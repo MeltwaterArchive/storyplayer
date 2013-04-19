@@ -1,0 +1,38 @@
+{
+    "local-dialects": [
+        "src/tests/functional-tests/php"
+    ],
+	"environments": {
+        "defaults": {
+            "savaged": {
+                "httpPort": 8091
+            }
+        }
+	},
+    "logger":
+    {
+        "writer": "StdOutWriter",
+        "levels":
+        {
+            "LOG_EMERGENCY": true,
+            "LOG_ALERT": true,
+            "LOG_CRITICAL": true,
+            "LOG_ERROR": true,
+            "LOG_WARNING": true,
+            "LOG_NOTICE": true,
+            "LOG_INFO": true,
+            "LOG_DEBUG": true,
+            "LOG_TRACE": true
+        }
+    },
+    "stages": {
+        "TestEnvironmentSetup": true,
+        "TestSetup": true,
+        "PreTestPrediction": true,
+        "PreTestInspection": true,
+        "Action": true,
+        "PostTestInspection": true,
+        "TestTeardown": true,
+        "TestEnvironmentTeardown": true
+    }
+}
