@@ -14,3 +14,11 @@ Bring your user and service stories to life through your test automation.
 Additionally, Storyplayer can measure non-functional requirements at the same time.
 
 Storyplayer is highly modular, and can be easily extended to support your own custom needs.
+
+## Licensing
+
+[Storyplayer](https://github.com/datasift/storyplayer) is Open Source software.
+
+## Installing Storyplayer
+
+Clone the [Storyplayer repository](https://github.com/datasift/storyplayer). 
