@@ -35,7 +35,7 @@
  *
  * @category    Libraries
  * @package     Storyplayer
- * @subpackage  StoryLib
+ * @subpackage  Prose
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -44,23 +44,24 @@
 
 namespace DataSift\Storyplayer\StoryLib;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use PHPUnit_Framework_TestCase;
 
-/**
- * Exception thrown when we attempt to load a file that is missing, or
- * contains an incorrectly-declared story
- *
- * @category   Libraries
- * @package    Storyplayer
- * @subpackage StoryLib
- * @author     Stuart Herbert <stuart.herbert@datasift.com>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://datasift.github.io/storyplayer
- */
-class E5xx_InvalidStoryFile extends Exxx_Exception
+class E5xx_InvalidStoryFileTest extends PHPUnit_Framework_TestCase
 {
-    public function __construct($msg)
-    {
-        parent::__construct(500, $msg, $msg);
-    }
+	/**
+	 * @covers DataSift\Storyplayer\StoryLib\E5xx_InvalidStoryFile::__construct
+	 */
+	public function testCanInstantiate()
+	{
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj = new E5xx_InvalidStoryFile("Test");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($obj instanceof E5xx_InvalidStoryFile);
+	}
+
 }
