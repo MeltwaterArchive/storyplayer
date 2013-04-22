@@ -44,24 +44,32 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use PHPUnit_Framework_TestCase;
+use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\AssertionsBase;
-use DataSift\Stone\ComparisonLib\IntegerComparitor;
 
-/**
- * Assertions about the nature of, and contents of, integers
- *
- * @category   Libraries
- * @package    Storyplayer
- * @subpackage Prose
- * @author     Stuart Herbert <stuart.herbert@datasift.com>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://datasift.github.io/storyplayer
- */
-class IntegerExpects extends AssertionsBase
+class IntegerExpectsTest extends PHPUnit_Framework_TestCase
 {
-	public function __construct(StoryTeller $st, $params)
+	/**
+	 * @covers DataSift\Storyplayer\Prose\ArrayExpects::__construct
+	 */
+	public function testCanInstantiate()
 	{
-		parent::__construct($st, new IntegerComparitor($params[0]));
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $st = new StoryTeller(new Story());
+	    $expectedArray = array(1);
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj = new IntegerExpects($st, $expectedArray);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($obj instanceof IntegerExpects);
 	}
+
 }
