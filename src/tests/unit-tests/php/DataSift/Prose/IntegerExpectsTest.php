@@ -51,7 +51,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 class IntegerExpectsTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers DataSift\Storyplayer\Prose\ArrayExpects::__construct
+	 * @covers DataSift\Storyplayer\Prose\IntegerExpects::__construct
 	 */
 	public function testCanInstantiate()
 	{
