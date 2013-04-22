@@ -44,24 +44,32 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use PHPUnit_Framework_TestCase;
+use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\AssertionsBase;
-use DataSift\Stone\ComparisonLib\DoubleComparitor;
 
-/**
- * Assertions about the nature of, and contents of, floating point numbers
- *
- * @category   Libraries
- * @package    Storyplayer
- * @subpackage Prose
- * @author     Stuart Herbert <stuart.herbert@datasift.com>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://datasift.github.io/storyplayer
- */
-class DoubleExpects extends AssertionsBase
+class DoubleExpectsTest extends PHPUnit_Framework_TestCase
 {
-	public function __construct(StoryTeller $st, $params)
+	/**
+	 * @covers DataSift\Storyplayer\Prose\DoubleExpects::__construct
+	 */
+	public function testCanInstantiate()
 	{
-		parent::__construct($st, new DoubleComparitor($params[0]));
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $st = new StoryTeller(new Story());
+	    $expectedArray = array("1.5");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj = new DoubleExpects($st, $expectedArray);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($obj instanceof DoubleExpects);
 	}
+
 }
