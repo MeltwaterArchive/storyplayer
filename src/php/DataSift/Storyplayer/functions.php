@@ -11,7 +11,8 @@ use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
  */
 function newStoryFor($category)
 {
-	$story = new Story($category);
+	$story = new Story();
+	$story->setCategory($category);
 
 	return $story;
 }
