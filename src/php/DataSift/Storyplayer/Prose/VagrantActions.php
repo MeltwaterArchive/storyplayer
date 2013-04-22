@@ -4,7 +4,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\ProseActions;
-use DataSift\StoryTeller\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 use DataSift\Stone\ObjectLib\BaseObject;
