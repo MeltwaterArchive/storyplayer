@@ -38,8 +38,10 @@ class StoryContext extends BaseObject
 
 	protected function getHostIpAddress()
 	{
+		// we can't use constants inside our strings
+		$BIN_DIR=APP_BINDIR;
+
 		// step 1 - how many adapters do we have on this box?
-		$BIN_DIR = BIN_DIR;
 		$adapters = trim(`{$BIN_DIR}/get-ip -l | tr '\n' ' '`);
 		if (empty($adapters)) {
 			throw new Exception("unable to parse host machine network adapters list");
