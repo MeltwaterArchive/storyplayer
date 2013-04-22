@@ -65,4 +65,44 @@ class StoryContextTest extends PHPUnit_Framework_TestCase
 	    $this->assertTrue($obj instanceof StoryContext);
 	}
 
+	/**
+	 * @covers DataSift\Storyplayer\StoryLib\StoryContext::__construct
+	 * @covers DataSift\Storyplayer\StoryLib\StoryContext::getHostIpAddress
+	 */
+	public function testGetsHostIpAddressWhenInstantiated()
+	{
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj = new StoryContext();
+
+	    // ----------------------------------------------------------------
+	    // test the results
+		//
+		// we can't compare against the host's actual IP address (because
+		// that is non-trivial to work out in this test), but we can
+		// make sure that we have something, and that it is a valid
+		// IP address
+
+	    $this->assertTrue(isset($obj->env));
+	    $this->assertTrue(isset($obj->env->host));
+	    $this->assertTrue(isset($obj->env->host->ipAddress));
+
+	    // make sure we have a well-formatted IP address
+	    $parts = explode('.', $obj->env->host->ipAddress);
+	    $this->assertEquals(4, count($parts));
+	    $this->assertTrue((int)$parts[0]>= 1);
+	    $this->assertTrue((int)$parts[0]<= 255);
+	    $this->assertTrue((int)$parts[1]>= 0);
+	    $this->assertTrue((int)$parts[1]<= 255);
+	    $this->assertTrue((int)$parts[2]>= 0);
+	    $this->assertTrue((int)$parts[2]<= 255);
+	    $this->assertTrue((int)$parts[3]>= 0);
+	    $this->assertTrue((int)$parts[3]<= 255);
+
+	    // make sure we don't have localhost
+	    $this->assertNotEquals("127.0.0.1", $obj->env->host->ipAddress);
+		$this->assertNotEquals("127.0.1.1", $obj->env->host->ipAddress);
+	}
+
 }

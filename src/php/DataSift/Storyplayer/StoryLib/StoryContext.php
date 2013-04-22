@@ -33,7 +33,6 @@ class StoryContext extends BaseObject
 		// are running on
 		$this->env->host = new BaseObject;
 		list($this->env->host->networkInterface, $this->env->host->ipAddress) = $this->getHostIpAddress();
-		$this->env->host->name = $this->getHostName();
 	}
 
 	protected function getHostIpAddress()
@@ -78,10 +77,5 @@ class StoryContext extends BaseObject
 		//
 		// this sucks
 		throw new Exception("could not determine IP address of host machine");
-	}
-
-	protected function getHostName()
-	{
-		return `hostname`;
 	}
 }
