@@ -141,10 +141,8 @@ class Story
 	//
 	// --------------------------------------------------------------------
 
-	public function __construct($category)
+	public function __construct()
 	{
-		$this->setCategory($category);
-
 		// assume we are testing a website
 		$this->setUsesTheWebBrowser();
 

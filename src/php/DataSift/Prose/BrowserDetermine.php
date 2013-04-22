@@ -1,6 +1,6 @@
 <?php
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Prose;
 
 use Exception;
 use DataSift\Storyplayer\ProseLib\ProseActions;
