@@ -10,7 +10,7 @@
         },
         "self-test": {
             "vagrant": {
-                "path": "../vagrant-environments/"
+                "dir": "../vagrant-environments"
             }
         }
 	},
