@@ -83,10 +83,14 @@ function main($argv)
 	// load any per-user overrides
 	$configLoader->loadUserConfig($staticConfig);
 
-	// load our environment-specific config
-	//
-	// this will be merged in with the default config
-	$configLoader->loadAdditionalConfig($staticConfig, $argv[1]);
+	// do we need to load environment-specific config?
+	if (!isset($staticConfig->environments, $staticConfig->environments->$argv[1]))
+	{
+		// load our environment-specific config
+		//
+		// this will be merged in with the default config
+		$configLoader->loadAdditionalConfig($staticConfig, $argv[1]);
+	}
 
 	// finally, load the runtime config, data that has been created
 	// by previous runs of storyplayer
