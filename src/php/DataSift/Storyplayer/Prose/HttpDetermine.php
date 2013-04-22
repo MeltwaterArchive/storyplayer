@@ -4,7 +4,6 @@ namespace DataSift\Storyplayer\Prose;
 
 use Exception;
 
-use DataSift\Storyplayer\ApiLib\RestApiCall;
 use DataSift\Storyplayer\ProseLib\ProseActions;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 
