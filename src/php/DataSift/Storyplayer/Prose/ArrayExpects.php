@@ -42,7 +42,7 @@
  * @link        http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Prose;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProseLib\AssertionsBase;
