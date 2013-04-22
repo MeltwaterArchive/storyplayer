@@ -76,5 +76,5 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostflightCheck(function(StoryTeller $st) {
+$story->setPostTestInspection(function(StoryTeller $st) {
 });
