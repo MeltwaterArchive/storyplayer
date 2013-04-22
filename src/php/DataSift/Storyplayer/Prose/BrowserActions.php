@@ -1,6 +1,6 @@
 <?php
 
-namespace DataSift\Prose;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\ContainedAction;
 use DataSift\Storyplayer\ProseLib\ProseActions;
