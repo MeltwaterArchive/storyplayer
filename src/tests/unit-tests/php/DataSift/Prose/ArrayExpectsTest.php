@@ -42,7 +42,7 @@
  * @link        http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Prose;
+namespace DataSift\Storyplayer\Prose;
 
 use PHPUnit_Framework_TestCase;
 use DataSift\Storyplayer\StoryLib\Story;
@@ -51,7 +51,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 class ArrayExpectsTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers DataSift\Prose\ArrayExpects::__construct
+	 * @covers DataSift\Storyplayer\Prose\ArrayExpects::__construct
 	 */
 	public function testCanInstantiate()
 	{
