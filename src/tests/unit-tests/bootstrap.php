@@ -20,6 +20,8 @@ use Phix_Project\Autoloader4\Autoloader_Path;
 define('APP_TOPDIR',  realpath(__DIR__ . '/../../php'));
 define('APP_TESTDIR', realpath(__DIR__ . '/php'));
 define('APP_LIBDIR',  realpath(__DIR__ . '/../../../vendor/php'));
+define('APP_BINDIR',  realpath(APP_TOPDIR . '/../bin'));
+define('APP_DATADIR', realpath(APP_TOPDIR . '/../data'));
 
 // step 2: find the autoloader, and install it
 require_once(APP_LIBDIR . '/Phix_Project/Autoloader4/PSR0/Autoloader.php');
