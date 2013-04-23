@@ -51,9 +51,6 @@ use DataSift\Storyplayer\ProseLib\TargettedBrowserSearch;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\ActionLogItem;
 
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
-
 /**
  * Get information from the browser
  *

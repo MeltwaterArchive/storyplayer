@@ -47,8 +47,6 @@ use Exception;
 
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\TimeLib\DateInterval;
 
 /**
@@ -133,8 +131,8 @@ class TimerActions extends Prose
 		$interval = new DateInterval($timeout);
 		$seconds  = $interval->getTotalSeconds();
 
-		Log::write(Log::LOG_DEBUG, "sleeping for {$timeout}; reason is: '{$reason}'");
+		$log = $this->st->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
 		sleep($seconds);
-		Log::write(Log::LOG_DEBUG, "finished sleeping");
+		$log->endAction("finished sleeping");
 	}
 }

@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
 
 /**
  * change a user's role(s)
