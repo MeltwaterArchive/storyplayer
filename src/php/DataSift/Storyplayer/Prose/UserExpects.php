@@ -46,8 +46,6 @@ namespace DataSift\Storyplayer\Prose;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
 
 /**
  * test the current user object
@@ -93,6 +91,6 @@ class UserExpects extends Prose
 		}
 
 		// if we get there, then there are no matches
-		throw new E5xx_ActionFailed('UserExpects::isValidForStory');
+		throw new E5xx_ActionFailed(__METHOD__);
 	}
 }

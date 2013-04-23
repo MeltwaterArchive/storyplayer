@@ -51,9 +51,6 @@ use DataSift\Storyplayer\ProseLib\TargettedBrowserExpects;
 use DataSift\Storyplayer\ProseLib\TargettedBrowserSearch;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
-
 /**
  * Test the current contents of the browser
  *

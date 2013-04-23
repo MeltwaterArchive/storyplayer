@@ -50,9 +50,6 @@ use DataSift\Storyplayer\ProseLib\TargettedBrowserAction;
 use DataSift\Storyplayer\ProseLib\TargettedBrowserSearch;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
-
 /**
  * do things to forms in the web browser
  *

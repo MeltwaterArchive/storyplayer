@@ -44,8 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
 
 /**
  * Get information about files on the local machine
