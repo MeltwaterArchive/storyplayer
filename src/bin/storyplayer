@@ -26,8 +26,8 @@ use DataSift\Storyplayer\UserLib\User;
 use DataSift\Storyplayer\UserLib\GenericUserGenerator;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 
-// where are we?
-define('BIN_DIR', __DIR__);
+// where are we, and our useful utilities?
+define('APP_BINDIR', __DIR__);
 
 // work out where the vendor folder might be
 $vendorDir = __DIR__ . '/../../vendor/php';

@@ -1,13 +1,63 @@
 <?php
 
+/**
+ * Copyright (c) 2011-present Mediasift Ltd
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *
+ *   * Neither the names of the copyright holders nor the names of his
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @category  Libraries
+ * @package   Storyplayer/PlayerLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+
 namespace DataSift\Storyplayer\PlayerLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
+/**
+ * a sanitised & dynamically enhanced version of the config that has been
+ * loaded for this test run
+ *
+ * @category  Libraries
+ * @package   Storyplayer/PlayerLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
 class StoryContext extends BaseObject
 {
-	public $story;
-
 	/**
 	 * the details about the user that has been chosen
 	 *
@@ -41,13 +91,14 @@ class StoryContext extends BaseObject
 		// are running on
 		$this->env->host = new BaseObject;
 		list($this->env->host->networkInterface, $this->env->host->ipAddress) = $this->getHostIpAddress();
-		$this->env->host->name = $this->getHostName();
 	}
 
 	protected function getHostIpAddress()
 	{
+		// we can't use constants inside our strings
+		$BIN_DIR=APP_BINDIR;
+
 		// step 1 - how many adapters do we have on this box?
-		$BIN_DIR = BIN_DIR;
 		$adapters = trim(`{$BIN_DIR}/get-ip -l | tr '\n' ' '`);
 		if (empty($adapters)) {
 			throw new Exception("unable to parse host machine network adapters list");
@@ -84,10 +135,5 @@ class StoryContext extends BaseObject
 		//
 		// this sucks
 		throw new Exception("could not determine IP address of host machine");
-	}
-
-	protected function getHostName()
-	{
-		return `hostname`;
 	}
 }

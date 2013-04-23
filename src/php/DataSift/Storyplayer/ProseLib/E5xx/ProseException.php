@@ -34,46 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/ProseLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\ProseLib;
 
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Get information about files on the local machine
+ * Base class for exceptions thrown whilst executing Prose
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/ProseLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FileDetermine extends Prose
+class E5xx_ProseException extends Exxx_Exception
 {
-	public function getTmpFileName()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("generate a temporary filename");
-
-		// create it
-		$filename = tempnam(null, 'storyteller-data-');
-
-		// log it
-		$log->endAction("'{$filename}'");
-
-		// all done
-		return $filename;
-	}
 }
