@@ -1,10 +1,52 @@
 <?php
 
+/**
+ * Copyright (c) 2011-present Mediasift Ltd
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *
+ *   * Neither the names of the copyright holders nor the names of his
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @category  Libraries
+ * @package   Storyplayer/PlayerLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+
 namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
 
-use DataSift\Storyplayer\ProseLib\DynamicContainer;
+use DataSift\Storyplayer\ProseLib\E5xx_NoMatchingActions;
+use DataSift\Storyplayer\ProseLib\ProseLoader;
 use DataSift\Storyplayer\ProseLib\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
 
@@ -14,6 +56,19 @@ use DataSift\Stone\Log\LogLib;
 use DataSift\BrowserMobProxy\BrowserMobProxy;
 use DataSift\WebDriver\WebDriver;
 
+/**
+ * our main facilitation class
+ *
+ * all actions and tests inside a story are executed through an instance
+ * of this class, making this class the StoryTeller :)
+ *
+ * @category  Libraries
+ * @package   Storyplayer/PlayerLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
 class StoryTeller
 {
 	/**
@@ -29,12 +84,7 @@ class StoryTeller
 	private $webBrowser = null;
 	private $webProxy = null;
 
-	private $containerTypes = array (
-		'using'     => 'Actions',
-		'from'      => 'Determine',
-		'calculate' => 'Calculator',
-		'asserts'   => 'Asserts',
-	);
+	private $proseLoader = null;
 
 	/**
 	 * [$actionLogger description]
@@ -61,6 +111,9 @@ class StoryTeller
 
 		// create an empty context
 		$this->setCheckpoint(new StoryCheckpoint($this));
+
+		// create our Prose Loader
+		$this->setProseLoader();
 	}
 
 	// ==================================================================
@@ -186,6 +239,11 @@ class StoryTeller
 	public function setStoryContext(StoryContext $storyContext) {
 	    $this->storyContext = $storyContext;
 
+	    // we need to update our ProseLoader, as the list of namespaces
+	    // to search for Prose classes may have changed
+	    $this->proseLoader->setNamespaces($this);
+
+	    // all done
 	    return $this;
 	}
 
@@ -217,6 +275,11 @@ class StoryTeller
 	public function setCurrentPhase($newPhase)
 	{
 		$this->currentPhase = $newPhase;
+	}
+
+	public function setProseLoader()
+	{
+		$this->proseLoader = new ProseLoader();
 	}
 
 	// ====================================================================
@@ -265,34 +328,17 @@ class StoryTeller
 
 	public function __call($methodName, $methodArgs)
 	{
-		// break up the method name into separate words
-		$words = $this->convertMethodNameToWords($methodName);
+		// what class do we want?
+		$className = $this->proseLoader->determineProseClassFor($methodName);
 
-		// the first word determines what kind of dynamic container we want
-		$containerType = array_shift($words);
+		// use the Prose Loader to create the object to call
+		$obj = $this->proseLoader->loadProse($this, $className, $methodArgs);
 
-		// is it actually an alias?
-		if (isset($this->containerTypes[$containerType])) {
-			// yes
-			$containerType = $this->containerTypes[$containerType];
+		// did we find something?
+		if (!is_object($obj)) {
+			// alas, no
+			throw new E5xx_NoMatchingActions($methodName);
 		}
-		else {
-			// not an alias that we know ... let it through
-			$containerType = ucfirst($containerType);
-		}
-
-		// the remaining words determine the specific class to instantiate
-		$className = '';
-		foreach ($words as $word) {
-			$className .= ucfirst($word);
-		}
-
-		// create the container
-		// var_dump($containerType, $methodName);
-		$container = new DynamicContainer($containerType, $this);
-
-		// use the container to create the object to call
-		$obj = call_user_func_array(array($container, $className), $methodArgs);
 
 		// all done
 		return $obj;
@@ -312,22 +358,6 @@ class StoryTeller
 	public function closeAllOpenActions()
 	{
 		return $this->actionLogger->closeAllOpenActions();
-	}
-
-	/**
-	 * this needs moving into its own trait perhaps, or into a static
-	 * inside the Stone library
-	 *
-	 * @param  [type] $methodName [description]
-	 * @return [type]             [description]
-	 */
-	protected function convertMethodNameToWords($methodName)
-	{
-		// turn the method name into an array of words
-		$words = explode(' ', strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1 $2", $methodName)));
-
-		// all done
-		return $words;
 	}
 
 	// ==================================================================

@@ -33,13 +33,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category    Libraries
- * @package     Storyplayer
- * @subpackage  StoryLib
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/StoryLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
 
 namespace DataSift\Storyplayer\StoryLib;
@@ -50,12 +49,12 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * Exception thrown when we attempt to load a file that is missing, or
  * contains an incorrectly-declared story
  *
- * @category   Libraries
- * @package    Storyplayer
- * @subpackage StoryLib
- * @author     Stuart Herbert <stuart.herbert@datasift.com>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/StoryLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
 class E5xx_InvalidStoryFile extends Exxx_Exception
 {

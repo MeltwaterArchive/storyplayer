@@ -34,46 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/ProseLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
-
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
+namespace DataSift\Storyplayer\ProseLib;
 
 /**
- * Get information about files on the local machine
+ * Exception thrown when StoryTeller *does* find the Prose class to load,
+ * but that class *doesn't* contain the method that the story is trying
+ * to use
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/ProseLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FileDetermine extends Prose
+class E5xx_NotImplemented extends E5xx_ProseException
 {
-	public function getTmpFileName()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("generate a temporary filename");
-
-		// create it
-		$filename = tempnam(null, 'storyteller-data-');
-
-		// log it
-		$log->endAction("'{$filename}'");
-
-		// all done
-		return $filename;
+	public function __construct($methodName) {
+		$msg = "Method '{$methodName}' has not been implemented yet";
+		parent::__construct(500, $msg, $msg);
 	}
 }

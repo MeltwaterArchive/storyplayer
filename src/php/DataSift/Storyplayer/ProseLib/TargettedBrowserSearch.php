@@ -34,46 +34,87 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/ProseLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\ProseLib;
 
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
-use DataSift\Stone\LogLib\Log;
+use Exception;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * Get information about files on the local machine
+ * Helper class for finding DOM elements using human-like terms (e.g.
+ * 'buttonLabelled')
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/ProseLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FileDetermine extends Prose
+class TargettedBrowserSearch extends TargettedBrowserBase
 {
-	public function getTmpFileName()
+	protected $st;
+	protected $pageContext;
+	protected $action;
+	protected $actionDesc;
+	protected $baseElement;
+
+	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
 	{
-		// shorthand
-		$st = $this->st;
+		$this->st          = $st;
+		$this->action      = $action;
+		$this->actionDesc  = $actionDesc;
+		$this->baseElement = $baseElement;
+	}
 
-		// what are we doing?
-		$log = $st->startAction("generate a temporary filename");
+	public function __call($methodName, $methodArgs)
+	{
+		// turn the method name into an array of words
+		$words = $this->convertMethodNameToWords($methodName);
 
-		// create it
-		$filename = tempnam(null, 'storyteller-data-');
+		$targetType = $this->determineTargetType($words);
+		$searchType = $this->determineSearchType($words);
 
-		// log it
-		$log->endAction("'{$filename}'");
+		if ($searchType == null) {
+			// we do not understand how to find the target field
+			throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
+		}
+
+		$tag = $this->determineTagType($targetType);
+
+		// what are we searching for?
+		$searchTerm = $methodArgs[0];
+
+		if ($this->isPluralTarget($targetType)) {
+			$searchMethod = 'getElements';
+		}
+		else {
+			$searchMethod = 'getElement';
+		}
+		$searchMethod .= $searchType;
+
+		// let's go find our element
+		try {
+			$searchObject = $this->st->fromCurrentPage();
+			if ($this->baseElement !== null) {
+				$searchObject->setTopElement($this->baseElement);
+			}
+			$element = $searchObject->$searchMethod($searchTerm, $tag);
+		} catch (Exception $e) {
+			$element = null;
+		}
+
+		// now that we have our element, let's apply the action to it
+		$action = $this->action;
+		$return = $action($this->st, $element, $searchTerm, $methodName);
 
 		// all done
-		return $filename;
+		return $return;
 	}
 }

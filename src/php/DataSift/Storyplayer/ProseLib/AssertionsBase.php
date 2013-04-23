@@ -33,31 +33,29 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category    Libraries
- * @package     Storyplayer
- * @subpackage  ProseLib
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/ProseLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
 
 namespace DataSift\Storyplayer\ProseLib;
 
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
  * Base class used for all assertions
  *
- * @category   Libraries
- * @package    Storyplayer
- * @subpackage ProseLib
- * @author     Stuart Herbert <stuart.herbert@datasift.com>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/ProseLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
-class AssertionsBase extends ProseActions
+class AssertionsBase extends Prose
 {
 	protected $comparitor = null;
 

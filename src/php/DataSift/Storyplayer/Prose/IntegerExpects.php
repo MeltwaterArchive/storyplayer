@@ -33,13 +33,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category    Libraries
- * @package     Storyplayer
- * @subpackage  Prose
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/Prose
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
 
 namespace DataSift\Storyplayer\Prose;
@@ -51,12 +50,12 @@ use DataSift\Stone\ComparisonLib\IntegerComparitor;
 /**
  * Assertions about the nature of, and contents of, integers
  *
- * @category   Libraries
- * @package    Storyplayer
- * @subpackage Prose
- * @author     Stuart Herbert <stuart.herbert@datasift.com>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/Prose
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
 class IntegerExpects extends AssertionsBase
 {
