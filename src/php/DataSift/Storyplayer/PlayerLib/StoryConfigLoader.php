@@ -43,9 +43,7 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use RuntimeException;
 use DataSift\Stone\ConfigLib\JsonConfigLoader;
-use DataSift\Stone\LogLib\Log;
 
 /**
  * helper class for loading our config files
