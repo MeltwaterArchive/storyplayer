@@ -195,7 +195,7 @@ class Story
 	public function __construct()
 	{
 		// assume we are testing a website
-		$this->setUsesTheWebBrowser();
+		// $this->setUsesTheWebBrowser();
 
 		// set default callbacks up
 		$this->setDefaultCallbacks();

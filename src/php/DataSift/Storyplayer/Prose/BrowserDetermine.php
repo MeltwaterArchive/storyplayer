@@ -63,6 +63,11 @@ use DataSift\Storyplayer\PlayerLib\ActionLogItem;
  */
 class BrowserDetermine extends Prose
 {
+	protected function initActions()
+	{
+		$this->initBrowser();
+	}
+
 	// ==================================================================
 	//
 	// Element finders go here
@@ -129,7 +134,7 @@ class BrowserDetermine extends Prose
 		try {
 			$xpath = 'descendant::' . $tag . '[@id = "' . $id . '"]';
 			$elements = $log->addStep("( find element using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->elements('xpath', $xpath);
+				return $topElement->getElements('xpath', $xpath);
 			});
 		}
 		catch (Exception $e) {
@@ -157,7 +162,7 @@ class BrowserDetermine extends Prose
 		try {
 			$xpath = 'descendant::label[normalize-space(text()) = "' . $labelText . '"]';
 			$labelElement = $log->addStep("( find the label with text '{$labelText}' using xpath '{$xpath}' )", function () use($xpath, $topElement){
-				return $topElement->element('xpath', $xpath);
+				return $topElement->getElement('xpath', $xpath);
 			});
 		}
 		catch (Exception $e) {
@@ -179,7 +184,7 @@ class BrowserDetermine extends Prose
 
 		try{
 			$inputElement = $log->addStep("( find the input element with the id '{$inputElementId}' )", function() use($topElement, $inputElementId) {
-				return $topElement->element('id', $inputElementId);
+				return $topElement->getElement('id', $inputElementId);
 			});
 
 			// all done
@@ -247,7 +252,7 @@ class BrowserDetermine extends Prose
 		try {
 			$xpath = 'descendant::' . $tag . '[@name = "' . $name . '"]';
 			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->elements('xpath', $xpath);
+				return $topElement->getElements('xpath', $xpath);
 			});
 		}
 		catch (Exception $e) {
@@ -281,7 +286,7 @@ class BrowserDetermine extends Prose
 		try {
 			$xpath = 'descendant::' . $tag . '[@placeholder = "' . $text . '"]';
 			$elements = $log->addStep("( find elements using xpath '{$xapth}' )", function() use($topElement, $xpath) {
-				return $topElement->elements('xpath', $xpath);
+				return $topElement->getElements('xpath', $xpath);
 			});
 
 		}
@@ -326,7 +331,7 @@ class BrowserDetermine extends Prose
 
 			foreach ($xpathList as $xpath) {
 				$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-					return $topElement->elements('xpath', $xpath);
+					return $topElement->getElements('xpath', $xpath);
 				});
 
 				if (count($elements) > 0) {
@@ -367,7 +372,7 @@ class BrowserDetermine extends Prose
 			$xpath = 'descendant::' . $tag . '[@title = "' . $title . '"]';
 
 			$element = $log->addStep("( find element using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->element('xpath', $xpath);
+				return $topElement->getElement('xpath', $xpath);
 			});
 
 			// all done
@@ -400,7 +405,7 @@ class BrowserDetermine extends Prose
 		try {
 			$xpath = 'descendant::' . $tag . '[contains(concat(" ", normalize-space(@class), " "), " ' . $class . ' ")]';
 			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->elements('xpath', $xpath);
+				return $topElement->getElements('xpath', $xpath);
 			});
 
 			// all done
@@ -433,7 +438,7 @@ class BrowserDetermine extends Prose
 		try {
 			$xpath = 'descendant::' . $tag . '[@id = "' . $id . '"]';
 			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->elements('xpath', $xpath);
+				return $topElement->getElements('xpath', $xpath);
 			});
 
 			// log the result
@@ -466,7 +471,7 @@ class BrowserDetermine extends Prose
 		try {
 			$xpath = 'descendant::' . $tag . '[@name = "' . $name . '"]';
 			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				$topElement->elements('xpath', $xpath);
+				$topElement->getElements('xpath', $xpath);
 			});
 
 			// log the result
@@ -499,7 +504,7 @@ class BrowserDetermine extends Prose
 		try {
 			$xpath = 'descendant::' . $tag . '[normalize-space(text()) = "' . $text . '"]|descendant::' . $tag . '/*[normalize-space(string(.)) = "' . $text . '"]|descendant::input[@value = "' . $text . '"]|descendant::input[@placeholder = "' . $text . '"]';
 			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				$topElement->elements('xpath', $xpath);
+				$topElement->getElements('xpath', $xpath);
 			});
 
 			// log the result
@@ -612,7 +617,7 @@ class BrowserDetermine extends Prose
 
 			$log = $st->startAction("[ retrieve the options of them $elementDesc '$elementName' ]");
 			// get the elements
-			$optionElements = $element->elements('xpath', "descendant::option");
+			$optionElements = $element->getElements('xpath', "descendant::option");
 
 			// extract their values
 			$return = array();
@@ -675,13 +680,13 @@ class BrowserDetermine extends Prose
 				case 'select':
 					// get the option that is selected
 					try {
-						$option = $element->element('xpath', 'option[@selected]');
+						$option = $element->getElement('xpath', 'option[@selected]');
 						$log->endAction("value is: " . $option->text());
 						return $option->text();
 					}
 					catch (Exception $e) {
 						// return the top option from the list
-						$option = $element->element('xpath', 'option[1]');
+						$option = $element->getElement('xpath', 'option[1]');
 						$log->endAction("value is: " . $option->text());
 						return $option->text();
 					}
@@ -711,7 +716,7 @@ class BrowserDetermine extends Prose
 	{
 		// some shorthand to make things easier to read
 		$st      = $this->st;
-		$browser = $st->getWebBrowser();
+		$browser = $st->getRunningWebBrowser();
 
 		$log = $st->startAction("[ retrieve the current page title ]");
 		$log->endAction("title is: " . $browser->title());

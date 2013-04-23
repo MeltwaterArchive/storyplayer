@@ -60,6 +60,11 @@ use DataSift\Storyplayer\ProseLib\TargettedBrowserAction;
  */
 class BrowserActions extends Prose
 {
+	protected function initActions()
+	{
+		$this->initBrowser();
+	}
+
 	// ==================================================================
 	//
 	// Input actions go here
@@ -129,7 +134,7 @@ class BrowserActions extends Prose
 	{
 		// some shorthand to make things easier to read
 		$st      = $this->st;
-		$browser = $st->getWebBrowser();
+		$browser = $st->getRunningWebBrowser();
 		$env     = $st->getEnvironment();
 
 		// relative, or absolute URL?

@@ -52,9 +52,11 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 use DataSift\Stone\HttpLib\HttpAddress;
 use DataSift\Stone\Log\LogLib;
+use DataSift\Stone\PathLib\PathTo;
+use DataSift\Stone\ProcessLib\SubProcess;
 
-use DataSift\BrowserMobProxy\BrowserMobProxy;
-use DataSift\WebDriver\WebDriver;
+use DataSift\BrowserMobProxy\BrowserMobProxyClient;
+use DataSift\WebDriver\WebDriverClient;
 
 /**
  * our main facilitation class
@@ -149,6 +151,21 @@ class StoryTeller
 	 */
 	public function getWebBrowser() {
 	    return $this->webBrowser;
+	}
+
+	public function getRunningWebBrowser()
+	{
+		if (!is_object($this->webBrowser))
+		{
+			$this->startWebBrowser();
+		}
+
+		if (!is_object($this->webBrowser))
+		{
+			throw new E5xx_CannotStartWebBrowser();
+		}
+
+		return $this->webBrowser;
 	}
 
 	/**
@@ -368,7 +385,7 @@ class StoryTeller
 
 	public function startWebBrowser()
 	{
-		$httpProxy = new BrowserMobProxy();
+		$httpProxy = new BrowserMobProxyClient();
 		$httpProxy->enableFeature('paramLogs');
 
 		$proxySession = $httpProxy->createProxy();
@@ -383,8 +400,8 @@ class StoryTeller
 		$proxySession->startHAR();
 
 		// create the browser session
-		$webDriver = new WebDriver();
-		$browserSession = $webDriver->session(
+		$webDriver = new WebDriverClient();
+		$browserSession = $webDriver->newSession(
 			'chrome',
 			array('proxy' => $proxySession->getWebDriverProxyConfig())
 		);

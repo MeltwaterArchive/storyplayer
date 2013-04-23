@@ -155,7 +155,7 @@ class ContainedBrowserAction
 			$log = $st->startAction("choose option '$label' from $elementDesc '$elementName'");
 
 			// get the option to select
-			$option = $element->element('xpath', 'option[normalize-space(text()) = "' . $label . '" ]');
+			$option = $element->getElement('xpath', 'option[normalize-space(text()) = "' . $label . '" ]');
 
 			// select it
 			$option->click();
