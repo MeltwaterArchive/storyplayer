@@ -1,4 +1,5 @@
 .build
+chromedriver.log
 dist
 .tmp
 nbproject
