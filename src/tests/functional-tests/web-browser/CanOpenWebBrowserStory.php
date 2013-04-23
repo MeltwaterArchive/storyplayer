@@ -1,0 +1,73 @@
+<?php
+
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+
+// ========================================================================
+//
+// STORY DETAILS
+//
+// ------------------------------------------------------------------------
+
+$story = newStoryFor('Storyplayer Service Stories')
+         ->inGroup('Web Browsing')
+         ->called('Can open web browser');
+
+// ========================================================================
+//
+// TEST ENVIRONMENT SETUP / TEAR-DOWN
+//
+// ------------------------------------------------------------------------
+
+// ========================================================================
+//
+// STORY SETUP / TEAR-DOWN
+//
+// ------------------------------------------------------------------------
+
+// ========================================================================
+//
+// PRE-TEST PREDICTION
+//
+// ------------------------------------------------------------------------
+
+// there is no preflight check, as this story should always succeed
+
+// ========================================================================
+//
+// PRE-TEST INSPECTION
+//
+// ------------------------------------------------------------------------
+
+// there is no preflight inspection
+
+// ========================================================================
+//
+// POSSIBLE ACTION(S)
+//
+// ------------------------------------------------------------------------
+
+$story->addAction(function(StoryTeller $st) {
+	// get the checkpoint, to store data in
+	$checkpoint = $st->getCheckpoint();
+
+    // load our test page
+    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/testpage.html');
+
+    // get the title of the test page
+    $checkpoint->title = $st->fromBrowser()->getTitle();
+});
+
+// ========================================================================
+//
+// POST-TEST INSPECTION
+//
+// ------------------------------------------------------------------------
+
+$story->setPostTestInspection(function(StoryTeller $st) {
+	// get the checkpoint
+	$checkpoint = $st->getCheckpoint();
+
+	// do we have the title we expected?
+	$st->expectsObject($checkpoint)->hasAttribute('title');
+	$st->expectsString($checkpoint->title)->equals("Test Page #1");
+});
