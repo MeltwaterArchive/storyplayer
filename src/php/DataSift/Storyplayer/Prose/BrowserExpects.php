@@ -63,6 +63,11 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class BrowserExpects extends Prose
 {
+	protected function initActions()
+	{
+		$this->initBrowser();
+	}
+
 	public function has()
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
@@ -155,7 +160,7 @@ class BrowserExpects extends Prose
 		var_dump($xpath);
 
 		try {
-			$element = $topElement->element('xpath', $xpath);
+			$element = $topElement->getElement('xpath', $xpath);
 			$log->endAction();
 		}
 		catch (Exception $e) {

@@ -94,22 +94,23 @@ class Prose
 	/**
 	 * override this method if required (for example, for web browsers)
 	 *
-	 * @todo this needs moving into traits longer term
-	 *
 	 * @return void
 	 */
 	protected function initActions()
 	{
-		// do we have a web browser?
-		$browser = $this->st->getWebBrowser();
-		if (is_object($browser)) {
-			// set our top XPATH node
-			$this->setTopXpath("//html");
+	}
 
-			// set our top element
-			$topElement = $browser->element('xpath', '/html');
-			$this->setTopElement($topElement);
-		}
+	protected function initBrowser()
+	{
+		// do we have a web browser?
+		$browser = $this->st->getRunningWebBrowser();
+
+		// set our top XPATH node
+		$this->setTopXpath("//html");
+
+		// set our top element
+		$topElement = $browser->getElement('xpath', '/html');
+		$this->setTopElement($topElement);
 	}
 
 	public function __call($methodName, $params)
