@@ -10,7 +10,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Browsing')
-         ->called('Can open web browser');
+         ->called('Can retrieve form field by its label');
 
 // ========================================================================
 //
@@ -47,10 +47,10 @@ $story->addAction(function(StoryTeller $st) {
 	$checkpoint = $st->getCheckpoint();
 
     // load our test page
-    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
+    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/testpage.html');
 
     // get the title of the test page
-    $checkpoint->title = $st->fromBrowser()->getTitle();
+    $checkpoint->contents = $st->fromBrowser()->get()->fieldLabelled('');
 });
 
 // ========================================================================
@@ -65,5 +65,5 @@ $story->setPostTestInspection(function(StoryTeller $st) {
 
 	// do we have the title we expected?
 	$st->expectsObject($checkpoint)->hasAttribute('title');
-	$st->expectsString($checkpoint->title)->equals("Storyplayer: Welcome To The Tests!");
+	$st->expectsString($checkpoint->title)->equals("Storyplayer: Self-Host Tests Page");
 });
