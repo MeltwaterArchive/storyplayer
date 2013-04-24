@@ -5,7 +5,7 @@ namespace DataSift\Storyplayer\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProseLib\IframeContext;
 
-class IframeExpects extends CurrentPageExpects
+class IframeExpects extends BrowserExpects
 {
 	public function __construct(StoryTeller $st, $params)
 	{

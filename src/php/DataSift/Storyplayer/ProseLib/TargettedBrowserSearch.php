@@ -101,7 +101,7 @@ class TargettedBrowserSearch extends TargettedBrowserBase
 
 		// let's go find our element
 		try {
-			$searchObject = $this->st->fromCurrentPage();
+			$searchObject = $this->st->fromBrowser();
 			if ($this->baseElement !== null) {
 				$searchObject->setTopElement($this->baseElement);
 			}

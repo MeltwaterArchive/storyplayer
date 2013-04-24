@@ -99,7 +99,7 @@ class TargettedBrowserAction extends TargettedBrowserBase
 			$searchMethod .= $searchType;
 
 			// let's go find our element
-			$searchObject = $this->st->fromCurrentPage();
+			$searchObject = $this->st->fromBrowser();
 			$searchObject->setTopElement($this->baseElement);
 
 			$element = $searchObject->$searchMethod($searchTerm, $tag);
