@@ -5,7 +5,7 @@ namespace DataSift\Storyplayer\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProseLib\IframeContext;
 
-class IframeDetermine extends CurrentPageDetermine
+class IframeDetermine extends BrowserDetermine
 {
 	public function __construct(StoryTeller $st, $params)
 	{
