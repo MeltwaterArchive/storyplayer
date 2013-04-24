@@ -36,7 +36,7 @@ where:
 
 ### Building The Dependencies
 
-If you want to run storyplayer from inside its own git repo, you'll need to do the following:
+If you want to run storyplayer from inside its own git repo, make sure that you have [Phix](http://phix-project.org) installed, and then do the following:
 
 ```
 phing build-vendor
