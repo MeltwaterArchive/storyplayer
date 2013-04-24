@@ -56,12 +56,22 @@ use DataSift\Storyplayer\StoryLib\Story;
  */
 abstract class EnvironmentSetup
 {
-
 	protected $story;
+	protected $vmParams;
+
+	public function __construct($vmParams = array())
+	{
+		$this->vmParams = $vmParams;
+	}
 
 	public function setStory(Story $story)
 	{
 		$this->story = $story;
+	}
+
+	public function getVmParams()
+	{
+		return $this->vmParams;
 	}
 
 	abstract public function getName();
