@@ -72,7 +72,7 @@ class FormActions extends BrowserActions
 		$formId = $this->args[0];
 
 		// find the form
-		$formElement = $st->fromCurrentPage()->getElementById($formId);
+		$formElement = $st->fromBrowser()->getElementById($formId);
 
 		// is it really a form?
 		if ($formElement->name() !== 'form') {

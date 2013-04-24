@@ -90,20 +90,20 @@ class BrowserExpects extends Prose
 		);
 	}
 
-	public function field($searchTerm)
+	public function hasField($searchTerm)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// how do we find the element to test?
 		$action = function() use ($st, $searchTerm) {
-			$element = $st->fromCurrentPage()->getElementByLabelIdOrName($searchTerm);
+			$element = $st->fromBrowser()->getElementByLabelIdOrName($searchTerm);
 		};
 
 		return new TargettedBrowserExpects($st, $action, $searchTerm, 'field');
 	}
 
-	public function title($title)
+	public function hasTitle($title)
 	{
 		// shorthand
 		$st = $this->st;
@@ -112,7 +112,7 @@ class BrowserExpects extends Prose
 		$log = $st->startAction("page title must be {$title}");
 
 		// get the browser title
-		$browserTitle = $this->st->fromCurrentPage()->getTitle();
+		$browserTitle = $this->st->fromBrowser()->getTitle();
 
 		if ($title != $browserTitle) {
 			throw new E5xx_ExpectFailed('BrowserExpects::title', $title, $browserTitle);
@@ -122,7 +122,7 @@ class BrowserExpects extends Prose
 		$log->endAction();
 	}
 
-	public function titles($titles)
+	public function hasTitles($titles)
 	{
 		// shorthand
 		$st = $this->st;
@@ -132,7 +132,7 @@ class BrowserExpects extends Prose
 		$log = $st->startAction("page title must be one of: {$titlesString}");
 
 		// get the browser title
-		$browserTitle = $this->st->fromCurrentPage()->getTitle();
+		$browserTitle = $this->st->fromBrowser()->getTitle();
 
 		if (!in_array($browserTitle, $titles)) {
 			throw new E5xx_ExpectFailed(__METHOD__, $titlesString, $browserTitle);

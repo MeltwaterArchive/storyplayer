@@ -158,7 +158,7 @@ class BrowserActions extends Prose
 
 		// check for the overlay
 		$st->usingTimer()->waitFor(function() use($st, $id) {
-			$st->expectsCurrentPage()->has()->elementWithId($id);
+			$st->expectsBrowser()->has()->elementWithId($id);
 		});
 
 		// all done
@@ -176,12 +176,12 @@ class BrowserActions extends Prose
 		// check the title
 		$st->usingTimer()->waitFor(function() use($st, $title, $failedTitle) {
 			// have we already failed?
-			if ($failedTitle && $st->fromCurrentPage()->getTitle() == $failedTitle) {
+			if ($failedTitle && $st->fromBrowser()->getTitle() == $failedTitle) {
 				return false;
 			}
 
 			// we have not failed yet
-			$st->expectsCurrentPage()->title($title);
+			$st->expectsBrowser()->title($title);
 		});
 
 		// all done
@@ -198,7 +198,7 @@ class BrowserActions extends Prose
 
 		// check the title
 		$st->usingTimer()->waitFor(function() use($st, $titles) {
-			$st->expectsCurrentPage()->titles($titles);
+			$st->expectsBrowser()->titles($titles);
 		});
 
 		// all done
