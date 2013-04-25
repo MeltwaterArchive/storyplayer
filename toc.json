@@ -1,8 +1,38 @@
 {
-	"navDepth": 1,
+	"navDepth": 3,
 	"contents":	[
 		"index",
 		"what-is-storyplayer",
+		"modules/browser/index",
+		"modules/browser/searching-the-dom",
+		"modules/browser/search-targets",
+		"modules/browser/search-filters",
+		"modules/browser/fromBrowser",
+		"modules/browser/expectsBrowser",
+		"modules/browser/usingBrowser",
 		"copyright"
-	]
+	],
+	"navbar": {
+		"Home": "/storyplayer/index.html",
+		"Modules": [
+			{
+				"Assertions": "/storyplayer/modules/assertions/index.html",
+				"Browser": "/storyplayer/modules/browser/index.html",
+				"Checkpoint": "/storyplayer/modules/checkpoint/index.html",
+				"Doppeld": "/storyplayer/modules/doppeld/index.html",
+				"File": "/storyplayer/modules/file/index.html",
+				"Form": "/storyplayer/modules/form/index.html",
+				"Graphite": "/storyplayer/modules/graphite/index.html",
+				"Hornet": "/storyplayer/modules/hornet/index.html",
+				"HTTP": "/storyplayer/modules/http/index.html",
+				"Iframe": "/storyplayer/modules/iframe/index.html",
+				"SavageD": "/storyplayer/modules/savaged/index.html",
+				"Timer": "/storyplayer/modules/timer/index.html",
+				"UNIX Shell": "/storyplayer/modules/shell/index.html",
+				"UUID": "/storyplayer/modules/uuid/index.html",
+				"Vagrant": "/storyplayer/modules/vagrant/index.html",
+				"ZeroMQ": "/storyplayer/modules/zeromq/index.html"
+			}
+		]
+	}
 }

@@ -1,6 +1,8 @@
 ---
 layout: book-chapter
 title: Storyplayer
+prev: '&nbsp;'
+next: '<a href="what-is-storyplayer.html">Next: What Is Storyplayer?</a>'
 ---
 
 # Storyplayer

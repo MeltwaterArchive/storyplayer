@@ -67,6 +67,46 @@ function buildNavBar($toc)
 	return $navBarHtml;
 }
 
+function buildSidebarList($toc)
+{
+	// make sure we have the metadata to use
+	if(!isset($toc->contents)) {
+		dieMsg("toc.json does not define 'contents' section at all");
+	}
+
+	if (!is_array($toc->contents)) {
+		dieMsg("'contents' section in toc.json must be an array");
+	}
+
+	// if we get here, everything (should) be fine
+
+	// this will hold our list of sidebars to build
+	$sidebars = array();
+
+	// trun the contents list into a list of sidebars
+	foreach ($toc->contents as $filename) {
+		// convert the filename into a sidebar name
+		$parts = explode("/", $filename);
+
+		if (count($parts) == 1) {
+			$sidebarName = "top-level";
+		}
+		else {
+			unset($parts[count($parts) - 1]);
+			$sidebarName = implode("-", $parts);
+		}
+
+		if (!isset($sidebars[$sidebarName])) {
+			$sidebars[$sidebarName] = array();
+		}
+
+		$sidebars[$sidebarName][] = $filename;
+	}
+
+	// all done
+	return $sidebars;
+}
+
 function dieMsg($msg)
 {
 	echo "*** error: " . $msg . "\n";
@@ -103,6 +143,18 @@ $navBarHtml = buildNavBar($toc);
 
 // write the navbar our to disk
 file_put_contents(TOP_DIR . '/_includes/nav.html', $navBarHtml);
+
+// get the list of sidebars that we need to build
+$sidebars = buildSidebarList($toc);
+
+// now, built each sidebar in turn
+foreach ($sidebars as $sidebarName => $contents) {
+	$sidebarHtml = buildSidebar($contents);
+	file_put_contents(TOP_DIR . "/_includes/sidebar/{$sidebarName}.html");
+}
+
+// finally, we need to go through and sort out the next / prev links
+rebuildPrevNextLinks($toc);
 
 // all done for now
 exit(0);

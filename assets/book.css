@@ -1,5 +1,15 @@
 html,body {
     height: 100%;
+    font-size: 13px;
+    line-height: 18px;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 24px;
 }
 
 .page {
@@ -60,10 +70,16 @@ html,body {
     margin-bottom: 20px;
 }
 
+/*
 .maincontent h2 {
     padding-top: 20px;
     padding-bottom: 10px;
 }
+
+.maincontent h3 {
+    padding-top: 10px;
+}
+*/
 
 .well h2 {
     padding-top: 0px;
