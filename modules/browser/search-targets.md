@@ -1,8 +1,8 @@
 ---
 layout: modules-browser
 title: Supported Search Targets
-prev: '<a href="what-is-storyplayer.html">Prev: What Is Storyplayer?</a>'
-next: '<a href="copyright.html">Next: Legal Stuff</a>'
+prev: '<a href="../../modules/browser/searching-the-dom.html">Prev: Searching The DOM</a>'
+next: '<a href="../../modules/browser/search-filters.html">Next: Supported Search Filters</a>'
 ---
 
 # Supported Search Targets

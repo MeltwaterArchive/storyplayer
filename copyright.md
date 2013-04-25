@@ -1,7 +1,7 @@
 ---
 layout: book-chapter
 title: Legal Stuff
-prev: '<a href="browser-module.html">Prev: The Browser Module</a>'
+prev: '<a href="modules/browser/usingBrowser.html">Prev: usingBrowser()</a>'
 next: '<a href="index.html">Back to: Storyplayer</a>'
 ---
 # Legal Stuff

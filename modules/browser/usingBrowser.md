@@ -1,8 +1,8 @@
 ---
 layout: modules-browser
 title: usingBrowser()
-prev: '<a href="what-is-storyplayer.html">Prev: What Is Storyplayer?</a>'
-next: '<a href="copyright.html">Next: Legal Stuff</a>'
+prev: '<a href="../../modules/browser/expectsBrowser.html">Prev: expectsBrowser()</a>'
+next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
 ---
 
 # usingBrowser()
