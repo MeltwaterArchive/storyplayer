@@ -1,5 +1,5 @@
 ---
-layout: book-chapter
+layout: modules-browser
 title: Searching The DOM
 prev: '<a href="what-is-storyplayer.html">Prev: What Is Storyplayer?</a>'
 next: '<a href="copyright.html">Next: Legal Stuff</a>'
@@ -24,6 +24,8 @@ where:
 * __WithId__ is one of our [supported filters](#supported_search_filters)
 
 You can use any combination of search target and filter with all of the operations that require a search term.
+
+## Examples
 
 Here are some examples:
 

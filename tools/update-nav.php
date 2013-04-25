@@ -87,7 +87,7 @@ foreach ($toc as $pageName)
 }
 
 // output our finished sidebar
-$sidebar = "<h3>Contents</h3>\n<ol>";
+$sidebar = "<h3>In This Section</h3>\n<ol>";
 foreach ($pages as $page)
 {
 	// add the links into the sidebar

@@ -1,5 +1,5 @@
 ---
-layout: book-chapter
+layout: top-level
 title: Storyplayer
 prev: '&nbsp;'
 next: '<a href="what-is-storyplayer.html">Next: What Is Storyplayer?</a>'
@@ -29,11 +29,11 @@ Storyplayer is highly modular, and can be easily extended to support your own cu
 
 ## Installing Storyplayer
 
-Clone the [Storyplayer repository](https://github.com/datasift/storyplayer). 
+Clone the [Storyplayer repository](https://github.com/datasift/storyplayer).
 
 ### Tales, Stories, and Prose
 
-Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. 
+Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation.
 
 ### What's a Story?
 
@@ -51,10 +51,10 @@ A story is a collection of steps that have to be completed in order to perform a
  * activate user account
  * send account activation confirmation email
  * possibly more steps
- 
+
 A Story captures all of those steps in a short sentence, which greatly improves communication between key project members.
 
-In case of user registration, you could have 
+In case of user registration, you could have
 
  * UserRegistersAndVerifiesAccount
  * UserRegistersButDoesNotVerifyAccount
@@ -74,7 +74,7 @@ Most users follow this pattern to get value from the site and to contribute to t
  4. get banned (a UserIsBanned Story)
  5. log out (a UserCanLogOut Story)
 
-Stories are written in PHP using Storyplayer-specific Prose (grammar and vocabulary).  Each story combines two types of dialects: 
+Stories are written in PHP using Storyplayer-specific Prose (grammar and vocabulary).  Each story combines two types of dialects:
 
  * Global -- generic Prose provided by Story player
  * Local -- Prose written by you, specific to your site, project
