@@ -1,5 +1,5 @@
 ---
-layout: book-chapter
+layout: modules-browser
 title: fromBrowser()
 prev: '<a href="what-is-storyplayer.html">Prev: What Is Storyplayer?</a>'
 next: '<a href="copyright.html">Next: Legal Stuff</a>'
