@@ -1,8 +1,8 @@
 ---
 layout: modules-browser
 title: Searching The DOM
-prev: '<a href="what-is-storyplayer.html">Prev: What Is Storyplayer?</a>'
-next: '<a href="copyright.html">Next: Legal Stuff</a>'
+prev: '<a href="../../modules/browser/index.html">Prev: The Browser Module</a>'
+next: '<a href="../../modules/browser/search-targets.html">Next: Supported Search Targets</a>'
 ---
 
 # Searching The DOM

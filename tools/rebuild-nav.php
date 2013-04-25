@@ -324,17 +324,17 @@ function rebuildPrevNextLinks($toc)
 		}
 		else
 		{
-			$prev='<a href="' . $pages[$i-1]['name'] . '.html">Prev: ' . $pages[$i-1]['title'] . "</a>";
+			$prev='<a href="' . getRelPathTo($pages[$i]['name'], $pages[$i-1]['name']) . '.html">Prev: ' . $pages[$i-1]['title'] . "</a>";
 		}
 
 		// what should the 'next' line be?
 		if ($i == count($pages) - 1)
 		{
-			$next = '<a href="' . $pages[0]['name'] . '.html">Back to: ' . $pages[0]['title'] . "</a>";
+			$next = '<a href="' . getRelPathTo("", $pages[0]['name']) . '.html">Back to: ' . $pages[0]['title'] . "</a>";
 		}
 		else
 		{
-			$next='<a href="' . $pages[$i+1]['name'] . '.html">Next: ' . $pages[$i+1]['title'] . "</a>";
+			$next='<a href="' . getRelPathTo($pages[$i]['name'], $pages[$i+1]['name']) . '.html">Next: ' . $pages[$i+1]['title'] . "</a>";
 		}
 
 		$pageSource = explode("\n", file_get_contents($page['MdFilename']));
@@ -347,6 +347,15 @@ function rebuildPrevNextLinks($toc)
 		$pageSource = implode("\n", $pageSource);
 		file_put_contents($page['MdFilename'], $pageSource);
 	}
+}
+
+function getRelPathTo($lastPath, $path) {
+	$parts = explode("/", $lastPath);
+	if (count($parts) == 1) {
+		return $path;
+	}
+
+	return str_repeat("../", count($parts) - 1) . $path;
 }
 
 // ========================================================================
