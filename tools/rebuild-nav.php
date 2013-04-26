@@ -37,7 +37,7 @@ function buildNavBar($toc)
 	{
 		// are we looking at a simple link?
 		if (is_string($contents)) {
-			$navBarHtml .= '<li><a href="' . $contents . '">' . htmlentities($sectionName) . "</a></li>\n";
+			$navBarHtml .= '<li><a href="' . BASE_URL . $contents . '.html">' . htmlentities($sectionName) . "</a></li>\n";
 			continue;
 		}
 
@@ -50,9 +50,12 @@ function buildNavBar($toc)
 					 . '<ul class="dropdown-menu">' . "\n";
 
 		// add the contents of this section
-		foreach ($contents as $sectionEntry) {
-			foreach ($sectionEntry as $name => $url) {
-				$navBarHtml .= '<li><a href="' . $url . '">' . htmlentities($name) . "</a></li>\n";
+		foreach ($contents as $name => $url) {
+			if (empty($url)) {
+				$navBarHtml .= '<li class="divider"></li>' . "\n";
+			}
+			else {
+				$navBarHtml .= '<li><a href="' . BASE_URL . $url . '.html">' . htmlentities($name) . "</a></li>\n";
 			}
 		}
 
@@ -67,72 +70,64 @@ function buildNavBar($toc)
 	return $navBarHtml;
 }
 
-function buildSidebar($filesList)
+function buildPageMap($toc)
 {
-	// we need to know about each page
-	$pages = array();
-
-	// understand the contents of each page
-	foreach ($filesList as $filename)
-	{
-		$page = array();
-
-		// where is the source file?
-		$page['MdFilename'] = TOP_DIR . "/{$filename}.md";
-
-		// where is the HTML version?
-		$page['HtmlFilename'] = TOP_DIR . "/_site/{$filename}.html";
-
-		// does the HTML version exist?
-		if (!file_exists($page['HtmlFilename'])) {
-			echo "Skipping {$filename} - HTML page not found\n";
-			continue;
-		}
-
-		// load the HTML version of the page
-		// we don't add this to the page[] array, because we don't want to
-		// run out of memory if the site gets too big
-		$pageHtml = file_get_contents($page['HtmlFilename']);
-
-		// extract the page title
-		preg_match("|<title>(.*)</title>|", $pageHtml, $matches);
-		$page['title'] = $matches[1];
-
-		// extract the h2 headings
-		preg_match_all('|<h2 id=\'(.*)\'>(.*)</h2>|', $pageHtml, $matches);
-		if (isset($matches[1]))
-		{
-			$i = 0;
-
-			foreach ($matches[1] as $id)
-			{
-				$page['h2'][] = array(
-					'id' => $id,
-					'text' => $matches[2][$i]
-				);
-
-				$i++;
-			}
-		}
-
-		// we're done with the HTML
-		unset($pageHtml);
-
-		// add this page to the list of pages we know about
-		$page['name'] = $filename;
-		$pages[] = $page;
+	// make sure we have the metadata to use
+	if(!isset($toc->contents)) {
+		dieMsg("toc.json does not define 'contents' section at all");
 	}
 
-	// when we get here, we have the list of pages that we want to put
-	// into the sidebar
+	if (!is_array($toc->contents)) {
+		dieMsg("'contents' section in toc.json must be an array");
+	}
 
+	// we need to know about each page
+	$pages = array(
+		"ordered" => array(),
+		"indexed" => array()
+	);
 
+	// understand the contents of each page
+	foreach ($toc->contents as $filename)
+	{
+		// extract the info for the page
+		$page = getPageInfo($filename);
+
+		// was that successful?
+		if (!is_null($page)) {
+			// yes
+			$pages["indexed"][$filename] = $page;
+		}
+	}
+
+	// additional processing can go here in the future
+
+	// finally, build our list of pages in running order, for next / prev
+	// calculations
+	foreach ($pages["indexed"] as $filename => $page)
+	{
+		$pages["ordered"][] = $pages["indexed"][$filename];
+	}
+
+	// all done
+	return $pages;
+}
+
+function buildSidebar($sidebar, $toc, $pages)
+{
 	// build up our sidebar HTML
 	$sidebarHtml = "<h3>This Section</h3>\n<ol>";
-	foreach ($pages as $page)
+	foreach ($filesList as $filename)
 	{
+		// find the metadata about our page
+		if (!isset($pages["indexed"][$filename])) {
+			// the page doesn't exist yet
+			continue;
+		}
+		$page = $pages["indexed"][$filename];
+
 		// add the links into the sidebar
-		$sidebarHtml .= '<li><a href="' . basename($page['name']) . '.html">' . $page['title'] . "</a></li>\n";
+		$sidebarHtml .= '<li><a href="' . BASE_URL . $filename . '.html">' . $page['title'] . "</a></li>\n";
 		echo $page['title'] . "\n";
 
 		if (isset($page['h2']))
@@ -185,8 +180,15 @@ function buildSidebarList($toc)
 			$sidebars[$sidebarName] = array();
 		}
 
-		$sidebars[$sidebarName][] = $filename;
+		$sidebars[$sidebarName]["contents"][] = $filename;
 	}
+
+	// now we need to build up the sections list for each sidebar
+	/*
+	foreach ($sidebars as $sidebarName => $sidebarDetails) {
+
+	}
+	*/
 
 	// all done
 	return $sidebars;
@@ -272,50 +274,65 @@ function putInYaml($key, $value, $source)
 	return $source;
 }
 
-function rebuildPrevNextLinks($toc)
+function getPageInfo($filename)
 {
-	// we need to know about each page
-	$pages = array();
+	$page = array();
 
-	// understand the contents of each page
-	foreach ($toc->contents as $filename)
-	{
-		$page = array();
+	// where is the source file?
+	$page['MdFilename'] = TOP_DIR . "/{$filename}.md";
 
-		// where is the source file?
-		$page['MdFilename'] = TOP_DIR . "/{$filename}.md";
+	// where is the HTML version?
+	$page['HtmlFilename'] = TOP_DIR . "/_site/{$filename}.html";
 
-		// where is the HTML version?
-		$page['HtmlFilename'] = TOP_DIR . "/_site/{$filename}.html";
-
-		// does the HTML version exist?
-		if (!file_exists($page['HtmlFilename'])) {
-			echo "Skipping {$filename} - HTML page not found\n";
-			continue;
-		}
-
-		// load the HTML version of the page
-		// we don't add this to the page[] array, because we don't want to
-		// run out of memory if the site gets too big
-		$pageHtml = file_get_contents($page['HtmlFilename']);
-
-		// extract the page title
-		preg_match("|<title>(.*)</title>|", $pageHtml, $matches);
-		$page['title'] = $matches[1];
-
-		// we're done with the HTML
-		unset($pageHtml);
-
-		// add this page to the list of pages we know about
-		$page['name'] = $filename;
-		$pages[] = $page;
+	// does the HTML version exist?
+	if (!file_exists($page['HtmlFilename'])) {
+		echo "Skipping {$filename} - HTML page not found\n";
+		return null;
 	}
 
+	// load the HTML version of the page
+	// we don't add this to the page[] array, because we don't want to
+	// run out of memory if the site gets too big
+	$pageHtml = file_get_contents($page['HtmlFilename']);
+
+	// extract the page title
+	preg_match("|<title>(.*)</title>|", $pageHtml, $matches);
+	$page['title'] = $matches[1];
+
+	// extract the h2 headings
+	preg_match_all('|<h2 id=\'(.*)\'>(.*)</h2>|', $pageHtml, $matches);
+	if (isset($matches[1]))
+	{
+		$i = 0;
+
+		foreach ($matches[1] as $id)
+		{
+			$page['h2'][] = array(
+				'id' => $id,
+				'text' => $matches[2][$i]
+			);
+
+			$i++;
+		}
+	}
+
+	// we're done with the HTML
+	unset($pageHtml);
+
+	// add this page to the list of pages we know about
+	$page['name'] = $filename;
+
+	// all done
+	return $page;
+}
+
+function rebuildPrevNextLinks($toc, $pages)
+{
 	// update the 'prev' / 'next' navigation in all of the source pages
-	for($i = 0; $i < count($pages); $i++)
+	for($i = 0; $i < count($pages["ordered"]); $i++)
 	{
 		// shortcut to save typing
-		$page = $pages[$i];
+		$page = $pages["ordered"][$i];
 
 		// what should the 'prev' line be?
 		if ($i == 0)
@@ -324,17 +341,17 @@ function rebuildPrevNextLinks($toc)
 		}
 		else
 		{
-			$prev='<a href="' . getRelPathTo($pages[$i]['name'], $pages[$i-1]['name']) . '.html">Prev: ' . $pages[$i-1]['title'] . "</a>";
+			$prev='<a href="' . getRelPathTo($pages["ordered"][$i]['name'], $pages["ordered"][$i-1]['name']) . '.html">Prev: ' . $pages["ordered"][$i-1]['title'] . "</a>";
 		}
 
 		// what should the 'next' line be?
-		if ($i == count($pages) - 1)
+		if ($i == count($pages["ordered"]) - 1)
 		{
-			$next = '<a href="' . getRelPathTo("", $pages[0]['name']) . '.html">Back to: ' . $pages[0]['title'] . "</a>";
+			$next = '<a href="' . getRelPathTo("", $pages["ordered"][0]['name']) . '.html">Back to: ' . $pages["ordered"][0]['title'] . "</a>";
 		}
 		else
 		{
-			$next='<a href="' . getRelPathTo($pages[$i]['name'], $pages[$i+1]['name']) . '.html">Next: ' . $pages[$i+1]['title'] . "</a>";
+			$next='<a href="' . getRelPathTo($pages["ordered"][$i]['name'], $pages["ordered"][$i+1]['name']) . '.html">Next: ' . $pages["ordered"][$i+1]['title'] . "</a>";
 		}
 
 		$pageSource = explode("\n", file_get_contents($page['MdFilename']));
@@ -358,13 +375,44 @@ function getRelPathTo($lastPath, $path) {
 	return str_repeat("../", count($parts) - 1) . $path;
 }
 
+function getBaseUrl($topDir)
+{
+	// do we have a Jekyll config file?
+	$filename = $topDir . '/_config.yml';
+	if (!file_exists($filename)) {
+		// no - so assume that we're publishing into the root of the
+		// website
+		return "/";
+	}
+
+	// load the config file
+	$raw = file_get_contents($filename);
+
+	// does it contain basename?
+	$lines = explode("\n", $raw);
+	foreach ($lines as $line) {
+		$parts = explode(":", $line);
+
+		if (is_array($parts) && $parts[0] == "baseurl") {
+			return trim($parts[1]) . "/";
+		}
+	}
+
+	// if we get here, then there's no baseurl in the config file
+	return "/";
+}
+
 // ========================================================================
 //
 // IT ALL HAPPENS HERE
 //
 // ------------------------------------------------------------------------
 
+define("BASE_URL", getBaseUrl(TOP_DIR));
 $toc = getToc(TOP_DIR);
+
+// build up data about all of our pages
+$pages = buildPageMap($toc);
 
 // build the navbar
 $navBarHtml = buildNavBar($toc);
@@ -372,14 +420,17 @@ $navBarHtml = buildNavBar($toc);
 // write the navbar our to disk
 file_put_contents(TOP_DIR . '/_includes/nav.html', $navBarHtml);
 
+// extract our list of sections from the navbar
+// $sections = buildSectionsList($toc);
+
 // get the list of sidebars that we need to build
 $sidebars = buildSidebarList($toc);
 
 // now, built each sidebar in turn
-foreach ($sidebars as $sidebarName => $contents) {
-	$sidebarHtml = buildSidebar($contents);
+foreach ($sidebars as $sidebarName => $sidebar) {
+	$sidebarHtml = buildSidebar($sidebar, $toc, $pages);
 	file_put_contents(TOP_DIR . "/_includes/sidebar/{$sidebarName}.html", $sidebarHtml);
 }
 
 // finally, we need to go through and sort out the next / prev links
-rebuildPrevNextLinks($toc);
+rebuildPrevNextLinks($toc, $pages);
