@@ -88,7 +88,7 @@ In general, you should use the [WithLabel / Labelled](#withlabel__labelled) or [
 
 Common problems that stop this search filter from working when you expect it to include:
 
-* __duplicate _name_ attributes on the page:__ this can commonly happen if you have a combined Registration / Login page with two forms on it. Use the [Form module](form-module.html) to only act on a specified form.
+* __duplicate _name_ attributes on the page:__ this can commonly happen if you have a combined Registration / Login page with two forms on it. Use the [Form module](../form/index.html) to only act on a specified form.
 
 ## WithPlaceholder
 

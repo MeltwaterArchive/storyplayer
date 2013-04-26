@@ -71,11 +71,11 @@ $st->MODULE()->ACTION()->SEARCHTERM()
 
 where __module__ is one of:
 
-* _[fromBrowser()](#frombrowser)_ - get data from the browser and the HTML page that is loaded
-* _[expectsBrowser()](#expectsbrowser)_ - test the contents of the HTML page
-* _[usingBrowser()](#expectsbrowser)_ - load HTML pages, and interact with the pages
+* _[fromBrowser()](fromBrowser.html)_ - get data from the browser and the HTML page that is loaded
+* _[expectsBrowser()](expectsBrowser.html)_ - test the contents of the HTML page
+* _[usingBrowser()](usingBrowser.html)_ - load HTML pages, and interact with the pages
 
-__action__ is one of the documented actions available from that module, and __searchterm__ is one of [the ways to search inside the HTML page](#different_ways_to_search_inside_an_html_page).
+__action__ is one of the documented actions available from that module, and __searchterm__ is one of [the ways to search inside the HTML page](searching-the-dom.html).
 
 Here are some examples:
 
