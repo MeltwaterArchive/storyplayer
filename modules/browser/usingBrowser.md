@@ -2,7 +2,7 @@
 layout: modules-browser
 title: usingBrowser()
 prev: '<a href="../../modules/browser/expectsBrowser.html">Prev: expectsBrowser()</a>'
-next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
+next: '<a href="../../modules/browser/webdriver.html">Next: The WebDriver Library</a>'
 ---
 
 # usingBrowser()
