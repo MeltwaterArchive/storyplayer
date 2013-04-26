@@ -3,6 +3,9 @@
 	"contents":	[
 		"index",
 		"what-is-storyplayer",
+		"prose/index",
+		"prose/global-dialect",
+		"prose/local-dialects",
 		"modules/index",
 		"modules/browser/index",
 		"modules/browser/searching-the-dom",
@@ -11,12 +14,18 @@
 		"modules/browser/fromBrowser",
 		"modules/browser/expectsBrowser",
 		"modules/browser/usingBrowser",
+		"modules/browser/webdriver",
 		"copyright"
 	],
 	"navbar": {
 		"Home": "index",
+		"Prose": {
+			"Introduction": "prose/index",
+			"Global Dialect": "prose/global-dialect",
+			"Local Dialects": "prose/local-dialects"
+		},
 		"Modules": {
-			"Modules": "modules/index",
+			"Introduction": "modules/index",
 			"Sep1": "",
 			"Assertions": "modules/assertions/index",
 			"Browser": "modules/browser/index",
