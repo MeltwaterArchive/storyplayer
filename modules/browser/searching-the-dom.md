@@ -20,8 +20,8 @@ An element search term looks like this:
 where:
 
 * __from|into__ are entirely optional - you can add either _from_ or _into_ at the front of the search term to make it nicer to read, or you can leave it out entirely!
-* __button__ is one of our [supported targets](#supported_search_targets)
-* __WithId__ is one of our [supported filters](#supported_search_filters)
+* __button__ is one of our [supported targets](search-targets.html)
+* __WithId__ is one of our [supported filters](search-filters.html)
 
 You can use any combination of search target and filter with all of the operations that require a search term.
 
