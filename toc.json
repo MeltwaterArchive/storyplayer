@@ -3,6 +3,7 @@
 	"contents":	[
 		"index",
 		"what-is-storyplayer",
+		"modules/index",
 		"modules/browser/index",
 		"modules/browser/searching-the-dom",
 		"modules/browser/search-targets",
@@ -13,26 +14,26 @@
 		"copyright"
 	],
 	"navbar": {
-		"Home": "/storyplayer/index.html",
-		"Modules": [
-			{
-				"Assertions": "/storyplayer/modules/assertions/index.html",
-				"Browser": "/storyplayer/modules/browser/index.html",
-				"Checkpoint": "/storyplayer/modules/checkpoint/index.html",
-				"Doppeld": "/storyplayer/modules/doppeld/index.html",
-				"File": "/storyplayer/modules/file/index.html",
-				"Form": "/storyplayer/modules/form/index.html",
-				"Graphite": "/storyplayer/modules/graphite/index.html",
-				"Hornet": "/storyplayer/modules/hornet/index.html",
-				"HTTP": "/storyplayer/modules/http/index.html",
-				"Iframe": "/storyplayer/modules/iframe/index.html",
-				"SavageD": "/storyplayer/modules/savaged/index.html",
-				"Timer": "/storyplayer/modules/timer/index.html",
-				"UNIX Shell": "/storyplayer/modules/shell/index.html",
-				"UUID": "/storyplayer/modules/uuid/index.html",
-				"Vagrant": "/storyplayer/modules/vagrant/index.html",
-				"ZeroMQ": "/storyplayer/modules/zeromq/index.html"
-			}
-		]
+		"Home": "index",
+		"Modules": {
+			"Modules": "modules/index",
+			"Sep1": "",
+			"Assertions": "modules/assertions/index",
+			"Browser": "modules/browser/index",
+			"Checkpoint": "modules/checkpoint/index",
+			"Doppeld": "modules/doppeld/index",
+			"File": "modules/file/index",
+			"Form": "modules/form/index",
+			"Graphite": "modules/graphite/index",
+			"Hornet": "modules/hornet/index",
+			"HTTP": "modules/http/index",
+			"Iframe": "modules/iframe/index",
+			"SavageD": "modules/savaged/index",
+			"Timer": "modules/timer/index",
+			"UNIX Shell": "modules/shell/index",
+			"UUID": "modules/uuid/index",
+			"Vagrant": "modules/vagrant/index",
+			"ZeroMQ": "modules/zeromq/index"
+		}
 	}
 }
