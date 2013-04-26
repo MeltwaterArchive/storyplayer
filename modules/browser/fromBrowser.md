@@ -7,7 +7,11 @@ next: '<a href="../../modules/browser/expectsBrowser.html">Next: expectsBrowser(
 
 # fromBrowser()
 
-_fromBrowser()_ allows you to extract information and [WebDriverElements](webdriver.html) from the currently loaded HTML page.
+_fromBrowser()_ allows you to extract information and [WebDriverElement objects](webdriver.html) from the currently loaded HTML page.
+
+## Behaviour And Return Codes
+
+Every action returns either a value on success, or _NULL_ on failure.  None of these actions throw exceptions on failure.
 
 ## has()
 
@@ -22,24 +26,111 @@ else {
 }
 {% endhighlight %}
 
-This action is normally used inside [local Prose dialects](../../prose/local-dialects.html), where you're building wrappers for larger (and sometimes complex) actions inside your app.
+This action is normally used inside [local Prose dialects](../../prose/local-dialects.html), where you're building wrappers for your app's actions.
 
-### See Also
+__See Also:__
 
 * [expectsBrowser()->has()](expectsBrowser.html#has)
 
 ## get()
 
+Use _$st->fromBrowser()->get()_ to get one or more [WebDriver element objects](webdriver.html#webdriver_elements) from the DOM.
+
+{% highlight php %}
+$element = $st->fromBrowser()->get()->tableWithId('results');
+{% endhighlight %}
+
+This action is normally used when you need to run a custom XPath query to extract content from a DOM element that cannot be found by any other means.  This should be your last resort, as these kind of XPath queries are quite fragile, and take a lot of maintenance.
+
 ## getName()
+
+Use _$st->fromBrowser()->getName()_ to get the _name_ attribute from a specific DOM element.
+
+{% highlight php %}
+$name = $st->fromBrowser()->getName()->fromFieldWithLabel("Username");
+{% endhighlight %}
+
+This action is normally used when you want to perform a low-level check on the HTML markup of your forms, to make sure that the form is defining the input fields that your server-side code is expecting.
+
+It's also handy for web pages where the _name_ attribute is being used outside of forms.  In this case, it is often worth revisiting the HTML markup to see whether _id_ or _class_ attributes need to be introduced / tweaked instead.
 
 ## getNames()
 
+Use _$st->fromBrowser()->getNames()_ to get the _name_ attribute from a set of specified DOM elements.
+
+{% highlight php %}
+$names = $st->fromBrowser()->getNames()->ofFieldsWithClass('input-error');
+{% endhighlight %}
+
+This action is normally only used with web pages where the _name_ attribute is being used outside of forms.  In this case, it is often worth revisiting the HTML markup to see whether _id_ or _class_ attributes need to be introduced / tweaked instead.
+
 ## getOptions()
+
+Use _$st->fromBrowser()->getOptions()_ to get the list of possible values from a _&lt;select&gt;_ list.
+
+{% highlight php %}
+$options = $st->fromBrowser()->getOptions()->fromDropdownWithLabel("Country");
+{% endhighlight %}
+
+This action is normally used for making sure that the end-user has the choices that are expected - especially if the dropdown list is dynamically generated.  For example:
+
+{% highlight php %}
+// the choices that should be available
+$expectedOptions = array (
+	"Gold Subscription Plan" => "gold",
+	"Silver Subscription Plan" => "silver",
+	"Bronze Subscription Plan" => "bronze"
+);
+
+// the choices that *are* available
+$actualOptions = $st->fromBrowser()->getOptions()->fromDropdownWithLabel("Payment Plan");
+
+// make sure the right choices are there
+$st->expectsArray($actualOptions)->equals($expectedOptions);
+{% endhighlight %}
 
 ## getTag()
 
+Use _$st->fromBrowser()->getTag()_ to get the HTML tag used by a specified DOM element.
+
+{% highlight php %}
+$tag = $st->fromBrowser()->getTag()->ofFieldWithText("Login");
+{% endhighlight %}
+
+This action is normally used when you want to perform a low-level check on the HTML markup of your page.
+
 ## getText()
+
+Use _$st->fromBrowser()->getText()_ to get the contents of the specified DOM element.
+
+{% highlight php %}
+$text = $st->fromBrowser()->getText()->fromFieldWithClass("total-amount");
+{% endhighlight %}
+
+This action is normally used when you want to check that the expected information is present on the page, for example:
+
+{% highlight php %}
+$expectedAmount = "$60";
+$actualAmount = $st->fromBrowser()->getText()->fromFieldWithClass("total-amount");
+$st->expectsString($actualAmount)->equals($expectedAmount);
+{% endhighlight %}
 
 ## getTitle()
 
+Use _$st->fromBrowser()->getTitle()_ to get the _&lt;title&gt;_ of the currently loaded page.
+
+{% highlight php %}
+$title = $st->fromBrowser()->getTitle();
+{% endhighlight %}
+
+This action is normally used inside [local Prose dialects](../../prose/local-dialects.html), where your Prose might be wrapping up a complex operation that spans multiple pages.
+
 ## getValue()
+
+Use _$st->fromBrowser()->getValue()_ to get the _value_ attribute of a specified DOM element.
+
+{% highlight php %}
+$username = $st->fromBrowser()->getValue()->ofBoxWithLabel('Username');
+{% endhighlight %}
+
+This action is normally used for checking that _Remember Me_-like functionality is working.
