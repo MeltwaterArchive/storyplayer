@@ -117,7 +117,7 @@ function buildSidebar($sidebar, $toc, $pages)
 {
 	// build up our sidebar HTML
 	$sidebarHtml = "<h3>This Section</h3>\n<ol>";
-	foreach ($filesList as $filename)
+	foreach ($sidebar["contents"] as $filename)
 	{
 		// find the metadata about our page
 		if (!isset($pages["indexed"][$filename])) {
