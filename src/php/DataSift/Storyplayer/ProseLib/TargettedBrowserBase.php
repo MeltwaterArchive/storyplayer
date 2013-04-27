@@ -63,20 +63,14 @@ class TargettedBrowserBase
 	const PLURAL_TARGET = 2;
 
 	protected $tagTypes = array(
-		'box'			=> 'input',
-		'boxes'			=> 'input',
 		'button'        => 'input',
 		'buttons'       => 'input',
 		'cell'          => 'td',
 		'cells'         => 'td',
-		'dropdown'		=> 'select',
-		'dropdowns'		=> 'select',
-		'heading'		=> 'h1|h2|h3|h4|h5|h6',
 		'link'          => 'a',
 		'links'         => 'a',
 		'orderedlist'   => 'ol',
-		'span'			=> 'span',
-		'unorderedlist' => 'ul',
+		'unorderedlist' => 'ul'
 	);
 
 	protected $targetTypes = array(
@@ -92,7 +86,6 @@ class TargettedBrowserBase
 		'elements'      => self::PLURAL_TARGET,
 		'field'         => self::SINGLE_TARGET,
 		'fields'        => self::PLURAL_TARGET,
-		'heading'		=> self::SINGLE_TARGET,
 		'link'          => self::SINGLE_TARGET,
 		'links'         => self::PLURAL_TARGET,
 		'orderedlist'   => self::SINGLE_TARGET,
@@ -106,7 +99,6 @@ class TargettedBrowserBase
 		'labelled'      => 'ByLabel',
 		'named'         => 'ByName',
 		'name'			=> 'ByName',
-		'alt'			=> 'ByAltText',
 		'text'          => 'ByText',
 		'class'         => 'ByClass',
 		'placeholder'   => 'ByPlaceholder',
