@@ -117,6 +117,16 @@ $actualAmount = $st->fromBrowser()->getText()->fromFieldWithClass("total-amount"
 $st->expectsString($actualAmount)->equals($expectedAmount);
 {% endhighlight %}
 
+## getTopElement()
+
+Use _$st->fromBrowser()->getTopElement()_ to get the DOM element that's at the top of the document loaded in the browser.  This is always the element created by the _&lt;html&gt;_ tag.
+
+{% highlight php %}
+$topElement = $st->fromBrowser()->getTopElement();
+{% endhighlight %}
+
+This action returns a _[WebDriverElement](webdriver.html)_, which you can then use to perform your own operations on directly.  We make this available so that you can use Selenium functionality that isn't yet supported by the _Browser_ module.
+
 ## getTitle()
 
 Use _$st->fromBrowser()->getTitle()_ to get the _&lt;title&gt;_ of the currently loaded page.
