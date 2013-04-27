@@ -111,14 +111,6 @@ class BrowserActions extends Prose
 		return $action->type($text);
 	}
 
-	public function typeSpecial($text)
-	{
-		$topElement = $this->getTopElement();
-
-		$action = new ContainedBrowserAction($this->st, $topElement);
-		return $action->typeSpecial($text);
-	}
-
 	public function fromElement($element)
 	{
 		return new ContainedBrowserAction($this->st, $element);
@@ -148,24 +140,24 @@ class BrowserActions extends Prose
 		$log->endAction();
 	}
 
-	public function waitForOverlay($id)
+	public function waitForOverlay($timeout, $id)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ wait for the overlay to appear ]");
+		$log = $st->startAction("[ wait for the overlay with id '{$id}' to appear ]");
 
 		// check for the overlay
 		$st->usingTimer()->waitFor(function() use($st, $id) {
 			$st->expectsBrowser()->has()->elementWithId($id);
-		});
+		}, $timeout);
 
 		// all done
 		$log->endAction();
 	}
 
-	public function waitForTitle($title, $failedTitle = null)
+	public function waitForTitle($timeout, $title, $failedTitle = null)
 	{
 		// shorthand
 		$st = $this->st;
@@ -182,13 +174,13 @@ class BrowserActions extends Prose
 
 			// we have not failed yet
 			$st->expectsBrowser()->title($title);
-		});
+		}, $timeout);
 
 		// all done
 		$log->endAction();
 	}
 
-	public function waitForTitles($titles)
+	public function waitForTitles($timeout, $titles)
 	{
 		// shorthand
 		$st = $this->st;
@@ -199,7 +191,7 @@ class BrowserActions extends Prose
 		// check the title
 		$st->usingTimer()->waitFor(function() use($st, $titles) {
 			$st->expectsBrowser()->titles($titles);
-		});
+		}, $timeout);
 
 		// all done
 		$log->endAction();

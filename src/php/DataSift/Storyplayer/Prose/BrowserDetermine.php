@@ -303,6 +303,41 @@ class BrowserDetermine extends Prose
 		);
 	}
 
+	public function getElementByAltText($text, $tag = '*')
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("( get '{$tag}' element with alt text '{$text}' )");
+
+		$successMsg = "found one";
+		$failureMsg = "no matching elements";
+
+		// shorthand
+		$topElement = $this->getTopElement();
+
+		// is there an element with this text?
+		try {
+			$xpath = 'descendant::' . $tag . '[@alt = "' . $text . '"]';
+			$elements = $log->addStep("( find elements using xpath '{$xapth}' )", function() use($topElement, $xpath) {
+				return $topElement->getElements('xpath', $xpath);
+			});
+
+		}
+		catch (Exception $e) {
+			// log the result
+			$log->endAction($failureMsg);
+
+			// report the failure
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		return $this->returnFirstVisibleElement(
+			$log, $elements, __METHOD__, $successMsg, $failureMsg
+		);
+	}
+
 	public function getElementByText($text, $tag = '*')
 	{
 		// short hand

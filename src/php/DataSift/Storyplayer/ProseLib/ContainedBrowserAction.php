@@ -193,22 +193,4 @@ class ContainedBrowserAction
 			$this->topElement
 		);
 	}
-
-	public function typeSpecial($text)
-	{
-		$action = function($st, $element, $elementName, $elementDesc) use ($text) {
-
-			// what are we doing?
-			$log = $st->startAction("type special character '$text' into $elementDesc '$elementName'");
-			$element->typeSpecial($text);
-			$log->endAction();
-		};
-
-		return new TargettedBrowserAction(
-			$this->st,
-			$action,
-			"typeSpecial",
-			$this->topElement
-		);
-	}
 }
