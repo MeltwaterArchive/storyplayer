@@ -2,7 +2,7 @@
 layout: modules-assertions
 title: Array Assertions
 prev: '<a href="../../modules/assertions/index.html">Prev: The Assertions Module</a>'
-next: '<a href="../../modules/assertions/assertsDouble.html">Next: Double Assertions</a>'
+next: '<a href="../../modules/assertions/assertsBoolean.html">Next: Boolean Assertions</a>'
 ---
 
 # Array Assertions
