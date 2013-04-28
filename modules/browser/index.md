@@ -1,7 +1,7 @@
 ---
 layout: modules-browser
 title: The Browser Module
-prev: '<a href="../../prose/local-dialects.html">Prev: Local Dialects</a>'
+prev: '<a href="../../modules/assertions/assertsString.html">Prev: String Assertions</a>'
 next: '<a href="../../modules/browser/searching-the-dom.html">Next: Searching The DOM</a>'
 ---
 
