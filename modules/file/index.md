@@ -1,7 +1,7 @@
 ---
 layout: modules-file
 title: The File Module
-prev: '<a href="../../modules/browser/webdriver.html">Prev: The WebDriver Library</a>'
+prev: '<a href="../../modules/checkpoint/usingCheckpoint.html">Prev: usingCheckpoint()</a>'
 next: '<a href="../../modules/file/fromFile.html">Next: fromFile()</a>'
 ---
 
