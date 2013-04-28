@@ -4,4 +4,4 @@ safe: true
 pygments: false
 url: http://datasift.github.io/storyplayer
 baseurl: /storyplayer
-include: modules
+include: modules, prose, stories
