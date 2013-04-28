@@ -20,6 +20,7 @@
 		"modules/index",
 		"modules/assertions/index",
 		"modules/assertions/assertsArray",
+		"modules/assertions/assertsBoolean",
 		"modules/assertions/assertsDouble",
 		"modules/assertions/assertsInteger",
 		"modules/assertions/assertsObject",
