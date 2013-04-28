@@ -2,7 +2,7 @@
 layout: modules-browser
 title: The WebDriver Library
 prev: '<a href="../../modules/browser/usingBrowser.html">Prev: usingBrowser()</a>'
-next: '<a href="../../modules/file/index.html">Next: The File Module</a>'
+next: '<a href="../../modules/checkpoint/index.html">Next: The Checkpoint Module</a>'
 ---
 
 # The WebDriver Library
