@@ -1,7 +1,7 @@
 ---
 layout: book-chapter
 title: Legal Stuff
-prev: '<a href="modules/form/usingForm.html">Prev: usingForm()</a>'
+prev: '<a href="modules/graphite/expectsGraphite.html">Prev: expectsGraphite()</a>'
 next: '<a href="index.html">Back to: Storyplayer</a>'
 ---
 # Legal Stuff
