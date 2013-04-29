@@ -46,7 +46,10 @@
 		"copyright"
 	],
 	"navbar": {
-		"Home": "index",
+		"Home": {
+			"Welcome To Storyplayer": "index",
+			"Configuring Storyplayer": "configuration"
+		},
 		"Stories": {
 			"Introduction": "stories/index",
 			"User Stories": "stories/user-stories",
