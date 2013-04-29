@@ -124,4 +124,54 @@ you can istall / remove software or create / terminate virtual servers.
 
 Test setup / teardown is used to set up tests.  Test customization happens here.
 
+    // ========================================================================
+    //
+    // PRE-TEST PREDICTION
+    //
+    // ------------------------------------------------------------------------
 
+    $story->setPreTestPrediction(function(StoryTeller $st) {
+            // this story should always succeed for any of the valid users
+            $st->expectsUser()->isValidForStory();
+    });
+    
+    // ========================================================================
+    //
+    // PRE-TEST INSPECTION
+    //
+    // ------------------------------------------------------------------------
+
+    // ========================================================================
+    //
+    // POSSIBLE ACTION(S)
+    //
+    // ------------------------------------------------------------------------
+
+    $story->addAction(function(StoryTeller $st) {
+            // register as our chosen user
+            $st->usingLogin()->loginUsingForm();
+
+            // make sure it worked - we should be logged in :)
+            $st->expectsUser()->isLoggedIn();
+    });
+
+    // ========================================================================
+    //
+    // POST-TEST INSPECTION
+    //
+    // ------------------------------------------------------------------------
+
+    $story->setPostTestInspection(function(StoryTeller $st) {
+            // we should be able to login :)
+            $st->usingLogin()->loginAsUser();
+    });
+
+### Testing a Backend
+
+### Testing an API
+
+### Testing Web UI
+
+### Telling Tales
+
+### F.A.Q
