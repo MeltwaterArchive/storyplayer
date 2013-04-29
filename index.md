@@ -82,3 +82,96 @@ Stories are written in PHP using Storyplayer-specific Prose (grammar and vocabul
 ### Telling a Story in Eight Parts
 
 Each Story can be divided into up to eight parts.
+
+Every story starts with an import of the `StoryTeller` library:
+
+    use DataSift\Storyteller\PlayerLib\StoryTeller;
+
+Next, come the story details:
+
+    // ========================================================================
+    //
+    // STORY DETAILS
+    //
+    // ------------------------------------------------------------------------
+
+    $story = newStoryFor('Twitter User Stories')
+             ->inGroup('login')
+             ->called("Can log in using the login form");
+
+The story details are followed by the user role definition:
+
+    $story->addValidRole('loggedout user');
+
+Both steps are **required**.
+
+The next two parts are *optional*.
+
+    // ========================================================================
+    //
+    // TEST ENVIRONMENT SETUP / TEAR-DOWN
+    //
+    // ------------------------------------------------------------------------
+
+Test environemnt setup / tear-down is used to prepare the test environment. Here 
+you can istall / remove software or create / terminate virtual servers.
+
+    // ========================================================================
+    //
+    // TEST SETUP / TEAR-DOWN
+    //
+    // ------------------------------------------------------------------------
+
+Test setup / teardown is used to set up tests.  Test customization happens here.
+
+    // ========================================================================
+    //
+    // PRE-TEST PREDICTION
+    //
+    // ------------------------------------------------------------------------
+
+    $story->setPreTestPrediction(function(StoryTeller $st) {
+            // this story should always succeed for any of the valid users
+            $st->expectsUser()->isValidForStory();
+    });
+    
+    // ========================================================================
+    //
+    // PRE-TEST INSPECTION
+    //
+    // ------------------------------------------------------------------------
+
+    // ========================================================================
+    //
+    // POSSIBLE ACTION(S)
+    //
+    // ------------------------------------------------------------------------
+
+    $story->addAction(function(StoryTeller $st) {
+            // register as our chosen user
+            $st->usingLogin()->loginUsingForm();
+
+            // make sure it worked - we should be logged in :)
+            $st->expectsUser()->isLoggedIn();
+    });
+
+    // ========================================================================
+    //
+    // POST-TEST INSPECTION
+    //
+    // ------------------------------------------------------------------------
+
+    $story->setPostTestInspection(function(StoryTeller $st) {
+            // we should be able to login :)
+            $st->usingLogin()->loginAsUser();
+    });
+
+### Testing a Backend
+
+### Testing an API
+
+### Testing Web UI
+
+### Telling Tales
+
+### F.A.Q
