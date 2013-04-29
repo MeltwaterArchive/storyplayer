@@ -1,8 +1,8 @@
 ---
 layout: modules-form
 title: fromForm()
-prev: '<a href="../../modules/browser/search-filters.html">Prev: Supported Search Filters</a>'
-next: '<a href="../../modules/browser/expectsBrowser.html">Next: expectsBrowser()</a>'
+prev: '<a href="../../modules/form/expectsForm.html">Prev: expectsForm()</a>'
+next: '<a href="../../modules/form/usingForm.html">Next: usingForm()</a>'
 ---
 
 # fromForm()
@@ -122,30 +122,20 @@ You can use it to inspect any element inside the form - it doesn't have to be a 
 
 ## getTopElement()
 
-Use _$st->fromBrowser()->getTopElement()_ to get the DOM element that's at the top of the document loaded in the browser.  This is always the element created by the _&lt;html&gt;_ tag.
+Use _$st->fromForm()->getTopElement()_ to get the specified form's _&lt;form&gt;_ DOM element.
 
 {% highlight php %}
-$topElement = $st->fromBrowser()->getTopElement();
+$topElement = $st->fromForm('registration')->getTopElement();
 {% endhighlight %}
 
-This action returns a _[WebDriverElement](webdriver.html)_, which you can then use to perform your own operations on directly.  We make this available so that you can use Selenium functionality that isn't yet supported by the _Browser_ module.
-
-## getTitle()
-
-Use _$st->fromBrowser()->getTitle()_ to get the _&lt;title&gt;_ of the currently loaded page.
-
-{% highlight php %}
-$title = $st->fromBrowser()->getTitle();
-{% endhighlight %}
-
-This action is normally used inside [local Prose dialects](../../prose/local-dialects.html), where your Prose might be wrapping up a complex operation that spans multiple pages.
+This action returns a _[WebDriverElement](webdriver.html)_, which you can then use to perform your own operations on directly.  We make this available so that you can use Selenium functionality that isn't yet supported by the _Form_ module.
 
 ## getValue()
 
-Use _$st->fromBrowser()->getValue()_ to get the _value_ attribute of a specified DOM element.
+Use _$st->fromForm()->getValue()_ to get the _value_ attribute of a specified DOM element in the specified form.
 
 {% highlight php %}
-$username = $st->fromBrowser()->getValue()->ofBoxWithLabel('Username');
+$username = $st->fromForm('registration')->getValue()->ofBoxWithLabel('Username');
 {% endhighlight %}
 
-This action is normally used for checking that _Remember Me_-like functionality is working.
+This action is normally used for checking that _Remember Me_-like functionality is working, or any other circumstance where you expect the form to be partially pre-populated before the user does anything.
