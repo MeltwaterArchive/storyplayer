@@ -82,3 +82,25 @@ Stories are written in PHP using Storyplayer-specific Prose (grammar and vocabul
 ### Telling a Story in Eight Parts
 
 Each Story can be divided into up to eight parts.
+
+Every story starts with an import of the `StoryTeller` library:
+
+    use DataSift\Storyteller\PlayerLib\StoryTeller;
+
+Next, come the story details:
+
+    // ========================================================================
+    //
+    // STORY DETAILS
+    //
+    // ------------------------------------------------------------------------
+
+    $story = newStoryFor('Twitter User Stories')
+             ->inGroup('login')
+             ->called("Can login using the login form");
+
+The story details are followed by the user role definition:
+
+    $story->addValidRole('loggedout user');
+
+
