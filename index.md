@@ -103,4 +103,25 @@ The story details are followed by the user role definition:
 
     $story->addValidRole('loggedout user');
 
+Both steps are **required**.
+
+The next two parts are *optional*.
+
+    // ========================================================================
+    //
+    // TEST ENVIRONMENT SETUP / TEAR-DOWN
+    //
+    // ------------------------------------------------------------------------
+
+Test environemnt setup / tear-down is used to prepare the test environment. Here 
+you can istall / remove software or create / terminate virtual servers.
+
+    // ========================================================================
+    //
+    // TEST SETUP / TEAR-DOWN
+    //
+    // ------------------------------------------------------------------------
+
+Test setup / teardown is used to set up tests.  Test customization happens here.
+
 
