@@ -2,7 +2,7 @@
 layout: modules-file
 title: usingFile()
 prev: '<a href="../../modules/file/fromFile.html">Prev: fromFile()</a>'
-next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
+next: '<a href="../../modules/form/index.html">Next: The Form Module</a>'
 ---
 
 # usingFile()

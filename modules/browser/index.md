@@ -63,7 +63,7 @@ We've looked at the possibility of having Storyplayer start these for you, but d
 
 ## Using The Browser Module
 
-The basic format of an operation is:
+The basic format of an action is:
 
 {% highlight php %}
 $st->MODULE()->ACTION()->SEARCHTERM()
