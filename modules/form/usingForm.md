@@ -2,7 +2,7 @@
 layout: modules-form
 title: usingForm()
 prev: '<a href="../../modules/form/fromForm.html">Prev: fromForm()</a>'
-next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
+next: '<a href="../../modules/graphite/index.html">Next: The Graphite Module</a>'
 ---
 
 # usingForm()

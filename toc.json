@@ -43,6 +43,9 @@
 		"modules/form/expectsForm",
 		"modules/form/fromForm",
 		"modules/form/usingForm",
+		"modules/graphite/index",
+		"modules/graphite/fromGraphite",
+		"modules/graphite/expectsGraphite",
 		"copyright"
 	],
 	"navbar": {
