@@ -97,7 +97,7 @@ Next, come the story details:
 
     $story = newStoryFor('Twitter User Stories')
              ->inGroup('login')
-             ->called("Can login using the login form");
+             ->called("Can log in using the login form");
 
 The story details are followed by the user role definition:
 
