@@ -1,7 +1,7 @@
 ---
 layout: modules-assertions
 title: The Assertions Module
-prev: '<a href="../../prose/local-dialects.html">Prev: Local Dialects</a>'
+prev: '<a href="../../modules/index.html">Prev: Storyplayer Modules</a>'
 next: '<a href="../../modules/assertions/assertsArray.html">Next: Array Assertions</a>'
 ---
 

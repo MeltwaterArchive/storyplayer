@@ -39,6 +39,10 @@
 		"modules/file/index",
 		"modules/file/fromFile",
 		"modules/file/usingFile",
+		"modules/form/index",
+		"modules/form/expectsForm",
+		"modules/form/fromForm",
+		"modules/form/usingForm",
 		"copyright"
 	],
 	"navbar": {
@@ -70,11 +74,9 @@
 			"Assertions": "modules/assertions/index",
 			"Browser": "modules/browser/index",
 			"Checkpoint": "modules/checkpoint/index",
-			"Doppeld": "modules/doppeld/index",
 			"File": "modules/file/index",
 			"Form": "modules/form/index",
 			"Graphite": "modules/graphite/index",
-			"Hornet": "modules/hornet/index",
 			"HTTP": "modules/http/index",
 			"Iframe": "modules/iframe/index",
 			"SavageD": "modules/savaged/index",
