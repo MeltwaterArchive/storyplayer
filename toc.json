@@ -89,7 +89,6 @@
 			"Form": "modules/form/index",
 			"Graphite": "modules/graphite/index",
 			"HTTP": "modules/http/index",
-			"Iframe": "modules/iframe/index",
 			"SavageD": "modules/savaged/index",
 			"Timer": "modules/timer/index",
 			"UNIX Shell": "modules/shell/index",
