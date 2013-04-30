@@ -189,7 +189,7 @@ class GraphiteExpects extends Prose
 		return;
 	}
 
-	public function metricAverageIsLessThanOrEqualTo($metric, $expectedAverage, $startTime, $endTime)
+	public function metricAverageDoesntExceed($metric, $expectedAverage, $startTime, $endTime)
 	{
 		// shorthand
 		$st = $this->st;
