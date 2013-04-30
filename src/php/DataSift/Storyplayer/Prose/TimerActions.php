@@ -43,17 +43,14 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use Exception;
+
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Stone\HttpLib\HttpClient;
-use DataSift\Stone\HttpLib\HttpClientRequest;
-use DataSift\Stone\HttpLib\HttpClientResponse;
+use DataSift\Stone\TimeLib\DateInterval;
 
 /**
- * do things to a web site by making requests directly to it (i.e. not
- * using the web browser at all)
- *
- * Great for testing APIs
+ * perform delayed actions
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,57 +59,68 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HttpActions extends Prose
+class TimerActions extends Prose
 {
-	public function delete($url, $params = array(), $body = null)
-	{
-		return $this->makeHttpRequest($url, "DELETE", $params, $body);
-	}
-
-	public function post($url, $params = array(), $body = null)
-	{
-		return $this->makeHttpRequest($url, "POST", $params, $body);
-	}
-
-	public function put($url, $params = array(), $body = null)
-	{
-		return $this->makeHttpRequest($url, "PUT", $params, $body);
-	}
-
-	protected function makeHttpRequest($url, $verb, $params, $body)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// create the full URL
-		if (count($params) > 0) {
-			$url = $url . '?' . http_build_query($params);
+	public function waitFor($callback, $timeout = 'PT5S') {
+		if (is_string($timeout)) {
+			$interval = new DateInterval($timeout);
+			$seconds  = $interval->getTotalSeconds();
+		}
+		else {
+			$seconds = $timeout;
 		}
 
-		// what are we doing?
-		$log = $st->startAction("HTTP " . strtoupper($verb) . " '${url}'");
+		$now = time();
+		$end = $now + $seconds;
 
-		// build the HTTP request
-		$request = new HttpClientRequest($url);
-		$request->withUserAgent("Storyplayer")
-				->withHttpVerb($verb);
+		while ($now < $end) {
+			try {
+				$log = $this->st->startAction("[ polling ]");
+				$result = $callback();
 
-		if (is_array($body)) {
-			foreach ($body as $key => $value) {
-				$request->addData($key, $value);
+				// if we get here, the actions inside the callback
+				// must have worked
+				$log->endAction();
+				return;
 			}
+			catch (Exception $e) {
+				// do nothing
+				$log->endAction();
+			}
+
+			// has the action actually failed?
+			if (isset($result) && !$result) {
+				$log->endAction();
+				throw new E5xx_ActionFailed(__METHOD__);
+			}
+
+			// we don't want to use all the CPU resources
+			sleep(1);
+
+			// update the timeout
+			$now = time();
 		}
 
-		// make the call
-		$client = new HttpClient();
-		$response = $client->newRequest($request);
+		// if we get here, then the timeout happened
+		throw new E5xx_ActionFailed('timer()->waitFor()');
+	}
 
-		// is this a valid response?
-		if (!$response instanceof HttpClientResponse) {
-			throw new E5xx_ActionFailed(__METHOD__);
+	public function waitWhile($callback, $timeout = 'PT5S')
+	{
+		$this->waitFor($callback, $timeout);
+	}
+
+	public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up") {
+		if (is_string($timeout)) {
+			$interval = new DateInterval($timeout);
+			$seconds  = $interval->getTotalSeconds();
+		}
+		else {
+			$seconds = $timeout;
 		}
 
-		// all done
-		return $response;
+		$log = $this->st->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
+		sleep($seconds);
+		$log->endAction("finished sleeping");
 	}
 }
