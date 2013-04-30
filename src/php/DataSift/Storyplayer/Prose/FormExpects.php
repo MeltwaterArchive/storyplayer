@@ -34,92 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-namespace DataSift\Storyplayer\ProseLib;
 
+namespace DataSift\Storyplayer\Prose;
+
+use Exception;
+use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * Helper class that allows us to write Prose where the action comes before
- * we say what DOM element we want to act upon
+ * test forms in the web browser
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TargettedBrowserAction extends TargettedBrowserBase
+class FormExpects extends BrowserExpects
 {
-	protected $st;
-	protected $action;
-	protected $actionDesc;
-	protected $baseElement;
-
-	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
+	protected function initActions()
 	{
-		$this->st          = $st;
-		$this->action      = $action;
-		$this->actionDesc  = $actionDesc;
-		$this->baseElement = $baseElement;
-	}
+		// shorthand
+		$st     = $this->st;
+		$formId = $this->args[0];
 
-	public function __call($methodName, $methodArgs)
-	{
-		$words = $this->convertMethodNameToWords($methodName);
+		// find the form
+		$formElement = $st->fromBrowser()->getElementById($formId);
 
-		$targetType = $this->determineTargetType($words);
-
-		if ($targetType != 'element') {
-
-			// what are we searching for?
-			$searchTerm = $methodArgs[0];
-
-			$searchType = $this->determineSearchType($words);
-			if ($searchType == null) {
-				// we do not understand how to find the target field
-				throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
-			}
-
-			// what tag(s) do we want to narrow our search to?
-			$tag = $this->determineTagType($targetType);
-
-			if ($this->isPluralTarget($targetType)) {
-				$searchMethod = 'getElements';
-			}
-			else {
-				$searchMethod = 'getElement';
-			}
-			$searchMethod .= $searchType;
-
-			// let's go find our element
-			$searchObject = $this->st->fromBrowser();
-			$searchObject->setTopElement($this->baseElement);
-
-			$element = $searchObject->$searchMethod($searchTerm, $tag);
-		}
-		else {
-			$element = $methodArgs[0];
-
-			if (isset($methodArgs[1])) {
-				$searchTerm = $methodArgs[1];
-			}
-			else {
-				$searchTerm = $element->getName();
-			}
+		// is it really a form?
+		if ($formElement->name() !== 'form') {
+			throw new E5xx_ActionFailed('form');
 		}
 
-		// now that we have our element, let's apply the action to it
-		$action = $this->action;
-		$return = $action($this->st, $element, $searchTerm, $methodName);
-
-		// all done
-		return $return;
+		// yes, it really is a form
+		$this->formId      = $formId;
+		$this->setTopElement($formElement);
 	}
 }

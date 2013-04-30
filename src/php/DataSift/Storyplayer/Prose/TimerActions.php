@@ -61,25 +61,30 @@ use DataSift\Stone\TimeLib\DateInterval;
  */
 class TimerActions extends Prose
 {
-	public function waitFor($callback, $timeout = 5) {
+	public function waitFor($callback, $timeout = 'PT5S') {
+		if (is_string($timeout)) {
+			$interval = new DateInterval($timeout);
+			$seconds  = $interval->getTotalSeconds();
+		}
+		else {
+			$seconds = $timeout;
+		}
+
 		$now = time();
-		$end = $now + $timeout;
+		$end = $now + $seconds;
 
 		while ($now < $end) {
 			try {
 				$log = $this->st->startAction("[ polling ]");
-				$result = $callback();
+				$result = $callback($st);
 
 				// if we get here, the actions inside the callback
-				// may have worked
-				if ($result || $result === null) {
-					$log->endAction();
-					return;
-				}
+				// must have worked
+				$log->endAction();
+				return;
 			}
 			catch (Exception $e) {
 				// do nothing
-				$log->endAction();
 			}
 
 			// has the action actually failed?
@@ -88,7 +93,7 @@ class TimerActions extends Prose
 				throw new E5xx_ActionFailed(__METHOD__);
 			}
 
-			// we need to give the browser time to catch up
+			// we don't want to use all the CPU resources
 			sleep(1);
 
 			// update the timeout
@@ -99,27 +104,46 @@ class TimerActions extends Prose
 		throw new E5xx_ActionFailed('timer()->waitFor()');
 	}
 
-	public function waitWhile($callback, $timeout = 5) {
+	public function waitWhile($callback, $timeout = 'PT5S')
+	{
+		if (is_string($timeout)) {
+			$interval = new DateInterval($timeout);
+			$seconds  = $interval->getTotalSeconds();
+		}
+		else {
+			$seconds = $timeout;
+		}
+
 		$now = time();
-		$end = $now + $timeout;
+		$end = $now + $seconds;
 
 		while ($now < $end) {
 			try {
-				$remaining = $end - $now;
-				$log = $this->st->startAction("[ polling; remaining time is {$remaining} seconds ]");
-				$result = $callback();
+				$log = $this->st->startAction("[ polling ]");
+				$result = $callback($st);
 
 				// if we get here, the actions inside the callback
-				// may have worked
-				$log->endAction();
+				// must have worked
+				//
+				// that means whatever we're waiting for hasn't happened
+				// yet
 			}
 			catch (Exception $e) {
-				// do nothing
+				// the conditions have changed - we can go ahead now
 				$log->endAction();
 				return;
 			}
+
+			// has the action actually failed?
+			if (isset($result) && !$result) {
+				$log->endAction();
+				throw new E5xx_ActionFailed(__METHOD__);
+			}
+
+			// we don't want to use all the CPU resources
 			sleep(1);
 
+			// update the timeout
 			$now = time();
 		}
 
@@ -128,8 +152,13 @@ class TimerActions extends Prose
 	}
 
 	public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up") {
-		$interval = new DateInterval($timeout);
-		$seconds  = $interval->getTotalSeconds();
+		if (is_string($timeout)) {
+			$interval = new DateInterval($timeout);
+			$seconds  = $interval->getTotalSeconds();
+		}
+		else {
+			$seconds = $timeout;
+		}
 
 		$log = $this->st->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
 		sleep($seconds);
