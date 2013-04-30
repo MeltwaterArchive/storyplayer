@@ -6,3 +6,14 @@ next: '<a href="../stories/test-setup-teardown.html">Next: Test Setup / Teardown
 ---
 
 # Test Environment Setup / Teardown Phases
+
+
+    // ========================================================================
+    //
+    // TEST ENVIRONMENT SETUP / TEAR-DOWN
+    //
+    // ------------------------------------------------------------------------
+
+This phase is *optional*. Here you will prepare your test environment.  Here 
+you can istall / remove software or create / terminate virtual servers as needed.
+

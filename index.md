@@ -99,6 +99,8 @@ Every story starts with an import of the `StoryTeller` library:
 
     use DataSift\Storyteller\PlayerLib\StoryTeller;
 
+This step is *required*.
+
 Next, come the story details:
 
     // ========================================================================
@@ -115,84 +117,6 @@ The story details are followed by the user role definition:
 
     $story->addValidRole('loggedout user');
 
-Both steps are **required**.
-
-The next two parts are *optional*.
-
-    // ========================================================================
-    //
-    // TEST ENVIRONMENT SETUP / TEAR-DOWN
-    //
-    // ------------------------------------------------------------------------
-
-Test environemnt setup / tear-down is used to prepare the test environment. Here 
-you can istall / remove software or create / terminate virtual servers.
-
-    // ========================================================================
-    //
-    // STORY SETUP / TEAR-DOWN
-    //
-    // ------------------------------------------------------------------------
-
-Test setup / teardown is used to set up tests.  Test customization happens here.
-
-    // ========================================================================
-    //
-    // PRE-TEST PREDICTION
-    //
-    // ------------------------------------------------------------------------
-
-    $story->setPreTestPrediction(function(StoryTeller $st) {
-
-        // this story should always succeed for any of the valid users
-        $st->expectsUser()->isValidForStory();
-
-    });
-    
-    // ========================================================================
-    //
-    // PRE-TEST INSPECTION
-    //
-    // ------------------------------------------------------------------------
-
-This phase is *optional*.
-
-    // ========================================================================
-    //
-    // POSSIBLE ACTION(S)
-    //
-    // ------------------------------------------------------------------------
-
-    $story->addAction(function(StoryTeller $st) {
-
-	    // get the checkpoint, to store data in
-	    $checkpoint = $st->getCheckpoint();
-
-        // load the home page
-        $st->usingBrowser()->gotoPage("https://twitter.com");
-
-        // get the title of the test page
-        $checkpoint->title = $st->fromBrowser()->getTitle();
-
-    });
-
-	// ========================================================================
-	//
-	// POST-TEST INSPECTION
-	//
-	// ------------------------------------------------------------------------
-
-	$story->setPostTestInspection(function(StoryTeller $st) {
-
-		// get the checkpoint
-		$checkpoint = $st->getCheckpoint();
-
-		// do we have the title we expected?
-		$st->expectsObject($checkpoint)->hasAttribute('title');
-		$st->expectsString($checkpoint->title)->equals("Twitter");
-
-	});
-
 ### Testing a Backend
 
 ### Testing an API
@@ -202,3 +126,20 @@ This phase is *optional*.
 ### Telling Tales
 
 ### F.A.Q
+
+1. The browser window closes immediately after the test completes. How can I make it stay on screen?
+
+Add `exit(0);` near the end of the callback function defined in a call the `addAction()` in the [Action Phase](/storyplayer/stories/action.html).
+
+    $story->addAction(function(StoryTeller $st) {
+
+            // get the checkpoint, to store data in
+            $checkpoint = $st->getCheckpoint();
+
+            $st->usingBrowser()->gotoPage("https://twitter.com");
+
+            // get the title of the test page
+            $checkpoint->title = $st->fromBrowser()->getTitle();
+
+            exit(0);
+    });
