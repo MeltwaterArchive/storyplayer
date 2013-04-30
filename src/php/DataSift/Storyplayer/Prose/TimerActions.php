@@ -62,6 +62,9 @@ use DataSift\Stone\TimeLib\DateInterval;
 class TimerActions extends Prose
 {
 	public function waitFor($callback, $timeout = 'PT5S') {
+		// shorthand
+		$st = $this->st;
+
 		if (is_string($timeout)) {
 			$interval = new DateInterval($timeout);
 			$seconds  = $interval->getTotalSeconds();
@@ -75,7 +78,7 @@ class TimerActions extends Prose
 
 		while ($now < $end) {
 			try {
-				$log = $this->st->startAction("[ polling ]");
+				$log = $st->startAction("[ polling ]");
 				$result = $callback($st);
 
 				// if we get here, the actions inside the callback
@@ -106,6 +109,9 @@ class TimerActions extends Prose
 
 	public function waitWhile($callback, $timeout = 'PT5S')
 	{
+		// shorthand
+		$st = $this->st;
+
 		if (is_string($timeout)) {
 			$interval = new DateInterval($timeout);
 			$seconds  = $interval->getTotalSeconds();
@@ -119,7 +125,7 @@ class TimerActions extends Prose
 
 		while ($now < $end) {
 			try {
-				$log = $this->st->startAction("[ polling ]");
+				$log = $st->startAction("[ polling ]");
 				$result = $callback($st);
 
 				// if we get here, the actions inside the callback
