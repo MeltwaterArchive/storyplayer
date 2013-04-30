@@ -76,7 +76,7 @@ class TimerActions extends Prose
 		while ($now < $end) {
 			try {
 				$log = $this->st->startAction("[ polling ]");
-				$result = $callback();
+				$result = $callback($st);
 
 				// if we get here, the actions inside the callback
 				// must have worked
