@@ -85,7 +85,6 @@ class TimerActions extends Prose
 			}
 			catch (Exception $e) {
 				// do nothing
-				$log->endAction();
 			}
 
 			// has the action actually failed?
@@ -107,7 +106,49 @@ class TimerActions extends Prose
 
 	public function waitWhile($callback, $timeout = 'PT5S')
 	{
-		$this->waitFor($callback, $timeout);
+		if (is_string($timeout)) {
+			$interval = new DateInterval($timeout);
+			$seconds  = $interval->getTotalSeconds();
+		}
+		else {
+			$seconds = $timeout;
+		}
+
+		$now = time();
+		$end = $now + $seconds;
+
+		while ($now < $end) {
+			try {
+				$log = $this->st->startAction("[ polling ]");
+				$result = $callback($st);
+
+				// if we get here, the actions inside the callback
+				// must have worked
+				//
+				// that means whatever we're waiting for hasn't happened
+				// yet
+			}
+			catch (Exception $e) {
+				// the conditions have changed - we can go ahead now
+				$log->endAction();
+				return;
+			}
+
+			// has the action actually failed?
+			if (isset($result) && !$result) {
+				$log->endAction();
+				throw new E5xx_ActionFailed(__METHOD__);
+			}
+
+			// we don't want to use all the CPU resources
+			sleep(1);
+
+			// update the timeout
+			$now = time();
+		}
+
+		// if we get here, then the timeout happened
+		throw new E5xx_ActionFailed('timer()->waitWhile()');
 	}
 
 	public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up") {
