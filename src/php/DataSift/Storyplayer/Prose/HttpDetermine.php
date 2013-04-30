@@ -67,7 +67,7 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  */
 class HttpDetermine extends Prose
 {
-	public function get($url, $params = array())
+	public function get($url, $params = array(), $headers = array())
 	{
 		// shorthand
 		$st = $this->st;
@@ -84,6 +84,9 @@ class HttpDetermine extends Prose
 		$request = new HttpClientRequest($url);
 		$request->withUserAgent("Storyplayer")
 		        ->asGetRequest();
+		foreach ($headers as $key => $value) {
+			$request->withExtraHeader($key, $value);
+		}
 
 		// make the call
 		$client = new HttpClient();
