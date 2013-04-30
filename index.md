@@ -155,6 +155,8 @@ Test setup / teardown is used to set up tests.  Test customization happens here.
     //
     // ------------------------------------------------------------------------
 
+This phase is *optional*.
+
     // ========================================================================
     //
     // POSSIBLE ACTION(S)
