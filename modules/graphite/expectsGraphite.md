@@ -2,7 +2,7 @@
 layout: modules-graphite
 title: expectsGraphite()
 prev: '<a href="../../modules/graphite/fromGraphite.html">Prev: fromGraphite()</a>'
-next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
+next: '<a href="../../modules/http/index.html">Next: The HTTP Module</a>'
 ---
 # expectsGraphite()
 
