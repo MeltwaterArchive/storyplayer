@@ -64,7 +64,7 @@ $story->addAction(function(StoryTeller $st) {
 
 $story->setPostTestInspection(function(StoryTeller $st) {
 
-// get the checkpoint
+	// get the checkpoint
 	$checkpoint = $st->getCheckpoint();
 
 	// do we have the title we expected?
