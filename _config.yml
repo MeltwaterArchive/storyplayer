@@ -1,0 +1,7 @@
+auto: true
+server: true
+safe: true
+pygments: false
+url: http://datasift.github.io/storyplayer
+baseurl: /storyplayer
+include: modules, prose, stories
