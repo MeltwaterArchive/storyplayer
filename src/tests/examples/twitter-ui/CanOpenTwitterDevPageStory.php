@@ -43,15 +43,17 @@ $story = newStoryFor('Storyplayer Service Stories')
 // ------------------------------------------------------------------------
 
 $story->addAction(function(StoryTeller $st) {
+	
 	// get the checkpoint, to store data in
 	$checkpoint = $st->getCheckpoint();
 
-    // load our test page
-    //$st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
-    $st->usingBrowser()->gotoPage("https://dev.twitter.com");
+    	// load our test page
+    	//$st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
+    	$st->usingBrowser()->gotoPage("https://dev.twitter.com");
 
-    // get the title of the test page
-    $checkpoint->title = $st->fromBrowser()->getTitle();
+    	// get the title of the test page
+    	$checkpoint->title = $st->fromBrowser()->getTitle();
+
 });
 
 // ========================================================================
@@ -61,10 +63,12 @@ $story->addAction(function(StoryTeller $st) {
 // ------------------------------------------------------------------------
 
 $story->setPostTestInspection(function(StoryTeller $st) {
-	// get the checkpoint
+
+// get the checkpoint
 	$checkpoint = $st->getCheckpoint();
 
 	// do we have the title we expected?
 	$st->expectsObject($checkpoint)->hasAttribute('title');
 	$st->expectsString($checkpoint->title)->equals("Twitter Developers");
+
 });
