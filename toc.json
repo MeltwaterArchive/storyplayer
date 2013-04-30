@@ -54,6 +54,8 @@
 		"modules/http/usingHttp",
 		"modules/savaged/index",
 		"modules/savaged/usingSavageD",
+		"modules/timer/index",
+		"modules/timer/usingTimer",
 		"copyright"
 	],
 	"navbar": {

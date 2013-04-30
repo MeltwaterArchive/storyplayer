@@ -2,7 +2,7 @@
 layout: modules-savaged
 title: usingSavageD()
 prev: '<a href="../../modules/savaged/index.html">Prev: The SavageD Module</a>'
-next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
+next: '<a href="../../modules/timer/index.html">Next: The Timer Module</a>'
 ---
 
 # usingSavageD()
