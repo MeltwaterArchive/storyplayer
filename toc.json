@@ -15,6 +15,7 @@
 		"stories/action",
 		"stories/post-test-inspection",
 		"prose/index",
+		"prose/the-st-object",
 		"prose/global-dialect",
 		"prose/local-dialects",
 		"modules/index",
@@ -78,6 +79,7 @@
 		},
 		"Prose": {
 			"Introduction": "prose/index",
+			"The $st Object": "prose/the-st-object",
 			"Global Dialect": "prose/global-dialect",
 			"Local Dialects": "prose/local-dialects"
 		},
