@@ -95,9 +95,9 @@ Next, come the story details:
     //
     // ------------------------------------------------------------------------
 
-    $story = newStoryFor('Twitter User Stories')
-             ->inGroup('login')
-             ->called("Can log in using the login form");
+    $story = newStoryFor('Twitter Stories')
+    	->inGroup('Web Browsing')
+        ->called("Can log in using the login form");
 
 The story details are followed by the user role definition:
 
@@ -118,7 +118,7 @@ you can istall / remove software or create / terminate virtual servers.
 
     // ========================================================================
     //
-    // TEST SETUP / TEAR-DOWN
+    // STORY SETUP / TEAR-DOWN
     //
     // ------------------------------------------------------------------------
 
@@ -131,8 +131,10 @@ Test setup / teardown is used to set up tests.  Test customization happens here.
     // ------------------------------------------------------------------------
 
     $story->setPreTestPrediction(function(StoryTeller $st) {
-            // this story should always succeed for any of the valid users
-            $st->expectsUser()->isValidForStory();
+
+        // this story should always succeed for any of the valid users
+        $st->expectsUser()->isValidForStory();
+
     });
     
     // ========================================================================
@@ -148,23 +150,34 @@ Test setup / teardown is used to set up tests.  Test customization happens here.
     // ------------------------------------------------------------------------
 
     $story->addAction(function(StoryTeller $st) {
-            // register as our chosen user
-            $st->usingLogin()->loginUsingForm();
 
-            // make sure it worked - we should be logged in :)
-            $st->expectsUser()->isLoggedIn();
+	    // get the checkpoint, to store data in
+	    $checkpoint = $st->getCheckpoint();
+
+        // load the home page
+        $st->usingBrowser()->gotoPage("https://twitter.com");
+
+        // get the title of the test page
+        $checkpoint->title = $st->fromBrowser()->getTitle();
+
     });
 
-    // ========================================================================
-    //
-    // POST-TEST INSPECTION
-    //
-    // ------------------------------------------------------------------------
+	// ========================================================================
+	//
+	// POST-TEST INSPECTION
+	//
+	// ------------------------------------------------------------------------
 
-    $story->setPostTestInspection(function(StoryTeller $st) {
-            // we should be able to login :)
-            $st->usingLogin()->loginAsUser();
-    });
+	$story->setPostTestInspection(function(StoryTeller $st) {
+
+		// get the checkpoint
+		$checkpoint = $st->getCheckpoint();
+
+		// do we have the title we expected?
+		$st->expectsObject($checkpoint)->hasAttribute('title');
+		$st->expectsString($checkpoint->title)->equals("Twitter");
+
+	});
 
 ### Testing a Backend
 
