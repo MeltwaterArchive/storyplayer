@@ -111,7 +111,7 @@ class TargettedBrowserAction extends TargettedBrowserBase
 				$searchTerm = $methodArgs[1];
 			}
 			else {
-				$searchTerm = $element->name();
+				$searchTerm = $element->getName();
 			}
 		}
 
