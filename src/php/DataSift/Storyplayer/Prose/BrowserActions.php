@@ -173,7 +173,7 @@ class BrowserActions extends Prose
 			}
 
 			// we have not failed yet
-			$st->expectsBrowser()->title($title);
+			$st->expectsBrowser()->hasTitle($title);
 		}, $timeout);
 
 		// all done

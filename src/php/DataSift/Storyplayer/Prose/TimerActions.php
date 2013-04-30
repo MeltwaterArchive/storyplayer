@@ -61,9 +61,17 @@ use DataSift\Stone\TimeLib\DateInterval;
  */
 class TimerActions extends Prose
 {
-	public function waitFor($callback, $timeout = 5) {
+	public function waitFor($callback, $timeout = 'PT5S') {
+		if (is_string($timeout)) {
+			$interval = new DateInterval($timeout);
+			$seconds  = $interval->getTotalSeconds();
+		}
+		else {
+			$seconds = $timeout;
+		}
+
 		$now = time();
-		$end = $now + $timeout;
+		$end = $now + $seconds;
 
 		while ($now < $end) {
 			try {
@@ -71,11 +79,9 @@ class TimerActions extends Prose
 				$result = $callback();
 
 				// if we get here, the actions inside the callback
-				// may have worked
-				if ($result || $result === null) {
-					$log->endAction();
-					return;
-				}
+				// must have worked
+				$log->endAction();
+				return;
 			}
 			catch (Exception $e) {
 				// do nothing
@@ -88,7 +94,7 @@ class TimerActions extends Prose
 				throw new E5xx_ActionFailed(__METHOD__);
 			}
 
-			// we need to give the browser time to catch up
+			// we don't want to use all the CPU resources
 			sleep(1);
 
 			// update the timeout
@@ -99,37 +105,19 @@ class TimerActions extends Prose
 		throw new E5xx_ActionFailed('timer()->waitFor()');
 	}
 
-	public function waitWhile($callback, $timeout = 5) {
-		$now = time();
-		$end = $now + $timeout;
-
-		while ($now < $end) {
-			try {
-				$remaining = $end - $now;
-				$log = $this->st->startAction("[ polling; remaining time is {$remaining} seconds ]");
-				$result = $callback();
-
-				// if we get here, the actions inside the callback
-				// may have worked
-				$log->endAction();
-			}
-			catch (Exception $e) {
-				// do nothing
-				$log->endAction();
-				return;
-			}
-			sleep(1);
-
-			$now = time();
-		}
-
-		// if we get here, then the timeout happened
-		throw new E5xx_ActionFailed('timer()->waitWhile()');
+	public function waitWhile($callback, $timeout = 'PT5S')
+	{
+		$this->waitFor($callback, $timeout);
 	}
 
 	public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up") {
-		$interval = new DateInterval($timeout);
-		$seconds  = $interval->getTotalSeconds();
+		if (is_string($timeout)) {
+			$interval = new DateInterval($timeout);
+			$seconds  = $interval->getTotalSeconds();
+		}
+		else {
+			$seconds = $timeout;
+		}
 
 		$log = $this->st->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
 		sleep($seconds);

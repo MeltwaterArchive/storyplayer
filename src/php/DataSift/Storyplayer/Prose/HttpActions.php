@@ -64,22 +64,22 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  */
 class HttpActions extends Prose
 {
-	public function delete($url, $params = array(), $body = null)
+	public function delete($url, $params = array(), $body = null, $headers = array())
 	{
-		return $this->makeHttpRequest($url, "DELETE", $params, $body);
+		return $this->makeHttpRequest($url, "DELETE", $params, $body, $headers);
 	}
 
-	public function post($url, $params = array(), $body = null)
+	public function post($url, $params = array(), $body = null, $headers = array())
 	{
-		return $this->makeHttpRequest($url, "POST", $params, $body);
+		return $this->makeHttpRequest($url, "POST", $params, $body, $headers);
 	}
 
-	public function put($url, $params = array(), $body = null)
+	public function put($url, $params = array(), $body = null, $headers = array())
 	{
-		return $this->makeHttpRequest($url, "PUT", $params, $body);
+		return $this->makeHttpRequest($url, "PUT", $params, $body, $headers);
 	}
 
-	protected function makeHttpRequest($url, $verb, $params, $body)
+	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array())
 	{
 		// shorthand
 		$st = $this->st;
@@ -96,6 +96,12 @@ class HttpActions extends Prose
 		$request = new HttpClientRequest($url);
 		$request->withUserAgent("Storyplayer")
 				->withHttpVerb($verb);
+
+		if (is_array($headers)) {
+			foreach ($headers as $key => $value) {
+				$request->withExtraHeader($key, $value);
+			}
+		}
 
 		if (is_array($body)) {
 			foreach ($body as $key => $value) {
