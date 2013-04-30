@@ -51,6 +51,8 @@
 		"modules/http/expectsHttpResponse",
 		"modules/http/fromHttp",
 		"modules/http/usingHttp",
+		"modules/savaged/index",
+		"modules/savaged/usingSavageD",
 		"copyright"
 	],
 	"navbar": {

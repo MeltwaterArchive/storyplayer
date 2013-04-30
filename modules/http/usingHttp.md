@@ -2,7 +2,7 @@
 layout: modules-http
 title: usingHttp()
 prev: '<a href="../../modules/http/fromHttp.html">Prev: fromHttp()</a>'
-next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
+next: '<a href="../../modules/savaged/index.html">Next: The SavageD Module</a>'
 ---
 
 # usingHttp()
