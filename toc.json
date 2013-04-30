@@ -46,6 +46,11 @@
 		"modules/graphite/index",
 		"modules/graphite/fromGraphite",
 		"modules/graphite/expectsGraphite",
+		"modules/http/index",
+		"modules/http/HttpClientResponse",
+		"modules/http/expectsHttpResponse",
+		"modules/http/fromHttp",
+		"modules/http/usingHttp",
 		"copyright"
 	],
 	"navbar": {
