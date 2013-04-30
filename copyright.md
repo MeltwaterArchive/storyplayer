@@ -1,7 +1,7 @@
 ---
 layout: book-chapter
 title: Legal Stuff
-prev: '<a href="modules/savaged/usingSavageD.html">Prev: usingSavageD()</a>'
+prev: '<a href="modules/timer/usingTimer.html">Prev: usingTimer()</a>'
 next: '<a href="index.html">Back to: Storyplayer</a>'
 ---
 # Legal Stuff
