@@ -10,7 +10,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 $story = newStoryFor('Twitter Stories')
          ->inGroup('Web Browsing')
-         ->called('Can open Twitter developer home page');
+         ->called('Can open Twitter home page');
 
 // ========================================================================
 //
@@ -47,9 +47,7 @@ $story->addAction(function(StoryTeller $st) {
     	// get the checkpoint, to store data in
     	$checkpoint = $st->getCheckpoint();
 
-    	// load our test page
-    	//$st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
-    	$st->usingBrowser()->gotoPage("https://dev.twitter.com");
+    	$st->usingBrowser()->gotoPage("https://twitter.com");
 
     	// get the title of the test page
     	$checkpoint->title = $st->fromBrowser()->getTitle();
@@ -69,6 +67,6 @@ $story->setPostTestInspection(function(StoryTeller $st) {
 
     	// do we have the title we expected?
     	$st->expectsObject($checkpoint)->hasAttribute('title');
-    	$st->expectsString($checkpoint->title)->equals("Twitter Developers");
+    	$st->expectsString($checkpoint->title)->equals("Twitter");
 
 });
