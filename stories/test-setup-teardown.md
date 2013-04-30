@@ -6,3 +6,14 @@ next: '<a href="../stories/pre-test-prediction.html">Next: Pre-Test Prediction P
 ---
 
 # Test Setup / Teardown Phases
+
+    // ========================================================================
+    //
+    // STORY SETUP / TEAR-DOWN
+    //
+    // ------------------------------------------------------------------------
+
+This phase is *optional*.
+
+Test setup / teardown is used to set up tests themselves.  Test customization happens here.  Tasks executed during this phase include, but are no limited to, downloading test data, detecting environment, configuring additional software, etc.
+

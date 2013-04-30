@@ -6,3 +6,12 @@ next: '<a href="../stories/action.html">Next: Action Phase</a>'
 ---
 
 # Pre-Test Inspection Phase
+
+    // ========================================================================
+    //
+    // PRE-TEST INSPECTION
+    //
+    // ------------------------------------------------------------------------
+
+This phase is *optional*.
+
