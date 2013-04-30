@@ -54,10 +54,10 @@ $story->addAction(function(StoryTeller $st) {
 //exit(0);
 
     //$st->usingForm("js-signin signin")->fillInFields(array("js-username-field email-input" => "DSTW2012", "js-password-field" => "kastaniety12"));
-    $st->usingBrowser()->type("DSTW2012")->elementWithName("session[username_or_email]");
+    $st->usingBrowser()->type("DSTW2012")->fieldWithName("session[username_or_email]");
     //$st->usingBrowser()->type("DSTW2012")->elementWithClass("js-username-field email-input");
 exit(0);
-    $st->usingBrowser()->type("kastaniety12")->elementWithClass("user-login");
+    $st->usingBrowser()->type("kastaniety12")->fieldWithClass("user-login");
     //-> => "DSTW2012", "js-password-field" => "kastaniety12"));
 
 exit(0);

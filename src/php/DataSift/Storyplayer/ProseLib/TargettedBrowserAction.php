@@ -107,11 +107,15 @@ class TargettedBrowserAction extends TargettedBrowserBase
 		else {
 			$element = $methodArgs[0];
 
+			if (!is_object($element)) {
+				throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "expected a WebDriverElement as 1st parameter to search term");
+			}
+
 			if (isset($methodArgs[1])) {
 				$searchTerm = $methodArgs[1];
 			}
 			else {
-				$searchTerm = $element->getName();
+				$searchTerm = $element->name();
 			}
 		}
 
