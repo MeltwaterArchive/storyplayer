@@ -5,7 +5,7 @@ title: Story-Writing Tips
 
 # Story-Writing 
 
-1. The browser window closes immediately after the test completes. How can I make it stay on screen?
+### The browser window closes immediately after the test completes. How can prevent it?
 
 Add `exit(0);` near the end of the callback function defined in a call the `addAction()` in the [Action Phase](/storyplayer/stories/action.html).
 
@@ -21,3 +21,7 @@ Add `exit(0);` near the end of the callback function defined in a call the `addA
 
             exit(0);
     });
+
+### Use configuration files to store credentials
+
+Create a directory called `config` and inside that direcotry store your story configuration file.
