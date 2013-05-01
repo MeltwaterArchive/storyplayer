@@ -34,6 +34,8 @@ where:
 
 ## Running It Out Of A Git Clone
 
+See [installing Storyplayer](http://datasift.github.io/storyplayer/configuration.html).
+
 ### Building The Dependencies
 
 If you want to run storyplayer from inside its own git repo, make sure that you have [Phix](http://phix-project.org) installed, and then do the following:
