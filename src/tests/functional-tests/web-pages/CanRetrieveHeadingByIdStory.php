@@ -50,7 +50,7 @@ $story->addAction(function(StoryTeller $st) {
     $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
 
     // get a h2 by its ID
-    $checkpoint->content = $st->fromBrowser()->getText()->headingWithId('self_test_website');
+    $checkpoint->content = $st->fromBrowser()->getText()->fromHeadingWithId('self_test_website');
 });
 
 // ========================================================================
