@@ -25,3 +25,14 @@ Add `exit(0);` near the end of the callback function defined in a call the `addA
 ### Use configuration files to store credentials
 
 Create a directory called `config` and inside that direcotry store your story configuration file.
+
+    {
+        "environments": {
+            "example": {
+                "twitter": {
+                    "username":"DSTW2012",
+                    "password":"burrito12"
+                }
+            }
+        }
+    }
