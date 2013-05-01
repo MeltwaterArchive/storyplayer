@@ -1,0 +1,1 @@
+s:257:"a:1:{s:8:"required";a:3:{s:3:"php";a:1:{s:3:"min";s:5:"5.3.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:5:"1.9.4";}s:7:"package";a:4:{s:4:"name";s:11:"Autoloader4";s:7:"channel";s:21:"pear.phix-project.org";s:3:"min";s:5:"4.0.0";s:3:"max";s:10:"4.999.9999";}}}";

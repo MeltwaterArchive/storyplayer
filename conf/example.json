@@ -1,0 +1,10 @@
+{
+    "environments": {
+        "example": {
+            "twitter": {
+                "username":"DSTW2012",
+                "password":"burrito12"
+            }
+        }
+    }
+}
