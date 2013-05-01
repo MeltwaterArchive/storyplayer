@@ -30,9 +30,13 @@ Create a directory called `config` and inside that direcotry store your story co
         "environments": {
             "example": {
                 "twitter": {
-                    "username":"DSTW2012",
-                    "password":"burrito12"
+                    "username":"your_username",
+                    "password":"your_password"
                 }
             }
         }
     }
+
+### How do I do a test with a login captcha?
+
+Use `$st->usingBrowser()->waitForTitle(60, "Insert actual title here");` and set the timeout to 60 seconds.
