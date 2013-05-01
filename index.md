@@ -29,7 +29,7 @@ Storyplayer is highly modular, and can be easily extended to support your own cu
 
 ### Tales, Stories, and Prose
 
-Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation.
+Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).
 
 ### Telling a Story in Eight Parts
 
