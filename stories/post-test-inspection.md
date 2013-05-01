@@ -7,6 +7,12 @@ next: '<a href="../prose/index.html">Next: Introducing Prose</a>'
 
 # Post-Test Inspection Phase
 
+This phase is *required*.
+
+Here you compare the results you got with the results you expected. Storyplayer ships with a wide range of [assertions](/storyplayer/modules/assertions/index.html) to make your job easier.
+
+The arguments of the assertions are extracted from the Storyplayer's [Checkpoint object](/storyplayer/stories/the-checkpoint.html).
+
 	// ========================================================================
 	//
 	// POST-TEST INSPECTION
@@ -24,6 +30,3 @@ next: '<a href="../prose/index.html">Next: Introducing Prose</a>'
 
 	});
 
-This phase is *required*.
-
-Here you compate the results you got with the results you were expecting.
