@@ -1,3 +1,0 @@
-<?php
-
-$story = new stdClass();
