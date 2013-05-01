@@ -37,4 +37,5 @@ The output you will see should end with a message similar to the one below:
 
 Now performing: Final Results
 
+    ...
     [2013-05-01 14:48:57] [storyplayer:7646] 6: NOTICE:    expected: SUCCESS         ; action: COMPLETED ; actual: SUCCESS         ; result: PASS

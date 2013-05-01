@@ -29,6 +29,8 @@ Storyplayer is highly modular, and can be easily extended to support your own cu
 
 ### Tales, Stories, and Prose
 
-Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).  
+Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html). Why not talk about tests instead of Stories? Because stories describe not only the results of a test, but also the path taken by the user to get those results.  This metaphor is specially useful when you are testing user-facing front-end modules, which may pass all tests a developer might think of, but still fail the user test.
+
+Take for example a login page that shows two forms: login and registration. Let's assume both have a password field. A programmer might write a test that uses basic authntication with sample credentials and such test would return a positive result while the user might get confused and not know which password field he or she should use.  From the point of view of the user, the login test might fail or pass; it all depends on what the user thinks is the correct choice.  As you can see, User Stories can be used to construct test suites that more realistically mimic actual user behavior and thus allow QA teams test both the functionality of the software and the user experience.
 
 Stories can be organized into collections called Tales.  All Stories are written using Prose&mdash;the way of writing PHP code that makes it not only natural to read, but also to think about Stories.
