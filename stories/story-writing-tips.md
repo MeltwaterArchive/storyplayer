@@ -39,4 +39,4 @@ Create a directory called `config` and inside that direcotry store your story co
 
 ### How do I do a test with a login captcha?
 
-Use `$st->usingBrowser()->waitForTitle(60, "Insert actual title here");` and set the timeout to 60 seconds.
+Use `$st->usingBrowser()->waitForTitle(60, "Insert actual title here");` and set the timeout to 60 seconds.  Your test will pause for 60 second giving you time to respond to the captcha challenge.
