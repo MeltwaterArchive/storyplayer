@@ -46,6 +46,7 @@ $story->addAction(function(StoryTeller $st) {
 
 	// get the checkpoint, to store data in
 	$checkpoint = $st->getCheckpoint();
+    $twitter = $st->fromEnvironment()->getAppSettings("twitter");
 
     // load Twitter login page
     $st->usingBrowser()->gotoPage("https://twitter.com");
@@ -53,12 +54,9 @@ $story->addAction(function(StoryTeller $st) {
 
 //exit(0);
 
-    //$st->usingForm("js-signin signin")->fillInFields(array("js-username-field email-input" => "DSTW2012", "js-password-field" => "kastaniety12"));
-    $st->usingBrowser()->type("DSTW2012")->fieldWithName("session[username_or_email]");
-    //$st->usingBrowser()->type("DSTW2012")->elementWithClass("js-username-field email-input");
+    $st->usingBrowser()->type($twitter->username)->fieldWithName("session[username_or_email]");
 exit(0);
-    $st->usingBrowser()->type("kastaniety12")->fieldWithClass("user-login");
-    //-> => "DSTW2012", "js-password-field" => "kastaniety12"));
+    $st->usingBrowser()->type($twitter->password)->fieldWithClass("user-login");
 
 exit(0);
 
