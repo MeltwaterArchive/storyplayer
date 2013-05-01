@@ -50,3 +50,5 @@ Stories are written in PHP using Storyplayer-specific Prose (grammar and vocabul
 
  * Global -- generic Prose provided by Story player
  * Local -- Prose written by you, specific to your site, project
+
+You can find a longer discussion of [user stories](http://en.wikipedia.org/wiki/User_story) elsewhere on the web. 
