@@ -31,32 +31,6 @@ Storyplayer is highly modular, and can be easily extended to support your own cu
 
 Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).
 
-### Telling a Story in Eight Parts
-
-Each Story can be divided into up to eight parts.
-
-Every story starts with an import of the `StoryTeller` library:
-
-    use DataSift\Storyteller\PlayerLib\StoryTeller;
-
-This step is *required*.
-
-Next, come the story details:
-
-    // ========================================================================
-    //
-    // STORY DETAILS
-    //
-    // ------------------------------------------------------------------------
-
-    $story = newStoryFor('Twitter Stories')
-    	->inGroup('Web Browsing')
-        ->called("Can log in using the login form");
-
-The story details are followed by the user role definition:
-
-    $story->addValidRole('loggedout user');
-
 ### Testing a Backend
 
 ### Testing an API
