@@ -1,7 +1,7 @@
 ---
 layout: modules-file
 title: The File Module
-prev: '<a href="../../modules/checkpoint/usingCheckpoint.html">Prev: usingCheckpoint()</a>'
+prev: '<a href="../../modules/environment/fromEnvironment.html">Prev: fromEnvironment()</a>'
 next: '<a href="../../modules/file/fromFile.html">Next: fromFile()</a>'
 ---
 
