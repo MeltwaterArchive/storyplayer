@@ -55,20 +55,24 @@ $story->addAction(function(StoryTeller $st) {
 //exit(0);
 
     $st->usingBrowser()->type($twitter->username)->fieldWithName("session[username_or_email]");
-exit(0);
-    $st->usingBrowser()->type($twitter->password)->fieldWithClass("user-login");
+    $st->usingBrowser()->type($twitter->password)->fieldWithName("session[password]");
 
-exit(0);
+    // get the 'Sign in' button from the page
+    $topElement = $st->fromBrowser()->getTopElement();
+    $element    = $topElement->getElement('xpath', '//td/button[normalize-space(text()) = "Sign in"]');
+    $element->click();
 
-    $st->usingForm("user-login")->click()->buttonWithText("Sign in");
+    //$st->usingBrowser()->click()->buttonWithClass("submit btn primary-btn");
+    //$st->usingBrowser()->click()->buttonWithText("Sign in");
+    //$st->usingForm("signin-dropdown")->click()->buttonWithText("Sign in");
 
     // make sure we're definitely logged in
-    $st->usingBrowser()->waitForTitle(10, "Twitter");
-    $st->expectsBrowser()->has()->imageWithTitle("DSTW2012");
-    // get the title of the test page
-    //$checkpoint->title = $st->fromBrowser()->getTitle();
+    $st->usingBrowser()->waitForTitle(60, "Twitter");
+    //$st->expectsBrowser()->has()->imageWithTitle("DSTW2012");
 
-    exit(0);
+    // store the title of the test page
+    $checkpoint->title = $st->fromBrowser()->getTitle();
+
 
 });
 
@@ -79,10 +83,12 @@ exit(0);
 // ------------------------------------------------------------------------
 
 $story->setPostTestInspection(function(StoryTeller $st) {
+
 	// get the checkpoint
 	$checkpoint = $st->getCheckpoint();
 
 	// do we have the title we expected?
 	$st->expectsObject($checkpoint)->hasAttribute('title');
 	$st->expectsString($checkpoint->title)->equals("Twitter");
+
 });
