@@ -29,5 +29,6 @@ Storyplayer is highly modular, and can be easily extended to support your own cu
 
 ### Tales, Stories, and Prose
 
-Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).
+Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).  
 
+Stories can be organized into collections called Tales.  All Stories are written using Prose&mdash;the way of writing PHP code that makes it not only natural to read, but also to think about Stories.
