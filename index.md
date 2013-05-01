@@ -11,7 +11,7 @@ Bring your user and service stories to life through your test automation.
 
 ## Introduction
 
-[Storyplayer](https://github.com/datasift/storyplayer) is [DataSift's](http://datasift.com) in-house tool for automating the functional testing of our user and service stories.  We've built it to make it easy to create repeatable end-to-end tests, and to make it just as easy to create repeatable functional tests.
+[Storyplayer](https://github.com/datasift/storyplayer) is [DataSift](http://datasift.com)'s in-house tool for automating the functional testing of our user and service stories.  We've built it to make it easy to create repeatable end-to-end tests, and to make it just as easy to create repeatable functional tests.
 
 Additionally, Storyplayer can measure non-functional requirements at the same time.
 
@@ -31,10 +31,3 @@ Storyplayer is highly modular, and can be easily extended to support your own cu
 
 Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).
 
-### Testing a Backend
-
-### Testing an API
-
-### Testing Web UI
-
-### Telling Tales
