@@ -6,3 +6,8 @@ next: '<a href="../stories/test-environment-setup-teardown.html">Next: Test Envi
 ---
 
 # The Checkpoint
+
+Storyplayer checkpoint object useed to store data used as arguments of the assertions made during the [post-test inspection phase](/storyplayer/stories/post-test-inspection.html).
+
+The [Checkpoint Module](/storyplayer/modules/checkpoint/index.html) is used to store and retrieve data from the Checkpoint object.
+
