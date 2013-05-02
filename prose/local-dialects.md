@@ -7,4 +7,4 @@ next: '<a href="../modules/index.html">Next: Storyplayer Modules</a>'
 
 # Local Dialects
 
-Something here
+The Storyplayer Local dialects (modules) are defined by the users and should be stored inside the `vendor` directory. The `vendor` directory is created after you complete [Storyplater installation](/storyplayer/configuration.html). 
