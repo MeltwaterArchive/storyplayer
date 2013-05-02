@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<phpunit bootstrap="src/tests/unit-tests/bootstrap.php">
+    <testsuites>
+        <testsuite name="Unit Tests">
+            <directory suffix="Test.php">src/tests/unit-tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <blacklist>
+            <directory suffix=".php">vendor</directory>
+            <directory suffix=".php">src/tests</directory>
+        </blacklist>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/bin</directory>
+            <directory suffix=".php">src/php</directory>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-html" target="review/code-coverage"/>
+        <log type="coverage-clover" target="review/logs/phpunit.xml"/>
+        <log type="json" target="review/logs/phpunit.json"/>
+        <log type="tap" target="review/logs/phpunit.tap"/>
+        <log type="junit" target="review/logs/phpunit-junit.xml"/>
+        <log type="testdox-html" target="review/testdox.html"/>
+        <log type="testdox-text" target="review/testdox.txt"/>
+    </logging>
+</phpunit>
+<!-- vim: set tabstop=4 shiftwidth=4 expandtab: -->
