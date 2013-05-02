@@ -7,4 +7,4 @@ next: '<a href="../prose/local-dialects.html">Next: Local Dialects</a>'
 
 # The Global Dialect
 
-Something here
+The Storyplayer Global dialect is defined in the [modules](/storyplayer/modules/index.html) that ship with Storyplayer.
