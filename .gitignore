@@ -1,5 +1,7 @@
 .build
+chromedriver.log
 dist
+etc
 .tmp
 nbproject
 review
