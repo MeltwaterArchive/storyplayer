@@ -25,7 +25,7 @@ Storyplayer is highly modular, and can be easily extended to support your own cu
 
 ## Licensing
 
-[Storyplayer](https://github.com/datasift/storyplayer) is Open Source software.
+[Storyplayer](https://github.com/datasift/storyplayer) is [Open Source software](http://datasift.github.io/storyplayer/copyright.html#license).
 
 ### Tales, Stories, and Prose
 
