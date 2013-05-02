@@ -48,7 +48,7 @@ Most users follow this pattern to get value from the site and to contribute to t
 
 Stories are written in PHP using Storyplayer-specific [Prose](/storyplayer/prose/index.html) (grammar and vocabulary).  Each story combines two types of dialects:
 
- * [Global](/storyplayer/prose/global-dialect.html) -- generic Prose provided by Story player
+ * [Global](/storyplayer/prose/global-dialect.html) -- generic Prose provided by Storyplayer
  * [Local](/storyplayer/prose/local-dialects.html) -- Prose written by you, specific to your site, project
 
 You can find a longer discussion of [user stories](http://en.wikipedia.org/wiki/User_story) elsewhere on the web. 
