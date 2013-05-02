@@ -7,7 +7,7 @@ next: '<a href="../prose/the-st-object.html">Next: The $st Object</a>'
 
 # Introducing Prose
 
-Prose is the grammar and the syntax used to tell [User Stories](/storyplayer/stories/user-stories.html) and [Service Stories](/storyplayer/stories/service-stories.html).
+Prose is the grammar and the syntax used to tell [User Stories](/storyplayer/stories/user-stories.html) and [Service Stories](/storyplayer/stories/service-stories.html). Reusable components used to write Stories have been groupd into [modules](/storyplayer/modules/index.html). The modules that ship with Storyplayer are called the [Global Dialect](/storyplayer/prose/global-dialect.html), the modules that you write are called [Local Dialects](/storyplayer/prose/local-dialects.html).
 
 Stories are told using sentences that call the methods and reference the properties of the [$st object](/storyplayer/prose/the-st-object.html). The general syntax used to construct Prose follows the syntax shown below:
 
