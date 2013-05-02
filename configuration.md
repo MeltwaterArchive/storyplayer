@@ -18,19 +18,19 @@ Install the following software packages:
 * Install [Python](http://python.org) 2.7.3 (or later)
 * Install Python `netifaces`:
  
-    `pip install netifaces`
+    $ pip install netifaces
 
 * Install [PHP](http://php.net) 5.3.10
 * Install PHP5 cURL support (the following command works on Ubuntu, other systems will use differetn installation tools): 
 
-    `sudo apt-get install php5-curl`
+    $ sudo apt-get install php5-curl
     
 * Install [Phinx](http://phix-project.org) (follow the instructions on the Phinx site):
 * Configure Pear
 
-    `phing pear-package`
+    $ phing pear-package
     
-    `phing install-vendor`
+    $ phing install-vendor
 
 ## Testing Storyplayer
 
@@ -40,7 +40,7 @@ Change the working directory to `storyplayer`:
 
 Run our first test:
 
-    bin/storyplayer example src/tests/examples/twitter-ui/CanOpenTwitterHomePageStory.php
+    $ bin/storyplayer example src/tests/examples/twitter-ui/CanOpenTwitterHomePageStory.php
 
 The output you will see should end with a message similar to the one below:
 
