@@ -1,6 +1,8 @@
 ---
 layout: top-level
 title: Configuring Storyplayer
+prev: '<a href="/storyplayer/what-is-storyplayer.html">Prev:What Is Storyplayer?</a>'
+next: '<a href="../stories/user-stories.html">Next: User Stories</a>'
 ---
 
 # Configuring Storyplayer
