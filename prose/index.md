@@ -7,4 +7,4 @@ next: '<a href="../prose/the-st-object.html">Next: The $st Object</a>'
 
 # Introducing Prose
 
-Prose is the grammar and the syntax used to tell [User Service](/storyplayer/stories/user-stories.html) and [Service Stories](/storyplayer/stories/service-stories.html).
+Prose is the grammar and the syntax used to tell [User Stories](/storyplayer/stories/user-stories.html) and [Service Stories](/storyplayer/stories/service-stories.html).
