@@ -29,3 +29,5 @@ next: '<a href="../stories/post-test-inspection.html">Next: Post-Test Inspection
 This phase is **required**.
 
 Here you execute the actual test.
+
+We'll be expanding this section in the next couple of weeks.

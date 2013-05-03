@@ -13,14 +13,8 @@ next: '<a href="../stories/pre-test-inspection.html">Next: Pre-Test Inspection P
     //
     // ------------------------------------------------------------------------
 
-    $story->setPreTestPrediction(function(StoryTeller $st) {
 
-        // this story should always succeed for any of the valid users
-        $st->expectsUser()->isValidForStory();
+This step is *optional*.
 
-    });
-    
-This step is *required*.
-
-Here you create a Storyteller object. 
+We'll be expanding this section in the next couple of weeks.
 

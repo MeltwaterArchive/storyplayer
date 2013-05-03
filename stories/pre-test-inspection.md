@@ -15,3 +15,4 @@ next: '<a href="../stories/action.html">Next: Action Phase</a>'
 
 This phase is *optional*.
 
+We'll be expanding this section in the next couple of weeks.

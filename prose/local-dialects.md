@@ -7,4 +7,16 @@ next: '<a href="../modules/index.html">Next: Storyplayer Modules</a>'
 
 # Local Dialects
 
-The Storyplayer Local dialects (modules) are defined by the users and should be stored inside the `vendor` directory. The `vendor` directory is created after you complete [Storyplayer installation](/storyplayer/configuration.html). 
+_Local dialects_ are your Prose modules, the reusable modules that you write for your unique needs.
+
+Your _storyteller.json_ file should include the following configuration:
+
+{% highlight json %}
+{
+	"local-dialects": [
+		"path/to/your/PSR0/tree"
+	]
+}
+{% endhighlight %}
+
+We'll expand this section shortly with much better details about how this works.

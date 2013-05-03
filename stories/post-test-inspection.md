@@ -2,7 +2,7 @@
 layout: stories
 title: Post-Test Inspection Phase
 prev: '<a href="../stories/action.html">Prev: Action Phase</a>'
-next: '<a href="../prose/index.html">Next: Introducing Prose</a>'
+next: '<a href="../stories/web-example.html">Next: Example: Testing A Website</a>'
 ---
 
 # Post-Test Inspection Phase
@@ -30,3 +30,4 @@ The arguments of the assertions are extracted from the Storyplayer's [Checkpoint
 
 	});
 
+We'll be expanding this section in the next couple of weeks.
