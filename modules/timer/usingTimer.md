@@ -2,7 +2,7 @@
 layout: modules-timer
 title: usingTimer()
 prev: '<a href="../../modules/timer/index.html">Prev: The Timer Module</a>'
-next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
+next: '<a href="../../modules/shell/index.html">Next: The UNIX Shell Module</a>'
 ---
 
 # usingTimer()
