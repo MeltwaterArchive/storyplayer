@@ -1,7 +1,7 @@
 ---
 layout: stories
 title: Introducing Stories
-prev: '<a href="/storyplayer/configuration.html">Prev:Configuring Storyplayer</a>'
+prev: '<a href="../configuration.html">Prev: Configuring Storyplayer</a>'
 next: '<a href="../stories/user-stories.html">Next: User Stories</a>'
 ---
 

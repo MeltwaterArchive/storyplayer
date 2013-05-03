@@ -2,7 +2,7 @@
 layout: top-level
 title: Storyplayer
 prev: '&nbsp;'
-next: '<a href="what-is-storyplayer.html">Next: What Is Storyplayer?</a>'
+next: '<a href="installation.html">Next: Installing Storyplayer</a>'
 ---
 
 # Storyplayer
@@ -17,18 +17,28 @@ Additionally, Storyplayer can measure non-functional requirements at the same ti
 
 Storyplayer is highly modular, and can be easily extended to support your own custom needs.
 
-### What can you test with Story Player?
+### What can you test with Storyplayer?
 
  * Back-end services
  * APIs
  * Front end interfaces
 
-## Licensing
-
-[Storyplayer](https://github.com/datasift/storyplayer) is [Open Source software](http://datasift.github.io/storyplayer/copyright.html#license).
-
-### Tales, Stories, and Prose
+### Stories, and Prose
 
 Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).
 
-Stories can be organized into collections called Tales.  All Stories are written using [Prose](/storyplayer/prose/index.html)&mdash;the way of writing PHP code that makes it not only natural to read, but also to think about Stories.
+All Stories are written using [Prose](/storyplayer/prose/index.html)&mdash;a way of writing PHP code that makes it not only natural to read, but also to think about Stories.
+
+## Source Code
+
+The source code for Storyplayer [is available from GitHub](https://github.com/datasift/storyplayer).
+
+## Current Status
+
+* __Code:__ recently open-sourced, bound to be a few rough edges at first
+* __Docs:__ most modules are documented, tutorial section to come in the next couple of weeks
+* __Examples:__ we'll be building up its self-test suite over the next couple of weeks
+
+## Licensing
+
+[Storyplayer](https://github.com/datasift/storyplayer) is [open source software](http://datasift.github.io/storyplayer/copyright.html#license).

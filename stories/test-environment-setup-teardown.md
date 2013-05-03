@@ -14,6 +14,7 @@ next: '<a href="../stories/test-setup-teardown.html">Next: Test Setup / Teardown
     //
     // ------------------------------------------------------------------------
 
-This phase is *optional*. Here you will prepare your test environment.  Here 
-you can istall / remove software or create / terminate virtual servers as needed.
+This phase is *optional*. Here you will prepare your test environment.  Here
+you can install / remove software or create / terminate virtual servers as needed.
 
+We'll be expanding this section in the next couple of weeks.

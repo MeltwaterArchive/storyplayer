@@ -2,7 +2,9 @@
 	"navDepth": 3,
 	"contents":	[
 		"index",
-		"what-is-storyplayer",
+		"installation",
+		"running-storyplayer",
+		"configuration",
 		"stories/index",
 		"stories/user-stories",
 		"stories/service-stories",
@@ -14,6 +16,9 @@
 		"stories/pre-test-inspection",
 		"stories/action",
 		"stories/post-test-inspection",
+		"stories/web-example",
+		"stories/soa-example",
+		"stories/story-writing-tips",
 		"prose/index",
 		"prose/the-st-object",
 		"prose/global-dialect",
@@ -63,7 +68,12 @@
 	"navbar": {
 		"Home": {
 			"Welcome To Storyplayer": "index",
-			"Configuring Storyplayer": "configuration"
+			"Sep1": "",
+			"Installation": "installation",
+			"Configuration": "configuration",
+			"How To Run": "running-storyplayer",
+			"Sep2": "",
+			"Legal Stuff": "copyright"
 		},
 		"Stories": {
 			"Introduction": "stories/index",
@@ -79,6 +89,8 @@
 			"Action": "stories/action",
 			"Post-Test Inspection": "stories/post-test-inspection",
 			"Sep2": "",
+			"Web Example": "stories/web-example",
+			"SOA Example": "stories/soa-example",
 			"Story-Writing Tips": "stories/story-writing-tips"
 		},
 		"Prose": {
