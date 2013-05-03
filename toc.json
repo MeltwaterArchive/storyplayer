@@ -63,6 +63,10 @@
 		"modules/savaged/usingSavageD",
 		"modules/timer/index",
 		"modules/timer/usingTimer",
+		"modules/shell/index",
+		"modules/uuid/index",
+		"modules/vagrant/index",
+		"modules/zeromq/index",
 		"copyright"
 	],
 	"navbar": {
