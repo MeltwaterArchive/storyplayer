@@ -403,10 +403,9 @@ class StoryTeller
 		$webDriver = new WebDriverClient();
 		$browserSession = $webDriver->newSession(
 			'chrome',
-			array()
-//			array(
-//				'proxy' => $proxySession->getWebDriverProxyConfig()
-//			)
+			array(
+				'proxy' => $proxySession->getWebDriverProxyConfig()
+			)
 		);
 
 		// remember what we've done!
