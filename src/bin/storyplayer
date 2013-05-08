@@ -37,7 +37,7 @@ if (is_dir($vendorDir)) {
 	require $vendorDir . '/Phix_Project/Autoloader4/PSR0/Autoloader.php';
 }
 else {
-	require 'Phix_Project/Autoloader4/PSR0/Autoloader4';
+	require 'Phix_Project/Autoloader4/PSR0/Autoloader.php';
 }
 
 // start autoloading
