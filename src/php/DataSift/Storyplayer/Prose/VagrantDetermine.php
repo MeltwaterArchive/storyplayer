@@ -47,7 +47,7 @@ use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ObjectLib\JsonObject;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * get information about vagrant
@@ -169,11 +169,11 @@ class VagrantDetermine extends Prose
 		$parts = explode(' ', $details);
 		if (count($parts) < 3) {
 			$log->endAction("could not get details ... package not installed?");
-			return new JsonObject();
+			return new BaseObject();
 		}
 
 		// we have some information to return
-		$return = new JsonObject();
+		$return = new BaseObject();
 		$return->name = $parts[0];
 		$return->version = $parts[1];
 		$return->repo = $parts[2];
