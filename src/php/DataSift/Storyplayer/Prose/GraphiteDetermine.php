@@ -46,8 +46,6 @@ namespace DataSift\Storyplayer\Prose;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ObjectLib\JsonObject;
-
 /**
  * get information from Graphite
  *

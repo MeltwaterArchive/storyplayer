@@ -2,7 +2,6 @@
 
 namespace DataSift\Storyplayer\UserLib;
 
-use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Stone\PasswordLib\BasicGenerator;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryContext;

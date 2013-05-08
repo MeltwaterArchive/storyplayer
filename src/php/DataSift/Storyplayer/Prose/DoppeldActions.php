@@ -47,8 +47,6 @@ use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ObjectLib\JsonObject;
-
 /**
  * Do things with doppelgangerd - DataSift's mocking daemon
  *
