@@ -93,6 +93,7 @@ class TimerActions extends Prose
 			}
 			catch (Exception $e) {
 				// do nothing
+				$log->closeAllOpenSubActions();
 			}
 
 			// has the action actually failed?
