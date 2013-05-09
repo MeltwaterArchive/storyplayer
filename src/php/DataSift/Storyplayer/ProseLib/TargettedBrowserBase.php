@@ -63,8 +63,8 @@ class TargettedBrowserBase
 	const PLURAL_TARGET = 2;
 
 	protected $tagTypes = array(
-		'button'        => 'input|button',
-		'buttons'       => 'input|button',
+		'button'        => array('input', 'button'),
+		'buttons'       => array('input','button'),
 		'cell'          => 'td',
 		'cells'         => 'td',
 		'link'          => 'a',

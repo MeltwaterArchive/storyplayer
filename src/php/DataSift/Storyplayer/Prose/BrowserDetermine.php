@@ -74,6 +74,15 @@ class BrowserDetermine extends Prose
 	//
 	// ------------------------------------------------------------------
 
+	protected function convertTagsToString($tags)
+	{
+		if (is_string($tags)) {
+			return $tags;
+		}
+
+		return implode('|', $tags);
+	}
+
 	protected function returnFirstVisibleElement(ActionLogItem $log, $elements, $method, $successMsg, $failureMsg)
 	{
 		// if the page contains multiple matches, return the first one
@@ -98,15 +107,16 @@ class BrowserDetermine extends Prose
 		throw new E5xx_ActionFailed($method);
 	}
 
-	public function getElementByClass($class, $tag = '*')
+	public function getElementByClass($class, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '${tag}' element by '{$class}' class )");
 
-		$elements = $this->getElementsByClass($class, $tag);
+		$elements = $this->getElementsByClass($class, $tags);
 		return $this->returnFirstVisibleElement(
 			$log,
 			$elements,
@@ -116,12 +126,13 @@ class BrowserDetermine extends Prose
 		);
 	}
 
-	public function getElementById($id, $tag = '*')
+	public function getElementById($id, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' element with id '{$id}' )");
 
 		$successMsg = "found one";
@@ -130,27 +141,27 @@ class BrowserDetermine extends Prose
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpath = 'descendant::' . $tag . '[@id = "' . $id . '"]';
-			$elements = $log->addStep("( find element using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->getElements('xpath', $xpath);
-			});
-		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction($failureMsg);
-
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
 		}
 
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[@id = "' . $id . '"]';
+		}
+
+		// get the possibly matching elements
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// find the first one that the user can see
 		return $this->returnFirstVisibleElement(
 			$log, $elements, __METHOD__, $successMsg, $failureMsg
 		);
 	}
 
-	public function getElementByLabel($labelText, $tag = 'label')
+	public function getElementByLabel($labelText, $tags = 'label')
 	{
 		// shorthand
 		$st         = $this->st;
@@ -199,17 +210,18 @@ class BrowserDetermine extends Prose
 		}
 	}
 
-	public function getElementByLabelIdOrName($searchTerm, $tag = '*')
+	public function getElementByLabelIdOrName($searchTerm, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' with label, id or name '{$searchTerm}' )");
 
 		// can we find this puppy by its label?
 		try {
-			$return = $this->getElementByLabel($searchTerm, $tag);
+			$return = $this->getElementByLabel($searchTerm, $tags);
 			$log->endAction("found one by its label");
 			return $return;
 		}
@@ -219,7 +231,7 @@ class BrowserDetermine extends Prose
 
 		// okay, so can we find it by its id instead?
 		try {
-			$return = $this->getElementById($searchTerm, $tag);
+			$return = $this->getElementById($searchTerm, $tags);
 			$log->endAction("found one by its id");
 			return $return;
 		}
@@ -228,17 +240,18 @@ class BrowserDetermine extends Prose
 		}
 
 		// last chance - can we find it by its text?
-		$return = $this->getElementByName($searchTerm, $tag);
+		$return = $this->getElementByName($searchTerm, $tags);
 		$log->endAction("found one by its name");
 		return $return;
 	}
 
-	public function getElementByName($name, $tag = '*')
+	public function getElementByName($name, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' element with name '{$name}' )");
 
 		// what goes right and wrong
@@ -248,32 +261,33 @@ class BrowserDetermine extends Prose
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpath = 'descendant::' . $tag . '[@name = "' . $name . '"]';
-			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->getElements('xpath', $xpath);
-			});
-		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction($failureMsg);
-
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
 		}
 
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[@name = "' . $name . '"]';
+		}
+
+		// get the possibly matching elements
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// find the first one that the user can see
 		return $this->returnFirstVisibleElement(
 			$log, $elements, __METHOD__, $successMsg, $failureMsg
 		);
 	}
 
-	public function getElementByPlaceholder($text, $tag = '*')
+	public function getElementByPlaceholder($text, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' element with placeholder '{$text}' )");
 
 		$successMsg = "found one";
@@ -282,33 +296,33 @@ class BrowserDetermine extends Prose
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpath = 'descendant::' . $tag . '[@placeholder = "' . $text . '"]';
-			$elements = $log->addStep("( find elements using xpath '{$xapth}' )", function() use($topElement, $xpath) {
-				return $topElement->getElements('xpath', $xpath);
-			});
-
-		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction($failureMsg);
-
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
 		}
 
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[@placeholder = "' . $text . '"]';
+		}
+
+		// get the possibly matching elements
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// find the first one that the user can see
 		return $this->returnFirstVisibleElement(
 			$log, $elements, __METHOD__, $successMsg, $failureMsg
 		);
 	}
 
-	public function getElementByAltText($text, $tag = '*')
+	public function getElementByAltText($text, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' element with alt text '{$text}' )");
 
 		$successMsg = "found one";
@@ -317,33 +331,33 @@ class BrowserDetermine extends Prose
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpath = 'descendant::' . $tag . '[@alt = "' . $text . '"]';
-			$elements = $log->addStep("( find elements using xpath '{$xapth}' )", function() use($topElement, $xpath) {
-				return $topElement->getElements('xpath', $xpath);
-			});
-
-		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction($failureMsg);
-
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
 		}
 
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[@alt = "' . $text . '"]';
+		}
+
+		// get the possibly matching elements
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// find the first one that the user can see
 		return $this->returnFirstVisibleElement(
 			$log, $elements, __METHOD__, $successMsg, $failureMsg
 		);
 	}
 
-	public function getElementByText($text, $tag = '*')
+	public function getElementByText($text, $tags = '*')
 	{
 		// short hand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' element with text '{$text}' )");
 
 		$successMsg = "found one";
@@ -352,48 +366,41 @@ class BrowserDetermine extends Prose
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpathList = array(
-				'descendant::' . $tag . '[normalize-space(text()) = "' . $text . '"]',
-				'descendant::' . $tag . '[normalize-space(string(.)) = "' . $text . '"]',
-				'descendant::' . $tag . '/*[normalize-space(string(.)) = "' . $text . '"]/parent::' . $tag
-			);
-			if ($tag == '*' || $tag == 'input') {
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
+		}
+
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[normalize-space(text()) = "' . $text . '"]';
+			$xpathList[] = 'descendant::' . $tag . '[normalize-space(string(.)) = "' . $text . '"]';
+			$xpathList[] = 'descendant::' . $tag . '/*[normalize-space(string(.)) = "' . $text . '"]/parent::' . $tag;
+
+			// special cases
+			if ($tag == '*' || $tag == 'input' || $tag == 'button') {
 				$xpathList[] = 'descendant::input[normalize-space(@value) = "' . $text . '"]';
 				$xpathList[] = 'descendant::input[normalize-space(@placeholder) = "' . $text . '"]';
 			}
-
-			foreach ($xpathList as $xpath) {
-				$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-					return $topElement->getElements('xpath', $xpath);
-				});
-
-				if (count($elements) > 0) {
-					break;
-				}
-			}
-		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction($failureMsg);
-
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
 		}
 
+		// get the possibly matching elements
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// find the first one that the user can see
 		return $this->returnFirstVisibleElement(
 			$log, $elements, __METHOD__, $successMsg, $failureMsg
 		);
-
 	}
 
-	public function getElementByTitle($title, $tag = '*')
+	public function getElementByTitle($title, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' element with title '{$title}' )");
 
 		$successMsg = "found one";
@@ -402,151 +409,212 @@ class BrowserDetermine extends Prose
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpath = 'descendant::' . $tag . '[@title = "' . $title . '"]';
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
+		}
 
-			$element = $log->addStep("( find element using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->getElement('xpath', $xpath);
-			});
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[@title = "' . $title . '"]';
+		}
 
-			// all done
-			$log->endAction($successMsg);
+		// search using the xpath
+		$elements = $this->getElementsByXpath($xpathList);
 
-			// return the element
-			return $element;
+		// get the possibly matching elements
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// find the first one that the user can see
+		return $this->returnFirstVisibleElement(
+			$log, $elements, __METHOD__, $successMsg, $failureMsg
+		);
+	}
+
+	public function getElementByXpath($xpathList)
+	{
+		// shorthand
+		$st = $this->st;
+		$topElement = $this->getTopElement();
+
+		try{
+			foreach ($xpathList as $xpath) {
+				$element = $log->addStep("( find element using xpath '{$xpath}' )", function() use($topElement, $xpath) {
+					return $topElement->getElement('xpath', $xpath);
+				});
+
+				// return the element
+				return $element;
+			}
 		}
 		catch (Exception $e) {
 			// log the result
-			$log->endAction($failureMsg);
+			$log->endAction("no matching elements");
 
 			// report the failure
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
 
+		// if we get here, we found a match
+		return $element;
 	}
 
-	public function getElementsByClass($class, $tag = '*')
+	public function getElementsByClass($class, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' elements with CSS class '{$class}' )");
 
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		try {
-			$xpath = 'descendant::' . $tag . '[contains(concat(" ", normalize-space(@class), " "), " ' . $class . ' ")]';
-			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->getElements('xpath', $xpath);
-			});
-
-			// all done
-			$log->endAction(count($elements) . " element(s) found");
-
-			// return the elements
-			return $elements;
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
 		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction("no matching elements");
 
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[contains(concat(" ", normalize-space(@class), " "), " ' . $class . ' ")]';
 		}
+
+		// find the matches
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// log the result
+		$log->endAction(count($elements) . " element(s) found");
+
+		// return the elements
+		return $elements;
 	}
 
-	public function getElementsById($id, $tag = '*')
+	public function getElementsById($id, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' elements with id '{$id}' )");
 
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpath = 'descendant::' . $tag . '[@id = "' . $id . '"]';
-			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				return $topElement->getElements('xpath', $xpath);
-			});
-
-			// log the result
-			$log->endAction(count($elements) . " element(s) found");
-
-			// return the element
-			return $elements;
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
 		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction("no matching elements");
 
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[@id = "' . $id . '"]';
 		}
+
+		// find the matches
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// log the result
+		$log->endAction(count($elements) . " element(s) found");
+
+		// return the elements
+		return $elements;
 	}
 
-	public function getElementsByName($name, $tag = '*')
+	public function getElementsByName($name, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' elements with name '{$name}' )");
 
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpath = 'descendant::' . $tag . '[@name = "' . $name . '"]';
-			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				$topElement->getElements('xpath', $xpath);
-			});
-
-			// log the result
-			$log->endAction(count($elements) . " element(s) found");
-
-			// return the element
-			return $elements;
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
 		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction("no matching elements");
 
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[@name = "' . $name . '"]';
 		}
+
+		// find the matches
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// log the result
+		$log->endAction(count($elements) . " element(s) found");
+
+		// return the elements
+		return $elements;
 	}
 
-	public function getElementsByText($text, $tag = '*')
+	public function getElementsByText($text, $tags = '*')
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
+		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("( get '{$tag}' elements with text '{$text}' )");
 
 		// shorthand
 		$topElement = $this->getTopElement();
 
-		// is there an element with this text?
-		try {
-			$xpath = 'descendant::' . $tag . '[normalize-space(text()) = "' . $text . '"]|descendant::' . $tag . '/*[normalize-space(string(.)) = "' . $text . '"]|descendant::input[@value = "' . $text . '"]|descendant::input[@placeholder = "' . $text . '"]';
-			$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
-				$topElement->getElements('xpath', $xpath);
-			});
+		// prepare the list of tags
+		if (is_string($tags)) {
+			$tags = array($tags);
+		}
 
-			// log the result
-			$log->endAction(count($elements) . " element(s) found");
+		// build up the xpath to use
+		$xpathList = array();
+		foreach ($tags as $tag) {
+			$xpathList[] = 'descendant::' . $tag . '[normalize-space(text()) = "' . $text . '"]|descendant::' . $tag . '/*[normalize-space(string(.)) = "' . $text . '"]|descendant::input[@value = "' . $text . '"]|descendant::input[@placeholder = "' . $text . '"]';
+		}
 
-			// return the element
-			return $elements;
+		// find the matches
+		$elements = $this->getElementsByXpath($xpathList);
+
+		// log the result
+		$log->endAction(count($elements) . " element(s) found");
+
+		// return the elements
+		return $elements;
+	}
+
+	public function getElementsByXpath($xpathList)
+	{
+		// shorthand
+		$st = $this->st;
+		$topElement = $this->getTopElement();
+
+		// what are we doing?
+		$log = $st->startAction("search the browser's DOM using a list of XPath queries");
+
+		// our set of elements to return
+		$return = array();
+
+		try{
+			foreach ($xpathList as $xpath) {
+				$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
+					return $topElement->getElements('xpath', $xpath);
+				});
+
+				if (count($elements) > 0) {
+					// add these elements to the total list
+					$return = array_merge($return, $elements);
+				}
+			}
 		}
 		catch (Exception $e) {
 			// log the result
@@ -555,6 +623,10 @@ class BrowserDetermine extends Prose
 			// report the failure
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
+
+		// if we get here, we found a match
+		$log->endAction("found " . count($return) . " element(s)");
+		return $return;
 	}
 
 	// ==================================================================

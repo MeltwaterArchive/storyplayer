@@ -67,6 +67,9 @@ class FormActions extends BrowserActions
 
 	protected function initActions()
 	{
+		// call our parent initActions() first
+		parent::initActions();
+
 		// shorthand
 		$st     = $this->st;
 		$formId = $this->args[0];
