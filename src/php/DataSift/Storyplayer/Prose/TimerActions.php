@@ -47,6 +47,7 @@ use Exception;
 
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
 use DataSift\Stone\TimeLib\DateInterval;
 
 /**
@@ -91,7 +92,11 @@ class TimerActions extends Prose
 				$log->endAction();
 				return;
 			}
-			catch (Exception $e) {
+			catch (E5xx_ActionFailed $e) {
+				// do nothing
+				$log->closeAllOpenSubActions();
+			}
+			catch (E5xx_ExpectFailed $e) {
 				// do nothing
 				$log->closeAllOpenSubActions();
 			}
