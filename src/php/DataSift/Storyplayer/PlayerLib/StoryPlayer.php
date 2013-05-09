@@ -96,7 +96,7 @@ class StoryPlayer
 	const PHASE_TESTTEARDOWN = 7;
 	const PHASE_TESTENVIRONMENTTEARDOWN = 8;
 
-	public function createContext(stdClass $staticConfig, stdClass $runtimeConfig, $envName, Story $story, UserGenerator $generator)
+	public function createContext(stdClass $staticConfig, stdClass $runtimeConfig, $envName, Story $story)
 	{
 		// create our context, which is just a container
 		$context = new StoryContext();
@@ -116,7 +116,7 @@ class StoryPlayer
 		$context->runtime = $runtimeConfig;
 
 		// we need to create our user
-		$context->user = $generator->getUser($staticConfig, $runtimeConfig, $context, $story);
+		$context->initUser($staticConfig, $runtimeConfig, $story);
 
 		// we need to know where to look for Prose classes
 		$context->prose = array();

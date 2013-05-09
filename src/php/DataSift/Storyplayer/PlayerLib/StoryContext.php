@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
@@ -91,6 +93,29 @@ class StoryContext extends BaseObject
 		// are running on
 		$this->env->host = new BaseObject;
 		list($this->env->host->networkInterface, $this->env->host->ipAddress) = $this->getHostIpAddress();
+	}
+
+	public function initUser($staticConfig, $runtimeConfig, Story $story)
+	{
+		// do we have a cached user?
+
+		// our default provider of users
+		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
+
+		var_dump($this->env->users);
+
+		// do we have a specific generator to load?
+		if (isset($this->env->users, $this->env->users->generator)) {
+			$className = $this->env->users->generator;
+		}
+
+		// create the generator
+		$generator = new ConfigUserLoader(new $className());
+
+		// get a user from the generator
+		$this->user = $generator->getUser($staticConfig, $runtimeConfig, $this, $story);
+
+		// all done
 	}
 
 	protected function getHostIpAddress()

@@ -26,8 +26,13 @@ class GenericUserGenerator implements UserGenerator
 		return $user;
 	}
 
-	public function storeUserContextAndCheckpoint($user, StoryContext $context = null, StoryCheckpoint $checkpoint = null)
-	{
-		// do nothing
-	}
+    public function storeUser($user, $staticConfig, $runtimeConfig)
+    {
+        // no action required
+    }
+
+    public function emptyCache($staticConfig, $runtimeConfig, StoryContext $context)
+    {
+        // can't do anything
+    }
 }

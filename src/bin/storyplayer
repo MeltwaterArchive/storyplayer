@@ -144,7 +144,7 @@ function main($argv)
     $teller = new StoryTeller($story);
 
     // create the supporting context for this story
-    $context = $player->createContext($staticConfig, $runtimeConfig, $environment, $story, $userLoader);
+    $context = $player->createContext($staticConfig, $runtimeConfig, $environment, $story);
     $teller->setStoryContext($context);
 
     // make the story happen
