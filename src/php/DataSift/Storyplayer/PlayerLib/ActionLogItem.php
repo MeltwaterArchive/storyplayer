@@ -197,6 +197,14 @@ class ActionLogItem
 		}
 	}
 
+	public function closeAllOpenSubActions()
+	{
+		$openItem = $this->getFirstOpenAction();
+		if (is_object($openItem)) {
+			$openItem->closeAllOpenActions();
+		}
+	}
+
 	public function isComplete()
 	{
 		if (!empty($this->endTime)) {
