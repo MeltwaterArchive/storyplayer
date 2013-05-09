@@ -161,7 +161,7 @@ class BrowserDetermine extends Prose
 		);
 	}
 
-	public function getElementByLabel($labelText, $tags = 'label')
+	public function getElementByLabel($labelText)
 	{
 		// shorthand
 		$st         = $this->st;
