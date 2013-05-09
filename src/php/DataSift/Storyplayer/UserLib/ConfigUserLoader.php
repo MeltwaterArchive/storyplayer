@@ -43,12 +43,12 @@ class ConfigUserLoader implements UserGenerator
         return $runtimeConfig->users->$envName;
     }
 
-    public function storeUserContextAndCheckpoint($user, StoryContext $context, StoryCheckpoint $checkpoint = null)
+    public function storeUser($user, $staticConfig, $runtimeConfig)
     {
         // no action required
     }
 
-    public function emptyCache($envName)
+    public function emptyCache($staticConfig, $runtimeConfig, StoryContext $context)
     {
         // can't do anything
     }
