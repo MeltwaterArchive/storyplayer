@@ -190,7 +190,7 @@ class BrowserActions extends Prose
 
 		// check the title
 		$st->usingTimer()->waitFor(function() use($st, $titles) {
-			$st->expectsBrowser()->titles($titles);
+			$st->expectsBrowser()->hasTitles($titles);
 		}, $timeout);
 
 		// all done
