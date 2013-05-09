@@ -80,7 +80,7 @@ class HttpResponseExpects extends Prose
 	{
 		// do we HAVE a valid response?
 		if (!isset($params[0])) {
-			throw new E5xx_ExpectFailed(__METHOD__, "HttpClientResponse object", gettype($response));
+			throw new E5xx_ExpectFailed(__METHOD__, "HttpClientResponse object", "missing object");
 		}
 		$response = $params[0];
 
