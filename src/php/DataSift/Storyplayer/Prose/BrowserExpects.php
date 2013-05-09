@@ -141,30 +141,4 @@ class BrowserExpects extends Prose
 		// all done
 		$log->endAction();
 	}
-
-	public function hasHeading($text, $maxLevel = 2)
-	{
-		// shorthand
-		$st         = $this->st;
-		$topElement = $this->getTopElement();
-
-		// what are we doing?
-		$log = $st->startAction("page must have a heading or sub-heading with text '$text'");
-
-		// build up the xpath to use in the query
-		for($i = 1; $i <= $maxLevel; $i++) {
-			$xpathList[] = "descendant::h" . $i . '[normalize-space(text()) = "' . $text . '"]';
-		}
-		$xpath = implode(" | ", $xpathList);
-
-		var_dump($xpath);
-
-		try {
-			$element = $topElement->getElement('xpath', $xpath);
-			$log->endAction();
-		}
-		catch (Exception $e) {
-			throw new E5xx_ExpectFailed('BrowserExpects::hasHeading', $text, null);
-		}
-	}
 }

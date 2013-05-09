@@ -102,8 +102,6 @@ class StoryContext extends BaseObject
 		// our default provider of users
 		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
 
-		var_dump($this->env->users);
-
 		// do we have a specific generator to load?
 		if (isset($this->env->users, $this->env->users->generator)) {
 			$className = $this->env->users->generator;
