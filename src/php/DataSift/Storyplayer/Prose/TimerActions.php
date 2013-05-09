@@ -65,6 +65,7 @@ class TimerActions extends Prose
 		// shorthand
 		$st = $this->st;
 
+		// how long do we wait for?
 		if (is_string($timeout)) {
 			$interval = new DateInterval($timeout);
 			$seconds  = $interval->getTotalSeconds();
@@ -73,12 +74,16 @@ class TimerActions extends Prose
 			$seconds = $timeout;
 		}
 
+		// when does this end?
 		$now = time();
 		$end = $now + $seconds;
 
+
+		// what are we doing?
+		$log = $st->startAction("[ polling for up to {$seconds} seconds ]");
+
 		while ($now < $end) {
 			try {
-				$log = $st->startAction("[ polling ]");
 				$result = $callback($st);
 
 				// if we get here, the actions inside the callback
