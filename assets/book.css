@@ -12,6 +12,13 @@ h2 {
   font-size: 24px;
 }
 
+h3 {
+  font-size: 16px;
+  line-height: 30px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
 .page {
     padding-left: 0;
     min-height: 100%;
