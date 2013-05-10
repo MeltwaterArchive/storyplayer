@@ -17,13 +17,16 @@ Additionally, Storyplayer can measure non-functional requirements at the same ti
 
 Storyplayer is highly modular, and can be easily extended to support your own custom needs.
 
-### What can you test with Storyplayer?
+### What Can You Test With Storyplayer?
 
- * Back-end services
- * APIs
- * Front end interfaces
+Storyplayer was initially designed and built to test DataSift's real-time filtering product.  This is a service-oriented architecture consisting of:
 
-### Stories, and Prose
+* Data pipline (using ZeroMQ and HTTP)
+* Supporting services (using HTTP and sometimes ZeroMQ)
+* Internal and public-facing APIs (using JSON over HTTP)
+* Front end interfaces (using HTML)
+
+### Stories And Prose
 
 Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).
 

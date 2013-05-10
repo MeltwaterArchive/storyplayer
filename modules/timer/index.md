@@ -9,6 +9,10 @@ next: '<a href="../../modules/timer/usingTimer.html">Next: usingTimer()</a>'
 
 The __Timer__ module allows you to wait for something to happen, and to timeout (which throws an exception) if that something doesn't happen quickly enough.
 
+The source code for this Prose module can be found in this PHP class:
+
+* DataSift\Storyplayer\Prose\TimerActions
+
 ## Dependencies
 
 This module relies on [DataSift's Stone library](http://github.com/datasift/Stone), which is installed as part of Storyplayer's installation.
