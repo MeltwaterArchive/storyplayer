@@ -9,6 +9,10 @@ next: '<a href="../../modules/savaged/usingSavageD.html">Next: usingSavageD()</a
 
 The __SavageD__ module allows you to control one or more (possibly) remote SavageD daemons.
 
+The source code for this Prose module can be found in this PHP class:
+
+* DataSift\Storyplayer\Prose\SavagedActions
+
 ## What Is SavageD?
 
 [SavageD](https://github.com/datasift/SavageD) is a process and server monitoring process developed by DataSift.  It logs results in real-time via [Etsy's statsd](https://github.com/etsy/statsd) into [Graphite](https://github.com/graphite-project).

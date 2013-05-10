@@ -1,7 +1,7 @@
 ---
 layout: modules-uuid
 title: The UUID Module
-prev: '<a href="../../modules/shell/index.html">Prev: The UNIX Shell Module</a>'
+prev: '<a href="../../modules/shell/usingShell.html">Prev: usingShell()</a>'
 next: '<a href="../../modules/vagrant/index.html">Next: The Vagrant Module</a>'
 ---
 
