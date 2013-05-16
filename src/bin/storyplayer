@@ -45,11 +45,11 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 $vendorDir = '';
 $vendorDirs = array(
 	__DIR__ . '/../../vendor/php',
-	getcwd() . '/vendor'
+	getcwd() . '/vendor/php'
 );
 foreach ($vendorDirs as $key => $candidateDir) {
-	if (!is_dir($candidateDir)) {
-		unset($vendorDirs[$key]);
+	if (is_dir($candidateDir)) {
+		$vendorDir = $candidateDir;
 	}
 }
 
