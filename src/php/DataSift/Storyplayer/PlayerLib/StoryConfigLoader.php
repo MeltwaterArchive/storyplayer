@@ -59,14 +59,10 @@ class StoryConfigLoader extends JsonConfigLoader
 {
 	public function __construct()
 	{
-		// are we installed globally?
-		if ('@@PHP_DIR@@' != '@' . '@PHP_DIR@@') {
-			// yes, we are
-			parent::__construct("storyplayer", getcwd());
-		}
-		else {
-			// we are running from the github repo clone
-			parent::__construct("storyplayer", realpath(__DIR__ . '/../../../../../'));
-		}
+		parent::__construct("storyplayer", getcwd(), array(
+			"etc",
+			"src/tests/stories/etc",
+			"src/main/etc"
+		));
 	}
 }
