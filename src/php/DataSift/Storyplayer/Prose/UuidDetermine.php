@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Stone\TokenLib\TokenGenerator;
 
 /**
  * generate a uuid on demand, without requiring the uuid extension
@@ -57,7 +58,7 @@ use DataSift\Storyplayer\ProseLib\Prose;
  */
 class UuidDetermine extends Prose
 {
-	public function getUuid($length = 32)
+	public function getUuid()
 	{
 		// shorthand
 		$st = $this->st;
@@ -65,26 +66,15 @@ class UuidDetermine extends Prose
 		// what are we doing?
 		$log = $st->startAction("generate a UUID");
 
-		// generate some random data
-		//
-		// we're not trying to create a cryptographically-strong amount of
-		// entropy here ... just enough to give us different UUIDs if we
-		// are called multiple times
-		$entropy = '';
-		for ($i = 0; $i < 5; $i++) {
-			$entropy .= uniqid(mt_rand(), true);
+		// do we have the UUID extension?
+		if (function_exists('uuid_create')) {
+			$uuid = uuid_create();
 		}
-
-		// use the entropy to generate our hash
-		if ($length <= 32) {
-			$hash = md5($entropy);
+		else {
+			// create it using Stone's TokenLib
+			$generator = new TokenGenerator();
+			$uuid = $generator->generateToken(32);
 		}
-		else if ($length <= 40) {
-			$hash = sha1($entropy);
-		}
-
-		// chop the hash down to size
-		$uuid = substr($hash, 0, $length);
 
 		// log it
 		$log->endAction("'{$uuid}'");
