@@ -43,11 +43,12 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Stone\TokenLib\TokenGenerator;
 
 /**
- * generate a uuid on demand, without requiring the uuid extension
+ * assertions for the UUID module
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -56,23 +57,31 @@ use DataSift\Stone\TokenLib\TokenGenerator;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UuidDetermine extends Prose
+class UuidExpects extends Prose
 {
-	public function generateUuid()
+	public function requirementsAreMet()
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("generate a UUID");
+		$log = $st->startAction("make sure the UUID module's requirements are installed");
 
 		// do we have the UUID extension?
-		$uuid = uuid_create();
+		if (!function_exists('uuid_create')) {
+			// we really want this
+			$log->endAction("PECL uuid extension missing");
+			throw new E5xx_ExpectFailed(__METHOD__, "PECL uuid extension installed", "extension is not installed");
+		}
 
-		// log it
-		$log->endAction("'{$uuid}'");
+		// is Stone's TokenLib available?
+		if (!class_exists('DataSift\Stone\TokenLib\TokenGenerator')) {
+			// we really want this
+			$log->endAction("DataSift\Stone\TokenLib missing");
+			throw new E5xx_ExpectFailed(__METHOD__, "DataSift's Stone library includes TokenLib", "TokenLib not found");
+		}
 
-		// all done
-		return $uuid;
+		// if we get here, we are good
+		$log->endAction();
 	}
 }
