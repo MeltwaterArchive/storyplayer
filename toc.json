@@ -69,6 +69,8 @@
 		"modules/shell/expectsShell",
 		"modules/shell/usingShell",
 		"modules/uuid/index",
+		"modules/uuid/fromUuid",
+		"modules/uuid/expectsUuid",
 		"modules/vagrant/index",
 		"modules/zeromq/index",
 		"copyright"

@@ -1,7 +1,7 @@
 ---
 layout: modules-vagrant
 title: The Vagrant Module
-prev: '<a href="../../modules/uuid/index.html">Prev: The UUID Module</a>'
+prev: '<a href="../../modules/uuid/expectsUuid.html">Prev: expectsUuid()</a>'
 next: '<a href="../../modules/zeromq/index.html">Next: The ZeroMQ Module</a>'
 ---
 

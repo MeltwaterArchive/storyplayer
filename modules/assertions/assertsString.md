@@ -175,6 +175,17 @@ $story->setPostTestInspection(function(StoryTeller $st) {
 });
 {% endhighlight %}
 
+## isUuid()
+
+Use _$st->assertsString()->isUuid()_ to make sure that a string is a _[universally-unique identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)_ of some kind:
+
+{% highlight php %}
+$uuid = $st->fromUuid()->generateUuid();
+$st->expectsString($uuid)->isUuid();
+{% endhighlight %}
+
+A UUID is a 32 character hexadecimal string (with four '-' characters at various places).  There are several different versions of the UUID-generation algorithm; at the moment, we don't test for compliance with any of those algorithms.
+
 ## isValidJson()
 
 Use _$st->assertsString()->isValidJson()_ to make sure that a string contains valid JSON-encoded data.
