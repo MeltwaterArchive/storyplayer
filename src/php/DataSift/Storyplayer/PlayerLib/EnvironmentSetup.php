@@ -69,9 +69,9 @@ abstract class EnvironmentSetup
 		$this->story = $story;
 	}
 
-	public function getVmParams()
+	public function getVmParams($additionalParams)
 	{
-		return $this->vmParams;
+		return $this->vmParams + $additionalParams;
 	}
 
 	abstract public function getName();

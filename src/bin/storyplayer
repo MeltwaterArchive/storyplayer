@@ -35,10 +35,9 @@ $localSrcDirs = array(
 	getcwd() . '/src/php',
 	getcwd() . '/php'
 );
-foreach ($localSrcDirs as $candidateDir) {
-	if (is_dir($candidateDir)) {
-		$localSrcDir = $candidateDir;
-		break;
+foreach ($localSrcDirs as $key => $candidateDir) {
+	if (!is_dir($candidateDir)) {
+		unset($localSrcDirs[$key]);
 	}
 }
 
@@ -48,10 +47,9 @@ $vendorDirs = array(
 	__DIR__ . '/../../vendor/php',
 	getcwd() . '/vendor'
 );
-foreach ($vendorDirs as $candidateDir) {
-	if (is_dir($candidateDir)) {
-		$vendorDir = $candidateDir;
-		break;
+foreach ($vendorDirs as $key => $candidateDir) {
+	if (!is_dir($candidateDir)) {
+		unset($vendorDirs[$key]);
 	}
 }
 
@@ -67,12 +65,12 @@ else {
 PSR0_Autoloader::startAutoloading();
 
 // if we have a vendor folder, load from there
-if (is_dir($vendorDir)) {
+foreach ($vendorDirs as $vendorDir){
 	Autoloader_Path::searchFirst(realpath($vendorDir));
 }
 
 // if we have a source dir, we also want to load from there
-if (is_dir($localSrcDir)) {
+foreach ($localSrcDirs as $localSrcDir){
 	Autoloader_Path::searchFirst($localSrcDir);
 }
 
