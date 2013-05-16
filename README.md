@@ -10,7 +10,7 @@ Storyplayer should be installed using the [PEAR Installer](http://pear.php.net).
 
 	sudo pear config-set auto_discover 1
     sudo pear channel-discover datasift.github.io/pear
-    sudo pear install --alldeps datasift/storyteller
+    sudo pear install --alldeps datasift/storyplayer
 
 ### Usage
 
