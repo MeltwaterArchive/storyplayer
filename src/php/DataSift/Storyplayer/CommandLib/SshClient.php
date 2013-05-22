@@ -60,14 +60,19 @@ class SshClient
 {
 	protected $st;
 	protected $ipAddress;
-	protected $sshHostKeyPath;
+	protected $sshKey;
 	protected $sshUsername;
 	protected $sshOptions = array("-n");
 
-	public function __construct(StoryTeller $st)
+	public function __construct(StoryTeller $st, $sshOptions = array())
 	{
 		// remember for future use
 		$this->st = $st;
+
+		// add in the options
+		foreach ($sshOptions as $option) {
+			$this->addSshOption($option);
+		}
 	}
 
 	public function getIpAddress()
@@ -78,26 +83,6 @@ class SshClient
 	public function setIpAddress($ipAddress)
 	{
 		$this->ipAddress = $ipAddress;
-	}
-
-	public function getSshHostKeyPath()
-	{
-		return $this->sshHostKeyPath;
-	}
-
-	public function getSshHostKeyPathForUse()
-	{
-		if (isset($this->sshHostKeyPath)) {
-			return "-i '" . $this->sshHostKeyPath . "'";
-		}
-
-		// no specified host key to use
-		return '';
-	}
-
-	public function setSshHostKeyPath($path)
-	{
-		$this->sshHostKeyPath = $path;
 	}
 
 	public function getSshOptions()
@@ -125,52 +110,25 @@ class SshClient
 		$this->sshUsername = $username;
 	}
 
-	public function convertParamsForUse($params = array())
+	public function convertParamsForUse($params)
 	{
 		// our return value
-		$result = '';
-
-		// make the params usable
-		foreach ($params as $param) {
-			// convert to string first
-			$stringParam = (string)$param;
-
-			// special case - empty param
-			if (strlen($stringParam) == 0) {
-				$result .= "'' ";
-				continue;
-			}
-
-			// general case
-			//
-			// by default, we want to make sure each parameter will be
-			// subject to globbing by the remote shell (mimicing an
-			// interactive shell), unless we've been given a hint
-			// otherwise
-			//
-			// escaping any single quotes should (in theory) do the trick
-			// just fine
-
-			$result .= str_replace('\'', '\\\'', $stringParam) . ' ';
-		}
+		$result = str_replace('\'', '\\\'', $stringParam);
 
 		// all done
 		return rtrim($result);
 	}
 
-	public function runCommand($command, $params = array())
+	public function runCommand($command)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// make the params printable / executable
-		$printableParams = $this->convertParamsForUse($params);
+		// $printableParams = $this->convertParamsForUse($params);
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' with params '{$printableParams}' against host ");
-
-		// the switches we need to pass to SSH
-		$sshOptions = explode(' ', $this->getSshOptions());
+		$log = $st->startAction("run command '{$command}' against host ");
 
 		// build the full command
 		//
@@ -188,16 +146,15 @@ class SshClient
 		//    the command to run on the remote/guest OS
 		//    (assumes the command will be globbed by the remote shell)
 		$fullCommand = 'ssh -o StrictHostKeyChecking=no'
-					 . " " . $this->getSshHostKeyPathForUse()
-					 . $this->getSshUsername() . '@' . $this->getIpAddress()
 					 . ' ' . $this->getSshOptionsForUse()
-					 . " '" . $command . ' ' . $printableParams . "'";
+					 . ' ' . $this->getSshUsername() . '@' . $this->getIpAddress()
+					 . ' "' . str_replace('"', '\"', $command) . '"';
 
 		// run the command
 		$output     = null;
 		$returnCode = null;
-		$log->addStep("run command via SSH: '{$fullCommand}'", function() use($fullCommand, &$output, &$returnCode) {
-			$output = passthru($fullCommand, $returnCode);
+		$log->addStep("run command via SSH: {$fullCommand}", function() use($fullCommand, &$output, &$returnCode) {
+			$output = system($fullCommand, $returnCode);
 		});
 
 		// all done
