@@ -43,13 +43,16 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Storyplayer\HostLib;
+use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
+use DataSift\Storyplayer\ProseLib\HostBase;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
  *
- * test the state of vagrant and its virtual machines
+ * test the state of a (possibly remote) computer
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -58,24 +61,95 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class VagrantExpects extends ComputerExpects
+class HostExpects extends HostBase
 {
-	public function vmIsRunning($boxName)
+	public function hostIsRunning()
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure VM '{$boxName}' running");
+		$log = $st->startAction("make sure host '{$this->hostDetails->name}' is running");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
 
 		// is it running?
-		$running = $st->fromVagrant()->getBoxIsRunning($boxName);
+		$running = $st->fromHost($this->hostDetails->name)->getHostIsRunning();
 		if (!$running) {
 			$log->endAction();
-			throw new E5xx_ExpectFailed(__METHOD__, 'VM running', 'VM not running');
+			throw new E5xx_ExpectFailed(__METHOD__, 'host is running', 'host is not running');
 		}
 
 		// all done
 		$log->endAction();
 	}
+
+	public function packageIsInstalled($packageName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure package '{$packageName}' is installed on host '{$this->hostDetails->name}'");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// is it installed?
+		$details = $st->fromHost($this->hostDetails->name)->getInstalledPackageDetails($packageName);
+
+		if (!isset($details->version)) {
+			$log->endAction();
+			throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
+		}
+
+		// all done
+		$log->endAction();
+	}
+
+	public function processIsRunning($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure process '{$processName}' is running on host '{$this->hostDetails->name}'");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// is the process running?
+		$isRunning = $st->fromHost($this->hostDetails->name)->getProcessIsRunning($processName);
+
+		if (!$isRunning) {
+			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' running", "process '{$processName}' is not running");
+		}
+
+		// all done
+		$log->endAction();
+	}
+
+	public function processIsNotRunning($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$boxName}'");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// is the process running?
+		$isRunning = $st->fromHost($this->hostDetails->name)->getProcessIsRunning($boxName, $processName);
+
+		if ($isRunning) {
+			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");
+		}
+
+		// all done
+		$log->endAction();
+	}
+
 }

@@ -43,14 +43,18 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Storyplayer\HostLib;
+use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\HostBase;
 use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * get information about vagrant
+ * do things with vagrant
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -59,65 +63,67 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class VagrantDetermine extends HostDetermine
+class HostActions extends HostBase
 {
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// call the parent constructor
-		parent::__construct($st, $args);
-
-		// arg[0] is the name of the box
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name you've given to the machine");
-		}
-
-		// arg[1] should be the name of the operating system to use
-		if (!isset($args[1])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #1 needs to be the name of the guest operating system");
-		}
-
-		// what is the name of the class that we need to find?
-		$className = 'DataSift\Storyplayer\OsLib\\' . ucfirst(strtolower($args[1]));
-
-		// do we have a class for this operating system?
-		if (!class_exists($className)) {
-			throw new E5xx_ActionFailed(__METHOD__, "Cannot find class '{$className}'");
-		}
-
-		// create our helper
-		$this->guestOs = new $className($st);
-	}
-
-	public function getVmIsRunning()
+	public function runCommand($command, $params)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("is VM '{$this->boxName}' running?");
+		$log = $st->startAction("run command '{$command}' on host '{$this->hostDetails->name}'");
 
-		// get the VM details
-		try {
-			$boxDetails = $st->fromVagrant()->getDetails($this->boxName);
-		}
-		catch (E5xx_ActionFailed $e) {
-			// the box does not exist
-			return false;
-		}
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
 
-		// if the box is running, it should have a status of 'running'
-		$status = '';
-		$log->addStep("determine status of Vagrant VM", function() use($st, $this->boxName, &$status) {
-			$command = "vagrant status | grep default | awk '{print \$2'}";
-			$status = $st->usingVagrant()->runVagrantCommand($boxName, $command);
-		});
-		if ($status != 'running') {
-			$log->endAction("VM is not running; state is '{$status}'");
-			return false;
-		}
+		// get an object to talk to this host
+		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+
+		// run the command in the guest operating system
+		$result = $host->runCommand($this->hostDetails, $command, $params);
 
 		// all done
-		$log->endAction("VM is running");
-		return true;
+		$log->endAction();
+		return $result;
+	}
+
+	public function writePlaybookVars($pathToVmHomeFolder, $playbookVars)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("write out ansible playbook vars");
+
+		// where are we writing to?
+		$parts = explode('-', $pathToVmHomeFolder);
+		if (count($parts) < 2) {
+			$log->endAction("cannot break folder path up to determine which OS we are running");
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+		$os = $parts[count($parts) - 2] . '-' . $parts[count($parts) - 1];
+
+		$storytellerVarsFilename = dirname(dirname($pathToVmHomeFolder)) . "/ansible-playbooks/vars/storyteller.yml";
+
+		// make sure we have something to write
+		if (count($playbookVars) == 0) {
+			$playbookVars['dummy'] = 'true';
+		}
+
+		// make sure we ahve somewhere to write it to
+		$log->addStep("create folder for ansible vars file", function() use($storytellerVarsFilename) {
+			$storytellerVarsDirname = dirname($storytellerVarsFilename);
+			if (!is_dir($storytellerVarsDirname)) {
+				mkdir($storytellerVarsDirname);
+			}
+		});
+
+		// save the data
+		$log->addStep("write vars to file '{$storytellerVarsFilename}'", function() use ($storytellerVarsFilename, $playbookVars) {
+			file_put_contents($storytellerVarsFilename, yaml_emit($playbookVars));
+		});
+
+		// all done
+		$log->endAction();
 	}
 }
