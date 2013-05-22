@@ -55,8 +55,11 @@ namespace DataSift\Storyplayer\ProseLib;
  */
 class E5xx_ActionFailed extends E5xx_ProseException
 {
-	public function __construct($actionName, $params = array()) {
+	public function __construct($actionName, $reason = '', $params = array()) {
 		$msg = "Action '$actionName' failed";
+		if (strlen($reason) > 0) {
+			$msg .= "; reason is '{$reason}'";
+		}
 		parent::__construct(500, $msg, $msg);
 	}
 }
