@@ -153,6 +153,7 @@ class VagrantVm implements SupportedHost
 	{
 		// shorthand
 		$st = $this->st;
+		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("stop VM");
@@ -161,7 +162,7 @@ class VagrantVm implements SupportedHost
 		if ($this->isRunning($vmDetails)) {
 			// yes it is ... shut it down
 
-			$command = "cd '{$vmDetails['dir']}' && vagrant destroy --force";
+			$command = "cd '{$vmDetails->dir}' && vagrant destroy --force";
 			$retVal = 1;
 			passthru($command, $retVal);
 
@@ -174,7 +175,7 @@ class VagrantVm implements SupportedHost
 
 		// if we get here, we need to forget about this VM
 		$runtimeConfig = $st->getRuntimeConfig();
-		unset($runtimeConfig->hosts->$vmDetails['name']);
+		unset($runtimeConfig->hosts->$vmName);
 
 		// all done
 		$log->endAction();

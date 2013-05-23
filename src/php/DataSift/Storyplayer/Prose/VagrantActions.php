@@ -107,7 +107,7 @@ class VagrantActions extends Prose
 		$log = $st->startAction("stop vagrant VM '{$vmName}'");
 
 		// get the VM details
-		$vmDetails = $st->fromHosts()->getDetails($vmName);
+		$vmDetails = $st->fromHost($vmName)->getDetails();
 
 		// create our host adapter
 		$host = new VagrantVm($st);
