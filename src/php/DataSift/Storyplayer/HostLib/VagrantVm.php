@@ -138,12 +138,7 @@ class VagrantVm implements SupportedHost
 		$vmDetails->provisioned = true;
 
 		// remember this vm, now that it is running
-		$name          = $vmDetails->name;
-		$runtimeConfig = $st->getRuntimeConfig();
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
-		$runtimeConfig->hosts->$name = $vmDetails;
+		$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
 
 		// all done
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
@@ -296,8 +291,7 @@ class VagrantVm implements SupportedHost
 		}
 
 		// if we get here, we need to forget about this VM
-		$runtimeConfig = $st->getRuntimeConfig();
-		unset($runtimeConfig->hosts->$vmName);
+		$st->usingHostsTable()->removeHost($vmDetails->name);
 
 		// all done
 		$log->endAction();

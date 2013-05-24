@@ -72,18 +72,11 @@ class HostDetermine extends HostBase
 		// what are we doing?
 		$log = $st->startAction("retrieve details for host '{$this->hostDetails->name}'");
 
-		// do we have *any* VM details?
-		$runtimeConfig = $st->getRuntimeConfig();
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "there are no details about any hosts or VMs";
+		// we already have details - are they valid?
+		if (isset($this->hostDetails->invalidHost) && $this->hostDetails->invalidHost) {
+			$msg = "there are no details about host '{$this->hostDetails->name}'";
 			$log->endAction($msg);
 			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// do we have the details about *this* VM?
-		if (isset($this->hostDetails->invalidHost) && $this->hostDetails->invalidHost) {
-			$log->endAction("there are no details about host '{$name}'");
-			throw new E5xx_ActionFailed(__METHOD__, "no details about host '{$name}'");
 		}
 
 		// return the details

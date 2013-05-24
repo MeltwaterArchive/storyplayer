@@ -77,14 +77,14 @@ class HostBase extends Prose
 		$name = $args[0];
 
 		// do we know anything about this host?
-		$runtimeConfig = $st->getRuntimeConfig();
-		if (!isset($runtimeConfig->hosts, $runtimeConfig->hosts->$name)) {
+		$hostsTable = $st->fromHostsTable()->getHostsTable();
+		if (!isset($hostsTable->$name)) {
 			$this->hostDetails = new BaseObject();
 			$this->hostDetails->name = $name;
 			$this->hostDetails->invalidHost = true;
 		}
 		else {
-			$this->hostDetails = $runtimeConfig->hosts->$name;
+			$this->hostDetails = $hostsTable->$name;
 		}
 	}
 

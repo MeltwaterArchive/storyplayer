@@ -85,6 +85,28 @@ class HostExpects extends HostBase
 		$log->endAction();
 	}
 
+	public function hostIsNotRunning()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure host '{$this->hostDetails->name}' is not running");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// is it running?
+		$running = $st->fromHost($this->hostDetails->name)->getHostIsRunning();
+		if ($running) {
+			$log->endAction();
+			throw new E5xx_ExpectFailed(__METHOD__, 'host is not running', 'host is running');
+		}
+
+		// all done
+		$log->endAction();
+	}
+
 	public function packageIsInstalled($packageName)
 	{
 		// shorthand
@@ -102,6 +124,29 @@ class HostExpects extends HostBase
 		if (!isset($details->version)) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
+		}
+
+		// all done
+		$log->endAction();
+	}
+
+	public function packageIsNotInstalled($packageName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure package '{$packageName}' is not installed on host '{$this->hostDetails->name}'");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// is it installed?
+		$details = $st->fromHost($this->hostDetails->name)->getInstalledPackageDetails($packageName);
+
+		if (isset($details->version)) {
+			$log->endAction();
+			throw new E5xx_ExpectFailed(__METHOD__, "package not installed", "package is installed");
 		}
 
 		// all done

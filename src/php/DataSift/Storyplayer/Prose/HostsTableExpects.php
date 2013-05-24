@@ -45,16 +45,14 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
 use DataSift\Storyplayer\ProseLib\HostBase;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ObjectLib\BaseObject;
-
 /**
- * do things with vagrant
+ *
+ * test the state of the internal hosts table
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -63,94 +61,64 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostActions extends HostBase
+class HostsTableExpects extends HostBase
 {
-	public function runCommand($command)
+	public function hasEntryForHost($hostName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("make sure host '{$hostName}' has an entry in Storyplayer's hosts table");
 
-		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		// get the runtime config
+		$runtimeConfig = $st->getRuntimeConfig();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
-
-		// run the command in the guest operating system
-		$result = $host->runCommand($this->hostDetails, $command);
-
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
+		// make sure we have a hosts table
+		if (!isset($runtimeConfig->hosts)) {
+			$msg = "Table is empty / does not exist";
 			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
+
+			throw new E5xx_ExpectFailed(__METHOD__, "hosts table existed", "hosts table does not exist");
+		}
+
+		// make sure we don't have a duplicate entry
+		if (!isset($runtimeConfig->hosts->$hostName)) {
+			$msg = "Table does not contain an entry for '{$hostName}'";
+			$log->endAction($msg);
+
+			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has an entry for '{$hostName}'", "hosts table has no entry for '{$hostName}'");
 		}
 
 		// all done
 		$log->endAction();
-		return $result;
 	}
 
-	public function runCommandAndIgnoreErrors($command)
+	public function hasNoEntryForHost($hostName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("make sure there is no existing entry for host '{$hostName}' in Storyplayer's hosts table");
 
-		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		// get the runtime config
+		$runtimeConfig = $st->getRuntimeConfig();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
-
-		// run the command in the guest operating system
-		$result = $host->runCommand($this->hostDetails, $command);
-
-		// all done
-		$log->endAction();
-		return $result;
-	}
-
-	public function writePlaybookVars($pathToVmHomeFolder, $playbookVars)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("write out ansible playbook vars");
-
-		// where are we writing to?
-		$parts = explode('-', $pathToVmHomeFolder);
-		if (count($parts) < 2) {
-			$log->endAction("cannot break folder path up to determine which OS we are running");
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$os = $parts[count($parts) - 2] . '-' . $parts[count($parts) - 1];
-
-		$storytellerVarsFilename = dirname(dirname($pathToVmHomeFolder)) . "/ansible-playbooks/vars/storyteller.yml";
-
-		// make sure we have something to write
-		if (count($playbookVars) == 0) {
-			$playbookVars['dummy'] = 'true';
+		// make sure we have a hosts table
+		if (!isset($runtimeConfig->hosts)) {
+			$msg = "Table is empty / does not exist";
+			$log->endAction($msg);
+			return;
 		}
 
-		// make sure we ahve somewhere to write it to
-		$log->addStep("create folder for ansible vars file", function() use($storytellerVarsFilename) {
-			$storytellerVarsDirname = dirname($storytellerVarsFilename);
-			if (!is_dir($storytellerVarsDirname)) {
-				mkdir($storytellerVarsDirname);
-			}
-		});
+		// make sure we don't have a duplicate entry
+		if (isset($runtimeConfig->hosts->$hostName)) {
+			$msg = "Table already contains an entry for '{$hostName}'";
+			$log->endAction($msg);
 
-		// save the data
-		$log->addStep("write vars to file '{$storytellerVarsFilename}'", function() use ($storytellerVarsFilename, $playbookVars) {
-			file_put_contents($storytellerVarsFilename, yaml_emit($playbookVars));
-		});
+			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has no entry for '{$hostName}'", "hosts table has an entry for '{$hostName}'");
+		}
 
 		// all done
 		$log->endAction();
