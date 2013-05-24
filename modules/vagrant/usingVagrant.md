@@ -38,7 +38,7 @@ This action runs a `vagrant up` using the Vagrantfile in _$homeFolder_.  If your
 
 If the virtual machine was already running, it will be destroyed and re-created when you call _createVm()_.
 
-If the virtual machine starts successfully, we create an entry in Storyplayer's [hosts table](../hosts/how-hosts-are-remembered.html), which then allows the [Host](../host/index.html) module to work with your virtual machine.
+If the virtual machine starts successfully, we create an entry in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html), which then allows the [Host](../host/index.html) module to work with your virtual machine.
 
 ## destroyVm()
 
@@ -54,7 +54,7 @@ where:
 
 This action runs a `vagrant destroy --force` against the virtual machine.  Vagrant shuts down the virtual machine, and then erases the VM image from disk.
 
-Once this is done, we remove the virtual machine's entry from Storyplayer's [hosts table](../hosts/how-hosts-are-remembered.html).  You can no longer use the [Host](../host/index.html) module with this virtual machine, unless you call _[createVm()](#createvm)_ once more first.
+Once this is done, we remove the virtual machine's entry from Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html).  You can no longer use the [Host](../host/index.html) module with this virtual machine, unless you call _[createVm()](#createvm)_ once more first.
 
 ## startVm()
 
@@ -87,7 +87,7 @@ where:
 
 * _$vmName_ is the name of the virtual machine that you created earlier
 
-This action runs a `vagrant halt` to shutdown the virtual machine.  The virtual machine image isn't deleted from disk, and the virtual machine still exists in Storyplayer's [hosts table](../hosts/how-hosts-are-remembered.html), even after Storyplayer finishes running.
+This action runs a `vagrant halt` to shutdown the virtual machine.  The virtual machine image isn't deleted from disk, and the virtual machine still exists in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html), even after Storyplayer finishes running.
 
 Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to delete the virtual machine from disk.
 
@@ -119,7 +119,7 @@ where:
 
 * _$vmName_ is the name of the virtual machine that you created earlier
 
-This action runs a `vagrant halt --force` to shutdown the virtual machine immediately.  The virtual machine image isn't deleted from disk, and the virtual machine still exists in Storyplayer's [hosts table](../hosts/how-hosts-are-remembered.html), even after Storyplayer finishes running.
+This action runs a `vagrant halt --force` to shutdown the virtual machine immediately.  The virtual machine image isn't deleted from disk, and the virtual machine still exists in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html), even after Storyplayer finishes running.
 
 Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to delete the virtual machine from disk.
 

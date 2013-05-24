@@ -28,7 +28,7 @@ Support for guest operating systems can be found in the _DataSift\Storyplayer\Os
 
 If you want to add support for another guest operating system, follow these steps:
 
-1. Create a new class called _DataSift\Storyplayer\OsLib\&lt;os-name&gt;_, when _&lt;os-name&gt;_ is the _$osName_ parameter passed into _[usingVagrant()->startVm()](usingVagrant.html#startvm)_.  _&lt;os-name&gt;_ must start with a capital leter, and all other letters must be in lower case.
+1. Create a new class called _DataSift\Storyplayer\OsLib\&lt;os-name&gt;_, where _&lt;os-name&gt;_ is the _$osName_ parameter passed into _[usingVagrant()->createVm()](usingVagrant.html#startvm)_.  _&lt;os-name&gt;_ must start with a capital leter, and all other letters must be in lower case.
 1. Your new class must implement the _DataSift\Storyplayer\OsLib\SupportedOs_ interface.
 1. Your new class should extend the _DataSift\Storyplayer\OsLib\OsBase_ class, to re-use the SSH support that we already have.
 1. The method _determineIpAddress()_ is used to find out the IP address assigned to the running guest.  You'll need to create a shell command to query the guest's network adapters.  You'll run the command using _SupportedHost::runCommandViaHostManager()_.
