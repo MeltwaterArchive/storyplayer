@@ -1,7 +1,7 @@
 ---
 layout: modules-zeromq
 title: The ZeroMQ Module
-prev: '<a href="../../modules/vagrant/index.html">Prev: The Vagrant Module</a>'
+prev: '<a href="../../modules/vagrant/expectsVagrant.html">Prev: expectsVagrant()</a>'
 next: '<a href="../../copyright.html">Next: Legal Stuff</a>'
 ---
 
