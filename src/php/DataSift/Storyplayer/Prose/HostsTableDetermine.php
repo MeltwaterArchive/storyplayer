@@ -34,66 +34,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Storyplayer\HostLib;
+use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * base class for all 'Host' Prose modules
+ * retrieve data from the internal hosts table
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostBase extends Prose
+class HostsTableDetermine extends Prose
 {
-	protected $hostDetails;
-
-	public function __construct(StoryTeller $st, $args = array())
+	public function getHostsTable()
 	{
-		// call the parent constructor
-		parent::__construct($st, $args);
-
-		// arg[0] is the name of the box
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name you've given to the machine");
-		}
-
 		// shorthand
-		$name = $args[0];
+		$st = $this->st;
 
-		// do we know anything about this host?
-		$hostsTable = $st->fromHostsTable()->getHostsTable();
-		if (!isset($hostsTable->$name)) {
-			$this->hostDetails = new BaseObject();
-			$this->hostDetails->name = $name;
-			$this->hostDetails->invalidHost = true;
+		// what are we doing?
+		$log = $st->startAction("get Storyplayer's hosts table");
+
+		// get the runtime config
+		$runtimeConfig = $st->getRuntimeConfig();
+
+		// make sure we have a hosts table
+		if (!isset($runtimeConfig->hosts)) {
+			$runtimeConfig->hosts = new BaseObject();
 		}
-		else {
-			$this->hostDetails = $hostsTable->$name;
-		}
+
+		// all done
+		$log->endAction();
+		return $runtimeConfig->hosts;
 	}
 
-	protected function requireValidHostDetails($caller)
+	public function getDetailsForHost($hostName)
 	{
-		// do we have valid host details?
-		if (isset($this->hostDetails->invalidHost) && $this->hostDetails->invalidHost) {
-			// no - throw an exception
-			throw new E5xx_ActionFailed($caller, "unknown host '{$this->hostDetails->name}'");
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get details for host '{$hostName}' from Storyplayer's hosts table");
+
+		// get the runtime config
+		$runtimeConfig = $st->getRuntimeConfig();
+
+		// make sure we have a hosts table
+		if (!isset($runtimeConfig->hosts)) {
+			$msg = "Table is empty / does not exist";
+			$log->endAction($msg);
+
+			return null;
 		}
+
+		// make sure we don't have a duplicate entry
+		if (!isset($runtimeConfig->hosts->$hostName)) {
+			$msg = "Table does not contain an entry for '{$hostName}'";
+			$log->endAction($msg);
+			return null;
+		}
+
+		// all done
+		$log->endAction();
+		return $runtimeConfig->hosts->$hostName;
 	}
 }
