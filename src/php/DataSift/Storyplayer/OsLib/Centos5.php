@@ -69,8 +69,8 @@ class Centos5 extends OsBase
 
 		// how do we do this?
 		foreach (array('eth1', 'eth0') as $iface) {
-			$command = "vagrant ssh -c \"/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'\"";
-			$result = $host->runCommandAgainstHostManager($hostDetails, $command);
+			$command = "/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'";
+			$result = $host->runCommandViaHostManager($hostDetails, $command);
 
 			if ($result->didCommandSucceed()) {
 				$ipAddress = trim($result->output);
