@@ -72,6 +72,10 @@
 		"modules/uuid/fromUuid",
 		"modules/uuid/expectsUuid",
 		"modules/vagrant/index",
+		"modules/vagrant/supported-guests",
+		"modules/vagrant/usingVagrant",
+		"modules/vagrant/fromVagrant",
+		"modules/vagrant/expectsVagrant",
 		"modules/zeromq/index",
 		"copyright"
 	],
