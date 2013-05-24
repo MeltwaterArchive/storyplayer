@@ -57,9 +57,13 @@ namespace DataSift\Storyplayer\HostLib;
 interface SupportedHost
 {
 	public function createHost($hostDetails, $provisioningVars = array());
+	public function destroyHost($hostDetails);
+	public function startHost($hostDetails);
 	public function stopHost($hostDetails);
-	public function runCommand($hostDetails, $command, $params = array());
+	public function restartHost($hostDetails);
+	public function powerOffHost($hostDetails);
 	public function runCommandAgainstHostManager($hostDetails, $command);
+	public function runCommandViaHostManager($hostDetails, $command);
 	public function isRunning($hostDetails);
 	public function determineIpAddress($hostDetails);
 }
