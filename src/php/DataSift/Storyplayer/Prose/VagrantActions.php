@@ -98,6 +98,27 @@ class VagrantActions extends Prose
 		$log->endAction();
 	}
 
+	public function destroyVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("destroy vagrant VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = new VagrantVm($st);
+
+		// stop the VM
+		$host->destroyHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
 	public function stopVm($vmName)
 	{
 		// shorthand
@@ -114,6 +135,69 @@ class VagrantActions extends Prose
 
 		// stop the VM
 		$host->stopHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function powerOffVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("power off vagrant VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = new VagrantVm($st);
+
+		// stop the VM
+		$host->stopHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function restartVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("restart start vagrant VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = new VagrantVm($this->st);
+
+		// restart our virtual machine
+		$host->restartHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function startVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("restart start vagrant VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = new VagrantVm($this->st);
+
+		// restart our virtual machine
+		$host->startHost($vmDetails);
 
 		// all done
 		$log->endAction();
@@ -137,7 +221,7 @@ class VagrantActions extends Prose
 		$result = $host->runCommandAgainstHostManager($vmDetails, $command);
 
 		// all done
-		$log->endAction("output was '{$result->output}'");
-		return $result->output;
+		$log->endAction("return code was '{$result->returnCode}', output was '{$result->output}'");
+		return $result;
 	}
 }

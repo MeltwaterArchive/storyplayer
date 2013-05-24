@@ -114,7 +114,7 @@ class VagrantVm implements SupportedHost
 		// let's start the VM
 		$command = "cd '{$pathToHomeFolder}' && vagrant up";
 		$retVal = 1;
-		$log->addStep("start vagrant VM in '{$pathToHomeFolder}'", function() use($command, &$retVal) {
+		$log->addStep("create vagrant VM in '{$pathToHomeFolder}'", function() use($command, &$retVal) {
 			passthru($command, $retVal);
 		});
 
@@ -149,6 +149,48 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
+	public function startHost($vmDetails)
+	{
+		// shorthand
+		$st = $this->st;
+		$vmName = $vmDetails->name;
+
+		// what are we doing?
+		$log = $st->startAction("start VM");
+
+		// is the VM actually running?
+		if ($this->isRunning($vmDetails)) {
+			// yes it is ... nothing to do
+			//
+			// we've decided not to treat this as an error ... that might
+			// change in a future release
+			$log->endAction("VM is already running");
+			return;
+		}
+
+		// let's start the VM
+		$command = "cd '{$vmDetails->dir}' && vagrant up";
+		$retVal = 1;
+		passthru($command, $retVal);
+
+		// did it work?
+		if ($retVal !== 0) {
+			$log->endAction("VM failed to start or re-provision :(");
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		// yes it did!!
+		//
+		// now, we need its IP address, which may have changed
+		$ipAddress = $this->determineIpAddress($vmDetails);
+
+		// store the IP address for future use
+		$vmDetails->ipAddress = $ipAddress;
+
+		// all done
+		$log->endAction("VM successfully started; IP address is {$ipAddress}");
+	}
+
 	public function stopHost($vmDetails)
 	{
 		// shorthand
@@ -157,6 +199,76 @@ class VagrantVm implements SupportedHost
 
 		// what are we doing?
 		$log = $st->startAction("stop VM");
+
+		// is the VM actually running?
+		if (!$this->isRunning($vmDetails)) {
+			// we've decided not to treat this as an error ... that might
+			// change in a future release
+			$log->endAction("VM was already stopped or destroyed");
+			return;
+		}
+
+		// yes it is ... shut it down
+		$command = "cd '{$vmDetails->dir}' && vagrant halt";
+		$retVal = 1;
+		passthru($command, $retVal);
+
+		// did it work?
+		if ($retVal !== 0) {
+			$log->endAction("VM failed to shutdown :(");
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		// all done - success!
+		$log->endAction("VM successfully stopped");
+	}
+
+	public function restartHost($vmDetails)
+	{
+		$this->stopHost($vmDetails);
+		$this->startHost($vmDetails);
+	}
+
+	public function powerOffHost($vmDetails)
+	{
+		// shorthand
+		$st = $this->st;
+		$vmName = $vmDetails->name;
+
+		// what are we doing?
+		$log = $st->startAction("power off VM");
+
+		// is the VM actually running?
+		if (!$this->isRunning($vmDetails)) {
+			// we've decided not to treat this as an error ... that might
+			// change in a future release
+			$log->endAction("VM was already stopped or destroyed");
+			return;
+		}
+
+		// yes it is ... shut it down
+		$command = "cd '{$vmDetails->dir}' && vagrant halt --force";
+		$retVal = 1;
+		passthru($command, $retVal);
+
+		// did it work?
+		if ($retVal !== 0) {
+			$log->endAction("VM failed to power off :(");
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		// all done - success!
+		$log->endAction("VM successfully powered off");
+	}
+
+	public function destroyHost($vmDetails)
+	{
+		// shorthand
+		$st = $this->st;
+		$vmName = $vmDetails->name;
+
+		// what are we doing?
+		$log = $st->startAction("destroy VM");
 
 		// is the VM actually running?
 		if ($this->isRunning($vmDetails)) {
@@ -181,11 +293,6 @@ class VagrantVm implements SupportedHost
 		$log->endAction();
 	}
 
-	public function runCommand($vmDetails, $command, $params = array())
-	{
-		// do nothing for now
-	}
-
 	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
 		// shorthand
@@ -196,6 +303,29 @@ class VagrantVm implements SupportedHost
 
 		// build the command
 		$fullCommand = "cd '{$vmDetails->dir}' && $command";
+
+		// run the command
+		$returnCode = 0;
+		$output = system($fullCommand, $returnCode);
+
+		// build the result
+		$result = new CommandResult($returnCode, $output);
+
+		// all done
+		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
+		return $result;
+	}
+
+	public function runCommandViaHostManager($vmDetails, $command)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("run vagrant command '{$command}'");
+
+		// build the command
+		$fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
 
 		// run the command
 		$returnCode = 0;
