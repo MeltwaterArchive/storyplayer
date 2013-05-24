@@ -225,8 +225,18 @@ class VagrantVm implements SupportedHost
 
 	public function restartHost($vmDetails)
 	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("restart VM");
+
+		// stop and start
 		$this->stopHost($vmDetails);
 		$this->startHost($vmDetails);
+
+		// all done
+		$log->endAction("VM successfully restarted");
 	}
 
 	public function powerOffHost($vmDetails)
