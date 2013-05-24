@@ -2,7 +2,7 @@
 layout: top-level
 title: Running Storyplayer
 prev: '<a href="installation.html">Prev: Installing Storyplayer</a>'
-next: '<a href="configuration.html">Next: Configuring Storyplayer</a>'
+next: '<a href="configuration/index.html">Next: </a>'
 ---
 
 # Running Storyplayer

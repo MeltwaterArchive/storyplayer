@@ -1,7 +1,7 @@
 ---
 layout: modules-http
 title: The HTTP Module
-prev: '<a href="../../modules/graphite/expectsGraphite.html">Prev: expectsGraphite()</a>'
+prev: '<a href="../../modules/hoststable/usingHostsTable.html">Prev: usingHostsTable()</a>'
 next: '<a href="../../modules/http/HttpClientResponse.html">Next: The HttpClientResponse Object</a>'
 ---
 
