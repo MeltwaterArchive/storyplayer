@@ -1,6 +1,6 @@
 ---
 layout: configuration
-title: The storyplayer.json File
+title: 'The storyplayer.json File'
 ---
 
 # The storyplayer.json File
