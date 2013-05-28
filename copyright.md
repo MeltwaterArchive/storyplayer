@@ -1,7 +1,7 @@
 ---
 layout: book-chapter
 title: Legal Stuff
-prev: '<a href="modules/zeromq/index.html">Prev: The ZeroMQ Module</a>'
+prev: '<a href="modules/zeromq/usingZmq.html">Prev: usingZmq()</a>'
 next: '<a href="index.html">Back to: Storyplayer</a>'
 ---
 # Legal Stuff
