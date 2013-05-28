@@ -1,7 +1,7 @@
 ---
 layout: modules-hoststable
 title: usingHostsTable()
-prev: '<a href="../../modules/hoststable/fromHostsTable.html">Prev: fromHostsTable()</a>'
+prev: '<a href="../../modules/hoststable/expectsHostsTable.html">Prev: expectsHostsTable()</a>'
 next: '<a href="../../modules/http/index.html">Next: The HTTP Module</a>'
 ---
 

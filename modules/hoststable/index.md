@@ -33,6 +33,6 @@ where __module__ is one of:
 * _expectsHostTable()_ - ensure entries exist in the hosts table
 * _usingHostsTable()_ add and remove entries to and from the hosts table
 
-and __action__ is one of the methods available on the __module_ you choose.
+and __action__ is one of the methods available on the __module__ you choose.
 
 This module is really here for use by other modules (an internal API, if you like), but you can use it from your own tests if you wish.

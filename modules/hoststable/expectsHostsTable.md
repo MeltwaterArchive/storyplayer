@@ -1,8 +1,8 @@
 ---
 layout: modules-hoststable
 title: expectsHostsTable()
-prev: '<a href="../../modules/host/fromHost.html">Prev: fromHost()</a>'
-next: '<a href="../../modules/host/usingHost.html">Next: usingHost()</a>'
+prev: '<a href="../../modules/hoststable/fromHostsTable.html">Prev: fromHostsTable()</a>'
+next: '<a href="../../modules/hoststable/usingHostsTable.html">Next: usingHostsTable()</a>'
 ---
 
 # expectsHostsTable()
