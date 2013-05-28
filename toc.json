@@ -6,6 +6,8 @@
 		"running-storyplayer",
 		"configuration/index",
 		"configuration/storyteller-json",
+		"configuration/app-settings",
+		"configuration/logging",
 		"configuration/runtime-config",
 		"stories/index",
 		"stories/user-stories",
@@ -89,6 +91,8 @@
 		"modules/vagrant/fromVagrant",
 		"modules/vagrant/expectsVagrant",
 		"modules/zeromq/index",
+		"modules/zeromq/expectsZmq",
+		"modules/zeromq/usingZmq",
 		"copyright"
 	],
 	"navbar": {
@@ -103,8 +107,13 @@
 		},
 		"Configuration": {
 			"Configuring Storyplayer": "configuration/index",
+			"Sep1": "",
 			"storyteller.json": "configuration/storyteller-json",
-			"Runtime Config": "configuration/runtime-config"
+			"App Settings": "configuration/app-settings",
+			"Logging": "configuration/logging",
+			"Sep2": "",
+			"Runtime Config": "configuration/runtime-config",
+			"The Hosts Table": "modules/hoststable/how-hosts-are-remembered"
 		},
 		"Stories": {
 			"Introduction": "stories/index",
