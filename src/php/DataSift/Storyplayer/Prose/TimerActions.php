@@ -81,7 +81,7 @@ class TimerActions extends Prose
 
 
 		// what are we doing?
-		$log = $st->startAction("[ polling for up to {$seconds} seconds ]");
+		$log = $st->startAction("polling for up to {$seconds} seconds");
 
 		while ($now < $end) {
 			try {
@@ -136,7 +136,7 @@ class TimerActions extends Prose
 
 		while ($now < $end) {
 			try {
-				$log = $st->startAction("[ polling ]");
+				$log = $st->startAction("polling");
 				$result = $callback($st);
 
 				// if we get here, the actions inside the callback

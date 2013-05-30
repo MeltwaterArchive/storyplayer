@@ -79,7 +79,7 @@ class TargettedBrowserExpects
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ {$this->elementDesc} '{$this->searchTerm}' must be blank ]");
+		$log = $st->startAction("{$this->elementDesc} '{$this->searchTerm}' must be blank");
 
 		// get the element
 		$element = $this->getElement();
@@ -100,7 +100,7 @@ class TargettedBrowserExpects
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ {$this->elementDesc} '{$this->searchTerm}' must not be blank ]");
+		$log = $st->startAction("{$this->elementDesc} '{$this->searchTerm}' must not be blank");
 
 		// get the element
 		$element = $this->getElement();
@@ -120,7 +120,7 @@ class TargettedBrowserExpects
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ {$this->elementDesc} '{$this->searchTerm}' must be checked ]");
+		$log = $st->startAction("{$this->elementDesc} '{$this->searchTerm}' must be checked");
 
 		// get the element
 		$element = $this->getElement();
@@ -140,7 +140,7 @@ class TargettedBrowserExpects
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ {$this->elementDesc} '{$this->searchTerm}' must not be checked ]");
+		$log = $st->startAction("{$this->elementDesc} '{$this->searchTerm}' must not be checked");
 
 		// get the element
 		$element = $this->getElement();
@@ -159,7 +159,7 @@ class TargettedBrowserExpects
 	{
 		$callable = $this->searchFunction;
 
-		$log = $this->st->startAction("[ Find element on page with label, id or name '{$this->searchTerm}'");
+		$log = $this->st->startAction("Find element on page with label, id or name '{$this->searchTerm}'");
 		try {
 			$element = $callable();
 			$log->endAction();

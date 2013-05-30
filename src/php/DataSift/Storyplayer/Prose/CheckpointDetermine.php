@@ -64,7 +64,7 @@ class CheckpointDetermine extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ get value of checkpoint field '{$fieldName}']");
+		$log = $st->startAction("get value of checkpoint field '{$fieldName}'");
 
 		// get the checkpoint
 		$checkpoint = $st->getCheckpoint();

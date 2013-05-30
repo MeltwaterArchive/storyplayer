@@ -68,7 +68,7 @@ class CheckpointActions extends Prose
 		$printable = $convertor->convertToString($value);
 
 		// what are we doing?
-		$log = $st->startAction("[ set checkpoint field '{$fieldName}' to '{$printable}' ]");
+		$log = $st->startAction("set checkpoint field '{$fieldName}' to '{$printable}'");
 
 		// get the checkpoint
 		$checkpoint = $st->getCheckpoint();

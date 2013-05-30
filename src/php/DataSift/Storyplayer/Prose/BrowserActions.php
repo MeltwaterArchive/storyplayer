@@ -135,7 +135,7 @@ class BrowserActions extends Prose
 			$url = $env->url . $url;
 		}
 
-		$log = $st->startAction("[ goto URL: $url ]");
+		$log = $st->startAction("goto URL: $url");
 		$browser->open($url);
 		$log->endAction();
 	}
@@ -146,7 +146,7 @@ class BrowserActions extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ wait for the overlay with id '{$id}' to appear ]");
+		$log = $st->startAction("wait for the overlay with id '{$id}' to appear");
 
 		// check for the overlay
 		$st->usingTimer()->waitFor(function() use($st, $id) {
@@ -163,7 +163,7 @@ class BrowserActions extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ check that the the right page has loaded ]");
+		$log = $st->startAction("check that the the right page has loaded");
 
 		// check the title
 		$st->usingTimer()->waitFor(function() use($st, $title, $failedTitle) {
@@ -186,7 +186,7 @@ class BrowserActions extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("[ check that the the right page has loaded ]");
+		$log = $st->startAction("check that the the right page has loaded");
 
 		// check the title
 		$st->usingTimer()->waitFor(function() use($st, $titles) {
