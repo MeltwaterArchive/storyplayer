@@ -34,32 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/HostLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer;
+
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 
 /**
- * Exception thrown when an operation in an 'Action' class fails
+ * host adapter factory
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/HostLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ActionFailed extends E5xx_ProseException
+class HostLib
 {
-	public function __construct($actionName, $reason = '', $params = array()) {
-		$msg = "Action '$actionName' failed";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
+	static public function getHostAdapter($st, $hostType)
+	{
+		// what are we looking for?
+		$className = 'DataSift\Storyplayer\HostLib\\' . $hostType;
+
+		// does it exist?
+		if (!class_exists($className)) {
+			throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' for host type '{$hostType}'");
 		}
-		parent::__construct(500, $msg, $msg);
+
+		// create the adapter
+		$adapter = new $className($st);
+
+		// all done
+		return $adapter;
 	}
 }

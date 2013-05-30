@@ -34,32 +34,76 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\OsLib;
+
+use DataSift\Storyplayer\CommandLib\SshClient;
+use DataSift\Storyplayer\HostLib\SupportedHost;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * Exception thrown when an operation in an 'Action' class fails
+ * the things you can do / learn about a machine running one of our
+ * supported operatating systems
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ActionFailed extends E5xx_ProseException
+abstract class OsBase implements SupportedOs
 {
-	public function __construct($actionName, $reason = '', $params = array()) {
-		$msg = "Action '$actionName' failed";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
+	protected $sshClients;
+
+	public function __construct(StoryTeller $st)
+	{
+		// remember for future use
+		$this->st = $st;
+	}
+
+	abstract public function determineIpAddress($hostDetails, SupportedHost $host);
+	abstract public function getInstalledPackageDetails($hostDetails, $packageName);
+	abstract public function getProcessIsRunning($hostDetails, $processName);
+	abstract public function getPid($hostDetails, $processName);
+
+	public function runCommand($hostDetails, $command, $params = array())
+	{
+		// get an SSH client
+		$sshClient = $this->getSshClient($hostDetails);
+
+		// run the command
+		return $sshClient->runCommand($command, $params);
+	}
+
+	protected function getSshClient($hostDetails)
+	{
+		// shorthand
+		$name = $hostDetails->name;
+
+		// do we already have a client?
+		if (isset($this->sshClients[$name])) {
+			// yes - reuse it
+			return $this->sshClients[$name];
 		}
-		parent::__construct(500, $msg, $msg);
+
+		// if we get here, we need to make a new client
+		$sshClient = new SshClient($this->st, $hostDetails->sshOptions);
+		$sshClient->setIpAddress($hostDetails->ipAddress);
+		$sshClient->setSshUsername($hostDetails->sshUsername);
+
+		if (isset($hostDetails->sshKey)) {
+			$sshClient->setSshKey($hostDetails->sshKey);
+		}
+
+		// all done
+		$this->sshClients[$name] = $sshClient;
+		return $sshClient;
 	}
 }

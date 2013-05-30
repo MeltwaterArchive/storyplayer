@@ -34,32 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\OsLib;
+
+use DataSift\Storyplayer\HostLib\SupportedHost;
 
 /**
- * Exception thrown when an operation in an 'Action' class fails
+ * the things you can do / learn about a machine running one of our
+ * supported operatating systems
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ActionFailed extends E5xx_ProseException
+interface SupportedOs
 {
-	public function __construct($actionName, $reason = '', $params = array()) {
-		$msg = "Action '$actionName' failed";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
-		}
-		parent::__construct(500, $msg, $msg);
-	}
+	public function determineIpAddress($hostDetails, SupportedHost $vm);
+	public function getInstalledPackageDetails($hostDetails, $packageName);
+	public function getProcessIsRunning($hostDetails, $processName);
+	public function getPid($hostDetails, $processName);
+	public function runCommand($hostDetails, $command, $params = array());
 }

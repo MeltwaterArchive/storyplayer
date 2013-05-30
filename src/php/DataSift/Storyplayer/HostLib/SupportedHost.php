@@ -34,32 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/HostLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\HostLib;
 
 /**
- * Exception thrown when an operation in an 'Action' class fails
+ * the things you can do / learn about a supported (and possibly remote)
+ * host / virtual machine
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/HostLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ActionFailed extends E5xx_ProseException
+interface SupportedHost
 {
-	public function __construct($actionName, $reason = '', $params = array()) {
-		$msg = "Action '$actionName' failed";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
-		}
-		parent::__construct(500, $msg, $msg);
-	}
+	public function createHost($hostDetails, $provisioningVars = array());
+	public function destroyHost($hostDetails);
+	public function startHost($hostDetails);
+	public function stopHost($hostDetails);
+	public function restartHost($hostDetails);
+	public function powerOffHost($hostDetails);
+	public function runCommandAgainstHostManager($hostDetails, $command);
+	public function runCommandViaHostManager($hostDetails, $command);
+	public function isRunning($hostDetails);
+	public function determineIpAddress($hostDetails);
 }

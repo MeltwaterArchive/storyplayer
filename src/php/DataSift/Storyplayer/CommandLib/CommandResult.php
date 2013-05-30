@@ -34,32 +34,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/CommandLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\CommandLib;
+
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * Exception thrown when an operation in an 'Action' class fails
+ * helper for tracking result of executing a command
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/CommandLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ActionFailed extends E5xx_ProseException
+
+class CommandResult
 {
-	public function __construct($actionName, $reason = '', $params = array()) {
-		$msg = "Action '$actionName' failed";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
+	public $returnCode;
+	public $output;
+
+	public function __construct($returnCode, $output)
+	{
+		$this->returnCode = $returnCode;
+		$this->output     = $output;
+	}
+
+	public function didCommandFail()
+	{
+		if ($this->returnCode != 0) {
+			return true;
 		}
-		parent::__construct(500, $msg, $msg);
+
+		return false;
+	}
+
+	public function didCommandSucceed()
+	{
+		if ($this->returnCode == 0) {
+			return true;
+		}
+
+		return false;
 	}
 }
