@@ -253,11 +253,11 @@ class StoryPlayer
 		// if the action completed successfully, then the user may have
 		// changed state ... let's deal with that
 		if ($actionResult == self::STORY_COMPLETED && $actionWorked == self::INSPECT_SUCCESS) {
-			$this->announceStage('Role Changes');
+			$this->announcePhase('Role Changes');
 			$this->applyRoleChanges($st, $staticConfig);
 		}
 
-		$this->announceStage('Final Results');
+		$this->announcePhase('Final Results');
 
 		// to finish, mark down as PASS or FAIL
 		if ($actionShouldWork == self::PREDICT_SUCCESS && ($actionResult == self::STORY_COMPLETED || $actionResult == self::STORY_HASNOACTIONS) && $actionWorked == self::INSPECT_SUCCESS) {
@@ -307,7 +307,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announceStage('Setup test environment');
+		$this->announcePhase('Setup test environment');
 
 		// do we have anything to do?
 		if (!$story->hasTestEnvironmentSetup())
@@ -320,7 +320,7 @@ class StoryPlayer
 		}
 
 		// should we do this stage?
-		if (!$this->shouldExecuteStage('TestEnvironmentSetup', $staticConfig)) {
+		if (!$this->shouldExecutePhase('TestEnvironmentSetup', $staticConfig)) {
 			Log::write(Log::LOG_INFO, "test environment setup is disabled; skipping");
 
 			// as far as the rest of the test is concerned, the setup
@@ -354,7 +354,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announceStage('Teardown test environment');
+		$this->announcePhase('Teardown test environment');
 
 		// do we have anything to do?
 		if (!$story->hasTestEnvironmentTeardown())
@@ -364,7 +364,7 @@ class StoryPlayer
 		}
 
 		// should we do this stage?
-		if (!$this->shouldExecuteStage('TestEnvironmentTeardown', $staticConfig)) {
+		if (!$this->shouldExecutePhase('TestEnvironmentTeardown', $staticConfig)) {
 			Log::write(Log::LOG_INFO, "test environment teardown is disabled; skipping");
 			return;
 		}
@@ -402,7 +402,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announceStage('Setup story');
+		$this->announcePhase('Setup story');
 
 		// do we have anything to do?
 		if (!$story->hasTestSetup())
@@ -415,7 +415,7 @@ class StoryPlayer
 		}
 
 		// should we do this stage?
-		if (!$this->shouldExecuteStage('TestSetup', $staticConfig)) {
+		if (!$this->shouldExecutePhase('TestSetup', $staticConfig)) {
 			Log::write(Log::LOG_INFO, "test setup is disabled; skipping");
 
 			// as far as the rest of the test is concerned, the setup was
@@ -456,7 +456,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announceStage('Teardown story');
+		$this->announcePhase('Teardown story');
 
 		// do we have anything to do?
 		if (!$story->hasTestTeardown())
@@ -466,7 +466,7 @@ class StoryPlayer
 		}
 
 		// should we do this stage?
-		if (!$this->shouldExecuteStage('TestTeardown', $staticConfig)) {
+		if (!$this->shouldExecutePhase('TestTeardown', $staticConfig)) {
 			Log::write(Log::LOG_INFO, "test teardown is disabled; skipping");
 			return;
 		}
@@ -554,7 +554,7 @@ class StoryPlayer
 		$actionShouldWork = self::INSPECT_SUCCESS;
 
 		try {
-			$this->announceStage('Pre-test prediction');
+			$this->announcePhase('Pre-test prediction');
 
 			// do we have anything to do?
 			if (!$story->hasPreTestPrediction())
@@ -565,7 +565,7 @@ class StoryPlayer
 			}
 
 			// should we do this stage?
-			if (!$this->shouldExecuteStage('PreTestPrediction', $staticConfig)) {
+			if (!$this->shouldExecutePhase('PreTestPrediction', $staticConfig)) {
 				Log::write(Log::LOG_INFO, "pre-test prediction is disabled; skipping");
 				Log::write(Log::LOG_INFO, "assuming that the action should always succeed");
 				return $actionShouldWork;
@@ -625,7 +625,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announceStage('Pre-test inspection');
+		$this->announcePhase('Pre-test inspection');
 
 		// do we have anything to do?
 		if (!$story->hasPreTestInspection())
@@ -635,7 +635,7 @@ class StoryPlayer
 		}
 
 		// should we do this stage?
-		if (!$this->shouldExecuteStage('PreTestInspection', $staticConfig)) {
+		if (!$this->shouldExecutePhase('PreTestInspection', $staticConfig)) {
 			Log::write(Log::LOG_INFO, "pre-test inspection is disabled; skipping");
 			return;
 		}
@@ -682,7 +682,7 @@ class StoryPlayer
 		$actionResult = self::STORY_COMPLETED;
 
 		// tell the user what we are doing
-		$this->announceStage('Action');
+		$this->announcePhase('Action');
 
 		// do we have anything to do?
 		if (!$story->hasActions())
@@ -692,7 +692,7 @@ class StoryPlayer
 		}
 
 		// should we do this stage?
-		if (!$this->shouldExecuteStage('PreTestInspection', $staticConfig)) {
+		if (!$this->shouldExecutePhase('PreTestInspection', $staticConfig)) {
 			Log::write(Log::LOG_INFO, "actions are disabled; skipping");
 			return self::STORY_HASNOACTIONS;
 		}
@@ -762,7 +762,7 @@ class StoryPlayer
 		$actionWorked = self::INSPECT_SUCCESS;
 
 		try {
-			$this->announceStage('Post-test inspection');
+			$this->announcePhase('Post-test inspection');
 
 			// do we have anything to do?
 			if (!$story->hasPostTestInspection())
@@ -773,7 +773,7 @@ class StoryPlayer
 			}
 
 			// should we do this stage?
-			if (!$this->shouldExecuteStage('PostTestInspection', $staticConfig)) {
+			if (!$this->shouldExecutePhase('PostTestInspection', $staticConfig)) {
 				Log::write(Log::LOG_INFO, "post-test inspection is disabled; skipping");
 				Log::write(Log::LOG_WARNING, "assuming that the action was successful (dangerous!)");
 				return $actionWorked;
@@ -846,16 +846,16 @@ class StoryPlayer
 		echo "\n";
 	}
 
-	public function announceStage($stageName)
+	public function announcePhase($phaseName)
 	{
 		echo "-------------------------------------------------------------\n";
-		echo "Now performing: $stageName\n";
+		echo "Now performing: $phaseName\n";
 		echo "\n";
 	}
 
-	public function shouldExecuteStage($stageName, stdClass $staticConfig)
+	public function shouldExecutePhase($phaseName, stdClass $staticConfig)
 	{
-		if (!isset($staticConfig->stages, $staticConfig->stages->$stageName) || !$staticConfig->stages->$stageName)
+		if (!isset($staticConfig->phases, $staticConfig->phases->$phaseName) || !$staticConfig->phases->$phaseName)
 		{
 			return false;
 		}

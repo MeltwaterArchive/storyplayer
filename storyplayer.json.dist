@@ -30,7 +30,7 @@
             "LOG_TRACE": true
         }
     },
-    "stages": {
+    "phases": {
         "TestEnvironmentSetup": true,
         "TestSetup": true,
         "PreTestPrediction": true,

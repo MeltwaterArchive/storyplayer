@@ -34,32 +34,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
+
+use DataSift\Storyplayer\HostLib;
+use DataSift\Storyplayer\OsLib;
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Exception thrown when an operation in an 'Action' class fails
+ * retrieve data from the internal hosts table
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ActionFailed extends E5xx_ProseException
+class HostsTableDetermine extends Prose
 {
-	public function __construct($actionName, $reason = '', $params = array()) {
-		$msg = "Action '$actionName' failed";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
+	public function getHostsTable()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get Storyplayer's hosts table");
+
+		// get the runtime config
+		$runtimeConfig = $st->getRuntimeConfig();
+
+		// make sure we have a hosts table
+		if (!isset($runtimeConfig->hosts)) {
+			$runtimeConfig->hosts = new BaseObject();
 		}
-		parent::__construct(500, $msg, $msg);
+
+		// all done
+		$log->endAction();
+		return $runtimeConfig->hosts;
+	}
+
+	public function getDetailsForHost($hostName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get details for host '{$hostName}' from Storyplayer's hosts table");
+
+		// get the runtime config
+		$runtimeConfig = $st->getRuntimeConfig();
+
+		// make sure we have a hosts table
+		if (!isset($runtimeConfig->hosts)) {
+			$msg = "Table is empty / does not exist";
+			$log->endAction($msg);
+
+			return null;
+		}
+
+		// make sure we don't have a duplicate entry
+		if (!isset($runtimeConfig->hosts->$hostName)) {
+			$msg = "Table does not contain an entry for '{$hostName}'";
+			$log->endAction($msg);
+			return null;
+		}
+
+		// all done
+		$log->endAction();
+		return $runtimeConfig->hosts->$hostName;
 	}
 }
