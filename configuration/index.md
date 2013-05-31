@@ -43,4 +43,3 @@ When you run Storyplayer, it loads the following configuration files, in this or
 1. _[$HOME/.storyplayer/storyplayer.json](user-config.html)_ - your per-user overrides and settings.  These settings apply to every test repository.  Normally used to vary logging levels.
 1. _[./etc/&lt;environment&gt;.json](environment-config.html)_ - your per-test-environment settings. There is normally one file per environment that you wish to test against.  These files live inside the same repository that your tests live inside.
 1. _[$HOME/.storyplayer/runtime.json](runtime-config.html)_ - the things that Storyplayer remembers between execution runs.  Storyplayer normally manages this file for you.
-

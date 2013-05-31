@@ -1,7 +1,7 @@
 ---
 layout: modules
 title: Storyplayer Modules
-prev: '<a href="../prose/local-dialects.html">Prev: Local Dialects</a>'
+prev: '<a href="../prose/persisting-data.html">Prev: Persisting Data Between Executions</a>'
 next: '<a href="../modules/assertions/index.html">Next: The Assertions Module</a>'
 ---
 
