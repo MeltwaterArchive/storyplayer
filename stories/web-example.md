@@ -1,7 +1,7 @@
 ---
 layout: stories
 title: "Example: Testing A Website"
-prev: '<a href="../stories/post-test-inspection.html">Prev: Post-Test Inspection Phase</a>'
+prev: '<a href="../stories/test-users.html">Prev: Test Users</a>'
 next: '<a href="../stories/soa-example.html">Next: Example: Testing A Service</a>'
 ---
 
