@@ -16,6 +16,7 @@ use Phix_Project\Autoloader4\Autoloader_Path;
 
 use DataSift\Stone\ConfigLib\ConfigLoader;
 use DataSift\Stone\LogLib\Log;
+use DataSift\Storyplayer\PlayerLib\DefaultConfig;
 use DataSift\Storyplayer\PlayerLib\RuntimeConfigManager;
 use DataSift\Storyplayer\PlayerLib\StoryConfigLoader;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
@@ -99,9 +100,15 @@ function main($argv)
 	$runtimeConfigManager = new RuntimeConfigManager();
 	$runtimeConfigManager->makeConfigDir();
 
-	// load our default config
+	// create our initial default config
+	$staticConfig = new DefaultConfig();
+
+	// load our main config
 	$configLoader = new StoryConfigLoader();
-	$staticConfig = $configLoader->loadDefaultConfig();
+	$loadedConfig = $configLoader->loadDefaultConfig();
+
+	// merge our default config in with our main loaded config
+	$staticConfig->mergeFrom($loadedConfig);
 
 	// load any per-user overrides
 	$configLoader->loadUserConfig($staticConfig);

@@ -114,7 +114,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '${tag}' element by '{$class}' class )");
+		$log = $st->startAction("get '${tag}' element by '{$class}' class");
 
 		$elements = $this->getElementsByClass($class, $tags);
 		return $this->returnFirstVisibleElement(
@@ -133,7 +133,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' element with id '{$id}' )");
+		$log = $st->startAction("get '{$tag}' element with id '{$id}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -168,11 +168,11 @@ class BrowserDetermine extends Prose
 		$topElement = $this->getTopElement();
 
 		// what are we doing?
-		$log = $st->startAction("( get element for label '{$labelText}' )");
+		$log = $st->startAction("get element for label '{$labelText}'");
 
 		try {
 			$xpath = 'descendant::label[normalize-space(text()) = "' . $labelText . '"]';
-			$labelElement = $log->addStep("( find the label with text '{$labelText}' using xpath '{$xpath}' )", function () use($xpath, $topElement){
+			$labelElement = $log->addStep("find the label with text '{$labelText}' using xpath '{$xpath}'", function () use($xpath, $topElement){
 				return $topElement->getElement('xpath', $xpath);
 			});
 		}
@@ -183,7 +183,7 @@ class BrowserDetermine extends Prose
 		}
 
 		try {
-			$inputElementId = $log->addStep("( determine id of corresponding input element )", function() use($labelElement) {
+			$inputElementId = $log->addStep("determine id of corresponding input element", function() use($labelElement) {
 				return $labelElement->attribute('for');
 			});
 		}
@@ -194,7 +194,7 @@ class BrowserDetermine extends Prose
 		}
 
 		try{
-			$inputElement = $log->addStep("( find the input element with the id '{$inputElementId}' )", function() use($topElement, $inputElementId) {
+			$inputElement = $log->addStep("find the input element with the id '{$inputElementId}'", function() use($topElement, $inputElementId) {
 				return $topElement->getElement('id', $inputElementId);
 			});
 
@@ -217,7 +217,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' with label, id or name '{$searchTerm}' )");
+		$log = $st->startAction("get '{$tag}' with label, id or name '{$searchTerm}'");
 
 		// can we find this puppy by its label?
 		try {
@@ -252,7 +252,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' element with name '{$name}' )");
+		$log = $st->startAction("get '{$tag}' element with name '{$name}'");
 
 		// what goes right and wrong
 		$successMsg = "found one";
@@ -288,7 +288,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' element with placeholder '{$text}' )");
+		$log = $st->startAction("get '{$tag}' element with placeholder '{$text}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -323,7 +323,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' element with alt text '{$text}' )");
+		$log = $st->startAction("get '{$tag}' element with alt text '{$text}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -358,7 +358,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' element with text '{$text}' )");
+		$log = $st->startAction("get '{$tag}' element with text '{$text}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -401,7 +401,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' element with title '{$title}' )");
+		$log = $st->startAction("get '{$tag}' element with title '{$title}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -440,7 +440,7 @@ class BrowserDetermine extends Prose
 
 		try{
 			foreach ($xpathList as $xpath) {
-				$element = $log->addStep("( find element using xpath '{$xpath}' )", function() use($topElement, $xpath) {
+				$element = $log->addStep("find element using xpath '{$xpath}'", function() use($topElement, $xpath) {
 					return $topElement->getElement('xpath', $xpath);
 				});
 
@@ -467,7 +467,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' elements with CSS class '{$class}' )");
+		$log = $st->startAction("get '{$tag}' elements with CSS class '{$class}'");
 
 		// shorthand
 		$topElement = $this->getTopElement();
@@ -500,7 +500,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' elements with id '{$id}' )");
+		$log = $st->startAction("get '{$tag}' elements with id '{$id}'");
 
 		// shorthand
 		$topElement = $this->getTopElement();
@@ -533,7 +533,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' elements with name '{$name}' )");
+		$log = $st->startAction("get '{$tag}' elements with name '{$name}'");
 
 		// shorthand
 		$topElement = $this->getTopElement();
@@ -566,7 +566,7 @@ class BrowserDetermine extends Prose
 
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("( get '{$tag}' elements with text '{$text}' )");
+		$log = $st->startAction("get '{$tag}' elements with text '{$text}'");
 
 		// shorthand
 		$topElement = $this->getTopElement();
@@ -606,7 +606,7 @@ class BrowserDetermine extends Prose
 
 		try{
 			foreach ($xpathList as $xpath) {
-				$elements = $log->addStep("( find elements using xpath '{$xpath}' )", function() use($topElement, $xpath) {
+				$elements = $log->addStep("find elements using xpath '{$xpath}'", function() use($topElement, $xpath) {
 					return $topElement->getElements('xpath', $xpath);
 				});
 
@@ -639,7 +639,7 @@ class BrowserDetermine extends Prose
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("[ check the current page for $elementDesc '$elementName' ]");
+			$log = $st->startAction("check the current page for $elementDesc '$elementName'");
 			if (is_object($element)) {
 				$log->endAction('found it');
 				return true;
@@ -661,7 +661,7 @@ class BrowserDetermine extends Prose
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("[ retrieve the $elementDesc '$elementName' ]");
+			$log = $st->startAction("retrieve the $elementDesc '$elementName'");
 			$log->endAction();
 			return $element;
 		};
@@ -678,7 +678,7 @@ class BrowserDetermine extends Prose
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("[ retrieve the name of the $elementDesc '$elementName' ]");
+			$log = $st->startAction("retrieve the name of the $elementDesc '$elementName'");
 			$log->endAction('name is: ' . $element->attribute('name'));
 			return $element->attribute('name');
 		};
@@ -695,7 +695,7 @@ class BrowserDetermine extends Prose
 	{
 		$action = function(StoryTeller $st, $elements, $elementName, $elementDesc) {
 
-			$log = $st->startAction("[ retrieve the names of the $elementDesc '$elementName' ]");
+			$log = $st->startAction("retrieve the names of the $elementDesc '$elementName'");
 			if (!is_array($elements)) {
 				$log->endAction('1 element found');
 				return $element->attribute('name');
@@ -722,7 +722,7 @@ class BrowserDetermine extends Prose
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("[ retrieve the options of them $elementDesc '$elementName' ]");
+			$log = $st->startAction("retrieve the options of them $elementDesc '$elementName'");
 			// get the elements
 			$optionElements = $element->getElements('xpath', "descendant::option");
 
@@ -748,7 +748,7 @@ class BrowserDetermine extends Prose
 	public function getTag()
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("[ retrieve the tagname of the $elementDesc '$elementName' ]");
+			$log = $st->startAction("retrieve the tagname of the $elementDesc '$elementName'");
 			$log->endAction("tag is: " . $element->name());
 			return $element->name();
 		};
@@ -764,7 +764,7 @@ class BrowserDetermine extends Prose
 	public function getText()
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("[ retrieve the text of the $elementDesc '$elementName' ]");
+			$log = $st->startAction("retrieve the text of the $elementDesc '$elementName'");
 			$log->endAction("text is: " . $element->text());
 			return $element->text();
 		};
@@ -780,7 +780,7 @@ class BrowserDetermine extends Prose
 	public function getValue()
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("[ retrieve the value of the $elementDesc '$elementName' ]");
+			$log = $st->startAction("retrieve the value of the $elementDesc '$elementName'");
 
 			// is this a select box?
 			switch($element->name()) {
@@ -825,7 +825,7 @@ class BrowserDetermine extends Prose
 		$st      = $this->st;
 		$browser = $st->getRunningWebBrowser();
 
-		$log = $st->startAction("[ retrieve the current page title ]");
+		$log = $st->startAction("retrieve the current page title");
 		$log->endAction("title is: " . $browser->title());
 
 		return $browser->title();

@@ -264,30 +264,41 @@ class ActionLogItem
 
 	protected function setLogLevel($text)
 	{
-		switch ($text[0])
+		// by default, no 'bookend'
+		//
+		// bookend is the character used to close the log message
+		$bookend = null;
+
+		// use the nesting to set the log level
+		switch ($this->nestLevel)
 		{
-			case '[':
-				$this->text = substr($text, 2);
-				$logLevel = Log::LOG_DEBUG;
-				$bookend  = "]";
+			case 1:
+				$this->logLevel = Log::LOG_INFO;
 				break;
 
-			case '(':
-				$this->text = substr($text, 2);
-				$logLevel = Log::LOG_TRACE;
-				$bookend  = ")";
-				break;
-
-			case '*':
-				$this->text = substr($text, 2);
-				$logLevel = Log::LOG_WARNING;
-				$bookend  = "*";
+			case 2:
+				$this->logLevel = Log::LOG_DEBUG;
 				break;
 
 			default:
+				$this->logLevel = Log::LOG_TRACE;
+				break;
+		}
+
+		// now, we let the message override the nesting
+		switch ($text[0])
+		{
+			case '*':
+				$this->text = substr($text, 2);
+				$this->logLevel = Log::LOG_WARNING;
+				$bookend  = "*";
+				break;
+
+			// support for other overrides goes here
+
+			// default behaviour
+			default:
 				$this->text = $text;
-				$logLevel = Log::LOG_INFO;
-				$bookend  = null;
 		}
 
 		// strip trailing text if necessary
@@ -296,23 +307,12 @@ class ActionLogItem
 				$this->text = substr($this->text, 0, -2);
 			}
 		}
-
-		// have we already inherited?
-		if (!isset($this->logLevel) || $this->logLevel < $logLevel) {
-			$this->logLevel = $logLevel;
-		}
 	}
 
 	protected function getMessageBookends($logLevel)
 	{
 		switch ($logLevel)
 		{
-			case Log::LOG_DEBUG:
-				return array("[ ", " ]");
-
-			case Log::LOG_TRACE:
-				return array("( ", " )");
-
 			case Log::LOG_WARNING:
 				return array("* ", " *");
 

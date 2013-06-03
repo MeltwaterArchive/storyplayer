@@ -158,7 +158,7 @@ class FormActions extends BrowserActions
 
 		foreach ($fields as $labelText => $fieldValue) {
 			// find the element
-			$element = $log->addStep("( finding field with label, id or name '{$labelText}'", function($log) use($st, $formId, $labelText) {
+			$element = $log->addStep("finding field with label, id or name '{$labelText}'", function($log) use($st, $formId, $labelText) {
 				try {
 					return $st->fromForm($formId)->getElementByLabelIdOrName($labelText);
 				}
