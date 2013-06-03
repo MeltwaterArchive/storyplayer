@@ -115,44 +115,4 @@ class HostActions extends HostBase
 		$log->endAction();
 		return $result;
 	}
-
-	public function writePlaybookVars($pathToVmHomeFolder, $playbookVars)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("write out ansible playbook vars");
-
-		// where are we writing to?
-		$parts = explode('-', $pathToVmHomeFolder);
-		if (count($parts) < 2) {
-			$log->endAction("cannot break folder path up to determine which OS we are running");
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$os = $parts[count($parts) - 2] . '-' . $parts[count($parts) - 1];
-
-		$storytellerVarsFilename = dirname(dirname($pathToVmHomeFolder)) . "/ansible-playbooks/vars/storyteller.yml";
-
-		// make sure we have something to write
-		if (count($playbookVars) == 0) {
-			$playbookVars['dummy'] = 'true';
-		}
-
-		// make sure we ahve somewhere to write it to
-		$log->addStep("create folder for ansible vars file", function() use($storytellerVarsFilename) {
-			$storytellerVarsDirname = dirname($storytellerVarsFilename);
-			if (!is_dir($storytellerVarsDirname)) {
-				mkdir($storytellerVarsDirname);
-			}
-		});
-
-		// save the data
-		$log->addStep("write vars to file '{$storytellerVarsFilename}'", function() use ($storytellerVarsFilename, $playbookVars) {
-			file_put_contents($storytellerVarsFilename, yaml_emit($playbookVars));
-		});
-
-		// all done
-		$log->endAction();
-	}
 }
