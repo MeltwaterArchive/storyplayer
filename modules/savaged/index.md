@@ -1,7 +1,7 @@
 ---
 layout: modules-savaged
 title: The SavageD Module
-prev: '<a href="../../modules/http/usingHttp.html">Prev: usingHttp()</a>'
+prev: '<a href="../../modules/log/usingLog.html">Prev: usingLog()</a>'
 next: '<a href="../../modules/savaged/usingSavageD.html">Next: usingSavageD()</a>'
 ---
 
