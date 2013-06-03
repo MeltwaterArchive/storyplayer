@@ -34,49 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\StoryTeller\ProseLib\E5xx_ActionFailed;
+use DataSift\Stone\ConfigLib\LoadedConfig;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Get data from the checkpoint
+ * Storyplayer's default config - the config that is active before we
+ * load any config files
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class CheckpointDetermine extends Prose
+class DefaultConfig extends LoadedConfig
 {
-	public function get($fieldName)
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
+		// defaults for LogLib
+		$this->logger = new BaseObject();
+		$this->logger->writer = "StdErrWriter";
 
-		// what are we doing?
-		$log = $st->startAction("get value of checkpoint field '{$fieldName}'");
+        $levels = new BaseObject();
+        $levels->LOG_EMERGENCY = true;
+        $levels->LOG_ALERT = true;
+        $levels->LOG_CRITICAL = true;
+        $levels->LOG_ERROR = true;
+        $levels->LOG_WARNING = true;
+        $levels->LOG_NOTICE = true;
+        $levels->LOG_INFO = true;
+        $levels->LOG_DEBUG = true;
+        $levels->LOG_TRACE = true;
 
-		// get the checkpoint
-		$checkpoint = $st->getCheckpoint();
+        $this->logger->levels = $levels;
 
-		// does the value exist?
-		if (!isset($checkpoint->$fieldName)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // defaults for phases
+        $phases = new BaseObject();
+        $phases->TestEnvironmentSetup = true;
+        $phases->TestSetup = true;
+        $phases->PreTestPrediction = true;
+        $phases->PreTestInspection = true;
+        $phases->Action = true;
+        $phases->PostTestInspection = true;
+        $phases->TestTeardown = true;
+        $phases->TestEnvironmentTeardown = true;
 
-		// all done
-		$log->endAction();
+        $this->phases = $phases;
 
-		return $checkpoint->$fieldName;
-	}
+        // all done
+    }
 }
