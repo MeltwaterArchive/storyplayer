@@ -151,7 +151,8 @@ class StoryCheckpoint
 		$printer = new DataPrinter();
 		$logValue = $printer->convertToString($this->data[$key]);
 
-		$log->endAction("value is '{$logValue}'");
+		//$log->endAction("value is '{$logValue}'");
+        $log->endAction();
 
 		// all done
 		return $this->data[$key];
