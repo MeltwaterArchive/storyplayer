@@ -107,6 +107,9 @@ class VagrantVm implements SupportedHost
 			$this->runCommandAgainstHostManager($vmDetails, $command);
 		});
 
+		// remove any existing hosts table entry
+		$st->usingHostsTable()->removeHost($vmDetails->name);
+
 		// write out the playbook variables, so that we can tailor our
 		// VM to suit this test
 		$this->writeProvisioningVars($provisioningVars);
