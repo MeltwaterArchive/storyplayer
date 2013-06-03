@@ -47,6 +47,7 @@ use ZMQ;
 use ZMQContext;
 use ZMQSocket;
 
+use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
@@ -188,19 +189,31 @@ class ZmqActions extends Prose
 		$log->endAction();
 	}
 
-	public function recvMulti($socket)
+	public function recvMulti($socket, $timeout = -1)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("recvmulti() from ZMQ socket");
+		if ($timeout == -1) {
+			$log = $st->startAction("recvmulti() from ZMQ socket; no timeout");
+		}
+		else {
+			$log = $st->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
+		}
+
+		// set the socket timeout
+		$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout);
 
 		// do it
 		$return = $socket->recvmulti();
 
+		// we need to look at the received value
+		$printer = new DataPrinter();
+		$msg     = $printer->convertToString($return);
+
 		// all done
-		$log->endAction();
+		$log->endAction("result is: {$msg}");
 		return $return;
 	}
 
