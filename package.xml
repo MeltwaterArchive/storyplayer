@@ -48,6 +48,18 @@ ${contents}
         <min>4.0.0</min>
         <max>4.999.9999</max>
       </package>
+      <package>
+        <name>Stone</name>
+        <channel>datasift.github.io/pear</channel>
+        <min>1.4.0</min>
+        <max>1.999.9999</max>
+      </package>
+      <package>
+        <name>webdriver</name>
+        <channel>datasift.github.io/pear</channel>
+        <min>1.0.0</min>
+        <max>1.999.9999</max>
+      </package>
     </required>
   </dependencies>
   <phprelease />
