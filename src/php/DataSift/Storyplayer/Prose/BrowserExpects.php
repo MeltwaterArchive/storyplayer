@@ -72,7 +72,7 @@ class BrowserExpects extends Prose
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("[ $elementDesc '$elementName' must exist");
+			$log = $st->startAction("$elementDesc '$elementName' must exist");
 
 			if (is_object($element)) {
 				$log->endAction();
