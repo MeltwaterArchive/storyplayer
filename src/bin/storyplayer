@@ -22,6 +22,7 @@ use DataSift\Storyplayer\PlayerLib\StoryConfigLoader;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\StoryLoader;
+use DataSift\Storyplayer\StoryListLib\StoryListLoader;
 use DataSift\Storyplayer\UserLib\User;
 use DataSift\Storyplayer\UserLib\GenericUserGenerator;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
@@ -141,19 +142,88 @@ function main($argv)
 	// it will use our user generator if no cached user is found
 	$userLoader = new ConfigUserLoader($userGenerator);
 
-	// load our story
-	$story = StoryLoader::loadStory($argv[2]);
+	// are we loading a story, or a list of stories?
+	$arg2suffix = end(explode('.', $argv[2]));
+	switch($arg2suffix)
+	{
+		case "php":
+			// we are running an individual story
 
-	// create something to play this story
-    $player = new StoryPlayer();
-    $teller = new StoryTeller($story);
+			// load our story
+			$story = StoryLoader::loadStory($argv[2]);
 
-    // create the supporting context for this story
-    $context = $player->createContext($staticConfig, $runtimeConfig, $environment, $story);
-    $teller->setStoryContext($context);
+			// create something to play this story
+		    $player = new StoryPlayer();
+		    $teller = new StoryTeller($story);
 
-    // make the story happen
-    $return = $player->play($teller, $staticConfig);
+		    // create the supporting context for this story
+		    $context = $player->createContext($staticConfig, $runtimeConfig, $environment, $story);
+		    $teller->setStoryContext($context);
+		    $teller->setConfigLoader($configLoader);
+
+		    // make the story happen
+		    $return = $player->play($teller, $staticConfig);
+
+		    // all done
+		    break;
+
+	    case "json":
+	    	// we are running a list of stories
+
+	    	// load the list of stories
+	    	$storyList = StoryListLoader::loadList($argv[2]);
+
+	    	// run through our list of stories
+	    	foreach ($storyList->stories as $storyFile)
+	    	{
+				// load our story
+				$story = StoryLoader::loadStory($storyFile);
+
+				// create something to play this story
+			    $player = new StoryPlayer();
+			    $teller = new StoryTeller($story);
+
+			    // create the supporting context for this story
+			    $context = $player->createContext($staticConfig, $runtimeConfig, $environment, $story);
+			    $teller->setStoryContext($context);
+			    $teller->setConfigLoader($configLoader);
+
+			    // special case - reusable environments
+			    $origStaticConfig = clone $staticConfig;
+			    if ($storyList->options->reuseTestEnvironment) {
+			    	// story #1 - keep the test environment around
+			    	if ($storyFile == $storyList->stories[0]) {
+			    		// we do not override the user's preference for
+			    		// the TestEnvironmentStartup
+
+			    		// do not shutdown the TestEnvironment;
+			    		// we want to re-use it in the other stories
+			    		$staticConfig->phases->TestEnvironmentTeardown = false;
+			    	}
+			    	else if ($storyFile == end($storyList->stories)) {
+			    		// do nothing - we do not want to override
+			    		// the user's config file settings here
+			    	}
+			    	else {
+			    		// we are running a story in the middle of the list
+			    		//
+			    		// do not re-create the test environment
+			    		// do not destroy it afterwards
+			    		$staticConfig->phases->TestEnvironmentSetup = false;
+			    		$staticConfig->phases->testEnvironmentTeardown = false;
+			    	}
+			    }
+
+			    // make the story happen
+			    $return = $player->play($teller, $staticConfig);
+
+			    // restore the original config
+			    $staticConfig = clone $origStaticConfig;
+	    	}
+
+	    default:
+	    	// unsupported!
+	}
 
     // write out any changed runtime config to disk
     $configLoader->saveRuntimeConfig($runtimeConfig);
