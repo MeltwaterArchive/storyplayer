@@ -88,6 +88,8 @@ class StoryTeller
 
 	private $proseLoader = null;
 
+	private $configLoader = null;
+
 	/**
 	 * [$actionLogger description]
 	 * @var Datasift\Storyplayer\PlayerLib\ActionLogItem
@@ -261,6 +263,26 @@ class StoryTeller
 	    $this->proseLoader->setNamespaces($this);
 
 	    // all done
+	    return $this;
+	}
+
+	/**
+	 * [description here]
+	 *
+	 * @return [type] [description]
+	 */
+	public function getConfigLoader() {
+	    return $this->configLoader;
+	}
+
+	/**
+	 * [Description]
+	 *
+	 * @param [type] $configLoader [description]
+	 */
+	public function setConfigLoader($configLoader) {
+	    $this->configLoader = $configLoader;
+
 	    return $this;
 	}
 

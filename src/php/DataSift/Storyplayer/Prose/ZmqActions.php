@@ -174,13 +174,21 @@ class ZmqActions extends Prose
 		return $return;
 	}
 
-	public function sendMulti($socket, $message)
+	public function sendMulti($socket, $message, $timeout = -1)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("sendmulti() to ZMQ socket");
+		if ($timeout == -1) {
+			$log = $st->startAction("sendmulti() from ZMQ socket; no timeout");
+		}
+		else {
+			$log = $st->startAction("sendmulti() from ZMQ socket; timeout is {$timeout} seconds");
+		}
+
+		// set the socket timeout
+		$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout);
 
 		// do it
 		$socket->sendmulti($message);
