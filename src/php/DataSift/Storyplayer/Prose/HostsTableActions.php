@@ -90,6 +90,13 @@ class HostsTableActions extends Prose
 		// add the entry
 		$runtimeConfig->hosts->$hostName = $hostDetails;
 
+		// save the updated runtimeConfig, in case Storyplayer terminates
+		// with a fatal error at some point
+		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
+			$configLoader = $st->getConfigLoader();
+			$configLoader->saveRuntimeConfig($runtimeConfig);
+		});
+
 		// all done
 		$log->endAction();
 	}
