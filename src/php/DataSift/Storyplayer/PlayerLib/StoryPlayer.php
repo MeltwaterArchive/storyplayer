@@ -189,7 +189,7 @@ class StoryPlayer
 	public function play(StoryTeller $st, stdClass $staticConfig)
 	{
 		// keep track of how each phase goes
-		$result = new StoryResult();
+		$result = new StoryResult($st->getStory());
 
 		// tell the outside world what we're doing
 		$this->announceStory($st);
@@ -696,21 +696,16 @@ class StoryPlayer
 		// do we have anything to do?
 		if (!$story->hasPreTestInspection())
 		{
-			// we assume that the absence means that we just don't know
 			Log::write(Log::LOG_INFO, "story has no pre-test inspection instructions");
-			return self::PREDICT_UNKNOWN;
+			return;
 		}
 
 		// should we do this stage?
 		if (!$this->shouldExecutePhase('PreTestInspection', $staticConfig)) {
 			// we assume that the absence means that we just don't know
 			Log::write(Log::LOG_INFO, "pre-test inspection is disabled; skipping");
-			return self::PREDICT_UNKNOWN;
+			return;
 		}
-
-		// at this point, the prediction should be a success, unless the
-		// Prose throws an exception
-		$return = self::PREDICT_SUCCESS;
 
 		// this could all go horribly wrong ... so wrap it up and deal
 		// with it if it explodes
@@ -726,7 +721,6 @@ class StoryPlayer
 		}
 		catch (Exception $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to perform pre-test inspection; " . (string)$e . "\n" . $e->getTraceAsString());
-			$return = self::PREDICT_FAIL;
 		}
 
 		// close off any open log actions
@@ -736,7 +730,6 @@ class StoryPlayer
 		$this->doPerPhaseTeardown($st);
 
 		// all done
-		return $return;
 	}
 
 	// ====================================================================
