@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\StoryLib\Story;
 
 /**
  * a record of what happened with a story
@@ -58,12 +59,15 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class StoryResult
 {
+	public $story = null;
 	public $phases = array();
-
 	public $storyResult = NULL;
 
-	public function __construct()
+	public function __construct(Story $story)
 	{
+		// remember the story we are reporting on
+		$this->story = $story;
+
 		// initialise the phases
 		foreach (StoryPlayer::$phaseToText as $phase => $name) {
 			$this->initPhase($phase, $name);
@@ -128,7 +132,7 @@ class StoryResult
 	public function calculateStoryResult()
 	{
 		// shorthand
-		$actionShouldWork = $this->getPhaseOutcome(StoryPlayer::PHASE_PRETESTINSPECTION);
+		$actionShouldWork = $this->getPhaseOutcome(StoryPlayer::PHASE_PRETESTPREDICTION);
 		$actionResult     = $this->getPhaseOutcome(StoryPlayer::PHASE_ACTION);
 		$actionWorked	  = $this->getPhaseOutcome(StoryPlayer::PHASE_POSTTESTINSPECTION);
 
