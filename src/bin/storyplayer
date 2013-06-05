@@ -79,6 +79,21 @@ foreach ($localSrcDirs as $localSrcDir){
 // load our list of helper functions
 require 'DataSift/Storyplayer/functions.php';
 
+function summariseStoryList($storyResults)
+{
+	// we need to make a pronouncement about the whole list of stories
+
+	echo "\n";
+	echo "============================================================\n";
+	echo "FINAL RESULTS\n";
+	echo "\n";
+
+	foreach ($storyResults as $result)
+	{
+		echo $result->story->getName() . " :: " . StoryPlayer::$outcomeToText[$result->storyResult] . "\n";
+	}
+}
+
 /**
  * it all happens here, baby
  *
@@ -162,7 +177,7 @@ function main($argv)
 		    $teller->setConfigLoader($configLoader);
 
 		    // make the story happen
-		    $return = $player->play($teller, $staticConfig);
+		    $result = $player->play($teller, $staticConfig);
 
 		    // all done
 		    break;
@@ -172,6 +187,9 @@ function main($argv)
 
 	    	// load the list of stories
 	    	$storyList = StoryListLoader::loadList($argv[2]);
+
+	    	// keep track of the results
+	    	$results = array();
 
 	    	// run through our list of stories
 	    	foreach ($storyList->stories as $storyFile)
@@ -189,8 +207,11 @@ function main($argv)
 			    $teller->setConfigLoader($configLoader);
 
 			    // special case - reusable environments
-			    $origStaticConfig = clone $staticConfig;
 			    if ($storyList->options->reuseTestEnvironment) {
+			    	// we need to remember the staticConfig, as we are
+			    	// probably about to override it
+				    $origStaticConfig = clone $staticConfig;
+
 			    	// story #1 - keep the test environment around
 			    	if ($storyFile == $storyList->stories[0]) {
 			    		// we do not override the user's preference for
@@ -215,11 +236,20 @@ function main($argv)
 			    }
 
 			    // make the story happen
-			    $return = $player->play($teller, $staticConfig);
+			    $results[] = $player->play($teller, $staticConfig);
 
-			    // restore the original config
-			    $staticConfig = clone $origStaticConfig;
+			    // special case - reusable environments
+			    if ($storyList->options->reuseTestEnvironment) {
+				    // restore the original config
+				    $staticConfig = clone $origStaticConfig;
+			    }
 	    	}
+
+	    	// report on the final results
+	    	summariseStoryList($results);
+
+	    	// all done
+	    	break;
 
 	    default:
 	    	// unsupported!
@@ -229,7 +259,7 @@ function main($argv)
     $configLoader->saveRuntimeConfig($runtimeConfig);
 
     // all done
-    return $return;
+    return 0;
 }
 
 return main($argv);
