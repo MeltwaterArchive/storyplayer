@@ -11,37 +11,64 @@ Bring your user and service stories to life through your test automation.
 
 ## Introduction
 
-[Storyplayer](https://github.com/datasift/storyplayer) is [DataSift](http://datasift.com)'s in-house tool for automating the functional testing of our user and service stories.  We've built it to make it easy to create repeatable end-to-end tests, and to make it just as easy to create repeatable functional tests.
+[Storyplayer](https://github.com/datasift/storyplayer) is [DataSift](http://datasift.com)'s in-house tool for automating the testing of our [user and service stories](stories/index.html).  Storyplayer makes it easy to test both your front-end website and your back-office services.  Storyplayer can test both functional and non-functional requirements.  It sits between unit testing tools such as PHPUnit (used by your developers) and acceptance testing tools such as Behat (used by your product team).
 
-Additionally, Storyplayer can measure non-functional requirements at the same time.
+Written in PHP, Storyplayer is highly [modular](modules/index.html), and can be easily extended to support your own custom needs.
 
-Storyplayer is highly modular, and can be easily extended to support your own custom needs.
+{% include presentations/storyplayer-20130502.html %}
 
-### What Can You Test With Storyplayer?
+## What Can You Test With Storyplayer?
 
-Storyplayer was initially designed and built to test DataSift's real-time filtering product.  This is a service-oriented architecture consisting of:
+Storyplayer was initially designed and built to test DataSift's real-time firehose-filtering product.  This is a service-oriented architecture consisting of:
 
-* Data pipline (using ZeroMQ and HTTP)
+* Data piplines (using [ZeroMQ](modules/zeromq/index.html) and [HTTP](modules/http/index.html))
 * Supporting services (using HTTP and sometimes ZeroMQ)
 * Internal and public-facing APIs (using JSON over HTTP)
-* Front end interfaces (using HTML)
+* Front end interfaces (using [HTML](modules/browser/index.html))
 
-### Stories And Prose
+Storyplayer can test software written in any language, because Storyplayer is designed to interact with your software just like a user would.
 
-Storyplayer introduces terminology designed to help developers and managers think about testing using high-level concepts before digging into the details of the implementation. The core concept is that of a [User Story](/storyplayer/stories/index.html).
+## Built For Developers And Testers Alike
 
-All Stories are written using [Prose](/storyplayer/prose/index.html)&mdash;a way of writing PHP code that makes it not only natural to read, but also to think about Stories.
+From the very beginning, Storyplayer has been designed as a testing tool for software engineers (who want to write code using the language they already know, not learn yet another DSL) and testers (who want a toolkit that allows them to focus on creating sophisticated tests with the minimum of code).
 
-## Source Code
+## User And Service Stories
 
-The source code for Storyplayer [is available from GitHub](https://github.com/datasift/storyplayer).
+The skeleton of a strong development process is the [story](stories/index.html).
 
-## Current Status
+* Each [user story](stories/user-stories.html) is a simple description of one feature or benefit that your product or service provides.
+* They are written in plain English, and they include clear acceptance tests and a place to record the 'why' behind anything that your product or service provides.
+* They can be shared between your product teams, your project management, your architects, your engineers and your testers.
+* [Service stories](stories/service-stories.html) are exactly like user stories, but for internal services and APIs.
 
-* __Code:__ recently open-sourced, bound to be a few rough edges at first
-* __Docs:__ most modules are documented, tutorial section to come in the next couple of weeks
-* __Examples:__ we'll be building up its self-test suite over the next couple of weeks
+Storyplayer is designed from the outset to automate the testing of all of your stories - to fill that gap between unit testing and product acceptance testing.
+
+## Prose
+
+All stories are written in the PHP that you already know using a style that we call [Prose](prose/index.html) (so-called because we like the whole story telling theme).  Prose is a way of writing PHP code that makes it not only natural to read, but also to think about stories.  There's no DSL to learn!
+
+At the heart of Prose is the [$st dynamic module loader](prose/the-st-object.html), which makes it hard _not_ to share code between your tests.  We've already published [over 15 re-usable modules](modules/index.html) - __you can get started with your testing right away__ - and it's very easy to [create your own Prose modules](prose/creating-prose-modules.html) when you need to do something that we haven't already covered.
+
+## Test Environments
+
+For those larger and more complicated apps (like the DataSift platform), Storyplayer can provision and destroy whole [test environments](environments/index.html) to run your tests against.  Today, Storyplayer ships with fully-working support for [Vagrant](environments/vagrant/index.html).  At DataSift, we use OpenStack and EC2 too, and support for both of these will be added to Storyplayer.  We'll also be adding support for [SauceLabs](environments/saucelabs/index.html) for automated cross-browser testing of your apps.
+
+## Documentation
+
+You're reading the front-page of Storyplayer's online manual, over 35,000 words covering:
+
+* [installation](installation.html) and [configuration](configuration/index.html) of Storyplayer
+* what [stories](stories/index.html) are, their [phases](stories/phases.html), and [best practices](stories/best-practices.html)
+* how to [write tests for your stories](prose/index.html), and how to [create your own Storyplayer modules](prose/creating-prose-modules.html)
+* how to [create test environments](environments/index.html) to test your apps in
+* a [comprehensive reference to every module that ships with Storyplayer](modules/index.html)
+
+The documentation is still a work in progress, with regular updates as we get everything thoroughly documented for you.
 
 ## Licensing
 
-[Storyplayer](https://github.com/datasift/storyplayer) is [open source software](http://datasift.github.io/storyplayer/copyright.html#license).
+Storyplayer is [open source software](http://datasift.github.io/storyplayer/copyright.html#license).
+
+## Source Code And Issues
+
+The [source code for Storyplayer](https://github.com/datasift/storyplayer) is available from GitHub, and [bug reports / feature requests](https://github.com/datasift/storyplayer/issues?state=open) and [pull requests](https://github.com/datasift/storyplayer/pulls) are all very welcome.

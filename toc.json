@@ -33,6 +33,10 @@
 		"prose/local-dialects",
 		"prose/creating-prose-modules",
 		"prose/persisting-data",
+		"environments/index",
+		"environments/ec2/index",
+		"environments/openstack/index",
+		"environments/vagrant/index",
 		"modules/index",
 		"modules/assertions/index",
 		"modules/assertions/assertsArray",
@@ -155,6 +159,13 @@
 			"Sep1": "",
 			"Creating Your Own Modules": "prose/creating-prose-modules",
 			"Persisting Data": "prose, persisting-data"
+		},
+		"Environments": {
+			"Introduction": "environments/index",
+			"Amazon EC2": "environments/ec2/index",
+			"OpenStack": "environments/openstack/index",
+			"SauceLabs": "environments/saucelabs/index",
+			"Vagrant": "environments/vagrant/index"
 		},
 		"Modules": {
 			"Introduction": "modules/index",
