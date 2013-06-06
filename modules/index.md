@@ -1,7 +1,7 @@
 ---
 layout: modules
 title: Storyplayer Modules
-prev: '<a href="../prose/persisting-data.html">Prev: Persisting Data Between Executions</a>'
+prev: '<a href="../environments/vagrant/index.html">Prev: Creating Test Environments Using Vagrant</a>'
 next: '<a href="../modules/assertions/index.html">Next: The Assertions Module</a>'
 ---
 
