@@ -4,6 +4,7 @@
 		"index",
 		"installation",
 		"running-storyplayer",
+		"example-test-repo",
 		"configuration/index",
 		"configuration/storyplayer-json",
 		"configuration/app-settings",
@@ -112,8 +113,8 @@
 			"Welcome To Storyplayer": "index",
 			"Sep1": "",
 			"Installation": "installation",
-			"Configuration": "configuration",
 			"How To Run": "running-storyplayer",
+			"Example Test Repo": "example-test-repo",
 			"Sep2": "",
 			"Legal Stuff": "copyright"
 		},

@@ -1,7 +1,7 @@
 ---
 layout: configuration
 title: Configuring Storyplayer
-prev: '<a href="../running-storyplayer.html">Prev: Running Storyplayer</a>'
+prev: '<a href="../example-test-repo.html">Prev: An Example Test Repository</a>'
 next: '<a href="../configuration/storyplayer-json.html">Next: The storyplayer.json File</a>'
 ---
 
