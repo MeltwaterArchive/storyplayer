@@ -457,15 +457,39 @@ class Story
 	// --------------------------------------------------------------------
 
 	/**
-	 * set up an entire environment from a predefined class
+	 * set up any templated methods from a predefined class
 	 *
 	 * @return void
 	 */
-	public function setEnvironment(EnvironmentSetup $env)
+	public function isBasedOn(StoryTemplate $tmpl)
 	{
-		$env->setStory($this);
-		$this->setTestEnvironmentSetup(array($env, "setUp"));
-		$this->setTestEnvironmentTeardown(array($env, "tearDown"));
+		$tmpl->setStory($this);
+		$this->storyTemplate = $tmpl;
+	}
+
+	/**
+	 * do we have a template class set?
+	 *
+	 * @return boolean true if there is a template specified
+	 */
+	public function hasTemplate()
+	{
+		return isset($this->storyTemplate);
+	}
+
+	/**
+	 * get the template we're using
+	 *
+	 * @return StoryTemplate|null The template we're using
+	 */
+	public function getTemplate()
+	{
+		if (isset($this->storyTemplate))
+		{
+			return $this->storyTemplate;
+		}
+
+		return null;
 	}
 
 	/**

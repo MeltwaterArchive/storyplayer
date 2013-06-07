@@ -54,7 +54,7 @@ use DataSift\Storyplayer\StoryLib\Story;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-abstract class EnvironmentSetup
+abstract class StoryTemplate
 {
 	protected $story;
 	protected $vmParams;
@@ -75,6 +75,95 @@ abstract class EnvironmentSetup
 	}
 
 	abstract public function getName();
-	abstract public function setUp(StoryTeller $st);
-	abstract public function tearDown(StoryTeller $st);
+
+	/**
+	 * Set up our (optional) phases
+	 */
+
+
+	public function testEnvironmentSetup(StoryTeller $st)
+	{
+	
+	}
+
+	public function testSetup(StoryTeller $st)
+	{
+	
+	}
+
+	public function preTestPrediction(StoryTeller $st)
+	{
+	
+	}
+
+	public function preTestInspection(StoryTeller $st)
+	{
+	
+	}
+
+	public function action(StoryTeller $st)
+	{
+	
+	}
+
+	public function postTestInspection(StoryTeller $st)
+	{
+	
+	}
+
+	public function testTeardown(StoryTeller $st)
+	{
+	
+	}
+
+	public function testEnvironmentTeardown(StoryTeller $st)
+	{
+	
+	}
+
+
+	/**
+	 * Helper methods to keep the Templates API in line with the phases
+	 */
+
+	public function getTestEnvironmentSetup()
+	{
+		return $this->testEnvironmentSetup;
+	}
+
+	public function getTestSetup()
+	{
+		return $this->testSetup;
+	}
+
+	public function getPreTestPrediction()
+	{
+		return $this->preTestPrediction;
+	}
+
+	public function getPreTestInspection()
+	{
+		return $this->preTestInspection;
+	}
+
+	public function getAction()
+	{
+		return $this->action;
+	}
+
+	public function getPostTestInspection()
+	{
+		return $this->postTestInspection;
+	}
+
+	public function getTestTeardown()
+	{
+		return $this->testTeardown;
+	}
+
+	public function getTestEnvironmentTeardown()
+	{
+		return $this->testEnvironmentTeardown;
+	}
+
 }
