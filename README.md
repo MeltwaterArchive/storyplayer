@@ -34,7 +34,7 @@ where:
 
 ## Running It Out Of A Git Clone
 
-See [installing Storyplayer](http://datasift.github.io/storyplayer/configuration.html).
+See [installing Storyplayer](http://datasift.github.io/storyplayer/installation.html).
 
 ### Building The Dependencies
 
