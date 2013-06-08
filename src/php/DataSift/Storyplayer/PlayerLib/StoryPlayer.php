@@ -149,10 +149,6 @@ class StoryPlayer
 		8 => self::TEARDOWN_FAIL
 	);
 
-	// What type of stages
-	protected $expectedSetupTypes = array("template", "test");
-
-
 	public function createContext(stdClass $staticConfig, stdClass $runtimeConfig, $envName, Story $story)
 	{
 		// create our context, which is just a container
@@ -367,35 +363,6 @@ class StoryPlayer
 	// TEST ENVIRONMENT SETUP / TEAR-DOWN SUPPORT
 	//
 	// --------------------------------------------------------------------
-	
-	protected function getPossibleCallbacksForStage($stage)
-	{
-
-		$getMethod = 'get'.$stage;
-		$hasMethod = 'has'.$stage;
-
-		$callbacksToExecute = array();
-
-		// first, is it based on a template?
-		if ($story->hasTemplate())
-		{
-			$callbacksToExecute["template"] = $story->getTemplate()->{$getMethod}();
-		}
-
-		if ($story->{$hasMethod}())
-		{
-			$callbacksToExecute["test"] = $story->{$getMethod}();
-		}
-
-		foreach ($expectedSetupTypes as $type)
-		{
-			if (!isset($callbacksToExecute[$type])){
-				Log::write(Log::LOG_INFO, "story has no {$type} environment setup instructions");
-			}
-		}
-
-		return $callbacksToExecute;
-	}
 
 	public function doTestEnvironmentSetup(StoryTeller $st, stdClass $staticConfig)
 	{
@@ -408,6 +375,16 @@ class StoryPlayer
 		// what are we doing?
 		$this->announcePhase('Setup test environment');
 
+		// do we have anything to do?
+		if (!$story->hasTestEnvironmentSetup())
+		{
+			Log::write(Log::LOG_INFO, "story has no test environment setup instructions");
+
+			// as far as the rest of the test is concerned, the setup was
+			// a success
+			return $return;
+		}
+
 		// should we do this stage?
 		if (!$this->shouldExecutePhase('TestEnvironmentSetup', $staticConfig)) {
 			Log::write(Log::LOG_INFO, "test environment setup is disabled; skipping");
@@ -417,34 +394,21 @@ class StoryPlayer
 			return $return;
 		}
 
-		$callbacksToExecute = $this->getPossibleCallbacksForStage("TestEnvironmentSetup");
+		// get the callback to call
+		$callback = $story->getTestEnvironmentSetup();
 
-		if (!count($callbacksToExecute)){
-			// if we have nothing to do, time to exit
-			return;
+		// make the call
+		try {
+			$st->setCurrentPhase(self::PHASE_TESTENVIRONMENTSETUP);
+			$callback($st);
+		}
+		catch (Exception $e) {
+			Log::write(Log::LOG_CRITICAL, "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString());
+			$return = self::SETUP_FAIL;
 		}
 
-		$st->setCurrentPhase(self::PHASE_TESTENVIRONMENTSETUP);
-
-		// run each of our functions
-		foreach ($callbacksToExecute as $type => $callback){
-			if (!isset($this->expectedSetupTypes[$type])){
-				Log::write(Log::LOG_WARNING, "unexpected callback type found: '{$type}'");
-				continue;
-			}
-
-			// make the call
-			try {
-				$callback($st);
-			}
-			catch (Exception $e) {
-				Log::write(Log::LOG_CRITICAL, "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString());
-				$return = self::SETUP_FAIL;
-			}
-
-			// close off any open log actions
-			$st->closeAllOpenActions();
-		}
+		// close off any open log actions
+		$st->closeAllOpenActions();
 
 		// all done
 		return $return;
