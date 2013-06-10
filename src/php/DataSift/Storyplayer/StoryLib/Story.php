@@ -461,7 +461,6 @@ class Story
 	public function basedOn(StoryTemplate $tmpl)
 	{
 		$tmpl->setStory($this);
-		$this->storyTemplate = $tmpl;
 
 		// Add all of the steps
 		$this->addTestEnvironmentSetup($tmpl->getTestEnvironmentSetup());
@@ -478,31 +477,6 @@ class Story
 
 		// Return $this for a fluent interface
 		return $this;
-	}
-
-	/**
-	 * do we have a template class set?
-	 *
-	 * @return boolean true if there is a template specified
-	 */
-	public function hasTemplate()
-	{
-		return isset($this->storyTemplate) && ($this->storyTemplate instanceof StoryTemplate);
-	}
-
-	/**
-	 * get the template we're using
-	 *
-	 * @return StoryTemplate|null The template we're using
-	 */
-	public function getTemplate()
-	{
-		if ($this->hasTemplate())
-		{
-			return $this->storyTemplate;
-		}
-
-		return null;
 	}
 
 	/**
