@@ -394,13 +394,15 @@ class StoryPlayer
 			return $return;
 		}
 
-		// get the callback to call
-		$callback = $story->getTestEnvironmentSetup();
+		// get the callbacks to call
+		$callbacks = $story->getTestEnvironmentSetup();
 
 		// make the call
 		try {
 			$st->setCurrentPhase(self::PHASE_TESTENVIRONMENTSETUP);
-			$callback($st);
+			foreach ($callbacks as $callback){
+				$callback($st);
+			}
 		}
 		catch (Exception $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString());
@@ -436,12 +438,14 @@ class StoryPlayer
 		}
 
 		// get the callback to call
-		$callback = $story->getTestEnvironmentTeardown();
+		$callbacks = $story->getTestEnvironmentTeardown();
 
 		// make the call
 		try {
 			$st->setCurrentPhase(self::PHASE_TESTENVIRONMENTTEARDOWN);
-			$callback($st);
+			foreach ($callbacks as $callback){
+				$callback($st);
+			}
 		}
 		catch (Exception $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to complete test environment teardown; " . (string)$e . "\n" . $e->getTraceAsString());
@@ -494,11 +498,13 @@ class StoryPlayer
 		$this->doPerPhaseSetup($st);
 
 		// get the callback to call
-		$callback = $story->getTestSetup();
+		$callbacks = $story->getTestSetup();
 
 		// make the call
 		try {
-			$callback($st);
+			foreach ($callbacks as $callback) {
+				$callback($st);
+			}
 		}
 		catch (Exception $e)
 		{
@@ -538,12 +544,14 @@ class StoryPlayer
 		}
 
 		// get the callback to call
-		$callback = $story->getTestTeardown();
+		$callbacks = $story->getTestTeardown();
 
 		// make the call
 		try {
 			$st->setCurrentPhase(self::PHASE_TESTTEARDOWN);
-			$callback($st);
+			foreach ($callbacks as $callback) {
+				$callback($st);
+			}
 		}
 		catch (Exception $e)
 		{
@@ -577,10 +585,12 @@ class StoryPlayer
 		}
 
 		// get the callback to call
-		$callback = $story->getPerPhaseSetup();
+		$callbacks = $story->getPerPhaseSetup();
 
 		// make the call
-		$callback($st);
+		foreach ($callbacks as $callback) {
+			$callback($st);
+		}
 
 		// all done
 	}
@@ -597,10 +607,12 @@ class StoryPlayer
 		}
 
 		// get the callback to call
-		$callback = $story->getPerPhaseTeardown();
+		$callbacks = $story->getPerPhaseTeardown();
 
 		// make the call
-		$callback($st);
+		foreach ($callbacks as $callback) {
+			$callback($st);
+		}
 
 		// all done
 	}
@@ -643,9 +655,12 @@ class StoryPlayer
 
 			// make the call
 			$story = $st->getStory();
-			$callback = $story->getPreTestPrediction();
-			if (is_callable($callback)) {
-				$callback($st);
+			$callbacks = $story->getPreTestPrediction();
+
+			foreach ($callbacks as $callback) {
+				if (is_callable($callback)) {
+					$callback($st);
+				}
 			}
 		}
 		// in any of the expects() calls in the preflight checks fails,
@@ -716,8 +731,10 @@ class StoryPlayer
 
 			// if the callback exists, use it
 			$story = $st->getStory();
-			$callback = $story->getPreTestInspection();
-			$callback($st);
+			$callbacks = $story->getPreTestInspection();
+			foreach ($callbacks as $callback) {
+				$callback($st);
+			}
 		}
 		catch (Exception $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to perform pre-test inspection; " . (string)$e . "\n" . $e->getTraceAsString());
@@ -850,9 +867,11 @@ class StoryPlayer
 
 			// make the call
 			$story = $st->getStory();
-			$callback = $story->getPostTestInspection();
-			if (is_callable($callback)) {
-				$callback($st);
+			$callbacks = $story->getPostTestInspection();
+			foreach ($callbacks as $callback) {
+				if (is_callable($callback)) {
+					$callback($st);
+				}
 			}
 		}
 		catch (E5xx_ActionFailed $e) {
@@ -894,8 +913,13 @@ class StoryPlayer
 		}
 
 		Log::write(Log::LOG_DEBUG, 'Applying role changes to context');
-		$callback = $story->getRoleChanges();
-		return $callback($st);
+		$callbacks = $story->getRoleChanges();
+
+		// This used to return $callback($st)
+		// @TODO Work out where it's passed to and if we need to continue returning it
+		foreach ($callbacks as $callback) {
+			$callback($st);
+		}
 	}
 
 	public function announceStory(StoryTeller $st)

@@ -44,7 +44,7 @@
 namespace DataSift\Storyplayer\StoryLib;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\EnvironmentSetup;
+use DataSift\Storyplayer\PlayerLib\StoryTemplate;
 
 /**
  * Object that represents a single story
@@ -100,74 +100,74 @@ class Story
 	/**
 	 * the function that provides any (optional) environment setup work
 	 *
-	 * @var callable
+	 * @var array
 	 */
-	protected $testEnvironmentSetupCallback;
+	protected $testEnvironmentSetupCallback = array();
 
 	/**
 	 * the function that provides any story-specific setup work
 	 *
-	 * @var callable
+	 * @var array
 	 */
-	protected $testSetupCallback;
+	protected $testSetupCallback = array();
 
 	/**
 	 * the function that provides any story-specific teardown action
-	 * @var callable
+	 * @var array
 	 */
-	protected $testTeardownCallback;
+	protected $testTeardownCallback = array();
 
 	/**
 	 * the function that provides any (optional) environment teardown action
-	 * @var callable
+	 * @var array
 	 */
-	protected $testEnvironmentTeardownCallback;
+	protected $testEnvironmentTeardownCallback = array();
 
 	/**
 	 * the function that provides any story-specific setup work that
 	 * happens before each phase of the test
-	 * @var callable
+	 * @var array
 	 */
-	protected $perPhaseSetupCallback;
+	protected $perPhaseSetupCallback = array();
 
 	/**
 	 * the function that provides any story-specific teardown work that
 	 * happens at the end of each phase of the test
-	 * @var callable
+	 * @var array
 	 */
-	protected $perPhaseTeardownCallback;
+	protected $perPhaseTeardownCallback = array();
 
 	/**
 	 * the function that provides information about how this story has
 	 * changed the state of the system or user
 	 *
-	 * @var callable
+	 * @var array
 	 */
-	protected $roleChangesCallback;
+	protected $roleChangesCallback = array();
 
 	/**
 	 * the callback that dynamically determines in advance whether the
 	 * story actions should succeed or fail
 	 *
-	 * @var callable
+	 * @var array
 	 */
-	protected $preTestPredictionCallback;
+	protected $preTestPredictionCallback = array();
 
 	/**
 	 * the callback that dynamically determines afterwards whether or not
 	 * the story actions actually did succeed
 	 *
-	 * @var callable
+	 * @var array
 	 */
-	protected $reportTestResultsCallback;
+	protected $reportTestResultsCallback = array();
 
 	/**
 	 * the callback used to remember the state of the system *before*
 	 * the action occurs
 	 *
-	 * @var callable
+	 * @var array
 	 */
-	protected $preTestInspectionCallback;
+	protected $preTestInspectionCallback = array();
 
 	/**
 	 * the actions that execute the story on behalf of the user
@@ -442,12 +442,12 @@ class Story
 	 */
 	public function hasRoleChanges()
 	{
-		return (is_callable($this->roleChangesCallback));
+		return count($this->roleChangesCallback) > 0;
 	}
 
 	public function setRoleChanges($newCallback)
 	{
-		$this->roleChangesCallback = $newCallback;
+		$this->roleChangesCallback = array($newCallback);
 	}
 
 	// ====================================================================
@@ -461,7 +461,7 @@ class Story
 	 *
 	 * @return void
 	 */
-	public function isBasedOn(StoryTemplate $tmpl)
+	public function basedOn(StoryTemplate $tmpl)
 	{
 		$tmpl->setStory($this);
 		$this->storyTemplate = $tmpl;
@@ -509,12 +509,12 @@ class Story
 	 */
 	public function hasTestEnvironmentSetup()
 	{
-		return (is_callable($this->testEnvironmentSetupCallback));
+		return count($this->testEnvironmentSetupCallback) > 0;
 	}
 
 	public function setTestEnvironmentSetup($newCallback)
 	{
-		$this->testEnvironmentSetupCallback = $newCallback;
+		$this->testEnvironmentSetupCallback = array($newCallback);
 	}
 
 	/**
@@ -534,12 +534,12 @@ class Story
 	 */
 	public function hasTestEnvironmentTeardown()
 	{
-		return (is_callable($this->testEnvironmentTeardownCallback));
+		return count($this->testEnvironmentTeardownCallback) > 0;
 	}
 
 	public function setTestEnvironmentTeardown($newCallback)
 	{
-		$this->testEnvironmentTeardownCallback = $newCallback;
+		$this->testEnvironmentTeardownCallback = array($newCallback);
 	}
 
 	// ====================================================================
@@ -565,12 +565,12 @@ class Story
 	 */
 	public function hasTestSetup()
 	{
-		return (is_callable($this->testSetupCallback));
+		return count($this->testSetupCallback) > 0;
 	}
 
 	public function setTestSetup($newCallback)
 	{
-		$this->testSetupCallback = $newCallback;
+		$this->testSetupCallback = array($newCallback);
 	}
 
 	/**
@@ -590,13 +590,13 @@ class Story
 	 */
 	public function hasTestTeardown()
 	{
-		return (is_callable($this->testTeardownCallback));
+		return count($this->testTeardownCallback) > 0;
 	}
 
 
 	public function setTestTeardown($newCallback)
 	{
-		$this->testTeardownCallback = $newCallback;
+		$this->testTeardownCallback = array($newCallback);
 	}
 
 	// ====================================================================
@@ -622,13 +622,13 @@ class Story
 	 */
 	public function hasPerPhaseSetup()
 	{
-		return (is_callable($this->perPhaseSetupCallback));
+		return count($this->perPhaseSetupCallback) > 0;
 	}
 
 
 	public function setPerPhaseSetup($newCallback)
 	{
-		$this->perPhaseSetupCallback = $newCallback;
+		$this->perPhaseSetupCallback = array($newCallback);
 	}
 
 	/**
@@ -648,7 +648,7 @@ class Story
 	 */
 	public function hasPerPhaseTeardown()
 	{
-		return (is_callable($this->perPhaseTeardownCallback));
+		return count($this->perPhaseTeardownCallback) > 0;
 	}
 
 	public function setPerPhaseTeardown($newCallback)
@@ -679,12 +679,12 @@ class Story
 	 */
 	public function hasHints()
 	{
-		return (is_callable($this->hintsCallback));
+		return count($this->hintsCallback) > 0;
 	}
 
 	public function setHints($newCallback)
 	{
-		$this->hintsCallback = $newCallback;
+		$this->hintsCallback = array($newCallback);
 	}
 
 	// ====================================================================
@@ -709,12 +709,12 @@ class Story
 	 */
 	public function hasPreTestPrediction()
 	{
-		return is_callable($this->preTestPredictionCallback);
+		return count($this->preTestPredictionCallback) > 0;
 	}
 
 	public function setPreTestPrediction($newCallback)
 	{
-		$this->preTestPredictionCallback = $newCallback;
+		$this->preTestPredictionCallback = array($newCallback);
 	}
 
 	// ====================================================================
@@ -739,12 +739,12 @@ class Story
 	 */
 	public function hasPreTestInspection()
 	{
-		return is_callable($this->preTestInspectionCallback);
+		return count($this->preTestInspectionCallback) > 0;
 	}
 
 	public function setPreTestInspection($newCallback)
 	{
-		$this->preTestInspectionCallback = $newCallback;
+		$this->preTestInspectionCallback = array($newCallback);
 	}
 
 	// ====================================================================
@@ -811,12 +811,12 @@ class Story
 
 	public function hasPostTestInspection()
 	{
-		return is_callable($this->postTestInspectionCallback);
+		return count($this->postTestInspectionCallback) > 0;
 	}
 
 	public function setPostTestInspection($newCallback)
 	{
-		$this->postTestInspectionCallback = $newCallback;
+		$this->postTestInspectionCallback = array($newCallback);
 	}
 
 	// ====================================================================
