@@ -80,13 +80,27 @@ abstract class StoryTemplate
 	 * Set up our (optional) phases
 	 */
 
-
 	public function testEnvironmentSetup(StoryTeller $st)
+	{
+
+	}
+
+	public function testSetup(StoryTeller $st)
 	{
 	
 	}
 
-	public function testSetup(StoryTeller $st)
+	public function perPhaseSetup(StoryTeller $st)
+	{
+	
+	}
+
+	public function perPhaseTeardown(StoryTeller $st)
+	{
+	
+	}
+
+	public function hints(StoryTeller $st)
 	{
 	
 	}
@@ -128,42 +142,57 @@ abstract class StoryTemplate
 
 	public function getTestEnvironmentSetup()
 	{
-		return $this->testEnvironmentSetup;
+		return array($this, 'testEnvironmentSetup');
 	}
 
 	public function getTestSetup()
 	{
-		return $this->testSetup;
+		return array($this, 'testSetup');
+	}
+
+	public function getPerPhaseSetup()
+	{
+		return array($this, 'perPhaseSetup');
+	}
+
+	public function getPerPhaseTeardown()
+	{
+		return array($this, 'perPhaseTeardown');
+	}
+
+	public function getHints()
+	{
+		return array($this, 'hints');
 	}
 
 	public function getPreTestPrediction()
 	{
-		return $this->preTestPrediction;
+		return array($this, 'preTestPrediction');
 	}
 
 	public function getPreTestInspection()
 	{
-		return $this->preTestInspection;
+		return array($this, 'preTestInspection');
 	}
 
 	public function getAction()
 	{
-		return $this->action;
+		return array($this, 'action');
 	}
 
 	public function getPostTestInspection()
 	{
-		return $this->postTestInspection;
+		return array($this, 'postTestInspection');
 	}
 
 	public function getTestTeardown()
 	{
-		return $this->testTeardown;
+		return array($this, 'testTeardown');
 	}
 
 	public function getTestEnvironmentTeardown()
 	{
-		return $this->testEnvironmentTeardown;
+		return array($this, 'testEnvironmentTeardown');
 	}
 
 }

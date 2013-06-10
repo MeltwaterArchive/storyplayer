@@ -188,6 +188,9 @@ class StoryPlayer
 
 	public function play(StoryTeller $st, stdClass $staticConfig)
 	{
+		// set default callbacks up
+		$st->getStory()->setDefaultCallbacks();
+
 		// keep track of how each phase goes
 		$result = new StoryResult($st->getStory());
 

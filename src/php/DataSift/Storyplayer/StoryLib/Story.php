@@ -196,9 +196,6 @@ class Story
 	{
 		// assume we are testing a website
 		// $this->setUsesTheWebBrowser();
-
-		// set default callbacks up
-		$this->setDefaultCallbacks();
 	}
 
 	public function inGroup($groupName)
@@ -465,6 +462,22 @@ class Story
 	{
 		$tmpl->setStory($this);
 		$this->storyTemplate = $tmpl;
+
+		// Add all of the steps
+		$this->addTestEnvironmentSetup($tmpl->getTestEnvironmentSetup());
+		$this->addTestEnvironmentTeardown($tmpl->getTestEnvironmentTeardown());
+		$this->addTestSetup($tmpl->getTestSetup());
+		$this->addTestTeardown($tmpl->getTestTeardown());
+		$this->addPerPhaseSetup($tmpl->getPerPhaseSetup());
+		$this->addPerPhaseTeardown($tmpl->getPerPhaseTeardown());
+		$this->addHints($tmpl->getHints());
+		$this->addPreTestPrediction($tmpl->getPreTestPrediction());
+		$this->addPreTestInspection($tmpl->getPreTestInspection());
+		$this->addAction($tmpl->getAction());
+		$this->addPostTestInspection($tmpl->getPostTestInspection());
+
+		// Return $this for a fluent interface
+		return $this;
 	}
 
 	/**
@@ -474,7 +487,7 @@ class Story
 	 */
 	public function hasTemplate()
 	{
-		return isset($this->storyTemplate);
+		return isset($this->storyTemplate) && ($this->storyTemplate instanceof StoryTemplate);
 	}
 
 	/**
@@ -484,7 +497,7 @@ class Story
 	 */
 	public function getTemplate()
 	{
-		if (isset($this->storyTemplate))
+		if ($this->hasTemplate())
 		{
 			return $this->storyTemplate;
 		}
@@ -517,6 +530,11 @@ class Story
 		$this->testEnvironmentSetupCallback = array($newCallback);
 	}
 
+	public function addTestEnvironmentSetup($newCallback)
+	{
+		$this->testEnvironmentSetupCallback[] = $newCallback;
+	}
+
 	/**
 	 * get the callback for per-environment teardown work
 	 *
@@ -540,6 +558,11 @@ class Story
 	public function setTestEnvironmentTeardown($newCallback)
 	{
 		$this->testEnvironmentTeardownCallback = array($newCallback);
+	}
+
+	public function addTestEnvironmentTeardown($newCallback)
+	{
+		$this->testEnvironmentTeardownCallback[] = $newCallback;
 	}
 
 	// ====================================================================
@@ -573,6 +596,11 @@ class Story
 		$this->testSetupCallback = array($newCallback);
 	}
 
+	public function addTestSetup($newCallback)
+	{
+		$this->testSetupCallback[] = $newCallback;
+	}
+
 	/**
 	 * get the callback for post-story teardown work
 	 *
@@ -597,6 +625,11 @@ class Story
 	public function setTestTeardown($newCallback)
 	{
 		$this->testTeardownCallback = array($newCallback);
+	}
+
+	public function addTestTeardown($newCallback)
+	{
+		$this->testTeardownCallback[] = $newCallback;
 	}
 
 	// ====================================================================
@@ -631,6 +664,11 @@ class Story
 		$this->perPhaseSetupCallback = array($newCallback);
 	}
 
+	public function addPerPhaseSetup($newCallback)
+	{
+		$this->perPhaseSetupCallback[] = $newCallback;
+	}
+
 	/**
 	 * get the callback for per-phase teardown work
 	 *
@@ -653,7 +691,12 @@ class Story
 
 	public function setPerPhaseTeardown($newCallback)
 	{
-		$this->perPhaseTeardownCallback = $newCallback;
+		$this->perPhaseTeardownCallback = array($newCallback);
+	}
+
+	public function addPerPhaseTeardown($newCallback)
+	{
+		$this->perPhaseTeardownCallback[] = $newCallback;
 	}
 
 	// ====================================================================
@@ -687,6 +730,11 @@ class Story
 		$this->hintsCallback = array($newCallback);
 	}
 
+	public function addHints($newCallback)
+	{
+		$this->hintsCallback[] = $newCallback;
+	}
+
 	// ====================================================================
 	//
 	// Before and after tests
@@ -717,6 +765,11 @@ class Story
 		$this->preTestPredictionCallback = array($newCallback);
 	}
 
+	public function addPreTestPrediction($newCallback)
+	{
+		$this->preTestPredictionCallback[] = $newCallback;
+	}
+
 	// ====================================================================
 	//
 	// Checkpoint the relevant system state before actions occur
@@ -745,6 +798,11 @@ class Story
 	public function setPreTestInspection($newCallback)
 	{
 		$this->preTestInspectionCallback = array($newCallback);
+	}
+
+	public function addPreTestInspection($newCallback)
+	{
+		$this->preTestInspectionCallback[] = $newCallback;
 	}
 
 	// ====================================================================
@@ -819,6 +877,11 @@ class Story
 		$this->postTestInspectionCallback = array($newCallback);
 	}
 
+	public function addPostTestInspection($newCallback)
+	{
+		$this->postTestInspectionCallback[] = $newCallback;
+	}
+
 	// ====================================================================
 	//
 	// Our default behaviour when the story object is instantiated
@@ -828,24 +891,32 @@ class Story
 	public function setDefaultCallbacks()
 	{
 		// 1: environment setup
-		$this->setTestEnvironmentSetup(function(StoryTeller $st) {
-			$st->usingReporting()->reportNotRequired();
-		});
+		if (!$this->hasTestEnvironmentSetup()) {
+			$this->addTestEnvironmentSetup(function(StoryTeller $st) {
+				$st->usingReporting()->reportNotRequired();
+			});
+		}
 
 		// 2: test setup
-		$this->setTestSetup(function(StoryTeller $st) {
-			$st->usingReporting()->reportNotRequired();
-		});
+		if (!$this->hasTestSetup()) {
+			$this->addTestSetup(function(StoryTeller $st) {
+				$st->usingReporting()->reportNotRequired();
+			});
+		}
 
 		// 3: pre-test prediction
-		$this->setPreTestPrediction(function(StoryTeller $st) {
-			$st->usingReporting()->reportShouldAlwaysSucceed();
-		});
+		if (!$this->hasPreTestPrediction()) {
+			$this->addPreTestPrediction(function(StoryTeller $st) {
+				$st->usingReporting()->reportShouldAlwaysSucceed();
+			});
+		}
 
 		// 4: pre-test inspection
-		$this->setPreTestInspection(function(StoryTeller $st) {
-			$st->usingReporting()->reportNotRequired();
-		});
+		if (!$this->hasPreTestInspection()) {
+			$this->addPreTestInspection(function(StoryTeller $st) {
+				$st->usingReporting()->reportNotRequired();
+			});
+		}
 
 		// 5: test action
 		//
