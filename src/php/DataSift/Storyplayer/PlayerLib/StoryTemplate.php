@@ -77,68 +77,65 @@ abstract class StoryTemplate
 	abstract public function getName();
 
 	/**
-	 * Set up our (optional) phases
-	 */
-
-	public function testEnvironmentSetup(StoryTeller $st)
-	{
-
-	}
-
-	public function testSetup(StoryTeller $st)
-	{
-	
-	}
-
-	public function perPhaseSetup(StoryTeller $st)
-	{
-	
-	}
-
-	public function perPhaseTeardown(StoryTeller $st)
-	{
-	
-	}
-
-	public function hints(StoryTeller $st)
-	{
-	
-	}
-
-	public function preTestPrediction(StoryTeller $st)
-	{
-	
-	}
-
-	public function preTestInspection(StoryTeller $st)
-	{
-	
-	}
-
-	public function action(StoryTeller $st)
-	{
-	
-	}
-
-	public function postTestInspection(StoryTeller $st)
-	{
-	
-	}
-
-	public function testTeardown(StoryTeller $st)
-	{
-	
-	}
-
-	public function testEnvironmentTeardown(StoryTeller $st)
-	{
-	
-	}
-
-
-	/**
 	 * Helper methods to keep the Templates API in line with the phases
 	 */
+
+	public function hasTestEnvironmentSetup()
+	{
+		return method_exists($this, 'testEnvironmentSetup');
+	}
+
+	public function hasTestSetup()
+	{
+		return method_exists($this, 'testSetup');
+	}
+
+	public function hasPerPhaseSetup()
+	{
+		return method_exists($this, 'perPhaseSetup');
+	}
+
+	public function hasPerPhaseTeardown()
+	{
+		return method_exists($this, 'perPhaseTeardown');
+	}
+
+	public function hasHints()
+	{
+		return method_exists($this, 'hints');
+	}
+
+	public function hasPreTestPrediction()
+	{
+		return method_exists($this, 'preTestPrediction');
+	}
+
+	public function hasPreTestInspection()
+	{
+		return method_exists($this, 'preTestInspection');
+	}
+
+	public function hasAction()
+	{
+		return method_exists($this, 'action');
+	}
+
+	public function hasPostTestInspection()
+	{
+		return method_exists($this, 'postTestInspection');
+	}
+
+	public function hasTestTeardown()
+	{
+		return method_exists($this, 'testTeardown');
+	}
+
+	public function hasTestEnvironmentTeardown()
+	{
+		return method_exists($this, 'testEnvironmentTeardown');
+	}
+	
+
 
 	public function getTestEnvironmentSetup()
 	{

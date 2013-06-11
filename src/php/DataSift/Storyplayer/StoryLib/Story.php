@@ -462,18 +462,17 @@ class Story
 	{
 		$tmpl->setStory($this);
 
-		// Add all of the steps
-		$this->addTestEnvironmentSetup($tmpl->getTestEnvironmentSetup());
-		$this->addTestEnvironmentTeardown($tmpl->getTestEnvironmentTeardown());
-		$this->addTestSetup($tmpl->getTestSetup());
-		$this->addTestTeardown($tmpl->getTestTeardown());
-		$this->addPerPhaseSetup($tmpl->getPerPhaseSetup());
-		$this->addPerPhaseTeardown($tmpl->getPerPhaseTeardown());
-		$this->addHints($tmpl->getHints());
-		$this->addPreTestPrediction($tmpl->getPreTestPrediction());
-		$this->addPreTestInspection($tmpl->getPreTestInspection());
-		$this->addAction($tmpl->getAction());
-		$this->addPostTestInspection($tmpl->getPostTestInspection());
+		$tmpl->hasTestEnvironmentSetup()    && $this->addTestEnvironmentSetup($tmpl->getTestEnvironmentSetup());
+		$tmpl->hasTestEnvironmentTeardown() && $this->addTestEnvironmentTeardown($tmpl->getTestEnvironmentTeardown());
+		$tmpl->hasTestSetup()               && $this->addTestSetup($tmpl->getTestSetup());
+		$tmpl->hasTestTeardown()            && $this->addTestTeardown($tmpl->getTestTeardown());
+		$tmpl->hasPerPhaseSetup()           && $this->addPerPhaseSetup($tmpl->getPerPhaseSetup());
+		$tmpl->hasPerPhaseTeardown()        && $this->addPerPhaseTeardown($tmpl->getPerPhaseTeardown());
+		$tmpl->hasHints()                   && $this->addHints($tmpl->getHints());
+		$tmpl->hasPreTestPrediction()       && $this->addPreTestPrediction($tmpl->getPreTestPrediction());
+		$tmpl->hasPreTestInspection()       && $this->addPreTestInspection($tmpl->getPreTestInspection());
+		$tmpl->hasAction()                  && $this->addAction($tmpl->getAction());
+		$tmpl->hasPostTestInspection()      && $this->addPostTestInspection($tmpl->getPostTestInspection());
 
 		// Return $this for a fluent interface
 		return $this;
