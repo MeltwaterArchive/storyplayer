@@ -114,9 +114,9 @@ class HostsTableActions extends Prose
 
 		// make sure we have a hosts table
 		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
+			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
 			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
+			return;
 		}
 
 		// make sure we have an entry to remove
