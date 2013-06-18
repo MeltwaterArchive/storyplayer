@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\DataLib\DataPrinter;
 
 /**
@@ -57,12 +58,24 @@ use DataSift\Stone\DataLib\DataPrinter;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class YamlActions extends Prose
+class YamlFileActions extends Prose
 {
-	public function writeToFile($filename, $params)
+	public function __construct(StoryTeller $st, $args)
+	{
+		// call our parent constructor
+		parent::__construct($st, $args);
+
+		// $args[0] will be our filename
+		if (!isset($args[0])) {
+			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name of the file to work with");
+		}
+	}
+
+	public function writeDataToFile($params)
 	{
 		// shorthand
 		$st = $this->st;
+		$filename = $this->args[0];
 
 		// what are we doing?
 		$printer = new DataPrinter();
@@ -71,7 +84,7 @@ class YamlActions extends Prose
 
 		// create the YAML data
 		$yamlData = yaml_emit($params);
-		if (!is_string($yamlData) || strlen($yamlData < 6)) {
+		if (!is_string($yamlData) || strlen($yamlData) < 6) {
 			throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
 		}
 
