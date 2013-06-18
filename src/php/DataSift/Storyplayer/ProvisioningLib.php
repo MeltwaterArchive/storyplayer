@@ -34,18 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/ProvisioningLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer;
+
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * provisioning adapter factory
  *
  * @category  Libraries
  * @package   Storyplayer/HostLib
@@ -54,16 +55,22 @@ namespace DataSift\Storyplayer\HostLib;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class ProvisioningLib
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	static public function getProvisioner($st, $type)
+	{
+		// what are we looking for?
+		$className = 'DataSift\Storyplayer\ProvisioningLib\Provisioners\\' . ucfirst($type) . 'Provisioner';
+
+		// does it exist?
+		if (!class_exists($className)) {
+			throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' to use for provisioning via '{$type}'");
+		}
+
+		// create the adapter
+		$adapter = new $className($st);
+
+		// all done
+		return $adapter;
+	}
 }
