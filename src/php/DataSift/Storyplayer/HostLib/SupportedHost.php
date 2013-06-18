@@ -56,7 +56,7 @@ namespace DataSift\Storyplayer\HostLib;
  */
 interface SupportedHost
 {
-	public function createHost($hostDetails, $provisioningVars = array());
+	public function createHost($hostDetails);
 	public function destroyHost($hostDetails);
 	public function startHost($hostDetails);
 	public function stopHost($hostDetails);
