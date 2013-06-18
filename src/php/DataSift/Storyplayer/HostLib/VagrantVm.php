@@ -355,7 +355,7 @@ class VagrantVm implements SupportedHost
 		$log = $st->startAction("determine status of Vagrant VM '{$vmDetails->name}'");
 
 		// if the box is running, it should have a status of 'running'
-		$command = "vagrant status | grep default | awk '{print \$2'}";
+		$command = "vagrant status | grep default | head -n 1 | awk '{print \$2'}";
 		$result  = $this->runCommandAgainstHostManager($vmDetails, $command);
 
 		if ($result->output != 'running') {
