@@ -123,7 +123,7 @@ class HostsTableActions extends Prose
 		if (!isset($runtimeConfig->hosts->$hostName)) {
 			$msg = "Table does not contain an entry for '{$hostName}'";
 			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
+			return;
 		}
 
 		// remove the entry
