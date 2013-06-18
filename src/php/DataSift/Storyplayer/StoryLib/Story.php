@@ -194,8 +194,7 @@ class Story
 
 	public function __construct()
 	{
-		// assume we are testing a website
-		// $this->setUsesTheWebBrowser();
+		// currently does nothing
 	}
 
 	public function inGroup($groupName)
@@ -905,14 +904,20 @@ class Story
 		// this
 
 		// 7: test tear down
-		$this->setTestEnvironmentSetup(function(StoryTeller $st) {
-			$st->usingReporting()->reportNotRequired();
-		});
+		if (!$this->hasTestTeardown()) {
+			$this->addTestTeardown(function(StoryTeller $st) {
+				$st->usingReporting()->reportNotRequired();
+			});
+		}
 
 		// 8: environment teardown
-		$this->setTestEnvironmentTeardown(function(StoryTeller $st) {
-			$st->usingReporting()->reportNotRequired();
-		});
+		if (!$this->hasTestEnvironmentTeardown()) {
+			$this->addTestEnvironmentTeardown(function(StoryTeller $st) {
+				$st->usingReporting()->reportNotRequired();
+			});
+		}
+
+		// all done
 	}
 
 	// ====================================================================
