@@ -69,7 +69,7 @@ class VagrantActions extends Prose
 		parent::__construct($st, $args);
 	}
 
-	public function createVm($vmName, $osName, $homeFolder, $provisioningVars = array())
+	public function createVm($vmName, $osName, $homeFolder)
 	{
 		// shorthand
 		$st = $this->st;
@@ -92,7 +92,7 @@ class VagrantActions extends Prose
 		$host = new VagrantVm($this->st);
 
 		// create our virtual machine
-		$host->createHost($vmDetails, $provisioningVars);
+		$host->createHost($vmDetails);
 
 		// all done
 		$log->endAction();
