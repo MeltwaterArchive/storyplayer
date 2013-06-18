@@ -110,10 +110,6 @@ class VagrantVm implements SupportedHost
 		// remove any existing hosts table entry
 		$st->usingHostsTable()->removeHost($vmDetails->name);
 
-		// write out the playbook variables, so that we can tailor our
-		// VM to suit this test
-		$this->writeProvisioningVars($provisioningVars);
-
 		// let's start the VM
 		$command = "cd '{$pathToHomeFolder}' && vagrant up";
 		$retVal = 1;
