@@ -34,36 +34,69 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Prose;
+
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * Support for working with YAML files
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class YamlFileActions extends Prose
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	public function __construct(StoryTeller $st, $args)
+	{
+		// call our parent constructor
+		parent::__construct($st, $args);
+
+		// $args[0] will be our filename
+		if (!isset($args[0])) {
+			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name of the file to work with");
+		}
+	}
+
+	public function writeDataToFile($params)
+	{
+		// shorthand
+		$st = $this->st;
+		$filename = $this->args[0];
+
+		// what are we doing?
+		$printer = new DataPrinter();
+		$logParams = $printer->convertToString($params);
+		$log = $st->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
+
+		// create the YAML data
+		$yamlData = yaml_emit($params);
+		if (!is_string($yamlData) || strlen($yamlData) < 6) {
+			throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
+		}
+
+		// write the file
+		//
+		// the loose FALSE test here is exactly what we want, because we want to catch
+		// both the situation when the write fails, and when there's zero bytes written
+		if (!file_put_contents($filename, $yamlData)) {
+			throw new E5xx_ActionFailed(__METHOD__, "unable to write file '{$filename}'");
+		}
+
+		// all done
+		$log->endAction();
+	}
 }

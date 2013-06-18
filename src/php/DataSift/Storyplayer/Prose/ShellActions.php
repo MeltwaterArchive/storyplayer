@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
@@ -60,6 +61,25 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class ShellActions extends Prose
 {
+	public function runCommand($command)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("run command: {$command}");
+
+		// run the command
+		$returnCode = null;
+		$output = system($command, $returnCode);
+
+		// all done
+		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
+
+		$return = new CommandResult($returnCode, $output);
+		return $return;
+	}
+
 	public function startInScreen($screenName, $commandLine)
 	{
 		// shorthand
