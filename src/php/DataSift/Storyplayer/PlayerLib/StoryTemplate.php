@@ -59,9 +59,9 @@ abstract class StoryTemplate
 	protected $story;
 	protected $vmParams;
 
-	public function __construct($vmParams = array())
+	public function __construct($params = array())
 	{
-		$this->vmParams = $vmParams;
+		$this->params = $params;
 	}
 
 	public function setStory(Story $story)
@@ -69,9 +69,9 @@ abstract class StoryTemplate
 		$this->story = $story;
 	}
 
-	public function getVmParams($additionalParams)
+	public function getParams($additionalParams = array())
 	{
-		return $this->vmParams + $additionalParams;
+		return $this->params + $additionalParams;
 	}
 
 	abstract public function getName();
@@ -134,7 +134,7 @@ abstract class StoryTemplate
 	{
 		return method_exists($this, 'testEnvironmentTeardown');
 	}
-	
+
 
 
 	public function getTestEnvironmentSetup()
