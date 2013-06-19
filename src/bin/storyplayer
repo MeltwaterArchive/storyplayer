@@ -33,7 +33,7 @@ define('APP_BINDIR', __DIR__);
 // work out where the local source code might be
 $localSrcDir = '';
 $localSrcDirs = array(
-	__DIR__ . '/../../src/php',
+	realpath(__DIR__ . '/../../src/php'),
 	getcwd() . '/src/php',
 	getcwd() . '/php'
 );
