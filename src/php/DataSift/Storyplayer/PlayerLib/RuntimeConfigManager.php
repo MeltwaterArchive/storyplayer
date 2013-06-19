@@ -68,7 +68,7 @@ class RuntimeConfigManager
 		// do we have a configDir remembered yet?
 		if (!$configDir)
 		{
-			$configDir = getenv("HOME") . '/.storyteller';
+			$configDir = getenv("HOME") . '/.storyplayer';
 		}
 
 		return $configDir;
