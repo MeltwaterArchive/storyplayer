@@ -182,7 +182,7 @@ class HostDetermine extends HostBase
 		$st = $this->st;
 
 		// log some info to the user
-		$log = $st->startAction("get id of process '{$processName}' running on VM '{$this->boxName}'");
+		$log = $st->startAction("get id of process '{$processName}' running on VM '{$this->hostDetails->name}'");
 
 		// make sure we have valid host details
 		$this->requireValidHostDetails(__METHOD__);
