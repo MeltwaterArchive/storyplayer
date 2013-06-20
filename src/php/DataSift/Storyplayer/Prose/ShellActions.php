@@ -105,8 +105,8 @@ class ShellActions extends Prose
 		$appData->screenName = $screenName . '_' . date('YmdHis');
 
 		// build up our command to run
-		$appData->commandLine = "screen -d -m -S " . $appData->screenName
-		         . ' bash -c "' . $commandLine . ' && sleep 5"';
+		$appData->commandLine = "screen -L -d -m -S " . $appData->screenName
+		         . ' bash -c "' . $commandLine . '"';
 
 		// run our command
 		//
