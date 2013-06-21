@@ -38,7 +38,7 @@ This action runs a `vagrant up` using the Vagrantfile in _$homeFolder_.  If your
 
 If the virtual machine was already running, it will be destroyed and re-created when you call _createVm()_.
 
-If the virtual machine starts successfully, we create an entry in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html), which then allows the [Host](../host/index.html) module to work with your virtual machine.
+If the virtual machine starts successfully, we create an entry in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html), which then allows the [Host](../host/index.html) and [Provisioning](../provisioning/index.html) modules to work with your virtual machine.
 
 ## destroyVm()
 

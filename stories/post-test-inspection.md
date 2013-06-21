@@ -2,7 +2,7 @@
 layout: stories
 title: Post-Test Inspection Phase
 prev: '<a href="../stories/action.html">Prev: Action Phase</a>'
-next: '<a href="../stories/test-users.html">Next: Test Users</a>'
+next: '<a href="../stories/story-templates.html">Next: Story Templates</a>'
 ---
 
 # Post-Test Inspection Phase

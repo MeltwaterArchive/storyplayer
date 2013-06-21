@@ -1,7 +1,7 @@
 ---
 layout: modules-savaged
 title: The SavageD Module
-prev: '<a href="../../modules/log/usingLog.html">Prev: usingLog()</a>'
+prev: '<a href="../../modules/provisioning/adding-more-engines.html">Prev: Adding Additional Provisioning Engines</a>'
 next: '<a href="../../modules/savaged/usingSavageD.html">Next: usingSavageD()</a>'
 ---
 
