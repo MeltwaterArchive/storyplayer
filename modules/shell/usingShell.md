@@ -20,6 +20,21 @@ Every action starts and stops processes on the same computer that Storyplayer is
 
 Write your story as if every action must succeed.
 
+## runCommand()
+
+Use _$st->usingShell()->runCommand()_ to run an arbitrary command on the same computer that Storyplayer is running on.
+
+{%highlight php %}
+$result = $st->usingShell()->runCommand($command);
+{% endhighlight %}
+
+where:
+
+* _$command_ is a UNIX command to run
+* _$result_ is a _CommandResult_ object containing both the command's return code, and the command's output
+
+This command is mostly for use by other modules (such as the _[Provisioning](../provisioning/index.html)_ module), but you're free to use it in your tests if you like.
+
 ## startInScreen()
 
 Use _$st->usingShell()->startInScreen()_ to start a process on the same computer that Storyplayer is running on.
