@@ -134,9 +134,10 @@ class TimerActions extends Prose
 		$now = time();
 		$end = $now + $seconds;
 
+		$log = $st->startAction("polling for up to '{$seconds}' seconds");
+
 		while ($now < $end) {
 			try {
-				$log = $st->startAction("polling");
 				$result = $callback($st);
 
 				// if we get here, the actions inside the callback
@@ -144,6 +145,7 @@ class TimerActions extends Prose
 				//
 				// that means whatever we're waiting for hasn't happened
 				// yet
+				$log->closeAllOpenSubActions();
 			}
 			catch (Exception $e) {
 				// the conditions have changed - we can go ahead now
@@ -165,6 +167,7 @@ class TimerActions extends Prose
 		}
 
 		// if we get here, then the timeout happened
+		$log->endAction();
 		throw new E5xx_ActionFailed('timer()->waitWhile()');
 	}
 
