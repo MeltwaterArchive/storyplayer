@@ -36,8 +36,10 @@
 		"prose/creating-prose-modules",
 		"prose/persisting-data",
 		"environments/index",
+		"environments/your-machine/index",
 		"environments/ec2/index",
 		"environments/openstack/index",
+		"environments/physical-hosts/index",
 		"environments/vagrant/index",
 		"modules/index",
 		"modules/assertions/index",
@@ -169,8 +171,10 @@
 		},
 		"Environments": {
 			"Introduction": "environments/index",
+			"On Your Own Machine": "environments/your-machine/index",
 			"Amazon EC2": "environments/ec2/index",
 			"OpenStack": "environments/openstack/index",
+			"Physical Hosts": "environments/physical-hosts/index",
 			"SauceLabs": "environments/saucelabs/index",
 			"Vagrant": "environments/vagrant/index"
 		},

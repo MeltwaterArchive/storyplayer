@@ -2,7 +2,7 @@
 layout: environments
 title: Test Environments
 prev: '<a href="../prose/persisting-data.html">Prev: Persisting Data Between Executions</a>'
-next: '<a href="../environments/ec2/index.html">Next: Creating Test Environments On Amazon EC2</a>'
+next: '<a href="../environments/your-machine/index.html">Next: </a>'
 ---
 
 # Test Environments
