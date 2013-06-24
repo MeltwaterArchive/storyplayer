@@ -1,7 +1,7 @@
 ---
 layout: environments-vagrant
 title: Creating Test Environments Using Vagrant
-prev: '<a href="../../environments/openstack/index.html">Prev: Creating Test Environments Using OpenStack</a>'
+prev: '<a href="../../environments/physical-hosts/index.html">Prev: </a>'
 next: '<a href="../../modules/index.html">Next: Storyplayer Modules</a>'
 ---
 
