@@ -57,7 +57,7 @@ use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class AnsibleProvisioner
+class AnsibleProvisioner extends Provisioner
 {
 	public function __construct(StoryTeller $st)
 	{
