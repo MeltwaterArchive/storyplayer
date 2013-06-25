@@ -1,7 +1,7 @@
 ---
 layout: prose
 title: Introducing Prose
-prev: '<a href="../stories/story-writing-tips.html">Prev: Story-Writing Tips</a>'
+prev: '<a href="../stories/tales.html">Prev: Tales</a>'
 next: '<a href="../prose/the-st-object.html">Next: The $st Object</a>'
 ---
 

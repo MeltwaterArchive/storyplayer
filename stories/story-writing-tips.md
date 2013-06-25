@@ -2,7 +2,7 @@
 layout: stories
 title: Story-Writing Tips
 prev: '<a href="../stories/soa-example.html">Prev: Example: Testing A Service</a>'
-next: '<a href="../prose/index.html">Next: Introducing Prose</a>'
+next: '<a href="../stories/tales.html">Next: Tales</a>'
 ---
 
 # Story-Writing 
