@@ -29,6 +29,7 @@
 		"stories/web-example",
 		"stories/soa-example",
 		"stories/story-writing-tips",
+		"stories/tales",
 		"prose/index",
 		"prose/the-st-object",
 		"prose/global-dialect",
@@ -37,6 +38,8 @@
 		"prose/persisting-data",
 		"environments/index",
 		"environments/your-machine/index",
+		"environments/isolated/index",
+		"environments/production/index",
 		"environments/ec2/index",
 		"environments/openstack/index",
 		"environments/physical-hosts/index",
@@ -158,7 +161,9 @@
 			"Sep3": "",
 			"Web Example": "stories/web-example",
 			"SOA Example": "stories/soa-example",
-			"Story-Writing Tips": "stories/story-writing-tips"
+			"Story-Writing Tips": "stories/story-writing-tips",
+			"Sep4": "",
+			"Tales": "stories/tales"
 		},
 		"Prose": {
 			"Introduction": "prose/index",
@@ -172,6 +177,9 @@
 		"Environments": {
 			"Introduction": "environments/index",
 			"On Your Own Machine": "environments/your-machine/index",
+			"Isolated Environments": "environments/isolated/index",
+			"Against Production": "environments/production/index",
+			"Sep1": "",
 			"Amazon EC2": "environments/ec2/index",
 			"OpenStack": "environments/openstack/index",
 			"Physical Hosts": "environments/physical-hosts/index",
