@@ -91,7 +91,7 @@
 		"modules/log/usingLog",
 		"modules/provisioning/index",
 		"modules/provisioning/provisioning-definition",
-		"modules/provisioning/useProvisioningEngine",
+		"modules/provisioning/usingProvisioningEngine",
 		"modules/provisioning/adding-more-engines",
 		"modules/savaged/index",
 		"modules/savaged/usingSavageD",

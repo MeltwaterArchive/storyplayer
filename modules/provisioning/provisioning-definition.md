@@ -2,7 +2,7 @@
 layout: modules-provisioning
 title: Creating The Provisioning Definition
 prev: '<a href="../../modules/provisioning/index.html">Prev: The Provisioning Module</a>'
-next: '<a href="../../modules/provisioning/useProvisioningEngine.html">Next: useProvisioningEngine()</a>'
+next: '<a href="../../modules/provisioning/usingProvisioningEngine.html">Next: useProvisioningEngine()</a>'
 ---
 
 # Creating The Provisioning Definition
@@ -31,7 +31,7 @@ where:
 
 * _$def_ is the _provisioning definition_ created in Step 1
 * _$roleName_ is the name of a role to add to a host (this must be a role that you've added to your chosen provisioning engine)
-* _$hostName_ is the name of the host you want to add the role to (this is normally the same name that you've passed into _$st->usingVagrant()->createBox())
+* _$hostName_ is the name of the host you want to add the role to (this is normally the same name that you've passed into _[$st->usingVagrant()->createBox()](../vagrant/usingVagrant.html#createbox)_)
 
 ## Step 3: Add Parameters To The Provisioning Definition
 
@@ -45,7 +45,7 @@ where:
 
 * _$def_ is the _provisioning definition_ created in Step 1
 * _$params_ is an array listing the variable names and values to use when the provisioning engine runs against _$hostName_
-* _$hostName_ is the name of the host you want to add the role to (this is normally the same name that you've passed into _$st->usingVagrant()->createBox())
+* _$hostName_ is the name of the host you want to add the role to (this is normally the same name that you've passed into _[$st->usingVagrant()->createBox()](../vagrant/usingVagrant.html#createbox)_)
 
 ## Next Step
 
