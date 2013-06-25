@@ -7,6 +7,13 @@ next: '<a href="../stories/the-checkpoint.html">Next: The Checkpoint</a>'
 
 # The Eight Phases Of A Story
 
+* Where is the software deployed? (_test environment setup_)
+* Has the right test data been injected? (_test setup_)
+* Is the test likely to succeed? (_pre-test prediction_)
+* What is the state of the software before we run our test? (_pre-test inspection_)
+* Did the action succeed? (_post-test inspection_)
+
+
 Each Story consists of up to 8 phases, in this order:
 
 1. [Test Environment Setup](test-environment-setup-teardown.html) - create the test environment

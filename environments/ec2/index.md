@@ -1,7 +1,7 @@
 ---
 layout: environments-ec2
 title: Creating Test Environments On Amazon EC2
-prev: '<a href="../../environments/your-machine/index.html">Prev: </a>'
+prev: '<a href="../../environments/production/index.html">Prev: </a>'
 next: '<a href="../../environments/openstack/index.html">Next: Creating Test Environments Using OpenStack</a>'
 ---
 
