@@ -1,13 +1,13 @@
 ---
 layout: stories
 title: The Eight Phases Of A Story Test
-prev: '<a href="../stories/service-stories.html">Prev: Service Stories</a>'
+prev: '<a href="../stories/story-test.html">Prev: The Story Test</a>'
 next: '<a href="../stories/the-checkpoint.html">Next: The Checkpoint</a>'
 ---
 
 # The Eight Phases Of A Story Test
 
-## The Life-cycle Of A Single Test
+## The Life-Cycle Of A Single Test
 
 With Storyplayer, you can automate the complete life-cycle of every single test:
 
