@@ -43,24 +43,43 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 	}
 }
 
-// work out where the vendor folder might be
-$vendorDir = '';
-$vendorDirs = array(
-	__DIR__ . '/../../vendor/php',
-	getcwd() . '/vendor/php'
+// do we have a composer autoloader?
+$composerAutoloader = false;
+$composerFiles = array (
+	__DIR__ . '/../../vendor/autoload.php',
+	getcwd() . '/vendor/autoload.php'
 );
-foreach ($vendorDirs as $key => $candidateDir) {
-	if (is_dir($candidateDir)) {
-		$vendorDir = $candidateDir;
+foreach ($composerFiles as $composerFile) {
+	if (file_exists($composerFile)) {
+		require_once($composerFile);
+		$composerAutoloader = true;
 	}
 }
 
-// load the autoloader file
-if (is_dir($vendorDir)) {
-	require $vendorDir . '/Phix_Project/Autoloader4/PSR0/Autoloader.php';
+// do we need to explicitly load Phix's autoloader instead?
+if (!$composerAutoloader) {
+	// work out where the vendor folder might be
+	$vendorDir = '';
+	$vendorDirs = array(
+		__DIR__ . '/../../vendor/php',
+		getcwd() . '/vendor/php'
+	);
+	foreach ($vendorDirs as $key => $candidateDir) {
+		if (is_dir($candidateDir)) {
+			$vendorDir = $candidateDir;
+		}
+	}
+
+	// load the autoloader file
+	if (is_dir($vendorDir)) {
+		require $vendorDir . '/Phix_Project/Autoloader4/PSR0/Autoloader.php';
+	}
+	else {
+		require 'Phix_Project/Autoloader4/PSR0/Autoloader.php';
+	}
 }
 else {
-	require 'Phix_Project/Autoloader4/PSR0/Autoloader.php';
+	$vendorDirs   = array();
 }
 
 // start autoloading
