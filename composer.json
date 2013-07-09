@@ -30,6 +30,7 @@
 		"phix/cliengine": "@dev",
 		"datasift/stone": "@dev",
 		"datasift/webdriver": "@dev"
+		"aws/aws-sdk-php": "2.*"
 	},
 	"autoload": {
 		"psr-0": { "" : "src/php/" }
