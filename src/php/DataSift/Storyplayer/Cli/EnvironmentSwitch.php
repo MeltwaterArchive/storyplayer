@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -50,13 +50,12 @@ use Phix_Project\CliEngine\CliResult;
 /**
  * A nice generic '-v|--version' switch for your CLI tool
  *
- * @package     Phix_Project
- * @subpackage  CliEngine
- * @author      Stuart Herbert <stuart@stuartherbert.com>
- * @copyright   2013-present Stuart Herbert. www.stuartherbert.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://www.phix-project.org
- * @version     @@PACKAGE_VERSION@@
+ * @category  Libraries
+ * @package   Storyplayer/Cli
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
 class EnvironmentSwitch extends CliEngineSwitch
 {
