@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Cli;
 use DataSift\Stone\ConfigLib\JsonConfigLoader;
 
 /**
- * helper class for loading our config files
+ * helper class for loading our static config files
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,7 +55,7 @@ use DataSift\Stone\ConfigLib\JsonConfigLoader;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryConfigLoader
+class StaticConfigManager
 {
 	public function __construct()
 	{
