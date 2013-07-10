@@ -48,7 +48,7 @@ use Phix_Project\ValidationLib4\ValidationResult;
 
 class EnvironmentValidator implements Validator
 {
-    const MSG_NOTVALIDENVIRONMENT = "Unknown environment '%environment%'";
+    const MSG_NOTVALIDENVIRONMENT = "Unknown environment '%value%'";
 
     public function __construct($envList)
     {
