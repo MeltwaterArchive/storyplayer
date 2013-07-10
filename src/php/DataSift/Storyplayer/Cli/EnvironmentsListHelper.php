@@ -43,10 +43,11 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
+use Exception;
+use DataSift\Stone\ConfigLib\LoadedConfig;
 
 /**
- * helper class for loading our static config files
+ * helper to create a list of available test environments
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,49 +56,42 @@ use DataSift\Stone\ConfigLib\JsonConfigLoader;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StaticConfigManager
+class EnvironmentsListHelper
 {
-	public function __construct()
+	static public function validateEnvironmentsList($staticConfig, $envList, $staticConfigManager)
 	{
-		// create our config loader
-		$this->configLoader = new JsonConfigLoader(
-			"storyplayer",
-			getcwd(),
-			array (
-				"etc",
-				"src/tests/stories/etc",
-				"src/main/etc"
-			)
-		);
-	}
+		// the list we will return
+		$return = array();
 
-	public function loadConfig($config)
-	{
-		// load the main config file
-		$newConfig = $this->configLoader->loadDefaultConfig();
+		foreach ($envList as $envName) {
+			// is this in our staticConfig?
+			if (isset($staticConfig->environments, $staticConfig->environments->$envName)) {
+				$return[] = $envName;
+				continue;
+			}
 
-		// load any per-user overrides
-		$this->configLoader->loadUserConfig($newConfig);
+			// if we get here, then the environment is in an additional
+			// config file on disk
 
-		// merge the new config with the existing
-		$config->mergeFrom($newConfig);
+			// our dummy config
+			$config = new LoadedConfig();
+
+			// can we load the file?
+			try {
+				$staticConfigManager->loadAdditionalConfig($config, $envName);
+			}
+			catch (Exception $e) {
+				// didn't load - skip it
+				continue;
+			}
+
+			// do we have something that might be an environment?
+			if (isset($config->environments, $config->environments->$envName)) {
+				$return[] = $envName;
+			}
+		}
 
 		// all done
+		return $return;
 	}
-
-	public function loadAdditionalConfig($config, $configName)
-	{
-		return $this->configLoader->loadAdditionalConfig($config, $configName);
-	}
-
-	public function loadRuntimeConfig()
-	{
-		return $this->configLoader->loadRuntimeConfig();
-	}
-
-	public function getListOfAdditionalConfigFiles()
-	{
-		return $this->configLoader->getListOfAdditionalConfigFiles();
-	}
-
 }

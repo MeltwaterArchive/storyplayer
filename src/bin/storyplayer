@@ -24,6 +24,7 @@ use Phix_Project\CliEngine\Commands\HelpCommand;
 
 use DataSift\Storyplayer\Cli\DefaultStaticConfig;
 use DataSift\Storyplayer\Cli\EnvironmentSwitch;
+use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
@@ -157,6 +158,7 @@ function main($argv)
 	}
 	sort($envList);
 	$envList = array_unique($envList);
+	$envList = EnvironmentsListHelper::validateEnvironmentsList($staticConfig, $envList, $configLoader);
 
 	// create the engine
 	$engine = new CliEngine();
