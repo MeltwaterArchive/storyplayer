@@ -77,16 +77,9 @@ class ListEnvironmentsCommand extends CliCommand
 
 	public function processCommand(CliEngine $engine, $params = array())
 	{
-		// do we *have* any environments?
-		if (count($this->envList) == 0) {
-			echo "There are currently no environments defined\n";
-			return 0;
-		}
-
-		// if we get here, then there are environments available
-		echo "The following test environment(s) are defined:\n\n";
+		// list the environments (if any) in a machine-friendly way
 		foreach ($this->envList as $envName) {
-			echo "- {$envName}\n";
+			echo "{$envName}\n";
 		}
 
 		// all done
