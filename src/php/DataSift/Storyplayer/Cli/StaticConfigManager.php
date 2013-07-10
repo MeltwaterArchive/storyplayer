@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ConfigLib\JsonConfigLoader;
 
@@ -49,20 +49,49 @@ use DataSift\Stone\ConfigLib\JsonConfigLoader;
  * helper class for loading our config files
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryConfigLoader extends JsonConfigLoader
+class StoryConfigLoader
 {
 	public function __construct()
 	{
-		parent::__construct("storyplayer", getcwd(), array(
-			"etc",
-			"src/tests/stories/etc",
-			"src/main/etc"
-		));
+		// create our config loader
+		$this->configLoader = new JsonConfigLoader(
+			"storyplayer",
+			getcwd(),
+			array (
+				"etc",
+				"src/tests/stories/etc",
+				"src/main/etc"
+			)
+		);
+	}
+
+	public function loadConfig($config)
+	{
+		// load the main config file
+		$newConfig = $this->configLoader->loadDefaultConfig();
+
+		// load any per-user overrides
+		$this->configLoader->loadUserConfig($newConfig);
+
+		// merge the new config with the existing
+		$config->mergeFrom($newConfig);
+
+		// all done
+	}
+
+	public function loadRuntimeConfig()
+	{
+		return $this->configLoader->loadRuntimeConfig();
+	}
+
+	public function getListOfAdditionalConfigFiles()
+	{
+		return $this->configLoader->getListOfAdditionalConfigFiles();
 	}
 }
