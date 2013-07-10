@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ConfigLib\LoadedConfig;
 use DataSift\Stone\ObjectLib\BaseObject;
@@ -51,13 +51,13 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * load any config files
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultConfig extends LoadedConfig
+class DefaultStaticConfig extends LoadedConfig
 {
 	public function __construct()
 	{
