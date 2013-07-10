@@ -14,11 +14,21 @@
 use Phix_Project\Autoloader4\PSR0_Autoloader;
 use Phix_Project\Autoloader4\Autoloader_Path;
 
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\Switches\LongHelpSwitch;
+use Phix_Project\CliEngine\Switches\ShortHelpSwitch;
+use Phix_Project\CliEngine\Switches\VerboseShortSwitch;
+use Phix_Project\CliEngine\Switches\VerboseLongSwitch;
+use Phix_Project\CliEngine\Switches\VersionSwitch;
+use Phix_Project\CliEngine\Commands\HelpCommand;
+
+use DataSift\Storyplayer\Cli\DefaultStaticConfig;
+use DataSift\Storyplayer\Cli\EnvironmentSwitch;
+use DataSift\Storyplayer\Cli\RuntimeConfigManager;
+use DataSift\Storyplayer\Cli\StaticConfigManager;
+
 use DataSift\Stone\ConfigLib\ConfigLoader;
 use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\DefaultConfig;
-use DataSift\Storyplayer\PlayerLib\RuntimeConfigManager;
-use DataSift\Storyplayer\PlayerLib\StoryConfigLoader;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\StoryLoader;
@@ -120,33 +130,70 @@ function summariseStoryList($storyResults)
  */
 function main($argv)
 {
-
-	// make sure we have enough arguments
-	if (!isset($argv[2])) {
-		echo "*** error: insufficient parameters\n";
-		echo "*** usage: " . $argv[0] . " <environment> <story>\n";
-		exit(1);
-	}
-
-	// What's our current hostname?
-	$hostname = trim(`hostname`);
-
 	// create our runtime config folder
 	$runtimeConfigManager = new RuntimeConfigManager();
 	$runtimeConfigManager->makeConfigDir();
 
 	// create our initial default config
-	$staticConfig = new DefaultConfig();
+	$staticConfig = new DefaultStaticConfig();
 
 	// load our main config
-	$configLoader = new StoryConfigLoader();
-	$loadedConfig = $configLoader->loadDefaultConfig();
+	$configLoader = new StaticConfigManager();
+	$configLoader->loadConfig($staticConfig);
 
-	// merge our default config in with our main loaded config
-	$staticConfig->mergeFrom($loadedConfig);
+	// load the runtime config,:data that has been created by previous runs of storyplayer
+	$runtimeConfig = $configLoader->loadRuntimeConfig();
 
-	// load any per-user overrides
-	$configLoader->loadUserConfig($staticConfig);
+	// get a list of the additional config files to load
+	// this is a list of the available test environments!
+	$envList = $configLoader->getListOfAdditionalConfigFiles();
+
+	// add into the list any environments in the default config file
+	foreach ($staticConfig->environments as $envName => $dummy) {
+		if ($envName !== 'defaults') {
+			$envList[] = $envName;
+		}
+	}
+	sort($envList);
+	$envList = array_unique($envList);
+
+	// create the engine
+	$engine = new CliEngine();
+
+	// set the main metadata
+	$engine->setAppName('storyplayer');
+	$engine->setAppVersion('1.3.0-dev');
+	$engine->setAppUrl('https://datasift.github.io/storyplayer/');
+	$engine->setAppCopyright('Copyright (c) 2012-present MediaSift Ltd. All rights reserved.');
+	$engine->setAppLicense('Released under the BSD 3-Clause license');
+
+	// add the switches that come before any of the commands
+	// if we have any
+	//
+	// add switches in the order of presidence
+	$engine->addEngineSwitch(new VersionSwitch);
+	$engine->addEngineSwitch(new LongHelpSwitch);
+	$engine->addEngineSwitch(new ShortHelpSwitch);
+	$engine->addEngineSwitch(new VerboseShortSwitch($engine->options, 0, 3));
+	$engine->addEngineSwitch(new VerboseLongSwitch($engine->options, 0, 3));
+	$engine->addEngineSwitch(new EnvironmentSwitch($envList));
+
+	// what is our default command?
+	// this is normally some sort of help command
+	$engine->setDefaultCommand(new HelpCommand);
+
+	// add any additional commands
+	// note - we do not have to add the default command a 2nd time
+	// note - if we add no additional commands, the default command is implied
+	//        and the user does not have to type it on the command line
+
+	// all set - let's go
+	return $engine->main($argv);
+
+	// setup logging
+	Log::init("storyplayer", $staticConfig->logger);
+
+
 
 	// do we need to load environment-specific config?
 	if (!isset($staticConfig->environments, $staticConfig->environments->$argv[1]))
@@ -157,12 +204,11 @@ function main($argv)
 		$configLoader->loadAdditionalConfig($staticConfig, $argv[1]);
 	}
 
-	// finally, load the runtime config, data that has been created
-	// by previous runs of storyplayer
-	$runtimeConfig = $configLoader->loadRuntimeConfig();
 
-	// setup logging
-	Log::init("storyplayer", $staticConfig->logger);
+
+
+
+
 
 	// pick our environment
 	$environment = $argv[1];
