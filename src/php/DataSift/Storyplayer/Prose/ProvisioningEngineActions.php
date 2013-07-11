@@ -59,7 +59,7 @@ use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ProvisionerActions extends Prose
+class ProvisioningEngineActions extends Prose
 {
 	public function __construct(StoryTeller $st, $args)
 	{
