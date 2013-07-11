@@ -1,5 +1,6 @@
 .build
 chromedriver.log
+composer.lock
 dist
 etc
 .tmp
