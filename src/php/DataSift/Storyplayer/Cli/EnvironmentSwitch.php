@@ -60,10 +60,13 @@ use Phix_Project\CliEngine\CliResult;
  */
 class EnvironmentSwitch extends CliEngineSwitch
 {
-	public function __construct($envList)
+	public function __construct($envList, $defaultEnvName)
 	{
 		// remember the list of available environments
 		$this->envList = $envList;
+
+		// remember the user's prefered test environment (can be NULL)
+		$this->defaultEnvName = $defaultEnvName;
 	}
 
 	public function getDefinition()
@@ -80,6 +83,11 @@ class EnvironmentSwitch extends CliEngineSwitch
 		// what is the required argument?
 		$def->setRequiredArg('<environment>', "the environment to test against");
 		$def->setArgValidator(new EnvironmentValidator($this->envList));
+
+		// does the user have a preferred test environment?
+		if ($this->defaultEnvName) {
+			$def->setArgHasDefaultValueOf($this->defaultEnvName);
+		}
 
 		// all done
 		return $def;
