@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Cli;
 use DataSift\Stone\ConfigLib\JsonConfigLoader;
 
 /**
- * helper class for loading our static config files
+ * helper base class for loading and saving our config files
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,34 +55,19 @@ use DataSift\Stone\ConfigLib\JsonConfigLoader;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StaticConfigManager extends ConfigManagerBase
+class ConfigManagerBase
 {
-	public function loadConfig($config)
+	public function __construct()
 	{
-		// load the main config file
-		$newConfig = $this->configLoader->loadDefaultConfig();
-
-		// load any per-user overrides
-		$this->configLoader->loadUserConfig($newConfig);
-
-		// merge the new config with the existing
-		$config->mergeFrom($newConfig);
-
-		// all done
-	}
-
-	public function loadAdditionalConfig($config, $configName)
-	{
-		return $this->configLoader->loadAdditionalConfig($config, $configName);
-	}
-
-	public function loadRuntimeConfig()
-	{
-		return $this->configLoader->loadRuntimeConfig();
-	}
-
-	public function getListOfAdditionalConfigFiles()
-	{
-		return $this->configLoader->getListOfAdditionalConfigFiles();
+		// create our config loader
+		$this->configLoader = new JsonConfigLoader(
+			"storyplayer",
+			getcwd(),
+			array (
+				"etc",
+				"src/tests/stories/etc",
+				"src/main/etc"
+			)
+		);
 	}
 }

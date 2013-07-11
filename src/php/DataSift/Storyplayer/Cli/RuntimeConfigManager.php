@@ -59,7 +59,7 @@ use DataSift\Stone\LogLib\Log;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class RuntimeConfigManager
+class RuntimeConfigManager extends ConfigManagerBase
 {
 	public function getConfigDir()
 	{
@@ -90,5 +90,15 @@ class RuntimeConfigManager
 				exit(1);
 			}
 		}
+	}
+
+	public function loadRuntimeConfig()
+	{
+		return $this->configLoader->loadRuntimeConfig();
+	}
+
+	public function saveRuntimeConfig($config)
+	{
+		return $this->configLoader->saveRuntimeConfig($config);
 	}
 }
