@@ -48,7 +48,8 @@ use Phix_Project\CliEngine\CliEngineSwitch;
 use Phix_Project\CliEngine\CliResult;
 
 /**
- * A nice generic '-v|--version' switch for your CLI tool
+ * Tell Storyplayer which test environment to test against; for when there
+ * is more than one test environment defined
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
