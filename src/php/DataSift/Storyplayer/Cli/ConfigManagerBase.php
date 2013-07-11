@@ -34,63 +34,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\LoadedConfig;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Stone\ConfigLib\JsonConfigLoader;
 
 /**
- * Storyplayer's default config - the config that is active before we
- * load any config files
+ * helper base class for loading and saving our config files
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultConfig extends LoadedConfig
+class ConfigManagerBase
 {
 	public function __construct()
 	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
-
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
-
-        $this->logger->levels = $levels;
-
-        // defaults for phases
-        $phases = new BaseObject();
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
-
-        $this->phases = $phases;
-
-        // all done
-    }
+		// create our config loader
+		$this->configLoader = new JsonConfigLoader(
+			"storyplayer",
+			getcwd(),
+			array (
+				"etc",
+				"src/tests/stories/etc",
+				"src/main/etc"
+			)
+		);
+	}
 }

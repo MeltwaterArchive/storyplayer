@@ -271,17 +271,17 @@ class StoryTeller
 	 *
 	 * @return [type] [description]
 	 */
-	public function getConfigLoader() {
-	    return $this->configLoader;
+	public function getRuntimeConfigManager() {
+	    return $this->runtimeConfigManager;
 	}
 
 	/**
 	 * [Description]
 	 *
-	 * @param [type] $configLoader [description]
+	 * @param [type] $runtimeConfigManager [description]
 	 */
-	public function setConfigLoader($configLoader) {
-	    $this->configLoader = $configLoader;
+	public function setRuntimeConfigManager($runtimeConfigManager) {
+	    $this->runtimeConfigManager = $runtimeConfigManager;
 
 	    return $this;
 	}
@@ -340,6 +340,15 @@ class StoryTeller
 	public function getRuntimeConfig()
 	{
 		return $this->storyContext->runtime;
+	}
+
+	public function saveRuntimeConfig()
+	{
+		if (!isset($this->runtimeConfigManager)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no runtimeConfigManager available");
+		}
+
+		$this->runtimeConfigManager->saveRuntimeConfig($this->storyContext->runtime);
 	}
 
 	public function getUser()

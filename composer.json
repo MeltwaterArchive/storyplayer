@@ -27,6 +27,7 @@
 	],
 	"require": {
 		"phix/autoloader": "4.*",
+		"phix/cliengine": "@dev",
 		"datasift/stone": "@dev",
 		"datasift/webdriver": "@dev"
 	},

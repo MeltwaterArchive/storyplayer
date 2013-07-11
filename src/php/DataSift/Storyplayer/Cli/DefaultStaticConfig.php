@@ -34,101 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
+use DataSift\Stone\ConfigLib\LoadedConfig;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * manipulate the internal hosts table
+ * Storyplayer's default config - the config that is active before we
+ * load any config files
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class DefaultStaticConfig extends LoadedConfig
 {
-	public function addHost($hostName, $hostDetails)
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
+		// defaults for LogLib
+		$this->logger = new BaseObject();
+		$this->logger->writer = "StdErrWriter";
 
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
+        $levels = new BaseObject();
+        $levels->LOG_EMERGENCY = true;
+        $levels->LOG_ALERT = true;
+        $levels->LOG_CRITICAL = true;
+        $levels->LOG_ERROR = true;
+        $levels->LOG_WARNING = true;
+        $levels->LOG_NOTICE = true;
+        $levels->LOG_INFO = true;
+        $levels->LOG_DEBUG = true;
+        $levels->LOG_TRACE = true;
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+        $this->logger->levels = $levels;
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
+        // defaults for phases
+        $phases = new BaseObject();
+        $phases->TestEnvironmentSetup = true;
+        $phases->TestSetup = true;
+        $phases->PreTestPrediction = true;
+        $phases->PreTestInspection = true;
+        $phases->Action = true;
+        $phases->PostTestInspection = true;
+        $phases->TestTeardown = true;
+        $phases->TestEnvironmentTeardown = true;
 
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+        $this->phases = $phases;
 
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
-	}
-
-	public function removeHost($hostName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
-		}
-
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
-
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
-
-		// all done
-		$log->endAction();
-	}
+        // all done
+    }
 }

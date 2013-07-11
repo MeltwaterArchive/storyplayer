@@ -34,101 +34,71 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Stone\ConfigLib\JsonConfigLoader;
+use DataSift\Stone\LogLib\Log;
 
 /**
- * manipulate the internal hosts table
+ * Helper class for making sure the user has somewhere to save the
+ * 'runtime config' (the persistent state) to
+ *
+ * This probably needs moving into Stone in the future
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class RuntimeConfigManager extends ConfigManagerBase
 {
-	public function addHost($hostName, $hostDetails)
+	public function getConfigDir()
 	{
-		// shorthand
-		$st = $this->st;
+		static $configDir = null;
 
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
+		// do we have a configDir remembered yet?
+		if (!$configDir)
+		{
+			$configDir = getenv("HOME") . '/.storyplayer';
 		}
 
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
+		return $configDir;
 	}
 
-	public function removeHost($hostName)
+	public function makeConfigDir()
 	{
-		// shorthand
-		$st = $this->st;
+		// what is the path to the config directory?
+		$configDir = $this->getConfigDir();
 
-		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
+		// does it exist?
+		if (!file_exists($configDir))
+		{
+			$success = mkdir($configDir, 0700, true);
+			if (!$success)
+			{
+				// cannot create it - bail out now
+				Log::logError("Unable to create config directory '{$configDir}'");
+				exit(1);
+			}
 		}
+	}
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
+	public function loadRuntimeConfig()
+	{
+		return $this->configLoader->loadRuntimeConfig();
+	}
 
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
-
-		// all done
-		$log->endAction();
+	public function saveRuntimeConfig($config)
+	{
+		return $this->configLoader->saveRuntimeConfig($config);
 	}
 }
