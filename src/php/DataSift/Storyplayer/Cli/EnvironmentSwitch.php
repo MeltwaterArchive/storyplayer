@@ -86,13 +86,10 @@ class EnvironmentSwitch extends CliEngineSwitch
 
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// write the version to the output
-		$engine->output->stdout->outputLine(
-			$engine->output->highlightStyle,
-			$engine->getAppVersion()
-		);
+		// remember the setting
+		$engine->options->environment = $params[0];
 
 		// tell the engine that it is done
-		return new CliResult(0);
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }
