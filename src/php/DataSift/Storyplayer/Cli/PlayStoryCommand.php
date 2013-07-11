@@ -69,7 +69,7 @@ use DataSift\Storyplayer\UserLib\ConfigUserLoader;
  */
 class PlayStoryCommand extends CliCommand
 {
-	public function __construct($envList, $defaultEnvName)
+	public function __construct($envList)
 	{
 		// define the command
 		$this->setName('play-story');
@@ -81,6 +81,10 @@ class PlayStoryCommand extends CliCommand
 		$this->setArgsList(array(
 			"[<story.php|list.json>]" => "run a story, or a list of stories"
 		));
+
+		// for convenience, the current computer's hostname will be the
+		// default environment
+		$defaultEnvName = getHostname();
 		$this->setSwitches(array(
 			new EnvironmentSwitch($envList, $defaultEnvName)
 		));
