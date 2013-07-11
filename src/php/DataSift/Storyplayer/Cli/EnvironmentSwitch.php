@@ -43,8 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliCommandSwitch;
 use Phix_Project\CliEngine\CliResult;
 
 /**
@@ -58,7 +58,7 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class EnvironmentSwitch extends CliEngineSwitch
+class EnvironmentSwitch extends CliCommandSwitch
 {
 	public function __construct($envList, $defaultEnvName)
 	{
@@ -93,10 +93,10 @@ class EnvironmentSwitch extends CliEngineSwitch
 		return $def;
 	}
 
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	public function process(CliCommand $command, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->environment = $params[0];
+		$command->options->environment = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);
