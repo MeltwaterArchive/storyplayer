@@ -34,61 +34,64 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
-use DataSift\Stone\LogLib\Log;
+use Exception;
+use DataSift\Stone\ConfigLib\LoadedConfig;
 
 /**
- * Helper class for making sure the user has somewhere to save the
- * 'runtime config' (the persistent state) to
- *
- * This probably needs moving into Stone in the future
+ * helper to create a list of available test environments
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class RuntimeConfigManager
+class EnvironmentsListHelper
 {
-	public function getConfigDir()
+	static public function validateEnvironmentsList($staticConfig, $envList, $staticConfigManager)
 	{
-		static $configDir = null;
+		// the list we will return
+		$return = array();
 
-		// do we have a configDir remembered yet?
-		if (!$configDir)
-		{
-			$configDir = getenv("HOME") . '/.storyplayer';
-		}
+		foreach ($envList as $envName) {
+			// is this in our staticConfig?
+			if (isset($staticConfig->environments, $staticConfig->environments->$envName)) {
+				$return[] = $envName;
+				continue;
+			}
 
-		return $configDir;
-	}
+			// if we get here, then the environment is in an additional
+			// config file on disk
 
-	public function makeConfigDir()
-	{
-		// what is the path to the config directory?
-		$configDir = $this->getConfigDir();
+			// our dummy config
+			$config = new LoadedConfig();
 
-		// does it exist?
-		if (!file_exists($configDir))
-		{
-			$success = mkdir($configDir, 0700, true);
-			if (!$success)
-			{
-				// cannot create it - bail out now
-				Log::logError("Unable to create config directory '{$configDir}'");
-				exit(1);
+			// can we load the file?
+			try {
+				$staticConfigManager->loadAdditionalConfig($config, $envName);
+			}
+			catch (Exception $e) {
+				// didn't load - skip it
+				continue;
+			}
+
+			// do we have something that might be an environment?
+			if (isset($config->environments, $config->environments->$envName)) {
+				$return[] = $envName;
 			}
 		}
+
+		// all done
+		return $return;
 	}
 }

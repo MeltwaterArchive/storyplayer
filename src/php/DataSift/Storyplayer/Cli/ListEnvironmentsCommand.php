@@ -34,35 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * helper class for loading our config files
+ * A command to list the supported test environments
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryConfigLoader extends JsonConfigLoader
+class ListEnvironmentsCommand extends CliCommand
 {
-	public function __construct()
+	public function __construct($envList)
 	{
-		parent::__construct("storyplayer", getcwd(), array(
-			"etc",
-			"src/tests/stories/etc",
-			"src/main/etc"
-		));
+		// define the command
+		$this->setName('list-environments');
+		$this->setShortDescription('list the available test environments');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the test environments"
+			. " that are defined in the config files."
+			.PHP_EOL
+		);
+
+		// remember the environments list
+		$this->envList = $envList;
+	}
+
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// list the environments (if any) in a machine-friendly way
+		foreach ($this->envList as $envName) {
+			echo "{$envName}\n";
+		}
+
+		// all done
+		return 0;
 	}
 }
