@@ -75,7 +75,7 @@ class ListEnvironmentsCommand extends CliCommand
 		$this->envList = $envList;
 	}
 
-	public function processCommand(CliEngine $engine, $params = array())
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// list the environments (if any) in a machine-friendly way
 		foreach ($this->envList as $envName) {
