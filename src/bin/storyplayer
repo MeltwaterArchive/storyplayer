@@ -152,6 +152,14 @@ function main($argv)
 		'staticConfigManager'  => $staticConfigManager,
 	);
 
+	// special case - does the user want us to use his/her computer's
+	// hostname as the default environment name?
+	$defaultEnvName = null;
+	if (isset($staticConfig->preferences, $staticConfig->preferences->useHostnameAsDefaultEnvironment)
+		&& $staticConfig->preferences->useHostnameAsDefaultEnvironment) {
+		$defaultEnvName = getHostname();
+	}
+
 	// ====================================================================
 	//
 	// PARSE THE COMMAND-LINE
@@ -177,7 +185,7 @@ function main($argv)
 	$engine->addEngineSwitch(new ShortHelpSwitch);
 	$engine->addEngineSwitch(new VerboseShortSwitch($engine->options, 0, 3));
 	$engine->addEngineSwitch(new VerboseLongSwitch($engine->options, 0, 3));
-	$engine->addEngineSwitch(new EnvironmentSwitch($envList));
+	$engine->addEngineSwitch(new EnvironmentSwitch($envList, $defaultEnvName));
 
 	// what is our default command?
 	// this is normally some sort of help command
