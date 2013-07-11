@@ -69,18 +69,20 @@ use DataSift\Storyplayer\UserLib\ConfigUserLoader;
  */
 class PlayStoryCommand extends CliCommand
 {
-	public function __construct()
+	public function __construct($envList, $defaultEnvName)
 	{
 		// define the command
 		$this->setName('play-story');
 		$this->setShortDescription('play a story, or a list of stories');
 		$this->setLongDescription(
-			"Use this command to get a list of all of the test environments"
-			. " that are defined in the config files."
+			"Use this command to play a single story, or a list of stories defined in a JSON file."
 			.PHP_EOL
 		);
 		$this->setArgsList(array(
-			"[<story|list>]" => "run a story, or a list of stories"
+			"[<story.php|list.json>]" => "run a story, or a list of stories"
+		));
+		$this->setSwitches(array(
+			new EnvironmentSwitch($envList, $defaultEnvName)
 		));
 	}
 
@@ -100,7 +102,7 @@ class PlayStoryCommand extends CliCommand
 		}
 
 		// which environment are we using?
-		if (!isset($engine->options->environment)) {
+		if (!isset($this->options->environment)) {
 			// this switch is optional ... *if* there is only one environment
 			// in the list
 			if (count($envList) > 1) {
@@ -115,7 +117,7 @@ class PlayStoryCommand extends CliCommand
 		}
 		else {
 			// use the environment that the user has provided
-			$envName = $engine->options->environment;
+			$envName = $this->options->environment;
 		}
 
 		// setup logging
