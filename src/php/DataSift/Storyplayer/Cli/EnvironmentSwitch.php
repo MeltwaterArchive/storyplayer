@@ -43,9 +43,9 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\CliEngine\CliCommandSwitch;
+use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
  * Tell Storyplayer which test environment to test against; for when there
@@ -58,45 +58,36 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class EnvironmentSwitch extends CliCommandSwitch
+class EnvironmentSwitch extends CliSwitch
 {
 	public function __construct($envList, $defaultEnvName)
 	{
-		// remember the list of available environments
-		$this->envList = $envList;
-
-		// remember the user's prefered test environment (can be NULL)
-		$this->defaultEnvName = $defaultEnvName;
-	}
-
-	public function getDefinition()
-	{
 		// define our name, and our description
-		$def = $this->newDefinition('environment', 'set the environment to test against');
+		$this->setName('environment');
+		$this->setShortDescription('set the environment to test against');
 
 		// what are the short switches?
-		$def->addShortSwitch('e');
+		$this->addShortSwitch('e');
 
 		// what are the long switches?
-		$def->addLongSwitch('environment');
+		$this->addLongSwitch('environment');
 
 		// what is the required argument?
-		$def->setRequiredArg('<environment>', "the environment to test against");
-		$def->setArgValidator(new EnvironmentValidator($this->envList));
+		$this->setRequiredArg('<environment>', "the environment to test against");
+		$this->setArgValidator(new EnvironmentValidator($envList));
 
 		// does the user have a preferred test environment?
-		if ($this->defaultEnvName) {
-			$def->setArgHasDefaultValueOf($this->defaultEnvName);
+		if ($defaultEnvName) {
+			$this->setArgHasDefaultValueOf($defaultEnvName);
 		}
 
 		// all done
-		return $def;
 	}
 
-	public function process(CliCommand $command, $invokes = 1, $params = array(), $isDefaultParam = false)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$command->options->environment = $params[0];
+		$engine->options->environment = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);
