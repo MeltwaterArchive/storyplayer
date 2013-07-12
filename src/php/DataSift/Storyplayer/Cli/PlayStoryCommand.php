@@ -69,18 +69,24 @@ use DataSift\Storyplayer\UserLib\ConfigUserLoader;
  */
 class PlayStoryCommand extends CliCommand
 {
-	public function __construct()
+	public function __construct($envList)
 	{
 		// define the command
 		$this->setName('play-story');
 		$this->setShortDescription('play a story, or a list of stories');
 		$this->setLongDescription(
-			"Use this command to get a list of all of the test environments"
-			. " that are defined in the config files."
+			"Use this command to play a single story, or a list of stories defined in a JSON file."
 			.PHP_EOL
 		);
 		$this->setArgsList(array(
-			"[<story|list>]" => "run a story, or a list of stories"
+			"[<story.php|list.json>]" => "run a story, or a list of stories"
+		));
+
+		// for convenience, the current computer's hostname will be the
+		// default environment
+		$defaultEnvName = getHostname();
+		$this->setSwitches(array(
+			new EnvironmentSwitch($envList, $defaultEnvName)
 		));
 	}
 
@@ -93,29 +99,30 @@ class PlayStoryCommand extends CliCommand
 		$staticConfig         = $additionalContext->staticConfig;
 		$staticConfigManager  = $additionalContext->staticConfigManager;
 
-		// do we have a story, or list of stories?
-		if (!isset($params[0])) {
-			echo "*** error: you must specify which story to play\n";
-			return 1;
-		}
-
 		// which environment are we using?
-		if (!isset($engine->options->environment)) {
-			// this switch is optional ... *if* there is only one environment
-			// in the list
-			if (count($envList) > 1) {
-				echo "*** error: there is more than one test environment defined\n\n";
-				echo "use 'storyplayer list-environments' to see the list\n";
-				echo "use '-e <environment>' to select one\n";
-				return 1;
-			}
-
+		//
+		// special case - only one environment defined, so always use that
+		if (count($envList) == 1) {
 			// we will use the first (and only) environment in the list
 			$envName = $envList[0];
+		}
+		else if (!isset($engine->options->environment)) {
+			// this switch is optional ... *if* there is only one environment
+			// in the list
+			echo "*** error: there is more than one test environment defined\n\n";
+			echo "use 'storyplayer list-environments' to see the list\n";
+			echo "use '-e <environment>' to select one\n";
+			return 1;
 		}
 		else {
 			// use the environment that the user has provided
 			$envName = $engine->options->environment;
+		}
+
+		// do we have a story, or list of stories?
+		if (!isset($params[0])) {
+			echo "*** error: you must specify which story to play\n";
+			return 1;
 		}
 
 		// setup logging
