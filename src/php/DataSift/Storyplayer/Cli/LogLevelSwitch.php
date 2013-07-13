@@ -76,7 +76,7 @@ class LogLevelSwitch extends CliSwitch
 		$this->addLongSwitch('loglevel');
 
 		// what is the required argument?
-		$this->setRequiredArg('<log-level>', "the log level to use");
+		$this->setRequiredArg('<loglevel>', "the minimum log level to use; one of: EMERGENCY, ALERT, CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG or TRACE");
 		$this->setArgValidator(new LogLevelValidator());
 
 		// default logging level if none provided
