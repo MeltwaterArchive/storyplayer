@@ -73,7 +73,7 @@ class LogLevelSwitch extends CliSwitch
 		$this->addShortSwitch('L');
 
 		// what are the long switches?
-		$this->addLongSwitch('log');
+		$this->addLongSwitch('loglevel');
 
 		// what is the required argument?
 		$this->setRequiredArg('<log-level>', "the log level to use");
