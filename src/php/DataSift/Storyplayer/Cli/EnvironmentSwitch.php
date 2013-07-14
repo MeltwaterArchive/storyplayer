@@ -65,6 +65,21 @@ class EnvironmentSwitch extends CliSwitch
 		// define our name, and our description
 		$this->setName('environment');
 		$this->setShortDescription('set the environment to test against');
+		$this->setLongDesc(
+			"If you have multiple test environments listed in your configuration files, "
+			. "you can use this switch to choose which test environment to run the test(s) "
+			. "against. If you omit this switch, Storyplayer will default to using your "
+			. "computer's hostname as the value for <environment>."
+			. PHP_EOL
+			. PHP_EOL
+			. "If you only have one test environment listed, then this switch has no "
+			. "effect when used, and Storyplayer will always use the test environment "
+			. "from your configuration file."
+			. PHP_EOL
+			. PHP_EOL
+			. "See http://datasift.github.io/storyplayer/ "
+			. "for how to configure and use multiple test environments."
+		);
 
 		// what are the short switches?
 		$this->addShortSwitch('e');
