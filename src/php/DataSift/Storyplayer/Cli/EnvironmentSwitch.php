@@ -73,7 +73,7 @@ class EnvironmentSwitch extends CliSwitch
 		$this->addLongSwitch('environment');
 
 		// what is the required argument?
-		$this->setRequiredArg('<environment>', "the environment to test against");
+		$this->setRequiredArg('<environment>', "the environment to test against; one of: " . implode(", ", $envList));
 		$this->setArgValidator(new EnvironmentValidator($envList));
 
 		// does the user have a preferred test environment?
