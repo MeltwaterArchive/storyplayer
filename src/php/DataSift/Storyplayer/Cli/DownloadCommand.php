@@ -50,6 +50,8 @@ use Phix_Project\CliEngine\CliResult;
 
 use DataSift\Stone\DownloadLib\FileDownloader;
 
+use DataSift\WebDriver\Configuration as WebDriverConfiguration;
+
 /**
  * Command to download dependencies
  *
@@ -79,12 +81,8 @@ class DownloadCommand extends CliCommand
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// find a list of files that we need to download
-		$filesToDownload = array(
-			array(
-				"url" => "http://chromedriver.googlecode.com/files/chromedriver_linux64_2.1.zip",
-				"make_executable" => array("chromedriver")
-			)
-		);
+		$wdConfig = new WebDriverConfiguration;
+		$filesToDownload = $wdConfig->getDependencies();
 
 		$downloader = new FileDownloader();
 
@@ -92,20 +90,22 @@ class DownloadCommand extends CliCommand
 
 			// How big is the file?
 			// via http://www.php.net/manual/en/function.filesize.php#84130
-			$headers = array_change_key_case(get_headers($file['url'], 1),CASE_LOWER);
+			$headers = array_change_key_case(get_headers($file->url, 1),CASE_LOWER);
 			if ( !preg_match('/HTTP\/1\.(0|1) 200 OK/', $headers[0] ) ) { 
 				$fileSize = $headers['content-length'][1];
 			} else { 
 				$fileSize = $headers['content-length'];
 			}
 
-			echo "Downloading: " . $file['url'].' ('.round($fileSize/1024/1024, 3).'mb)'.PHP_EOL;
+			// Update the user on what's going on
+			echo "Downloading: " . $file->url.' ('.round($fileSize/1024/1024, 3).'mb)'.PHP_EOL;
 
-			$fileBase = basename($file['url']);
-			$downloader->download($file['url'], "./vendor/bin/".$fileBase);
+			// Download it
+			$fileBase = basename($file->url);
+			$downloader->download($file->url, "./vendor/bin/".$fileBase);
 
-			// Make sure they're executable
-			foreach ($file['make_executable'] as $exec){
+			// Make sure that the relevant files are executable
+			foreach ($file->makeExecutable as $exec){
 				chmod("./vendor/bin/".$exec, 0755);
 			}
 		}
