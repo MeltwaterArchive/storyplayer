@@ -86,6 +86,7 @@ class PlayStoryCommand extends CliCommand
 		// default environment
 		$defaultEnvName = getHostname();
 		$this->setSwitches(array(
+			new LogLevelSwitch(),
 			new EnvironmentSwitch($envList, $defaultEnvName)
 		));
 	}
@@ -126,7 +127,14 @@ class PlayStoryCommand extends CliCommand
 		}
 
 		// setup logging
-		Log::init("storyplayer", $staticConfig->logger);
+		//
+		// by default, we go with what is in the config, and use the
+		// command-line switch(es) to override it
+		$loggingConfig = $staticConfig->logger;
+		if (isset($engine->options->logLevels)) {
+			$loggingConfig->levels = $engine->options->logLevels;
+		}
+		Log::init("storyplayer", $loggingConfig);
 
 		// do we need to load environment-specific config?
 		if (!isset($staticConfig->environments, $staticConfig->environments->$envName))
