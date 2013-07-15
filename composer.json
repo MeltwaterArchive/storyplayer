@@ -29,7 +29,7 @@
 		"phix/autoloader": "4.*",
 		"phix/cliengine": "@dev",
 		"datasift/stone": "@dev",
-		"datasift/webdriver": "@dev"
+		"datasift/webdriver": "@dev",
 		"aws/aws-sdk-php": "2.*"
 	},
 	"autoload": {
