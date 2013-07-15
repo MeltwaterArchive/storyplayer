@@ -23,6 +23,10 @@ If you want to run Storyplayer from inside a GitHub clone, you'll also need to i
 
 ## How To Install
 
+_Storyplayer 1.3 will support installation using Composer, and hopefully as a Phar too._
+
+### Install Via PEAR
+
 Storyplayer is installed using PEAR:
 
 {% highlight bash %}
@@ -32,3 +36,14 @@ sudo pear install DataSift/storyplayer
 {% endhighlight %}
 
 This will install the <code>storyplayer</code> command onto your computer.
+
+### Install From Source
+
+You can also run the very latest Storyplayer from a GitHub checkout:
+
+{% highlight bash %}
+git clone https://github.com/datasift/storyplayer.git
+cd storyplayer
+composer install
+export PATH=`pwd`/src/bin:$PATH
+{% endhighlight %}
