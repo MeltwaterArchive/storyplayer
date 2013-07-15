@@ -27,6 +27,7 @@ use DataSift\Storyplayer\Cli\EnvironmentSwitch;
 use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
 use DataSift\Storyplayer\Cli\PlayStoryCommand;
+use DataSift\Storyplayer\Cli\DownloadCommand;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
@@ -197,6 +198,7 @@ function main($argv)
 	//        and the user does not have to type it on the command line
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new ListEnvironmentsCommand($envList));
+	$engine->addCommand(new DownloadCommand);
 
 	// all set - let's go
 	return $engine->main($argv, $additionalContext);
