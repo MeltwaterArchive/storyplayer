@@ -373,17 +373,22 @@ class StoryTeller
 		return $this->storyContext->defines;
 	}
 
-	public function getParams(StoryTemplate $template = null, $additionalParams = array())
+	public function getParams($mixed1 = array(), $mixed2 = array())
 	{
-		if ($template == null) {
-			$return = array();
+		// $mixed1 might be a StoryTemplate
+		if ($mixed1 instanceof StoryTemplate) {
+			$return = $mixed1->getParams();
+		}
+		else if (is_array($mixed1)) {
+			$return = $mixed1;
 		}
 		else {
-			$return = $template->getParams();
+			// unsupported
+			throw new \Exception("Unexpected param 1 to StoryTeller::getParams()");
 		}
 
 		// add any additional params we've been asked to merge in
-		$return = $return + $additionalParams;
+		$return = $return + $mixed2;
 
 		// merge in any defines from the command-line
 		$defines = $this->getDefines();
