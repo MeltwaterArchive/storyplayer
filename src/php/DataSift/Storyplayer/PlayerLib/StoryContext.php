@@ -88,6 +88,7 @@ class StoryContext extends BaseObject
 		$this->user    = new BaseObject;
 		$this->env     = new BaseObject;
 		$this->runtime = new BaseObject;
+		$this->defines = new BaseObject;
 
 		// we need to provide information about the machine that we
 		// are running on

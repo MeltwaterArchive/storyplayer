@@ -368,6 +368,33 @@ class StoryTeller
 		return $this;
 	}
 
+	public function getDefines()
+	{
+		return $this->storyContext->defines;
+	}
+
+	public function getParams(StoryTemplate $template = null, $additionalParams = array())
+	{
+		if ($template == null) {
+			$return = array();
+		}
+		else {
+			$return = $template->getParams();
+		}
+
+		// add any additional params we've been asked to merge in
+		$return = $return + $additionalParams;
+
+		// merge in any defines from the command-line
+		$defines = $this->getDefines();
+		foreach ($defines as $key => $value) {
+			$return[$key] = $value;
+		}
+
+		// all done
+		return $return;
+	}
+
 	// ==================================================================
 	//
 	// Accessors of other containers go here

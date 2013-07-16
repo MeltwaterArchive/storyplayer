@@ -74,6 +74,13 @@ abstract class StoryTemplate
 		return $this->params + $additionalParams;
 	}
 
+	public function addDefines($defines)
+	{
+		foreach ($defines as $key => $value) {
+			$this->params[$key] = $value;
+		}
+	}
+
 	abstract public function getName();
 
 	/**

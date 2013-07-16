@@ -459,6 +459,7 @@ class Story
 	 */
 	public function basedOn(StoryTemplate $tmpl)
 	{
+		// tell the template which story it is being used with
 		$tmpl->setStory($this);
 
 		$tmpl->hasTestEnvironmentSetup()    && $this->addTestEnvironmentSetup($tmpl->getTestEnvironmentSetup());

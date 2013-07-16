@@ -87,7 +87,9 @@ class PlayStoryCommand extends CliCommand
 		$defaultEnvName = getHostname();
 		$this->setSwitches(array(
 			new LogLevelSwitch(),
-			new EnvironmentSwitch($envList, $defaultEnvName)
+			new EnvironmentSwitch($envList, $defaultEnvName),
+			new DefineSwitch(),
+			new PlatformSwitch(),
 		));
 	}
 
@@ -143,6 +145,14 @@ class PlayStoryCommand extends CliCommand
 			//
 			// this will be merged in with the default config
 			$staticConfigManager->loadAdditionalConfig($staticConfig, $envName);
+		}
+
+		// do we have any defines from the command-line to merge in?
+		//
+		// this must be done AFTER all config files have been loaded!
+		if (isset($engine->options->defines)) {
+			// merge into the default + what was loaded from config files
+			$staticConfig->defines->mergeFrom($engine->options->defines);
 		}
 
 		// create our user generator
