@@ -385,11 +385,11 @@ class StoryTeller
 		// phase
 		foreach (array($mixed1, $mixed2) as $mixed) {
 			// $mixed1 might be a StoryTemplate
-			if ($mixed1 instanceof StoryTemplate) {
-				$return = $return + $mixed1->getParams();
+			if ($mixed instanceof StoryTemplate) {
+				$return = $return + $mixed->getParams();
 			}
-			else if (is_array($mixed1)) {
-				$return = $return + $mixed1;
+			else if (is_array($mixed)) {
+				$return = $return + $mixed;
 			}
 			else {
 				// unsupported
