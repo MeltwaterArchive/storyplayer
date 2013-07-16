@@ -67,7 +67,7 @@ class DownloadCommand extends CliCommand
 	public function __construct()
 	{
 		// define the command
-		$this->setName('download-deps');
+		$this->setName('install');
 		$this->setShortDescription('download optional dependencies');
 		$this->setLongDescription(
 			"Use this command to download any optional dependencies"
