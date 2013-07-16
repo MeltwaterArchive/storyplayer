@@ -375,20 +375,27 @@ class StoryTeller
 
 	public function getParams($mixed1 = array(), $mixed2 = array())
 	{
-		// $mixed1 might be a StoryTemplate
-		if ($mixed1 instanceof StoryTemplate) {
-			$return = $mixed1->getParams();
-		}
-		else if (is_array($mixed1)) {
-			$return = $mixed1;
-		}
-		else {
-			// unsupported
-			throw new \Exception("Unexpected param 1 to StoryTeller::getParams()");
-		}
+		// our return value
+		$return = array();
 
-		// add any additional params we've been asked to merge in
-		$return = $return + $mixed2;
+		// $mixed1 OR $mixed2 might be a StoryTemplate
+		//
+		// we've decided to support it either way to reduce the liklihood
+		// of a mistake that causes a PHP error during testEnvironmentTeardown
+		// phase
+		foreach (array($mixed1, $mixed2) as $mixed) {
+			// $mixed1 might be a StoryTemplate
+			if ($mixed1 instanceof StoryTemplate) {
+				$return = $return + $mixed1->getParams();
+			}
+			else if (is_array($mixed1)) {
+				$return = $return + $mixed1;
+			}
+			else {
+				// unsupported
+				throw new \Exception("Unexpected param 1 to StoryTeller::getParams()");
+			}
+		}
 
 		// merge in any defines from the command-line
 		$defines = $this->getDefines();
