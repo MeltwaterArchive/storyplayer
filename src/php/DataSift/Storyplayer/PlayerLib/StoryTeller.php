@@ -383,7 +383,7 @@ class StoryTeller
 		// we've decided to support it either way to reduce the liklihood
 		// of a mistake that causes a PHP error during testEnvironmentTeardown
 		// phase
-		foreach (array($mixed1, $mixed2) as $mixed) {
+		foreach (array($mixed1, $mixed2) as $index => $mixed) {
 			// $mixed1 might be a StoryTemplate
 			if ($mixed instanceof StoryTemplate) {
 				$return = $return + $mixed->getParams();
@@ -393,7 +393,7 @@ class StoryTeller
 			}
 			else {
 				// unsupported
-				throw new \Exception("Unexpected param 1 to StoryTeller::getParams()");
+				throw new \Exception("Unsupported param " . ($index + 1) . " to StoryTeller::getParams(); must be array or StoryTemplate object");
 			}
 		}
 
