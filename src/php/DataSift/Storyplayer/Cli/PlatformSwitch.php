@@ -43,12 +43,16 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\LoadedConfig;
-use DataSift\Stone\ObjectLib\BaseObject;
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeString;
 
 /**
- * Storyplayer's default config - the config that is active before we
- * load any config files
+ * Tell Storyplayer which platform to build the test environment on
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,43 +61,42 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultStaticConfig extends LoadedConfig
+class PlatformSwitch extends CliSwitch
 {
 	public function __construct()
 	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
+		// define our name, and our description
+		$this->setName('platform');
+		$this->setShortDescription('set the platform to build the test environment on');
+		$this->setLongDesc(
+			"If you can run your stories on multiple platforms (Vagrant, EC2, etc etc), "
+			. "use this switch to choose which platform to run your story on."
+			. PHP_EOL . PHP_EOL
+			."This switch is an alias for '-Dplatform=<platform>'."
+		);
 
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
+		// what are the short switches?
+		$this->addShortSwitch('P');
 
-        $this->logger->levels = $levels;
+		// what are the long switches?
+		$this->addLongSwitch('platform');
 
-        // defaults for phases
-        $phases = new BaseObject();
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
+		// what is the required argument?
+		$this->setRequiredArg('<platform>', "the platform to build the test environment on");
+		$this->setArgValidator(new Type_MustBeString);
 
-        $this->phases = $phases;
+		// all done
+	}
 
-        // defaults for defines
-        $this->defines = new BaseObject();
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		if (!isset($engine->options->defines)) {
+			$engine->options->defines = new stdClass;
+		}
+		$engine->options->defines->platform = $params[0];
 
-        // all done
-    }
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }
