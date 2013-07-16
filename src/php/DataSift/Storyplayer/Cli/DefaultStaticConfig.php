@@ -91,6 +91,9 @@ class DefaultStaticConfig extends LoadedConfig
 
         $this->phases = $phases;
 
+        // defaults for defines
+        $this->defines = new BaseObject();
+
         // all done
     }
 }
