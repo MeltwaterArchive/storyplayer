@@ -86,20 +86,26 @@ class AwsDetermine extends Prose
 
 	public function getEc2Client()
 	{
+		// the client to return
+		static $ec2Client = null;
+
 		// shorthand
 		$st = $this->st;
 
-		// what are we doing?
-		$log = $st->startAction("create AWS client for EC2");
+		if (!$ec2Client) {
+			// what are we doing?
+			$log = $st->startAction("create AWS client for EC2");
 
-		// get the Aws client factory
-		$awsFactory = $st->fromAws()->getAwsClientFactory();
+			// get the Aws client factory
+			$awsFactory = $st->fromAws()->getAwsClientFactory();
 
-		// create the EC2 client
-		$ec2Client = $awsFactory->get('ec2');
+			// create the EC2 client
+			$ec2Client = $awsFactory->get('ec2');
+
+			$log->endAction();
+		}
 
 		// all done
-		$log->endAction();
 		return $ec2Client;
 	}
 }
