@@ -496,5 +496,34 @@
     <delete dir="${project.tmpdir}" />
     <phingcallifexists target="local.clean"/>
   </target>
+
+  <!-- <target name="package" depends="build-vendor"> -->
+  <target name="package">
+    <pharpackage
+      destfile="./storyplayer.phar"
+      basedir="./"
+      compression="gzip"
+      stub="./src/stub.php"
+      signature="sha1">
+      <fileset dir="./src">
+        <include name="**/**" />
+      </fileset>
+      <fileset dir="./vendor/php">
+        <include name="**/**" />
+      </fileset>
+      <metadata>
+        <element name="version" value="0.0.1" />
+        <element name="authors">
+          <element name="Stuart Herbert">
+            <element name="email" value="stuart.herbert@datasift.com" />
+          </element>
+          <element name="Michael Heap">
+            <element name="email" value="michael.heap@datasift.com" />
+          </element>
+        </element>
+      </metadata>
+    </pharpackage>
+  </target>
+
 </project>
 <!-- vim: set tabstop=2 shiftwidth=2 expandtab: -->
