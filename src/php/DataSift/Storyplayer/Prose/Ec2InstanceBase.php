@@ -77,6 +77,10 @@ class Ec2InstanceBase extends Prose
 
 			// get the data about the instance from EC2
 			$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+
+			// add the instance data to the vmDetails too, to keep that
+			// up to date
+			$this->vmDetails->ec2Instance = $this->instance;
 		}
 	}
 
