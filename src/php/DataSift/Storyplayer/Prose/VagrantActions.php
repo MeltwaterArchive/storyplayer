@@ -84,6 +84,7 @@ class VagrantActions extends Prose
 		$vmDetails->homeFolder  = $homeFolder;
 		$vmDetails->type        = 'VagrantVm';
 		$vmDetails->sshUsername = 'vagrant';
+		$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
 		$vmDetails->sshOptions  = array (
 			"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
 		);
