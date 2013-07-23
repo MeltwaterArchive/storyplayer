@@ -76,4 +76,11 @@ class DelayedProvisioningDefinitionAction
 		$action = $this->action;
 		$action($this->st, $this->def, $hostName);
 	}
+
+	public function forHost($hostName)
+	{
+		// our embedded action does all the work
+		$action = $this->action;
+		$action($this->st, $this->def, $hostName);
+	}
 }

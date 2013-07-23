@@ -159,4 +159,33 @@ class ProvisioningDefinitionActions extends Prose
 		// all done
 		return $return;
 	}
-}
+
+	public function usePlaybook($playbookName)
+	{
+		// build our callable
+		$action = function($st, $def, $hostName) use($playbookName) {
+			// what are we doing?
+			$log = $st->startAction("use top-level playbook '{$playbookName}' to host '{$hostName}'");
+
+			// make sure we have an entry for this host
+			if (!isset($def->$hostName)) {
+				$def->$hostName = new BaseObject();
+			}
+
+			// add the playbook
+			$def->$hostName->playbook = $playbookName;
+
+			// all done
+			$log->endAction();
+		};
+
+		// build our return object
+		$return = new DelayedProvisioningDefinitionAction (
+			$this->st,
+			$this->args[0],
+			$action
+		);
+
+		// all done
+		return $return;
+	}}
