@@ -59,6 +59,34 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class Ec2Determine extends Prose
 {
+	public function getImage($amiId)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get data for EC2 image '{$amiId}'");
+
+		// get the client
+		$client = $st->fromAws()->getEc2Client();
+
+		// get the list of registered images
+		$result = $client->describeImages();
+
+		// is our image in there?
+		foreach ($result['Images'] as $image) {
+			if ($image['ImageId'] == $amiId) {
+				// success!
+				$log->endAction("image found");
+				return $image;
+			}
+		}
+
+		// if we get here, then we don't have the image
+		$log->endAction("image does not exist");
+		return null;
+	}
+
 	public function getInstance($instanceName)
 	{
 		// shorthand
