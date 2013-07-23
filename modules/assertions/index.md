@@ -1,7 +1,7 @@
 ---
 layout: modules-assertions
 title: The Assertions Module
-prev: '<a href="../../modules/index.html">Prev: Storyplayer Modules</a>'
+prev: '<a href="../../modules/ec2/usingEc2Instance.html">Prev: usingEc2Instance()</a>'
 next: '<a href="../../modules/assertions/assertsArray.html">Next: Array Assertions</a>'
 ---
 
