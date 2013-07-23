@@ -98,8 +98,6 @@ class Ec2InstanceActions extends Ec2InstanceBase
 		$log = $st->startAction("mark all volumes on EC2 VM '{$this->instanceName}' to be deleted on termination");
 
 		// create a list of all of the volumes we're going to modify
-		var_dump($this->instance);
-
 		$ebsVolumes = array();
 		foreach ($this->instance['BlockDeviceMappings'] as $origEbsVolume) {
 			$ebsVolume = array(
@@ -125,8 +123,8 @@ class Ec2InstanceActions extends Ec2InstanceBase
 		// now, we need to make sure that actually worked
 		$this->instance = $st->fromEc2()->getInstance($this->instanceName);
 
-		var_dump("\n\n\nAFTER MODIFY INSTANCE ATTRIBUTE\n\n");
-		var_dump($this->instance);
+		// var_dump("\n\n\nAFTER MODIFY INSTANCE ATTRIBUTE\n\n");
+		// var_dump($this->instance);
 
 		// that should be that
 		$log->endAction();
