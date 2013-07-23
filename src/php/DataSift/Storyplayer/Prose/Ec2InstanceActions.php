@@ -59,6 +59,34 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class Ec2InstanceActions extends Ec2InstanceBase
 {
+	public function createImage($imageName)
+	{
+		$this->requiresValidHost(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("create EBS AMI image '{$imageName}' from EC2 VM '{$this->instanceName}'");
+
+		// get the AWS EC2 client to work with
+		$ec2Client = $st->fromAws()->getEc2Client();
+
+		$response = $ec2Client->createImage(array(
+			"InstanceId" => $this->instance['InstanceId'],
+			"Name" => $imageName
+		));
+
+		// did we get an image ID back?
+		if (!isset($response['ImageId'])) {
+			throw new E5xx_ActionFailed(__METHOD__, "no ImageId returned from EC2 :(");
+		}
+
+		// all done
+		$log->endAction("created AMI image '{$response['ImageId']}'");
+		return $response['ImageId'];
+	}
+
 	public function markAllVolumesAsDeleteOnTermination()
 	{
 		$this->requiresValidHost(__METHOD__);
