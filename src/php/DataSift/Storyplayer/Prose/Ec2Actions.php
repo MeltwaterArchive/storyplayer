@@ -91,8 +91,9 @@ class Ec2Actions extends Prose
 		$vmDetails->securityGroup = $securityGroup;
 		$vmDetails->keyPairName   = $awsSettings->ec2->keyPairName;
 		$vmDetails->sshUsername   = $awsSettings->ec2->sshUsername;
+		$vmDetails->sshKeyFile    = $awsSettings->ec2->sshKeyFile;
 		$vmDetails->sshOptions    = array (
-			"-i '" . $awsSettings->ec2->sshKeyFile
+			"-i '" . $awsSettings->ec2->sshKeyFile . "'"
 		);
 
 		// create our host adapter
