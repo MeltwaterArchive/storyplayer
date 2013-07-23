@@ -2,7 +2,7 @@
 layout: modules
 title: Storyplayer Modules
 prev: '<a href="../environments/vagrant/index.html">Prev: Creating Test Environments Using Vagrant</a>'
-next: '<a href="../modules/assertions/index.html">Next: The Assertions Module</a>'
+next: '<a href="../modules/ec2/index.html">Next: The Amazon EC2 Module</a>'
 ---
 
 # Storyplayer Modules
