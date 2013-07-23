@@ -25,6 +25,24 @@ You need to choose a provisioning engine, and install it.  You also need to prep
 
 At the moment, we support [Ansible](http://ansible.cc/) the best (because it's what we use internally for our test environments), but we're keen to support [Chef](http://www.opscode.com/chef/) and [Puppet](https://puppetlabs.com/) equally - pull requests are most welcome if code changes are needed.
 
+## Configuring The Provisioning Module
+
+This is an example configuration for using [Ansible](http://ansible.cc) as your provisioning engine:
+
+{% highlight json %}
+{
+    "environments": {
+        "thor": {
+            "ansible": {
+                "dir": "/home/stuart/Devel/datasift/qa-ansible-playbooks",
+                "playbook": "main-vagrant.yml",
+                "privateKey": "/home/stuart/.vagrant.d/insecure_private_key"
+            }
+        }
+    }
+}
+{% endhighlight %}
+
 ## Using The Provisioning Module
 
 The general flow of building a test environment is:
@@ -32,7 +50,7 @@ The general flow of building a test environment is:
 1. Define any host-specific parameters that you need to inject into your provisioning engine
 1. Create a physical or virtual host (e.g. using the [Vagrant](../vagrant/index.html) module)
 1. Create a [provisioning definition](provisioning-definition.html)
-1. [Use a provisioner](usingProvisioner.html) to deploy your software
+1. [Use a provisioning engine](usingProvisioningEngine.html) to deploy your software
 
 ## An Example
 

@@ -54,9 +54,20 @@ You're limited only by your imagination, and the performance limitations that co
 
 ## Why Vagrant?
 
-We picked Vagrant because it's the best tool that you can install on your desktop or server, and it's easily combined with a provisioning plugin which together will create your virtual machine and install software into it all in one easy step.
+We support Vagrant because it's the best tool that you can install on your desktop or server to give you a local virtual machine to test inside.
 
-Longer term, we plan on supporting other virtual machine systems too, especially Amazon EC2 and OpenStack (both of which we use here at DataSift).  We also plan on supporting provisioning onto arbitrary remote machines (there'll always be some tests that need to run on real hardware).  When that happens, we'll implement the functionality into the _Server_ module, and continue to maintain this module for backwards compatibility.
+Supported hosting solutions currently are:
+
+* [Amazon EC2](../ec2/index.html)
+* [Vagrant + VirtualBox](../vagrant/index.html)
+
+Planned in the future are:
+
+* OpenStack (which we use at DataSift)
+* Physical Hosts (which we use at DataSift)
+* Statesman (DataSift QA's internal VM provision system)
+
+Pull requests for other hosting solutions are welcome.
 
 ## Dependencies
 
@@ -65,13 +76,32 @@ You need to install:
 * [Vagrant](http://www.vagrantup.com) - CLI tool for controlling virtual machines
 * [VirtualBox](https://www.virtualbox.org/) - virtual machine software, runs on Windows, OS X and Linux
 
-You'll also want to install a provisioning plugin for Vagrant, and the provisioning engine.  Your main choices are [Ansible](http://ansible.cc/), [Chef](http://www.opscode.com/chef/), or [Puppet](https://puppetlabs.com/).
-
-At the moment, we support Ansible the best (because it's what we use internally for our test environments), but we're keen to support Chef and Puppet equally - pull requests are most welcome if code changes are needed.
+You'll probably want to use one of our [supported provisioning engines](../provisioning/index.html) too.
 
 ## Before You Use The Vagrant Module
 
 Before you write any tests for your stories, test your Vagrant virtual machine from the command line.  Start it up, and make sure that it boots and provisions exactly how you want it.  This step can save you a lot of time when you design a new virtual machine for a series of tests.
+
+## Configuring The Vagrant Module
+
+Add the following to your Storyplayer configuration:
+
+{% highlight json %}
+{
+    "environments": {
+        "env-name": {
+            "vagrant": {
+                "dir": "/home/stuart/Devel/datasift/vagrant-environments"
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+where:
+
+* _env-name_ is the name of your test environment (or 'defaults' to apply to all test environments)
+* _dir_ is the path to the folder containing your Vagrantfiles
 
 ## Using The Vagrant Module
 

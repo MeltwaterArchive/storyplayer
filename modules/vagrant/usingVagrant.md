@@ -13,7 +13,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## Behaviour And Return Codes
 
-Every action makes changes to the browser and the web page loaded in the browser.
+Every action makes changes to the virtual machine.
 
 * If the action succeeds, the action returns control to your code, and does not return a value.
 * If the action fails, an exception is throw. _Do not catch exceptions thrown by these actions._ Let them go through to Storyplayer, which will use the information to work out whether your story as a whole passes or fails.
