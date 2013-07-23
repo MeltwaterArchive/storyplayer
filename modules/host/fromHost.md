@@ -114,3 +114,31 @@ where:
 * _$hostName_ is the name you set when you created the host
 * _$processName_ is the string to search the output of `ps` for
 * _$isRunning_ is _TRUE_ if the process is running, or _FALSE_ if the process is not running
+
+## getSshUsername()
+
+Use _$st->fromHost()->getSshUsername()_ to get the default username used for SSH'ing into the host.
+
+{% highlight php %}
+$sshUsername = $st->fromHost($hostName)->getSshUsername();
+{% endhighlight %}
+
+where:
+
+* _$hostName_ is the name you set when you created the host
+* _$sshUsername_ is the default SSH username for that host
+
+## getSshKeyFile()
+
+Use _$st->fromHost()->getSshKeyFile()_ to get the path to the SSH private key file that Storyplayer will use in _[$st->usingHost()->runCommand()](usingHost.html#runcommand)_ et al.
+
+{% highlight php %}
+$sshKeyFile = $st->fromHost($hostName)->getSshKeyFile();
+{% endhighlight %}
+
+where:
+
+* _$hostName_ is the name you set when you created the host
+* _$sshKeyFile_ is the default SSH key file for that host
+
+The SSH private key file is set when the host is originally created (e.g. when _[$st->usingVagrant()->createVm()](../vagrant/usingVagrant.html#createvm)_ is called).
