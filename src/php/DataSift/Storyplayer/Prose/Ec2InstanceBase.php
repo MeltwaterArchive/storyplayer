@@ -57,80 +57,38 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Ec2InstanceDetermine extends Ec2InstanceBase
+class Ec2InstanceBase extends Prose
 {
-	public function getInstanceIsRunning()
+	protected $vmDetails    = null;
+	protected $instance     = null;
+	protected $instanceName = '**unknown**';
+
+	public function __construct(StoryTeller $st, $params = array())
 	{
-		// shorthand
-		$st = $this->st;
+		// call our parent
+		parent::__construct($st, $params);
 
-		// what are we doing?
-		$log = $st->startAction("determine if EC2 VM '{$this->instanceName}' is running");
+		// get the VM details from the hosts table
+		$this->vmDetails = $st->fromHostsTable()->getDetailsForHost($params[0]);
 
-		// does the instance exist?
+		if ($this->vmDetails) {
+			// remember the name of this VM
+			$this->instanceName = $this->vmDetails->ec2Name;
+
+			// get the data about the instance from EC2
+			$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+		}
+	}
+
+	protected function requiresValidHost($method)
+	{
+		if (!$this->vmDetails) {
+			throw new E5xx_ActionFailed($method, "No such host '{$this->args[0]}' in the hosts table");
+		}
+
+		// did we get anything?
 		if (!$this->instance) {
-			$log->endAction("no: instance does not exist");
-			return false;
+			throw new E5xx_ActionFailed($method, "No such EC2 instance '{$this->instanceName}' at AWS");
 		}
-
-		// is the instance running?
-		if ($this->instance['State']['Code'] == 16) {
-			// yes, it is
-			$log->endAction("yes");
-			return true;
-		}
-		else {
-			// no, it is not
-			$log->endAction("no: state is '{$this->instance['State']['Name']}'");
-			return false;
-		}
-	}
-
-	public function getInstanceVolumes()
-	{
-		// make sure we have a host to work with
-		$this->requiresValidHost(__METHOD__);
-
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("retrieve configuration for all volumes attached to EC2 VM '{$this->instanceName}'");
-
-		// does this instance have any block devices?
-		if (isset($this->instance['BlockDeviceMappings'])) {
-			$log->endAction("found " . count($this->instance['BlockDeviceMappings']) . " volumes");
-			return $this->instance['BlockDeviceMappings'];
-		}
-
-		// if we get here, the instance has no volumes, which is
-		// a little weird
-		$log->endAction("no volumes found");
-		return array();
-	}
-
-	public function getPublicDnsName()
-	{
-		// make sure we have a host to work with
-		$this->requiresValidHost(__METHOD__);
-
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get the public DNS name for EC2 VM '{$this->instanceName}'");
-
-		// here are the details, as a string
-		$dnsName = $this->instance['PublicDnsName'];
-
-		// does it *have* a public DNS name?
-		if (empty($dnsName)) {
-			$log->endAction("EC2 VM does not have a public DNS name; has it finished booting?");
-			return null;
-		}
-
-		// all done
-		$log->endAction("public DNS name is: '{$dnsName}'");
-		return $dnsName;
 	}
 }

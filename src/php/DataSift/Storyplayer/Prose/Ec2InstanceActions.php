@@ -57,80 +57,50 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Ec2InstanceDetermine extends Ec2InstanceBase
+class Ec2InstanceActions extends Ec2InstanceBase
 {
-	public function getInstanceIsRunning()
+	public function markAllVolumesAsDeleteOnTermination()
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("determine if EC2 VM '{$this->instanceName}' is running");
-
-		// does the instance exist?
-		if (!$this->instance) {
-			$log->endAction("no: instance does not exist");
-			return false;
-		}
-
-		// is the instance running?
-		if ($this->instance['State']['Code'] == 16) {
-			// yes, it is
-			$log->endAction("yes");
-			return true;
-		}
-		else {
-			// no, it is not
-			$log->endAction("no: state is '{$this->instance['State']['Name']}'");
-			return false;
-		}
-	}
-
-	public function getInstanceVolumes()
-	{
-		// make sure we have a host to work with
 		$this->requiresValidHost(__METHOD__);
 
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("retrieve configuration for all volumes attached to EC2 VM '{$this->instanceName}'");
+		$log = $st->startAction("mark all volumes on EC2 VM '{$this->instanceName}' to be deleted on termination");
 
-		// does this instance have any block devices?
-		if (isset($this->instance['BlockDeviceMappings'])) {
-			$log->endAction("found " . count($this->instance['BlockDeviceMappings']) . " volumes");
-			return $this->instance['BlockDeviceMappings'];
+		// create a list of all of the volumes we're going to modify
+		var_dump($this->instance);
+
+		$ebsVolumes = array();
+		foreach ($this->instance['BlockDeviceMappings'] as $origEbsVolume) {
+			$ebsVolume = array(
+				'DeviceName' => $origEbsVolume['DeviceName'],
+				'Ebs' => array (
+					'DeleteOnTermination' => true
+				)
+			);
+
+			$ebsVolumes[] = $ebsVolume;
 		}
 
-		// if we get here, the instance has no volumes, which is
-		// a little weird
-		$log->endAction("no volumes found");
-		return array();
-	}
+		// get the AWS EC2 client to work with
+		$ec2Client = $st->fromAws()->getEc2Client();
 
-	public function getPublicDnsName()
-	{
-		// make sure we have a host to work with
-		$this->requiresValidHost(__METHOD__);
+		// let's mark all of the volumes as needing to be deleted
+		// on termination
+		$ec2Client->modifyInstanceAttribute(array(
+			'InstanceId' => $this->instance['InstanceId'],
+			'BlockDeviceMappings' => $ebsVolumes
+		));
 
-		// shorthand
-		$st = $this->st;
+		// now, we need to make sure that actually worked
+		$this->instance = $st->fromEc2()->getInstance($this->instanceName);
 
-		// what are we doing?
-		$log = $st->startAction("get the public DNS name for EC2 VM '{$this->instanceName}'");
+		var_dump("\n\n\nAFTER MODIFY INSTANCE ATTRIBUTE\n\n");
+		var_dump($this->instance);
 
-		// here are the details, as a string
-		$dnsName = $this->instance['PublicDnsName'];
-
-		// does it *have* a public DNS name?
-		if (empty($dnsName)) {
-			$log->endAction("EC2 VM does not have a public DNS name; has it finished booting?");
-			return null;
-		}
-
-		// all done
-		$log->endAction("public DNS name is: '{$dnsName}'");
-		return $dnsName;
+		// that should be that
+		$log->endAction();
 	}
 }
