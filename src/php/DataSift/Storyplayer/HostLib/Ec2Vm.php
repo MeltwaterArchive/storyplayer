@@ -94,8 +94,9 @@ class Ec2Vm implements SupportedHost
 
 		// make sure the VM is stopped, if it is running
 		$log->addStep("stop EC2 VM '{$vmDetails->ec2Name}' if already running", function() use($st, $vmDetails, $client) {
-			if ($st->fromEc2Instance($vmDetails->ec2Name)->getInstanceisRunning()) {
+			if ($st->fromEc2Instance($vmDetails->name)->getInstanceisRunning()) {
 				// stop the host
+				$st->usingEc2()->destroyVm($vmDetails->name);
 			}
 		});
 
@@ -135,13 +136,16 @@ class Ec2Vm implements SupportedHost
 			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
 		}
 
+		// we'll need this for future API calls
+		$instanceId = $response['Instances'][0]['InstanceId'];
+
 		try {
 			// now, we need to wait until this instance is running
-			$log->addStep("wait for EC2 VM to finish booting", function() use($client, $vmDetails, $response) {
+			$log->addStep("wait for EC2 VM '{$instanceId}' to finish booting", function() use($client, $vmDetails, $response, $instanceId) {
 				$client->waitUntilInstanceRunning(array(
-					'InstanceIds' => array($response['Instances'][0]['InstanceId']),
+					'InstanceIds' => array($instanceId),
 					'waiter.interval' 	  => 10,
-					'waiter.max_attempts' => 6
+					'waiter.max_attempts' => 10
 				));
 
 				// remember the instance data, to save us time in the future
@@ -157,6 +161,9 @@ class Ec2Vm implements SupportedHost
 
 		// yes it did!!
 		//
+		// remember this vm, now that it is running
+		$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
+
 		// now, we need its IP address
 		$ipAddress = $this->determineIpAddress($vmDetails);
 
@@ -168,9 +175,6 @@ class Ec2Vm implements SupportedHost
 		// to provision
 		$vmDetails->provisioned = true;
 
-		// remember this vm, now that it is running
-		$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
-
 		// all done
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
@@ -179,7 +183,6 @@ class Ec2Vm implements SupportedHost
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("start VM");
@@ -194,15 +197,37 @@ class Ec2Vm implements SupportedHost
 			return;
 		}
 
-		// let's start the VM
-		$command = "cd '{$vmDetails->dir}' && vagrant up";
-		$retVal = 1;
-		passthru($command, $retVal);
+		// get our Ec2 client from the SDK
+		$client = $st->fromAws()->getEc2Client();
 
-		// did it work?
-		if ($retVal !== 0) {
-			$log->endAction("VM failed to start or re-provision :(");
-			throw new E5xx_ActionFailed(__METHOD__);
+		// what is our instanceId?
+		$instanceId = $vmDetails->ec2Instance['InstanceId'];
+
+		// let's start the VM
+		try {
+			$log->addStep("start EC2 VM instance '{$instanceId}'", function() use($client, &$response, $instanceId) {
+				$response = $client->startInstances(array(
+					"InstanceIds" => array($instanceId)
+				));
+			});
+
+			// now, we need to wait until this instance is running
+			$log->addStep("wait for EC2 VM '{$instanceId}' to finish booting", function() use($client, $vmDetails, $response, $instanceId) {
+				$client->waitUntilInstanceRunning(array(
+					'InstanceIds' => array($instanceId),
+					'waiter.interval' 	  => 10,
+					'waiter.max_attempts' => 10
+				));
+
+				// remember the instance data, to save us time in the future
+				$vmDetails->ec2Instance = $response['Instances'][0];
+			});
+		}
+		catch (Exception $e)
+		{
+			// something went wrong
+			$log->endAction("VM failed to start :(");
+			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
 		}
 
 		// yes it did!!
@@ -221,7 +246,6 @@ class Ec2Vm implements SupportedHost
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("stop VM");
@@ -234,15 +258,37 @@ class Ec2Vm implements SupportedHost
 			return;
 		}
 
-		// yes it is ... shut it down
-		$command = "cd '{$vmDetails->dir}' && vagrant halt";
-		$retVal = 1;
-		passthru($command, $retVal);
+		// get our Ec2 client from the SDK
+		$client = $st->fromAws()->getEc2Client();
 
-		// did it work?
-		if ($retVal !== 0) {
-			$log->endAction("VM failed to shutdown :(");
-			throw new E5xx_ActionFailed(__METHOD__);
+		// what is our instanceId?
+		$instanceId = $vmDetails->ec2Instance['InstanceId'];
+
+		// let's start the VM
+		try {
+			$log->addStep("stop EC2 VM instance '{$instanceId}'", function() use($client, &$response, $instanceId) {
+				$response = $client->stopInstances(array(
+					"InstanceIds" => array($instanceId)
+				));
+			});
+
+			// now, we need to wait until this instance is running
+			$log->addStep("wait for EC2 VM '{$instanceId}' to finish shutting down", function() use($client, $vmDetails, $response, $instanceId) {
+				$client->waitUntilInstanceStopped(array(
+					'InstanceIds' => array($instanceId),
+					'waiter.interval' 	  => 10,
+					'waiter.max_attempts' => 18
+				));
+
+				// remember the instance data, to save us time in the future
+				$vmDetails->ec2Instance = $response['Instances'][0];
+			});
+		}
+		catch (Exception $e)
+		{
+			// something went wrong
+			$log->endAction("VM failed to stop :(");
+			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
 		}
 
 		// all done - success!
@@ -267,58 +313,46 @@ class Ec2Vm implements SupportedHost
 
 	public function powerOffHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-		$vmName = $vmDetails->name;
-
-		// what are we doing?
-		$log = $st->startAction("power off VM");
-
-		// is the VM actually running?
-		if (!$this->isRunning($vmDetails)) {
-			// we've decided not to treat this as an error ... that might
-			// change in a future release
-			$log->endAction("VM was already stopped or destroyed");
-			return;
-		}
-
-		// yes it is ... shut it down
-		$command = "cd '{$vmDetails->dir}' && vagrant halt --force";
-		$retVal = 1;
-		passthru($command, $retVal);
-
-		// did it work?
-		if ($retVal !== 0) {
-			$log->endAction("VM failed to power off :(");
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-
-		// all done - success!
-		$log->endAction("VM successfully powered off");
+		// sadly, not supported by EC2
+		throw new E5xx_ActionFailed(__METHOD__, "operation not supported on EC2");
 	}
 
 	public function destroyHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("destroy VM");
 
-		// is the VM actually running?
-		if ($this->isRunning($vmDetails)) {
-			// yes it is ... shut it down
+		// get our Ec2 client from the SDK
+		$client = $st->fromAws()->getEc2Client();
 
-			$command = "cd '{$vmDetails->dir}' && vagrant destroy --force";
-			$retVal = 1;
-			passthru($command, $retVal);
+		// what is our instanceId?
+		$instanceId = $vmDetails->ec2Instance['InstanceId'];
 
-			// did it work?
-			if ($retVal !== 0) {
-				$log->endAction("VM failed to shutdown :(");
-				throw new E5xx_ActionFailed(__METHOD__);
-			}
+		// let's destroy the VM
+		try {
+			$log->addStep("destroy EC2 VM instance '{$instanceId}'", function() use($client, &$response, $instanceId) {
+				$response = $client->terminateInstances(array(
+					"InstanceIds" => array($instanceId)
+				));
+			});
+
+			// now, we need to wait until this instance has been terminated
+			$log->addStep("wait for EC2 VM '{$instanceId}' to finish terminating", function() use($client, $vmDetails, $response, $instanceId) {
+				$client->waitUntilInstanceTerminated(array(
+					'InstanceIds' => array($instanceId),
+					'waiter.interval' 	  => 10,
+					'waiter.max_attempts' => 10
+				));
+			});
+		}
+		catch (Exception $e)
+		{
+			// something went wrong
+			$log->endAction("VM failed to terminate :(");
+			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
 		}
 
 		// if we get here, we need to forget about this VM
@@ -330,48 +364,12 @@ class Ec2Vm implements SupportedHost
 
 	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("run vagrant command '{$command}'");
-
-		// build the command
-		$fullCommand = "cd '{$vmDetails->dir}' && $command";
-
-		// run the command
-		$returnCode = 0;
-		$output = system($fullCommand, $returnCode);
-
-		// build the result
-		$result = new CommandResult($returnCode, $output);
-
-		// all done
-		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
-		return $result;
+		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
 	public function runCommandViaHostManager($vmDetails, $command)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("run vagrant command '{$command}'");
-
-		// build the command
-		$fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
-
-		// run the command
-		$returnCode = 0;
-		$output = system($fullCommand, $returnCode);
-
-		// build the result
-		$result = new CommandResult($returnCode, $output);
-
-		// all done
-		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
-		return $result;
+		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
 	public function isRunning($vmDetails)
@@ -391,14 +389,9 @@ class Ec2Vm implements SupportedHost
 			$log->endAction("no such instance");
 			return false;
 		}
-		if ($st->fromEc2()->getInstanceIsRunning($instance))
-
-		// if the box is running, it should have a status of 'running'
-		$command = "vagrant status | grep default | head -n 1 | awk '{print \$2'}";
-		$result  = $this->runCommandAgainstHostManager($vmDetails, $command);
-
-		if ($result->output != 'running') {
-			$log->endAction("VM is not running; state is '{$result->output}'");
+		$state = $st->fromEc2Instance($vmDetails->ec2Name)->getInstanceState();
+		if ($state != 'running') {
+			$log->endAction("VM is not running; state is '{$state}'");
 			return false;
 		}
 
@@ -416,7 +409,7 @@ class Ec2Vm implements SupportedHost
 		$log = $st->startAction("determine IP address of EC2 VM '{$vmDetails->name}'");
 
 		// we need to get a fresh copy of the instance details
-		$dnsName = $st->fromEc2Instance($vmDetails->ec2Name)->getPublicDnsName();
+		$dnsName = $st->fromEc2Instance($vmDetails->name)->getPublicDnsName();
 
 		// do we have a DNS name?
 		if (!$dnsName) {
