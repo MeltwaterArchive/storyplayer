@@ -52,7 +52,7 @@ use DataSift\Storyplayer\HostLib;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * do things with vagrant
+ * base class & API for different types of virtual hosting
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -61,7 +61,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class VagrantActions extends VmActionsBase
+class VmActionsBase extends Prose
 {
 	public function __construct(StoryTeller $st, $args = array())
 	{
@@ -69,31 +69,106 @@ class VagrantActions extends VmActionsBase
 		parent::__construct($st, $args);
 	}
 
-	public function createVm($vmName, $osName, $homeFolder)
+	public function destroyVm($vmName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("start vagrant VM '{$vmName}', running guest OS '{$osName}', using Vagrantfile in '{$homeFolder}'");
+		$log = $st->startAction("destroy VM '{$vmName}'");
 
-		// put the details into an array
-		$vmDetails = new BaseObject();
-		$vmDetails->name        = $vmName;
-		$vmDetails->osName      = $osName;
-		$vmDetails->homeFolder  = $homeFolder;
-		$vmDetails->type        = 'VagrantVm';
-		$vmDetails->sshUsername = 'vagrant';
-		$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
-		$vmDetails->sshOptions  = array (
-			"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
-		);
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
 
 		// create our host adapter
 		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
-		// create our virtual machine
-		$host->createHost($vmDetails);
+		// stop the VM
+		$host->destroyHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function stopVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("stop VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// stop the VM
+		$host->stopHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function powerOffVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("power off VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// stop the VM
+		$host->stopHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function restartVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("restart VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// restart our virtual machine
+		$host->restartHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function startVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("start VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// restart our virtual machine
+		$host->startHost($vmDetails);
 
 		// all done
 		$log->endAction();

@@ -264,7 +264,7 @@ class Ec2Vm implements SupportedHost
 		// what is our instanceId?
 		$instanceId = $vmDetails->ec2Instance['InstanceId'];
 
-		// let's start the VM
+		// let's stop the VM
 		try {
 			$log->addStep("stop EC2 VM instance '{$instanceId}'", function() use($client, &$response, $instanceId) {
 				$response = $client->stopInstances(array(
@@ -272,7 +272,7 @@ class Ec2Vm implements SupportedHost
 				));
 			});
 
-			// now, we need to wait until this instance is running
+			// now, we need to wait until this instance has stopped
 			$log->addStep("wait for EC2 VM '{$instanceId}' to finish shutting down", function() use($client, $vmDetails, $response, $instanceId) {
 				$client->waitUntilInstanceStopped(array(
 					'InstanceIds' => array($instanceId),
@@ -314,7 +314,9 @@ class Ec2Vm implements SupportedHost
 	public function powerOffHost($vmDetails)
 	{
 		// sadly, not supported by EC2
-		throw new E5xx_ActionFailed(__METHOD__, "operation not supported on EC2");
+		//
+		// for now, we make this an alias of stopHost().
+		return $this->stopHost($vmDetails);
 	}
 
 	public function destroyHost($vmDetails)

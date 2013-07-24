@@ -47,7 +47,7 @@ use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\HostLib\Ec2Vm;
+use DataSift\Storyplayer\HostLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
@@ -61,7 +61,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Ec2Actions extends Prose
+class Ec2Actions extends VmActionsBase
 {
 	public function __construct(StoryTeller $st, $args = array())
 	{
@@ -97,115 +97,10 @@ class Ec2Actions extends Prose
 		);
 
 		// create our host adapter
-		$host = new Ec2Vm($this->st);
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
 		// create our virtual machine
 		$host->createHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function destroyVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("destroy EC2 VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new Ec2Vm($st);
-
-		// stop the VM
-		$host->destroyHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function stopVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("stop EC2 VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new Ec2Vm($st);
-
-		// stop the VM
-		$host->stopHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function powerOffVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("power off EC2 VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new EC2Vm($st);
-
-		// stop the VM
-		$host->stopHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function restartVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("restart start EC2 VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new EC2Vm($this->st);
-
-		// restart our virtual machine
-		$host->restartHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function startVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("restart start EC2 VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new Ec2Vm($this->st);
-
-		// restart our virtual machine
-		$host->startHost($vmDetails);
 
 		// all done
 		$log->endAction();
