@@ -515,7 +515,6 @@
       </fileset>
       <fileset dir="./vendor">
         <include name="**/**" />
-        <exclude name="autoload.php" />
         <exclude name=".git/**" />
         <exclude name="datasift/webdriver/src/bin/**" />
         <exclude name="datasift/webdriver/src/data/**" />
