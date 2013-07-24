@@ -499,6 +499,8 @@
 
   <!-- <target name="package" depends="build-vendor"> -->
   <target name="package">
+    <exec command="cp src/bin/storyplayer ." logoutput="true" checkreturn="true" />
+    <exec command="sed -i '1d' src/bin/storyplayer" logoutput="true" checkreturn="true" />
     <pharpackage
       destfile="./storyplayer.phar"
       basedir="./"
@@ -508,8 +510,9 @@
       <fileset dir="./src">
         <include name="**/**" />
       </fileset>
-      <fileset dir="./vendor/php">
+      <fileset dir="./vendor">
         <include name="**/**" />
+        <exclude name="autoload.php" />
       </fileset>
       <metadata>
         <element name="version" value="0.0.1" />
@@ -523,6 +526,8 @@
         </element>
       </metadata>
     </pharpackage>
+    <exec command="cp ./storyplayer src/bin" logoutput="true" checkreturn="true" />
+    <exec command="rm ./storyplayer" logoutput="true" checkreturn="true" />
   </target>
 
 </project>
