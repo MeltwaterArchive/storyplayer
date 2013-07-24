@@ -368,6 +368,45 @@ class StoryTeller
 		return $this;
 	}
 
+	public function getDefines()
+	{
+		return $this->storyContext->defines;
+	}
+
+	public function getParams($mixed1 = array(), $mixed2 = array())
+	{
+		// our return value
+		$return = array();
+
+		// $mixed1 OR $mixed2 might be a StoryTemplate
+		//
+		// we've decided to support it either way to reduce the liklihood
+		// of a mistake that causes a PHP error during testEnvironmentTeardown
+		// phase
+		foreach (array($mixed1, $mixed2) as $index => $mixed) {
+			// $mixed1 might be a StoryTemplate
+			if ($mixed instanceof StoryTemplate) {
+				$return = $return + $mixed->getParams();
+			}
+			else if (is_array($mixed)) {
+				$return = $return + $mixed;
+			}
+			else {
+				// unsupported
+				throw new \Exception("Unsupported param " . ($index + 1) . " to StoryTeller::getParams(); must be array or StoryTemplate object");
+			}
+		}
+
+		// merge in any defines from the command-line
+		$defines = $this->getDefines();
+		foreach ($defines as $key => $value) {
+			$return[$key] = $value;
+		}
+
+		// all done
+		return $return;
+	}
+
 	// ==================================================================
 	//
 	// Accessors of other containers go here
