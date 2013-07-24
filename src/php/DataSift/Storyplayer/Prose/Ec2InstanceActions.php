@@ -34,53 +34,99 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper for creating provisioning definitions
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class Ec2InstanceActions extends Ec2InstanceBase
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	public function createImage($imageName)
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
+		$this->requiresValidHost(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("create EBS AMI image '{$imageName}' from EC2 VM '{$this->instanceName}'");
+
+		// get the AWS EC2 client to work with
+		$ec2Client = $st->fromAws()->getEc2Client();
+
+		$response = $ec2Client->createImage(array(
+			"InstanceId" => $this->instance['InstanceId'],
+			"Name" => $imageName
+		));
+
+		// did we get an image ID back?
+		if (!isset($response['ImageId'])) {
+			throw new E5xx_ActionFailed(__METHOD__, "no ImageId returned from EC2 :(");
+		}
+
+		// all done
+		$log->endAction("created AMI image '{$response['ImageId']}'");
+		return $response['ImageId'];
 	}
 
-	public function toHost($hostName)
+	public function markAllVolumesAsDeleteOnTermination()
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
+		$this->requiresValidHost(__METHOD__);
 
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("mark all volumes on EC2 VM '{$this->instanceName}' to be deleted on termination");
+
+		// create a list of all of the volumes we're going to modify
+		$ebsVolumes = array();
+		foreach ($this->instance['BlockDeviceMappings'] as $origEbsVolume) {
+			$ebsVolume = array(
+				'DeviceName' => $origEbsVolume['DeviceName'],
+				'Ebs' => array (
+					'DeleteOnTermination' => true
+				)
+			);
+
+			$ebsVolumes[] = $ebsVolume;
+		}
+
+		// get the AWS EC2 client to work with
+		$ec2Client = $st->fromAws()->getEc2Client();
+
+		// let's mark all of the volumes as needing to be deleted
+		// on termination
+		$ec2Client->modifyInstanceAttribute(array(
+			'InstanceId' => $this->instance['InstanceId'],
+			'BlockDeviceMappings' => $ebsVolumes
+		));
+
+		// now, we need to make sure that actually worked
+		$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+
+		// var_dump("\n\n\nAFTER MODIFY INSTANCE ATTRIBUTE\n\n");
+		// var_dump($this->instance);
+
+		// that should be that
+		$log->endAction();
 	}
 }

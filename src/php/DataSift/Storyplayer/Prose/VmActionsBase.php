@@ -43,18 +43,16 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\HostBase;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\HostLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * do things with vagrant
+ * base class & API for different types of virtual hosting
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -63,115 +61,116 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostActions extends HostBase
+class VmActionsBase extends Prose
 {
-	public function runCommand($command)
+	public function __construct(StoryTeller $st, $args = array())
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("run command '{$command}' on host '{$this->hostDetails->name}'");
-
-		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
-
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
-
-		// run the command in the guest operating system
-		$result = $host->runCommand($this->hostDetails, $command);
-
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// all done
-		$log->endAction();
-		return $result;
+		// call the parent constructor
+		parent::__construct($st, $args);
 	}
 
-	public function runCommandAsUser($command, $user)
+	public function destroyVm($vmName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("destroy VM '{$vmName}'");
 
-		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
-		// make a copy of the hostDetails, so that we can override them
-		$myHostDetails = clone $this->hostDetails;
-		$myHostDetails->sshUsername = $user;
-
-		// run the command in the guest operating system
-		$result = $host->runCommand($myHostDetails, $command);
-
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+		// stop the VM
+		$host->destroyHost($vmDetails);
 
 		// all done
 		$log->endAction();
-		return $result;
 	}
 
-	public function runCommandAndIgnoreErrors($command)
+	public function stopVm($vmName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("stop VM '{$vmName}'");
 
-		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
-		// run the command in the guest operating system
-		$result = $host->runCommand($this->hostDetails, $command);
+		// stop the VM
+		$host->stopHost($vmDetails);
 
 		// all done
 		$log->endAction();
-		return $result;
 	}
 
-	public function runCommandAsUserAndIgnoreErrors($command, $user)
+	public function powerOffVm($vmName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("power off VM '{$vmName}'");
 
-		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
-		// make a copy of the hostDetails, so that we can override them
-		$myHostDetails = clone $this->hostDetails;
-		$myHostDetails->sshUsername = $user;
-
-		// run the command in the guest operating system
-		$result = $host->runCommand($myHostDetails, $command);
+		// stop the VM
+		$host->stopHost($vmDetails);
 
 		// all done
 		$log->endAction();
-		return $result;
+	}
+
+	public function restartVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("restart VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// restart our virtual machine
+		$host->restartHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function startVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("start VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// restart our virtual machine
+		$host->startHost($vmDetails);
+
+		// all done
+		$log->endAction();
 	}
 }

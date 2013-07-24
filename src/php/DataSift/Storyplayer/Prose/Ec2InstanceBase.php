@@ -34,53 +34,65 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper for creating provisioning definitions
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class Ec2InstanceBase extends Prose
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	protected $vmDetails    = null;
+	protected $instance     = null;
+	protected $instanceName = '**unknown**';
+
+	public function __construct(StoryTeller $st, $params = array())
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
+		// call our parent
+		parent::__construct($st, $params);
+
+		// get the VM details from the hosts table
+		$this->vmDetails = $st->fromHostsTable()->getDetailsForHost($params[0]);
+
+		if ($this->vmDetails) {
+			// remember the name of this VM
+			$this->instanceName = $this->vmDetails->ec2Name;
+
+			// get the data about the instance from EC2
+			$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+
+			// add the instance data to the vmDetails too, to keep that
+			// up to date
+			$this->vmDetails->ec2Instance = $this->instance;
+		}
 	}
 
-	public function toHost($hostName)
+	protected function requiresValidHost($method)
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
+		if (!$this->vmDetails) {
+			throw new E5xx_ActionFailed($method, "No such host '{$this->args[0]}' in the hosts table");
+		}
 
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// did we get anything?
+		if (!$this->instance) {
+			throw new E5xx_ActionFailed($method, "No such EC2 instance '{$this->instanceName}' at AWS");
+		}
 	}
 }
