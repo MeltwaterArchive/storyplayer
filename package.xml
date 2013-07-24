@@ -33,6 +33,12 @@
     <dir baseinstalldir="/" name="/">
 ${contents}
     </dir>
+    <dir baseinstalldir="/" name="/">
+      <file baseinstalldir="/" name="storyplayer.bat" role="script">
+        <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+        <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
+      </file>
+	</dir>
   </contents>
   <dependencies>
     <required>
