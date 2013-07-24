@@ -50,7 +50,7 @@ use Phix_Project\CliEngine\CliResult;
 
 use DataSift\Stone\DownloadLib\FileDownloader;
 
-use DataSift\WebDriver\Configuration as WebDriverConfiguration;
+use DataSift\WebDriver\WebDriverConfiguration;
 
 /**
  * Command to download dependencies
