@@ -43,12 +43,13 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\LoadedConfig;
-use DataSift\Stone\ObjectLib\BaseObject;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * Storyplayer's default config - the config that is active before we
- * load any config files
+ * A command to list the
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,43 +58,48 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultStaticConfig extends LoadedConfig
+class ListHostsTableCommand extends CliCommand
 {
 	public function __construct()
 	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
+		// define the command
+		$this->setName('list-hoststable');
+		$this->setShortDescription('list the current contents of the hoststable');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the machines (physical or VM)"
+			. " that are currently listed in Storyplayer's hoststable."
+			.PHP_EOL .PHP_EOL
+			."This can help you to identify VMs that have been left running after "
+			."a test has completed."
+			.PHP_EOL
+		);
+		$this->setSwitches(array(
+			new HostTypeSwitch("list only hosts of a given type", "a comma-separated list of the types of hosts to include in the output")
+		));
+	}
 
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// shorthand
+		$runtimeConfig = $additionalContext->runtimeConfig;
 
-        $this->logger->levels = $levels;
+		// are there any hosts in the table?
+		if (!isset($runtimeConfig->hosts)) {
+			// we're done
+			return new CliResult(0);
+		}
 
-        // defaults for phases
-        $phases = new BaseObject();
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
+		// let's walk through the table
+		foreach ($runtimeConfig->hosts as $hostName => $details) {
+			// is this in the list we are filtering against?
+			if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
+				continue;
+			}
 
-        $this->phases = $phases;
+			echo "{$details->name}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
+		}
 
-        // defaults for defines
-        $this->defines = new BaseObject();
-
-        // all done
-    }
+		// all done
+		return new CliResult(0);
+	}
 }

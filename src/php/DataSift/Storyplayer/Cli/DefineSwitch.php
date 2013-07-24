@@ -43,13 +43,16 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use stdClass;
+
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliEngineSwitch;
 use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
 
 /**
- * Tell Storyplayer which test environment to test against; for when there
- * is more than one test environment defined
+ * Override the settings defined in your story
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -58,45 +61,39 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class EnvironmentSwitch extends CliEngineSwitch
+class DefineSwitch extends CliSwitch
 {
-	public function __construct($envList, $defaultEnvName)
-	{
-		// remember the list of available environments
-		$this->envList = $envList;
-
-		// remember the user's prefered test environment (can be NULL)
-		$this->defaultEnvName = $defaultEnvName;
-	}
-
-	public function getDefinition()
+	public function __construct()
 	{
 		// define our name, and our description
-		$def = $this->newDefinition('environment', 'set the environment to test against');
+		$this->setName('define');
+		$this->setShortDescription('override a setting in your story');
 
 		// what are the short switches?
-		$def->addShortSwitch('e');
-
-		// what are the long switches?
-		$def->addLongSwitch('environment');
+		$this->addShortSwitch('D');
 
 		// what is the required argument?
-		$def->setRequiredArg('<environment>', "the environment to test against");
-		$def->setArgValidator(new EnvironmentValidator($this->envList));
+		$this->setRequiredArg('<key=value>', "the setting you want to set in your story");
+		$this->setArgValidator(new Type_MustBeKeyValuePair);
 
-		// does the user have a preferred test environment?
-		if ($this->defaultEnvName) {
-			$def->setArgHasDefaultValueOf($this->defaultEnvName);
-		}
+		// this argument is repeatable
+		$this->setSwitchIsRepeatable();
 
 		// all done
-		return $def;
 	}
 
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
+		// split up the setting
+		$parts = explode('=', $params[0]);
+		$key   = array_shift($parts);
+		$value = implode('=', $parts);
+
 		// remember the setting
-		$engine->options->environment = $params[0];
+		if (!isset($engine->options->defines)) {
+			$engine->options->defines = new stdClass;
+		}
+		$engine->options->defines->$key = $value;
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);
