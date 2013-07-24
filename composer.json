@@ -1,12 +1,18 @@
 {
 	"name": "datasift/storyplayer",
 	"description": "Bring your user and service stories to life through test automation",
-	"homepage": "https://github.com/datasift/storyplayer",
+	"homepage": "https://datasift.github.io/storyplayer",
 	"license": "BSD-3-Clause",
 	"authors": [
 		{
 			"name": "Stuart Herbert",
 			"email": "stuart.herbert@datasift.com",
+			"homepage": "http://datasift.github.io",
+			"role": "Developer"
+		},
+		{
+			"name": "Michael Heap",
+			"email": "michael.heap@datasift.com",
 			"homepage": "http://datasift.github.io",
 			"role": "Developer"
 		}
@@ -28,8 +34,8 @@
 	"require": {
 		"phix/autoloader": "4.*",
 		"phix/cliengine": "@dev",
-		"datasift/stone": "@dev",
-		"datasift/webdriver": "@dev",
+		"datasift/stone": ">=1.5.0",
+		"datasift/webdriver": ">=1.3.0",
 		"aws/aws-sdk-php": "2.*"
 	},
 	"autoload": {
