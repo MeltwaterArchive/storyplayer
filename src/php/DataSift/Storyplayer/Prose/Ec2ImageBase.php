@@ -34,53 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper for creating provisioning definitions
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class Ec2ImageBase extends Prose
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	protected $image = null;
+	protected $amiId = '**unknown**';
+
+	public function __construct(StoryTeller $st, $params = array())
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
+		// call our parent
+		parent::__construct($st, $params);
+
+		// remember the name of this VM
+		$this->amiId = $params[0];
+
+		// get the data about the instance from EC2
+		$this->image = $st->fromEc2()->getImage($this->amiId);
 	}
 
-	public function toHost($hostName)
+	protected function requiresValidImage($method)
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
-
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		if (!$this->image) {
+			throw new E5xx_ActionFailed($method, "No such EC2 image '{$this->amiId}' at AWS");
+		}
 	}
 }

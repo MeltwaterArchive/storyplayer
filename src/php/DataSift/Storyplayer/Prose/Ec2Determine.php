@@ -34,53 +34,105 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper for creating provisioning definitions
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class Ec2Determine extends Prose
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	public function getImage($amiId)
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get data for EC2 image '{$amiId}'");
+
+		// get the client
+		$client = $st->fromAws()->getEc2Client();
+
+		// get the list of registered images
+		$result = $client->describeImages();
+
+		// is our image in there?
+		foreach ($result['Images'] as $image) {
+			if ($image['ImageId'] == $amiId) {
+				// success!
+				$log->endAction("image found");
+				return $image;
+			}
+		}
+
+		// if we get here, then we don't have the image
+		$log->endAction("image does not exist");
+		return null;
 	}
 
-	public function toHost($hostName)
+	public function getInstance($instanceName)
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
+		// shorthand
+		$st = $this->st;
 
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// what are we doing?
+		$log = $st->startAction("get data for EC2 VM '{$instanceName}'");
+
+		// get the client
+		$client = $st->fromAws()->getEc2Client();
+
+		// get the list of running instances
+		$result = $client->describeInstances();
+
+		// loop through, and see if the instance is running
+		foreach ($result['Reservations'] as $reservation) {
+			foreach ($reservation['Instances'] as $instance) {
+				$foundInstanceName = '';
+
+				if (!isset($instance['Tags'])) {
+					// no tags at all means no name to match against
+					continue;
+				}
+
+				// skip terminated instances
+				if ($instance['State']['Code'] == 48) {
+					continue;
+				}
+
+				foreach ($instance['Tags'] as $tag) {
+					if ($tag['Key'] == 'Name') {
+						$foundInstanceName = $tag['Value'];
+					}
+				}
+
+				if ($instanceName == $foundInstanceName) {
+					// we're done here
+					$instanceId = $instance['InstanceId'];
+					$log->endAction("instance is running as ID '{$instanceId}'");
+					return $instance;
+				}
+			}
+		}
+
+		// if we get here, the instance currently does not exist at EC2
+		$log->endAction("instance does not exist");
+		return null;
 	}
 }

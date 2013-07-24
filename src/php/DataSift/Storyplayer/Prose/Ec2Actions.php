@@ -34,53 +34,75 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
+use DataSift\Storyplayer\HostLib;
+
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper for creating provisioning definitions
+ * do things with Amazon EC2
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class Ec2Actions extends VmActionsBase
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	public function __construct(StoryTeller $st, $args = array())
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
+		// call the parent constructor
+		parent::__construct($st, $args);
 	}
 
-	public function toHost($hostName)
+	public function createVm($vmName, $osName, $amiId, $instanceType, $securityGroup)
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
+		// shorthand
+		$st = $this->st;
 
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// what are we doing?
+		$log = $st->startAction("start EC2 VM '{$vmName}', running guest OS '{$osName}', using AMI ID '{$amiId}' and security group '{$securityGroup}'");
+
+		// get the aws settings
+		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
+
+		// put the details into an array
+		$vmDetails = new BaseObject();
+		$vmDetails->name          = $vmName;
+		$vmDetails->environment   = $st->getEnvironmentName();
+		$vmDetails->osName        = $osName;
+		$vmDetails->amiId         = $amiId;
+		$vmDetails->type          = 'Ec2Vm';
+		$vmDetails->instanceType  = $instanceType;
+		$vmDetails->securityGroup = $securityGroup;
+		$vmDetails->keyPairName   = $awsSettings->ec2->keyPairName;
+		$vmDetails->sshUsername   = $awsSettings->ec2->sshUsername;
+		$vmDetails->sshKeyFile    = $awsSettings->ec2->sshKeyFile;
+		$vmDetails->sshOptions    = array (
+			"-i '" . $awsSettings->ec2->sshKeyFile . "'"
+		);
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// create our virtual machine
+		$host->createHost($vmDetails);
+
+		// all done
+		$log->endAction();
 	}
 }

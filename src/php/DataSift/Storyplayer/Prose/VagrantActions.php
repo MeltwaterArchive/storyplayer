@@ -47,7 +47,7 @@ use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\HostLib\VagrantVm;
+use DataSift\Storyplayer\HostLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
@@ -61,7 +61,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class VagrantActions extends Prose
+class VagrantActions extends VmActionsBase
 {
 	public function __construct(StoryTeller $st, $args = array())
 	{
@@ -84,144 +84,18 @@ class VagrantActions extends Prose
 		$vmDetails->homeFolder  = $homeFolder;
 		$vmDetails->type        = 'VagrantVm';
 		$vmDetails->sshUsername = 'vagrant';
+		$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
 		$vmDetails->sshOptions  = array (
 			"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
 		);
 
 		// create our host adapter
-		$host = new VagrantVm($this->st);
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
 		// create our virtual machine
 		$host->createHost($vmDetails);
 
 		// all done
 		$log->endAction();
-	}
-
-	public function destroyVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("destroy vagrant VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new VagrantVm($st);
-
-		// stop the VM
-		$host->destroyHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function stopVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("stop vagrant VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new VagrantVm($st);
-
-		// stop the VM
-		$host->stopHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function powerOffVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("power off vagrant VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new VagrantVm($st);
-
-		// stop the VM
-		$host->stopHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function restartVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("restart start vagrant VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new VagrantVm($this->st);
-
-		// restart our virtual machine
-		$host->restartHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function startVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("restart start vagrant VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = new VagrantVm($this->st);
-
-		// restart our virtual machine
-		$host->startHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
-
-	public function runVagrantCommand($vmName, $command)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("run command '{$command}' in Vagrant VM '{$boxName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHosts()->getDetails($vmName);
-
-		// create our host adapter
-		$host = new VagrantVm($st);
-
-		// run the command
-		$result = $host->runCommandAgainstHostManager($vmDetails, $command);
-
-		// all done
-		$log->endAction("return code was '{$result->returnCode}', output was '{$result->output}'");
-		return $result;
 	}
 }
