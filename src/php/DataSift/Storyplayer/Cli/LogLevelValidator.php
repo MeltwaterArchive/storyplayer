@@ -43,57 +43,28 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\LoadedConfig;
-use DataSift\Stone\ObjectLib\BaseObject;
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
 
-/**
- * Storyplayer's default config - the config that is active before we
- * load any config files
- *
- * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class DefaultStaticConfig extends LoadedConfig
+use DataSift\Stone\LogLib\Log;
+
+class LogLevelValidator implements Validator
 {
-	public function __construct()
-	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
+    const MSG_UNKNOWNLOGLEVEL = "Unknown log level '%value%'";
 
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
+    public function validate($value, ValidationResult $result = null)
+    {
+        if ($result === null) {
+            $result = new ValidationResult($value);
+        }
 
-        $this->logger->levels = $levels;
+        // the $value must be a valid log level
+        $logLevel = Log::getLevelFromName($value);
+        if ($logLevel === null) {
+            $result->addError(static::MSG_UNKNOWNLOGLEVEL);
+            return $result;
+        }
 
-        // defaults for phases
-        $phases = new BaseObject();
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
-
-        $this->phases = $phases;
-
-        // defaults for defines
-        $this->defines = new BaseObject();
-
-        // all done
+        return $result;
     }
 }

@@ -43,12 +43,16 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\LoadedConfig;
-use DataSift\Stone\ObjectLib\BaseObject;
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use DataSift\Stone\LogLib\Log;
 
 /**
- * Storyplayer's default config - the config that is active before we
- * load any config files
+ * Tell Storyplayer which log level to output at
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,43 +61,36 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultStaticConfig extends LoadedConfig
+class LogLevelSwitch extends CliSwitch
 {
 	public function __construct()
 	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
+		// define our name, and our description
+		$this->setName('loglevel');
+		$this->setShortDescription('set the output log level');
 
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
+		// what are the short switches?
+		$this->addShortSwitch('L');
 
-        $this->logger->levels = $levels;
+		// what are the long switches?
+		$this->addLongSwitch('loglevel');
 
-        // defaults for phases
-        $phases = new BaseObject();
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
+		// what is the required argument?
+		$this->setRequiredArg('<loglevel>', "the minimum log level to use; one of: EMERGENCY, ALERT, CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG or TRACE");
+		$this->setArgValidator(new LogLevelValidator());
 
-        $this->phases = $phases;
+		// default logging level if none provided
+		// $this->setArgHasDefaultValueOf('INFO');
 
-        // defaults for defines
-        $this->defines = new BaseObject();
+		// all done
+	}
 
-        // all done
-    }
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->logLevels = Log::getMaskForMinLevel($params[0]);
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }
