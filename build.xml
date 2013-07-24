@@ -497,8 +497,11 @@
     <phingcallifexists target="local.clean"/>
   </target>
 
-  <!-- <target name="package" depends="build-vendor"> -->
-  <target name="package">
+  <target name="build-composer">
+    <exec command="composer install" logoutput="true" checkreturn="true" />
+  </target>
+
+  <target name="package" depends="build-composer">
     <exec command="cp src/bin/storyplayer ." logoutput="true" checkreturn="true" />
     <exec command="sed -i '1d' src/bin/storyplayer" logoutput="true" checkreturn="true" />
     <pharpackage
@@ -513,6 +516,9 @@
       <fileset dir="./vendor">
         <include name="**/**" />
         <exclude name="autoload.php" />
+        <exclude name=".git/**" />
+        <exclude name="datasift/webdriver/src/bin/**" />
+        <exclude name="datasift/webdriver/src/data/**" />
       </fileset>
       <metadata>
         <element name="version" value="0.0.1" />
