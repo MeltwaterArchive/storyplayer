@@ -23,9 +23,9 @@ use Phix_Project\CliEngine\Switches\VersionSwitch;
 use Phix_Project\CliEngine\Commands\HelpCommand;
 
 use DataSift\Storyplayer\Cli\DefaultStaticConfig;
-use DataSift\Storyplayer\Cli\EnvironmentSwitch;
 use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
+use DataSift\Storyplayer\Cli\ListHostsTableCommand;
 use DataSift\Storyplayer\Cli\PlayStoryCommand;
 use DataSift\Storyplayer\Cli\DownloadCommand;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
@@ -153,14 +153,6 @@ function main($argv)
 		'staticConfigManager'  => $staticConfigManager,
 	);
 
-	// special case - does the user want us to use his/her computer's
-	// hostname as the default environment name?
-	$defaultEnvName = null;
-	if (isset($staticConfig->preferences, $staticConfig->preferences->useHostnameAsDefaultEnvironment)
-		&& $staticConfig->preferences->useHostnameAsDefaultEnvironment) {
-		$defaultEnvName = getHostname();
-	}
-
 	// ====================================================================
 	//
 	// PARSE THE COMMAND-LINE
@@ -186,11 +178,10 @@ function main($argv)
 	$engine->addEngineSwitch(new ShortHelpSwitch);
 	$engine->addEngineSwitch(new VerboseShortSwitch($engine->options, 0, 3));
 	$engine->addEngineSwitch(new VerboseLongSwitch($engine->options, 0, 3));
-	$engine->addEngineSwitch(new EnvironmentSwitch($envList, $defaultEnvName));
 
 	// what is our default command?
 	// this is normally some sort of help command
-	$engine->setDefaultCommand(new PlayStoryCommand);
+	$engine->setDefaultCommand(new PlayStoryCommand($envList));
 
 	// add any additional commands
 	// note - we do not have to add the default command a 2nd time
@@ -199,6 +190,7 @@ function main($argv)
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new ListEnvironmentsCommand($envList));
 	$engine->addCommand(new DownloadCommand);
+	$engine->addCommand(new ListHostsTableCommand);
 
 	// all set - let's go
 	return $engine->main($argv, $additionalContext);

@@ -44,8 +44,8 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliEngineSwitch;
 use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
  * Tell Storyplayer which test environment to test against; for when there
@@ -58,39 +58,45 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class EnvironmentSwitch extends CliEngineSwitch
+class EnvironmentSwitch extends CliSwitch
 {
 	public function __construct($envList, $defaultEnvName)
 	{
-		// remember the list of available environments
-		$this->envList = $envList;
-
-		// remember the user's prefered test environment (can be NULL)
-		$this->defaultEnvName = $defaultEnvName;
-	}
-
-	public function getDefinition()
-	{
 		// define our name, and our description
-		$def = $this->newDefinition('environment', 'set the environment to test against');
+		$this->setName('environment');
+		$this->setShortDescription('set the environment to test against');
+		$this->setLongDesc(
+			"If you have multiple test environments listed in your configuration files, "
+			. "you can use this switch to choose which test environment to run the test(s) "
+			. "against. If you omit this switch, Storyplayer will default to using your "
+			. "computer's hostname as the value for <environment>."
+			. PHP_EOL
+			. PHP_EOL
+			. "If you only have one test environment listed, then this switch has no "
+			. "effect when used, and Storyplayer will always use the test environment "
+			. "from your configuration file."
+			. PHP_EOL
+			. PHP_EOL
+			. "See http://datasift.github.io/storyplayer/ "
+			. "for how to configure and use multiple test environments."
+		);
 
 		// what are the short switches?
-		$def->addShortSwitch('e');
+		$this->addShortSwitch('e');
 
 		// what are the long switches?
-		$def->addLongSwitch('environment');
+		$this->addLongSwitch('environment');
 
 		// what is the required argument?
-		$def->setRequiredArg('<environment>', "the environment to test against");
-		$def->setArgValidator(new EnvironmentValidator($this->envList));
+		$this->setRequiredArg('<environment>', "the environment to test against; one of: " . implode(", ", $envList));
+		$this->setArgValidator(new EnvironmentValidator($envList));
 
 		// does the user have a preferred test environment?
-		if ($this->defaultEnvName) {
-			$def->setArgHasDefaultValueOf($this->defaultEnvName);
+		if ($defaultEnvName) {
+			$this->setArgHasDefaultValueOf($defaultEnvName);
 		}
 
 		// all done
-		return $def;
 	}
 
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)

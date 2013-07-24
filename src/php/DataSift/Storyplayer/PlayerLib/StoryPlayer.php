@@ -162,6 +162,9 @@ class StoryPlayer
 		// we need to remember the name of the environment too!
 		$context->env->envName = $envName;
 
+		// if there are any 'defines', we need those
+		$context->defines->mergeFrom($staticConfig->defines);
+
 		// put our runtime data in place too
 		//
 		// we don't force a copy of this data, because we're going to

@@ -43,12 +43,16 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\LoadedConfig;
-use DataSift\Stone\ObjectLib\BaseObject;
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
 
 /**
- * Storyplayer's default config - the config that is active before we
- * load any config files
+ * Override the settings defined in your story
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,43 +61,41 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultStaticConfig extends LoadedConfig
+class DefineSwitch extends CliSwitch
 {
 	public function __construct()
 	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
+		// define our name, and our description
+		$this->setName('define');
+		$this->setShortDescription('override a setting in your story');
 
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
+		// what are the short switches?
+		$this->addShortSwitch('D');
 
-        $this->logger->levels = $levels;
+		// what is the required argument?
+		$this->setRequiredArg('<key=value>', "the setting you want to set in your story");
+		$this->setArgValidator(new Type_MustBeKeyValuePair);
 
-        // defaults for phases
-        $phases = new BaseObject();
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
+		// this argument is repeatable
+		$this->setSwitchIsRepeatable();
 
-        $this->phases = $phases;
+		// all done
+	}
 
-        // defaults for defines
-        $this->defines = new BaseObject();
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// split up the setting
+		$parts = explode('=', $params[0]);
+		$key   = array_shift($parts);
+		$value = implode('=', $parts);
 
-        // all done
-    }
+		// remember the setting
+		if (!isset($engine->options->defines)) {
+			$engine->options->defines = new stdClass;
+		}
+		$engine->options->defines->$key = $value;
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }

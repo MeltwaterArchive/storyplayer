@@ -43,12 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\LoadedConfig;
-use DataSift\Stone\ObjectLib\BaseObject;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Storyplayer's default config - the config that is active before we
- * load any config files
+ * Tell Storyplayer which host type to use
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,43 +57,32 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultStaticConfig extends LoadedConfig
+class HostTypeSwitch extends CliSwitch
 {
-	public function __construct()
+	public function __construct($shortDesc, $argDesc)
 	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
+		// define our name, and our description
+		$this->setName('hosttype');
+		$this->setShortDescription($shortDesc);
 
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
+		// what are the short switches?
+		$this->addShortSwitch('T');
 
-        $this->logger->levels = $levels;
+		// what are the long switches?
+		$this->addLongSwitch('hosttype');
 
-        // defaults for phases
-        $phases = new BaseObject();
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
+		// what is the required argument?
+		$this->setRequiredArg('<hosttype>', $argDesc);
+		$this->setArgHasDefaultValueOf("EC2,OpenStack,PhysicalHost,ProxmoxContainer,ProxmoxVM,StatesmanVM,VagrantVM");
+		// all done
+	}
 
-        $this->phases = $phases;
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->hosttype = explode(',', strtolower($params[0]));
 
-        // defaults for defines
-        $this->defines = new BaseObject();
-
-        // all done
-    }
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }
