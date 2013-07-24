@@ -1,17 +1,7 @@
+#!/usr/bin/env php
 <?php
-Phar::mapPhar('storyplayer.phar');
-
-$basePaths = array("src", "vendor");
-
-foreach ($basePaths as $path){
-spl_autoload_register(function ($className) use ($path) {
-	$libPath = 'phar://storyplayer.phar/'.$path.'/';
-	$classFile = str_replace(array('\\', '_'),DIRECTORY_SEPARATOR,$className).'.php';
-	$classPath = $libPath.$classFile;
-	if (file_exists($classPath)) {
-		require $classPath ;
-	}
-});
-}
-require 'phar://storyplayer.phar/src/bin/storyplayer';
+// Alias the phar to phar://storyplayer for include paths
+Phar::mapPhar('storyplayer');
+// Boot the app
+require 'phar://storyplayer/src/bin/storyplayer';
 __HALT_COMPILER();
