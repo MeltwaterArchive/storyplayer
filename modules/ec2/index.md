@@ -1,7 +1,7 @@
 ---
 layout: modules-ec2
 title: The Amazon EC2 Module
-prev: '<a href="../../modules/index.html">Prev: Storyplayer Modules</a>'
+prev: '<a href="../../modules/aws/fromAws.html">Prev: fromAws()</a>'
 next: '<a href="../../modules/ec2/fromEc2.html">Next: fromEc2()</a>'
 ---
 

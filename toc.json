@@ -46,6 +46,8 @@
 		"environments/physical-hosts/index",
 		"environments/vagrant/index",
 		"modules/index",
+		"modules/aws/index",
+		"modules/aws/fromAws",
 		"modules/ec2/index",
 		"modules/ec2/fromEc2",
 		"modules/ec2/fromEc2Instance",
@@ -197,6 +199,7 @@
 		"Modules": {
 			"Introduction": "modules/index",
 			"Sep1": "",
+			"Amazon AWS": "modules/aws/index",
 			"Amazon EC2": "modules/ec2/index",
 			"Assertions": "modules/assertions/index",
 			"Browser": "modules/browser/index",
