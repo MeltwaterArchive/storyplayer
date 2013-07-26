@@ -40,5 +40,6 @@
 	},
 	"autoload": {
 		"psr-0": { "" : "src/php/" }
-	}
+	},
+	"bin": ["src/bin/storyplayer"]
 }
