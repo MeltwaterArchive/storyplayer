@@ -105,14 +105,11 @@ class InstallCommand extends CliCommand
 			$downloader->download($file->url, "./vendor/bin/".$fileBase);
 
 			// Make sure that the relevant files are executable
-			foreach ($file->makeExecutable as $exec){
-				chmod("./vendor/bin/".$exec, 0755);
+			if (isset($file->makeExecutable)) {
+				foreach ($file->makeExecutable as $exec){
+					chmod("./vendor/bin/".$exec, 0755);
+				}
 			}
 		}
-
-
-
-
 	}
-
 }
