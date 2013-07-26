@@ -287,7 +287,7 @@ class PlayStoryCommand extends CliCommand
 
 		foreach ($storyResults as $result)
 		{
-			echo $result->story->getName() . " :: " . StoryPlayer::$outcomeToText[$result->storyResult] . "\n";
+			echo StoryPlayer::$outcomeToText[$result->storyResult] . " :: " . $result->story->getName() . "\n";
 		}
 	}
 
