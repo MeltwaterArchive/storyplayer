@@ -34,68 +34,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @package   Storyplayer/Cli
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\HostLib;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
 
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Stone\DownloadLib\FileDownloader;
+
+use DataSift\WebDriver\WebDriverConfiguration;
 
 /**
- * do things with vagrant
+ * Command to download dependencies
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @package   Storyplayer/Cli
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class VagrantActions extends VmActionsBase
+class DownloadCommand extends CliCommand
 {
-	public function __construct(StoryTeller $st, $args = array())
+	public function __construct()
 	{
-		// call the parent constructor
-		parent::__construct($st, $args);
-	}
-
-	public function createVm($vmName, $osName, $homeFolder)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("start vagrant VM '{$vmName}', running guest OS '{$osName}', using Vagrantfile in '{$homeFolder}'");
-
-		// put the details into an array
-		$vmDetails = new BaseObject();
-		$vmDetails->name        = $vmName;
-		$vmDetails->osName      = $osName;
-		$vmDetails->homeFolder  = $homeFolder;
-		$vmDetails->type        = 'VagrantVm';
-		$vmDetails->sshUsername = 'vagrant';
-		$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
-		$vmDetails->sshOptions  = array (
-			"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
+		// define the command
+		$this->setName('install');
+		$this->setShortDescription('download optional dependencies');
+		$this->setLongDescription(
+			"Use this command to download any optional dependencies"
+			. " that you might need e.g. chromedriver for selenium"
+			.PHP_EOL
 		);
-
-		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
-
-		// create our virtual machine
-		$host->createHost($vmDetails);
-
-		// all done
-		$log->endAction();
+		$this->setArgsList(array(
+		));
 	}
+
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// find a list of files that we need to download
+		$wdConfig = new WebDriverConfiguration;
+		$filesToDownload = $wdConfig->getDependencies();
+
+		$downloader = new FileDownloader();
+
+		foreach ($filesToDownload as $file){
+
+			// How big is the file?
+			// via http://www.php.net/manual/en/function.filesize.php#84130
+			$headers = array_change_key_case(get_headers($file->url, 1),CASE_LOWER);
+			if ( !preg_match('/HTTP\/1\.(0|1) 200 OK/', $headers[0] ) ) { 
+				$fileSize = $headers['content-length'][1];
+			} else { 
+				$fileSize = $headers['content-length'];
+			}
+
+			// Update the user on what's going on
+			echo "Downloading: " . $file->url.' ('.round($fileSize/1024/1024, 3).'mb)'.PHP_EOL;
+
+			// Download it
+			$fileBase = basename($file->url);
+			$downloader->download($file->url, "./vendor/bin/".$fileBase);
+
+			// Make sure that the relevant files are executable
+			foreach ($file->makeExecutable as $exec){
+				chmod("./vendor/bin/".$exec, 0755);
+			}
+		}
+
+
+
+
+	}
+
 }

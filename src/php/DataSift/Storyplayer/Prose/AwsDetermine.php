@@ -34,63 +34,78 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ConfigLib\LoadedConfig;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+
+use Aws\Common\Aws;
 
 /**
- * Storyplayer's default config - the config that is active before we
- * load any config files
+ * generates AWS clients using the official SDK
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultConfig extends LoadedConfig
+class AwsDetermine extends Prose
 {
-	public function __construct()
+	public function getAwsClientFactory()
 	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
+		// shorthand
+		$st = $this->st;
 
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
+		// what are we doing?
+		$log = $st->startAction("create AWS client factory using official SDK");
 
-        $this->logger->levels = $levels;
+		// get the settings for Aws
+		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
 
-        // defaults for phases
-        $phases = new BaseObject();
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
+		// create the AWS client factory
+		$awsFactory = Aws::factory(array(
+			'key' => $awsSettings->key,
+			'secret' => $awsSettings->secret,
+			'region' => $awsSettings->region
+		));
 
-        $this->phases = $phases;
+		// all done
+		$log->endAction();
+		return $awsFactory;
+	}
 
-        // all done
-    }
+	public function getEc2Client()
+	{
+		// the client to return
+		static $ec2Client = null;
+
+		// shorthand
+		$st = $this->st;
+
+		if (!$ec2Client) {
+			// what are we doing?
+			$log = $st->startAction("create AWS client for EC2");
+
+			// get the Aws client factory
+			$awsFactory = $st->fromAws()->getAwsClientFactory();
+
+			// create the EC2 client
+			$ec2Client = $awsFactory->get('ec2');
+
+			$log->endAction();
+		}
+
+		// all done
+		return $ec2Client;
+	}
 }

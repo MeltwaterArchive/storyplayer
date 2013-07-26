@@ -94,6 +94,39 @@ class HostActions extends HostBase
 		return $result;
 	}
 
+	public function runCommandAsUser($command, $user)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->hostDetails->name}'");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// get an object to talk to this host
+		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+
+		// make a copy of the hostDetails, so that we can override them
+		$myHostDetails = clone $this->hostDetails;
+		$myHostDetails->sshUsername = $user;
+
+		// run the command in the guest operating system
+		$result = $host->runCommand($myHostDetails, $command);
+
+		// did the command succeed?
+		if ($result->didCommandFail()) {
+			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
+		}
+
+		// all done
+		$log->endAction();
+		return $result;
+	}
+
 	public function runCommandAndIgnoreErrors($command)
 	{
 		// shorthand
@@ -110,6 +143,32 @@ class HostActions extends HostBase
 
 		// run the command in the guest operating system
 		$result = $host->runCommand($this->hostDetails, $command);
+
+		// all done
+		$log->endAction();
+		return $result;
+	}
+
+	public function runCommandAsUserAndIgnoreErrors($command, $user)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->hostDetails->name}'");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// get an object to talk to this host
+		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+
+		// make a copy of the hostDetails, so that we can override them
+		$myHostDetails = clone $this->hostDetails;
+		$myHostDetails->sshUsername = $user;
+
+		// run the command in the guest operating system
+		$result = $host->runCommand($myHostDetails, $command);
 
 		// all done
 		$log->endAction();

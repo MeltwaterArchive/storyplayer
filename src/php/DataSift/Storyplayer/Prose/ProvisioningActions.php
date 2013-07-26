@@ -43,17 +43,13 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
+use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * manipulate the internal hosts table
+ * Support for creating a new provisioning definition
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,73 +58,19 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class ProvisioningActions extends Prose
 {
-	public function addHost($hostName, $hostDetails)
+	public function createDefinition()
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
+		$log = $st->startAction("create empty provisioning definition");
 
 		// all done
 		$log->endAction();
-	}
 
-	public function removeHost($hostName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
-		}
-
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
-
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
-
-		// all done
-		$log->endAction();
+		return new ProvisioningDefinition($st);
 	}
 }

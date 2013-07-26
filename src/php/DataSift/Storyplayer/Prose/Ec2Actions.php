@@ -43,17 +43,16 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\HostLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * manipulate the internal hosts table
+ * do things with Amazon EC2
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,71 +61,46 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class Ec2Actions extends VmActionsBase
 {
-	public function addHost($hostName, $hostDetails)
+	public function __construct(StoryTeller $st, $args = array())
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
+		// call the parent constructor
+		parent::__construct($st, $args);
 	}
 
-	public function removeHost($hostName)
+	public function createVm($vmName, $osName, $amiId, $instanceType, $securityGroup)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
+		$log = $st->startAction("start EC2 VM '{$vmName}', running guest OS '{$osName}', using AMI ID '{$amiId}' and security group '{$securityGroup}'");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// get the aws settings
+		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
-		}
+		// put the details into an array
+		$vmDetails = new BaseObject();
+		$vmDetails->name          = $vmName;
+		$vmDetails->environment   = $st->getEnvironmentName();
+		$vmDetails->osName        = $osName;
+		$vmDetails->amiId         = $amiId;
+		$vmDetails->type          = 'Ec2Vm';
+		$vmDetails->instanceType  = $instanceType;
+		$vmDetails->securityGroup = $securityGroup;
+		$vmDetails->keyPairName   = $awsSettings->ec2->keyPairName;
+		$vmDetails->sshUsername   = $awsSettings->ec2->sshUsername;
+		$vmDetails->sshKeyFile    = $awsSettings->ec2->sshKeyFile;
+		$vmDetails->sshOptions    = array (
+			"-i '" . $awsSettings->ec2->sshKeyFile . "'"
+		);
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
+		// create our virtual machine
+		$host->createHost($vmDetails);
 
 		// all done
 		$log->endAction();

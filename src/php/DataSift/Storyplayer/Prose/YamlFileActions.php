@@ -43,17 +43,13 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * manipulate the internal hosts table
+ * Support for working with YAML files
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,71 +58,43 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class YamlFileActions extends Prose
 {
-	public function addHost($hostName, $hostDetails)
+	public function __construct(StoryTeller $st, $args)
 	{
-		// shorthand
-		$st = $this->st;
+		// call our parent constructor
+		parent::__construct($st, $args);
 
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
+		// $args[0] will be our filename
+		if (!isset($args[0])) {
+			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name of the file to work with");
 		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
 	}
 
-	public function removeHost($hostName)
+	public function writeDataToFile($params)
 	{
 		// shorthand
 		$st = $this->st;
+		$filename = $this->args[0];
 
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
+		$printer = new DataPrinter();
+		$logParams = $printer->convertToString($params);
+		$log = $st->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
+		// create the YAML data
+		$yamlData = yaml_emit($params);
+		if (!is_string($yamlData) || strlen($yamlData) < 6) {
+			throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
 		}
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
+		// write the file
+		//
+		// the loose FALSE test here is exactly what we want, because we want to catch
+		// both the situation when the write fails, and when there's zero bytes written
+		if (!file_put_contents($filename, $yamlData)) {
+			throw new E5xx_ActionFailed(__METHOD__, "unable to write file '{$filename}'");
 		}
-
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
 
 		// all done
 		$log->endAction();

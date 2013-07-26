@@ -43,17 +43,16 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\HostLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * manipulate the internal hosts table
+ * base class & API for different types of virtual hosting
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,71 +61,114 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class VmActionsBase extends Prose
 {
-	public function addHost($hostName, $hostDetails)
+	public function __construct(StoryTeller $st, $args = array())
+	{
+		// call the parent constructor
+		parent::__construct($st, $args);
+	}
+
+	public function destroyVm($vmName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
+		$log = $st->startAction("destroy VM '{$vmName}'");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
+		// stop the VM
+		$host->destroyHost($vmDetails);
 
 		// all done
 		$log->endAction();
 	}
 
-	public function removeHost($hostName)
+	public function stopVm($vmName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
+		$log = $st->startAction("stop VM '{$vmName}'");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
-		}
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
+		// stop the VM
+		$host->stopHost($vmDetails);
 
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
+		// all done
+		$log->endAction();
+	}
+
+	public function powerOffVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("power off VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// stop the VM
+		$host->stopHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function restartVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("restart VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// restart our virtual machine
+		$host->restartHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function startVm($vmName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("start VM '{$vmName}'");
+
+		// get the VM details
+		$vmDetails = $st->fromHost($vmName)->getDetails();
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// restart our virtual machine
+		$host->startHost($vmDetails);
 
 		// all done
 		$log->endAction();

@@ -43,17 +43,12 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ObjectLib\BaseObject;
-
 /**
- * manipulate the internal hosts table
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,73 +57,42 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class Ec2InstanceBase extends Prose
 {
-	public function addHost($hostName, $hostDetails)
+	protected $vmDetails    = null;
+	protected $instance     = null;
+	protected $instanceName = '**unknown**';
+
+	public function __construct(StoryTeller $st, $params = array())
 	{
-		// shorthand
-		$st = $this->st;
+		// call our parent
+		parent::__construct($st, $params);
 
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
+		// get the VM details from the hosts table
+		$this->vmDetails = $st->fromHostsTable()->getDetailsForHost($params[0]);
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		if ($this->vmDetails) {
+			// remember the name of this VM
+			$this->instanceName = $this->vmDetails->ec2Name;
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
+			// get the data about the instance from EC2
+			$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+
+			// add the instance data to the vmDetails too, to keep that
+			// up to date
+			$this->vmDetails->ec2Instance = $this->instance;
 		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
 	}
 
-	public function removeHost($hostName)
+	protected function requiresValidHost($method)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
+		if (!$this->vmDetails) {
+			throw new E5xx_ActionFailed($method, "No such host '{$this->args[0]}' in the hosts table");
 		}
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
+		// did we get anything?
+		if (!$this->instance) {
+			throw new E5xx_ActionFailed($method, "No such EC2 instance '{$this->instanceName}' at AWS");
 		}
-
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
-
-		// all done
-		$log->endAction();
 	}
 }

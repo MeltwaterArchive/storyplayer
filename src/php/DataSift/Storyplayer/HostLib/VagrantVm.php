@@ -110,10 +110,6 @@ class VagrantVm implements SupportedHost
 		// remove any existing hosts table entry
 		$st->usingHostsTable()->removeHost($vmDetails->name);
 
-		// write out the playbook variables, so that we can tailor our
-		// VM to suit this test
-		$this->writeProvisioningVars($provisioningVars);
-
 		// let's start the VM
 		$command = "cd '{$pathToHomeFolder}' && vagrant up";
 		$retVal = 1;
@@ -355,7 +351,7 @@ class VagrantVm implements SupportedHost
 		$log = $st->startAction("determine status of Vagrant VM '{$vmDetails->name}'");
 
 		// if the box is running, it should have a status of 'running'
-		$command = "vagrant status | grep default | awk '{print \$2'}";
+		$command = "vagrant status | grep default | head -n 1 | awk '{print \$2'}";
 		$result  = $this->runCommandAgainstHostManager($vmDetails, $command);
 
 		if ($result->output != 'running') {
@@ -386,44 +382,4 @@ class VagrantVm implements SupportedHost
 		$log->endAction("IP address is '{$ipAddress}'");
 		return $ipAddress;
 	}
-
-	public function writeProvisioningVars($vars)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("write out provisioning vars");
-
-		// get details about vagrant
-		$vagrantSettings = $st->fromEnvironment()->getAppSettings('vagrant');
-
-		// do we have somewhere to write to?
-		if (!isset($vagrantSettings->provisioning_vars_file)) {
-			throw new E5xx_ActionFailed(__METHOD__, "missing config: 'provisioning_vars_file' in 'vagrant' settings");
-		}
-		$varsFilename = $vagrantSettings->dir . DIRECTORY_SEPARATOR . $vagrantSettings->provisioning_vars_file;
-
-		// make sure we have something to write
-		if (count($vars) == 0) {
-			$vars['dummy'] = 'true';
-		}
-
-		// make sure we ahve somewhere to write it to
-		$log->addStep("create folder for provisioning vars file", function() use($varsFilename) {
-			$varsDirname = dirname($varsFilename);
-			if (!is_dir($varsDirname)) {
-				mkdir($varsDirname);
-			}
-		});
-
-		// save the data
-		$log->addStep("write vars to file '{$varsFilename}'", function() use ($varsFilename, $vars) {
-			file_put_contents($varsFilename, yaml_emit($vars));
-		});
-
-		// all done
-		$log->endAction();
-	}
-
 }

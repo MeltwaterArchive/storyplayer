@@ -43,17 +43,12 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ObjectLib\BaseObject;
-
 /**
- * manipulate the internal hosts table
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,73 +57,80 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class Ec2InstanceDetermine extends Ec2InstanceBase
 {
-	public function addHost($hostName, $hostDetails)
+	public function getInstanceIsRunning()
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
+		$log = $st->startAction("determine if EC2 VM '{$this->instanceName}' is running");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
+		// does the instance exist?
+		if (!$this->instance) {
+			$log->endAction("no: instance does not exist");
+			return false;
 		}
 
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
+		// is the instance running?
+		if ($this->instance['State']['Code'] == 16) {
+			// yes, it is
+			$log->endAction("yes");
+			return true;
 		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
+		else {
+			// no, it is not
+			$log->endAction("no: state is '{$this->instance['State']['Name']}'");
+			return false;
+		}
 	}
 
-	public function removeHost($hostName)
+	public function getInstanceVolumes()
 	{
+		// make sure we have a host to work with
+		$this->requiresValidHost(__METHOD__);
+
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
+		$log = $st->startAction("retrieve configuration for all volumes attached to EC2 VM '{$this->instanceName}'");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
+		// does this instance have any block devices?
+		if (isset($this->instance['BlockDeviceMappings'])) {
+			$log->endAction("found " . count($this->instance['BlockDeviceMappings']) . " volumes");
+			return $this->instance['BlockDeviceMappings'];
 		}
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
+		// if we get here, the instance has no volumes, which is
+		// a little weird
+		$log->endAction("no volumes found");
+		return array();
+	}
 
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
+	public function getPublicDnsName()
+	{
+		// make sure we have a host to work with
+		$this->requiresValidHost(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get the public DNS name for EC2 VM '{$this->instanceName}'");
+
+		// here are the details, as a string
+		$dnsName = $this->instance['PublicDnsName'];
+
+		// does it *have* a public DNS name?
+		if (empty($dnsName)) {
+			$log->endAction("EC2 VM does not have a public DNS name; has it finished booting?");
+			return null;
+		}
 
 		// all done
-		$log->endAction();
+		$log->endAction("public DNS name is: '{$dnsName}'");
+		return $dnsName;
 	}
 }

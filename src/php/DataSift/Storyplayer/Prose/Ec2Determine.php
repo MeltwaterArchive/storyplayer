@@ -34,61 +34,105 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
-use DataSift\Stone\LogLib\Log;
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * Helper class for making sure the user has somewhere to save the
- * 'runtime config' (the persistent state) to
- *
- * This probably needs moving into Stone in the future
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class RuntimeConfigManager
+class Ec2Determine extends Prose
 {
-	public function getConfigDir()
+	public function getImage($amiId)
 	{
-		static $configDir = null;
+		// shorthand
+		$st = $this->st;
 
-		// do we have a configDir remembered yet?
-		if (!$configDir)
-		{
-			$configDir = getenv("HOME") . '/.storyteller';
-		}
+		// what are we doing?
+		$log = $st->startAction("get data for EC2 image '{$amiId}'");
 
-		return $configDir;
-	}
+		// get the client
+		$client = $st->fromAws()->getEc2Client();
 
-	public function makeConfigDir()
-	{
-		// what is the path to the config directory?
-		$configDir = $this->getConfigDir();
+		// get the list of registered images
+		$result = $client->describeImages();
 
-		// does it exist?
-		if (!file_exists($configDir))
-		{
-			$success = mkdir($configDir, 0700, true);
-			if (!$success)
-			{
-				// cannot create it - bail out now
-				Log::logError("Unable to create config directory '{$configDir}'");
-				exit(1);
+		// is our image in there?
+		foreach ($result['Images'] as $image) {
+			if ($image['ImageId'] == $amiId) {
+				// success!
+				$log->endAction("image found");
+				return $image;
 			}
 		}
+
+		// if we get here, then we don't have the image
+		$log->endAction("image does not exist");
+		return null;
+	}
+
+	public function getInstance($instanceName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get data for EC2 VM '{$instanceName}'");
+
+		// get the client
+		$client = $st->fromAws()->getEc2Client();
+
+		// get the list of running instances
+		$result = $client->describeInstances();
+
+		// loop through, and see if the instance is running
+		foreach ($result['Reservations'] as $reservation) {
+			foreach ($reservation['Instances'] as $instance) {
+				$foundInstanceName = '';
+
+				if (!isset($instance['Tags'])) {
+					// no tags at all means no name to match against
+					continue;
+				}
+
+				// skip terminated instances
+				if ($instance['State']['Code'] == 48) {
+					continue;
+				}
+
+				foreach ($instance['Tags'] as $tag) {
+					if ($tag['Key'] == 'Name') {
+						$foundInstanceName = $tag['Value'];
+					}
+				}
+
+				if ($instanceName == $foundInstanceName) {
+					// we're done here
+					$instanceId = $instance['InstanceId'];
+					$log->endAction("instance is running as ID '{$instanceId}'");
+					return $instance;
+				}
+			}
+		}
+
+		// if we get here, the instance currently does not exist at EC2
+		$log->endAction("instance does not exist");
+		return null;
 	}
 }

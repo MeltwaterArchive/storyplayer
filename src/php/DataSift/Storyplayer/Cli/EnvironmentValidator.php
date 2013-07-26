@@ -34,68 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\HostLib;
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
 
-use DataSift\Stone\ObjectLib\BaseObject;
-
-/**
- * do things with vagrant
- *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class VagrantActions extends VmActionsBase
+class EnvironmentValidator implements Validator
 {
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// call the parent constructor
-		parent::__construct($st, $args);
-	}
+    const MSG_NOTVALIDENVIRONMENT = "Unknown environment '%value%'";
 
-	public function createVm($vmName, $osName, $homeFolder)
-	{
-		// shorthand
-		$st = $this->st;
+    public function __construct($envList)
+    {
+        $this->envList = $envList;
+    }
 
-		// what are we doing?
-		$log = $st->startAction("start vagrant VM '{$vmName}', running guest OS '{$osName}', using Vagrantfile in '{$homeFolder}'");
+    public function validate($value, ValidationResult $result = null)
+    {
+        if ($result === null) {
+            $result = new ValidationResult($value);
+        }
 
-		// put the details into an array
-		$vmDetails = new BaseObject();
-		$vmDetails->name        = $vmName;
-		$vmDetails->osName      = $osName;
-		$vmDetails->homeFolder  = $homeFolder;
-		$vmDetails->type        = 'VagrantVm';
-		$vmDetails->sshUsername = 'vagrant';
-		$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
-		$vmDetails->sshOptions  = array (
-			"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
-		);
+        // the $value must be a valid environment name
+        if (!in_array($value, $this->envList)) {
+            $result->addError(static::MSG_NOTVALIDENVIRONMENT);
+            return $result;
+        }
 
-		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
-
-		// create our virtual machine
-		$host->createHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
+        return $result;
+    }
 }

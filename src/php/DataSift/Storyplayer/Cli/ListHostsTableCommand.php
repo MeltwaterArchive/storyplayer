@@ -34,101 +34,72 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
-use DataSift\Stone\ObjectLib\BaseObject;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * manipulate the internal hosts table
+ * A command to list the
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class ListHostsTableCommand extends CliCommand
 {
-	public function addHost($hostName, $hostDetails)
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
+		// define the command
+		$this->setName('list-hoststable');
+		$this->setShortDescription('list the current contents of the hoststable');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the machines (physical or VM)"
+			. " that are currently listed in Storyplayer's hoststable."
+			.PHP_EOL .PHP_EOL
+			."This can help you to identify VMs that have been left running after "
+			."a test has completed."
+			.PHP_EOL
+		);
+		$this->setSwitches(array(
+			new HostTypeSwitch("list only hosts of a given type", "a comma-separated list of the types of hosts to include in the output")
+		));
 	}
 
-	public function removeHost($hostName)
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// shorthand
-		$st = $this->st;
+		$runtimeConfig = $additionalContext->runtimeConfig;
 
-		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
+		// are there any hosts in the table?
 		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
+			// we're done
+			return new CliResult(0);
 		}
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
+		// let's walk through the table
+		foreach ($runtimeConfig->hosts as $hostName => $details) {
+			// is this in the list we are filtering against?
+			if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
+				continue;
+			}
 
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
+			echo "{$details->name}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
+		}
 
 		// all done
-		$log->endAction();
+		return new CliResult(0);
 	}
 }

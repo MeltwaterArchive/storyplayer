@@ -14,18 +14,22 @@
 use Phix_Project\Autoloader4\PSR0_Autoloader;
 use Phix_Project\Autoloader4\Autoloader_Path;
 
-use DataSift\Stone\ConfigLib\ConfigLoader;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\DefaultConfig;
-use DataSift\Storyplayer\PlayerLib\RuntimeConfigManager;
-use DataSift\Storyplayer\PlayerLib\StoryConfigLoader;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\StoryLib\StoryLoader;
-use DataSift\Storyplayer\StoryListLib\StoryListLoader;
-use DataSift\Storyplayer\UserLib\User;
-use DataSift\Storyplayer\UserLib\GenericUserGenerator;
-use DataSift\Storyplayer\UserLib\ConfigUserLoader;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\Switches\LongHelpSwitch;
+use Phix_Project\CliEngine\Switches\ShortHelpSwitch;
+use Phix_Project\CliEngine\Switches\VerboseShortSwitch;
+use Phix_Project\CliEngine\Switches\VerboseLongSwitch;
+use Phix_Project\CliEngine\Switches\VersionSwitch;
+use Phix_Project\CliEngine\Commands\HelpCommand;
+
+use DataSift\Storyplayer\Cli\DefaultStaticConfig;
+use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
+use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
+use DataSift\Storyplayer\Cli\ListHostsTableCommand;
+use DataSift\Storyplayer\Cli\PlayStoryCommand;
+use DataSift\Storyplayer\Cli\DownloadCommand;
+use DataSift\Storyplayer\Cli\RuntimeConfigManager;
+use DataSift\Storyplayer\Cli\StaticConfigManager;
 
 // where are we, and our useful utilities?
 define('APP_BINDIR', __DIR__);
@@ -33,7 +37,8 @@ define('APP_BINDIR', __DIR__);
 // work out where the local source code might be
 $localSrcDir = '';
 $localSrcDirs = array(
-	__DIR__ . '/../../src/php',
+	'phar://storyplayer/src/php',
+	realpath(__DIR__ . '/../../src/php'),
 	getcwd() . '/src/php',
 	getcwd() . '/php'
 );
@@ -43,24 +48,45 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 	}
 }
 
-// work out where the vendor folder might be
-$vendorDir = '';
-$vendorDirs = array(
-	__DIR__ . '/../../vendor/php',
-	getcwd() . '/vendor/php'
+// do we have a composer autoloader?
+$composerAutoloader = false;
+$composerFiles = array (
+	'phar://storyplayer/vendor/autoload.php',
+	__DIR__ . '/../../vendor/autoload.php',
+	getcwd() . '/vendor/autoload.php'
 );
-foreach ($vendorDirs as $key => $candidateDir) {
-	if (is_dir($candidateDir)) {
-		$vendorDir = $candidateDir;
+foreach ($composerFiles as $composerFile) {
+	if (file_exists($composerFile)) {
+		require_once($composerFile);
+		$composerAutoloader = true;
 	}
 }
 
-// load the autoloader file
-if (is_dir($vendorDir)) {
-	require $vendorDir . '/Phix_Project/Autoloader4/PSR0/Autoloader.php';
+// do we need to explicitly load Phix's autoloader instead?
+if (!$composerAutoloader) {
+	// work out where the vendor folder might be
+	$vendorDir = '';
+	$vendorDirs = array(
+		'phar://storyplayer/vendor/php',
+		__DIR__ . '/../../vendor/php',
+		getcwd() . '/vendor/php'
+	);
+	foreach ($vendorDirs as $key => $candidateDir) {
+		if (is_dir($candidateDir)) {
+			$vendorDir = $candidateDir;
+		}
+	}
+
+	// load the autoloader file
+	if (is_dir($vendorDir)) {
+		require $vendorDir . '/Phix_Project/Autoloader4/PSR0/Autoloader.php';
+	}
+	else {
+		require 'Phix_Project/Autoloader4/PSR0/Autoloader.php';
+	}
 }
 else {
-	require 'Phix_Project/Autoloader4/PSR0/Autoloader.php';
+	$vendorDirs   = array();
 }
 
 // start autoloading
@@ -79,20 +105,6 @@ foreach ($localSrcDirs as $localSrcDir){
 // load our list of helper functions
 require 'DataSift/Storyplayer/functions.php';
 
-function summariseStoryList($storyResults)
-{
-	// we need to make a pronouncement about the whole list of stories
-
-	echo "\n";
-	echo "============================================================\n";
-	echo "FINAL RESULTS\n";
-	echo "\n";
-
-	foreach ($storyResults as $result)
-	{
-		echo $result->story->getName() . " :: " . StoryPlayer::$outcomeToText[$result->storyResult] . "\n";
-	}
-}
 
 /**
  * it all happens here, baby
@@ -101,165 +113,90 @@ function summariseStoryList($storyResults)
  */
 function main($argv)
 {
+	// ====================================================================
+	//
+	// BOOTSTRAP THE APP
+	//
+	// --------------------------------------------------------------------
 
-	// make sure we have enough arguments
-	if (!isset($argv[2])) {
-		echo "*** error: insufficient parameters\n";
-		echo "*** usage: " . $argv[0] . " <environment> <story>\n";
-		exit(1);
-	}
+	// create our initial default config
+	$staticConfig = new DefaultStaticConfig();
 
-	// What's our current hostname?
-	$hostname = trim(`hostname`);
+	// load our main config
+	$staticConfigManager = new StaticConfigManager();
+	$staticConfigManager->loadConfig($staticConfig);
 
 	// create our runtime config folder
 	$runtimeConfigManager = new RuntimeConfigManager();
 	$runtimeConfigManager->makeConfigDir();
 
-	// create our initial default config
-	$staticConfig = new DefaultConfig();
+	// get a list of the additional config files to load
+	// this is a list of the available test environments!
+	$envList = $staticConfigManager->getListOfAdditionalConfigFiles();
 
-	// load our main config
-	$configLoader = new StoryConfigLoader();
-	$loadedConfig = $configLoader->loadDefaultConfig();
+	// load the runtime config,:data that has been created by previous runs of storyplayer
+	$runtimeConfig = $runtimeConfigManager->loadRuntimeConfig();
 
-	// merge our default config in with our main loaded config
-	$staticConfig->mergeFrom($loadedConfig);
-
-	// load any per-user overrides
-	$configLoader->loadUserConfig($staticConfig);
-
-	// do we need to load environment-specific config?
-	if (!isset($staticConfig->environments, $staticConfig->environments->$argv[1]))
-	{
-		// load our environment-specific config
-		//
-		// this will be merged in with the default config
-		$configLoader->loadAdditionalConfig($staticConfig, $argv[1]);
+	// add into the list any environments in the default config file
+	foreach ($staticConfig->environments as $envName => $dummy) {
+		if ($envName !== 'defaults') {
+			$envList[] = $envName;
+		}
 	}
+	sort($envList);
+	$envList = array_unique($envList);
+	$envList = EnvironmentsListHelper::validateEnvironmentsList($staticConfig, $envList, $staticConfigManager);
 
-	// finally, load the runtime config, data that has been created
-	// by previous runs of storyplayer
-	$runtimeConfig = $configLoader->loadRuntimeConfig();
+	// put all of that into something we can give to the CliEngine
+	$additionalContext = (object) array (
+		'envList'			   => $envList,
+		'runtimeConfig'        => $runtimeConfig,
+		'runtimeConfigManager' => $runtimeConfigManager,
+		'staticConfig'         => $staticConfig,
+		'staticConfigManager'  => $staticConfigManager,
+	);
 
-	// setup logging
-	Log::init("storyplayer", $staticConfig->logger);
+	// ====================================================================
+	//
+	// PARSE THE COMMAND-LINE
+	//
+	// --------------------------------------------------------------------
 
-	// pick our environment
-	$environment = $argv[1];
+	// create the engine
+	$engine = new CliEngine();
 
-	// @TODO validate environment
+	// set the main metadata
+	$engine->setAppName('storyplayer');
+	$engine->setAppVersion('1.3.0');
+	$engine->setAppUrl('https://datasift.github.io/storyplayer/');
+	$engine->setAppCopyright('Copyright (c) 2012-present MediaSift Ltd. All rights reserved.');
+	$engine->setAppLicense('Released under the BSD 3-Clause license');
 
-	// create our user generator
-	$userGenerator = new GenericUserGenerator();
+	// add the switches that come before any of the commands
+	// if we have any
+	//
+	// add switches in the order of presidence
+	$engine->addEngineSwitch(new VersionSwitch);
+	$engine->addEngineSwitch(new LongHelpSwitch);
+	$engine->addEngineSwitch(new ShortHelpSwitch);
+	$engine->addEngineSwitch(new VerboseShortSwitch($engine->options, 0, 3));
+	$engine->addEngineSwitch(new VerboseLongSwitch($engine->options, 0, 3));
 
-	// create our user loader
-	// it will use our user generator if no cached user is found
-	$userLoader = new ConfigUserLoader($userGenerator);
+	// what is our default command?
+	// this is normally some sort of help command
+	$engine->setDefaultCommand(new PlayStoryCommand($envList));
 
-	// are we loading a story, or a list of stories?
-	$arg2suffix = end(explode('.', $argv[2]));
-	switch($arg2suffix)
-	{
-		case "php":
-			// we are running an individual story
+	// add any additional commands
+	// note - we do not have to add the default command a 2nd time
+	// note - if we add no additional commands, the default command is implied
+	//        and the user does not have to type it on the command line
+	$engine->addCommand(new HelpCommand);
+	$engine->addCommand(new ListEnvironmentsCommand($envList));
+	$engine->addCommand(new DownloadCommand);
+	$engine->addCommand(new ListHostsTableCommand);
 
-			// load our story
-			$story = StoryLoader::loadStory($argv[2]);
-
-			// create something to play this story
-		    $player = new StoryPlayer();
-		    $teller = new StoryTeller($story);
-
-		    // create the supporting context for this story
-		    $context = $player->createContext($staticConfig, $runtimeConfig, $environment, $story);
-		    $teller->setStoryContext($context);
-		    $teller->setConfigLoader($configLoader);
-
-		    // make the story happen
-		    $result = $player->play($teller, $staticConfig);
-
-		    // all done
-		    break;
-
-	    case "json":
-	    	// we are running a list of stories
-
-	    	// load the list of stories
-	    	$storyList = StoryListLoader::loadList($argv[2]);
-
-	    	// keep track of the results
-	    	$results = array();
-
-	    	// run through our list of stories
-	    	foreach ($storyList->stories as $storyFile)
-	    	{
-				// load our story
-				$story = StoryLoader::loadStory($storyFile);
-
-				// create something to play this story
-			    $player = new StoryPlayer();
-			    $teller = new StoryTeller($story);
-
-			    // create the supporting context for this story
-			    $context = $player->createContext($staticConfig, $runtimeConfig, $environment, $story);
-			    $teller->setStoryContext($context);
-			    $teller->setConfigLoader($configLoader);
-
-			    // special case - reusable environments
-			    if ($storyList->options->reuseTestEnvironment) {
-			    	// we need to remember the staticConfig, as we are
-			    	// probably about to override it
-				    $origStaticConfig = clone $staticConfig;
-
-			    	// story #1 - keep the test environment around
-			    	if ($storyFile == $storyList->stories[0]) {
-			    		// we do not override the user's preference for
-			    		// the TestEnvironmentStartup
-
-			    		// do not shutdown the TestEnvironment;
-			    		// we want to re-use it in the other stories
-			    		$staticConfig->phases->TestEnvironmentTeardown = false;
-			    	}
-			    	else if ($storyFile == end($storyList->stories)) {
-			    		// do nothing - we do not want to override
-			    		// the user's config file settings here
-			    	}
-			    	else {
-			    		// we are running a story in the middle of the list
-			    		//
-			    		// do not re-create the test environment
-			    		// do not destroy it afterwards
-			    		$staticConfig->phases->TestEnvironmentSetup = false;
-			    		$staticConfig->phases->testEnvironmentTeardown = false;
-			    	}
-			    }
-
-			    // make the story happen
-			    $results[] = $player->play($teller, $staticConfig);
-
-			    // special case - reusable environments
-			    if ($storyList->options->reuseTestEnvironment) {
-				    // restore the original config
-				    $staticConfig = clone $origStaticConfig;
-			    }
-	    	}
-
-	    	// report on the final results
-	    	summariseStoryList($results);
-
-	    	// all done
-	    	break;
-
-	    default:
-	    	// unsupported!
-	}
-
-    // write out any changed runtime config to disk
-    $configLoader->saveRuntimeConfig($runtimeConfig);
-
-    // all done
-    return 0;
+	// all set - let's go
+	return $engine->main($argv, $additionalContext);
 }
 
 return main($argv);

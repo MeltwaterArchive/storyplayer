@@ -97,7 +97,7 @@ class SavageDActions extends Prose
 		$url       = "http://{$ipAddress}:{$httpPort}/stats/prefix";
 
 		// make the request
-		$st->usingHttp()->put($url, null, array("prefix" => $prefix));
+		$st->usingHttp()->post($url, null, array("prefix" => $prefix));
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
@@ -123,7 +123,7 @@ class SavageDActions extends Prose
 		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/pid";
 
 		// make the request
-		$st->usingHttp()->put($url, null, array("pid" => $pid));
+		$st->usingHttp()->post($url, null, array("pid" => $pid));
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
@@ -152,8 +152,8 @@ class SavageDActions extends Prose
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
-		$st->expectsHttpResponse($response)->hasStatusCode(200);
-		$st->expectsHttpResponse($response)->hasBody('{"monitoring":true}');
+		$st->expectsHttpResponse($response)->hasStatusCode(404);
+		$st->expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
 
 		// all done
 		$log->endAction();
@@ -173,7 +173,7 @@ class SavageDActions extends Prose
 		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/cpu";
 
 		// make the request
-		$st->usingHttp()->put($url);
+		$st->usingHttp()->post($url);
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
@@ -205,8 +205,8 @@ class SavageDActions extends Prose
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
-		$st->expectsHttpResponse($response)->hasStatusCode(200);
-		$st->expectsHttpResponse($response)->hasBody('{"monitoring":false}');
+		$st->expectsHttpResponse($response)->hasStatusCode(404);
+		$st->expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
 
 		// all done
 		$log->endAction();
@@ -226,7 +226,7 @@ class SavageDActions extends Prose
 		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/memory";
 
 		// make the request
-		$st->usingHttp()->put($url);
+		$st->usingHttp()->post($url);
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
@@ -258,8 +258,8 @@ class SavageDActions extends Prose
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
-		$st->expectsHttpResponse($response)->hasStatusCode(200);
-		$st->expectsHttpResponse($response)->hasBody('{"monitoring":false}');
+		$st->expectsHttpResponse($response)->hasStatusCode(404);
+		$st->expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
 
 		// all done
 		$log->endAction();
@@ -279,7 +279,7 @@ class SavageDActions extends Prose
 		$url       = "http://{$ipAddress}:{$httpPort}/server/{$testName}.host/cpu";
 
 		// make the request
-		$st->usingHttp()->put($url);
+		$st->usingHttp()->post($url);
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
@@ -308,8 +308,8 @@ class SavageDActions extends Prose
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
-		$st->expectsHttpResponse($response)->hasStatusCode(200);
-		$st->expectsHttpResponse($response)->hasBody('{"monitoring":false}');
+		$st->expectsHttpResponse($response)->hasStatusCode(404);
+		$st->expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
 
 		// all done
 		$log->endAction();
@@ -329,7 +329,7 @@ class SavageDActions extends Prose
 		$url       = "http://{$ipAddress}:{$httpPort}/server/{$testName}.host/loadavg";
 
 		// make the request
-		$st->usingHttp()->put($url);
+		$st->usingHttp()->post($url);
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
@@ -358,7 +358,7 @@ class SavageDActions extends Prose
 
 		// did it work?
 		$response = $st->fromHttp()->get($url);
-		$st->expectsHttpResponse($response)->hasStatusCode(200);
+		$st->expectsHttpResponse($response)->hasStatusCode(404);
 		$st->expectsHttpResponse($response)->hasBody('{"monitoring":false}');
 
 		// all done

@@ -34,101 +34,102 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/HostLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\HostLib;
 
-use DataSift\Storyplayer\HostLib;
+use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * manipulate the internal hosts table
+ * the things you can do / learn about a physical host
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/HostLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class PhysicalHost implements SupportedHost
 {
-	public function addHost($hostName, $hostDetails)
+	protected $st;
+
+	public function __construct(StoryTeller $st)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
+		// remember
+		$this->st = $st;
 	}
 
-	public function removeHost($hostName)
+	public function createHost($vmDetails, $provisioningVars = array())
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "cannot create a physical host");
+	}
+
+	public function startHost($vmDetails)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "cannot start a physical host");
+	}
+
+	public function stopHost($vmDetails)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "cannot stop a physical host");
+	}
+
+	public function restartHost($vmDetails)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "cannot restart a physical host");
+	}
+
+	public function powerOffHost($vmDetails)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "cannot power off a physical host");
+	}
+
+	public function destroyHost($vmDetails)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "cannot destroy a physical host");
+	}
+
+	public function runCommandAgainstHostManager($vmDetails, $command)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands against");
+	}
+
+	public function runCommandViaHostManager($vmDetails, $command)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands via");
+	}
+
+	public function isRunning($vmDetails)
+	{
+		return true;
+	}
+
+	public function determineIpAddress($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
+		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->name}'");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// create an adapter to talk to the host operating system
+		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
-		}
-
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
-
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
+		// get the IP address
+		$ipAddress = $host->determineIpAddress($vmDetails, $this);
 
 		// all done
-		$log->endAction();
+		$log->endAction("IP address is '{$ipAddress}'");
+		return $ipAddress;
 	}
 }

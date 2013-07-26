@@ -54,14 +54,14 @@ use DataSift\Storyplayer\StoryLib\Story;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-abstract class EnvironmentSetup
+abstract class StoryTemplate
 {
 	protected $story;
 	protected $vmParams;
 
-	public function __construct($vmParams = array())
+	public function __construct($params = array())
 	{
-		$this->vmParams = $vmParams;
+		$this->params = $params;
 	}
 
 	public function setStory(Story $story)
@@ -69,12 +69,127 @@ abstract class EnvironmentSetup
 		$this->story = $story;
 	}
 
-	public function getVmParams($additionalParams)
+	public function getParams($additionalParams = array())
 	{
-		return $this->vmParams + $additionalParams;
+		return $this->params + $additionalParams;
 	}
 
 	abstract public function getName();
-	abstract public function setUp(StoryTeller $st);
-	abstract public function tearDown(StoryTeller $st);
+
+	/**
+	 * Helper methods to keep the Templates API in line with the phases
+	 */
+
+	public function hasTestEnvironmentSetup()
+	{
+		return method_exists($this, 'testEnvironmentSetup');
+	}
+
+	public function hasTestSetup()
+	{
+		return method_exists($this, 'testSetup');
+	}
+
+	public function hasPerPhaseSetup()
+	{
+		return method_exists($this, 'perPhaseSetup');
+	}
+
+	public function hasPerPhaseTeardown()
+	{
+		return method_exists($this, 'perPhaseTeardown');
+	}
+
+	public function hasHints()
+	{
+		return method_exists($this, 'hints');
+	}
+
+	public function hasPreTestPrediction()
+	{
+		return method_exists($this, 'preTestPrediction');
+	}
+
+	public function hasPreTestInspection()
+	{
+		return method_exists($this, 'preTestInspection');
+	}
+
+	public function hasAction()
+	{
+		return method_exists($this, 'action');
+	}
+
+	public function hasPostTestInspection()
+	{
+		return method_exists($this, 'postTestInspection');
+	}
+
+	public function hasTestTeardown()
+	{
+		return method_exists($this, 'testTeardown');
+	}
+
+	public function hasTestEnvironmentTeardown()
+	{
+		return method_exists($this, 'testEnvironmentTeardown');
+	}
+
+
+
+	public function getTestEnvironmentSetup()
+	{
+		return array($this, 'testEnvironmentSetup');
+	}
+
+	public function getTestSetup()
+	{
+		return array($this, 'testSetup');
+	}
+
+	public function getPerPhaseSetup()
+	{
+		return array($this, 'perPhaseSetup');
+	}
+
+	public function getPerPhaseTeardown()
+	{
+		return array($this, 'perPhaseTeardown');
+	}
+
+	public function getHints()
+	{
+		return array($this, 'hints');
+	}
+
+	public function getPreTestPrediction()
+	{
+		return array($this, 'preTestPrediction');
+	}
+
+	public function getPreTestInspection()
+	{
+		return array($this, 'preTestInspection');
+	}
+
+	public function getAction()
+	{
+		return array($this, 'action');
+	}
+
+	public function getPostTestInspection()
+	{
+		return array($this, 'postTestInspection');
+	}
+
+	public function getTestTeardown()
+	{
+		return array($this, 'testTeardown');
+	}
+
+	public function getTestEnvironmentTeardown()
+	{
+		return array($this, 'testEnvironmentTeardown');
+	}
+
 }

@@ -182,7 +182,7 @@ class HostDetermine extends HostBase
 		$st = $this->st;
 
 		// log some info to the user
-		$log = $st->startAction("get id of process '{$processName}' running on VM '{$this->boxName}'");
+		$log = $st->startAction("get id of process '{$processName}' running on VM '{$this->hostDetails->name}'");
 
 		// make sure we have valid host details
 		$this->requireValidHostDetails(__METHOD__);
@@ -195,6 +195,44 @@ class HostDetermine extends HostBase
 
 		// success
 		$log->endAction("pid is '{$return}'");
+		return $return;
+	}
+
+	public function getSshUsername()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get username to use with SSH to host '{$this->hostDetails->name}'");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// get the information
+		$return = $this->hostDetails->sshUsername;
+
+		// all done
+		$log->endAction("username is '{$return}'");
+		return $return;
+	}
+
+	public function getSshKeyFile()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get key file to use with SSH to host '{$this->hostDetails->name}'");
+
+		// make sure we have valid host details
+		$this->requireValidHostDetails(__METHOD__);
+
+		// get the information
+		$return = $this->hostDetails->sshKeyFile;
+
+		// all done
+		$log->endAction("key file is '{$return}'");
 		return $return;
 	}
 }

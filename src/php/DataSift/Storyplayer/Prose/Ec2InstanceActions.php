@@ -43,17 +43,12 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ObjectLib\BaseObject;
-
 /**
- * manipulate the internal hosts table
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,73 +57,76 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class Ec2InstanceActions extends Ec2InstanceBase
 {
-	public function addHost($hostName, $hostDetails)
+	public function createImage($imageName)
 	{
+		$this->requiresValidHost(__METHOD__);
+
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
+		$log = $st->startAction("create EBS AMI image '{$imageName}' from EC2 VM '{$this->instanceName}'");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// get the AWS EC2 client to work with
+		$ec2Client = $st->fromAws()->getEc2Client();
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
+		$response = $ec2Client->createImage(array(
+			"InstanceId" => $this->instance['InstanceId'],
+			"Name" => $imageName
+		));
+
+		// did we get an image ID back?
+		if (!isset($response['ImageId'])) {
+			throw new E5xx_ActionFailed(__METHOD__, "no ImageId returned from EC2 :(");
 		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
 
 		// all done
-		$log->endAction();
+		$log->endAction("created AMI image '{$response['ImageId']}'");
+		return $response['ImageId'];
 	}
 
-	public function removeHost($hostName)
+	public function markAllVolumesAsDeleteOnTermination()
 	{
+		$this->requiresValidHost(__METHOD__);
+
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
+		$log = $st->startAction("mark all volumes on EC2 VM '{$this->instanceName}' to be deleted on termination");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// create a list of all of the volumes we're going to modify
+		$ebsVolumes = array();
+		foreach ($this->instance['BlockDeviceMappings'] as $origEbsVolume) {
+			$ebsVolume = array(
+				'DeviceName' => $origEbsVolume['DeviceName'],
+				'Ebs' => array (
+					'DeleteOnTermination' => true
+				)
+			);
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
+			$ebsVolumes[] = $ebsVolume;
 		}
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
+		// get the AWS EC2 client to work with
+		$ec2Client = $st->fromAws()->getEc2Client();
 
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
+		// let's mark all of the volumes as needing to be deleted
+		// on termination
+		$ec2Client->modifyInstanceAttribute(array(
+			'InstanceId' => $this->instance['InstanceId'],
+			'BlockDeviceMappings' => $ebsVolumes
+		));
 
-		// all done
+		// now, we need to make sure that actually worked
+		$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+
+		// var_dump("\n\n\nAFTER MODIFY INSTANCE ATTRIBUTE\n\n");
+		// var_dump($this->instance);
+
+		// that should be that
 		$log->endAction();
 	}
 }

@@ -43,17 +43,12 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-use DataSift\Stone\ObjectLib\BaseObject;
-
 /**
- * manipulate the internal hosts table
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -62,73 +57,71 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class Ec2ImageExpects extends Ec2ImageBase
 {
-	public function addHost($hostName, $hostDetails)
+	public function isAvailable()
 	{
+		$this->requiresValidImage(__METHOD__);
+
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
+		$log = $st->startAction("make sure EC2 image '{$this->amiId}' is available");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// get the state of the image
+		$imageState = $this->image['State'];
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
+		if ($imageState != 'available') {
+			$log->endAction("image state is '{$imageState}'");
+			throw new E5xx_ExpectFailed(__METHOD__, "state is 'available'", "state is '{$imageState}'");
 		}
 
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
+		// if we get here, all is well
 		$log->endAction();
 	}
 
-	public function removeHost($hostName)
+	public function hasFailed()
 	{
+		$this->requiresValidImage(__METHOD__);
+
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
+		$log = $st->startAction("make sure EC2 image '{$this->amiId}' has failed");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// get the state of the image
+		$imageState = $this->image['State'];
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
+		if ($imageState != 'failed') {
+			$log->endAction("image state is '{$imageState}'");
+			throw new E5xx_ExpectFailed(__METHOD__, "state is 'failed'", "state is '{$imageState}'");
 		}
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
+		// if we get here, all is well
+		$log->endAction();
+	}
+
+	public function isPending()
+	{
+		$this->requiresValidImage(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure EC2 image '{$this->amiId}' is pending");
+
+		// get the state of the image
+		$imageState = $this->image['State'];
+
+		if ($imageState != 'pending') {
+			$log->endAction("image state is '{$imageState}'");
+			throw new E5xx_ExpectFailed(__METHOD__, "state is 'pending'", "state is '{$imageState}'");
 		}
 
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
-
-		// all done
+		// if we get here, all is well
 		$log->endAction();
 	}
 }

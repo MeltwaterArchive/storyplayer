@@ -34,101 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use stdClass;
 
-use DataSift\Stone\ObjectLib\BaseObject;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use DataSift\Stone\LogLib\Log;
 
 /**
- * manipulate the internal hosts table
+ * Tell Storyplayer which log level to output at
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class LogLevelSwitch extends CliSwitch
 {
-	public function addHost($hostName, $hostDetails)
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
+		// define our name, and our description
+		$this->setName('loglevel');
+		$this->setShortDescription('set the output log level');
 
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
+		// what are the short switches?
+		$this->addShortSwitch('L');
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// what are the long switches?
+		$this->addLongSwitch('loglevel');
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
+		// what is the required argument?
+		$this->setRequiredArg('<loglevel>', "the minimum log level to use; one of: EMERGENCY, ALERT, CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG or TRACE");
+		$this->setArgValidator(new LogLevelValidator());
 
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
+		// default logging level if none provided
+		// $this->setArgHasDefaultValueOf('INFO');
 
 		// all done
-		$log->endAction();
 	}
 
-	public function removeHost($hostName)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// shorthand
-		$st = $this->st;
+		// remember the setting
+		$engine->options->logLevels = Log::getMaskForMinLevel($params[0]);
 
-		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
-		}
-
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
-
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
-
-		// all done
-		$log->endAction();
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }

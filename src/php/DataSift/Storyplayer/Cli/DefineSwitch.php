@@ -34,101 +34,68 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use stdClass;
 
-use DataSift\Stone\ObjectLib\BaseObject;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
 
 /**
- * manipulate the internal hosts table
+ * Override the settings defined in your story
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableActions extends Prose
+class DefineSwitch extends CliSwitch
 {
-	public function addHost($hostName, $hostDetails)
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
+		// define our name, and our description
+		$this->setName('define');
+		$this->setShortDescription('override a setting in your story');
 
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
+		// what are the short switches?
+		$this->addShortSwitch('D');
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// what is the required argument?
+		$this->setRequiredArg('<key=value>', "the setting you want to set in your story");
+		$this->setArgValidator(new Type_MustBeKeyValuePair);
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
+		// this argument is repeatable
+		$this->setSwitchIsRepeatable();
 
 		// all done
-		$log->endAction();
 	}
 
-	public function removeHost($hostName)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// shorthand
-		$st = $this->st;
+		// split up the setting
+		$parts = explode('=', $params[0]);
+		$key   = array_shift($parts);
+		$value = implode('=', $parts);
 
-		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
+		// remember the setting
+		if (!isset($engine->options->defines)) {
+			$engine->options->defines = new stdClass;
 		}
+		$engine->options->defines->$key = $value;
 
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
-
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
-
-		// all done
-		$log->endAction();
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }

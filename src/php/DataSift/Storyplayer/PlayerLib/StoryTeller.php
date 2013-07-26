@@ -271,17 +271,17 @@ class StoryTeller
 	 *
 	 * @return [type] [description]
 	 */
-	public function getConfigLoader() {
-	    return $this->configLoader;
+	public function getRuntimeConfigManager() {
+	    return $this->runtimeConfigManager;
 	}
 
 	/**
 	 * [Description]
 	 *
-	 * @param [type] $configLoader [description]
+	 * @param [type] $runtimeConfigManager [description]
 	 */
-	public function setConfigLoader($configLoader) {
-	    $this->configLoader = $configLoader;
+	public function setRuntimeConfigManager($runtimeConfigManager) {
+	    $this->runtimeConfigManager = $runtimeConfigManager;
 
 	    return $this;
 	}
@@ -337,9 +337,23 @@ class StoryTeller
 		return $this->storyContext->env;
 	}
 
+	public function getEnvironmentName()
+	{
+		return $this->storyContext->env->envName;
+	}
+
 	public function getRuntimeConfig()
 	{
 		return $this->storyContext->runtime;
+	}
+
+	public function saveRuntimeConfig()
+	{
+		if (!isset($this->runtimeConfigManager)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no runtimeConfigManager available");
+		}
+
+		$this->runtimeConfigManager->saveRuntimeConfig($this->storyContext->runtime);
 	}
 
 	public function getUser()
@@ -357,6 +371,45 @@ class StoryTeller
 		$this->storyContext->env->url = $url;
 
 		return $this;
+	}
+
+	public function getDefines()
+	{
+		return $this->storyContext->defines;
+	}
+
+	public function getParams($mixed1 = array(), $mixed2 = array())
+	{
+		// our return value
+		$return = array();
+
+		// $mixed1 OR $mixed2 might be a StoryTemplate
+		//
+		// we've decided to support it either way to reduce the liklihood
+		// of a mistake that causes a PHP error during testEnvironmentTeardown
+		// phase
+		foreach (array($mixed1, $mixed2) as $index => $mixed) {
+			// $mixed1 might be a StoryTemplate
+			if ($mixed instanceof StoryTemplate) {
+				$return = $return + $mixed->getParams();
+			}
+			else if (is_array($mixed)) {
+				$return = $return + $mixed;
+			}
+			else {
+				// unsupported
+				throw new \Exception("Unsupported param " . ($index + 1) . " to StoryTeller::getParams(); must be array or StoryTemplate object");
+			}
+		}
+
+		// merge in any defines from the command-line
+		$defines = $this->getDefines();
+		foreach ($defines as $key => $value) {
+			$return[$key] = $value;
+		}
+
+		// all done
+		return $return;
 	}
 
 	// ==================================================================
