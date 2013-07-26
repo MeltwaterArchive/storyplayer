@@ -52,6 +52,8 @@ use DataSift\Stone\DownloadLib\FileDownloader;
 
 use DataSift\WebDriver\WebDriverConfiguration;
 
+use Exception;
+
 /**
  * Command to download dependencies
  *
@@ -62,7 +64,7 @@ use DataSift\WebDriver\WebDriverConfiguration;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DownloadCommand extends CliCommand
+class InstallCommand extends CliCommand
 {
 	public function __construct()
 	{
@@ -88,31 +90,43 @@ class DownloadCommand extends CliCommand
 
 		foreach ($filesToDownload as $file){
 
+			if (!is_object($file->url)){
+				$url = $file->url;
+			} else {
+				$arch = php_uname("m");
+				if (isset($file->url->{$arch})){
+					$url = $file->url->{$arch};
+				} else if (isset($file->url->generic)){
+					$url =  $file->url->generic;
+				}
+			}
+
+			if (!isset($url)){
+				throw new Exception("No supported downloads for ".$file->name);
+			}
+
 			// How big is the file?
 			// via http://www.php.net/manual/en/function.filesize.php#84130
-			$headers = array_change_key_case(get_headers($file->url, 1),CASE_LOWER);
-			if ( !preg_match('/HTTP\/1\.(0|1) 200 OK/', $headers[0] ) ) { 
+			$headers = array_change_key_case(get_headers($url, 1),CASE_LOWER);
+			if ( !preg_match('/HTTP\/1\.(0|1) 200 OK/', $headers[0] ) ) {
 				$fileSize = $headers['content-length'][1];
-			} else { 
+			} else {
 				$fileSize = $headers['content-length'];
 			}
 
 			// Update the user on what's going on
-			echo "Downloading: " . $file->url.' ('.round($fileSize/1024/1024, 3).'mb)'.PHP_EOL;
+			echo "Downloading: " . $url.' ('.round($fileSize/1024/1024, 3).'mb)'.PHP_EOL;
 
 			// Download it
-			$fileBase = basename($file->url);
-			$downloader->download($file->url, "./vendor/bin/".$fileBase);
+			$fileBase = basename($url);
+			$downloader->download($url, "./vendor/bin/".$fileBase);
 
 			// Make sure that the relevant files are executable
-			foreach ($file->makeExecutable as $exec){
-				chmod("./vendor/bin/".$exec, 0755);
+			if (isset($file->makeExecutable)) {
+				foreach ($file->makeExecutable as $exec){
+					chmod("./vendor/bin/".$exec, 0755);
+				}
 			}
 		}
-
-
-
-
 	}
-
 }
