@@ -22,6 +22,8 @@ use Phix_Project\CliEngine\Switches\VerboseLongSwitch;
 use Phix_Project\CliEngine\Switches\VersionSwitch;
 use Phix_Project\CliEngine\Commands\HelpCommand;
 
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+
 use DataSift\Storyplayer\Cli\DefaultStaticConfig;
 use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\InstallCommand;
@@ -170,6 +172,24 @@ function main($argv)
 		'staticConfig'         => $staticConfig,
 		'staticConfigManager'  => $staticConfigManager,
 	);
+
+	// let's grab the composer file so we know what version we're running
+	// This will currently break the PEAR package. Works for composer + phar
+	/*
+	$composerPath = dirname(__FILE__).'/../../composer.json';
+	if (!file_exists($composerPath)){
+		throw new E5xx_ConfigFileNotFound("composer.json", array($composerPath));
+	}
+	$composerFile = json_decode(file_get_contents($composerPath));
+	*/
+
+	// special case - does the user want us to use his/her computer's
+	// hostname as the default environment name?
+	$defaultEnvName = null;
+	if (isset($staticConfig->preferences, $staticConfig->preferences->useHostnameAsDefaultEnvironment)
+		&& $staticConfig->preferences->useHostnameAsDefaultEnvironment) {
+		$defaultEnvName = getHostname();
+	}
 
 	// ====================================================================
 	//
