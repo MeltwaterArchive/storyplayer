@@ -34,61 +34,68 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
-use DataSift\Stone\LogLib\Log;
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
 
 /**
- * Helper class for making sure the user has somewhere to save the
- * 'runtime config' (the persistent state) to
- *
- * This probably needs moving into Stone in the future
+ * Override the settings defined in your story
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class RuntimeConfigManager
+class DefineSwitch extends CliSwitch
 {
-	public function getConfigDir()
+	public function __construct()
 	{
-		static $configDir = null;
+		// define our name, and our description
+		$this->setName('define');
+		$this->setShortDescription('override a setting in your story');
 
-		// do we have a configDir remembered yet?
-		if (!$configDir)
-		{
-			$configDir = getenv("HOME") . '/.storyteller';
-		}
+		// what are the short switches?
+		$this->addShortSwitch('D');
 
-		return $configDir;
+		// what is the required argument?
+		$this->setRequiredArg('<key=value>', "the setting you want to set in your story");
+		$this->setArgValidator(new Type_MustBeKeyValuePair);
+
+		// this argument is repeatable
+		$this->setSwitchIsRepeatable();
+
+		// all done
 	}
 
-	public function makeConfigDir()
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// what is the path to the config directory?
-		$configDir = $this->getConfigDir();
+		// split up the setting
+		$parts = explode('=', $params[0]);
+		$key   = array_shift($parts);
+		$value = implode('=', $parts);
 
-		// does it exist?
-		if (!file_exists($configDir))
-		{
-			$success = mkdir($configDir, 0700, true);
-			if (!$success)
-			{
-				// cannot create it - bail out now
-				Log::logError("Unable to create config directory '{$configDir}'");
-				exit(1);
-			}
+		// remember the setting
+		if (!isset($engine->options->defines)) {
+			$engine->options->defines = new stdClass;
 		}
+		$engine->options->defines->$key = $value;
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }

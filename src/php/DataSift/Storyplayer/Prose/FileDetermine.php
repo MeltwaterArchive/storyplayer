@@ -66,7 +66,7 @@ class FileDetermine extends Prose
 		$log = $st->startAction("generate a temporary filename");
 
 		// create it
-		$filename = tempnam(null, 'storyteller-data-');
+		$filename = tempnam(null, 'storyplayer-data-');
 
 		// log it
 		$log->endAction("'{$filename}'");

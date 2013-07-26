@@ -34,36 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Cli;
+
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use DataSift\Stone\LogLib\Log;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * Tell Storyplayer which log level to output at
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class LogLevelSwitch extends CliSwitch
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	public function __construct()
+	{
+		// define our name, and our description
+		$this->setName('loglevel');
+		$this->setShortDescription('set the output log level');
+
+		// what are the short switches?
+		$this->addShortSwitch('L');
+
+		// what are the long switches?
+		$this->addLongSwitch('loglevel');
+
+		// what is the required argument?
+		$this->setRequiredArg('<loglevel>', "the minimum log level to use; one of: EMERGENCY, ALERT, CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG or TRACE");
+		$this->setArgValidator(new LogLevelValidator());
+
+		// default logging level if none provided
+		// $this->setArgHasDefaultValueOf('INFO');
+
+		// all done
+	}
+
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->logLevels = Log::getMaskForMinLevel($params[0]);
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }

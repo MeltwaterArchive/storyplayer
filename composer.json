@@ -1,0 +1,45 @@
+{
+	"name": "datasift/storyplayer",
+	"description": "Bring your user and service stories to life through test automation",
+	"homepage": "https://datasift.github.io/storyplayer",
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Stuart Herbert",
+			"email": "stuart.herbert@datasift.com",
+			"homepage": "http://datasift.github.io",
+			"role": "Developer"
+		},
+		{
+			"name": "Michael Heap",
+			"email": "michael.heap@datasift.com",
+			"homepage": "http://datasift.github.io",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/datasift/storyplayer/issues",
+		"source": "https://github.com/datasift/storyplayer/"
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/datasift/ms-lib-stone"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/datasift/php_webdriver"
+		}
+	],
+	"require": {
+		"phix/autoloader": "4.*",
+		"phix/cliengine": "@dev",
+		"datasift/stone": ">=1.5.0",
+		"datasift/webdriver": ">=1.3.0",
+		"aws/aws-sdk-php": "2.*"
+	},
+	"autoload": {
+		"psr-0": { "" : "src/php/" }
+	},
+	"bin": ["src/bin/storyplayer"]
+}

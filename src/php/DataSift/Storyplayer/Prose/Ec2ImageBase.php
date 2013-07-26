@@ -34,36 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Prose;
+
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class Ec2ImageBase extends Prose
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	protected $image = null;
+	protected $amiId = '**unknown**';
+
+	public function __construct(StoryTeller $st, $params = array())
+	{
+		// call our parent
+		parent::__construct($st, $params);
+
+		// remember the name of this VM
+		$this->amiId = $params[0];
+
+		// get the data about the instance from EC2
+		$this->image = $st->fromEc2()->getImage($this->amiId);
+	}
+
+	protected function requiresValidImage($method)
+	{
+		if (!$this->image) {
+			throw new E5xx_ActionFailed($method, "No such EC2 image '{$this->amiId}' at AWS");
+		}
+	}
 }

@@ -34,36 +34,75 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Prose;
+
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\HostLib;
+
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * do things with Amazon EC2
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class Ec2Actions extends VmActionsBase
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	public function __construct(StoryTeller $st, $args = array())
+	{
+		// call the parent constructor
+		parent::__construct($st, $args);
+	}
+
+	public function createVm($vmName, $osName, $amiId, $instanceType, $securityGroup)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("start EC2 VM '{$vmName}', running guest OS '{$osName}', using AMI ID '{$amiId}' and security group '{$securityGroup}'");
+
+		// get the aws settings
+		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
+
+		// put the details into an array
+		$vmDetails = new BaseObject();
+		$vmDetails->name          = $vmName;
+		$vmDetails->environment   = $st->getEnvironmentName();
+		$vmDetails->osName        = $osName;
+		$vmDetails->amiId         = $amiId;
+		$vmDetails->type          = 'Ec2Vm';
+		$vmDetails->instanceType  = $instanceType;
+		$vmDetails->securityGroup = $securityGroup;
+		$vmDetails->keyPairName   = $awsSettings->ec2->keyPairName;
+		$vmDetails->sshUsername   = $awsSettings->ec2->sshUsername;
+		$vmDetails->sshKeyFile    = $awsSettings->ec2->sshKeyFile;
+		$vmDetails->sshOptions    = array (
+			"-i '" . $awsSettings->ec2->sshKeyFile . "'"
+		);
+
+		// create our host adapter
+		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+
+		// create our virtual machine
+		$host->createHost($vmDetails);
+
+		// all done
+		$log->endAction();
+	}
 }

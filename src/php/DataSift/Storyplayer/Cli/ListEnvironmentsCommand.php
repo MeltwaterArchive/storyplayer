@@ -34,36 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Cli;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * A command to list the supported test environments
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class ListEnvironmentsCommand extends CliCommand
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	public function __construct($envList)
+	{
+		// define the command
+		$this->setName('list-environments');
+		$this->setShortDescription('list the available test environments');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the test environments"
+			. " that are defined in the config files."
+			.PHP_EOL
+		);
+
+		// remember the environments list
+		$this->envList = $envList;
+	}
+
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// list the environments (if any) in a machine-friendly way
+		foreach ($this->envList as $envName) {
+			echo "{$envName}\n";
+		}
+
+		// all done
+		return 0;
+	}
 }

@@ -34,47 +34,78 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\StoryLib\Story;
+namespace DataSift\Storyplayer\Prose;
+
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+
+use Aws\Common\Aws;
 
 /**
- * Base class for reusable test environment setup/teardown instructions
+ * generates AWS clients using the official SDK
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-abstract class EnvironmentSetup
+class AwsDetermine extends Prose
 {
-	protected $story;
-	protected $vmParams;
-
-	public function __construct($vmParams = array())
+	public function getAwsClientFactory()
 	{
-		$this->vmParams = $vmParams;
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("create AWS client factory using official SDK");
+
+		// get the settings for Aws
+		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
+
+		// create the AWS client factory
+		$awsFactory = Aws::factory(array(
+			'key' => $awsSettings->key,
+			'secret' => $awsSettings->secret,
+			'region' => $awsSettings->region
+		));
+
+		// all done
+		$log->endAction();
+		return $awsFactory;
 	}
 
-	public function setStory(Story $story)
+	public function getEc2Client()
 	{
-		$this->story = $story;
-	}
+		// the client to return
+		static $ec2Client = null;
 
-	public function getVmParams($additionalParams)
-	{
-		return $this->vmParams + $additionalParams;
-	}
+		// shorthand
+		$st = $this->st;
 
-	abstract public function getName();
-	abstract public function setUp(StoryTeller $st);
-	abstract public function tearDown(StoryTeller $st);
+		if (!$ec2Client) {
+			// what are we doing?
+			$log = $st->startAction("create AWS client for EC2");
+
+			// get the Aws client factory
+			$awsFactory = $st->fromAws()->getAwsClientFactory();
+
+			// create the EC2 client
+			$ec2Client = $awsFactory->get('ec2');
+
+			$log->endAction();
+		}
+
+		// all done
+		return $ec2Client;
+	}
 }

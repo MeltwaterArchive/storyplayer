@@ -34,36 +34,71 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Cli;
+
+use DataSift\Stone\ConfigLib\JsonConfigLoader;
+use DataSift\Stone\LogLib\Log;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * Helper class for making sure the user has somewhere to save the
+ * 'runtime config' (the persistent state) to
+ *
+ * This probably needs moving into Stone in the future
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class RuntimeConfigManager extends ConfigManagerBase
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	public function getConfigDir()
+	{
+		static $configDir = null;
+
+		// do we have a configDir remembered yet?
+		if (!$configDir)
+		{
+			$configDir = getenv("HOME") . '/.storyplayer';
+		}
+
+		return $configDir;
+	}
+
+	public function makeConfigDir()
+	{
+		// what is the path to the config directory?
+		$configDir = $this->getConfigDir();
+
+		// does it exist?
+		if (!file_exists($configDir))
+		{
+			$success = mkdir($configDir, 0700, true);
+			if (!$success)
+			{
+				// cannot create it - bail out now
+				Log::logError("Unable to create config directory '{$configDir}'");
+				exit(1);
+			}
+		}
+	}
+
+	public function loadRuntimeConfig()
+	{
+		return $this->configLoader->loadRuntimeConfig();
+	}
+
+	public function saveRuntimeConfig($config)
+	{
+		return $this->configLoader->saveRuntimeConfig($config);
+	}
 }

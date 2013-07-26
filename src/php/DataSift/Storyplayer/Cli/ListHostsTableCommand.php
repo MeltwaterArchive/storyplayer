@@ -34,36 +34,72 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Cli;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * A command to list the
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class ListHostsTableCommand extends CliCommand
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	public function __construct()
+	{
+		// define the command
+		$this->setName('list-hoststable');
+		$this->setShortDescription('list the current contents of the hoststable');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the machines (physical or VM)"
+			. " that are currently listed in Storyplayer's hoststable."
+			.PHP_EOL .PHP_EOL
+			."This can help you to identify VMs that have been left running after "
+			."a test has completed."
+			.PHP_EOL
+		);
+		$this->setSwitches(array(
+			new HostTypeSwitch("list only hosts of a given type", "a comma-separated list of the types of hosts to include in the output")
+		));
+	}
+
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// shorthand
+		$runtimeConfig = $additionalContext->runtimeConfig;
+
+		// are there any hosts in the table?
+		if (!isset($runtimeConfig->hosts)) {
+			// we're done
+			return new CliResult(0);
+		}
+
+		// let's walk through the table
+		foreach ($runtimeConfig->hosts as $hostName => $details) {
+			// is this in the list we are filtering against?
+			if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
+				continue;
+			}
+
+			echo "{$details->name}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
+		}
+
+		// all done
+		return new CliResult(0);
+	}
 }

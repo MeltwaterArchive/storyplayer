@@ -34,36 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Cli;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * Tell Storyplayer which host type to use
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class HostTypeSwitch extends CliSwitch
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	public function __construct($shortDesc, $argDesc)
+	{
+		// define our name, and our description
+		$this->setName('hosttype');
+		$this->setShortDescription($shortDesc);
+
+		// what are the short switches?
+		$this->addShortSwitch('T');
+
+		// what are the long switches?
+		$this->addLongSwitch('hosttype');
+
+		// what is the required argument?
+		$this->setRequiredArg('<hosttype>', $argDesc);
+		$this->setArgHasDefaultValueOf("EC2,OpenStack,PhysicalHost,ProxmoxContainer,ProxmoxVM,StatesmanVM,VagrantVM");
+		// all done
+	}
+
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->hosttype = explode(',', strtolower($params[0]));
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }

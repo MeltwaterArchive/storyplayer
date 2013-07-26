@@ -34,36 +34,65 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Prose;
+
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class Ec2InstanceBase extends Prose
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	protected $vmDetails    = null;
+	protected $instance     = null;
+	protected $instanceName = '**unknown**';
+
+	public function __construct(StoryTeller $st, $params = array())
+	{
+		// call our parent
+		parent::__construct($st, $params);
+
+		// get the VM details from the hosts table
+		$this->vmDetails = $st->fromHostsTable()->getDetailsForHost($params[0]);
+
+		if ($this->vmDetails) {
+			// remember the name of this VM
+			$this->instanceName = $this->vmDetails->ec2Name;
+
+			// get the data about the instance from EC2
+			$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+
+			// add the instance data to the vmDetails too, to keep that
+			// up to date
+			$this->vmDetails->ec2Instance = $this->instance;
+		}
+	}
+
+	protected function requiresValidHost($method)
+	{
+		if (!$this->vmDetails) {
+			throw new E5xx_ActionFailed($method, "No such host '{$this->args[0]}' in the hosts table");
+		}
+
+		// did we get anything?
+		if (!$this->instance) {
+			throw new E5xx_ActionFailed($method, "No such EC2 instance '{$this->instanceName}' at AWS");
+		}
+	}
 }

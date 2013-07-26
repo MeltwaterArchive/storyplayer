@@ -34,36 +34,66 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Cli;
+
+use DataSift\Stone\ConfigLib\LoadedConfig;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
+ * Storyplayer's default config - the config that is active before we
+ * load any config files
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface SupportedHost
+class DefaultStaticConfig extends LoadedConfig
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+	public function __construct()
+	{
+		// defaults for LogLib
+		$this->logger = new BaseObject();
+		$this->logger->writer = "StdErrWriter";
+
+        $levels = new BaseObject();
+        $levels->LOG_EMERGENCY = true;
+        $levels->LOG_ALERT = true;
+        $levels->LOG_CRITICAL = true;
+        $levels->LOG_ERROR = true;
+        $levels->LOG_WARNING = true;
+        $levels->LOG_NOTICE = true;
+        $levels->LOG_INFO = true;
+        $levels->LOG_DEBUG = true;
+        $levels->LOG_TRACE = true;
+
+        $this->logger->levels = $levels;
+
+        // defaults for phases
+        $phases = new BaseObject();
+        $phases->TestEnvironmentSetup = true;
+        $phases->TestSetup = true;
+        $phases->PreTestPrediction = true;
+        $phases->PreTestInspection = true;
+        $phases->Action = true;
+        $phases->PostTestInspection = true;
+        $phases->TestTeardown = true;
+        $phases->TestEnvironmentTeardown = true;
+
+        $this->phases = $phases;
+
+        // defaults for defines
+        $this->defines = new BaseObject();
+
+        // all done
+    }
 }

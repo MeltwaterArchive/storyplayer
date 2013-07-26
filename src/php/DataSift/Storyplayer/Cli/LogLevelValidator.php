@@ -34,36 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace DataSift\Storyplayer\Cli;
 
-/**
- * the things you can do / learn about a supported (and possibly remote)
- * host / virtual machine
- *
- * @category  Libraries
- * @package   Storyplayer/HostLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-interface SupportedHost
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
+
+use DataSift\Stone\LogLib\Log;
+
+class LogLevelValidator implements Validator
 {
-	public function createHost($hostDetails);
-	public function destroyHost($hostDetails);
-	public function startHost($hostDetails);
-	public function stopHost($hostDetails);
-	public function restartHost($hostDetails);
-	public function powerOffHost($hostDetails);
-	public function runCommandAgainstHostManager($hostDetails, $command);
-	public function runCommandViaHostManager($hostDetails, $command);
-	public function isRunning($hostDetails);
-	public function determineIpAddress($hostDetails);
+    const MSG_UNKNOWNLOGLEVEL = "Unknown log level '%value%'";
+
+    public function validate($value, ValidationResult $result = null)
+    {
+        if ($result === null) {
+            $result = new ValidationResult($value);
+        }
+
+        // the $value must be a valid log level
+        $logLevel = Log::getLevelFromName($value);
+        if ($logLevel === null) {
+            $result->addError(static::MSG_UNKNOWNLOGLEVEL);
+            return $result;
+        }
+
+        return $result;
+    }
 }
