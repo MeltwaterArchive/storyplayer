@@ -163,7 +163,8 @@ class PlayStoryCommand extends CliCommand
 		$userLoader = new ConfigUserLoader($userGenerator);
 
 		// are we loading a story, or a list of stories?
-		$arg2suffix = end(explode('.', $params[0]));
+		$arg2parts  = explode('.', $params[0]);
+		$arg2suffix = end($arg2parts);
 		switch($arg2suffix)
 		{
 			case "php":
