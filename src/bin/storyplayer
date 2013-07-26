@@ -29,6 +29,7 @@ use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
 use DataSift\Storyplayer\Cli\ListHostsTableCommand;
 use DataSift\Storyplayer\Cli\PlayStoryCommand;
+use DataSift\Storyplayer\Cli\DownloadCommand;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
@@ -38,6 +39,7 @@ define('APP_BINDIR', __DIR__);
 // work out where the local source code might be
 $localSrcDir = '';
 $localSrcDirs = array(
+	'phar://storyplayer/src/php',
 	realpath(__DIR__ . '/../../src/php'),
 	getcwd() . '/src/php',
 	getcwd() . '/php'
@@ -51,6 +53,7 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 // do we have a composer autoloader?
 $composerAutoloader = false;
 $composerFiles = array (
+	'phar://storyplayer/vendor/autoload.php',
 	__DIR__ . '/../../vendor/autoload.php',
 	getcwd() . '/vendor/autoload.php'
 );
@@ -66,6 +69,7 @@ if (!$composerAutoloader) {
 	// work out where the vendor folder might be
 	$vendorDir = '';
 	$vendorDirs = array(
+		'phar://storyplayer/vendor/php',
 		__DIR__ . '/../../vendor/php',
 		getcwd() . '/vendor/php'
 	);
@@ -205,6 +209,7 @@ function main($argv)
 	//        and the user does not have to type it on the command line
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new ListEnvironmentsCommand($envList));
+	$engine->addCommand(new DownloadCommand);
 	$engine->addCommand(new ListHostsTableCommand);
 
 	// all set - let's go

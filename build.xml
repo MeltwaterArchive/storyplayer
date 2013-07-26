@@ -496,5 +496,44 @@
     <delete dir="${project.tmpdir}" />
     <phingcallifexists target="local.clean"/>
   </target>
+
+  <target name="build-composer">
+    <exec command="composer install" logoutput="true" checkreturn="true" />
+  </target>
+
+  <target name="package" depends="build-composer">
+    <exec command="cp src/bin/storyplayer ." logoutput="true" checkreturn="true" />
+    <exec command="sed -i '1d' src/bin/storyplayer" logoutput="true" checkreturn="true" />
+    <pharpackage
+      destfile="./storyplayer.phar"
+      basedir="./"
+      compression="gzip"
+      stub="./src/stub.php"
+      signature="sha1">
+      <fileset dir="./src">
+        <include name="**/**" />
+      </fileset>
+      <fileset dir="./vendor">
+        <include name="**/**" />
+        <exclude name=".git/**" />
+        <exclude name="datasift/webdriver/src/bin/**" />
+        <exclude name="datasift/webdriver/src/data/**" />
+      </fileset>
+      <metadata>
+        <element name="version" value="0.0.1" />
+        <element name="authors">
+          <element name="Stuart Herbert">
+            <element name="email" value="stuart.herbert@datasift.com" />
+          </element>
+          <element name="Michael Heap">
+            <element name="email" value="michael.heap@datasift.com" />
+          </element>
+        </element>
+      </metadata>
+    </pharpackage>
+    <exec command="cp ./storyplayer src/bin" logoutput="true" checkreturn="true" />
+    <exec command="rm ./storyplayer" logoutput="true" checkreturn="true" />
+  </target>
+
 </project>
 <!-- vim: set tabstop=2 shiftwidth=2 expandtab: -->

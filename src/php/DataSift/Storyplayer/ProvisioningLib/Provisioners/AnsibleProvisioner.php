@@ -79,7 +79,9 @@ class AnsibleProvisioner extends Provisioner
 		// process each host
 		foreach($hosts as $hostName => $hostProps) {
 			// what is the host's IP address?
-			$ipAddress = $st->fromHost($hostName)->getIpAddress();
+			$ipAddress   = $st->fromHost($hostName)->getIpAddress();
+			$sshUsername = $st->fromHost($hostName)->getSshUsername();
+			$sshKeyFile  = $st->fromHost($hostName)->getSshKeyFile();
 
 			// do we have any vars to write?
 			if (!isset($hostProps->params) || $hostProps->params === null || (is_array($hostProps) && count($hostProps) == 0)) {
@@ -128,10 +130,10 @@ class AnsibleProvisioner extends Provisioner
 		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
 
 		// build the command for Ansible
-		$command = 'ansible-playbook -i "' . $inventoryFile . '"';
-		if (isset($ansibleSettings->privateKey)) {
-			$command .= ' "--private-key=' . $ansibleSettings->privateKey . '"';
-		}
+		$command = 'ansible-playbook -i "' . $inventoryFile . '"'
+		         . ' "--private-key=' . $sshKeyFile . '"'
+		         . ' "--user=' . $sshUsername . '"';
+
 		$command .= ' "' . $ansibleSettings->dir . DIRECTORY_SEPARATOR . $ansibleSettings->playbook . '"';
 
 		// let's run the command

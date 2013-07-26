@@ -337,6 +337,11 @@ class StoryTeller
 		return $this->storyContext->env;
 	}
 
+	public function getEnvironmentName()
+	{
+		return $this->storyContext->env->envName;
+	}
+
 	public function getRuntimeConfig()
 	{
 		return $this->storyContext->runtime;

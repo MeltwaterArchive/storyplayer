@@ -34,53 +34,78 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
+
+use Aws\Common\Aws;
 
 /**
- * Helper for creating provisioning definitions
+ * generates AWS clients using the official SDK
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class AwsDetermine extends Prose
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	public function getAwsClientFactory()
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("create AWS client factory using official SDK");
+
+		// get the settings for Aws
+		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
+
+		// create the AWS client factory
+		$awsFactory = Aws::factory(array(
+			'key' => $awsSettings->key,
+			'secret' => $awsSettings->secret,
+			'region' => $awsSettings->region
+		));
+
+		// all done
+		$log->endAction();
+		return $awsFactory;
 	}
 
-	public function toHost($hostName)
+	public function getEc2Client()
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
+		// the client to return
+		static $ec2Client = null;
 
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// shorthand
+		$st = $this->st;
+
+		if (!$ec2Client) {
+			// what are we doing?
+			$log = $st->startAction("create AWS client for EC2");
+
+			// get the Aws client factory
+			$awsFactory = $st->fromAws()->getAwsClientFactory();
+
+			// create the EC2 client
+			$ec2Client = $awsFactory->get('ec2');
+
+			$log->endAction();
+		}
+
+		// all done
+		return $ec2Client;
 	}
 }

@@ -34,53 +34,94 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper for creating provisioning definitions
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class Ec2ImageExpects extends Ec2ImageBase
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	public function isAvailable()
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
+		$this->requiresValidImage(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure EC2 image '{$this->amiId}' is available");
+
+		// get the state of the image
+		$imageState = $this->image['State'];
+
+		if ($imageState != 'available') {
+			$log->endAction("image state is '{$imageState}'");
+			throw new E5xx_ExpectFailed(__METHOD__, "state is 'available'", "state is '{$imageState}'");
+		}
+
+		// if we get here, all is well
+		$log->endAction();
 	}
 
-	public function toHost($hostName)
+	public function hasFailed()
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		$this->requiresValidImage(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure EC2 image '{$this->amiId}' has failed");
+
+		// get the state of the image
+		$imageState = $this->image['State'];
+
+		if ($imageState != 'failed') {
+			$log->endAction("image state is '{$imageState}'");
+			throw new E5xx_ExpectFailed(__METHOD__, "state is 'failed'", "state is '{$imageState}'");
+		}
+
+		// if we get here, all is well
+		$log->endAction();
 	}
 
-	public function forHost($hostName)
+	public function isPending()
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		$this->requiresValidImage(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure EC2 image '{$this->amiId}' is pending");
+
+		// get the state of the image
+		$imageState = $this->image['State'];
+
+		if ($imageState != 'pending') {
+			$log->endAction("image state is '{$imageState}'");
+			throw new E5xx_ExpectFailed(__METHOD__, "state is 'pending'", "state is '{$imageState}'");
+		}
+
+		// if we get here, all is well
+		$log->endAction();
 	}
 }

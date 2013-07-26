@@ -34,53 +34,103 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper for creating provisioning definitions
+ * wrappers around the official Amazon EC2 SDK
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class Ec2InstanceDetermine extends Ec2InstanceBase
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	public function getInstanceIsRunning()
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("determine if EC2 VM '{$this->instanceName}' is running");
+
+		// does the instance exist?
+		if (!$this->instance) {
+			$log->endAction("no: instance does not exist");
+			return false;
+		}
+
+		// is the instance running?
+		if ($this->instance['State']['Code'] == 16) {
+			// yes, it is
+			$log->endAction("yes");
+			return true;
+		}
+		else {
+			// no, it is not
+			$log->endAction("no: state is '{$this->instance['State']['Name']}'");
+			return false;
+		}
 	}
 
-	public function toHost($hostName)
+	public function getInstanceVolumes()
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// make sure we have a host to work with
+		$this->requiresValidHost(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("retrieve configuration for all volumes attached to EC2 VM '{$this->instanceName}'");
+
+		// does this instance have any block devices?
+		if (isset($this->instance['BlockDeviceMappings'])) {
+			$log->endAction("found " . count($this->instance['BlockDeviceMappings']) . " volumes");
+			return $this->instance['BlockDeviceMappings'];
+		}
+
+		// if we get here, the instance has no volumes, which is
+		// a little weird
+		$log->endAction("no volumes found");
+		return array();
 	}
 
-	public function forHost($hostName)
+	public function getPublicDnsName()
 	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// make sure we have a host to work with
+		$this->requiresValidHost(__METHOD__);
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get the public DNS name for EC2 VM '{$this->instanceName}'");
+
+		// here are the details, as a string
+		$dnsName = $this->instance['PublicDnsName'];
+
+		// does it *have* a public DNS name?
+		if (empty($dnsName)) {
+			$log->endAction("EC2 VM does not have a public DNS name; has it finished booting?");
+			return null;
+		}
+
+		// all done
+		$log->endAction("public DNS name is: '{$dnsName}'");
+		return $dnsName;
 	}
 }
