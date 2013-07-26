@@ -68,6 +68,28 @@ class BrowserExpects extends Prose
 		$this->initBrowser();
 	}
 
+	public function doesntHave()
+	{
+		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
+
+			$log = $st->startAction("$elementDesc '$elementName' must not exist");
+
+			if (is_object($element)) {
+				$log->endAction();
+				return true;
+			}
+
+			throw new E5xx_ExpectFailed(__METHOD__, 'element does not exist', 'element exists');
+		};
+
+		return new TargettedBrowserSearch(
+			$this->st,
+			$action,
+			"doesntHave",
+			$this->getTopElement()
+		);
+	}
+
 	public function has()
 	{
 		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
