@@ -93,7 +93,7 @@ class InstallCommand extends CliCommand
 			if (!is_object($file->url)){
 				$url = $file->url;
 			} else {
-				$arch = php_uname("m");
+				$arch = strtolower(php_uname("s"));
 				if (isset($file->url->{$arch})){
 					$url = $file->url->{$arch};
 				} else if (isset($file->url->generic)){
