@@ -1,5 +1,6 @@
 {
 	"name": "datasift/storyplayer",
+	"version": "1.3.0-dev",
 	"description": "Bring your user and service stories to life through test automation",
 	"homepage": "https://datasift.github.io/storyplayer",
 	"license": "BSD-3-Clause",

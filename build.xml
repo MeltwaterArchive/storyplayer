@@ -507,9 +507,11 @@
     <pharpackage
       destfile="./storyplayer.phar"
       basedir="./"
-      compression="gzip"
       stub="./src/stub.php"
       signature="sha1">
+      <fileset dir="./">
+        <include name="composer.json" />
+      </fileset>
       <fileset dir="./src">
         <include name="**/**" />
       </fileset>
