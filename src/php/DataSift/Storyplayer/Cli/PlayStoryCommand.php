@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use stdClass;
+
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
 use Phix_Project\CliEngine\CliEngineSwitch;
@@ -155,6 +157,12 @@ class PlayStoryCommand extends CliCommand
 			$staticConfig->defines->mergeFrom($engine->options->defines);
 		}
 
+		// do we have a defaults section?
+		if (!isset($staticConfig->environments->defaults)) {
+			// create an empty one to keep PlayerLib happy
+			$staticConfig->environments->defaults = new stdClass;
+		}
+
 		// create our user generator
 		$userGenerator = new GenericUserGenerator();
 
@@ -163,7 +171,8 @@ class PlayStoryCommand extends CliCommand
 		$userLoader = new ConfigUserLoader($userGenerator);
 
 		// are we loading a story, or a list of stories?
-		$arg2suffix = end(explode('.', $params[0]));
+		$arg2parts  = explode('.', $params[0]);
+		$arg2suffix = end($arg2parts);
 		switch($arg2suffix)
 		{
 			case "php":
@@ -209,7 +218,7 @@ class PlayStoryCommand extends CliCommand
 				    // create the supporting context for this story
 				    $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
 				    $teller->setStoryContext($context);
-				    $teller->setConfigLoader($configLoader);
+			    	$teller->setRuntimeConfigManager($runtimeConfigManager);
 
 				    // special case - reusable environments
 				    if ($storyList->options->reuseTestEnvironment) {
@@ -278,7 +287,7 @@ class PlayStoryCommand extends CliCommand
 
 		foreach ($storyResults as $result)
 		{
-			echo $result->story->getName() . " :: " . StoryPlayer::$outcomeToText[$result->storyResult] . "\n";
+			echo StoryPlayer::$outcomeToText[$result->storyResult] . " :: " . $result->story->getName() . "\n";
 		}
 	}
 
