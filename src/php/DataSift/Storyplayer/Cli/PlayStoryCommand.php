@@ -218,7 +218,7 @@ class PlayStoryCommand extends CliCommand
 				    // create the supporting context for this story
 				    $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
 				    $teller->setStoryContext($context);
-				    $teller->setConfigLoader($configLoader);
+			    	$teller->setRuntimeConfigManager($runtimeConfigManager);
 
 				    // special case - reusable environments
 				    if ($storyList->options->reuseTestEnvironment) {

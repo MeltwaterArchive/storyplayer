@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\StoryListLib;
 
+use stdClass;
+
 /**
  * Helper for loading a list of stories to run, and verifying that
  * it is a list we are happy with
