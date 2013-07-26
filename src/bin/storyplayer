@@ -113,7 +113,7 @@ foreach ($localSrcDirs as $localSrcDir){
 
 $functionsLoaded = false;
 foreach ($localSrcDirs as $localSrcDir){
-	if (file_exists($localSrcDir.'/DataSift/Storyplayer/functions.php')){
+	if (file_exists($localSrcDir.'/DataSift/Storyplayer/functions.php') && !$functionsLoaded){
 		require $localSrcDir.'/DataSift/Storyplayer/functions.php';
 		$functionsLoaded = true;
 	}
