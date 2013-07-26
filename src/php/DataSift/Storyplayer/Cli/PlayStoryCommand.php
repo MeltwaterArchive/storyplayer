@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use stdClass;
+
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
 use Phix_Project\CliEngine\CliEngineSwitch;
@@ -153,6 +155,12 @@ class PlayStoryCommand extends CliCommand
 		if (isset($engine->options->defines)) {
 			// merge into the default + what was loaded from config files
 			$staticConfig->defines->mergeFrom($engine->options->defines);
+		}
+
+		// do we have a defaults section?
+		if (!isset($staticConfig->environments->defaults)) {
+			// create an empty one to keep PlayerLib happy
+			$staticConfig->environments->defaults = new stdClass;
 		}
 
 		// create our user generator
