@@ -21,21 +21,11 @@
 		"issues": "https://github.com/datasift/storyplayer/issues",
 		"source": "https://github.com/datasift/storyplayer/"
 	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/datasift/ms-lib-stone"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/datasift/php_webdriver"
-		}
-	],
 	"require": {
 		"phix/autoloader": "4.*",
 		"phix/cliengine": "@dev",
 		"datasift/stone": ">=1.5.0",
-		"datasift/webdriver": ">=1.3.0",
+		"datasift/webdriver": ">=1.3.5",
 		"aws/aws-sdk-php": "2.*"
 	},
 	"autoload": {
