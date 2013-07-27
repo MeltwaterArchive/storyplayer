@@ -73,15 +73,16 @@ class InstallCommand extends CliCommand
 		$this->setShortDescription('download optional dependencies');
 		$this->setLongDescription(
 			"Use this command to download any optional dependencies"
-			. " that you might need e.g. chromedriver for selenium"
+			. " that you might need e.g. chromedriver for selenium."
 			.PHP_EOL
 		);
-		$this->setArgsList(array(
-		));
 	}
 
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
+		// tell the user what is happening
+		echo "Additional files will be added to the vendor/ folder\n";
+
 		// find a list of files that we need to download
 		$wdConfig = new WebDriverConfiguration;
 		$filesToDownload = $wdConfig->getDependencies();
@@ -93,9 +94,9 @@ class InstallCommand extends CliCommand
 			if (!is_object($file->url)){
 				$url = $file->url;
 			} else {
-				$arch = strtolower(php_uname("s"));
-				if (isset($file->url->{$arch})){
-					$url = $file->url->{$arch};
+				$platform = strtolower(php_uname("s") . '/' . php_uname("m"));
+				if (isset($file->url->{$platform})){
+					$url = $file->url->{$platform};
 				} else if (isset($file->url->generic)){
 					$url =  $file->url->generic;
 				}
