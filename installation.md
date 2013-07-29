@@ -23,7 +23,20 @@ If you want to run Storyplayer from inside a GitHub clone, you'll also need to i
 
 ## How To Install
 
-_Storyplayer 1.3 will support installation using Composer, and hopefully as a Phar too._
+### Install Via Composer
+
+From version 1.3, Storyplayer can be installed using Composer. Simply add the following <code>require-dev</code> entry to your <code>composer.json</code> file, for example:
+
+{% highlight json %}
+{
+    "name": "vendor/my-project",
+    "require-dev": {
+        "datasift/storyplayer": "*"
+    }
+}
+{% endhighlight %}
+
+Then run <code>composer update</code> if Composer is installed globally or <code>php composer.phar update</code> if Composer is installed locally.
 
 ### Install Via PEAR
 
