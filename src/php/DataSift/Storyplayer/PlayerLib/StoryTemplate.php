@@ -54,14 +54,15 @@ use DataSift\Storyplayer\StoryLib\Story;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-abstract class StoryTemplate
+class StoryTemplate
 {
 	protected $story;
-	protected $vmParams;
 
-	public function __construct($params = array())
+	protected $params = array();
+
+	public function getStory()
 	{
-		$this->params = $params;
+		return $this->story;
 	}
 
 	public function setStory(Story $story)
@@ -69,12 +70,15 @@ abstract class StoryTemplate
 		$this->story = $story;
 	}
 
-	public function getParams($additionalParams = array())
+	public function getParams()
 	{
-		return $this->params + $additionalParams;
+		return $this->params;
 	}
 
-	abstract public function getName();
+	public function setParams($params = array())
+	{
+		$this->params = $params;
+	}
 
 	/**
 	 * Helper methods to keep the Templates API in line with the phases

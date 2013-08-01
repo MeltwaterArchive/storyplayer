@@ -46,6 +46,8 @@ namespace DataSift\Storyplayer\StoryLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\StoryTemplate;
 
+use DataSift\Stone\LogLib\Log;
+
 /**
  * Object that represents a single story
  *
@@ -185,6 +187,22 @@ class Story
 	 * @var array
 	 */
 	protected $actionsCallbacks = array();
+
+	/**
+	 * a list of the StoryTemplates that this story is based on. can be
+	 * empty
+	 *
+	 * @var array
+	 */
+	protected $storyTemplates = array();
+
+	/**
+	 * the parameters that get passed into virtual machines et al, and
+	 * which can be overridden on the command-line
+	 *
+	 * @var array
+	 */
+	protected $params = array();
 
 	// ====================================================================
 	//
@@ -385,6 +403,62 @@ class Story
 	    return $this;
 	}
 
+	/**
+	 * Set the parameters for this story
+	 *
+	 * Parameters are simple settings for use throughout the execution
+	 * of the story.  They were originally added for injection into
+	 * virtual machine configurations, but have since evolved to be
+	 * arbitrary key/value settings used throughout the story, and to be
+	 * overridable from the command-line.
+	 *
+	 * Order of precedence:
+	 *
+	 * 1) StoryTemplates (in 'basedOn()' order)
+	 *    (templates cannot override each other)
+	 * 2) Story
+	 * 3) -D on the command-line
+	 *
+	 * @param array $defaults
+	 *        a list of the parameters for this story
+	 */
+	public function setParams($defaults)
+	{
+		$this->params = $defaults;
+	}
+
+	public function getParams()
+	{
+		// our return value
+		$return = array();
+
+		// populate it with the parameters from the templates
+		foreach ($this->storyTemplates as $template) {
+			// get any params from the template
+			$params = $template->getParams();
+
+			// any params already set have precedence
+			foreach ($params as $key => $value) {
+				// do we have a clash?
+				if (isset($return[$key])) {
+					Log::write(Log::LOG_WARNING, "StoryTemplate '" . get_class($template) . "' attempting to set duplicate story parameter '{$key}'; using existing value '{$return['$key']}' instead of template value '{$value}'");
+				}
+				else {
+					$return[$key] = $value;
+				}
+			}
+		}
+
+		// now, merge in our own params
+		//
+		// our params always take precedence over the params set
+		// in the template(s)
+		$return = $this->params + $return;
+
+		// all done
+		return $return;
+	}
+
 	// ====================================================================
 	//
 	// Metadata for which states the story is valid for
@@ -448,7 +522,7 @@ class Story
 
 	// ====================================================================
 	//
-	// Information about how to setup and teardown the test environment
+	// Information about story templates
 	//
 	// --------------------------------------------------------------------
 
@@ -474,9 +548,31 @@ class Story
 		$tmpl->hasAction()                  && $this->addAction($tmpl->getAction());
 		$tmpl->hasPostTestInspection()      && $this->addPostTestInspection($tmpl->getPostTestInspection());
 
+		// remember this template for future use
+		$this->storyTemplates[] = $tmpl;
+
 		// Return $this for a fluent interface
 		return $this;
 	}
+
+	/**
+	 * get a list of the templates that this story is based on, in order
+	 * or precedence
+	 *
+	 * can be empty
+	 *
+	 * @return array(StoryTemplate)
+	 */
+	public function getStoryTemplates()
+	{
+		return $this->storyTemplates;
+	}
+
+	// ====================================================================
+	//
+	// Information about how to setup and teardown the test environment
+	//
+	// --------------------------------------------------------------------
 
 	/**
 	 * get the callback for per-environment setup work
