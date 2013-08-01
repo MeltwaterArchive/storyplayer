@@ -164,20 +164,27 @@ function main($argv)
 	// create our initial default config
 	$staticConfig = new DefaultStaticConfig();
 
-	// load our main config
-	$staticConfigManager = new StaticConfigManager();
-	$staticConfigManager->loadConfig($staticConfig);
+	try {
+		// load our main config
+		$staticConfigManager = new StaticConfigManager();
+		$staticConfigManager->loadConfig($staticConfig);
 
-	// create our runtime config folder
-	$runtimeConfigManager = new RuntimeConfigManager();
-	$runtimeConfigManager->makeConfigDir();
+		// create our runtime config folder
+		$runtimeConfigManager = new RuntimeConfigManager();
+		$runtimeConfigManager->makeConfigDir();
 
-	// get a list of the additional config files to load
-	// this is a list of the available test environments!
-	$envList = $staticConfigManager->getListOfAdditionalConfigFiles();
+		// get a list of the additional config files to load
+		// this is a list of the available test environments!
+		$envList = $staticConfigManager->getListOfAdditionalConfigFiles();
 
-	// load the runtime config,:data that has been created by previous runs of storyplayer
-	$runtimeConfig = $runtimeConfigManager->loadRuntimeConfig();
+		// load the runtime config,:data that has been created by previous runs of storyplayer
+		$runtimeConfig = $runtimeConfigManager->loadRuntimeConfig();
+	}
+	catch (Exception $e)
+	{
+		echo "*** fatal error: {$e->getMessage()}\n";
+		exit(1);
+	}
 
 	// add into the list any environments in the default config file
 	foreach ($staticConfig->environments as $envName => $dummy) {
