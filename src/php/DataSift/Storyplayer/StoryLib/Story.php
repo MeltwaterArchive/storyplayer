@@ -412,7 +412,12 @@ class Story
 	 * arbitrary key/value settings used throughout the story, and to be
 	 * overridable from the command-line.
 	 *
-	 * Things like the StoryTemplate can (and will) change these params.
+	 * Order of precedence:
+	 *
+	 * 1) StoryTemplates (in 'basedOn()' order)
+	 *    (templates cannot override each other)
+	 * 2) Story
+	 * 3) -D on the command-line
 	 *
 	 * @param array $defaults
 	 *        a list of the parameters for this story
