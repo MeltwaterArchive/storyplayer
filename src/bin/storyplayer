@@ -37,8 +37,8 @@ define('APP_BINDIR', __DIR__);
 // work out where the local source code might be
 $localSrcDir = '';
 $localSrcDirs = array(
-	'phar://storyplayer/src/php',
-	realpath(__DIR__ . '/../../src/php'),
+	__DIR__ . '/../php',
+	__DIR__ . '/../src/php',
 	getcwd() . '/src/php',
 	getcwd() . '/php'
 );
@@ -51,7 +51,6 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 // do we have a composer autoloader?
 $composerAutoloader = false;
 $composerFiles = array (
-	'phar://storyplayer/vendor/autoload.php',
 	__DIR__ . '/../../vendor/autoload.php',
 	getcwd() . '/vendor/autoload.php'
 );
@@ -67,7 +66,6 @@ if (!$composerAutoloader) {
 	// work out where the vendor folder might be
 	$vendorDir = '';
 	$vendorDirs = array(
-		'phar://storyplayer/vendor/php',
 		__DIR__ . '/../../vendor/php',
 		getcwd() . '/vendor/php'
 	);
@@ -94,7 +92,7 @@ PSR0_Autoloader::startAutoloading();
 
 // if we have a vendor folder, load from there
 foreach ($vendorDirs as $vendorDir){
-	Autoloader_Path::searchFirst(realpath($vendorDir));
+	Autoloader_Path::searchFirst($vendorDir);
 }
 
 // if we have a source dir, we also want to load from there
@@ -103,8 +101,7 @@ foreach ($localSrcDirs as $localSrcDir){
 }
 
 // load our list of helper functions
-require 'DataSift/Storyplayer/functions.php';
-
+require __DIR__.'/../php/DataSift/Storyplayer/functions.php';
 
 /**
  * it all happens here, baby
