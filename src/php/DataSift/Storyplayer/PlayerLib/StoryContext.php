@@ -47,6 +47,8 @@ use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Stone\ObjectLib\BaseObject;
 
+use Exception;
+
 /**
  * a sanitised & dynamically enhanced version of the config that has been
  * loaded for this test run
@@ -134,7 +136,7 @@ class StoryContext extends BaseObject
 		//
 		// note: am not sure that the search list for OSX interfaces is
 		// reliable :(
-		$searchList = array("br0", "p20p1", "eth0", "en2", "en0", "en1");
+		$searchList = array("br0", "p20p1", "eth0", "en2", "en0", "en1", "wlan0");
 		foreach ($searchList as $adapterToTest) {
 			// skip over any adapters that don't exist on this machine
 			if (!in_array($adapterToTest, $adapters)) {
