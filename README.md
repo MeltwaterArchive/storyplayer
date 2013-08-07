@@ -20,6 +20,12 @@ Then, run `composer install`. Once that's completed, run `./vendor/bin/storyplay
 
 ### Usage
 
+Create a default Storyplayer config file:
+
+```bash
+mkdir ./etc && echo '{"environments":{}}' > ./etc/storyplayer.json
+```
+
 If your tests need a web browser, make sure you've started browsermob-proxy and selenium:
 
 ```
