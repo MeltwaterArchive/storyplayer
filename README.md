@@ -6,25 +6,31 @@ Bring your user and service stories to life through your tests.
 
 ### Installation
 
-Storyplayer should be installed using the [PEAR Installer](http://pear.php.net).
+Storyplayer should be installed via [Composer](http://getcomposer.org/). To install Storyplayer, create a `composer.json` file with the following contents:
 
-	sudo pear config-set auto_discover 1
-    sudo pear channel-discover datasift.github.io/pear
-    sudo pear install --alldeps datasift/storyplayer
+```json
+{
+    "require": {
+        "datasift/storyplayer": "1.3.3"
+    }
+}
+```
+
+Then, run `composer install`. Once that's completed, run `./vendor/bin/storyplayer install` to install any additional dependencies.
 
 ### Usage
 
 If your tests need a web browser, make sure you've started browsermob-proxy and selenium:
 
 ```
-browsermob-proxy.sh start
-selenium-server.sh start
+./vendor/bin/browsermob-proxy.sh start
+./vendor/bin/selenium-server.sh start
 ```
 
 Basic usage is:
 
 ```
-storyplayer <environment> <story>
+./vendor/bin/storyplayer <environment> <story>
 ```
 
 where:
