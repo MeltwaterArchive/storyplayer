@@ -31,6 +31,9 @@ use DataSift\Storyplayer\Cli\PlayStoryCommand;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+
 // where are we, and our useful utilities?
 define('APP_BINDIR', __DIR__);
 
@@ -168,7 +171,21 @@ function main($argv)
 		// load our main config
 		$staticConfigManager = new StaticConfigManager();
 		$staticConfigManager->loadConfig($staticConfig);
+	}
+	catch (E5xx_ConfigFileNotFound $e)
+	{
+		// this isn't fatal, but we need to tell the user, just in case
+		echo "*** warning: storyplayer.json / storyplayer.json.dist not found\n";
+	}
+	catch (Exception $e)
+	{
+		// these are fatal ... there is a config file, but something
+		// went wrong with loading it
+		echo "*** fatal error: {$e->getMessage()}\n";
+		exit(1);
+	}
 
+	try {
 		// create our runtime config folder
 		$runtimeConfigManager = new RuntimeConfigManager();
 		$runtimeConfigManager->makeConfigDir();
@@ -182,6 +199,7 @@ function main($argv)
 	}
 	catch (Exception $e)
 	{
+		// all errors here are fatal
 		echo "*** fatal error: {$e->getMessage()}\n";
 		exit(1);
 	}
