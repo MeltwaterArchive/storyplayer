@@ -23,7 +23,29 @@ If you want to run Storyplayer from inside a GitHub clone, you'll also need to i
 
 ## How To Install
 
-_Storyplayer 1.3 will support installation using Composer, and hopefully as a Phar too._
+### Install Via Composer
+
+From version 1.3, Storyplayer can be installed using Composer. Simply add the following <code>require-dev</code> entry to your <code>composer.json</code> file, for example:
+
+{% highlight json %}
+{
+    "name": "vendor/my-project",
+    "require-dev": {
+        "datasift/storyplayer": "*"
+    }
+}
+{% endhighlight %}
+
+Then run <code>composer update</code> if Composer is installed globally or <code>php composer.phar update</code> if Composer is installed locally.
+
+After this, if you want to use the Browser module, you will need to ask Storyplayer to download Selenium and ChromeDriver, like so (versions downloaded may differ from this example):
+
+{% highlight bash %}
+$ vendor/bin/storyplayer install
+Additional files will be added to the vendor/ folder
+Downloading: http://chromedriver.googlecode.com/files/chromedriver_linux64_2.1.zip (7.026mb)
+Downloading: http://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar (32.708mb)
+{% endhighlight %}
 
 ### Install Via PEAR
 
