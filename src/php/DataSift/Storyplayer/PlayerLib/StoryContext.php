@@ -47,6 +47,11 @@ use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Stone\ObjectLib\BaseObject;
 
+use Datasift\Os;
+use Datasift\IfconfigParser;
+use Datasift\netifaces;
+use Datasift\NetifacesException;
+
 use Exception;
 
 /**
@@ -125,41 +130,51 @@ class StoryContext extends BaseObject
 		$BIN_DIR=APP_BINDIR;
 
 		// step 1 - how many adapters do we have on this box?
-		$adapters = trim(`{$BIN_DIR}/get-ip -l | tr '\n' ' '`);
+		// @todo Maybe we want to move this somewhere more central later?
+		$os = Os::getOs();
+		$parser = IfconfigParser::fromDistributions($os->getPossibleClassNames());
+		$netifaces = new netifaces($os, $parser);
+		
+		$adapters = $netifaces->listAdapters();
 		if (empty($adapters)) {
 			throw new Exception("unable to parse host machine network adapters list");
 		}
-		$adapters = explode(' ', $adapters);
 
 		// step 2 - find an adapter that is most likely to have the IP address
 		// that we want
 		//
 		// note: am not sure that the search list for OSX interfaces is
 		// reliable :(
-		$searchList = array("br0", "p20p1", "eth0", "en2", "en0", "en1", "wlan0");
-		foreach ($searchList as $adapterToTest) {
-			// skip over any adapters that don't exist on this machine
-			if (!in_array($adapterToTest, $adapters)) {
-				continue;
-			}
 
-			// we think the adapter is present
+		try {
+			$searchList = array("br0", "p20p1", "eth0", "en2", "en0", "en1", "wlan0");
+			foreach ($searchList as $adapterToTest) {
+				// skip over any adapters that don't exist on this machine
+				if (!in_array($adapterToTest, $adapters)) {
+					continue;
+				}
+
+				// we think the adapter is present
+				//
+				// does it have an IP address?
+				$ipAddress = $netifaces->getIpAddress($adapterToTest);
+
+				// did we get back a valid IP address?
+				$parts = explode('.', $ipAddress);
+				if (count($parts) == 4) {
+					// success!
+					return array($adapterToTest, $ipAddress);
+				}
+			}
+			
+			// if we get here, we could not determine the IP address of our
+			// host :(
 			//
-			// does it have an IP address?
-			$ipAddress = trim(`{$BIN_DIR}/get-ip -i {$adapterToTest}`);
+			// this sucks
+			throw new NetifacesException("Unable to determine IP address");
 
-			// did we get back a valid IP address?
-			$parts = explode('.', $ipAddress);
-			if (count($parts) == 4) {
-				// success!
-				return array($adapterToTest, $ipAddress);
-			}
+		} catch (NetifacesException $e){
+			throw new Exception("could not determine IP address of host machine");
 		}
-
-		// if we get here, we could not determine the IP address of our
-		// host :(
-		//
-		// this sucks
-		throw new Exception("could not determine IP address of host machine");
 	}
 }
