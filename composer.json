@@ -21,31 +21,16 @@
 		"issues": "https://github.com/datasift/storyplayer/issues",
 		"source": "https://github.com/datasift/storyplayer/"
 	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/datasift/netifaces"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/datasift/os-php"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/datasift/ifconfig-parser-php"
-		}
-	],
 	"require": {
 		"phix/autoloader": "4.*",
 		"phix/cliengine": "@dev",
 		"datasift/stone": ">=1.5.0",
 		"datasift/webdriver": ">=1.3.5",
 		"aws/aws-sdk-php": "2.*",
-		"datasift/netifaces": "dev-master@dev"
+		"datasift/netifaces": "*"
 	},
 	"autoload": {
 		"psr-0": { "" : "src/php/" }
 	},
-	"bin": ["src/bin/storyplayer"],
-	"minimum-stability": "dev"
+	"bin": ["src/bin/storyplayer"]
 }
