@@ -65,6 +65,9 @@ class DefaultStaticConfig extends LoadedConfig
 		$this->logger = new BaseObject();
 		$this->logger->writer = "StdErrWriter";
 
+        $this->environments = new BaseObject();
+        $this->environments->defaults = new BaseObject();
+
         $levels = new BaseObject();
         $levels->LOG_EMERGENCY = true;
         $levels->LOG_ALERT = true;
