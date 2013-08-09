@@ -11,55 +11,50 @@ next: '<a href="running-storyplayer.html">Next: Running Storyplayer</a>'
 
 To run Storyplayer, you'll need at least the following:
 
+### PHP Dependencies
+
 * [PHP 5.3](http://php.net) or later
 * cURL extension for PHP
 * YAML extension for PHP
+
+### Other Dependencies
+
 * Python - 2.7 preferred
-* Python netifaces - _pip install netifaces_
+* Python netifaces - `pip install netifaces` works on most systems
+* GNU screen - `apt-get install screen` works on Ubuntu
 * Google Chrome (if you want to test web pages)
 * Java JRE 1.6 or later (if you want to test web pages)
+* Vagrant (if you want to create test virtual machines)
+* Ansible (if you want to deploy into your test virtual machines from Storyplayer)
 
-If you want to run Storyplayer from inside a GitHub clone, you'll also need to install [Phix](http://phix-project.org) in order to build the vendor folder and PEAR packages.
+## Install Via Composer
 
-## How To Install
-
-### Install Via Composer
-
-From version 1.3, Storyplayer can be installed using Composer. Simply add the following <code>require-dev</code> entry to your <code>composer.json</code> file, for example:
+Storyplayer can be installed using Composer. Simply add the following `require-dev` entry to your `composer.json` file, for example:
 
 {% highlight json %}
 {
-    "name": "vendor/my-project",
     "require-dev": {
         "datasift/storyplayer": "*"
     }
 }
 {% endhighlight %}
 
-Then run <code>composer update</code> if Composer is installed globally or <code>php composer.phar update</code> if Composer is installed locally.
+Then run `composer update` if Composer is installed globally or `php composer.phar update` if Composer is installed locally.
 
-After this, if you want to use the Browser module, you will need to ask Storyplayer to download Selenium and ChromeDriver, like so (versions downloaded may differ from this example):
+After this, if you want to use the [Browser module](modules/browser/index.html), you will need to ask Storyplayer to download Selenium and ChromeDriver, like so (versions downloaded may differ from this example):
 
 {% highlight bash %}
 $ vendor/bin/storyplayer install
 Additional files will be added to the vendor/ folder
 Downloading: http://chromedriver.googlecode.com/files/chromedriver_linux64_2.1.zip (7.026mb)
 Downloading: http://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar (32.708mb)
+$ vendor/bin/browsermob-proxy.sh start
+$ vendor/bin/selenium-server.sh start
 {% endhighlight %}
 
-### Install Via PEAR
+This will download some additional tools into your project's `vendor/bin` folder, and start them running in the background on your computer.
 
-Storyplayer is installed using PEAR:
-
-{% highlight bash %}
-sudo pear config-set auto_discover 1
-sudo pear channel-discover datasift.github.io/pear
-sudo pear install DataSift/storyplayer
-{% endhighlight %}
-
-This will install the <code>storyplayer</code> command onto your computer.
-
-### Install From Source
+## Install From Source
 
 You can also run the very latest Storyplayer from a GitHub checkout:
 
@@ -69,3 +64,17 @@ cd storyplayer
 composer install
 export PATH=`pwd`/src/bin:$PATH
 {% endhighlight %}
+
+After this, if you want to use the [Browser module](modules/browser/index.html), you will need to ask Storyplayer to download Selenium and ChromeDriver, like so (versions downloaded may differ from this example):
+
+{% highlight bash %}
+$ cd <your-project-folder>
+$ storyplayer install
+Additional files will be added to the vendor/ folder
+Downloading: http://chromedriver.googlecode.com/files/chromedriver_linux64_2.1.zip (7.026mb)
+Downloading: http://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar (32.708mb)
+$ vendor/bin/browsermob-proxy.sh start
+$ vendor/bin/selenium-server.sh start
+{% endhighlight %}
+
+This will download some additional tools into your project's `vendor/bin` folder, and start them running in the background on your computer.
