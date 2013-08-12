@@ -373,6 +373,7 @@ class PlayStoryCommand extends CliCommand
 		else {
 			echo "There are " . count($screenSessions) . " background processes still running\n";
 		}
+		echo "Use 'storyplayer list-processes' to see the list of background processes\n";
 		echo "Use 'storyplayer kill-processes' to stop any background processes\n";
 	}
 
