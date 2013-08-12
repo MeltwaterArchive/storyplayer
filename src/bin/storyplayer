@@ -27,7 +27,7 @@ use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\InstallCommand;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
 use DataSift\Storyplayer\Cli\ListHostsTableCommand;
-use DataSift\Storyplayer\Cli\ListProcessesTableCommand;
+use DataSift\Storyplayer\Cli\ListProcessesCommand;
 use DataSift\Storyplayer\Cli\PlayStoryCommand;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
@@ -281,7 +281,7 @@ function main($argv)
 	$engine->addCommand(new ListEnvironmentsCommand($envList));
 	$engine->addCommand(new InstallCommand);
 	$engine->addCommand(new ListHostsTableCommand);
-	$engine->addCommand(new ListProcessesTableCommand);
+	$engine->addCommand(new ListProcessesCommand);
 
 	// all set - let's go
 	return $engine->main($argv, $additionalContext);

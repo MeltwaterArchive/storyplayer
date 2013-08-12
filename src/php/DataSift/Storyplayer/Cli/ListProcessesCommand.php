@@ -58,19 +58,21 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ListProcessesTableCommand extends CliCommand
+class ListProcessesCommand extends CliCommand
 {
 	public function __construct()
 	{
 		// define the command
-		$this->setName('list-processestable');
-		$this->setShortDescription('list the current contents of the processestable');
+		$this->setName('list-processes');
+		$this->setShortDescription('list any background processes that are currently running');
 		$this->setLongDescription(
 			"Use this command to get a list of all of the processes that Storyplayer "
 			."has started in the background."
 			.PHP_EOL .PHP_EOL
 			."This can help you to identify processes that have been left running after "
 			."a test has completed."
+			.PHP_EOL .PHP_EOL
+			."You can use the 'kill-processes' command to stop these processes."
 			.PHP_EOL
 		);
 	}
