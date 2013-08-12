@@ -226,6 +226,22 @@ function main($argv)
 
 	// ====================================================================
 	//
+	// SELF-CLEANING
+	//
+	// --------------------------------------------------------------------
+
+	// tidy up our list of background processes
+	if (isset($runtimeConfig->processes)) {
+		foreach ($runtimeConfig->processes as $pid => $details) {
+			if (!posix_kill($pid, 0)) {
+				// process no longer running
+				unset($runtimeConfig->processes->$pid);
+			}
+		}
+	}
+
+	// ====================================================================
+	//
 	// PARSE THE COMMAND-LINE
 	//
 	// --------------------------------------------------------------------
