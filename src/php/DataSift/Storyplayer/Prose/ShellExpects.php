@@ -81,4 +81,26 @@ class ShellExpects extends Prose
 		$log->endAction();
 		return true;
 	}
+
+	public function isNotRunningInScreen($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure process '{$processName}' is not running");
+
+		// get the details
+		$processDetails = $st->fromShell()->getScreenSessionDetails($processName);
+
+		// is this process still running?
+		if ($st->fromShell()->getIsProcessRunning($processDetails->pid)) {
+			$log->endAction("process is running");
+			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} not running", "process {$processDetails->pid} is running");
+		}
+
+		// all done
+		$log->endAction();
+		return true;
+	}
 }
