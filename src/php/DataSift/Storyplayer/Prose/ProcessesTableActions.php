@@ -110,7 +110,7 @@ class ProcessesTableActions extends Prose
 		$log = $st->startAction("remove process '{$pid}' from Storyplayer's processes table");
 
 		// get the runtime config
-		$runtimeCOnfig = $st->getRuntimeConfig();
+		$runtimeConfig = $st->getRuntimeConfig();
 
 		// make sure we have a processes table
 		if (!isset($runtimeConfig->processes)) {
