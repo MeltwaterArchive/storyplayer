@@ -25,6 +25,7 @@ use Phix_Project\CliEngine\Commands\HelpCommand;
 use DataSift\Storyplayer\Cli\DefaultStaticConfig;
 use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\InstallCommand;
+use DataSift\Storyplayer\Cli\KillProcessesCommand;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
 use DataSift\Storyplayer\Cli\ListHostsTableCommand;
 use DataSift\Storyplayer\Cli\ListProcessesCommand;
@@ -280,6 +281,7 @@ function main($argv)
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new ListEnvironmentsCommand($envList));
 	$engine->addCommand(new InstallCommand);
+	$engine->addCommand(new KillProcessesCommand);
 	$engine->addCommand(new ListHostsTableCommand);
 	$engine->addCommand(new ListProcessesCommand);
 
