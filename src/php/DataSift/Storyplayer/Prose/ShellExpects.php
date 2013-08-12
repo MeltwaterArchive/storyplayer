@@ -60,16 +60,16 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class ShellExpects extends Prose
 {
-	public function isRunningInScreen($screenName)
+	public function isRunningInScreen($processName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$screenName}' is running");
+		$log = $st->startAction("make sure process '{$processName}' is running");
 
 		// get the details
-		$processDetails = $st->fromShell()->getScreenSessionDetails($screenName);
+		$processDetails = $st->fromShell()->getScreenSessionDetails($processName);
 
 		// is this process still running?
 		if (!$st->fromShell()->getIsProcessRunning($processDetails->pid)) {
