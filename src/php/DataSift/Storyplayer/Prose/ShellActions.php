@@ -117,8 +117,6 @@ class ShellActions extends Prose
 			throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$processName}'");
 		}
 
-		var_dump($processDetails);
-
 		// remember this process
 		$st->usingProcessesTable()->addProcess($processDetails);
 
