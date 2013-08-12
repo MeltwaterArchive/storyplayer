@@ -140,6 +140,9 @@ class PlayStoryCommand extends CliCommand
 		}
 		Log::init("storyplayer", $loggingConfig);
 
+		// setup shutdown handling
+		register_shutdown_function(array($this, 'shutdownHandler'));
+
 		// do we need to load environment-specific config?
 		if (!isset($staticConfig->environments, $staticConfig->environments->$envName))
 		{
@@ -185,6 +188,10 @@ class PlayStoryCommand extends CliCommand
 			    $player = new StoryPlayer();
 			    $teller = new StoryTeller($story);
 
+			    // remember our $st object, as we'll need it for our
+			    // shutdown function
+			    $this->st = $teller;
+
 			    // create the supporting context for this story
 			    $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
 			    $teller->setStoryContext($context);
@@ -214,6 +221,10 @@ class PlayStoryCommand extends CliCommand
 					// create something to play this story
 				    $player = new StoryPlayer();
 				    $teller = new StoryTeller($story);
+
+				    // remember our $st object, as we'll need it for our
+				    // shutdown function
+				    $this->st = $teller;
 
 				    // create the supporting context for this story
 				    $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
@@ -291,4 +302,33 @@ class PlayStoryCommand extends CliCommand
 		}
 	}
 
+	public function shutdownHandler()
+	{
+		// we need to shutdown any running processes
+		$this->shutdownScreenProcesses();
+	}
+
+	protected function shutdownScreenProcesses()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// do we have anything to shutdown?
+		$screenSessions = $st->fromShell()->getAllScreenSessions();
+		if (count($screenSessions) == 0) {
+			// nothing to do
+			return;
+		}
+
+		// if we get here, there are things to stop
+		echo "\n";
+		echo "============================================================\n";
+		echo "SHUTDOWN - STOP SCREEN PROCESSES\n";
+		echo "\n";
+
+		foreach ($screenSessions as $processDetails) {
+			$st->usingShell()->stopProcess($processDetails->pid);
+			$st->usingProcessesTable()->removeProcess($processDetails->pid);
+		}
+	}
 }
