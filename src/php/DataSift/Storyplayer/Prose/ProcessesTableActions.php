@@ -64,10 +64,11 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class ProcessesTableActions extends Prose
 {
-	public function addProcess($pid, $processDetails)
+	public function addProcess($processDetails)
 	{
 		// shorthand
-		$st = $this->st;
+		$st  = $this->st;
+		$pid = $processDetails->pid;
 
 		// what are we doing?
 		$log = $st->startAction("add process '{$pid}' to Storyplayer's processes table");
