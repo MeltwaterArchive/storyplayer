@@ -97,6 +97,7 @@ class PlayStoryCommand extends CliCommand
 			new LogLevelSwitch(),
 			new EnvironmentSwitch($envList, $defaultEnvName),
 			new DefineSwitch(),
+			new PersistProcessesSwitch(),
 			new PlatformSwitch(),
 		));
 	}
