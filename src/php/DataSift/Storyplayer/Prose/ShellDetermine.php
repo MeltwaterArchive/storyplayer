@@ -64,7 +64,7 @@ class ShellDetermine extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("check if  process '{$screenName}' is still running");
+		$log = $st->startAction("check if process '{$screenName}' is still running");
 
 		// get the details
 		$appData = $st->fromShell()->getScreenSessionDetails($screenName);
@@ -116,20 +116,19 @@ class ShellDetermine extends Prose
 		$log = $st->startAction("get details about process '{$screenName}'");
 
 		// are there any details?
-		$env = $st->getEnvironment();
-		if (!isset($env->screen->sessions)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		if (!isset($env->screen->sessions->$screenName)) {
-			throw new E5xx_ActionFailed(__METHOD__);
+		$processesTable = $st->fromProcessesTable()->getProcessesTable();
+		foreach ($processesTable as $processDetails) {
+			if (isset($processDetails->screenName) && $processDetails->screenName == $screenName) {
+				// success!
+				$log->endAction();
+				return $processDetails;
+			}
 		}
 
-		// we have some data :)
-		$appData = $env->screen->sessions->$screenName;
-
-		// all done
-		$log->endAction();
-		return $appData;
+		// we don't have this process
+		$msg = "no process with the screen name '{$screenName}'";
+		$log->endAction($msg);
+		throw new E5xx_ActionFailed(__METHOD__, $msg);
 	}
 
 	public function getAllScreenSessions()
@@ -140,18 +139,21 @@ class ShellDetermine extends Prose
 		// what are we doing?
 		$log = $st->startAction("get details about all screen processes");
 
+		// our return data
+		$return = array();
+
 		// are there any details?
-		$env = $st->getEnvironment();
-		if (!isset($env->screen->sessions)) {
-			throw new E5xx_ActionFailed(__METHOD__);
+		$processesTable = $st->fromProcessesTable()->getProcessesTable();
+		foreach ($processesTable as $processDetails) {
+			if (isset($processDetails->screenName)) {
+				$return[] = $processDetails;
+			}
 		}
 
-		// we have some data :)
-		$apps = $env->screen->sessions;
+		// all done
+		$log->endAction("found " . count($return) . " screen process(es)");
 
 		// all done
-		$log->endAction();
-		return $apps;
+		return $return;
 	}
-
 }

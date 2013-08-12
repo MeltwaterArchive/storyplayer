@@ -69,12 +69,12 @@ class ShellExpects extends Prose
 		$log = $st->startAction("make sure process '{$screenName}' is running");
 
 		// get the details
-		$appData = $st->fromShell()->getScreenSessionDetails($screenName);
+		$processDetails = $st->fromShell()->getScreenSessionDetails($screenName);
 
 		// is this process still running?
-		if (!$st->fromShell()->getIsProcessRunning($appData->pid)) {
+		if (!$st->fromShell()->getIsProcessRunning($processDetails->pid)) {
 			$log->endAction("process is not running");
-			throw new E5xx_ExpectFailed(__METHOD__, "process {$appData->pid} running", "process {$appData->pid} not running");
+			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} running", "process {$processDetails->pid} not running");
 		}
 
 		// all done
