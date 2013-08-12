@@ -80,19 +80,22 @@ class ShellActions extends Prose
 		return $return;
 	}
 
-	public function startInScreen($screenName, $commandLine)
+	public function startInScreen($processName, $commandLine)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run process '{$screenName}' ({$commandLine}) in the background");
+		$log = $st->startAction("run process '{$processName}' ({$commandLine}) in the background");
 
 		// build up the process data structure
 		$processDetails = new BaseObject();
 
+		// remember how users will refer to this
+		$processDetails->processName = $processName;
+
 		// we need to create a unique screen name
-		$processDetails->screenName = $screenName . '_' . date('YmdHis');
+		$processDetails->screenName = $processName . '_' . date('YmdHis');
 
 		// build up our command to run
 		$processDetails->commandLine = "screen -L -d -m -S " . $processDetails->screenName
@@ -111,7 +114,7 @@ class ShellActions extends Prose
 		// did the process start, or has it already terminated?
 		if (empty($processDetails->pid)) {
 			$log->endAction("process failed to start");
-			throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$screenName}'");
+			throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$processName}'");
 		}
 
 		var_dump($processDetails);
@@ -123,16 +126,16 @@ class ShellActions extends Prose
 		$log->endAction("process running as '{$processDetails->screenName}' ({$processDetails->pid})");
 	}
 
-	public function stopInScreen($screenName)
+	public function stopInScreen($processName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop process '{$screenName}'");
+		$log = $st->startAction("stop process '{$processName}'");
 
 		// get the process details
-		$processDetails = $st->fromShell()->getScreenSessionDetails($screenName);
+		$processDetails = $st->fromShell()->getScreenSessionDetails($processName);
 
 		// stop the process
 		$st->usingShell()->stopProcess($processDetails->pid);
