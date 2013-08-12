@@ -60,21 +60,43 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class ShellExpects extends Prose
 {
-	public function isRunningInScreen($screenName)
+	public function isRunningInScreen($processName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$screenName}' is running");
+		$log = $st->startAction("make sure process '{$processName}' is running");
 
 		// get the details
-		$appData = $st->fromShell()->getScreenSessionDetails($screenName);
+		$processDetails = $st->fromShell()->getScreenSessionDetails($processName);
 
 		// is this process still running?
-		if (!$st->fromShell()->getIsProcessRunning($appData->pid)) {
+		if (!$st->fromShell()->getIsProcessRunning($processDetails->pid)) {
 			$log->endAction("process is not running");
-			throw new E5xx_ExpectFailed(__METHOD__, "process {$appData->pid} running", "process {$appData->pid} not running");
+			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} running", "process {$processDetails->pid} not running");
+		}
+
+		// all done
+		$log->endAction();
+		return true;
+	}
+
+	public function isNotRunningInScreen($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure process '{$processName}' is not running");
+
+		// get the details
+		$processDetails = $st->fromShell()->getScreenSessionDetails($processName);
+
+		// is this process still running?
+		if ($st->fromShell()->getIsProcessRunning($processDetails->pid)) {
+			$log->endAction("process is running");
+			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} not running", "process {$processDetails->pid} is running");
 		}
 
 		// all done

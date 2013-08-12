@@ -51,7 +51,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
  *
- * test the state of the internal hosts table
+ * test the state of the internal processes table
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -60,63 +60,48 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableExpects extends Prose
+class ProcessesTableExpects extends Prose
 {
-	public function hasEntryForHost($hostName)
+	public function hasEntryForProcess($pid)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure host '{$hostName}' has an entry in Storyplayer's hosts table");
+		$log = $st->startAction("make sure process ID '{$pid}' has an entry in Storyplayer's processes table");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// get the processes table
+		$processesTable = $st->fromProcessesTable()->getProcessesTable();
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
+		// make sure we have the entry
+		if (!isset($processesTable->$pid)) {
+			$msg = "table does not contain an entry for '{$pid}'";
 			$log->endAction($msg);
 
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table existed", "hosts table does not exist");
-		}
-
-		// make sure we don't have a duplicate entry
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has an entry for '{$hostName}'", "hosts table has no entry for '{$hostName}'");
+			throw new E5xx_ExpectFailed(__METHOD__, "processes table has an entry for '{$pid}'", "processes table has no entry for '{$pid}'");
 		}
 
 		// all done
 		$log->endAction();
 	}
 
-	public function hasNoEntryForHost($hostName)
+	public function hasNoEntryForProcess($pid)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure there is no existing entry for host '{$hostName}' in Storyplayer's hosts table");
+		$log = $st->startAction("make sure process ID '{$pid}' has no entry in Storyplayer's processes table");
 
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
+		// get the processes table
+		$processesTable = $st->fromProcessesTable()->getProcessesTable();
 
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-			return;
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
+		// make sure we do not have the entry
+		if (isset($processesTable->$pid)) {
+			$msg = "table contains an entry for '{$pid}'";
 			$log->endAction($msg);
 
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has no entry for '{$hostName}'", "hosts table has an entry for '{$hostName}'");
+			throw new E5xx_ExpectFailed(__METHOD__, "processes table has no entry for '{$pid}'", "processes table has an entry for '{$pid}'");
 		}
 
 		// all done
