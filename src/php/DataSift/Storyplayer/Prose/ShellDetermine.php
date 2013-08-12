@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
@@ -58,16 +59,16 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class ShellDetermine extends Prose
 {
-	public function getIsScreenRunning($screenName)
+	public function getIsScreenRunning($processName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("check if process '{$screenName}' is still running");
+		$log = $st->startAction("check if process '{$processName}' is still running in screen");
 
 		// get the details
-		$appData = $st->fromShell()->getScreenSessionDetails($screenName);
+		$appData = $st->fromShell()->getScreenSessionDetails($processName);
 
 		// is it still running?
 		$isRunning = $st->fromShell()->getIsProcessRunning($appData->pid);
@@ -107,18 +108,18 @@ class ShellDetermine extends Prose
 		return true;
 	}
 
-	public function getScreenSessionDetails($screenName)
+	public function getScreenSessionDetails($processName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get details about process '{$screenName}'");
+		$log = $st->startAction("get details about process '{$processName}'");
 
 		// are there any details?
 		$processesTable = $st->fromProcessesTable()->getProcessesTable();
 		foreach ($processesTable as $processDetails) {
-			if (isset($processDetails->screenName) && $processDetails->screenName == $screenName) {
+			if (isset($processDetails->processName) && $processDetails->processName == $processName) {
 				// success!
 				$log->endAction();
 				return $processDetails;
@@ -126,7 +127,7 @@ class ShellDetermine extends Prose
 		}
 
 		// we don't have this process
-		$msg = "no process with the screen name '{$screenName}'";
+		$msg = "no process with the screen name '{$processName}'";
 		$log->endAction($msg);
 		throw new E5xx_ActionFailed(__METHOD__, $msg);
 	}
