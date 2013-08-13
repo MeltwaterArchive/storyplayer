@@ -34,92 +34,71 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- *
- * test the state of the internal hosts table
+ * A command to list the processes we have previously started
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableExpects extends Prose
+class ListProcessesCommand extends CliCommand
 {
-	public function hasEntryForHost($hostName)
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("make sure host '{$hostName}' has an entry in Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table existed", "hosts table does not exist");
-		}
-
-		// make sure we don't have a duplicate entry
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has an entry for '{$hostName}'", "hosts table has no entry for '{$hostName}'");
-		}
-
-		// all done
-		$log->endAction();
+		// define the command
+		$this->setName('list-processes');
+		$this->setShortDescription('list any background processes that are currently running');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the processes that Storyplayer "
+			."has started in the background."
+			.PHP_EOL .PHP_EOL
+			."This can help you to identify processes that have been left running after "
+			."a test has completed."
+			.PHP_EOL .PHP_EOL
+			."You can use the 'kill-processes' command to stop these processes."
+			.PHP_EOL
+		);
 	}
 
-	public function hasNoEntryForHost($hostName)
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// shorthand
-		$st = $this->st;
+		$runtimeConfig = $additionalContext->runtimeConfig;
 
-		// what are we doing?
-		$log = $st->startAction("make sure there is no existing entry for host '{$hostName}' in Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-			return;
+		// are there any processes in the table?
+		if (!isset($runtimeConfig->processes)) {
+			// we're done
+			return new CliResult(0);
 		}
 
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has no entry for '{$hostName}'", "hosts table has an entry for '{$hostName}'");
+		// let's walk through the table
+		foreach ($runtimeConfig->processes as $details) {
+			if (isset($details->screenName)) {
+				echo "{$details->pid}:{$details->processName}:{$details->screenName}\n";
+			}
+			else {
+				echo "{$details->pid}:{$details->processName}\n";
+			}
 		}
 
 		// all done
-		$log->endAction();
+		return new CliResult(0);
 	}
 }

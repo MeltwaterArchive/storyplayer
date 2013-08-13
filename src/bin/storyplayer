@@ -26,8 +26,10 @@ use DataSift\Storyplayer\Cli\CreateStoryCommand;
 use DataSift\Storyplayer\Cli\DefaultStaticConfig;
 use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\InstallCommand;
+use DataSift\Storyplayer\Cli\KillProcessesCommand;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
 use DataSift\Storyplayer\Cli\ListHostsTableCommand;
+use DataSift\Storyplayer\Cli\ListProcessesCommand;
 use DataSift\Storyplayer\Cli\PlayStoryCommand;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
@@ -37,6 +39,9 @@ use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 
 // where are we, and our useful utilities?
 define('APP_BINDIR', __DIR__);
+
+// enable signal handling
+declare(ticks=1);
 
 /**
  * can we safely load this file?
@@ -226,6 +231,22 @@ function main($argv)
 
 	// ====================================================================
 	//
+	// SELF-CLEANING
+	//
+	// --------------------------------------------------------------------
+
+	// tidy up our list of background processes
+	if (isset($runtimeConfig->processes)) {
+		foreach ($runtimeConfig->processes as $pid => $details) {
+			if (!posix_kill($pid, 0)) {
+				// process no longer running
+				unset($runtimeConfig->processes->$pid);
+			}
+		}
+	}
+
+	// ====================================================================
+	//
 	// PARSE THE COMMAND-LINE
 	//
 	// --------------------------------------------------------------------
@@ -262,7 +283,9 @@ function main($argv)
 	$engine->addCommand(new CreateStoryCommand);
 	$engine->addCommand(new ListEnvironmentsCommand($envList));
 	$engine->addCommand(new InstallCommand);
+	$engine->addCommand(new KillProcessesCommand);
 	$engine->addCommand(new ListHostsTableCommand);
+	$engine->addCommand(new ListProcessesCommand);
 
 	// all set - let's go
 	return $engine->main($argv, $additionalContext);

@@ -34,92 +34,64 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeString;
 
 /**
- *
- * test the state of the internal hosts table
+ * Tell Storyplayer not to kill any background processes we have started
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableExpects extends Prose
+class PersistProcessesSwitch extends CliSwitch
 {
-	public function hasEntryForHost($hostName)
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
+		// define our name, and our description
+		$this->setName('persistprocess');
+		$this->setShortDescription('do not auto-kill background processes on exit');
+		$this->setLongDesc(
+			"Storyplayer's usingShell() module allows you to start background processes as "
+			."part of your test.  When your story finishes, Storyplayer normally terminates "
+			."any background processes that your story hasn't already terminated."
+			. PHP_EOL . PHP_EOL
+			."When developing or debugging a story, it can be useful for these background processes "
+			."to continue running after the story has finished."
+			. PHP_EOL . PHP_EOL
+			."Use this switch to avoid auto-killing any background processes when a story "
+			."finishes running"
+		);
 
-		// what are we doing?
-		$log = $st->startAction("make sure host '{$hostName}' has an entry in Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table existed", "hosts table does not exist");
-		}
-
-		// make sure we don't have a duplicate entry
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has an entry for '{$hostName}'", "hosts table has no entry for '{$hostName}'");
-		}
+		// what are the long switches?
+		$this->addLongSwitch('persist-processes');
 
 		// all done
-		$log->endAction();
 	}
 
-	public function hasNoEntryForHost($hostName)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// shorthand
-		$st = $this->st;
+		// remember the setting
+		$engine->options->persistProcesses = true;
 
-		// what are we doing?
-		$log = $st->startAction("make sure there is no existing entry for host '{$hostName}' in Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-			return;
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has no entry for '{$hostName}'", "hosts table has an entry for '{$hostName}'");
-		}
-
-		// all done
-		$log->endAction();
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }
