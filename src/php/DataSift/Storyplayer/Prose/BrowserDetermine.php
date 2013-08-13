@@ -830,4 +830,27 @@ class BrowserDetermine extends Prose
 
 		return $browser->title();
 	}
+
+	// ==================================================================
+	//
+	// Retrievers of browser metadata
+	//
+	// ------------------------------------------------------------------
+
+	public function getCurrentWindowSize()
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $st->getRunningWebBrowser();
+
+		// what are we doing?
+		$log = $st->startAction("retrieve the current browser window's dimensions");
+
+		// get the dimensions
+		$dimensions = $browser->window()->getSize();
+
+		// all done
+		$log->endAction("width: '{$dimensions['width']}'; height: '{$dimensions['height']}'");
+		return array('width' => $dimensions['width'], 'height' => $dimensions['height']);
+	}
 }
