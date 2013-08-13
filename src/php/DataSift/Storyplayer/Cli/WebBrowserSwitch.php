@@ -52,7 +52,7 @@ use Phix_Project\CliEngine\CliSwitch;
 use Phix_Project\ValidationLib4\Type_MustBeString;
 
 /**
- * Tell Storyplayer which platform to build the test environment on
+ * Tell Storyplayer which web browser to use in tests
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
