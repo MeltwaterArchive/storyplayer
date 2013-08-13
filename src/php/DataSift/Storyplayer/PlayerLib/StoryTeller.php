@@ -446,6 +446,37 @@ class StoryTeller
 	//
 	// ------------------------------------------------------------------
 
+	public function getPreferredWebBrowser()
+	{
+		static $browser = null;
+
+		// have we calculated this before?
+		if ($browser) {
+			// yes - so use that
+			return $browser;
+		}
+
+		// our default browser is chrome
+		$browser = "chrome";
+
+		// get the currently loaded environment
+		$env = $this->getEnvironment();
+
+		// does it have a browser set in the environment?
+		if (isset($env->webbrowser)) {
+			$browser = $env->webbrowser;
+		}
+
+		// has the user overridden this on the command-line?
+		$params = $this->getParams();
+		if (isset($params['webbrowser'])) {
+			$browser = $params['webbrowser'];
+		}
+
+		// all done
+		return $browser;
+	}
+
 	public function startWebBrowser()
 	{
 		$httpProxy = new BrowserMobProxyClient();
@@ -465,7 +496,7 @@ class StoryTeller
 		// create the browser session
 		$webDriver = new WebDriverClient();
 		$browserSession = $webDriver->newSession(
-			'chrome',
+			$this->getPreferredWebBrowser(),
 			array(
 				'proxy' => $proxySession->getWebDriverProxyConfig()
 			)
