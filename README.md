@@ -41,8 +41,8 @@ Basic usage is:
 
 where:
 
-* <environment> is the name of the environment that you want to run your story against
-* <story> is the path to the PHP file containing your story and its test
+* `<environment>` is the name of the environment that you want to run your story against
+* `<story>` is the path to the PHP file containing your story and its test
 
 ## Running It Out Of A Git Clone
 
