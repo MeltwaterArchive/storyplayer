@@ -34,92 +34,82 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- *
- * test the state of the internal hosts table
+ * A command to kill any previously started background processes
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsTableExpects extends Prose
+class KillProcessesCommand extends CliCommand
 {
-	public function hasEntryForHost($hostName)
+	public function __construct()
+	{
+		// define the command
+		$this->setName('kill-processes');
+		$this->setShortDescription('kill any currently-running background processes');
+		$this->setLongDescription(
+			"Use this command to stop any background processes that Storyplayer "
+			."has previously started in the background."
+			.PHP_EOL
+		);
+	}
+
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// shorthand
-		$st = $this->st;
+		$runtimeConfig = $additionalContext->runtimeConfig;
 
-		// what are we doing?
-		$log = $st->startAction("make sure host '{$hostName}' has an entry in Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table existed", "hosts table does not exist");
+		// are there any processes in the table?
+		if (!isset($runtimeConfig->processes)) {
+			// we're done
+			return new CliResult(0);
 		}
 
-		// make sure we don't have a duplicate entry
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has an entry for '{$hostName}'", "hosts table has no entry for '{$hostName}'");
+		// let's walk through the table
+		foreach ($runtimeConfig->processes as $details) {
+			$this->killProcess($details->pid, $details->processName);
 		}
 
 		// all done
-		$log->endAction();
+		return new CliResult(0);
 	}
 
-	public function hasNoEntryForHost($hostName)
+	public function killProcess($pid, $processName)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("make sure there is no existing entry for host '{$hostName}' in Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
+		// is the process running?
+		if (!posix_kill($pid, 0)) {
 			return;
 		}
 
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has no entry for '{$hostName}'", "hosts table has an entry for '{$hostName}'");
+		echo "Killing $pid ($processName) ... ";
+		posix_kill($pid, SIGTERM);
+		if (posix_kill($pid, 0)) {
+			sleep(1);
+			posix_kill($pid, SIGKILL);
 		}
-
-		// all done
-		$log->endAction();
+		if (posix_kill($pid, 0)) {
+			echo "could not kill\n";
+		}
+		else {
+			echo "killed\n";
+		}
 	}
 }
