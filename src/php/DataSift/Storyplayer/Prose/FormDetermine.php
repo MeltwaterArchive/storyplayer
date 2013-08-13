@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 use Exception;
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
@@ -69,7 +70,7 @@ class FormDetermine extends BrowserDetermine
 		$formElement = $st->fromBrowser()->getElementById($formId);
 
 		// is it really a form?
-		if ($formElement->name() !== 'form') {
+		if (strtolower($formElement->name()) !== 'form') {
 			throw new E5xx_ActionFailed('form');
 		}
 
