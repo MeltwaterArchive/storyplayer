@@ -93,7 +93,7 @@ class BrowserDetermine extends Prose
 			}
 
 			$location = $element->location();
-			if ($location['x'] >=0 && $location['y'] >= 0) {
+			if ($location['x'] <> 0 && $location['y'] <> 0) {
 				$log->endAction($successMsg);
 
 				// return the element
