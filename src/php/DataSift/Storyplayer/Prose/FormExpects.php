@@ -69,7 +69,7 @@ class FormExpects extends BrowserExpects
 		$formElement = $st->fromBrowser()->getElementById($formId);
 
 		// is it really a form?
-		if ($formElement->name() !== 'form') {
+		if (strtolower($formElement->name()) !== 'form') {
 			throw new E5xx_ActionFailed('form');
 		}
 
