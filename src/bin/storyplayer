@@ -22,6 +22,7 @@ use Phix_Project\CliEngine\Switches\VerboseLongSwitch;
 use Phix_Project\CliEngine\Switches\VersionSwitch;
 use Phix_Project\CliEngine\Commands\HelpCommand;
 
+use DataSift\Storyplayer\Cli\CreateStoryCommand;
 use DataSift\Storyplayer\Cli\DefaultStaticConfig;
 use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
 use DataSift\Storyplayer\Cli\InstallCommand;
@@ -258,6 +259,7 @@ function main($argv)
 	// note - if we add no additional commands, the default command is implied
 	//        and the user does not have to type it on the command line
 	$engine->addCommand(new HelpCommand);
+	$engine->addCommand(new CreateStoryCommand);
 	$engine->addCommand(new ListEnvironmentsCommand($envList));
 	$engine->addCommand(new InstallCommand);
 	$engine->addCommand(new ListHostsTableCommand);
