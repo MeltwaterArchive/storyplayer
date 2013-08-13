@@ -78,8 +78,8 @@ class FormActions extends BrowserActions
 		$formElement = $st->fromBrowser()->getElementById($formId);
 
 		// is it really a form?
-		if ($formElement->name() !== 'form') {
-			throw new E5xx_ActionFailed('form');
+		if (strtolower($formElement->name()) !== 'form') {
+			throw new E5xx_ActionFailed(__METHOD__, "expected form element, got element '" . $formElement->name() . "'");
 		}
 
 		// yes, it really is a form
@@ -174,7 +174,7 @@ class FormActions extends BrowserActions
 				continue;
 			}
 
-			$tag = $element->name();
+			$tag = strtolower($element->name());
 			switch ($tag) {
 				case 'input':
 				case 'textarea':

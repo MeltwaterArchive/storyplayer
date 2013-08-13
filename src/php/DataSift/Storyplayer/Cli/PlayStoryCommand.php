@@ -92,6 +92,7 @@ class PlayStoryCommand extends CliCommand
 			new EnvironmentSwitch($envList, $defaultEnvName),
 			new DefineSwitch(),
 			new PlatformSwitch(),
+			new WebBrowserSwitch()
 		));
 	}
 
