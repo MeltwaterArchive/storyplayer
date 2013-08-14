@@ -92,13 +92,11 @@ class BrowserDetermine extends Prose
 				continue;
 			}
 
-			$location = $element->location();
-			if ($location['x'] >=0 && $location['y'] >= 0) {
-				$log->endAction($successMsg);
+			// we have our element :)
+			$log->endAction($successMsg);
 
-				// return the element
-				return $element;
-			}
+			// return the element
+			return $element;
 		}
 
 		// if we get here, then there was no visible element
