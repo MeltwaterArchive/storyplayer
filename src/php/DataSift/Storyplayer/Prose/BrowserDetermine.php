@@ -796,6 +796,9 @@ class BrowserDetermine extends Prose
 						return $option->text();
 					}
 					break;
+				case 'input':
+					$log->endAction("value is: " . $element->attribute("value"));
+					return $element->attribute("value");
 
 				default:
 					$log->endAction("value is: " . $element->text());
