@@ -196,4 +196,26 @@ class BrowserActions extends Prose
 		// all done
 		$log->endAction();
 	}
+
+	// ==================================================================
+	//
+	// Window actions go here
+	//
+	// ------------------------------------------------------------------
+
+	public function resizeCurrentWindow($width, $height)
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $st->getRunningWebBrowser();
+
+		// what are we doing?
+		$log = $st->startAction("change the current browser window size to be {$width} x {$height} (w x h)");
+
+		// resize the window
+		$browser->window()->postSize(array("width" => $width, "height" => $height));
+
+		// all done
+		$log->endAction();
+	}
 }

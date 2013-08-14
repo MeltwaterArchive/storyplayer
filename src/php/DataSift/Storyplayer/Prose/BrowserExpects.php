@@ -163,4 +163,24 @@ class BrowserExpects extends Prose
 		// all done
 		$log->endAction();
 	}
+
+	public function currentWindowSizeIs($width, $height)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("current browser window dimensions must be '{$width}' x '{$height}' (w x h)");
+
+		// get the dimensions
+		$dimensions = $st->fromBrowser()->getCurrentWindowSize();
+
+		// are they right?
+		if ($dimensions['width'] != $width || $dimensions['height'] != $height) {
+			throw new E5xx_ExpectFailed(__METHOD__, "$width x $height", "{$dimensions['width']} x {$dimensions['height']}");
+		}
+
+		// all done
+		$log->endAction();
+	}
 }
