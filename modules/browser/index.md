@@ -37,6 +37,7 @@ These dependencies are automatically installed when you install Storyplayer:
 You need to install:
 
 * [Google Chrome](http://google.com/chrome) - Google's web browser
+* [Mozilla Firefox](http://www.mozilla.org/en-US/firefox/new/) - Mozilla's web browser
 * [screen](http://www.gnu.org/software/screen/) - terminal management
 
 Support for other browsers will be added, and we also plan to add support for testing via [Sauce Labs](http://saucelabs.com) in the near future.
