@@ -50,7 +50,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
 use Datasift\Os;
 use Datasift\IfconfigParser;
 use Datasift\netifaces;
-use Datasift\NetifacesException;
+use Datasift\netifaces\NetifacesException;
 
 use Exception;
 
@@ -157,7 +157,12 @@ class StoryContext extends BaseObject
 				// we think the adapter is present
 				//
 				// does it have an IP address?
-				$ipAddress = $netifaces->getIpAddress($adapterToTest);
+				try {
+					$ipAddress = $netifaces->getIpAddress($adapterToTest);
+				} catch(NetifacesException $e){
+					// We couldn't get an IP address
+					$ipAddress = null;
+				}
 
 				// did we get back a valid IP address?
 				$parts = explode('.', $ipAddress);
