@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Prose\Prose;
+
 /**
  * Helper class to load Prose classes and create objects from them
  *
