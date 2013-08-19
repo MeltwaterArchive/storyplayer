@@ -41,7 +41,9 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\PlayerLib;
+
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
  * Exception thrown when the ProseLoader loads a class, but it isn't
@@ -54,7 +56,7 @@ namespace DataSift\Storyplayer\ProseLib;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_NotAProseClass extends E5xx_ProseException
+class E5xx_NotAProseClass extends Exxx_Exception
 {
 	public function __construct($className) {
 		$msg = "Class '{$className}' does not inherit from DataSift\\StoryPlayer\\ProseLib\\Prose";
