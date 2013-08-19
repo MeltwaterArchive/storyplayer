@@ -34,29 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-namespace DataSift\Storyplayer\ProseLib;
+
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * Exception thrown when the StoryTeller class cannot find any suitable
- * Prose to load and execute
+ * Exception thrown when an operation in an 'Except' class fails
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_NoMatchingActions extends E5xx_ProseException
+class E5xx_ExpectFailed extends E5xx_ProseException
 {
-	public function __construct($methodName) {
-		$msg = "Cannot find a suitable class for actions of type '$methodName'";
+	public function __construct($actionName, $expected, $found) {
+		$msg = "Action '$actionName' failed; expected '$expected', found '$found'";
 		parent::__construct(500, $msg, $msg);
 	}
 }

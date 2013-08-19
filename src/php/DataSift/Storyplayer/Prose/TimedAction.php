@@ -34,96 +34,95 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-namespace DataSift\Storyplayer\ProseLib;
+
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\TimeLib\DateInterval;
 
 /**
- * Helper class that allows us to write Prose where the action comes before
- * we say what DOM element we want to act upon
+ * Helper class for running an action for a precise period of time
+ *
+ * Longer term, we probably need to move into running the actions in
+ * a subprocess of some kind, to make this much more robust than it is
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TargettedBrowserAction extends TargettedBrowserBase
+class TimedAction
 {
-	protected $st;
-	protected $action;
-	protected $actionDesc;
-	protected $baseElement;
+    protected $st;
+    protected $action;
+    protected $cleanupAction;
+    protected $duration;
 
-	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
-	{
-		$this->st          = $st;
-		$this->action      = $action;
-		$this->actionDesc  = $actionDesc;
-		$this->baseElement = $baseElement;
-	}
+    public $terminate = false;
 
-	public function __call($methodName, $methodArgs)
-	{
-		$words = $this->convertMethodNameToWords($methodName);
+    public function __construct(StoryTeller $st, $action, $cleanupAction = null)
+    {
+        $this->st            = $st;
+        $this->action        = $action;
+        $this->cleanupAction = $cleanupAction;
+    }
 
-		$targetType = $this->determineTargetType($words);
+    public function forExactly($duration)
+    {
+        // shorthand
+        $st = $this->st;
 
-		if ($targetType != 'element') {
+        // what are we doing?
+        $log = $st->startAction("run for exactly '{$duration}'");
 
-			// what are we searching for?
-			$searchTerm = $methodArgs[0];
+        // remember the duration
+        //
+        // the $action callback can then make use of it
+        $this->duration = $duration;
 
-			$searchType = $this->determineSearchType($words);
-			if ($searchType == null) {
-				// we do not understand how to find the target field
-				throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
-			}
+        // convert the duration into seconds
+        $interval = new DateInterval($duration);
+        $seconds  = $interval->getTotalSeconds();
 
-			// what tag(s) do we want to narrow our search to?
-			$tag = $this->determineTagType($targetType);
+        // set the alarm
+        pcntl_signal(SIGALRM, array($this, "handleSigAlarm"), FALSE);
+        $log->addStep("setting SIGALRM for '{$seconds}' seconds", function() use($seconds) {
+            pcntl_alarm($seconds);
+        });
 
-			if ($this->isPluralTarget($targetType)) {
-				$searchMethod = 'getElements';
-			}
-			else {
-				$searchMethod = 'getElement';
-			}
-			$searchMethod .= $searchType;
+        declare(ticks=1);
+        $callback = $this->action;
+        $returnVal = $callback($this);
 
-			// let's go find our element
-			$searchObject = $this->st->fromBrowser();
-			$searchObject->setTopElement($this->baseElement);
+        // all done
+        $log->endAction();
+        return $returnVal;
+    }
 
-			$element = $searchObject->$searchMethod($searchTerm, $tag);
-		}
-		else {
-			$element = $methodArgs[0];
+    public function handleSigAlarm()
+    {
+        Log::write(Log::LOG_DEBUG, __METHOD__ . '() called');
 
-			if (!is_object($element)) {
-				throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "expected a WebDriverElement as 1st parameter to search term");
-			}
+        // try and terminate the running code
+        $this->terminate = true;
 
-			if (isset($methodArgs[1])) {
-				$searchTerm = $methodArgs[1];
-			}
-			else {
-				$searchTerm = $element->name();
-			}
-		}
+        if ($this->cleanupAction) {
+            $callback = $this->cleanupAction;
+            $callback();
+        }
+    }
 
-		// now that we have our element, let's apply the action to it
-		$action = $this->action;
-		$return = $action($this->st, $element, $searchTerm, $methodName);
-
-		// all done
-		return $return;
-	}
+    public function getDuration()
+    {
+        return $this->duration;
+    }
 }

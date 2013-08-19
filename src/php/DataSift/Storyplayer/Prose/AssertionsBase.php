@@ -34,29 +34,59 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
+
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * Exception thrown when an operation in an 'Except' class fails
+ * Base class used for all assertions
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ExpectFailed extends E5xx_ProseException
+class AssertionsBase extends Prose
 {
-	public function __construct($actionName, $expected, $found) {
-		$msg = "Action '$actionName' failed; expected '$expected', found '$found'";
-		parent::__construct(500, $msg, $msg);
+	protected $comparitor = null;
+
+	public function __construct(StoryTeller $st, $comparitor)
+	{
+		$this->comparitor = $comparitor;
+		parent::__construct($st);
+	}
+
+	public function __call($methodName, $params)
+	{
+		// pass this through to our comparitor, if it has the same method
+		// name
+		if (method_exists($this->comparitor, $methodName)) {
+			$result = call_user_func_array(array($this->comparitor, $methodName), $params);
+
+			// was the comparison successful?
+			if ($result->hasPassed()) {
+				return true;
+			}
+
+			// if we get here, then the comparison failed
+			throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
+		}
+
+		// this only gets called if there's no matching method
+		throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
+	}
+
+	public function getComparitor()
+	{
+		return $this->comparitor;
 	}
 }

@@ -34,29 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-namespace DataSift\Storyplayer\ProseLib;
+
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * Exception thrown when we can't work out what kind of DOM element you
- * want us to find
+ * Exception thrown when StoryTeller *does* find the Prose class to load,
+ * but that class *doesn't* contain the method that the story is trying
+ * to use
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_UnknownDomElementType extends E5xx_ProseException
+class E5xx_NotImplemented extends E5xx_ProseException
 {
-	public function __construct($elementType) {
-		$msg = "Unknown DOM element type '{$elementType}'";
+	public function __construct($methodName) {
+		$msg = "Method '{$methodName}' has not been implemented yet";
 		parent::__construct(500, $msg, $msg);
 	}
 }

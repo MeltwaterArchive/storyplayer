@@ -43,11 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\PageContext;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\TargettedBrowserAction;
-use DataSift\Storyplayer\ProseLib\TargettedBrowserSearch;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**

@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use Exception;
-use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
