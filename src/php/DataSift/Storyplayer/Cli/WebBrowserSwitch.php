@@ -34,48 +34,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeString;
 
 /**
- * get information about forms in the web browser
+ * Tell Storyplayer which web browser to use in tests
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FormDetermine extends BrowserDetermine
+class WebBrowserSwitch extends CliSwitch
 {
-	protected function initActions()
+	public function __construct()
 	{
-		// shorthand
-		$st     = $this->st;
-		$formId = $this->args[0];
+		// define our name, and our description
+		$this->setName('webbrowser');
+		$this->setShortDescription('set the web browser to use in your tests');
+		$this->setLongDesc(
+			"If your stories use a web browser, use this switch to tell Storyplayer "
+			."which web browser you want to use."
+			. PHP_EOL . PHP_EOL
+			."To avoid using this switch all the time, add the following to "
+			."your environment config:"
+			.PHP_EOL . PHP_EOL
+			.'{' .PHP_EOL
+			.'    "environments": {' . PHP_EOL
+			.'        "defaults": {' . PHP_EOL
+			.'            "webbrowser": "<browser>"' .PHP_EOL
+			.'        }' . PHP_EOL
+			.'    }'.PHP_EOL
+			.'}'
+			.PHP_EOL.PHP_EOL
+			."This switch is an alias for '-Dwebbrowser=<browser>'."
+		);
 
-		// find the form
-		$formElement = $st->fromBrowser()->getElementById($formId);
+		// what are the short switches?
+		$this->addShortSwitch('b');
 
-		// is it really a form?
-		if (strtolower($formElement->name()) !== 'form') {
-			throw new E5xx_ActionFailed('form');
+		// what are the long switches?
+		$this->addLongSwitch('web-browser');
+
+		// what is the required argument?
+		$this->setRequiredArg('<browser>', "the name of the browser to use (e.g. chrome, firefox, phantomjs)");
+		$this->setArgValidator(new Type_MustBeString);
+		$this->setArgHasDefaultValueOf('chrome');
+
+		// all done
+	}
+
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		if (!isset($engine->options->defines)) {
+			$engine->options->defines = new stdClass;
+		}
+		// we do not remember when the default is used, because that would
+		// override anything set in the config files
+		if (!$isDefaultParam) {
+			$engine->options->defines->webbrowser = $params[0];
 		}
 
-		// yes, it really is a form
-		$this->formId      = $formId;
-		$this->setTopElement($formElement);
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }
