@@ -66,6 +66,6 @@ $story->setPostTestInspection(function(StoryTeller $st) {
 	$checkpoint = $st->getCheckpoint();
 
 	// do we have the content we expected?
-	$st->expectsObject($checkpoint)->hasAttribute('uuid');
-	$st->expectsString($checkpoint->uuid)->isUuid();
+	$st->assertsObject($checkpoint)->hasAttribute('uuid');
+	$st->assertsString($checkpoint->uuid)->isUuid();
 });
