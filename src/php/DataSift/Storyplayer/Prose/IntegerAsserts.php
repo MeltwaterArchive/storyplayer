@@ -57,7 +57,7 @@ use DataSift\Stone\ComparisonLib\IntegerComparitor;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class IntegerExpects extends AssertionsBase
+class IntegerAsserts extends AssertionsBase
 {
 	public function __construct(StoryTeller $st, $params)
 	{

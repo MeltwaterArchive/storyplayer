@@ -63,7 +63,7 @@ class ProseLoader
 		'using'     => 'Actions',
 		'from'      => 'Determine',
 		'calculate' => 'Calculator',
-		'asserts'   => 'Expects',
+		'asserts'   => 'Asserts',
 	);
 
 	public function setNamespaces(StoryTeller $st)

@@ -45,10 +45,10 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProseLib\AssertionsBase;
-use DataSift\Stone\ComparisonLib\StringComparitor;
+use DataSift\Stone\ComparisonLib\BooleanComparitor;
 
 /**
- * Assertions about the nature of, and contents of, strings
+ * Assertions about the nature of, and contents of, booleans
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -57,10 +57,10 @@ use DataSift\Stone\ComparisonLib\StringComparitor;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StringExpects extends AssertionsBase
+class BooleanAsserts extends AssertionsBase
 {
-	public function __construct(StoryTeller $st, $params)
-	{
-		parent::__construct($st, new StringComparitor($params[0]));
-	}
+    public function __construct(StoryTeller $st, $params)
+    {
+        parent::__construct($st, new BooleanComparitor($params[0]));
+    }
 }
