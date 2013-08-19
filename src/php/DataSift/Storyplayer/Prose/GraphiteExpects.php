@@ -43,9 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
 
 /**
  * test the data stored in Graphite

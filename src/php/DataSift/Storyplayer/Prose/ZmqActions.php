@@ -46,10 +46,7 @@ namespace DataSift\Storyplayer\Prose;
 use ZMQ;
 use ZMQContext;
 use ZMQSocket;
-
 use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**

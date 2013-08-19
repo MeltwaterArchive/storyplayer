@@ -34,95 +34,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Stone\TimeLib\DateInterval;
 
 /**
- * Helper class for running an action for a precise period of time
- *
- * Longer term, we probably need to move into running the actions in
- * a subprocess of some kind, to make this much more robust than it is
+ * This (when it is finished) will be used to tell Selenium to work against
+ * the main DOM document, rather than an iframe on the page
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TimedAction
+class PageContext
 {
-    protected $st;
-    protected $action;
-    protected $cleanupAction;
-    protected $duration;
+	protected $pageContextAction = null;
 
-    public $terminate = false;
+	public function switchToContext(StoryTeller $st)
+	{
+		if (is_callable($this->pageContextAction)) {
+			$callback = $this->pageContextAction;
 
-    public function __construct(StoryTeller $st, $action, $cleanupAction = null)
-    {
-        $this->st            = $st;
-        $this->action        = $action;
-        $this->cleanupAction = $cleanupAction;
-    }
-
-    public function forExactly($duration)
-    {
-        // shorthand
-        $st = $this->st;
-
-        // what are we doing?
-        $log = $st->startAction("run for exactly '{$duration}'");
-
-        // remember the duration
-        //
-        // the $action callback can then make use of it
-        $this->duration = $duration;
-
-        // convert the duration into seconds
-        $interval = new DateInterval($duration);
-        $seconds  = $interval->getTotalSeconds();
-
-        // set the alarm
-        pcntl_signal(SIGALRM, array($this, "handleSigAlarm"), FALSE);
-        $log->addStep("setting SIGALRM for '{$seconds}' seconds", function() use($seconds) {
-            pcntl_alarm($seconds);
-        });
-
-        declare(ticks=1);
-        $callback = $this->action;
-        $returnVal = $callback($this);
-
-        // all done
-        $log->endAction();
-        return $returnVal;
-    }
-
-    public function handleSigAlarm()
-    {
-        Log::write(Log::LOG_DEBUG, __METHOD__ . '() called');
-
-        // try and terminate the running code
-        $this->terminate = true;
-
-        if ($this->cleanupAction) {
-            $callback = $this->cleanupAction;
-            $callback();
-        }
-    }
-
-    public function getDuration()
-    {
-        return $this->duration;
-    }
+			$callback($st);
+		}
+	}
 }

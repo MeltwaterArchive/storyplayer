@@ -43,9 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\StoryTeller\ProseLib\E5xx_ActionFailed;
-
 /**
  * Get data from the checkpoint
  *

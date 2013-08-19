@@ -45,10 +45,6 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\HostBase;
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 use DataSift\Stone\ObjectLib\BaseObject;

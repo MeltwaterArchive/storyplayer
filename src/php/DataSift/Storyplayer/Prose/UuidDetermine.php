@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Stone\TokenLib\TokenGenerator;
 
 /**

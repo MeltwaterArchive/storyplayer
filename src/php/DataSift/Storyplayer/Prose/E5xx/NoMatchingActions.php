@@ -34,37 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-namespace DataSift\Storyplayer\ProseLib;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * This (when it is finished) will be used to tell Selenium to work against
- * the main DOM document, rather than an iframe on the page
+ * Exception thrown when the StoryTeller class cannot find any suitable
+ * Prose to load and execute
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PageContext
+class E5xx_NoMatchingActions extends E5xx_ProseException
 {
-	protected $pageContextAction = null;
-
-	public function switchToContext(StoryTeller $st)
-	{
-		if (is_callable($this->pageContextAction)) {
-			$callback = $this->pageContextAction;
-
-			$callback($st);
-		}
+	public function __construct($methodName) {
+		$msg = "Cannot find a suitable class for actions of type '$methodName'";
+		parent::__construct(500, $msg, $msg);
 	}
 }

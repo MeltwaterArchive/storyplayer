@@ -43,9 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
-
 /**
  * do things with SavageD. SavageD is DataSift's real-time server and
  * process monitoring API-driven daemon

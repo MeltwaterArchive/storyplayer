@@ -34,31 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
+
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Exception thrown when StoryTeller *does* find the Prose class to load,
- * but that class *doesn't* contain the method that the story is trying
- * to use
+ * base class for all 'Host' Prose modules
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_NotImplemented extends E5xx_ProseException
+class HostBase extends Prose
 {
-	public function __construct($methodName) {
-		$msg = "Method '{$methodName}' has not been implemented yet";
-		parent::__construct(500, $msg, $msg);
+	protected $hostDetails;
+
+	public function __construct(StoryTeller $st, $args = array())
+	{
+		// call the parent constructor
+		parent::__construct($st, $args);
+
+		// arg[0] is the name of the box
+		if (!isset($args[0])) {
+			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name you've given to the machine");
+		}
+
+		// shorthand
+		$name = $args[0];
+
+		// do we know anything about this host?
+		$hostsTable = $st->fromHostsTable()->getHostsTable();
+		if (!isset($hostsTable->$name)) {
+			$this->hostDetails = new BaseObject();
+			$this->hostDetails->name = $name;
+			$this->hostDetails->invalidHost = true;
+		}
+		else {
+			$this->hostDetails = $hostsTable->$name;
+		}
+	}
+
+	protected function requireValidHostDetails($caller)
+	{
+		// do we have valid host details?
+		if (isset($this->hostDetails->invalidHost) && $this->hostDetails->invalidHost) {
+			// no - throw an exception
+			throw new E5xx_ActionFailed($caller, "unknown host '{$this->hostDetails->name}'");
+		}
 	}
 }
