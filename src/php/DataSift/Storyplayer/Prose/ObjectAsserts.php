@@ -45,10 +45,10 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProseLib\AssertionsBase;
-use DataSift\Stone\ComparisonLib\DoubleComparitor;
+use DataSift\Stone\ComparisonLib\ObjectComparitor;
 
 /**
- * Assertions about the nature of, and contents of, floating point numbers
+ * Assertions about the nature of, and contents of, objects
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -57,10 +57,10 @@ use DataSift\Stone\ComparisonLib\DoubleComparitor;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DoubleExpects extends AssertionsBase
+class ObjectAsserts extends AssertionsBase
 {
 	public function __construct(StoryTeller $st, $params)
 	{
-		parent::__construct($st, new DoubleComparitor($params[0]));
+		parent::__construct($st, new ObjectComparitor($params[0]));
 	}
 }
