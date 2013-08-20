@@ -59,13 +59,6 @@ class ProseLoader
 {
 	private $namespaces = array();
 
-	private $classTypes = array (
-		'using'     => 'Actions',
-		'from'      => 'Determine',
-		'calculate' => 'Calculator',
-		'asserts'   => 'Asserts',
-	);
-
 	public function setNamespaces(StoryTeller $st)
 	{
 		// a list of the namespaces we're going to search for this class
@@ -94,30 +87,15 @@ class ProseLoader
 
 	public function determineProseClassFor($methodName)
 	{
-		// break up the method name into separate words
-		$words = $this->convertMethodNameToWords($methodName);
-
-		// the first word determines what kind of dynamic container we want
-		$classType = array_shift($words);
-
-		// is it actually an alias?
-		if (isset($this->classTypes[$classType])) {
-			// yes
-			$classType = $this->classTypes[$classType];
-		}
-		else {
-			// not an alias that we know ... let it through
-			$classType = ucfirst($classType);
-		}
-
-		// the remaining words determine the specific class to instantiate
-		$className = '';
-		foreach ($words as $word) {
-			$className .= ucfirst($word);
-		}
+		// this new, simplified naming scheme was introduced for
+		// Storyplayer 1.4
+		//
+		// it isn't considered a b/c break, because we didn't document
+		// how to create modules until v1.4 was released
+		$className = ucfirst($methodName);
 
 		// all done
-		return ucfirst($className) . ucfirst($classType);
+		return $className;
 	}
 
 	public function loadProse(StoryTeller $st, $className, $constructorArgs)
