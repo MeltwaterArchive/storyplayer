@@ -1,0 +1,574 @@
+2013-08-20 08:22:26,484 - sauce_connect:558 - INFO - / Starting \
+2013-08-20 08:22:26,490 - sauce_connect:559 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-08-20 08:22:26,496 - sauce_connect:571 - DEBUG - System is 1.0 hours off UTC
+2013-08-20 08:22:26,499 - sauce_connect:573 - DEBUG - options: {'user': 'datasift', 'ports': ['61755'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': None, 'shared_tunnel': False, 'boost_mode': True, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-08-20 08:22:26,500 - sauce_connect:574 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r28', 'OwnerPorts': ['61755'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64', 'Build': '43', 'ScriptRelease': 43, 'ScriptName': 'sauce_connect'}
+2013-08-20 08:22:26,503 - sauce_connect:576 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['61755']
+2013-08-20 08:22:26,519 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:61755 in 9ms
+2013-08-20 08:22:27,507 - sauce_connect:238 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r28","OwnerPorts":["61755"],"Ports":["80"],"Platform":"Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64","Build":"43","ScriptRelease":43,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-08-20 08:22:30,976 - sauce_connect:250 - INFO - Tunnel remote VM is provisioned (11a30d8b8ba74ea7a893ae563b5ed18d)
+2013-08-20 08:22:31,293 - sauce_connect:268 - INFO - Tunnel remote VM is booting ..
+2013-08-20 08:23:14,788 - sauce_connect:272 - INFO - Tunnel remote VM is running at maki13002.miso.saucelabs.com
+2013-08-20 08:23:14,808 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:61755 in 0ms
+2013-08-20 08:23:14,812 - sauce_connect:646 - INFO - Starting connection to tunnel host...
+2013-08-20 08:23:14,815 - sauce_connect:646 - INFO - Connecting to tunnel host maki13002.miso.saucelabs.com as datasift
+2013-08-20 08:23:15,033 - sauce_connect:646 - INFO - Forwarding Selenium with ephemeral port 61770
+2013-08-20 08:23:15,039 - sauce_connect:646 - INFO - Selenium HTTP proxy listening on port 4445
+2013-08-20 08:23:16,111 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-08-20 08:23:16,305 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: d4afc0fedd014f669d33c8ea0c36d1ad
+2013-08-20 08:23:16,309 - sauce_connect:646 - INFO - Connected! You may start your tests.
+2013-08-20 08:29:55,996 - sauce_connect:0 - INFO - received SIGINT
+2013-08-20 09:13:42,523 - sauce_connect:558 - INFO - / Starting \
+2013-08-20 09:13:42,528 - sauce_connect:559 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-08-20 09:13:42,538 - sauce_connect:571 - DEBUG - System is 1.0 hours off UTC
+2013-08-20 09:13:42,539 - sauce_connect:573 - DEBUG - options: {'user': 'datasift', 'ports': ['62576'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': None, 'shared_tunnel': False, 'boost_mode': True, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-08-20 09:13:42,542 - sauce_connect:574 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r28', 'OwnerPorts': ['62576'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64', 'Build': '43', 'ScriptRelease': 43, 'ScriptName': 'sauce_connect'}
+2013-08-20 09:13:42,543 - sauce_connect:576 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['62576']
+2013-08-20 09:13:42,559 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:62576 in 7ms
+2013-08-20 09:13:43,627 - sauce_connect:238 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r28","OwnerPorts":["62576"],"Ports":["80"],"Platform":"Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64","Build":"43","ScriptRelease":43,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-08-20 09:13:47,341 - sauce_connect:250 - INFO - Tunnel remote VM is provisioned (8425a3e0a550445b9f111a61de527689)
+2013-08-20 09:13:47,651 - sauce_connect:268 - INFO - Tunnel remote VM is booting ..
+2013-08-20 09:14:12,618 - sauce_connect:272 - INFO - Tunnel remote VM is running at maki8010.miso.saucelabs.com
+2013-08-20 09:14:12,641 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:62576 in 1ms
+2013-08-20 09:14:12,647 - sauce_connect:646 - INFO - Starting connection to tunnel host...
+2013-08-20 09:14:12,648 - sauce_connect:646 - INFO - Connecting to tunnel host maki8010.miso.saucelabs.com as datasift
+2013-08-20 09:14:12,836 - sauce_connect:646 - INFO - Forwarding Selenium with ephemeral port 62582
+2013-08-20 09:14:12,845 - sauce_connect:646 - INFO - Selenium HTTP proxy listening on port 4445
+2013-08-20 09:14:13,894 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-08-20 09:14:14,085 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: cefc1a2445fd423e8df4dc859f64557d
+2013-08-20 09:14:14,088 - sauce_connect:646 - INFO - Connected! You may start your tests.
+2013-08-20 09:30:47,572 - sauce_connect:0 - INFO - received SIGINT
+2013-08-20 09:31:04,249 - sauce_connect:558 - INFO - / Starting \
+2013-08-20 09:31:04,256 - sauce_connect:559 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-08-20 09:31:04,266 - sauce_connect:571 - DEBUG - System is 1.0 hours off UTC
+2013-08-20 09:31:04,269 - sauce_connect:573 - DEBUG - options: {'user': 'datasift', 'ports': ['63015'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': None, 'shared_tunnel': False, 'boost_mode': True, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-08-20 09:31:04,272 - sauce_connect:574 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r28', 'OwnerPorts': ['63015'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64', 'Build': '43', 'ScriptRelease': 43, 'ScriptName': 'sauce_connect'}
+2013-08-20 09:31:04,275 - sauce_connect:576 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['63015']
+2013-08-20 09:31:04,292 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:63015 in 7ms
+2013-08-20 09:31:05,180 - sauce_connect:238 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r28","OwnerPorts":["63015"],"Ports":["80"],"Platform":"Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64","Build":"43","ScriptRelease":43,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-08-20 09:31:09,365 - sauce_connect:250 - INFO - Tunnel remote VM is provisioned (70b433c7f3d847398ab58e8f71dd441b)
+2013-08-20 09:31:09,684 - sauce_connect:268 - INFO - Tunnel remote VM is booting ..
+2013-08-20 09:31:48,503 - sauce_connect:272 - INFO - Tunnel remote VM is running at maki11157.miso.saucelabs.com
+2013-08-20 09:31:48,523 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:63015 in 0ms
+2013-08-20 09:31:48,529 - sauce_connect:646 - INFO - Starting connection to tunnel host...
+2013-08-20 09:31:48,532 - sauce_connect:646 - INFO - Connecting to tunnel host maki11157.miso.saucelabs.com as datasift
+2013-08-20 09:31:48,686 - sauce_connect:646 - INFO - Forwarding Selenium with ephemeral port 63028
+2013-08-20 09:31:48,691 - sauce_connect:646 - INFO - Selenium HTTP proxy listening on port 4445
+2013-08-20 09:31:49,596 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-08-20 09:31:49,766 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: 80ae2d0cc71d4d068a74e9b21364e0df
+2013-08-20 09:31:49,769 - sauce_connect:646 - INFO - Connected! You may start your tests.
+2013-08-20 09:33:21,638 - sauce_connect:0 - INFO - received SIGINT
+2013-08-20 09:33:40,240 - sauce_connect:558 - INFO - / Starting \
+2013-08-20 09:33:40,244 - sauce_connect:559 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-08-20 09:33:40,252 - sauce_connect:571 - DEBUG - System is 1.0 hours off UTC
+2013-08-20 09:33:40,255 - sauce_connect:573 - DEBUG - options: {'user': 'datasift', 'ports': ['63080'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': None, 'shared_tunnel': False, 'boost_mode': True, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-08-20 09:33:40,256 - sauce_connect:574 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r28', 'OwnerPorts': ['63080'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64', 'Build': '43', 'ScriptRelease': 43, 'ScriptName': 'sauce_connect'}
+2013-08-20 09:33:40,257 - sauce_connect:576 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['63080']
+2013-08-20 09:33:40,276 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:63080 in 8ms
+2013-08-20 09:33:41,315 - sauce_connect:238 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r28","OwnerPorts":["63080"],"Ports":["80"],"Platform":"Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64","Build":"43","ScriptRelease":43,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-08-20 09:33:44,789 - sauce_connect:250 - INFO - Tunnel remote VM is provisioned (e0b3973946374b8bb678364cdeb3bf5c)
+2013-08-20 09:33:45,171 - sauce_connect:268 - INFO - Tunnel remote VM is booting ..
+2013-08-20 09:34:25,471 - sauce_connect:272 - INFO - Tunnel remote VM is running at maki8028.miso.saucelabs.com
+2013-08-20 09:34:25,492 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:63080 in 0ms
+2013-08-20 09:34:25,497 - sauce_connect:646 - INFO - Starting connection to tunnel host...
+2013-08-20 09:34:25,500 - sauce_connect:646 - INFO - Connecting to tunnel host maki8028.miso.saucelabs.com as datasift
+2013-08-20 09:34:25,628 - sauce_connect:646 - INFO - Forwarding Selenium with ephemeral port 63088
+2013-08-20 09:34:25,634 - sauce_connect:646 - INFO - Selenium HTTP proxy listening on port 4445
+2013-08-20 09:34:26,687 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-08-20 09:34:26,918 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: 199ec486eeb841afab4aee514fa29079
+2013-08-20 09:34:26,921 - sauce_connect:646 - INFO - Connected! You may start your tests.
+2013-08-20 09:34:57,048 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session
+2013-08-20 09:34:57,512 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session -> 401 (464ms, 185 bytes)
+2013-08-20 09:34:57,519 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:34:57,917 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (398ms, 150 bytes)
+2013-08-20 09:34:57,923 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/url
+2013-08-20 09:34:58,388 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/url -> 404 (465ms, 142 bytes)
+2013-08-20 09:34:58,398 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:34:58,796 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (398ms, 150 bytes)
+2013-08-20 09:34:58,801 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:34:59,256 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (456ms, 146 bytes)
+2013-08-20 09:34:59,259 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:34:59,484 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (225ms, 146 bytes)
+2013-08-20 09:34:59,497 - sauce_connect:0 - INFO - Selenium Relay - Request started: DELETE http://localhost:63088/wd/hub/session
+2013-08-20 09:34:59,905 - sauce_connect:0 - INFO - Selenium Relay - DELETE http://localhost:63088/wd/hub/session -> 404 (407ms, 395 bytes)
+2013-08-20 09:36:14,693 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session
+2013-08-20 09:36:15,088 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session -> 401 (397ms, 185 bytes)
+2013-08-20 09:36:15,095 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:15,598 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (502ms, 150 bytes)
+2013-08-20 09:36:15,604 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/url
+2013-08-20 09:36:16,069 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/url -> 404 (464ms, 142 bytes)
+2013-08-20 09:36:16,072 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:16,602 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (531ms, 150 bytes)
+2013-08-20 09:36:16,612 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:17,121 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (508ms, 150 bytes)
+2013-08-20 09:36:17,128 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:17,608 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (478ms, 150 bytes)
+2013-08-20 09:36:17,614 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:36:17,838 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (225ms, 146 bytes)
+2013-08-20 09:36:17,844 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:36:18,247 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (404ms, 146 bytes)
+2013-08-20 09:36:19,255 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:19,638 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (382ms, 150 bytes)
+2013-08-20 09:36:19,642 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:20,066 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (423ms, 150 bytes)
+2013-08-20 09:36:20,071 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:36:20,506 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (435ms, 146 bytes)
+2013-08-20 09:36:20,512 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:36:21,155 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (645ms, 146 bytes)
+2013-08-20 09:36:22,171 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:22,469 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (297ms, 150 bytes)
+2013-08-20 09:36:22,473 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:22,744 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (271ms, 150 bytes)
+2013-08-20 09:36:22,753 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:36:23,505 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (751ms, 150 bytes)
+2013-08-20 09:38:36,101 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub
+2013-08-20 09:38:36,700 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub -> 404 (599ms, 385 bytes)
+2013-08-20 09:39:32,381 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session
+2013-08-20 09:39:32,634 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session -> 401 (254ms, 186 bytes)
+2013-08-20 09:39:32,638 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:33,084 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (445ms, 150 bytes)
+2013-08-20 09:39:33,088 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/url
+2013-08-20 09:39:33,313 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/url -> 404 (224ms, 142 bytes)
+2013-08-20 09:39:33,318 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:33,733 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (416ms, 150 bytes)
+2013-08-20 09:39:33,743 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:34,142 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (401ms, 150 bytes)
+2013-08-20 09:39:34,150 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:34,394 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (243ms, 150 bytes)
+2013-08-20 09:39:34,398 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:39:35,042 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (644ms, 146 bytes)
+2013-08-20 09:39:35,046 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:39:35,342 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (295ms, 146 bytes)
+2013-08-20 09:39:36,348 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:36,572 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (224ms, 150 bytes)
+2013-08-20 09:39:36,576 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:37,032 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (455ms, 150 bytes)
+2013-08-20 09:39:37,036 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:39:37,482 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (446ms, 146 bytes)
+2013-08-20 09:39:37,486 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63088/wd/hub/session/title
+2013-08-20 09:39:37,721 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63088/wd/hub/session/title -> 404 (234ms, 146 bytes)
+2013-08-20 09:39:38,730 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:39,020 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (290ms, 150 bytes)
+2013-08-20 09:39:39,026 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:39,430 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (404ms, 150 bytes)
+2013-08-20 09:39:39,436 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63088/wd/hub/session/element
+2013-08-20 09:39:39,661 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63088/wd/hub/session/element -> 404 (225ms, 150 bytes)
+2013-08-20 09:41:16,727 - sauce_connect:0 - INFO - received SIGINT
+2013-08-20 09:41:43,020 - sauce_connect:558 - INFO - / Starting \
+2013-08-20 09:41:43,028 - sauce_connect:559 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-08-20 09:41:43,035 - sauce_connect:571 - DEBUG - System is 1.0 hours off UTC
+2013-08-20 09:41:43,036 - sauce_connect:573 - DEBUG - options: {'user': 'datasift', 'ports': ['63331'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': None, 'shared_tunnel': False, 'boost_mode': True, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-08-20 09:41:43,039 - sauce_connect:574 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r28', 'OwnerPorts': ['63331'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64', 'Build': '43', 'ScriptRelease': 43, 'ScriptName': 'sauce_connect'}
+2013-08-20 09:41:43,039 - sauce_connect:576 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['63331']
+2013-08-20 09:41:43,059 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:63331 in 9ms
+2013-08-20 09:41:44,073 - sauce_connect:238 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r28","OwnerPorts":["63331"],"Ports":["80"],"Platform":"Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64","Build":"43","ScriptRelease":43,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-08-20 09:41:47,688 - sauce_connect:250 - INFO - Tunnel remote VM is provisioned (2a988069f34e4a75bb58eff752ef5507)
+2013-08-20 09:41:48,005 - sauce_connect:268 - INFO - Tunnel remote VM is booting ..
+2013-08-20 09:42:11,493 - sauce_connect:272 - INFO - Tunnel remote VM is running at maki8016.miso.saucelabs.com
+2013-08-20 09:42:11,513 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:63331 in 0ms
+2013-08-20 09:42:11,519 - sauce_connect:646 - INFO - Starting connection to tunnel host...
+2013-08-20 09:42:11,522 - sauce_connect:646 - INFO - Connecting to tunnel host maki8016.miso.saucelabs.com as datasift
+2013-08-20 09:42:11,661 - sauce_connect:646 - INFO - Forwarding Selenium with ephemeral port 63340
+2013-08-20 09:42:11,667 - sauce_connect:646 - INFO - Selenium HTTP proxy listening on port 4445
+2013-08-20 09:42:12,763 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-08-20 09:42:12,966 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: 96c4de0cd8cd469aadda0c4c63e59898
+2013-08-20 09:42:12,970 - sauce_connect:646 - INFO - Connected! You may start your tests.
+2013-08-20 09:42:20,819 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session
+2013-08-20 09:42:21,947 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session -> 401 (1128ms, 186 bytes)
+2013-08-20 09:42:21,956 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:22,423 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (467ms, 150 bytes)
+2013-08-20 09:42:22,430 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/url
+2013-08-20 09:42:23,003 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/url -> 404 (575ms, 142 bytes)
+2013-08-20 09:42:23,009 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:23,451 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (443ms, 150 bytes)
+2013-08-20 09:42:23,460 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:24,042 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (581ms, 150 bytes)
+2013-08-20 09:42:24,051 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:24,592 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (541ms, 150 bytes)
+2013-08-20 09:42:24,598 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63340/wd/hub/session/title
+2013-08-20 09:42:25,391 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63340/wd/hub/session/title -> 404 (793ms, 146 bytes)
+2013-08-20 09:42:25,394 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63340/wd/hub/session/title
+2013-08-20 09:42:25,671 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63340/wd/hub/session/title -> 404 (276ms, 146 bytes)
+2013-08-20 09:42:26,680 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:27,369 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (689ms, 150 bytes)
+2013-08-20 09:42:27,375 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:27,671 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (296ms, 150 bytes)
+2013-08-20 09:42:27,677 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63340/wd/hub/session/title
+2013-08-20 09:42:27,921 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63340/wd/hub/session/title -> 404 (246ms, 146 bytes)
+2013-08-20 09:42:27,927 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63340/wd/hub/session/title
+2013-08-20 09:42:28,536 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63340/wd/hub/session/title -> 404 (611ms, 146 bytes)
+2013-08-20 09:42:29,549 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:29,858 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (308ms, 150 bytes)
+2013-08-20 09:42:29,862 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:30,269 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (405ms, 150 bytes)
+2013-08-20 09:42:30,276 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63340/wd/hub/session/element
+2013-08-20 09:42:30,740 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63340/wd/hub/session/element -> 404 (462ms, 150 bytes)
+2013-08-20 09:43:26,430 - sauce_connect:0 - INFO - received SIGINT
+2013-08-20 11:53:14,921 - sauce_connect:558 - INFO - / Starting \
+2013-08-20 11:53:14,927 - sauce_connect:559 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-08-20 11:53:14,934 - sauce_connect:571 - DEBUG - System is 1.0 hours off UTC
+2013-08-20 11:53:14,937 - sauce_connect:573 - DEBUG - options: {'user': 'datasift', 'ports': ['63677'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': None, 'shared_tunnel': False, 'boost_mode': True, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-08-20 11:53:14,938 - sauce_connect:574 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r28', 'OwnerPorts': ['63677'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64', 'Build': '43', 'ScriptRelease': 43, 'ScriptName': 'sauce_connect'}
+2013-08-20 11:53:14,940 - sauce_connect:576 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['63677']
+2013-08-20 11:53:14,956 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:63677 in 6ms
+2013-08-20 11:53:15,641 - sauce_connect:238 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r28","OwnerPorts":["63677"],"Ports":["80"],"Platform":"Java-1.6.0_51-Java_HotSpot-TM-_64-Bit_Server_VM,_20.51-b01-457,_Apple_Inc.-on-Mac_OS_X-10.8.4-x86_64","Build":"43","ScriptRelease":43,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-08-20 11:53:19,387 - sauce_connect:250 - INFO - Tunnel remote VM is provisioned (5cf067f75b6341d6a6030fd769ac6068)
+2013-08-20 11:53:19,644 - sauce_connect:268 - INFO - Tunnel remote VM is booting ..
+2013-08-20 11:53:35,937 - sauce_connect:272 - INFO - Tunnel remote VM is running at maki8012.miso.saucelabs.com
+2013-08-20 11:53:35,973 - sauce_connect:375 - INFO - Succesfully connected to local server 127.0.0.1:63677 in 0ms
+2013-08-20 11:53:35,977 - sauce_connect:646 - INFO - Starting connection to tunnel host...
+2013-08-20 11:53:35,980 - sauce_connect:646 - INFO - Connecting to tunnel host maki8012.miso.saucelabs.com as datasift
+2013-08-20 11:53:36,161 - sauce_connect:646 - INFO - Forwarding Selenium with ephemeral port 63686
+2013-08-20 11:53:36,167 - sauce_connect:646 - INFO - Selenium HTTP proxy listening on port 4445
+2013-08-20 11:53:36,937 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-08-20 11:53:37,088 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: c6430b493a3c4789b35192e701615ae3
+2013-08-20 11:53:37,095 - sauce_connect:646 - INFO - Connected! You may start your tests.
+2013-08-20 11:55:13,286 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session
+2013-08-20 11:55:13,979 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session -> 401 (692ms, 186 bytes)
+2013-08-20 11:55:13,989 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:14,338 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (348ms, 150 bytes)
+2013-08-20 11:55:14,344 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/url
+2013-08-20 11:55:14,622 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/url -> 404 (280ms, 142 bytes)
+2013-08-20 11:55:14,628 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:14,967 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (337ms, 150 bytes)
+2013-08-20 11:55:14,979 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:15,619 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (641ms, 150 bytes)
+2013-08-20 11:55:15,631 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:15,966 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (334ms, 150 bytes)
+2013-08-20 11:55:15,971 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63686/wd/hub/session/title
+2013-08-20 11:55:16,359 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63686/wd/hub/session/title -> 404 (388ms, 146 bytes)
+2013-08-20 11:55:16,365 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63686/wd/hub/session/title
+2013-08-20 11:55:16,562 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63686/wd/hub/session/title -> 404 (198ms, 146 bytes)
+2013-08-20 11:55:17,573 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:17,786 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (212ms, 150 bytes)
+2013-08-20 11:55:17,792 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:18,308 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (516ms, 150 bytes)
+2013-08-20 11:55:18,315 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63686/wd/hub/session/title
+2013-08-20 11:55:18,888 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63686/wd/hub/session/title -> 404 (573ms, 146 bytes)
+2013-08-20 11:55:18,895 - sauce_connect:0 - INFO - Selenium Relay - Request started: GET http://localhost:63686/wd/hub/session/title
+2013-08-20 11:55:19,253 - sauce_connect:0 - INFO - Selenium Relay - GET http://localhost:63686/wd/hub/session/title -> 404 (356ms, 146 bytes)
+2013-08-20 11:55:20,269 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:20,608 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (339ms, 150 bytes)
+2013-08-20 11:55:20,614 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:20,796 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (183ms, 150 bytes)
+2013-08-20 11:55:20,805 - sauce_connect:0 - INFO - Selenium Relay - Request started: POST http://localhost:63686/wd/hub/session/element
+2013-08-20 11:55:20,989 - sauce_connect:0 - INFO - Selenium Relay - POST http://localhost:63686/wd/hub/session/element -> 404 (182ms, 150 bytes)
+2013-08-20 12:26:19,486 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/test/guinea-pig
+2013-08-20 12:26:19,869 - sauce_connect:0 - INFO - GET http://saucelabs.com/test/guinea-pig -> 200 (385ms, 1589 bytes)
+2013-08-20 12:26:20,084 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css
+2013-08-20 12:26:20,227 - sauce_connect:0 - INFO - GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css -> 404 (145ms, 169 bytes)
+2013-08-20 12:26:20,247 - sauce_connect:0 - INFO - Request started: GET http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
+2013-08-20 12:26:20,253 - sauce_connect:0 - INFO - Request started: GET https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js
+2013-08-20 12:26:20,769 - sauce_connect:0 - INFO - GET http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js -> 200 (522ms, 29715 bytes)
+2013-08-20 12:26:20,868 - sauce_connect:0 - INFO - GET https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js -> 200 (616ms, 52140 bytes)
+2013-08-20 12:26:22,312 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/favicon.ico
+2013-08-20 12:26:22,446 - sauce_connect:0 - INFO - GET http://saucelabs.com/favicon.ico -> 200 (135ms, 1150 bytes)
+2013-08-20 12:26:41,151 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/test/guinea-pig
+2013-08-20 12:26:41,536 - sauce_connect:0 - INFO - GET http://saucelabs.com/test/guinea-pig -> 200 (384ms, 1589 bytes)
+2013-08-20 12:26:41,730 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css
+2013-08-20 12:26:41,864 - sauce_connect:0 - INFO - GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css -> 404 (133ms, 169 bytes)
+2013-08-20 12:26:42,299 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/favicon.ico
+2013-08-20 12:26:42,438 - sauce_connect:0 - INFO - GET http://saucelabs.com/favicon.ico -> 200 (140ms, 1150 bytes)
+2013-08-20 12:26:43,134 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/test-guinea-pig2.html
+2013-08-20 12:26:43,267 - sauce_connect:0 - INFO - GET http://saucelabs.com/test-guinea-pig2.html -> 200 (134ms, 192 bytes)
+2013-08-20 12:26:43,469 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/favicon.ico
+2013-08-20 12:26:43,608 - sauce_connect:0 - INFO - GET http://saucelabs.com/favicon.ico -> 200 (138ms, 1150 bytes)
+2013-08-20 12:26:43,789 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/favicon.ico
+2013-08-20 12:26:43,921 - sauce_connect:0 - INFO - GET http://saucelabs.com/favicon.ico -> 200 (134ms, 1150 bytes)
+2013-08-20 12:27:00,516 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/test/guinea-pig
+2013-08-20 12:27:00,900 - sauce_connect:0 - INFO - GET http://saucelabs.com/test/guinea-pig -> 200 (385ms, 1589 bytes)
+2013-08-20 12:27:01,345 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css
+2013-08-20 12:27:01,473 - sauce_connect:0 - INFO - GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css -> 404 (129ms, 169 bytes)
+2013-08-20 12:27:01,782 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/favicon.ico
+2013-08-20 12:27:01,917 - sauce_connect:0 - INFO - GET http://saucelabs.com/favicon.ico -> 200 (134ms, 1150 bytes)
+2013-08-20 12:27:19,917 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/test/guinea-pig
+2013-08-20 12:27:20,299 - sauce_connect:0 - INFO - GET http://saucelabs.com/test/guinea-pig -> 200 (382ms, 1589 bytes)
+2013-08-20 12:27:20,592 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css
+2013-08-20 12:27:20,732 - sauce_connect:0 - INFO - GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css -> 404 (140ms, 169 bytes)
+2013-08-20 12:27:21,017 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/favicon.ico
+2013-08-20 12:27:21,153 - sauce_connect:0 - INFO - GET http://saucelabs.com/favicon.ico -> 200 (134ms, 1150 bytes)
+2013-08-20 12:27:22,934 - sauce_connect:0 - INFO - Request started: POST http://saucelabs.com/test/guinea-pig
+2013-08-20 12:27:23,180 - sauce_connect:0 - INFO - POST http://saucelabs.com/test/guinea-pig -> 200 (247ms, 1601 bytes)
+2013-08-20 12:27:23,359 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css
+2013-08-20 12:27:23,493 - sauce_connect:0 - INFO - GET http://saucelabs.com/css/themes/cupertino/jquery-ui-1.8.5.custom.css -> 404 (134ms, 169 bytes)
+2013-08-20 12:27:24,372 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/favicon.ico
+2013-08-20 12:27:24,522 - sauce_connect:0 - INFO - GET http://saucelabs.com/favicon.ico -> 200 (148ms, 1150 bytes)
+2013-08-20 12:27:24,704 - sauce_connect:0 - INFO - Request started: GET http://saucelabs.com/favicon.ico
+2013-08-20 12:27:24,845 - sauce_connect:0 - INFO - GET http://saucelabs.com/favicon.ico -> 200 (139ms, 1150 bytes)
+2013-08-20 12:37:03,578 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/auth/register
+2013-08-20 12:37:03,680 - sauce_connect:0 - INFO - GET http://datasift.com/auth/register -> 302 (102ms, 0 bytes)
+2013-08-20 12:37:04,059 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/auth/register
+2013-08-20 12:37:04,193 - sauce_connect:0 - INFO - GET https://datasift.com/auth/register -> 200 (134ms, 3762 bytes)
+2013-08-20 12:37:04,391 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/default.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:04,392 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/main.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:04,479 - sauce_connect:0 - INFO - GET https://datasift.com/styles/default.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (89ms, 20296 bytes)
+2013-08-20 12:37:04,484 - sauce_connect:0 - INFO - GET https://datasift.com/styles/main.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (93ms, 1478 bytes)
+2013-08-20 12:37:04,548 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/print.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:04,548 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/parts.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:04,578 - sauce_connect:0 - INFO - GET https://datasift.com/styles/print.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (29ms, 130 bytes)
+2013-08-20 12:37:04,690 - sauce_connect:0 - INFO - GET https://datasift.com/styles/parts.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (142ms, 77415 bytes)
+2013-08-20 12:37:06,240 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/floyd.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,240 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/scriptaculous.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,240 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/jquery-1.9.1.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,243 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/jquery-ui.min.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,243 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/prototype.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,269 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/scriptaculous.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (30ms, 634 bytes)
+2013-08-20 12:37:06,318 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/floyd.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (78ms, 10462 bytes)
+2013-08-20 12:37:06,326 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/zeroclipboard.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,420 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/zeroclipboard.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (92ms, 3163 bytes)
+2013-08-20 12:37:06,480 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/jquery-1.9.1.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (240ms, 47304 bytes)
+2013-08-20 12:37:06,533 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/events.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,533 - sauce_connect:0 - INFO - Request started: GET https://ssl.google-analytics.com/ga.js
+2013-08-20 12:37:06,608 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/jquery-ui.min.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (365ms, 74003 bytes)
+2013-08-20 12:37:06,611 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/events.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (78ms, 1069 bytes)
+2013-08-20 12:37:06,617 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/prototype.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (374ms, 39928 bytes)
+2013-08-20 12:37:06,618 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/datasift.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,621 - sauce_connect:0 - INFO - Request started: GET https://munchkin.marketo.net/munchkin.js
+2013-08-20 12:37:06,651 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/datasift.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (33ms, 1341 bytes)
+2013-08-20 12:37:06,707 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/controls/tips.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:06,739 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/controls/tips.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (30ms, 629 bytes)
+2013-08-20 12:37:07,121 - sauce_connect:0 - INFO - GET https://munchkin.marketo.net/munchkin.js -> 200 (500ms, 4073 bytes)
+2013-08-20 12:37:07,190 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/calendarview.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:07,247 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/calendarview.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (57ms, 4571 bytes)
+2013-08-20 12:37:07,707 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/chosen/chosen.jquery.min.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:07,780 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/chosen/chosen.jquery.min.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (74ms, 6802 bytes)
+2013-08-20 12:37:07,857 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/datetime.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:07,858 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/controls/login.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:37:07,877 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/icons/wordpress_small.png
+2013-08-20 12:37:07,877 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/icons/facebook_small.png
+2013-08-20 12:37:07,888 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/controls/login.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (32ms, 1596 bytes)
+2013-08-20 12:37:07,890 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/datetime.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (34ms, 755 bytes)
+2013-08-20 12:37:07,927 - sauce_connect:0 - INFO - GET https://datasift.com/images/icons/wordpress_small.png -> 200 (51ms, 1233 bytes)
+2013-08-20 12:37:07,927 - sauce_connect:0 - INFO - GET https://datasift.com/images/icons/facebook_small.png -> 200 (51ms, 1118 bytes)
+2013-08-20 12:37:08,036 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/icons/twitter_small.png
+2013-08-20 12:37:08,036 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/builder.js
+2013-08-20 12:37:08,069 - sauce_connect:0 - INFO - GET https://datasift.com/images/icons/twitter_small.png -> 200 (34ms, 1219 bytes)
+2013-08-20 12:37:08,072 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/builder.js -> 200 (34ms, 1298 bytes)
+2013-08-20 12:37:08,141 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/_effects.js
+2013-08-20 12:37:08,141 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/dragdrop.js
+2013-08-20 12:37:08,171 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/_effects.js -> 200 (31ms, 7874 bytes)
+2013-08-20 12:37:08,190 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/dragdrop.js -> 200 (50ms, 6678 bytes)
+2013-08-20 12:37:08,197 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/slider.js
+2013-08-20 12:37:08,197 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/controls.js
+2013-08-20 12:37:08,240 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/slider.js -> 200 (43ms, 2236 bytes)
+2013-08-20 12:37:08,257 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/controls.js -> 200 (62ms, 6988 bytes)
+2013-08-20 12:37:08,358 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/icons/linkedin_small.png
+2013-08-20 12:37:08,358 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/sound.js
+2013-08-20 12:37:08,367 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/logo.png
+2013-08-20 12:37:08,388 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/sound.js -> 200 (30ms, 686 bytes)
+2013-08-20 12:37:08,390 - sauce_connect:0 - INFO - GET https://datasift.com/images/icons/linkedin_small.png -> 200 (30ms, 1135 bytes)
+2013-08-20 12:37:08,415 - sauce_connect:0 - INFO - GET https://datasift.com/images/logo.png -> 200 (49ms, 2687 bytes)
+2013-08-20 12:37:08,431 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/icons/arrow-pointer-down.png
+2013-08-20 12:37:08,431 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/login/login_sprites.png
+2013-08-20 12:37:08,459 - sauce_connect:0 - INFO - GET https://datasift.com/images/icons/arrow-pointer-down.png -> 200 (28ms, 1117 bytes)
+2013-08-20 12:37:08,517 - sauce_connect:0 - INFO - GET https://ssl.google-analytics.com/ga.js -> 200 (1984ms, 15654 bytes)
+2013-08-20 12:37:08,540 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/favicon.ico
+2013-08-20 12:37:08,592 - sauce_connect:0 - INFO - GET https://datasift.com/images/favicon.ico -> 200 (53ms, 1150 bytes)
+2013-08-20 12:37:08,641 - sauce_connect:0 - INFO - GET https://datasift.com/images/login/login_sprites.png -> 200 (211ms, 119179 bytes)
+2013-08-20 12:37:08,996 - sauce_connect:0 - INFO - Request started: GET https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.4&utms=1&utmn=177583398&utmhn=datasift.com&utme=8(Logged%20In)9(false)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1024x646&utmsc=24-bit&utmul=en-us&utmje=1&utmfl=11.7%20r700&utmdt=Register%20-%20DataSift&utmhid=1253433197&utmr=-&utmp=%2Fauth%2Fregister&utmht=1376998617844&utmac=UA-394484-13&utmcc=__utma%3D138696614.492621210.1376998618.1376998618.1376998618.1%3B%2B__utmz%3D138696614.1376998618.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qQ~
+2013-08-20 12:37:09,367 - sauce_connect:0 - INFO - GET https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.4&utms=1&utmn=177583398&utmhn=datasift.com&utme=8(Logged%20In)9(false)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1024x646&utmsc=24-bit&utmul=en-us&utmje=1&utmfl=11.7%20r700&utmdt=Register%20-%20DataSift&utmhid=1253433197&utmr=-&utmp=%2Fauth%2Fregister&utmht=1376998617844&utmac=UA-394484-13&utmcc=__utma%3D138696614.492621210.1376998618.1376998618.1376998618.1%3B%2B__utmz%3D138696614.1376998618.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qQ~ -> 200 (369ms, 35 bytes)
+2013-08-20 12:37:20,424 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/icons/form-valid.png
+2013-08-20 12:37:20,516 - sauce_connect:0 - INFO - GET https://datasift.com/images/icons/form-valid.png -> 200 (92ms, 1195 bytes)
+2013-08-20 12:37:48,237 - sauce_connect:0 - INFO - Request started: POST https://datasift.com/auth/register
+2013-08-20 12:37:48,924 - sauce_connect:0 - INFO - POST https://datasift.com/auth/register -> 302 (685ms, 0 bytes)
+2013-08-20 12:37:49,244 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/auth/interests
+2013-08-20 12:37:49,487 - sauce_connect:0 - INFO - GET https://datasift.com/auth/interests -> 200 (242ms, 2774 bytes)
+2013-08-20 12:37:49,858 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/buttons.css?
+2013-08-20 12:37:49,858 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/parts.css?
+2013-08-20 12:37:49,858 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/default.css?
+2013-08-20 12:37:49,858 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/print.css?
+2013-08-20 12:37:49,859 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/island.css?
+2013-08-20 12:37:49,887 - sauce_connect:0 - INFO - GET https://datasift.com/styles/buttons.css? -> 200 (30ms, 837 bytes)
+2013-08-20 12:37:49,937 - sauce_connect:0 - INFO - GET https://datasift.com/styles/print.css? -> 200 (79ms, 130 bytes)
+2013-08-20 12:37:49,940 - sauce_connect:0 - INFO - GET https://datasift.com/styles/island.css? -> 200 (80ms, 449 bytes)
+2013-08-20 12:37:50,015 - sauce_connect:0 - INFO - GET https://datasift.com/styles/default.css? -> 200 (158ms, 20296 bytes)
+2013-08-20 12:37:50,094 - sauce_connect:0 - INFO - GET https://datasift.com/styles/parts.css? -> 200 (234ms, 77415 bytes)
+2013-08-20 12:37:51,806 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/datasift.js?
+2013-08-20 12:37:51,806 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/scriptaculous.js?
+2013-08-20 12:37:51,806 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/zeroclipboard.js?
+2013-08-20 12:37:51,806 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/floyd.js?
+2013-08-20 12:37:51,808 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/prototype.js?
+2013-08-20 12:37:51,836 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/datasift.js? -> 200 (31ms, 1341 bytes)
+2013-08-20 12:37:51,845 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/scriptaculous.js? -> 200 (39ms, 634 bytes)
+2013-08-20 12:37:51,877 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/floyd.js? -> 200 (70ms, 10462 bytes)
+2013-08-20 12:37:51,950 - sauce_connect:0 - INFO - Request started: GET https://www.googleadservices.com/pagead/conversion.js
+2013-08-20 12:37:51,950 - sauce_connect:0 - INFO - Request started: GET https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
+2013-08-20 12:37:51,967 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/prototype.js? -> 200 (158ms, 39928 bytes)
+2013-08-20 12:37:51,967 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/interests/logo.png
+2013-08-20 12:37:52,013 - sauce_connect:0 - INFO - GET https://datasift.com/images/interests/logo.png -> 200 (46ms, 2448 bytes)
+2013-08-20 12:37:52,058 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/favicon.ico
+2013-08-20 12:37:52,065 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/zeroclipboard.js? -> 200 (260ms, 3163 bytes)
+2013-08-20 12:37:52,086 - sauce_connect:0 - INFO - GET https://datasift.com/images/favicon.ico -> 200 (28ms, 1150 bytes)
+2013-08-20 12:37:52,128 - sauce_connect:0 - INFO - Request started: GET https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js
+2013-08-20 12:37:52,170 - sauce_connect:0 - INFO - GET https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js -> 200 (221ms, 32819 bytes)
+2013-08-20 12:37:52,322 - sauce_connect:0 - INFO - GET https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js -> 200 (192ms, 62651 bytes)
+2013-08-20 12:37:52,467 - sauce_connect:0 - INFO - GET https://www.googleadservices.com/pagead/conversion.js -> 200 (517ms, 3160 bytes)
+2013-08-20 12:37:53,486 - sauce_connect:0 - INFO - Request started: GET https://www.googleadservices.com/pagead/conversion/984288070/?random=1376998662172&cv=7&fst=1376998662172&num=1&fmt=3&value=0&label=FD16CKr31wQQxpas1QM&bg=ffffff&hl=en&guid=ON&u_h=768&u_w=1024&u_ah=768&u_aw=1024&u_cd=24&u_his=2&u_tz=0&u_java=true&u_nplug=5&u_nmime=41&ref=https%3A//datasift.com/auth/register&url=https%3A//datasift.com/auth/interests&frm=0
+2013-08-20 12:37:53,523 - sauce_connect:0 - INFO - GET https://www.googleadservices.com/pagead/conversion/984288070/?random=1376998662172&cv=7&fst=1376998662172&num=1&fmt=3&value=0&label=FD16CKr31wQQxpas1QM&bg=ffffff&hl=en&guid=ON&u_h=768&u_w=1024&u_ah=768&u_aw=1024&u_cd=24&u_his=2&u_tz=0&u_java=true&u_nplug=5&u_nmime=41&ref=https%3A//datasift.com/auth/register&url=https%3A//datasift.com/auth/interests&frm=0 -> 302 (37ms, 42 bytes)
+2013-08-20 12:37:53,552 - sauce_connect:0 - INFO - Request started: GET https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.4&utms=2&utmn=1114041411&utmhn=datasift.com&utme=8(Logged%20In)9(true)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1008x646&utmsc=24-bit&utmul=en-us&utmje=1&utmfl=11.7%20r700&utmdt=Your%20account%20has%20been%20created...&utmhid=1654537035&utmr=0&utmp=%2Fauth%2Finterests&utmht=1376998662391&utmac=UA-394484-13&utmcc=__utma%3D138696614.492621210.1376998618.1376998618.1376998618.1%3B%2B__utmz%3D138696614.1376998618.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qQ~
+2013-08-20 12:37:53,890 - sauce_connect:0 - INFO - Request started: GET https://googleads.g.doubleclick.net/pagead/viewthroughconversion/984288070/?random=1376998662172&cv=7&fst=1376998662172&num=1&fmt=3&value=0&label=FD16CKr31wQQxpas1QM&bg=ffffff&hl=en&guid=ON&u_h=768&u_w=1024&u_ah=768&u_aw=1024&u_cd=24&u_his=2&u_tz=0&u_java=true&u_nplug=5&u_nmime=41&ref=https%3A//datasift.com/auth/register&url=https%3A//datasift.com/auth/interests&frm=0&ctc_id=CAIVAgAAAB0CAAAA&ct_cookie_present=false&convclickts=0
+2013-08-20 12:37:54,384 - sauce_connect:0 - INFO - GET https://googleads.g.doubleclick.net/pagead/viewthroughconversion/984288070/?random=1376998662172&cv=7&fst=1376998662172&num=1&fmt=3&value=0&label=FD16CKr31wQQxpas1QM&bg=ffffff&hl=en&guid=ON&u_h=768&u_w=1024&u_ah=768&u_aw=1024&u_cd=24&u_his=2&u_tz=0&u_java=true&u_nplug=5&u_nmime=41&ref=https%3A//datasift.com/auth/register&url=https%3A//datasift.com/auth/interests&frm=0&ctc_id=CAIVAgAAAB0CAAAA&ct_cookie_present=false&convclickts=0 -> 302 (495ms, 42 bytes)
+2013-08-20 12:37:54,654 - sauce_connect:0 - INFO - GET https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.4&utms=2&utmn=1114041411&utmhn=datasift.com&utme=8(Logged%20In)9(true)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1008x646&utmsc=24-bit&utmul=en-us&utmje=1&utmfl=11.7%20r700&utmdt=Your%20account%20has%20been%20created...&utmhid=1654537035&utmr=0&utmp=%2Fauth%2Finterests&utmht=1376998662391&utmac=UA-394484-13&utmcc=__utma%3D138696614.492621210.1376998618.1376998618.1376998618.1%3B%2B__utmz%3D138696614.1376998618.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qQ~ -> 200 (1101ms, 35 bytes)
+2013-08-20 12:37:54,763 - sauce_connect:0 - INFO - Request started: GET https://www.google.com/ads/conversion/984288070/?random=1376998662172&cv=7&fst=1376998662172&num=1&fmt=3&value=0&label=FD16CKr31wQQxpas1QM&bg=ffffff&hl=en&guid=ON&u_h=768&u_w=1024&u_ah=768&u_aw=1024&u_cd=24&u_his=2&u_tz=0&u_java=true&u_nplug=5&u_nmime=41&ref=https%3A//datasift.com/auth/register&url=https%3A//datasift.com/auth/interests&frm=0&ctc_id=CAIVAgAAAB0CAAAA&ct_cookie_present=false&cdct=2&convclickts=0&random=2717189256
+2013-08-20 12:37:54,927 - sauce_connect:0 - INFO - GET https://www.google.com/ads/conversion/984288070/?random=1376998662172&cv=7&fst=1376998662172&num=1&fmt=3&value=0&label=FD16CKr31wQQxpas1QM&bg=ffffff&hl=en&guid=ON&u_h=768&u_w=1024&u_ah=768&u_aw=1024&u_cd=24&u_his=2&u_tz=0&u_java=true&u_nplug=5&u_nmime=41&ref=https%3A//datasift.com/auth/register&url=https%3A//datasift.com/auth/interests&frm=0&ctc_id=CAIVAgAAAB0CAAAA&ct_cookie_present=false&cdct=2&convclickts=0&random=2717189256 -> 302 (163ms, 747 bytes)
+2013-08-20 12:37:55,339 - sauce_connect:0 - INFO - Request started: GET https://www.google.co.uk/ads/conversion/984288070/?random=1376998662172&cv=7&fst=1376998662172&num=1&fmt=3&value=0&label=FD16CKr31wQQxpas1QM&bg=ffffff&hl=en&guid=ON&u_h=768&u_w=1024&u_ah=768&u_aw=1024&u_cd=24&u_his=2&u_tz=0&u_java=true&u_nplug=5&u_nmime=41&ref=https%3A//datasift.com/auth/register&url=https%3A//datasift.com/auth/interests&frm=0&ctc_id=CAIVAgAAAB0CAAAA&ct_cookie_present=false&cdct=2&convclickts=0&random=2717189256&ipr=y
+2013-08-20 12:37:55,513 - sauce_connect:0 - INFO - GET https://www.google.co.uk/ads/conversion/984288070/?random=1376998662172&cv=7&fst=1376998662172&num=1&fmt=3&value=0&label=FD16CKr31wQQxpas1QM&bg=ffffff&hl=en&guid=ON&u_h=768&u_w=1024&u_ah=768&u_aw=1024&u_cd=24&u_his=2&u_tz=0&u_java=true&u_nplug=5&u_nmime=41&ref=https%3A//datasift.com/auth/register&url=https%3A//datasift.com/auth/interests&frm=0&ctc_id=CAIVAgAAAB0CAAAA&ct_cookie_present=false&cdct=2&convclickts=0&random=2717189256&ipr=y -> 200 (172ms, 42 bytes)
+2013-08-20 12:38:00,696 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/dashboard
+2013-08-20 12:38:01,763 - sauce_connect:0 - INFO - GET http://datasift.com/dashboard -> 200 (1068ms, 5569 bytes)
+2013-08-20 12:38:02,115 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/styles/default.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:02,134 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/styles/parts.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:02,134 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/styles/print.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:02,134 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/styles/main.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:02,188 - sauce_connect:0 - INFO - GET http://datasift.com/styles/default.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (74ms, 20296 bytes)
+2013-08-20 12:38:02,194 - sauce_connect:0 - INFO - GET http://datasift.com/styles/main.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (61ms, 1478 bytes)
+2013-08-20 12:38:02,201 - sauce_connect:0 - INFO - GET http://datasift.com/styles/print.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (67ms, 130 bytes)
+2013-08-20 12:38:02,388 - sauce_connect:0 - INFO - GET http://datasift.com/styles/parts.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (254ms, 77415 bytes)
+2013-08-20 12:38:03,805 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/jquery-1.9.1.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:03,815 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/prototype.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:03,815 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/scriptaculous/scriptaculous.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:03,815 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/jquery-ui.min.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:03,905 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/scriptaculous/scriptaculous.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (91ms, 634 bytes)
+2013-08-20 12:38:03,976 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/jquery-1.9.1.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (173ms, 47304 bytes)
+2013-08-20 12:38:04,058 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/jquery-ui.min.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (243ms, 74003 bytes)
+2013-08-20 12:38:04,095 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/prototype.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (280ms, 39928 bytes)
+2013-08-20 12:38:04,200 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/zeroclipboard.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,204 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/calendarview.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,201 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/floyd.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,204 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/datasift.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,204 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/chosen/chosen.jquery.min.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,209 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/events.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,211 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/controls/tips.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,217 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/datetime.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,223 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/highcharts/highcharts.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,221 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/highcharts/adapters/prototype-adapter.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,233 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/controls/dashboard.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:04,232 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/icons/twitter_small.png
+2013-08-20 12:38:04,233 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/icons/facebook_small.png
+2013-08-20 12:38:04,233 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/icons/wordpress_small.png
+2013-08-20 12:38:04,244 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/zeroclipboard.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (44ms, 3163 bytes)
+2013-08-20 12:38:04,247 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/datasift.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (43ms, 1341 bytes)
+2013-08-20 12:38:04,247 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/icons/linkedin_small.png
+2013-08-20 12:38:04,256 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/calendarview.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (53ms, 4571 bytes)
+2013-08-20 12:38:04,273 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/floyd.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (72ms, 10462 bytes)
+2013-08-20 12:38:04,279 - sauce_connect:0 - INFO - GET http://datasift.com/images/icons/linkedin_small.png -> 200 (32ms, 1135 bytes)
+2013-08-20 12:38:04,303 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/controls/tips.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (91ms, 629 bytes)
+2013-08-20 12:38:04,312 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/events.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (105ms, 1069 bytes)
+2013-08-20 12:38:04,315 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/datetime.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (99ms, 755 bytes)
+2013-08-20 12:38:04,321 - sauce_connect:0 - INFO - GET http://datasift.com/images/icons/facebook_small.png -> 200 (87ms, 1118 bytes)
+2013-08-20 12:38:04,321 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/highcharts/adapters/prototype-adapter.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (99ms, 989 bytes)
+2013-08-20 12:38:04,323 - sauce_connect:0 - INFO - GET http://datasift.com/images/icons/twitter_small.png -> 200 (92ms, 1219 bytes)
+2013-08-20 12:38:04,323 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/controls/dashboard.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (91ms, 595 bytes)
+2013-08-20 12:38:04,328 - sauce_connect:0 - INFO - GET http://datasift.com/images/icons/wordpress_small.png -> 200 (95ms, 1233 bytes)
+2013-08-20 12:38:04,335 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/chosen/chosen.jquery.min.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (130ms, 6802 bytes)
+2013-08-20 12:38:04,418 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/highcharts/highcharts.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (195ms, 35957 bytes)
+2013-08-20 12:38:04,434 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/favicon.ico
+2013-08-20 12:38:04,436 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/logo.png
+2013-08-20 12:38:04,437 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/icons/arrow-pointer-down.png
+2013-08-20 12:38:04,434 - sauce_connect:0 - INFO - Request started: GET http://www.google-analytics.com/ga.js
+2013-08-20 12:38:04,441 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/tips/sprites.png
+2013-08-20 12:38:04,441 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/nav.gif
+2013-08-20 12:38:04,441 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/gears.png
+2013-08-20 12:38:04,437 - sauce_connect:0 - INFO - Request started: GET http://www.gravatar.com/avatar/1f8943e31f5714a5e776ba71c9ae457e.jpg?d=http://datasift.com/images/gravatar.png&s=44
+2013-08-20 12:38:04,444 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/icons.png
+2013-08-20 12:38:04,444 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/tips/tips-left.png
+2013-08-20 12:38:04,446 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/icons/plus.gif
+2013-08-20 12:38:04,443 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/notifications/notification_icons_sprites.png
+2013-08-20 12:38:04,444 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/balancebar-icons.png
+2013-08-20 12:38:04,463 - sauce_connect:0 - INFO - GET http://datasift.com/images/favicon.ico -> 200 (30ms, 1150 bytes)
+2013-08-20 12:38:04,466 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/images/book.png
+2013-08-20 12:38:04,477 - sauce_connect:0 - INFO - GET http://datasift.com/images/logo.png -> 200 (43ms, 2687 bytes)
+2013-08-20 12:38:04,477 - sauce_connect:0 - INFO - GET http://datasift.com/images/icons/arrow-pointer-down.png -> 200 (42ms, 1117 bytes)
+2013-08-20 12:38:04,505 - sauce_connect:0 - INFO - GET http://datasift.com/images/gears.png -> 200 (68ms, 1533 bytes)
+2013-08-20 12:38:04,505 - sauce_connect:0 - INFO - GET http://datasift.com/images/nav.gif -> 200 (65ms, 35 bytes)
+2013-08-20 12:38:04,516 - sauce_connect:0 - INFO - GET http://datasift.com/images/tips/sprites.png -> 200 (80ms, 21773 bytes)
+2013-08-20 12:38:04,519 - sauce_connect:0 - INFO - GET http://datasift.com/images/book.png -> 200 (53ms, 1365 bytes)
+2013-08-20 12:38:04,548 - sauce_connect:0 - INFO - GET http://datasift.com/images/tips/tips-left.png -> 200 (103ms, 7241 bytes)
+2013-08-20 12:38:04,553 - sauce_connect:0 - INFO - GET http://datasift.com/images/notifications/notification_icons_sprites.png -> 200 (114ms, 2202 bytes)
+2013-08-20 12:38:04,558 - sauce_connect:0 - INFO - GET http://datasift.com/images/icons.png -> 200 (114ms, 5363 bytes)
+2013-08-20 12:38:04,559 - sauce_connect:0 - INFO - GET http://datasift.com/images/icons/plus.gif -> 200 (114ms, 67 bytes)
+2013-08-20 12:38:04,559 - sauce_connect:0 - INFO - GET http://datasift.com/images/balancebar-icons.png -> 200 (115ms, 1624 bytes)
+2013-08-20 12:38:04,957 - sauce_connect:0 - INFO - GET http://www.google-analytics.com/ga.js -> 200 (523ms, 15654 bytes)
+2013-08-20 12:38:05,049 - sauce_connect:0 - INFO - GET http://www.gravatar.com/avatar/1f8943e31f5714a5e776ba71c9ae457e.jpg?d=http://datasift.com/images/gravatar.png&s=44 -> 302 (612ms, 0 bytes)
+2013-08-20 12:38:05,348 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/scriptaculous/builder.js
+2013-08-20 12:38:05,349 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/scriptaculous/controls.js
+2013-08-20 12:38:05,348 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/scriptaculous/_effects.js
+2013-08-20 12:38:05,348 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/scriptaculous/dragdrop.js
+2013-08-20 12:38:05,349 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/scriptaculous/sound.js
+2013-08-20 12:38:05,349 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/scriptaculous/slider.js
+2013-08-20 12:38:05,374 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/scriptaculous/builder.js -> 200 (27ms, 1298 bytes)
+2013-08-20 12:38:05,387 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/scriptaculous/controls.js -> 200 (38ms, 6988 bytes)
+2013-08-20 12:38:05,390 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/scriptaculous/sound.js -> 200 (40ms, 686 bytes)
+2013-08-20 12:38:05,415 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/scriptaculous/_effects.js -> 200 (69ms, 7874 bytes)
+2013-08-20 12:38:05,417 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/scriptaculous/dragdrop.js -> 200 (69ms, 6678 bytes)
+2013-08-20 12:38:05,424 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/scriptaculous/slider.js -> 200 (74ms, 2236 bytes)
+2013-08-20 12:38:06,174 - sauce_connect:0 - INFO - Request started: GET http://www.google-analytics.com/__utm.gif?utmwv=5.4.4&utms=3&utmn=2127494913&utmhn=datasift.com&utme=8(Logged%20In)9(true)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1008x646&utmsc=24-bit&utmul=en-us&utmje=1&utmfl=11.7%20r700&utmdt=Dashboard%20-%20DataSift&utmhid=1588173820&utmr=-&utmp=%2Fdashboard&utmht=1376998674985&utmac=UA-394484-13&utmcc=__utma%3D138696614.492621210.1376998618.1376998618.1376998618.1%3B%2B__utmz%3D138696614.1376998618.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qQ~
+2013-08-20 12:38:06,177 - sauce_connect:0 - INFO - Request started: GET http://i2.wp.com/datasift.com/images/gravatar.png
+2013-08-20 12:38:06,203 - sauce_connect:0 - INFO - GET http://www.google-analytics.com/__utm.gif?utmwv=5.4.4&utms=3&utmn=2127494913&utmhn=datasift.com&utme=8(Logged%20In)9(true)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1008x646&utmsc=24-bit&utmul=en-us&utmje=1&utmfl=11.7%20r700&utmdt=Dashboard%20-%20DataSift&utmhid=1588173820&utmr=-&utmp=%2Fdashboard&utmht=1376998674985&utmac=UA-394484-13&utmcc=__utma%3D138696614.492621210.1376998618.1376998618.1376998618.1%3B%2B__utmz%3D138696614.1376998618.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qQ~ -> 200 (30ms, 35 bytes)
+2013-08-20 12:38:06,592 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/scripts/libraries/zeroclipboard/ZeroClipboard.swf?nocache=1376998675172
+2013-08-20 12:38:06,614 - sauce_connect:0 - INFO - GET http://i2.wp.com/datasift.com/images/gravatar.png -> 200 (438ms, 849 bytes)
+2013-08-20 12:38:06,625 - sauce_connect:0 - INFO - GET http://datasift.com/scripts/libraries/zeroclipboard/ZeroClipboard.swf?nocache=1376998675172 -> 200 (34ms, 1635 bytes)
+2013-08-20 12:38:16,614 - sauce_connect:0 - INFO - Request started: GET http://datasift.com/settings
+2013-08-20 12:38:16,677 - sauce_connect:0 - INFO - GET http://datasift.com/settings -> 302 (64ms, 0 bytes)
+2013-08-20 12:38:16,963 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/settings
+2013-08-20 12:38:17,122 - sauce_connect:0 - INFO - GET https://datasift.com/settings -> 200 (159ms, 6481 bytes)
+2013-08-20 12:38:17,615 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/print.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:17,617 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/parts.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:17,617 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/main.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:17,630 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/styles/default.css?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:17,654 - sauce_connect:0 - INFO - GET https://datasift.com/styles/print.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (38ms, 130 bytes)
+2013-08-20 12:38:17,714 - sauce_connect:0 - INFO - GET https://datasift.com/styles/main.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (99ms, 1478 bytes)
+2013-08-20 12:38:17,776 - sauce_connect:0 - INFO - GET https://datasift.com/styles/default.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (160ms, 20296 bytes)
+2013-08-20 12:38:17,885 - sauce_connect:0 - INFO - GET https://datasift.com/styles/parts.css?build=f387624df552cea2f369918c5e1e12bc -> 200 (269ms, 77415 bytes)
+2013-08-20 12:38:19,505 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/zeroclipboard.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:19,506 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/jquery-1.9.1.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:19,505 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/scriptaculous/scriptaculous.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:19,505 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/prototype.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:19,506 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/jquery-ui.min.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:19,506 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/floyd.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:19,545 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/scriptaculous/scriptaculous.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (41ms, 634 bytes)
+2013-08-20 12:38:19,608 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/zeroclipboard.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (104ms, 3163 bytes)
+2013-08-20 12:38:19,642 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/jquery-1.9.1.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (138ms, 47304 bytes)
+2013-08-20 12:38:19,651 - sauce_connect:0 - INFO - Request started: GET https://secure.gravatar.com/avatar/1f8943e31f5714a5e776ba71c9ae457e.jpg?d=https://datasift.com/images/gravatar.png&s=44
+2013-08-20 12:38:19,651 - sauce_connect:0 - INFO - Request started: GET https://secure.gravatar.com/avatar/1f8943e31f5714a5e776ba71c9ae457e.jpg?d=https://datasift.com/images/gravatar.png&s=36
+2013-08-20 12:38:19,707 - sauce_connect:0 - INFO - Request started: GET https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.4&utms=4&utmn=912307973&utmhn=datasift.com&utme=8(Logged%20In)9(true)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1008x646&utmsc=24-bit&utmul=en-us&utmje=1&utmfl=11.7%20r700&utmdt=User%20Settings%20-%20DataSift&utmhid=1615638926&utmr=-&utmp=%2Fsettings&utmht=1376998688578&utmac=UA-394484-13&utmcc=__utma%3D138696614.492621210.1376998618.1376998618.1376998618.1%3B%2B__utmz%3D138696614.1376998618.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qQ~
+2013-08-20 12:38:19,717 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/prototype.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (214ms, 39928 bytes)
+2013-08-20 12:38:19,763 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/floyd.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (257ms, 10462 bytes)
+2013-08-20 12:38:19,783 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/events.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:19,836 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/events.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (54ms, 1069 bytes)
+2013-08-20 12:38:19,868 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/jquery-ui.min.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (362ms, 74003 bytes)
+2013-08-20 12:38:19,868 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/datasift.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:19,895 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/datasift.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (28ms, 1341 bytes)
+2013-08-20 12:38:20,128 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/controls/tips.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:20,158 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/controls/tips.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (30ms, 629 bytes)
+2013-08-20 12:38:20,466 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/calendarview.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:20,536 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/calendarview.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (70ms, 4571 bytes)
+2013-08-20 12:38:20,634 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/chosen/chosen.jquery.min.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:20,677 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/chosen/chosen.jquery.min.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (44ms, 6802 bytes)
+2013-08-20 12:38:20,752 - sauce_connect:0 - INFO - GET https://secure.gravatar.com/avatar/1f8943e31f5714a5e776ba71c9ae457e.jpg?d=https://datasift.com/images/gravatar.png&s=44 -> 302 (1101ms, 0 bytes)
+2013-08-20 12:38:20,755 - sauce_connect:0 - INFO - GET https://secure.gravatar.com/avatar/1f8943e31f5714a5e776ba71c9ae457e.jpg?d=https://datasift.com/images/gravatar.png&s=36 -> 302 (1105ms, 0 bytes)
+2013-08-20 12:38:20,799 - sauce_connect:0 - INFO - GET https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.4&utms=4&utmn=912307973&utmhn=datasift.com&utme=8(Logged%20In)9(true)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1008x646&utmsc=24-bit&utmul=en-us&utmje=1&utmfl=11.7%20r700&utmdt=User%20Settings%20-%20DataSift&utmhid=1615638926&utmr=-&utmp=%2Fsettings&utmht=1376998688578&utmac=UA-394484-13&utmcc=__utma%3D138696614.492621210.1376998618.1376998618.1376998618.1%3B%2B__utmz%3D138696614.1376998618.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qQ~ -> 200 (1092ms, 35 bytes)
+2013-08-20 12:38:20,974 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/datetime.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:20,996 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/controls/settings.js?build=f387624df552cea2f369918c5e1e12bc
+2013-08-20 12:38:21,005 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/datetime.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (30ms, 755 bytes)
+2013-08-20 12:38:21,023 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/controls/settings.js?build=f387624df552cea2f369918c5e1e12bc -> 200 (28ms, 1010 bytes)
+2013-08-20 12:38:21,108 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/balancebar-icons.png
+2013-08-20 12:38:21,108 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/nav.gif
+2013-08-20 12:38:21,109 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/icons/plus.gif
+2013-08-20 12:38:21,134 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/tips/tips-left.png
+2013-08-20 12:38:21,137 - sauce_connect:0 - INFO - GET https://datasift.com/images/balancebar-icons.png -> 200 (27ms, 1624 bytes)
+2013-08-20 12:38:21,138 - sauce_connect:0 - INFO - GET https://datasift.com/images/nav.gif -> 200 (29ms, 35 bytes)
+2013-08-20 12:38:21,142 - sauce_connect:0 - INFO - GET https://datasift.com/images/icons/plus.gif -> 200 (33ms, 67 bytes)
+2013-08-20 12:38:21,187 - sauce_connect:0 - INFO - Request started: GET https://i2.wp.com/datasift.com/images/gravatar.png?ssl=1
+2013-08-20 12:38:21,193 - sauce_connect:0 - INFO - GET https://datasift.com/images/tips/tips-left.png -> 200 (59ms, 7241 bytes)
+2013-08-20 12:38:21,275 - sauce_connect:0 - INFO - GET https://i2.wp.com/datasift.com/images/gravatar.png?ssl=1 -> 200 (86ms, 849 bytes)
+2013-08-20 12:38:21,293 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/tips/sprites.png
+2013-08-20 12:38:21,293 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/sidetab-light.png
+2013-08-20 12:38:21,345 - sauce_connect:0 - INFO - GET https://datasift.com/images/sidetab-light.png -> 200 (52ms, 1440 bytes)
+2013-08-20 12:38:21,365 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/scripts/libraries/zeroclipboard/ZeroClipboard.swf?nocache=1376998690156
+2013-08-20 12:38:21,365 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/icons.png
+2013-08-20 12:38:21,372 - sauce_connect:0 - INFO - GET https://datasift.com/images/tips/sprites.png -> 200 (80ms, 21773 bytes)
+2013-08-20 12:38:21,394 - sauce_connect:0 - INFO - GET https://datasift.com/scripts/libraries/zeroclipboard/ZeroClipboard.swf?nocache=1376998690156 -> 200 (30ms, 1635 bytes)
+2013-08-20 12:38:21,423 - sauce_connect:0 - INFO - GET https://datasift.com/images/icons.png -> 200 (57ms, 5363 bytes)
+2013-08-20 12:38:21,453 - sauce_connect:0 - INFO - Request started: GET https://datasift.com/images/favicon.ico
+2013-08-20 12:38:21,483 - sauce_connect:0 - INFO - GET https://datasift.com/images/favicon.ico -> 200 (30ms, 1150 bytes)
+2013-08-20 13:27:03,395 - sauce_connect:0 - INFO - received SIGINT
