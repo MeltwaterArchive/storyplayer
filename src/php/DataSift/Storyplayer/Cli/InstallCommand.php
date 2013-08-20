@@ -53,6 +53,7 @@ use DataSift\Stone\DownloadLib\FileDownloader;
 use DataSift\WebDriver\WebDriverConfiguration;
 
 use Exception;
+use stdClass;
 
 /**
  * Command to download dependencies
@@ -87,8 +88,16 @@ class InstallCommand extends CliCommand
 		$wdConfig = new WebDriverConfiguration;
 		$filesToDownload = $wdConfig->getDependencies();
 
+		// add in the Sauce Connect JAR
+		$sauceConnect = new stdClass;
+		$sauceConnect->name = "Sauce-Connect.jar";
+		$sauceConnect->url  = "http://saucelabs.com/downloads/Sauce-Connect-latest.zip";
+		$filesToDownload[] = $sauceConnect;
+
+		// helper for downloading files
 		$downloader = new FileDownloader();
 
+		// let's get the files downloaded
 		foreach ($filesToDownload as $file){
 
 			if (!is_object($file->url)){
