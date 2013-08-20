@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\Prose;
-
 /**
  * placeholders used as default behaviour for test phases
  *

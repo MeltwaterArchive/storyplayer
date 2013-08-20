@@ -34,33 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/ProseLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\AssertionsBase;
-use DataSift\Stone\ComparisonLib\BooleanComparitor;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Assertions about the nature of, and contents of, booleans
+ * Exception thrown when the ProseLoader loads a class, but it isn't
+ * a child of the 'Prose' class
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/ProseLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class BooleanExpects extends AssertionsBase
+class E5xx_NotAProseClass extends Exxx_Exception
 {
-    public function __construct(StoryTeller $st, $params)
-    {
-        parent::__construct($st, new BooleanComparitor($params[0]));
-    }
+	public function __construct($className) {
+		$msg = "Class '{$className}' does not inherit from DataSift\\StoryPlayer\\ProseLib\\Prose";
+		parent::__construct(500, $msg, $msg);
+	}
 }

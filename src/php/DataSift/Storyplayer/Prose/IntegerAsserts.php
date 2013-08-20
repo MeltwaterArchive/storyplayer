@@ -34,27 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ComparisonLib\IntegerComparitor;
 
 /**
- * Base class for exceptions thrown whilst executing Prose
+ * Assertions about the nature of, and contents of, integers
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ProseException extends Exxx_Exception
+class IntegerAsserts extends AssertionsBase
 {
+	public function __construct(StoryTeller $st, $params)
+	{
+		parent::__construct($st, new IntegerComparitor($params[0]));
+	}
 }

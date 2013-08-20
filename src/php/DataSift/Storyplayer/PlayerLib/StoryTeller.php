@@ -45,9 +45,8 @@ namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
 
-use DataSift\Storyplayer\ProseLib\E5xx_NoMatchingActions;
-use DataSift\Storyplayer\ProseLib\ProseLoader;
-use DataSift\Storyplayer\ProseLib\PageContext;
+use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
+use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
 
 use DataSift\Stone\HttpLib\HttpAddress;

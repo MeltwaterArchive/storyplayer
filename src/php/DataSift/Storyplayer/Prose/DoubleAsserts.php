@@ -34,47 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ComparisonLib\DoubleComparitor;
 
 /**
- * Helper class for when we want to compare before and after data
- *
- * For example, this class makes it possible to write Prose like this:
- *
- * 	   $newStats = $st->fromCppDaemon()->getStats();
- *     $st->expectsCppDaemonStats($newStats)->counter('no_of_tweets')->hasIncreasedBy(1)->since($oldStats);
+ * Assertions about the nature of, and contents of, floating point numbers
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedComparisonAction
+class DoubleAsserts extends AssertionsBase
 {
-	protected $st;
-	protected $topElement;
-
-	public function __construct(StoryTeller $st, $newStats, $action)
+	public function __construct(StoryTeller $st, $params)
 	{
-		$this->st = $st;
-		$this->newStats = $newStats;
-		$this->action   = $action;
-	}
-
-	public function since($oldStats)
-	{
-		$action = $this->action;
-		$action($this->st, $oldStats, $this->newStats);
+		parent::__construct($st, new DoubleComparitor($params[0]));
 	}
 }

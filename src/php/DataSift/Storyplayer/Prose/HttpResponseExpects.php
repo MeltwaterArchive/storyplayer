@@ -43,10 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\HttpLib\HttpClientResponse;
 

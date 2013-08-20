@@ -44,11 +44,10 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\AssertionsBase;
-use DataSift\Stone\ComparisonLib\IntegerComparitor;
 
 /**
- * Assertions about the nature of, and contents of, integers
+ * This (when it is finished) will be used to tell Selenium to work against
+ * the main DOM document, rather than an iframe on the page
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -57,10 +56,16 @@ use DataSift\Stone\ComparisonLib\IntegerComparitor;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class IntegerExpects extends AssertionsBase
+class PageContext
 {
-	public function __construct(StoryTeller $st, $params)
+	protected $pageContextAction = null;
+
+	public function switchToContext(StoryTeller $st)
 	{
-		parent::__construct($st, new IntegerComparitor($params[0]));
+		if (is_callable($this->pageContextAction)) {
+			$callback = $this->pageContextAction;
+
+			$callback($st);
+		}
 	}
 }

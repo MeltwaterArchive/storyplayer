@@ -34,59 +34,121 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * Base class used for all assertions
+ * base class for all Prose classes
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class AssertionsBase extends Prose
+class Prose
 {
-	protected $comparitor = null;
+	protected $st = null;
+	protected $args = array();
+	protected $topElement = null;
+	protected $topXpath   = null;
 
-	public function __construct(StoryTeller $st, $comparitor)
+	public function __construct(StoryTeller $st, $args = array())
 	{
-		$this->comparitor = $comparitor;
-		parent::__construct($st);
+		// save the StoryTeller object; we're going to need it!
+		$this->st = $st;
+
+		// save any arguments that have been passed into the constructor
+		// our child classes may be interested in them
+		if (!is_array($args)) {
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+		$this->args = $args;
+
+		// setup the page context
+		$this->initPageContext();
+
+		// run any context-specific setup that we need
+		$this->initActions();
+	}
+
+	protected function initPageContext()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// make sure we are looking at the right part of the page
+		$pageContext = $st->getPageContext();
+		$pageContext->switchToContext($st);
+	}
+
+	/**
+	 * override this method if required (for example, for web browsers)
+	 *
+	 * @return void
+	 */
+	protected function initActions()
+	{
+	}
+
+	protected function initBrowser()
+	{
+		// do we have a web browser?
+		$browser = $this->st->getRunningWebBrowser();
+
+		// set our top XPATH node
+		$this->setTopXpath("//html");
+
+		// set our top element
+		$topElement = $browser->getElement('xpath', '/html');
+		$this->setTopElement($topElement);
 	}
 
 	public function __call($methodName, $params)
 	{
-		// pass this through to our comparitor, if it has the same method
-		// name
-		if (method_exists($this->comparitor, $methodName)) {
-			$result = call_user_func_array(array($this->comparitor, $methodName), $params);
-
-			// was the comparison successful?
-			if ($result->hasPassed()) {
-				return true;
-			}
-
-			// if we get here, then the comparison failed
-			throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
-		}
-
 		// this only gets called if there's no matching method
 		throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
 	}
 
-	public function getComparitor()
+	public function getTopElement()
 	{
-		return $this->comparitor;
+		return $this->topElement;
+	}
+
+	public function setTopElement($element)
+	{
+		$this->topElement = $element;
+	}
+
+	protected function getTopXpath()
+	{
+		return $this->topXpath;
+	}
+
+	protected function setTopXpath($xpath)
+	{
+		$this->topXpath = $xpath;
+	}
+
+	// ====================================================================
+	//
+	// Convertors go here
+	//
+	// --------------------------------------------------------------------
+
+	public function toNum($string)
+	{
+		$final = str_replace(array(',', '$', ' '), '', $string);
+
+		return (double)$final;
 	}
 }

@@ -34,87 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-
-namespace DataSift\Storyplayer\ProseLib;
-
-use Exception;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * Helper class for finding DOM elements using human-like terms (e.g.
- * 'buttonLabelled')
+ * Exception thrown when we can't work out what kind of DOM element you
+ * want us to find
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TargettedBrowserSearch extends TargettedBrowserBase
+class E5xx_UnknownDomElementType extends E5xx_ProseException
 {
-	protected $st;
-	protected $pageContext;
-	protected $action;
-	protected $actionDesc;
-	protected $baseElement;
-
-	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
-	{
-		$this->st          = $st;
-		$this->action      = $action;
-		$this->actionDesc  = $actionDesc;
-		$this->baseElement = $baseElement;
-	}
-
-	public function __call($methodName, $methodArgs)
-	{
-		// turn the method name into an array of words
-		$words = $this->convertMethodNameToWords($methodName);
-
-		$targetType = $this->determineTargetType($words);
-		$searchType = $this->determineSearchType($words);
-
-		if ($searchType == null) {
-			// we do not understand how to find the target field
-			throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
-		}
-
-		$tag = $this->determineTagType($targetType);
-
-		// what are we searching for?
-		$searchTerm = $methodArgs[0];
-
-		if ($this->isPluralTarget($targetType)) {
-			$searchMethod = 'getElements';
-		}
-		else {
-			$searchMethod = 'getElement';
-		}
-		$searchMethod .= $searchType;
-
-		// let's go find our element
-		try {
-			$searchObject = $this->st->fromBrowser();
-			if ($this->baseElement !== null) {
-				$searchObject->setTopElement($this->baseElement);
-			}
-			$element = $searchObject->$searchMethod($searchTerm, $tag);
-		} catch (Exception $e) {
-			$element = null;
-		}
-
-		// now that we have our element, let's apply the action to it
-		$action = $this->action;
-		$return = $action($this->st, $element, $searchTerm, $methodName);
-
-		// all done
-		return $return;
+	public function __construct($elementType) {
+		$msg = "Unknown DOM element type '{$elementType}'";
+		parent::__construct(500, $msg, $msg);
 	}
 }
