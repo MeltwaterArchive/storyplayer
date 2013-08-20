@@ -34,96 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-namespace DataSift\Storyplayer\ProseLib;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * Helper class that allows us to write Prose where the action comes before
- * we say what DOM element we want to act upon
+ * Exception thrown when an operation in an 'Except' class fails
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TargettedBrowserAction extends TargettedBrowserBase
+class E5xx_ExpectFailed extends E5xx_ProseException
 {
-	protected $st;
-	protected $action;
-	protected $actionDesc;
-	protected $baseElement;
-
-	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
-	{
-		$this->st          = $st;
-		$this->action      = $action;
-		$this->actionDesc  = $actionDesc;
-		$this->baseElement = $baseElement;
-	}
-
-	public function __call($methodName, $methodArgs)
-	{
-		$words = $this->convertMethodNameToWords($methodName);
-
-		$targetType = $this->determineTargetType($words);
-
-		if ($targetType != 'element') {
-
-			// what are we searching for?
-			$searchTerm = $methodArgs[0];
-
-			$searchType = $this->determineSearchType($words);
-			if ($searchType == null) {
-				// we do not understand how to find the target field
-				throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
-			}
-
-			// what tag(s) do we want to narrow our search to?
-			$tag = $this->determineTagType($targetType);
-
-			if ($this->isPluralTarget($targetType)) {
-				$searchMethod = 'getElements';
-			}
-			else {
-				$searchMethod = 'getElement';
-			}
-			$searchMethod .= $searchType;
-
-			// let's go find our element
-			$searchObject = $this->st->fromBrowser();
-			$searchObject->setTopElement($this->baseElement);
-
-			$element = $searchObject->$searchMethod($searchTerm, $tag);
-		}
-		else {
-			$element = $methodArgs[0];
-
-			if (!is_object($element)) {
-				throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "expected a WebDriverElement as 1st parameter to search term");
-			}
-
-			if (isset($methodArgs[1])) {
-				$searchTerm = $methodArgs[1];
-			}
-			else {
-				$searchTerm = $element->name();
-			}
-		}
-
-		// now that we have our element, let's apply the action to it
-		$action = $this->action;
-		$return = $action($this->st, $element, $searchTerm, $methodName);
-
-		// all done
-		return $return;
+	public function __construct($actionName, $expected, $found) {
+		$msg = "Action '$actionName' failed; expected '$expected', found '$found'";
+		parent::__construct(500, $msg, $msg);
 	}
 }

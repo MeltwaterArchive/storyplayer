@@ -44,10 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use Exception;
-
-use DataSift\Storyplayer\ProseLib\Prose;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-
 use DataSift\Stone\HttpLib\HttpClient;
 use DataSift\Stone\HttpLib\HttpClientRequest;
 use DataSift\Stone\HttpLib\HttpClientResponse;

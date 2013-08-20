@@ -34,121 +34,97 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * base class for all Prose classes
+ * Helper class that allows us to write Prose where the action comes before
+ * we say what DOM element we want to act upon
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Prose
+class TargettedBrowserAction extends TargettedBrowserBase
 {
-	protected $st = null;
-	protected $args = array();
-	protected $topElement = null;
-	protected $topXpath   = null;
+	protected $st;
+	protected $action;
+	protected $actionDesc;
+	protected $baseElement;
 
-	public function __construct(StoryTeller $st, $args = array())
+	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
 	{
-		// save the StoryTeller object; we're going to need it!
-		$this->st = $st;
+		$this->st          = $st;
+		$this->action      = $action;
+		$this->actionDesc  = $actionDesc;
+		$this->baseElement = $baseElement;
+	}
 
-		// save any arguments that have been passed into the constructor
-		// our child classes may be interested in them
-		if (!is_array($args)) {
-			throw new E5xx_ActionFailed(__METHOD__);
+	public function __call($methodName, $methodArgs)
+	{
+		$words = $this->convertMethodNameToWords($methodName);
+
+		$targetType = $this->determineTargetType($words);
+
+		if ($targetType != 'element') {
+
+			// what are we searching for?
+			$searchTerm = $methodArgs[0];
+
+			$searchType = $this->determineSearchType($words);
+			if ($searchType == null) {
+				// we do not understand how to find the target field
+				throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
+			}
+
+			// what tag(s) do we want to narrow our search to?
+			$tag = $this->determineTagType($targetType);
+
+			if ($this->isPluralTarget($targetType)) {
+				$searchMethod = 'getElements';
+			}
+			else {
+				$searchMethod = 'getElement';
+			}
+			$searchMethod .= $searchType;
+
+			// let's go find our element
+			$searchObject = $this->st->fromBrowser();
+			$searchObject->setTopElement($this->baseElement);
+
+			$element = $searchObject->$searchMethod($searchTerm, $tag);
 		}
-		$this->args = $args;
+		else {
+			$element = $methodArgs[0];
 
-		// setup the page context
-		$this->initPageContext();
+			if (!is_object($element)) {
+				throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "expected a WebDriverElement as 1st parameter to search term");
+			}
 
-		// run any context-specific setup that we need
-		$this->initActions();
-	}
+			if (isset($methodArgs[1])) {
+				$searchTerm = $methodArgs[1];
+			}
+			else {
+				$searchTerm = $element->name();
+			}
+		}
 
-	protected function initPageContext()
-	{
-		// shorthand
-		$st = $this->st;
+		// now that we have our element, let's apply the action to it
+		$action = $this->action;
+		$return = $action($this->st, $element, $searchTerm, $methodName);
 
-		// make sure we are looking at the right part of the page
-		$pageContext = $st->getPageContext();
-		$pageContext->switchToContext($st);
-	}
-
-	/**
-	 * override this method if required (for example, for web browsers)
-	 *
-	 * @return void
-	 */
-	protected function initActions()
-	{
-	}
-
-	protected function initBrowser()
-	{
-		// do we have a web browser?
-		$browser = $this->st->getRunningWebBrowser();
-
-		// set our top XPATH node
-		$this->setTopXpath("//html");
-
-		// set our top element
-		$topElement = $browser->getElement('xpath', '/html');
-		$this->setTopElement($topElement);
-	}
-
-	public function __call($methodName, $params)
-	{
-		// this only gets called if there's no matching method
-		throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
-	}
-
-	public function getTopElement()
-	{
-		return $this->topElement;
-	}
-
-	public function setTopElement($element)
-	{
-		$this->topElement = $element;
-	}
-
-	protected function getTopXpath()
-	{
-		return $this->topXpath;
-	}
-
-	protected function setTopXpath($xpath)
-	{
-		$this->topXpath = $xpath;
-	}
-
-	// ====================================================================
-	//
-	// Convertors go here
-	//
-	// --------------------------------------------------------------------
-
-	public function toNum($string)
-	{
-		$final = str_replace(array(',', '$', ' '), '', $string);
-
-		return (double)$final;
+		// all done
+		return $return;
 	}
 }

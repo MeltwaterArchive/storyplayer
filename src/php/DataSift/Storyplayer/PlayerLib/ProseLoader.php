@@ -34,16 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProseLib;
+namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Prose\Prose;
 
 /**
  * Helper class to load Prose classes and create objects from them
@@ -63,7 +63,7 @@ class ProseLoader
 		'using'     => 'Actions',
 		'from'      => 'Determine',
 		'calculate' => 'Calculator',
-		'asserts'   => 'Expects',
+		'asserts'   => 'Asserts',
 	);
 
 	public function setNamespaces(StoryTeller $st)
@@ -78,11 +78,11 @@ class ProseLoader
 		// want to search?
 		$context = $st->getStoryContext();
 
-		if (isset($context->prose) && is_array($context->prose)) {
+		if (isset($context->prose, $context->prose->namespaces) && is_array($context->prose->namespaces)) {
 
 			// yes, the user does have some namespaces
 			// copy them across into our list
-			foreach ($context->prose as $namespace) {
+			foreach ($context->prose->namespaces as $namespace) {
 				$this->namespaces[] = $namespace;
 			}
 		}

@@ -64,6 +64,6 @@ $story->setPostTestInspection(function(StoryTeller $st) {
 	$checkpoint = $st->getCheckpoint();
 
 	// do we have the content we expected?
-	$st->expectsObject($checkpoint)->hasAttribute('content');
-	$st->expectsString($checkpoint->content)->equals("Self-Test Website");
+	$st->assertsObject($checkpoint)->hasAttribute('content');
+	$st->assertsString($checkpoint->content)->equals("Self-Test Website");
 });

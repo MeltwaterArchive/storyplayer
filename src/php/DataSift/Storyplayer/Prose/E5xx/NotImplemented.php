@@ -43,12 +43,10 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\AssertionsBase;
-use DataSift\Stone\ComparisonLib\StringComparitor;
-
 /**
- * Assertions about the nature of, and contents of, strings
+ * Exception thrown when StoryTeller *does* find the Prose class to load,
+ * but that class *doesn't* contain the method that the story is trying
+ * to use
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -57,10 +55,10 @@ use DataSift\Stone\ComparisonLib\StringComparitor;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StringExpects extends AssertionsBase
+class E5xx_NotImplemented extends E5xx_ProseException
 {
-	public function __construct(StoryTeller $st, $params)
-	{
-		parent::__construct($st, new StringComparitor($params[0]));
+	public function __construct($methodName) {
+		$msg = "Method '{$methodName}' has not been implemented yet";
+		parent::__construct(500, $msg, $msg);
 	}
 }
