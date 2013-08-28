@@ -2,7 +2,7 @@
 layout: prose
 title: Creating Your Own Prose Modules
 prev: '<a href="../prose/module-namespaces.html">Prev: Module Namespaces</a>'
-next: '<a href="../prose/asserts-classes.html">Next: Creating Asserts Classes</a>'
+next: '<a href="../prose/asserts-classes.html">Next: Asserts Classes</a>'
 ---
 
 # Creating Your Own Prose Modules

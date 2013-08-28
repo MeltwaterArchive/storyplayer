@@ -2,7 +2,7 @@
 layout: configuration
 title: Per-User Configuration
 prev: '<a href="../configuration/environment-config.html">Prev: Per-Environment Configuration</a>'
-next: '<a href="../configuration/runtime-config.html">Next: The Runtime Configuration</a>'
+next: '<a href="../configuration/prose-namespaces.html">Next: Prose Namespaces</a>'
 ---
 
 # Per-User Configuration

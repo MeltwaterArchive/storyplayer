@@ -1,7 +1,7 @@
 ---
 layout: configuration
 title: The Runtime Configuration
-prev: '<a href="../configuration/user-config.html">Prev: Per-User Configuration</a>'
+prev: '<a href="../configuration/prose-namespaces.html">Prev: Prose Namespaces</a>'
 next: '<a href="../stories/index.html">Next: Introducing Stories</a>'
 ---
 

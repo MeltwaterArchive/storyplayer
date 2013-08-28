@@ -1,8 +1,8 @@
 ---
 layout: prose
 title: Using Classes
-prev: '<a href="../prose/asserts-classes.html">Prev: Creating Asserts Classes</a>'
-next: '<a href="../prose/from-classes.html">Next: Creating From Classes</a>'
+prev: '<a href="../prose/from-classes.html">Prev: From Classes</a>'
+next: '<a href="../environments/index.html">Next: Test Environments</a>'
 ---
 
 # Using Classes

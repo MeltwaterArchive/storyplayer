@@ -2,7 +2,7 @@
 layout: prose
 title: Asserts Classes
 prev: '<a href="../prose/creating-prose-modules.html">Prev: Creating Your Own Prose Modules</a>'
-next: '<a href="../prose/expects-classes.html">Next: Creating Expects Classes</a>'
+next: '<a href="../prose/expects-classes.html">Next: Expects Classes</a>'
 ---
 
 # Asserts Classes

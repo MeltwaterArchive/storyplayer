@@ -1,8 +1,8 @@
 ---
 layout: prose
 title: From Classes
-prev: '<a href="../prose/asserts-classes.html">Prev: Creating Asserts Classes</a>'
-next: '<a href="../prose/from-classes.html">Next: Creating From Classes</a>'
+prev: '<a href="../prose/expects-classes.html">Prev: Expects Classes</a>'
+next: '<a href="../prose/using-classes.html">Next: Using Classes</a>'
 ---
 
 # From Classes
