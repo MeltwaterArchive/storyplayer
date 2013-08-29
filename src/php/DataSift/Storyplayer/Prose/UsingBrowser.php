@@ -213,4 +213,37 @@ class UsingBrowser extends Prose
 		// all done
 		$log->endAction();
 	}
+
+	// ==================================================================
+	//
+	// Authentication actions go here
+	//
+	// ------------------------------------------------------------------
+
+	public function setBasicAuthForHost($hostname, $username, $password)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("set HTTP basic auth for host '{$hostname}': user: '{$username}'; password: '{$password}'");
+
+		try {
+			// get the browser first to force a valid adapter to exist
+			$st->getRunningWebBrowser();
+
+			// get the browser adapter
+			$adapter = $st->getWebBrowserAdapter();
+
+			// set the details
+			$adapter->setHttpBasicAuth($hostname, $username, $password);
+		}
+		catch (Exception $e)
+		{
+			throw new E5xx_ActionFailed(__METHOD__, "unable to set HTTP basic auth; error is: " . $e->getMessage());
+		}
+
+		// all done
+		$log->endAction();
+	}
 }
