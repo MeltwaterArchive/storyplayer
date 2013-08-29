@@ -85,7 +85,7 @@ class UseSauceLabsSwitch extends CliSwitch
 			.'    }'.PHP_EOL
 			.'}'
 			.PHP_EOL.PHP_EOL
-			."You will also need to add your SauceLabs username and API key to "
+			."You will also need to add your SauceLabs username and access key to "
 			."your environment config:"
 			.PHP_EOL.PHP_EOL
 			.'{' .PHP_EOL
@@ -94,7 +94,7 @@ class UseSauceLabsSwitch extends CliSwitch
 			.'            "webbrowser": {' .PHP_EOL
 			.'                "saucelabs": {' . PHP_EOL
 			.'                    "username": "<saucelabs-username>",' . PHP_EOL
-			.'                    "apikey": "<saucelabs-apikey>"' . PHP_EOL
+			.'                    "accesskey": "<saucelabs-accesskey>"' . PHP_EOL
 			.'                }'.PHP_EOL
 			.'            }'.PHP_EOL
 			.'        }' . PHP_EOL
