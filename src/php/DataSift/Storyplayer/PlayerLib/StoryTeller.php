@@ -479,7 +479,7 @@ class StoryTeller
 				throw new E5xx_NoSauceLabsUsername();
 			}
 
-			if (!isset($browserDetails->saucelabs->apikey)) {
+			if (!isset($browserDetails->saucelabs->accesskey)) {
 				throw new E5xx_NoSauceLabsApiKey();
 			}
 		}
