@@ -1031,41 +1031,4 @@ class Story
 	{
 		return $this->getCategory() . ' :: ' . $this->getGroup() . ' :: ' . $this->getName();
 	}
-
-	// ==================================================================
-	//
-	// Helpers to speed up writing tests
-	//
-	// ------------------------------------------------------------------
-
-	/**
-	 * configures this story to start a web browser before each phase of
-	 * the test, and to stop the web browser after each phase
-	 */
-	public function setUsesTheWebBrowser()
-	{
-		// start the browser before each phase
-		$this->setPerPhaseSetup(function(StoryTeller $st) {
-			$st->startWebBrowser();
-		});
-
-		// stop the brownser after each phase
-		$this->setPerPhaseTeardown(function(StoryTeller $st) {
-			$st->stopWebBrowser();
-		});
-	}
-
-	/**
-	 * configures this story with empty per-phase setup/teardown
-	 */
-	public function setDoesntUseTheWebBrowser()
-	{
-		$this->setPerPhaseSetup(function(StoryTeller $st) {
-			// do nothing
-		});
-
-		$this->setPerPhaseTeardown(function(StoryTeller $st) {
-			// do nothing
-		});
-	}
 }
