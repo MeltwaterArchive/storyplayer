@@ -78,7 +78,9 @@ class WebBrowserSwitch extends CliSwitch
 			.'{' .PHP_EOL
 			.'    "environments": {' . PHP_EOL
 			.'        "defaults": {' . PHP_EOL
-			.'            "webbrowser": "<browser>"' .PHP_EOL
+			.'            "webbrowser": {' . PHP_EOL
+			.'                "name": "<browser>"' .PHP_EOL
+			.'            }' . PHP_EOL
 			.'        }' . PHP_EOL
 			.'    }'.PHP_EOL
 			.'}'
