@@ -76,7 +76,8 @@ class LocalWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 			$this->browserDetails->browser,
 			array(
 				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			)
+			) + $this->browserDetails->desiredCapabilities
+
 		);
 	}
 

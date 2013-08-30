@@ -444,6 +444,7 @@ class StoryTeller
 		// we're going to build up a picture of the web browser, and
 		// store the details into an object
 		$browserDetails = new BaseObject();
+		$browserDetails->desiredCapabilities = array();
 
 		// our default provider of a browser is a locally-running copy
 		// of Selenium WebDriver
@@ -465,6 +466,13 @@ class StoryTeller
 		if (isset($params['webbrowser'])) {
 			$browserDetails->browser = $params['webbrowser'];
 		}
+		foreach ($params as $key => $value) {
+			if (substr($key, 0, 11) == 'webbrowser.') {
+				$detailsName = substr($key,11);
+				$browserDetails->desiredCapabilities[$detailsName] = $value;
+			}
+		}
+
 		if (isset($params['usesaucelabs']) && $params['usesaucelabs']) {
 			$browserDetails->provider = "SauceLabsWebDriver";
 
@@ -482,6 +490,7 @@ class StoryTeller
 			if (!isset($browserDetails->saucelabs->accesskey)) {
 				throw new E5xx_NoSauceLabsApiKey();
 			}
+
 		}
 
 		// all done

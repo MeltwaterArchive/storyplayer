@@ -75,7 +75,8 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 		// create the browser session
 		$webDriver = new WebDriverClient($url);
 		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser
+			$this->browserDetails->browser,
+			$this->browserDetails->desiredCapabilities
 		);
 	}
 
