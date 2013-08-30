@@ -7,5 +7,5 @@ etc
 .tmp
 nbproject
 review
-sauce_connect.log
+sauce_connect.log*
 vendor
