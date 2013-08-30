@@ -59,5 +59,8 @@ interface WebBrowserAdapter
 	public function start();
 	public function stop();
 	public function getWebBrowser();
-	public function setHttpBasicAuth($hostname, $username, $password);
+	public function applyHttpBasicAuthForHost($hostname);
+	public function hasHttpBasicAuthForHost($hostname);
+	public function getHttpBasicAuthForHost($hostname);
+	public function setHttpBasicAuthForHost($hostname, $username, $password);
 }

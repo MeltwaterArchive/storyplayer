@@ -66,6 +66,8 @@ class BaseAdapter
 
 	protected $proxySession;
 
+	protected $httpAuthDetails = array();
+
 	public function init($browserDetails)
 	{
 		$this->browserDetails = $browserDetails;
@@ -79,5 +81,32 @@ class BaseAdapter
 	public function getWebBrowser()
 	{
 		return $this->browserSession;
+	}
+
+	public function applyHttpBasicAuthForHost($hostname)
+	{
+		throw new E5xx_NoHttpBasicAuthSupport();
+	}
+
+	public function hasHttpBasicAuthForHost($hostname)
+	{
+		return (isset($this->httpAuthDetails[$hostname]));
+	}
+
+	public function getHttpBasicAuthForHost($hostname)
+	{
+		if (!isset($this->httpAuthDetails[$hostname])) {
+			return null;
+		}
+
+		return $this->httpAuthDetails[$hostname];
+	}
+
+	public function setHttpBasicAuthForHost($hostname, $username, $password)
+	{
+		$this->httpAuthDetails[$hostname] = array(
+			'user' => $username,
+			'pass' => $password
+		);
 	}
 }

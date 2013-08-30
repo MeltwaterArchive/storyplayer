@@ -122,16 +122,40 @@ class UsingBrowser extends Prose
 		// some shorthand to make things easier to read
 		$st      = $this->st;
 		$browser = $st->getRunningWebBrowser();
-		$env     = $st->getEnvironment();
 
 		// relative, or absolute URL?
 		if (substr($url, 0, 1) == '/') {
 			// relative URL
-			$url = $env->url . $url;
+			$currentUrl = $st->fromBrowser()->getUrl();
+
+			// parse the URL we've been given
+			$urlParts = parse_url($url);
+
+			// merge the results
+			$url = \http_build_url($currentUrl, $urlParts);
 		}
 
+		// parse the URL
+		$urlParts = parse_url($url);
+
+		// if we have no host, we cannot continue
+		if (!isset($urlParts['host'])) {
+			throw new E5xx_ActionFailed(__METHOD__, "the (possibly calculated) url '{$url}' has no host component; cannot continue");
+		}
+
+		// do we have any HTTP AUTH credentials to merge in?
+		if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
+			$adapter = $st->getWebBrowserAdapter();
+			$adapter->applyHttpBasicAuthForHost($urlParts['host']);
+		}
+
+		// what are we doing?
 		$log = $st->startAction("goto URL: $url");
+
+		// tell the browser to move to the page we want
 		$browser->open($url);
+
+		// all done
 		$log->endAction();
 	}
 
@@ -220,7 +244,7 @@ class UsingBrowser extends Prose
 	//
 	// ------------------------------------------------------------------
 
-	public function setBasicAuthForHost($hostname, $username, $password)
+	public function setHttpBasicAuthForHost($hostname, $username, $password)
 	{
 		// shorthand
 		$st = $this->st;
@@ -236,7 +260,7 @@ class UsingBrowser extends Prose
 			$adapter = $st->getWebBrowserAdapter();
 
 			// set the details
-			$adapter->setHttpBasicAuth($hostname, $username, $password);
+			$adapter->setHttpBasicAuthForHost($hostname, $username, $password);
 		}
 		catch (Exception $e)
 		{

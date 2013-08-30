@@ -43,13 +43,10 @@
 
 namespace DataSift\Storyplayer\WebBrowserLib;
 
-use Exception;
-use DataSift\BrowserMobProxy\BrowserMobProxyClient;
-use DataSift\WebDriver\WebDriverClient;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * The adapter that talks to Browsermob-proxy and Selenium-standalone-server
- * running on the same host as Storyplayer
+ * Exception thrown when we don't support HTTP Basic Auth
  *
  * @category    Libraries
  * @package     Storyplayer/WebBrowserLib
@@ -58,57 +55,10 @@ use DataSift\WebDriver\WebDriverClient;
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-class LocalWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
+class E5xx_NoHttpBasicAuthSupport extends Exxx_Exception
 {
-	public function start()
-	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('paramLogs');
-
-		$this->proxySession = $httpProxy->createProxy();
-
-		// start recording
-		$this->proxySession->startHAR();
-
-		// create the browser session
-		$webDriver = new WebDriverClient();
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			array(
-				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			)
-		);
-	}
-
-	public function stop()
-	{
-		// stop the web browser
-		if (is_object($this->browserSession))
-		{
-			$this->browserSession->close();
-			$this->browserSession = null;
-		}
-
-		// now stop the proxy
-		if (is_object($this->proxySession))
-		{
-			try {
-				$this->proxySession->close();
-			}
-			catch (Exception $e) {
-				// do nothing - we don't care!
-			}
-			$this->proxySession = null;
-		}
-	}
-
-	public function applyHttpBasicAuthForHost($hostname)
-	{
-		// get the auth credentials
-		$credentials = $this->getHttpBasicAuthForHost($hostname);
-
-		if (isset($this->proxySession)) {
-			$this->proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
-		}
+	public function __construct() {
+		$msg = "no support for HTTP Basic Auth available; cannot continue";
+		parent::__construct(500, $msg, $msg);
 	}
 }

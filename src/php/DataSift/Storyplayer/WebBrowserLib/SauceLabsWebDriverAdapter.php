@@ -100,11 +100,4 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 			$this->proxySession = null;
 		}
 	}
-
-	public function setHttpBasicAuth($hostname, $username, $password)
-	{
-		if (isset($this->proxySession)) {
-			$this->proxySession->setHttpBasicAuth($hostname, $username, $password);
-		}
-	}
 }
