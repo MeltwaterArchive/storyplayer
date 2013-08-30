@@ -55,7 +55,7 @@ namespace DataSift\Storyplayer\Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UserHints extends Prose
+class ChangesUser extends Prose
 {
 	public function addsRole($role)
 	{
