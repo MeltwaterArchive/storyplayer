@@ -102,7 +102,7 @@ class LocalWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 		}
 	}
 
-	public function applyHttpBasicAuthForHost($hostname)
+	public function applyHttpBasicAuthForHost($hostname, $url)
 	{
 		// get the auth credentials
 		$credentials = $this->getHttpBasicAuthForHost($hostname);
@@ -110,5 +110,8 @@ class LocalWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 		if (isset($this->proxySession)) {
 			$this->proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
 		}
+
+		// all done
+		return $url;
 	}
 }

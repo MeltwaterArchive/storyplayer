@@ -140,7 +140,10 @@ class UsingBrowser extends Prose
 		// do we have any HTTP AUTH credentials to merge in?
 		if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
 			$adapter = $st->getWebBrowserAdapter();
-			$adapter->applyHttpBasicAuthForHost($urlParts['host']);
+
+			// the adapter *might* embed the authentication details
+			// into the URL
+			$url = $adapter->applyHttpBasicAuthForHost($urlParts['host'], $url);
 		}
 
 		// what are we doing?

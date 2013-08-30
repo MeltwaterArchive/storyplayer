@@ -83,7 +83,7 @@ class BaseAdapter
 		return $this->browserSession;
 	}
 
-	public function applyHttpBasicAuthForHost($hostname)
+	public function applyHttpBasicAuthForHost($hostname, $url)
 	{
 		throw new E5xx_NoHttpBasicAuthSupport();
 	}
