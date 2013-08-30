@@ -125,14 +125,8 @@ class UsingBrowser extends Prose
 
 		// relative, or absolute URL?
 		if (substr($url, 0, 1) == '/') {
-			// relative URL
-			$currentUrl = $st->fromBrowser()->getUrl();
-
-			// parse the URL we've been given
-			$urlParts = parse_url($url);
-
-			// merge the results
-			$url = \http_build_url($currentUrl, $urlParts);
+			// only absolute URLs are supported
+			throw new E5xx_ActionFailed(__METHOD__, 'only absolute URLs are supported');
 		}
 
 		// parse the URL
