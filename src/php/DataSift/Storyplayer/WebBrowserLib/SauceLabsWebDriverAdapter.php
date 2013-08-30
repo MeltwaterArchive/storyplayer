@@ -44,7 +44,7 @@
 namespace DataSift\Storyplayer\WebBrowserLib;
 
 use Exception;
-use DataSift\BrowserMobProxy\BrowserMobProxyClient;
+use DataSift\BrowserMobProxy\BrowserMobProxySession;
 use DataSift\WebDriver\WebDriverClient;
 
 /**
@@ -99,5 +99,31 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 			}
 			$this->proxySession = null;
 		}
+	}
+
+	/*
+	public function applyHttpBasicAuthForHost($hostname, $url)
+	{
+		// get the auth credentials
+		$credentials = $this->getHttpBasicAuthForHost($hostname);
+
+		// we're going to embed them in the URL
+		$url = http_build_url($url, $credentials);
+
+		// all done
+		return $url;
+	}*/
+
+	public function applyHttpBasicAuthForHost($hostname, $url)
+	{
+		// get the auth credentials
+		$credentials = $this->getHttpBasicAuthForHost($hostname);
+
+		// get the proxy server
+		$proxySession = new BrowserMobProxySession('http://localhost:9090', 9091);
+		$proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
+
+		// all done
+		return $url;
 	}
 }
