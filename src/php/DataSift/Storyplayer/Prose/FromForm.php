@@ -56,7 +56,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromForm extends BrowserDetermine
+class FromForm extends FromBrowser
 {
 	protected function initActions()
 	{
