@@ -490,6 +490,9 @@ class StoryTeller
 
 	public function startWebBrowser()
 	{
+		// what are we doing?
+		$log = $this->startAction('start a web browser');
+
 		// what sort of browser are we starting?
 		$browserDetails = $this->getWebBrowserDetails();
 
@@ -504,6 +507,7 @@ class StoryTeller
 
 		// all done
 		$this->setWebBrowserAdapter($adapter);
+		$log->endAction();
 	}
 
 	public function stopWebBrowser()
