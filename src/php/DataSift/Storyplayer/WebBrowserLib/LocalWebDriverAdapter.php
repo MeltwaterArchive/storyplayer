@@ -34,46 +34,86 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/WebBrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\WebBrowserLib;
 
 use Exception;
+use DataSift\BrowserMobProxy\BrowserMobProxyClient;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\WebDriver\WebDriverClient;
 
 /**
- * get information about forms in the web browser
+ * The adapter that talks to Browsermob-proxy and Selenium-standalone-server
+ * running on the same host as Storyplayer
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/WebBrowserLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-class FromForm extends FromBrowser
+class LocalWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 {
-	protected function initActions()
+	public function start(StoryTeller $st)
 	{
-		// shorthand
-		$st     = $this->st;
-		$formId = $this->args[0];
+		$httpProxy = new BrowserMobProxyClient();
+		$httpProxy->enableFeature('paramLogs');
 
-		// find the form
-		$formElement = $st->fromBrowser()->getElementById($formId);
+		$this->proxySession = $httpProxy->createProxy();
 
-		// is it really a form?
-		if (strtolower($formElement->name()) !== 'form') {
-			throw new E5xx_ActionFailed('form');
+		// start recording
+		$this->proxySession->startHAR();
+
+		// create the browser session
+		$webDriver = new WebDriverClient();
+		$this->browserSession = $webDriver->newSession(
+			$this->browserDetails->browser,
+			array(
+				'proxy' => $this->proxySession->getWebDriverProxyConfig()
+			) + $this->browserDetails->desiredCapabilities
+
+		);
+	}
+
+	public function stop()
+	{
+		// stop the web browser
+		if (is_object($this->browserSession))
+		{
+			$this->browserSession->close();
+			$this->browserSession = null;
 		}
 
-		// yes, it really is a form
-		$this->formId      = $formId;
-		$this->setTopElement($formElement);
+		// now stop the proxy
+		if (is_object($this->proxySession))
+		{
+			try {
+				$this->proxySession->close();
+			}
+			catch (Exception $e) {
+				// do nothing - we don't care!
+			}
+			$this->proxySession = null;
+		}
+	}
+
+	public function applyHttpBasicAuthForHost($hostname, $url)
+	{
+		// get the auth credentials
+		$credentials = $this->getHttpBasicAuthForHost($hostname);
+
+		if (isset($this->proxySession)) {
+			$this->proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
+		}
+
+		// all done
+		return $url;
 	}
 }

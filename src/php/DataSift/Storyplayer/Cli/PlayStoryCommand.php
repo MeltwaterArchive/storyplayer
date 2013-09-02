@@ -99,6 +99,7 @@ class PlayStoryCommand extends CliCommand
 			new DefineSwitch(),
 			new PersistProcessesSwitch(),
 			new PlatformSwitch(),
+			new UseSauceLabsSwitch(),
 			new WebBrowserSwitch()
 		));
 	}

@@ -812,6 +812,91 @@ class FromBrowser extends Prose
 
 	// ==================================================================
 	//
+	// Retrievers of navigation metadata
+	//
+	// ------------------------------------------------------------------
+
+	public function getUrl()
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $st->getRunningWebBrowser();
+
+		// what are we doing?
+		$log = $st->startAction("retrieve the current URL from the browser");
+
+		// get the URL
+		$url = $browser->url();
+
+		// all done
+		$log->endAction($url);
+
+		return $url;
+	}
+
+	// ==================================================================
+	//
+	// Authentication actions go here
+	//
+	// ------------------------------------------------------------------
+
+	public function getHttpBasicAuthForHost($hostname)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// this method deliberately has no logging, because it is called
+		// every single time that we want the browser to go to a new URL
+		//
+		// nothing else should really use this
+
+		try {
+			// get the browser first to force a valid adapter to exist
+			$st->getRunningWebBrowser();
+
+			// get the browser adapter
+			$adapter = $st->getWebBrowserAdapter();
+
+			// get the details
+			$credentials = $adapter->getHttpBasicAuthForHost($hostname);
+
+			// all done
+			return $credentials;
+		}
+		catch (Exception $e)
+		{
+			return null;
+		}
+	}
+
+	public function hasHttpBasicAuthForHost($hostname)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// this method deliberately has no logging, because it is called
+		// every single time that we want the browser to go to a new URL
+		//
+		// nothing else should really use this
+
+		try {
+			// get the browser first to force a valid adapter to exist
+			$st->getRunningWebBrowser();
+
+			// get the browser adapter
+			$adapter = $st->getWebBrowserAdapter();
+
+			// get the details
+			return $adapter->hasHttpBasicAuthForHost($hostname);
+		}
+		catch (Exception $e)
+		{
+			return false;
+		}
+	}
+
+	// ==================================================================
+	//
 	// Retrievers of page metadata
 	//
 	// ------------------------------------------------------------------

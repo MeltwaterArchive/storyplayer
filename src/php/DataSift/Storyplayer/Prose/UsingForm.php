@@ -55,7 +55,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingForm extends BrowserActions
+class UsingForm extends UsingBrowser
 {
 	protected $formId = null;
 	protected $formElement = null;

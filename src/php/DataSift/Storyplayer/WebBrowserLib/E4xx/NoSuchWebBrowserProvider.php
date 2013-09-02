@@ -34,46 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/WebBrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\WebBrowserLib;
 
-use Exception;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * get information about forms in the web browser
+ * Exception thrown when we're asked to use a web browser but there's no
+ * matching adapter available
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/WebBrowserLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-class FromForm extends FromBrowser
+class E4xx_NoSuchWebBrowserProvider extends Exxx_Exception
 {
-	protected function initActions()
-	{
-		// shorthand
-		$st     = $this->st;
-		$formId = $this->args[0];
-
-		// find the form
-		$formElement = $st->fromBrowser()->getElementById($formId);
-
-		// is it really a form?
-		if (strtolower($formElement->name()) !== 'form') {
-			throw new E5xx_ActionFailed('form');
-		}
-
-		// yes, it really is a form
-		$this->formId      = $formId;
-		$this->setTopElement($formElement);
+	public function __construct($provider) {
+		$msg = "Unknown web browser provider '{$provider}'";
+		parent::__construct(400, $msg, $msg);
 	}
 }
