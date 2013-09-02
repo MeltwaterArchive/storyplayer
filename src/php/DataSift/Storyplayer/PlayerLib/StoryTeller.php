@@ -530,11 +530,21 @@ class StoryTeller
 		$adapter = $this->getWebBrowserAdapter();
 
 		// stop the web browser
-		if ($adapter) {
-			$adapter->stop();
+		if (!$adapter) {
+			// nothing to do
+			return;
 		}
+
+		// what are we doing?
+		$log = $this->startAction('stop the web browser');
+
+		// stop the browser
+		$adapter->stop();
 
 		// destroy the adapter
 		$this->setWebBrowserAdapter(null);
+
+		// all done
+		$log->endAction();
 	}
 }
