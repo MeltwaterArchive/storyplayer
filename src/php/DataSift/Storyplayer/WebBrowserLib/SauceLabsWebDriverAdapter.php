@@ -115,6 +115,19 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 	}
 
 	/*
+	 * this code was written to embed the HTTP Basic Auth details
+	 * into the URL we are testing
+	 *
+	 * unfortunately, at the time of writing, although it's the
+	 * documented way of doing this, it isn't correctly supported
+	 * in any browser that I've tested
+	 *
+	 * there's a ticket in with SauceLabs on this one
+	 *
+	 * I'm leaving this code here in case we're able to switch to it
+	 * in future, as the approach we're using for now is a great big
+	 * dirty hack
+	 *
 	public function applyHttpBasicAuthForHost($hostname, $url)
 	{
 		// get the auth credentials
@@ -133,6 +146,13 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 		$credentials = $this->getHttpBasicAuthForHost($hostname);
 
 		// get the proxy server
+		//
+		// this is an absolutely *horrible* hack, as we're relying on
+		// there being absolutely no parallel testing going on for this
+		// to work
+		//
+		// that said, SauceConnect also relies on exactly the same hack,
+		// so as long as it works at all, so will this hack
 		$proxySession = new BrowserMobProxySession('http://localhost:9090', 9091);
 		$proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
 
