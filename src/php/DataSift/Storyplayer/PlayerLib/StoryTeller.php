@@ -252,6 +252,11 @@ class StoryTeller
 		return $this->currentPhase;
 	}
 
+	public function getCurrentPhaseName()
+	{
+		return Storyplayer::$phaseToText[$this->currentPhase];
+	}
+
 	public function setCurrentPhase($newPhase)
 	{
 		$this->currentPhase = $newPhase;
