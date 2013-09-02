@@ -288,7 +288,17 @@ function main($argv)
 	$engine->addCommand(new ListProcessesCommand);
 
 	// all set - let's go
-	return $engine->main($argv, $additionalContext);
+	try {
+		return $engine->main($argv, $additionalContext);
+	}
+	catch (Exception $e)
+	{
+		echo "*** fatal error: " . $e->getMessage() . "\n\n";
+
+		if (get_class($e) !== 'Exception') {
+			echo "Stack trace is:\n" . $e->getTraceAsString() . "\n";
+		}
+	}
 }
 
 return main($argv);

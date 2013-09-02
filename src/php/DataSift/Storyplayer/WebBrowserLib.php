@@ -34,54 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/WebBrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer;
+
+use DataSift\Storyplayer\WebBrowserLib\E4xx_NoSuchWebBrowserProvider;
+use DataSift\Storyplayer\WebBrowserLib\E5xx_BadWebBrowserAdapter;
 
 /**
- * change a user's role(s)
- *
- * this needs moving and refactoring
+ * web browser factory
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/WebBrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UserHints extends Prose
+class WebBrowserLib
 {
-	public function addsRole($role)
+	static public function getWebBrowserAdapter($browserDetails)
 	{
-		// shorthand
-		$st = $this->st;
-		$user = $st->getUser();
+		// which namespace do our browser adapters live in?
+		$namespace = 'DataSift\Storyplayer\WebBrowserLib\\';
 
-		$user->addRole($role);
-	}
+		// where do we want to get the browser from?
+		$browserClass = $namespace . $browserDetails->provider . 'Adapter';
 
-	public function creates($role)
-	{
-		// shorthand
-		$st = $this->st;
-		$user = $st->getUser();
+		// do we have the adapter?
+		if (!class_exists($browserClass)) {
+			throw new E4xx_NoSuchWebBrowserProvider($browserDetails->provider);
+		}
 
-		$user->removeAllRoles();
-		$user->addRole($role);
-	}
+		// create the adapter
+		$browserAdapter = new $browserClass;
 
-	public function removesRole($role)
-	{
-		// shorthand
-		$st = $this->st;
-		$user = $st->getUser();
+		// is this an adapter we're happy with?
+		if (!$browserAdapter instanceof \DataSift\Storyplayer\WebBrowserLib\WebBrowserAdapter) {
+			throw new E5xx_BadWebBrowserAdapter($browserClass);
+		}
 
-		$user->removeRole($role);
+		// initialise the adapter
+		$browserAdapter->init($browserDetails);
+
+		// all done
+		return $browserAdapter;
 	}
 }

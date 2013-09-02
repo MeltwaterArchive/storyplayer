@@ -122,16 +122,37 @@ class UsingBrowser extends Prose
 		// some shorthand to make things easier to read
 		$st      = $this->st;
 		$browser = $st->getRunningWebBrowser();
-		$env     = $st->getEnvironment();
 
 		// relative, or absolute URL?
 		if (substr($url, 0, 1) == '/') {
-			// relative URL
-			$url = $env->url . $url;
+			// only absolute URLs are supported
+			throw new E5xx_ActionFailed(__METHOD__, 'only absolute URLs are supported');
 		}
 
+		// parse the URL
+		$urlParts = parse_url($url);
+
+		// if we have no host, we cannot continue
+		if (!isset($urlParts['host'])) {
+			throw new E5xx_ActionFailed(__METHOD__, "the (possibly calculated) url '{$url}' has no host component; cannot continue");
+		}
+
+		// do we have any HTTP AUTH credentials to merge in?
+		if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
+			$adapter = $st->getWebBrowserAdapter();
+
+			// the adapter *might* embed the authentication details
+			// into the URL
+			$url = $adapter->applyHttpBasicAuthForHost($urlParts['host'], $url);
+		}
+
+		// what are we doing?
 		$log = $st->startAction("goto URL: $url");
+
+		// tell the browser to move to the page we want
 		$browser->open($url);
+
+		// all done
 		$log->endAction();
 	}
 
@@ -209,6 +230,39 @@ class UsingBrowser extends Prose
 
 		// resize the window
 		$browser->window()->postSize(array("width" => $width, "height" => $height));
+
+		// all done
+		$log->endAction();
+	}
+
+	// ==================================================================
+	//
+	// Authentication actions go here
+	//
+	// ------------------------------------------------------------------
+
+	public function setHttpBasicAuthForHost($hostname, $username, $password)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("set HTTP basic auth for host '{$hostname}': user: '{$username}'; password: '{$password}'");
+
+		try {
+			// get the browser first to force a valid adapter to exist
+			$st->getRunningWebBrowser();
+
+			// get the browser adapter
+			$adapter = $st->getWebBrowserAdapter();
+
+			// set the details
+			$adapter->setHttpBasicAuthForHost($hostname, $username, $password);
+		}
+		catch (Exception $e)
+		{
+			throw new E5xx_ActionFailed(__METHOD__, "unable to set HTTP basic auth; error is: " . $e->getMessage());
+		}
 
 		// all done
 		$log->endAction();

@@ -52,7 +52,7 @@ use Phix_Project\CliEngine\CliSwitch;
 use Phix_Project\ValidationLib4\Type_MustBeString;
 
 /**
- * Tell Storyplayer which web browser to use in tests
+ * Tell Storyplayer to use web browsers provided by sauce labs
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -61,16 +61,16 @@ use Phix_Project\ValidationLib4\Type_MustBeString;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class WebBrowserSwitch extends CliSwitch
+class UseSauceLabsSwitch extends CliSwitch
 {
 	public function __construct()
 	{
 		// define our name, and our description
-		$this->setName('webbrowser');
-		$this->setShortDescription('set the web browser to use in your tests');
+		$this->setName('usesaucelabs');
+		$this->setShortDescription('use Sauce Labs to run web browsers used in this test');
 		$this->setLongDesc(
 			"If your stories use a web browser, use this switch to tell Storyplayer "
-			."which web browser you want to use."
+			."to use a web browser hosted at Sauce Labs"
 			. PHP_EOL . PHP_EOL
 			."To avoid using this switch all the time, add the following to "
 			."your environment config:"
@@ -78,26 +78,34 @@ class WebBrowserSwitch extends CliSwitch
 			.'{' .PHP_EOL
 			.'    "environments": {' . PHP_EOL
 			.'        "defaults": {' . PHP_EOL
-			.'            "webbrowser": {' . PHP_EOL
-			.'                "name": "<browser>"' .PHP_EOL
-			.'            }' . PHP_EOL
+			.'            "webbrowser": {' .PHP_EOL
+			.'                "provider": "SauceLabs"' .PHP_EOL
+			.'            }'.PHP_EOL
 			.'        }' . PHP_EOL
 			.'    }'.PHP_EOL
 			.'}'
 			.PHP_EOL.PHP_EOL
-			."This switch is an alias for '-Dwebbrowser=<browser>'."
+			."You will also need to add your SauceLabs username and access key to "
+			."your environment config:"
+			.PHP_EOL.PHP_EOL
+			.'{' .PHP_EOL
+			.'    "environments": {' . PHP_EOL
+			.'        "defaults": {' . PHP_EOL
+			.'            "webbrowser": {' .PHP_EOL
+			.'                "saucelabs": {' . PHP_EOL
+			.'                    "username": "<saucelabs-username>",' . PHP_EOL
+			.'                    "accesskey": "<saucelabs-accesskey>"' . PHP_EOL
+			.'                }'.PHP_EOL
+			.'            }'.PHP_EOL
+			.'        }' . PHP_EOL
+			.'    }'.PHP_EOL
+			.'}'
+			.PHP_EOL.PHP_EOL
+			."This switch is an alias for '-Dusesaucelabs=1'."
 		);
 
-		// what are the short switches?
-		$this->addShortSwitch('b');
-
 		// what are the long switches?
-		$this->addLongSwitch('web-browser');
-
-		// what is the required argument?
-		$this->setRequiredArg('<browser>', "the name of the browser to use (e.g. chrome, firefox, phantomjs)");
-		$this->setArgValidator(new Type_MustBeString);
-		$this->setArgHasDefaultValueOf('chrome');
+		$this->addLongSwitch('usesaucelabs');
 
 		// all done
 	}
@@ -108,11 +116,7 @@ class WebBrowserSwitch extends CliSwitch
 		if (!isset($engine->options->defines)) {
 			$engine->options->defines = new stdClass;
 		}
-		// we do not remember when the default is used, because that would
-		// override anything set in the config files
-		if (!$isDefaultParam) {
-			$engine->options->defines->webbrowser = $params[0];
-		}
+		$engine->options->defines->usesaucelabs = true;
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

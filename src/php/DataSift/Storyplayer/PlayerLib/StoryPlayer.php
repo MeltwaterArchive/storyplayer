@@ -607,18 +607,19 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// do we have anything to do?
-		if (!$story->hasPerPhaseTeardown())
+		if ($story->hasPerPhaseTeardown())
 		{
-			return;
+			// get the callback to call
+			$callbacks = $story->getPerPhaseTeardown();
+
+			// make the call
+			foreach ($callbacks as $callback) {
+				$callback($st);
+			}
 		}
 
-		// get the callback to call
-		$callbacks = $story->getPerPhaseTeardown();
-
-		// make the call
-		foreach ($callbacks as $callback) {
-			$callback($st);
-		}
+		// stop the browser, if it is still running
+		$st->stopWebBrowser();
 
 		// all done
 	}

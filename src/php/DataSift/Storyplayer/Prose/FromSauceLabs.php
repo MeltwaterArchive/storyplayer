@@ -34,87 +34,87 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Prose;
 
-use stdClass;
-
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliResult;
-use Phix_Project\CliEngine\CliSwitch;
-
-use Phix_Project\ValidationLib4\Type_MustBeString;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * Tell Storyplayer which web browser to use in tests
+ * Sauce Labs integration
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class WebBrowserSwitch extends CliSwitch
+
+class FromSauceLabs extends Prose
 {
-	public function __construct()
+	public function getAccountDetails()
 	{
-		// define our name, and our description
-		$this->setName('webbrowser');
-		$this->setShortDescription('set the web browser to use in your tests');
-		$this->setLongDesc(
-			"If your stories use a web browser, use this switch to tell Storyplayer "
-			."which web browser you want to use."
-			. PHP_EOL . PHP_EOL
-			."To avoid using this switch all the time, add the following to "
-			."your environment config:"
-			.PHP_EOL . PHP_EOL
-			.'{' .PHP_EOL
-			.'    "environments": {' . PHP_EOL
-			.'        "defaults": {' . PHP_EOL
-			.'            "webbrowser": {' . PHP_EOL
-			.'                "name": "<browser>"' .PHP_EOL
-			.'            }' . PHP_EOL
-			.'        }' . PHP_EOL
-			.'    }'.PHP_EOL
-			.'}'
-			.PHP_EOL.PHP_EOL
-			."This switch is an alias for '-Dwebbrowser=<browser>'."
-		);
 
-		// what are the short switches?
-		$this->addShortSwitch('b');
-
-		// what are the long switches?
-		$this->addLongSwitch('web-browser');
-
-		// what is the required argument?
-		$this->setRequiredArg('<browser>', "the name of the browser to use (e.g. chrome, firefox, phantomjs)");
-		$this->setArgValidator(new Type_MustBeString);
-		$this->setArgHasDefaultValueOf('chrome');
-
-		// all done
 	}
 
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	public function getAccountLimits()
 	{
-		// remember the setting
-		if (!isset($engine->options->defines)) {
-			$engine->options->defines = new stdClass;
-		}
-		// we do not remember when the default is used, because that would
-		// override anything set in the config files
-		if (!$isDefaultParam) {
-			$engine->options->defines->webbrowser = $params[0];
-		}
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
+
+	public function getCurrentActivity()
+	{
+
+	}
+
+	public function getHistoricalActivity()
+	{
+
+	}
+
+	public function getJobs()
+	{
+
+	}
+
+	public function getJobAssetsList()
+	{
+
+	}
+
+	public function getJobAsset()
+	{
+
+	}
+
+	public function getSauceConnectTunnels()
+	{
+
+	}
+
+	public function getSauceConnectTunnel()
+	{
+
+	}
+
+	public function getServiceStatus()
+	{
+
+	}
+
+	public function getAvailableBrowsers()
+	{
+
+	}
+
+	public function getPublicTestsExecutedCounter()
+	{
+
 	}
 }

@@ -109,8 +109,9 @@ class Prose
 		$this->setTopXpath("//html");
 
 		// set our top element
-		$topElement = $browser->getElement('xpath', '/html');
-		$this->setTopElement($topElement);
+		//$topElement = $browser->getElement('xpath', '/html');
+		//$this->setTopElement($topElement);
+		$this->setTopElement($browser);
 	}
 
 	public function __call($methodName, $params)

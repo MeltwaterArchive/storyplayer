@@ -34,46 +34,79 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/WebBrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
-
-use Exception;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+namespace DataSift\Storyplayer\WebBrowserLib;
 
 /**
- * get information about forms in the web browser
+ * Base class for web browser adapters
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/WebBrowserLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-class FromForm extends FromBrowser
+class BaseAdapter
 {
-	protected function initActions()
+	/**
+	 * details about the web browser that we want to use
+	 *
+	 * @var stdClass
+	 */
+	protected $browserDetails;
+
+	protected $browserSession;
+
+	protected $proxySession;
+
+	protected $httpAuthDetails = array();
+
+	public function init($browserDetails)
 	{
-		// shorthand
-		$st     = $this->st;
-		$formId = $this->args[0];
+		$this->browserDetails = $browserDetails;
+	}
 
-		// find the form
-		$formElement = $st->fromBrowser()->getElementById($formId);
+	public function getProxy()
+	{
+		return $this->proxySession();
+	}
 
-		// is it really a form?
-		if (strtolower($formElement->name()) !== 'form') {
-			throw new E5xx_ActionFailed('form');
+	public function getWebBrowser()
+	{
+		return $this->browserSession;
+	}
+
+	public function applyHttpBasicAuthForHost($hostname, $url)
+	{
+		throw new E5xx_NoHttpBasicAuthSupport();
+	}
+
+	public function hasHttpBasicAuthForHost($hostname)
+	{
+		return (isset($this->httpAuthDetails[$hostname]));
+	}
+
+	public function getHttpBasicAuthForHost($hostname)
+	{
+		if (!isset($this->httpAuthDetails[$hostname])) {
+			return null;
 		}
 
-		// yes, it really is a form
-		$this->formId      = $formId;
-		$this->setTopElement($formElement);
+		return $this->httpAuthDetails[$hostname];
+	}
+
+	public function setHttpBasicAuthForHost($hostname, $username, $password)
+	{
+		$this->httpAuthDetails[$hostname] = array(
+			'user' => $username,
+			'pass' => $password
+		);
 	}
 }

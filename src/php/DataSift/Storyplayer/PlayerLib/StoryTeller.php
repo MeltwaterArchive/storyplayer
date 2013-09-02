@@ -48,14 +48,13 @@ use Exception;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\WebBrowserLib;
 
 use DataSift\Stone\HttpLib\HttpAddress;
 use DataSift\Stone\Log\LogLib;
+use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Stone\PathLib\PathTo;
 use DataSift\Stone\ProcessLib\SubProcess;
-
-use DataSift\BrowserMobProxy\BrowserMobProxyClient;
-use DataSift\WebDriver\WebDriverClient;
 
 /**
  * our main facilitation class
@@ -82,11 +81,9 @@ class StoryTeller
 	private $pageContext = null;
 	private $checkpoint = null;
 
-	private $webBrowser = null;
-	private $webProxy = null;
+	private $webBrowserAdapter = null;
 
 	private $proseLoader = null;
-
 	private $configLoader = null;
 
 	/**
@@ -141,41 +138,6 @@ class StoryTeller
 	 */
 	public function setActionLogger(ActionLogger $actionLogger) {
 	    $this->actionLogger = $actionLogger;
-
-	    return $this;
-	}
-
-	/**
-	 * [description here]
-	 *
-	 * @return [type] [description]
-	 */
-	public function getWebBrowser() {
-	    return $this->webBrowser;
-	}
-
-	public function getRunningWebBrowser()
-	{
-		if (!is_object($this->webBrowser))
-		{
-			$this->startWebBrowser();
-		}
-
-		if (!is_object($this->webBrowser))
-		{
-			throw new E5xx_CannotStartWebBrowser();
-		}
-
-		return $this->webBrowser;
-	}
-
-	/**
-	 * [Description]
-	 *
-	 * @param [type] $newbrowser [description]
-	 */
-	public function setWebBrowser($webBrowser) {
-	    $this->webBrowser = $webBrowser;
 
 	    return $this;
 	}
@@ -285,29 +247,14 @@ class StoryTeller
 	    return $this;
 	}
 
-	/**
-	 * [description here]
-	 *
-	 * @return [type] [description]
-	 */
-	public function getWebProxy() {
-	    return $this->webProxy;
-	}
-
-	/**
-	 * [Description]
-	 *
-	 * @param [type] $newwebProxy [description]
-	 */
-	public function setWebProxy($webProxy) {
-	    $this->webProxy = $webProxy;
-
-	    return $this;
-	}
-
 	public function getCurrentPhase()
 	{
 		return $this->currentPhase;
+	}
+
+	public function getCurrentPhaseName()
+	{
+		return Storyplayer::$phaseToText[$this->currentPhase];
 	}
 
 	public function setCurrentPhase($newPhase)
@@ -441,98 +388,163 @@ class StoryTeller
 
 	// ==================================================================
 	//
-	// Starting and stopping browsers goes here
+	// Web browser support
 	//
 	// ------------------------------------------------------------------
 
-	public function getPreferredWebBrowser()
-	{
-		static $browser = null;
-
-		// have we calculated this before?
-		if ($browser) {
-			// yes - so use that
-			return $browser;
+	/**
+	 * [description here]
+	 *
+	 * @return [type] [description]
+	 */
+	public function getWebBrowser() {
+		if (!isset($this->webBrowserAdapter)) {
+			return null;
 		}
 
+	    return $this->webBrowserAdapter->getWebBrowser();
+	}
+
+	public function getRunningWebBrowser()
+	{
+		if (!is_object($this->webBrowserAdapter))
+		{
+			$this->startWebBrowser();
+		}
+
+		if (!is_object($this->webBrowserAdapter))
+		{
+			throw new E5xx_CannotStartWebBrowser();
+		}
+
+		return $this->webBrowserAdapter->getWebBrowser();
+	}
+
+	public function getWebBrowserAdapter()
+	{
+		return $this->webBrowserAdapter;
+	}
+
+	/**
+	 * [Description]
+	 *
+	 * @param [type] $newbrowser [description]
+	 */
+	public function setWebBrowserAdapter($adapter) {
+	    $this->webBrowserAdapter = $adapter;
+
+	    return $this;
+	}
+
+	public function getWebBrowserDetails()
+	{
+		static $browserDetails = null;
+
+		// have we calculated this before?
+		if ($browserDetails) {
+			// yes - so use that
+			return $browserDetails;
+		}
+
+		// we're going to build up a picture of the web browser, and
+		// store the details into an object
+		$browserDetails = new BaseObject();
+		$browserDetails->desiredCapabilities = array();
+
+		// our default provider of a browser is a locally-running copy
+		// of Selenium WebDriver
+		$browserDetails->provider = "LocalWebDriver";
+
 		// our default browser is chrome
-		$browser = "chrome";
+		$browserDetails->browser = "chrome";
 
 		// get the currently loaded environment
 		$env = $this->getEnvironment();
 
-		// does it have a browser set in the environment?
+		// does this environment have settings for the web browser?
 		if (isset($env->webbrowser)) {
-			$browser = $env->webbrowser;
+			$browserDetails->mergeFrom($env->webbrowser);
 		}
 
-		// has the user overridden this on the command-line?
+		// what (if anything) has the user overridden on the command-line?
 		$params = $this->getParams();
 		if (isset($params['webbrowser'])) {
-			$browser = $params['webbrowser'];
+			$browserDetails->browser = $params['webbrowser'];
+		}
+		foreach ($params as $key => $value) {
+			if (substr($key, 0, 11) == 'webbrowser.') {
+				$detailsName = substr($key,11);
+				$browserDetails->desiredCapabilities[$detailsName] = $value;
+			}
+		}
+
+		if (isset($params['usesaucelabs']) && $params['usesaucelabs']) {
+			$browserDetails->provider = "SauceLabsWebDriver";
+
+			// do we have the sauce labs username and API key?
+			// they will have been previously merged from the environment
+			// if we have them
+			if (!isset($browserDetails->saucelabs)) {
+				throw new E5xx_NoSauceLabsConfig();
+			}
+
+			if (!isset($browserDetails->saucelabs->username)) {
+				throw new E5xx_NoSauceLabsUsername();
+			}
+
+			if (!isset($browserDetails->saucelabs->accesskey)) {
+				throw new E5xx_NoSauceLabsApiKey();
+			}
+
 		}
 
 		// all done
-		return $browser;
+		return $browserDetails;
 	}
 
 	public function startWebBrowser()
 	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('paramLogs');
+		// what are we doing?
+		$log = $this->startAction('start a web browser');
 
-		$proxySession = $httpProxy->createProxy();
+		// what sort of browser are we starting?
+		$browserDetails = $this->getWebBrowserDetails();
 
-		$env = $this->getEnvironment();
-		if (isset($env->username)) {
-			$address = new HttpAddress($env->url);
-			$proxySession->setHttpBasicAuth($address->hostname, $env->username, $env->password);
-		}
+		// get the adapter
+		$adapter = WebBrowserLib::getWebBrowserAdapter($browserDetails);
 
-		// start recording
-		$proxySession->startHAR();
+		// initialise the adapter
+		$adapter->init($browserDetails);
 
-		// create the browser session
-		$webDriver = new WebDriverClient();
-		$browserSession = $webDriver->newSession(
-			$this->getPreferredWebBrowser(),
-			array(
-				'proxy' => $proxySession->getWebDriverProxyConfig()
-			)
-		);
-
-		// remember what we've done!
-		$this->setWebProxy($proxySession);
-		$this->setWebBrowser($browserSession);
+		// start the browser
+		$adapter->start($this);
 
 		// all done
+		$this->setWebBrowserAdapter($adapter);
+		$log->endAction();
 	}
 
 	public function stopWebBrowser()
 	{
-		// get the browser
-		$browser = $this->getWebBrowser();
+		// get the browser adapter
+		$adapter = $this->getWebBrowserAdapter();
 
 		// stop the web browser
-		if (is_object($browser))
-		{
-			$browser->close();
-			$this->setWebBrowser(null);
+		if (!$adapter) {
+			// nothing to do
+			return;
 		}
 
-		// get the proxy
-		$proxy = $this->getWebProxy();
+		// what are we doing?
+		$log = $this->startAction('stop the web browser');
 
-		// stop the proxy too
-		if (is_object($proxy))
-		{
-			try {
-				$proxy->close();
-			}
-			catch (Exception $e) {
-				// do nothing - we don't care!
-			}
-			$this->setWebProxy(null);
-		}
+		// stop the browser
+		$adapter->stop();
+
+		// destroy the adapter
+		$this->setWebBrowserAdapter(null);
+
+		// all done
+		$log->endAction();
 	}
 }
