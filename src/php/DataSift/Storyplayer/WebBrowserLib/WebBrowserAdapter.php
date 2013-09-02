@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\WebBrowserLib;
 
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+
 /**
  * Interface that all WebBrowser adapter classes must implement
  *
@@ -56,7 +58,7 @@ namespace DataSift\Storyplayer\WebBrowserLib;
 interface WebBrowserAdapter
 {
 	public function init($browserDetails);
-	public function start();
+	public function start(StoryTeller $st);
 	public function stop();
 	public function getWebBrowser();
 	public function applyHttpBasicAuthForHost($hostname, $url);

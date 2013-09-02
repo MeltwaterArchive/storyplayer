@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\WebBrowserLib;
 
 use Exception;
 use DataSift\BrowserMobProxy\BrowserMobProxySession;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\WebDriver\WebDriverClient;
 
 /**
@@ -60,7 +61,7 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class SauceLabsWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 {
-	public function start()
+	public function start(StoryTeller $st)
 	{
 		// Sauce Labs handles proxying for us (if required)
 		// via the Sauce Connect app
@@ -72,11 +73,19 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 		     . urlencode($this->browserDetails->saucelabs->accesskey)
 		     . '@ondemand.saucelabs.com/wd/hub';
 
+		// build the Sauce Labs capabilities array
+		$desiredCapabilities = $this->browserDetails->desiredCapabilities;
+
+		// add the story's name, so that someone looking at the Sauce Labs
+		// list of jobs can see what this browser was used for
+		$story = $st->getStory();
+		$desiredCapabilities['name'] = '[' . $st->getCurrentPhase() . ':' . $st->getCurrentPhaseName() . '] '. $story->getName();
+
 		// create the browser session
 		$webDriver = new WebDriverClient($url);
 		$this->browserSession = $webDriver->newSession(
 			$this->browserDetails->browser,
-			$this->browserDetails->desiredCapabilities
+			$desiredCapabilities
 		);
 	}
 

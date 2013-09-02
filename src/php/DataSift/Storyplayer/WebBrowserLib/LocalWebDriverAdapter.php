@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\WebBrowserLib;
 
 use Exception;
 use DataSift\BrowserMobProxy\BrowserMobProxyClient;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\WebDriver\WebDriverClient;
 
 /**
@@ -60,7 +61,7 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class LocalWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
 {
-	public function start()
+	public function start(StoryTeller $st)
 	{
 		$httpProxy = new BrowserMobProxyClient();
 		$httpProxy->enableFeature('paramLogs');

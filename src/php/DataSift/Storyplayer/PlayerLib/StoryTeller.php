@@ -517,7 +517,7 @@ class StoryTeller
 		$adapter->init($browserDetails);
 
 		// start the browser
-		$adapter->start();
+		$adapter->start($this);
 
 		// all done
 		$this->setWebBrowserAdapter($adapter);
