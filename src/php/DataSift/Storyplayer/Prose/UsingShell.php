@@ -69,7 +69,9 @@ class UsingShell extends Prose
 
 		// run the command
 		$returnCode = null;
-		$output = system($command, $returnCode);
+		$lines = array();
+		exec($command, $lines, $returnCode);
+		$output = implode(PHP_EOL, $lines);
 
 		// all done
 		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
