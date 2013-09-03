@@ -69,3 +69,17 @@ Storyplayer supports running the same tests against different test environments.
 {% highlight bash %}
 storyplayer list-environments
 {% endhighlight %}
+
+## Other Storyplayer Commands
+
+Storyplayer has other commands built-in too, and comprehensive built-in help.  You can always get a list of everything Storyplayer can do by running:
+
+{% highlight bash %}
+storyplayer --help
+{% endhighlight %}
+
+and comprehensive help about a specific command by running:
+
+{% highlight bash %}
+storyplayer help <command>
+{% endhighlight %}
