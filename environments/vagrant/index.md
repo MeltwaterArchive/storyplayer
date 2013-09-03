@@ -1,7 +1,7 @@
 ---
 layout: environments-vagrant
 title: Creating Test Environments Using Vagrant
-prev: '<a href="../../environments/physical-hosts/index.html">Prev: </a>'
+prev: '<a href="../../environments/saucelabs/index.html">Prev: Testing Multiple Browsers Using SauceLabs</a>'
 next: '<a href="../../modules/index.html">Next: Storyplayer Modules</a>'
 ---
 

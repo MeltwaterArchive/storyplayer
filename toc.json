@@ -49,6 +49,7 @@
 		"environments/production/index",
 		"environments/ec2/index",
 		"environments/physical-hosts/index",
+		"environments/saucelabs/index",
 		"environments/vagrant/index",
 		"modules/index",
 		"modules/aws/index",
