@@ -48,13 +48,25 @@ With this approach, anyone can still run tests at any time inside virtual machin
 
 ## Creating Your Test Environment
 
+To create your test environment, add a _TestEnvironmentSetup_ function to your story:
+
 {% highlight php %}
 $story->addTestEnvironmentSetup(function(StoryTeller $st) {
     // steps go here
 });
 {% endhighlight %}
 
+Useful modules to use here include:
+
+* [Amazon EC2](../modules/ec2/index.html)
+* [Vagrant](../modules/vagrant/index.html)
+* [Provisioning](../modules/provisioning/index.html)
+
+The [Environments section](../environments/index.html) of this manual looks at test environments in detail.
+
 ## Destroying The Test Environment
+
+If your test creates a test environment, add a _TestEnvironmentTeardown_ function to your story to undo everything you created in the _TestEnvironmentSetup_ function:
 
 {% highlight php %}
 $story->addTestEnvironmentTeardown(function(StoryTeller $st) {
@@ -77,20 +89,61 @@ class MyStoryTemplate extends StoryTemplate
         // steps go here
     }
 
-    public function testEnvironmentSetup(StoryTeller $st)
+    public function testEnvironmentTeardown(StoryTeller $st)
     {
         // steps go here
     }
 }
 {% endhighlight %}
 
-You can put exactly the same code into the template that you would put into the `setTestEnvironmentSetup()` and `setTestEnvironmentTeardown()` anonymous functions in the story script.
+You can put exactly the same code into the template that you would put into the _TestEnvironmentSetup_ and _TestEnvironmentTeardown_ functions in the story script.
 
-## Testing Against Multiple Environments
+## Testing Against Multiple Types Of Environments
 
-At this time, Storyplayer has limited support for running the same story test against multiple test environments.  Right now, this is done simply by building the other environments by hand, and then telling Storyplayer to [skip the test environment setup and / or teardown phases](#disabling_the_test_environment_setup_teardown_phases), which is a bit of a hack.
+You may need to run the exact same test against multiple types of environments, such as:
 
-We're going to add great support for doing this via story templates in the near future.
+* a local environment running in a virtual machine on your desktop (quick & cheap to create and destroy)
+* a remote environment running in a virtual machine on Amazon EC2 (the location where your app will finally run)
+* a local environment running on dedicated hardware (for performance testing)
+
+You can do this by adding a simple `switch` statement to your _TestEnvironmentSetup_ function:
+
+{% highlight php %}
+$st->addTestEnvironmentSetup(function(StoryTeller $st) {
+    // set the defaults for this story / template
+    $st->setParams(array(
+        'platform' => 'vagrant'
+        // any additional settings go here
+    ));
+
+    // get the final params for this story / template
+    // $st will merge in anything overridden from the command-line
+    $params = $st->getParams();
+
+    // pick a platform
+    switch($params['platform'])
+    {
+        case 'ec2':
+            // add steps here to build on EC2
+            break;
+
+        case 'vagrant':
+        default:
+            // add steps here to build locally
+    }
+});
+{% endhighlight %}
+
+To pick an alternative platform, use the `-P` flag to override the 'platform' parameter:
+
+{% highlight php %}
+storyplayer -P ec2 <your story>
+{% endhighlight %}
+
+__Notes:__
+
+* The `-P` flag is completely independent from `-e`.  `-e` tells Storyplayer to load a specific config for your test; `-P` is simply information passed into your test for you to support in any way that suits.
+* You can give your test platforms whatever names you like.
 
 ## Testing Against Existing Environments
 
@@ -98,6 +151,8 @@ There are times when you'll want to run (some!) of your tests against an existin
 
 * Testing against a complex, multi-host environment (e.g. OpenStack) that Storyplayer currently doesn't have a module for
 * Testing against your staging or [production environment](../environments/production/index.html)
+
+The best way to do this is to temporarily disable the test environment setup and teardown phases.
 
 ## Disabling The Test Environment Setup / Teardown Phases
 
