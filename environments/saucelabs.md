@@ -1,8 +1,8 @@
 ---
-layout: environments-saucelabs
+layout: environments
 title: Testing Multiple Browsers Using SauceLabs
-prev: '<a href="../../environments/physical-hosts/index.html">Prev: Creating Test Environments On Physical Hosts</a>'
-next: '<a href="../../environments/vagrant/index.html">Next: Creating Test Environments Using Vagrant</a>'
+prev: '<a href="../environments/physical-hosts.html">Prev: Creating Test Environments On Physical Hosts</a>'
+next: '<a href="../environments/vagrant.html">Next: Creating Test Environments Using Vagrant</a>'
 ---
 
 # Testing Multiple Browsers Using SauceLabs

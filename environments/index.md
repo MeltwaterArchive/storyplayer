@@ -2,7 +2,7 @@
 layout: environments
 title: Test Environments
 prev: '<a href="../prose/using-classes.html">Prev: Using Classes</a>'
-next: '<a href="../environments/your-machine/index.html">Next: Testing On Your Machine</a>'
+next: '<a href="../environments/your-machine.html">Next: Testing On Your Machine</a>'
 ---
 
 # Test Environments
