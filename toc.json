@@ -205,7 +205,6 @@
 			"Against Production": "environments/production/index",
 			"Sep1": "",
 			"Amazon EC2": "environments/ec2/index",
-			"OpenStack": "environments/openstack/index",
 			"Physical Hosts": "environments/physical-hosts/index",
 			"SauceLabs": "environments/saucelabs/index",
 			"Vagrant": "environments/vagrant/index"

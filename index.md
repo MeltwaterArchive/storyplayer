@@ -51,7 +51,7 @@ At the heart of Prose is the [$st dynamic module loader](prose/the-st-object.htm
 
 ## Test Environments
 
-For those larger and more complicated apps (like the DataSift platform), Storyplayer can provision and destroy whole [test environments](environments/index.html) to run your tests against.  Today, Storyplayer ships with fully-working support for [Vagrant](environments/vagrant/index.html).  At DataSift, we use OpenStack and EC2 too, and support for both of these will be added to Storyplayer.  We'll also be adding support for [SauceLabs](environments/saucelabs/index.html) for automated cross-browser testing of your apps.
+For those larger and more complicated apps (like the DataSift platform), Storyplayer can provision and destroy whole [test environments](environments/index.html) to run your tests against.  Today, Storyplayer ships with fully-working support for [Vagrant](environments/vagrant/index.html) and [EC2](environments/ec2/index.html).  We've also added support for [SauceLabs](environments/saucelabs/index.html) for automated cross-browser testing of your apps.
 
 ## Documentation
 
