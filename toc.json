@@ -48,7 +48,6 @@
 		"environments/isolated/index",
 		"environments/production/index",
 		"environments/ec2/index",
-		"environments/openstack/index",
 		"environments/physical-hosts/index",
 		"environments/vagrant/index",
 		"modules/index",
