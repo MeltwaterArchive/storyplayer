@@ -50,9 +50,12 @@
 		"environments/ec2",
 		"environments/physical-hosts",
 		"environments/vagrant",
-		"devices/localbrowser",
-		"devices/remotewebdriver",
+		"devices/index",
+		"devices/how-it-works",
+		"devices/localbrowsers",
 		"devices/saucelabs",
+		"devices/remotewebdriver",
+		"devices/how-to-test",
 		"modules/index",
 		"modules/aws/index",
 		"modules/aws/fromAws",
@@ -208,9 +211,16 @@
 			"Sep1": "",
 			"Amazon EC2": "environments/ec2",
 			"Physical Hosts": "environments/physical-hosts",
-			"Remote WebDriver": "environments/remotewebdriver",
-			"SauceLabs": "environments/saucelabs",
 			"Vagrant": "environments/vagrant"
+		},
+		"Devices": {
+			"Introduction": "devices/index",
+			"How It Works": "devices/how-it-works",
+			"Browsers On Your Machine": "devices/localbrowsers",
+			"SauceLabs": "devices/saucelabs",
+			"Remote WebDriver": "devices/remotewebdriver",
+			"Sep1": "",
+			"How To Test": "devices/how-to-test"
 		},
 		"Modules": {
 			"Introduction": "modules/index",

@@ -1,8 +1,8 @@
 ---
-layout: environments
+layout: devices
 title: Testing Multiple Browsers Using SauceLabs
-prev: '<a href="../environments/remotewebdriver.html">Prev: Testing Unusual Browsers Using The Remote WebDriver</a>'
-next: '<a href="../environments/vagrant.html">Next: Creating Test Environments Using Vagrant</a>'
+prev: '<a href="../devices/localbrowsers.html">Prev: Testing With Locally Running Web Browsers</a>'
+next: '<a href="../devices/remotewebdriver.html">Next: Testing Unusual Browsers Using The Remote WebDriver</a>'
 ---
 
 # Testing Multiple Browsers Using SauceLabs
@@ -45,6 +45,15 @@ You need to add your Sauce Labs details to your Storyplayer config file.
 (Tip: for private repos, it's fine to put them in the main [storyplayer.json](../../configuration/storyplayer-json.html) file, but for public repos, it's best to add them to your [per-user config file](../../configuration/user-config.html) instead).
 
 Make sure you've installed the latest version of Storyplayer (to get the latest features and bug fixes), and that you're run `storyplayer install` to download dependencies such as _browsermob-proxy_ and _Sauce Connect_.
+
+{% highlight php %}
+storyplayer install
+vendor/bin/browsermob-proxy.sh start
+{% endhighlight %}
+
+This will start _browsermob-proxy_ in a _[screen](http://www.gnu.org/software/screen/)_ session in the background.
+
+We've looked at the possibility of having Storyplayer start browsermob-proxy for you, but decided that this was too slow (it's a Java application, which takes time to start) and too unreliable (it needs a few seconds before it has finished initialising, and that time depends on the speed of your computer).
 
 Finally, before you use Storyplayer's Sauce Labs integration for the first time, make sure that your test works with a web browser that is running on your own desktop.  This will save you a lot of time :)
 
@@ -125,7 +134,7 @@ vendor/bin/browsermob-proxy.sh start
 java -jar vendor/bin/Sauce-Connect.jar <saucelabs-username> <saucelabs-accesskey> -p localhost:9091
 {% endhighlight %}
 
-Your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling [`$st->usingBrowser()->setHttpBasicAuthForHost()`](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost).
+Your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling [$st->usingBrowser()->setHttpBasicAuthForHost()](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost).
 
 ## Known Differences Between Sauce Labs And Local Selenium WebDriver
 

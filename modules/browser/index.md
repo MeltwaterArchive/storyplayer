@@ -27,12 +27,7 @@ Any non-trivial web-based application these days relies heavily on client-side J
 
 ## Dependencies
 
-These dependencies are automatically installed when you install Storyplayer:
-
-* [browsermob-proxy](https://github.com/webmetrics/browsermob-proxy) - HTTP proxy with REST API
-* [Selenium WebDriver](http://docs.seleniumhq.org/) - web browser remote control with REST API
-* [ChromeDriver](https://code.google.com/p/selenium/wiki/ChromeDriver) - WebDriver bridge between Selenium and Google Chrome
-* [PHP WebDriver Client](https://github.com/datasift/php_webdriver) - client library for talking to Selenium, originally by [Facebook](http://facebook.com)
+Storyplayer automatically installs [many of the dependencies required](../../devices/how-it-works.html) for you when you run `storyplayer install`.
 
 You need to install:
 
@@ -40,27 +35,7 @@ You need to install:
 * [Mozilla Firefox](http://www.mozilla.org/en-US/firefox/new/) - Mozilla's web browser
 * [screen](http://www.gnu.org/software/screen/) - terminal management
 
-Support for other browsers will be added, and we also plan to add support for testing via [Sauce Labs](http://saucelabs.com) in the near future.
-
-Additionally, to use this module, you need to run Storyplayer on a machine with a real desktop installed and running, because it works by running a real web browser session.  You can't use this module on a 'headless'
-machine, nor (in our experience) inside Xnest.
-
-## Starting BrowserMob-Proxy And Selenium Server
-
-Behind the scenes, the Browser module uses a real web browser, controlled via [Selenium WebDriver](http://docs.seleniumhq.org/).  At the moment, only Chrome is supported, but support for other browsers is planned.
-
-We also use a custom version of [browsermob-proxy](https://github.com/webmetrics/browsermob-proxy), which is required for SSL support, HTTP Basic Auth support, and Request/Response inspection via the HTTP Archive.
-
-To use the Browser module, you need to have Selenium Server and BrowserMob-Proxy running on your machine before you run Storyplayer.  They are installed as part of the Storyplayer, but need to be started by hand:
-
-{% highlight bash %}
-browsermob-proxy.sh start
-selenium-server.sh start
-{% endhighlight %}
-
-This will start _browsermob-proxy_ and _selenium_ in _[screen](http://www.gnu.org/software/screen/)_ sessions in the background.
-
-We've looked at the possibility of having Storyplayer start these for you, but decided that this was too slow (both are Java applications, which take time to start) and too unreliable (both applications need a few seconds before they have finished initialising, and that time depends on the speed of your computer).  It's also sometimes handy to be able to look at the output from Selenium to understand why an operation isn't working.
+Additionally, to use this module, you need to run Storyplayer on a machine with a real desktop installed and running, because it works by running a real web browser session.  You can't use this module on a 'headless' machine, nor (in our experience) inside Xnest.  (If you prefer, you can take advantage of our [Sauce Labs integration](../../devices/saucelabs.html), or for advanced users you can use Storyplayer with [a remote WebDriver](../../devices/remotewebdriver.html)).
 
 ## Using The Browser Module
 

@@ -16,7 +16,7 @@ Although we've added many features to the Browser module, there may be times whe
 
 ## Supported Browsers
 
-At the moment, we only support Google Chrome, but support for other WebDriver-enabled browsers (and [Sauce Labs](http://saucelabs.com)) is planned.
+For a full list of supported browsers, please [see the Devices section](../../devices/index.html) of this manual.
 
 ## Most Common Case - XPath Queries
 

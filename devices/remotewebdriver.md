@@ -1,8 +1,8 @@
 ---
-layout: environments
+layout: devices
 title: Testing Unusual Browsers Using The Remote WebDriver
-prev: '<a href="../environments/physical-hosts.html">Prev: Creating Test Environments On Physical Hosts</a>'
-next: '<a href="../environments/saucelabs.html">Next: Testing Multiple Browsers Using SauceLabs</a>'
+prev: '<a href="../devices/saucelabs.html">Prev: Testing Multiple Browsers Using SauceLabs</a>'
+next: '<a href="../devices/how-to-test.html">Next: How To Test With Browsers And Devices</a>'
 ---
 
 # Testing Unusual Browsers Using The Remote WebDriver
@@ -44,6 +44,10 @@ storyplayer install
 vendor/bin/browsermob-proxy.sh start
 {% endhighlight %}
 
+This will start _browsermob-proxy_ in a _[screen](http://www.gnu.org/software/screen/)_ session in the background.
+
+We've looked at the possibility of having Storyplayer start browsermob-proxy for you, but decided that this was too slow (it's a Java application, which takes time to start) and too unreliable (it needs a few seconds before it has finished initialising, and that time depends on the speed of your computer).
+
 Finally, before you use Storyplayer's the Remote WebDriver for the first time, make sure that your test works with a web browser that is running on your own desktop.  This will save you a lot of time :)
 
 ## Running A Test
@@ -64,4 +68,4 @@ storyplayer -b 'internet explorer' --useremotewebdriver stories/registration/sig
 
 At the time of writing, Selenium WebDriver (the technology Storyplayer uses to control web browsers) does not provide working support for authenticating via HTTP Basic Auth.  To get around this, when you run tests against a browser on your own desktop, we proxy the web browser through browsermob-proxy, which can inject the HTTP Basic Auth credentials for us.
 
-If your website requires HTTP Basic Auth, then your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling [`$st->usingBrowser()->setHttpBasicAuthForHost()`](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost).
+If your website requires HTTP Basic Auth, then your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling [$st->usingBrowser()->setHttpBasicAuthForHost()](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost).
