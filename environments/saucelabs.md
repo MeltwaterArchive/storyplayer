@@ -1,7 +1,7 @@
 ---
 layout: environments
 title: Testing Multiple Browsers Using SauceLabs
-prev: '<a href="../environments/physical-hosts.html">Prev: Creating Test Environments On Physical Hosts</a>'
+prev: '<a href="../environments/remotewebdriver.html">Prev: Testing Unusual Browsers Using The Remote WebDriver</a>'
 next: '<a href="../environments/vagrant.html">Next: Creating Test Environments Using Vagrant</a>'
 ---
 
