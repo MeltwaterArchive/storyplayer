@@ -50,9 +50,10 @@ class EnvironmentValidator implements Validator
 {
     const MSG_NOTVALIDENVIRONMENT = "Unknown environment '%value%'";
 
-    public function __construct($envList)
+    public function __construct($envList, $defaultValue)
     {
         $this->envList = $envList;
+        $this->defaultValue = $defaultValue;
     }
 
     public function validate($value, ValidationResult $result = null)
@@ -61,8 +62,9 @@ class EnvironmentValidator implements Validator
             $result = new ValidationResult($value);
         }
 
-        // the $value must be a valid environment name
-        if (!in_array($value, $this->envList)) {
+        // the $value must be a valid environment name, but it's ok if it doesn't
+        // exist if it's the default env as we might not have created it yet
+        if (!in_array($value, $this->envList) && $value !== $this->defaultValue) {
             $result->addError(static::MSG_NOTVALIDENVIRONMENT);
             return $result;
         }
