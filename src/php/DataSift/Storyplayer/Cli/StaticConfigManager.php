@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ConfigLib\JsonConfigLoader;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 
 /**
  * helper class for loading our static config files
@@ -73,7 +74,12 @@ class StaticConfigManager extends ConfigManagerBase
 
 	public function loadAdditionalConfig($config, $configName)
 	{
-		return $this->configLoader->loadAdditionalConfig($config, $configName);
+		try {
+			return $this->configLoader->loadAdditionalConfig($config, $configName);
+		}
+		catch (E5xx_ConfigFileNotFound $e){
+			echo "*** warning: config file {$configName} not found\n";
+		}
 	}
 
 	public function loadRuntimeConfig()
