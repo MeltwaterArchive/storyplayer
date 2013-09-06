@@ -78,7 +78,7 @@ class StaticConfigManager extends ConfigManagerBase
 			return $this->configLoader->loadAdditionalConfig($config, $configName);
 		}
 		catch (E5xx_ConfigFileNotFound $e){
-			echo "*** warning: config file {$configName} not found\n";
+			echo "*** warning: config file {$configName} not found - for more information on configuring Storyplayer, see http://datasift.github.io/storyplayer/configuration/\n";
 		}
 	}
 
