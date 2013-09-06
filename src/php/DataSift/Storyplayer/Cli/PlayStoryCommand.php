@@ -71,6 +71,12 @@ use DataSift\Storyplayer\UserLib\ConfigUserLoader;
  */
 class PlayStoryCommand extends CliCommand
 {
+	/**
+	 * should we let background processes survive when we shutdown?
+	 * @var boolean
+	 */
+	protected $persistProcesses = false;
+
 	public function __construct($envList)
 	{
 		// define the command
@@ -91,7 +97,11 @@ class PlayStoryCommand extends CliCommand
 			new LogLevelSwitch(),
 			new EnvironmentSwitch($envList, $defaultEnvName),
 			new DefineSwitch(),
+			new PersistProcessesSwitch(),
 			new PlatformSwitch(),
+			new UseRemoteWebDriverSwitch(),
+			new UseSauceLabsSwitch(),
+			new WebBrowserSwitch()
 		));
 	}
 
@@ -124,6 +134,11 @@ class PlayStoryCommand extends CliCommand
 			$envName = $engine->options->environment;
 		}
 
+		// are we persisting processes?
+		if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
+			$this->persistProcesses = true;
+		}
+
 		// do we have a story, or list of stories?
 		if (!isset($params[0])) {
 			echo "*** error: you must specify which story to play\n";
@@ -139,6 +154,13 @@ class PlayStoryCommand extends CliCommand
 			$loggingConfig->levels = $engine->options->logLevels;
 		}
 		Log::init("storyplayer", $loggingConfig);
+
+		// setup shutdown handling
+		register_shutdown_function(array($this, 'shutdownHandler'));
+
+		// setup signal handling
+		pcntl_signal(SIGTERM, array($this, 'sigtermHandler'));
+		pcntl_signal(SIGINT , array($this, 'sigtermHandler'));
 
 		// do we need to load environment-specific config?
 		if (!isset($staticConfig->environments, $staticConfig->environments->$envName))
@@ -185,6 +207,10 @@ class PlayStoryCommand extends CliCommand
 			    $player = new StoryPlayer();
 			    $teller = new StoryTeller($story);
 
+			    // remember our $st object, as we'll need it for our
+			    // shutdown function
+			    $this->st = $teller;
+
 			    // create the supporting context for this story
 			    $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
 			    $teller->setStoryContext($context);
@@ -214,6 +240,10 @@ class PlayStoryCommand extends CliCommand
 					// create something to play this story
 				    $player = new StoryPlayer();
 				    $teller = new StoryTeller($story);
+
+				    // remember our $st object, as we'll need it for our
+				    // shutdown function
+				    $this->st = $teller;
 
 				    // create the supporting context for this story
 				    $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
@@ -291,4 +321,74 @@ class PlayStoryCommand extends CliCommand
 		}
 	}
 
+	public function shutdownHandler()
+	{
+		// we need to shutdown any running processes
+		if (!$this->persistProcesses) {
+			$this->shutdownScreenProcesses();
+		}
+		else {
+			$this->warnScreenProcesses();
+		}
+	}
+
+	protected function shutdownScreenProcesses()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// do we have anything to shutdown?
+		$screenSessions = $st->fromShell()->getAllScreenSessions();
+		if (count($screenSessions) == 0) {
+			// nothing to do
+			return;
+		}
+
+		// if we get here, there are things to stop
+		echo "\n";
+		echo "============================================================\n";
+		echo "SHUTDOWN - STOP SCREEN PROCESSES\n";
+		echo "\n";
+
+		foreach ($screenSessions as $processDetails) {
+			$st->usingShell()->stopProcess($processDetails->pid);
+			$st->usingProcessesTable()->removeProcess($processDetails->pid);
+		}
+	}
+
+	protected function warnScreenProcesses()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// do we have anything to shutdown?
+		$screenSessions = $st->fromShell()->getAllScreenSessions();
+		if (count($screenSessions) == 0) {
+			// nothing to do
+			return;
+		}
+
+		// if we get here, there are background jobs running
+		echo "\n";
+		if (count($screenSessions) == 1) {
+			echo "There is 1 background process still running\n";
+		}
+		else {
+			echo "There are " . count($screenSessions) . " background processes still running\n";
+		}
+		echo "Use 'storyplayer list-processes' to see the list of background processes\n";
+		echo "Use 'storyplayer kill-processes' to stop any background processes\n";
+	}
+
+	public function sigtermHandler($signo)
+	{
+		echo "\n";
+		echo "============================================================\n";
+		echo "USER ABORT!!\n";
+		echo "============================================================\n";
+		echo "\n";
+
+		// force a clean shutdown
+		exit(1);
+	}
 }

@@ -84,16 +84,19 @@ class DefineSwitch extends CliSwitch
 
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// split up the setting
-		$parts = explode('=', $params[0]);
-		$key   = array_shift($parts);
-		$value = implode('=', $parts);
-
-		// remember the setting
 		if (!isset($engine->options->defines)) {
 			$engine->options->defines = new stdClass;
 		}
-		$engine->options->defines->$key = $value;
+
+		foreach ($params as $param) {
+			// split up the setting
+			$parts = explode('=', $param);
+			$key   = array_shift($parts);
+			$value = implode('=', $parts);
+
+			// remember the setting
+			$engine->options->defines->$key = $value;
+		}
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

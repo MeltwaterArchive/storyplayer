@@ -64,6 +64,6 @@ $story->setPostTestInspection(function(StoryTeller $st) {
 	$checkpoint = $st->getCheckpoint();
 
 	// do we have the title we expected?
-	$st->expectsObject($checkpoint)->hasAttribute('title');
-	$st->expectsString($checkpoint->title)->equals("Storyplayer: Self-Host Tests Page");
+	$st->assertsObject($checkpoint)->hasAttribute('title');
+	$st->assertsString($checkpoint->title)->equals("Storyplayer: Self-Host Tests Page");
 });

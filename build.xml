@@ -51,10 +51,11 @@
   <property name="project.vendor.docdir"   value="${project.vendordir}/docs" override="true" />
   <property name="project.vendor.wwwdir"   value="${project.vendordir}/www" override="true" />
 
-  <property name="project.distdir"         value="${project.basedir}/dist" />
+  <property name="project.distdir"           value="${project.basedir}/dist" />
   <property name="project.distdir.lastBuilt" value="${project.basedir}/dist/lastBuilt" />
-  <property name="project.tarfilename"     value="${project.name}-${project.version}.tgz" />
-  <property name="project.tarfile"         value="${project.distdir}/${project.tarfilename}" />
+  <property name="project.tarfilename"       value="${project.name}-${project.version}.tgz" />
+  <property name="project.tarfile"           value="${project.distdir}/${project.tarfilename}" />
+  <property name="project.pharfile"          value="${project.distdir}/storyplayer-${project.version}.phar" />
 
   <!-- what was the last PEAR package we created, if any? -->
   <if>
@@ -111,6 +112,18 @@
     <include name="*.txt" />
     <include name="*.md" />
   </fileset>
+  <fileset dir="${project.basedir}" id="toplevelconffiles">
+    <include name="*.properties" />
+    <include name="*.json" />
+    <include name="composer.lock" />
+  </fileset>
+  <fileset dir="${project.vendordir}" id="vendorfiles">
+    <include name="**/**"/>
+    <exclude name="**/.DS_Store"/>
+    <exclude name="**/.empty"/>
+    <exclude name="**/.svn"/>
+    <exclude name="**/.git"/>
+  </fileset>
 
   <taskdef name="phingcallifexists" classname="Phix_Project.ComponentManager.Phing.PhingCallIfExistsTask" />
   <import file="build.local.xml"/>
@@ -148,6 +161,8 @@
     <echo message="" />
     <echo message="  pear-package" />
     <echo message="    Create a PEAR-compatible package" />
+    <echo message="  phar-package" />
+    <echo message="    Create a PHAR of your app" />
     <echo message="  publish-local" />
     <echo message="    Publish your PEAR-compatible package into a local copy" />
     <echo message="    of your PEAR channel" />
@@ -501,26 +516,87 @@
     <exec command="composer install" logoutput="true" checkreturn="true" />
   </target>
 
-  <target name="package" depends="build-composer">
-    <exec command="cp src/bin/storyplayer ." logoutput="true" checkreturn="true" />
-    <exec command="sed -i '1d' src/bin/storyplayer" logoutput="true" checkreturn="true" />
-    <pharpackage
-      destfile="./storyplayer.phar"
-      basedir="./"
-      compression="gzip"
-      stub="./src/stub.php"
-      signature="sha1">
-      <fileset dir="./src">
-        <include name="**/**" />
+  <target name="phar-package" depends="build-composer">
+    <echo>Building release directory</echo>
+    <delete dir="${project.builddir}" />
+    <mkdir dir="${project.pkgdir}" />
+    <if>
+      <available file="${project.src.bindir}"/>
+      <then>
+        <copy todir="${project.pkgdir}/src/bin">
+          <fileset refid="binfiles"/>
+        </copy>
+      </then>
+    </if>
+    <if>
+      <available file="${project.src.datadir}"/>
+      <then>
+        <copy todir="${project.pkgdir}/src/data">
+          <fileset refid="datafiles"/>
+        </copy>
+      </then>
+    </if>
+    <if>
+      <available file="${project.src.docdir}"/>
+      <then>
+        <copy todir="${project.pkgdir}/src/doc">
+          <fileset refid="docfiles"/>
+        </copy>
+      </then>
+    </if>
+    <if>
+      <available file="${project.src.phpdir}"/>
+      <then>
+        <copy todir="${project.pkgdir}/src/php">
+          <fileset refid="phpfiles"/>
+        </copy>
+      </then>
+    </if>
+    <if>
+      <available file="${project.src.testunitdir}"/>
+      <then>
+        <copy todir="${project.pkgdir}/src/tests">
+          <fileset refid="testfiles"/>
+        </copy>
+      </then>
+    </if>
+    <if>
+      <available file="${project.src.wwwdir}"/>
+      <then>
+        <copy todir="${project.pkgdir}/src/www">
+          <fileset refid="wwwfiles"/>
+        </copy>
+      </then>
+    </if>
+    <copy todir="${project.pkgdir}">
+      <fileset refid="topleveldocfiles"/>
+    </copy>
+    <copy todir="${project.pkgdir}">
+      <fileset refid="toplevelconffiles"/>
+    </copy>
+    <copy todir="${project.pkgdir}/vendor">
+      <fileset refid="vendorfiles"/>
+    </copy>
+    <copy todir="${project.pkgdir}/src">
+      <fileset dir="src">
+        <include name="stub.php" />
       </fileset>
-      <fileset dir="./vendor">
+    </copy>
+
+    <exec command="sed -i.bak '1d' '${project.pkgdir}/src/bin/storyplayer'" logoutput="true" checkreturn="true" />
+    <pharpackage
+      destfile="${project.pharfile}"
+      basedir="${project.pkgdir}"
+      compression="gzip"
+      stub="${project.pkgdir}/src/stub.php"
+      signature="sha1">
+      <fileset dir="${project.pkgdir}">
         <include name="**/**" />
-        <exclude name=".git/**" />
-        <exclude name="datasift/webdriver/src/bin/**" />
-        <exclude name="datasift/webdriver/src/data/**" />
+        <exclude name="**/datasift/webdriver/src/bin/**" />
+        <exclude name="**/datasift/webdriver/src/data/**" />
       </fileset>
       <metadata>
-        <element name="version" value="0.0.1" />
+        <element name="version" value="{$project.version}" />
         <element name="authors">
           <element name="Stuart Herbert">
             <element name="email" value="stuart.herbert@datasift.com" />
@@ -531,8 +607,11 @@
         </element>
       </metadata>
     </pharpackage>
-    <exec command="cp ./storyplayer src/bin" logoutput="true" checkreturn="true" />
-    <exec command="rm ./storyplayer" logoutput="true" checkreturn="true" />
+
+    <!-- write a message to say which file we built last -->
+    <echo>Your PHAR file is ${project.pharfile}</echo>
+    <phingcallifexists target="local.phar-package"/>
+
   </target>
 
 </project>
