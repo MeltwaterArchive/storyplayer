@@ -136,6 +136,7 @@
 		"modules/zeromq/index",
 		"modules/zeromq/expectsZmq",
 		"modules/zeromq/usingZmq",
+		"changelog",
 		"copyright"
 	],
 	"navbar": {
@@ -146,6 +147,8 @@
 			"How To Run": "running-storyplayer",
 			"Example Test Repo": "example-test-repo",
 			"Sep2": "",
+			"ChangeLog": "changelog",
+			"Sep3": "",
 			"Legal Stuff": "copyright"
 		},
 		"Configuration": {
