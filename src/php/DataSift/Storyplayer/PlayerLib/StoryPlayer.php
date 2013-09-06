@@ -46,6 +46,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 use Exception;
 use stdClass;
 use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
 use DataSift\Storyplayer\ProseLib\E5xx_NotImplemented;
@@ -157,7 +158,11 @@ class StoryPlayer
 		// we need to work out which environment we are running against,
 		// as all other decisions are affected by this
 		$context->env->mergeFrom($staticConfig->environments->defaults);
-		$context->env->mergeFrom($staticConfig->environments->$envName);
+		try {
+			$context->env->mergeFrom($staticConfig->environments->$envName);
+		}catch (E5xx_NoSuchProperty $e){
+			echo "*** warning: using empty config instead of '{$envName}'";
+		}
 
 		// we need to remember the name of the environment too!
 		$context->env->envName = $envName;
