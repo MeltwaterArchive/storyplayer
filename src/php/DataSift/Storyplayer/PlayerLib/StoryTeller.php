@@ -478,6 +478,7 @@ class StoryTeller
 			}
 		}
 
+		// make sure we have the required info for Sauce Labs
 		if (isset($params['usesaucelabs']) && $params['usesaucelabs']) {
 			$browserDetails->provider = "SauceLabsWebDriver";
 
@@ -495,7 +496,25 @@ class StoryTeller
 			if (!isset($browserDetails->saucelabs->accesskey)) {
 				throw new E5xx_NoSauceLabsApiKey();
 			}
+		}
 
+		// make sure we have the required info for an arbitrary remote
+		// webdriver instance
+		if (isset($params['useremotewebdriver']) && $params['useremotewebdriver']) {
+			$browserDetails->provider = "RemoteWebDriver";
+
+			// do we have any remote webdriver config at all?
+			if (!isset($env->remotewebdriver)) {
+				throw new E5xx_NoRemoteWebDriverConfig();
+			}
+
+			// do we have the host:port of the webdriver instance?
+			if (!isset($env->remotewebdriver->url)) {
+				throw new E5xx_NoRemoteWebDriverUrl();
+			}
+
+			// remember the URL for Selenium Server
+			$browserDetails->url = $env->remotewebdriver->url;
 		}
 
 		// all done
