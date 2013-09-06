@@ -11,6 +11,14 @@ next: '<a href="copyright.html">Next: Legal Stuff</a>'
 
 Currently under development.
 
+## v1.4.1
+
+Released 6th September 2013.
+
+### New
+
+* Fixed bug where you couldn't run Storyplayer without creating an environment config file first.([#65](https://github.com/datasift/storyplayer/pull/65))
+
 ## v1.4.0
 
 Released 6th September 2013.
