@@ -43,69 +43,78 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\Prose\Prose;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
 
 /**
-* get information from Facebook
-*
-* @category  Libraries
-* @package   Storyplayer/Prose
-* @author    Michael Heap <michael.heap@datasift.com>
-* @copyright 2011-present Mediasift Ltd www.datasift.com
-* @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
-* @link      http://datasift.github.io/storyplayer
-*/
-class FromFacebook extends Prose
+ * get information from a HTTP server, without using a web browser to
+ * get it.
+ *
+ * great for testing APIs
+ *
+ * @category  Libraries
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+class FromCurl extends Prose
 {
-
-	protected $login_url = "https://www.facebook.com/login.php";
-	protected $developer_url = "https://developers.facebook.com/tools/explorer";
-
 	/**
-	 * getAccessToken 
+	 * get 
 	 * 
-	 * @param array $options Options to use when getting token
+	 * @param mixed $url URL to request
+	 * @param array $params GET params to add to the URL
+	 * @param array $headers HTTP headers to use
 	 * 
-	 * @return string Access token
+	 * @return object|string Response sent by the server. If it's JSON, we'll decode it
 	 */
-	public function getAccessToken($options = array()){
+	public function get($url, $params = array(), $headers = array())
+	{
 
-		// Shorthand
-		$st = $this->st;
-
-		// Grab the details of our user
-		$user = $this->args[0];
-
-		// Start getting our token
-		$disableCache = isset($options['disable_cache']) && $options['disable_cache'];
-
-		// Get our runtime config
-		$config = $st->getRuntimeConfig();
-
-		// Check the one in the runtime config if we've not disabled the cache
-		if (isset($config->facebookAccessToken, $config->facebookAccessToken->expires) && $config->facebookAccessToken->expires > time() && !$disableCache){
-			return $config->facebookAccessToken->access_token;
+		if (count($headers)){
+			throw new E5xx_NotImplemented("FromCurl does not support headers yet");
 		}
 
-		// Login to Facebook
-		$st->usingBrowser()->gotoPage($this->login_url);
-		$st->usingBrowser()->type($user['email'])->intoFieldWithId('email');
-		$st->usingBrowser()->type($user['password'])->intoFieldWithId('pass');
-		$st->usingBrowser()->click()->fieldWithName('login');
+		// shorthand
+		$st = $this->st;
 
-		// Get our access token
-		$tokenCreationTime = time();
-		$st->usingBrowser()->gotoPage($this->developer_url);
-		$access_token = $st->fromBrowser()->getValue()->fromFieldWithId('access_token');
+		// create the full URL
+		if (count($params) > 0) {
+			$url = $url . '?' . http_build_query($params);
+		}
 
-		// Write it to the config
-		$config->facebookAccessToken = array(
-			"access_token" => $access_token,
-			"expires" => ($tokenCreationTime + 5400) // It expires in 1.5 hours
-		);
-		$st->saveRuntimeConfig();
+		// what are we doing?
+		$log = $st->startAction("HTTP GET '${url}'");
 
-		return $access_token;
+		// create a new cURL resource
+		$ch = curl_init();
+
+		// set URL and other appropriate options
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+
+		// grab URL and pass it to the browser
+		$response = curl_exec($ch);
+		$error = curl_error($ch);
+
+		// close cURL resource, and free up system resources
+		curl_close($ch);
+
+		if ($error){
+			throw new E5xx_ActionFailed(__CLASS__.': '.$error);
+		}
+
+		// Try and decode it
+		$decoded = json_decode($response);
+
+		if ($decoded){
+			$response = $decoded;
+		}
+
+		// all done
+		return $response;
 	}
-
 }
