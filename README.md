@@ -11,7 +11,7 @@ Storyplayer should be installed via [Composer](http://getcomposer.org/). To inst
 ```json
 {
     "require": {
-        "datasift/storyplayer": "1.3.3"
+        "datasift/storyplayer": "1.4.2"
     }
 }
 ```
@@ -19,12 +19,6 @@ Storyplayer should be installed via [Composer](http://getcomposer.org/). To inst
 Then, run `composer install`. Once that's completed, run `./vendor/bin/storyplayer install` to install any additional dependencies.
 
 ### Usage
-
-Create a default Storyplayer config file:
-
-```bash
-mkdir ./etc && echo '{"environments":{}}' > ./etc/storyplayer.json
-```
 
 If your tests need a web browser, make sure you've started browsermob-proxy and selenium:
 
