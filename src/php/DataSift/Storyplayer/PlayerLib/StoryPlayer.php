@@ -412,7 +412,7 @@ class StoryPlayer
 		try {
 			$st->setCurrentPhase(self::PHASE_TESTENVIRONMENTSETUP);
 			foreach ($callbacks as $callback){
-				$callback($st);
+				call_user_func($callback, $st);
 			}
 		}
 		catch (Exception $e) {
@@ -455,7 +455,7 @@ class StoryPlayer
 		try {
 			$st->setCurrentPhase(self::PHASE_TESTENVIRONMENTTEARDOWN);
 			foreach ($callbacks as $callback){
-				$callback($st);
+				call_user_func($callback, $st);
 			}
 		}
 		catch (Exception $e) {
@@ -514,7 +514,7 @@ class StoryPlayer
 		// make the call
 		try {
 			foreach ($callbacks as $callback) {
-				$callback($st);
+				call_user_func($callback, $st);
 			}
 		}
 		catch (Exception $e)
@@ -561,7 +561,7 @@ class StoryPlayer
 		try {
 			$st->setCurrentPhase(self::PHASE_TESTTEARDOWN);
 			foreach ($callbacks as $callback) {
-				$callback($st);
+				call_user_func($callback, $st);
 			}
 		}
 		catch (Exception $e)
@@ -600,7 +600,7 @@ class StoryPlayer
 
 		// make the call
 		foreach ($callbacks as $callback) {
-			$callback($st);
+			call_user_func($callback, $st);
 		}
 
 		// all done
@@ -619,7 +619,7 @@ class StoryPlayer
 
 			// make the call
 			foreach ($callbacks as $callback) {
-				$callback($st);
+				call_user_func($callback, $st);
 			}
 		}
 
@@ -671,7 +671,7 @@ class StoryPlayer
 
 			foreach ($callbacks as $callback) {
 				if (is_callable($callback)) {
-					$callback($st);
+					call_user_func($callback, $st);
 				}
 			}
 		}
@@ -745,7 +745,7 @@ class StoryPlayer
 			$story = $st->getStory();
 			$callbacks = $story->getPreTestInspection();
 			foreach ($callbacks as $callback) {
-				$callback($st);
+				call_user_func($callback, $st);
 			}
 		}
 		catch (Exception $e) {
@@ -882,7 +882,7 @@ class StoryPlayer
 			$callbacks = $story->getPostTestInspection();
 			foreach ($callbacks as $callback) {
 				if (is_callable($callback)) {
-					$callback($st);
+					call_user_func($callback, $st);
 				}
 			}
 		}
@@ -930,7 +930,7 @@ class StoryPlayer
 		// This used to return $callback($st)
 		// @TODO Work out where it's passed to and if we need to continue returning it
 		foreach ($callbacks as $callback) {
-			$callback($st);
+			call_user_func($callback, $st);
 		}
 	}
 

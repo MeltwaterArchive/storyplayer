@@ -34,84 +34,87 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\LoadedConfig;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
 
 /**
- * helper class for loading our static config files
+ * get information from a HTTP server, without using a web browser to
+ * get it.
+ *
+ * great for testing APIs
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StaticConfigManager extends ConfigManagerBase
+class FromCurl extends Prose
 {
-	public function loadConfig($config)
+	/**
+	 * get 
+	 * 
+	 * @param mixed $url URL to request
+	 * @param array $params GET params to add to the URL
+	 * @param array $headers HTTP headers to use
+	 * 
+	 * @return object|string Response sent by the server. If it's JSON, we'll decode it
+	 */
+	public function get($url, $params = array(), $headers = array())
 	{
-		// load the main config file
-		try {
-			// We start with an empty config
-			$userConfig = new LoadedConfig;
-			// Then load our user config into it
-			$this->configLoader->loadUserConfig($userConfig);
 
-			// Then try and load our default configs
-			$newConfig = $this->configLoader->loadDefaultConfig();
-
-			// Merge our user config into the default config
-			$newConfig->mergeFrom($userConfig);
-
-		// We couldn't find our default config files
-		} catch (E5xx_ConfigFileNotFound $e){
-			// Did we load a user config though? Get the public class
-			// vars and count them. If there's > 0, we have some config
-			$availableKeys = get_object_vars($userConfig);
-			// Otherwise, just rethrow the exception
-			if (!count($availableKeys)){
-				throw $e;
-			}
-
-			// Move user config to $newConfig for merging into the
-			// current config
-			$newConfig = $userConfig;
+		if (count($headers)){
+			throw new E5xx_NotImplemented("FromCurl does not support headers yet");
 		}
-		
-		// merge the new config with the existing
-		$config->mergeFrom($newConfig);
+
+		// shorthand
+		$st = $this->st;
+
+		// create the full URL
+		if (count($params) > 0) {
+			$url = $url . '?' . http_build_query($params);
+		}
+
+		// what are we doing?
+		$log = $st->startAction("HTTP GET '${url}'");
+
+		// create a new cURL resource
+		$ch = curl_init();
+
+		// set URL and other appropriate options
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+
+		// grab URL and pass it to the browser
+		$response = curl_exec($ch);
+		$error = curl_error($ch);
+
+		// close cURL resource, and free up system resources
+		curl_close($ch);
+
+		if ($error){
+			throw new E5xx_ActionFailed(__CLASS__.': '.$error);
+		}
+
+		// Try and decode it
+		$decoded = json_decode($response);
+
+		if ($decoded){
+			$response = $decoded;
+		}
 
 		// all done
-	}
-
-	public function loadAdditionalConfig($config, $configName)
-	{
-		try {
-			return $this->configLoader->loadAdditionalConfig($config, $configName);
-		}
-		catch (E5xx_ConfigFileNotFound $e){
-			echo "*** warning: config file {$configName} not found - for more information on configuring Storyplayer, see http://datasift.github.io/storyplayer/configuration/\n";
-		}
-	}
-
-	public function loadRuntimeConfig()
-	{
-		return $this->configLoader->loadRuntimeConfig();
-	}
-
-	public function getListOfAdditionalConfigFiles()
-	{
-		return $this->configLoader->getListOfAdditionalConfigFiles();
+		return $response;
 	}
 }
