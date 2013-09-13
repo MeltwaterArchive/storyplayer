@@ -11,11 +11,25 @@ next: '<a href="copyright.html">Next: Legal Stuff</a>'
 
 Currently under development.
 
+## v1.4.2
+
+Released 13th September 2013.
+
+### New
+
+* Added basic FromCurl module for making HTTP requests
+* Added FromFacebook and UsingFacebookGraphApi modules
+
+### Fixed
+
+* Added ability to use a per-user config file without project specific config
+* Moved to using call_user_func($callback) over $callback() for PHP 5.3 compatibility
+
 ## v1.4.1
 
 Released 6th September 2013.
 
-### New
+### Fixed
 
 * Fixed bug where you couldn't run Storyplayer without creating an environment config file first.([#65](https://github.com/datasift/storyplayer/pull/65))
 
