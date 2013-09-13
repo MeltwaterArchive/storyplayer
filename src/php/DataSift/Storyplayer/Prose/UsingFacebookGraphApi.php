@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
- * @author    Michael Heap <michael.heap@datasift.com>
+ * @author    Michael Heap <michael.heap@datasift.com>, Michael Pitidis <michael.pitidis@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -97,6 +97,28 @@ class UsingFacebookGraphApi extends Prose
 		return reset($posts);
 	}
 
+	public function getPostUpdatedTime($post_id) {
+		return $this->st->fromCurl()->get("{$this->base_path}/{$post_id}", $this->authenticated(array(
+			'fields' => 'updated_time',
+		)));
+	}
+
+	public function createComment($post_id, $comment) {
+		return $this->makeGraphPostRequest("/{$post_id}/comments", "message=$comment");
+	}
+
+	public function deleteComment($comment_id) {
+		return $this->makeGraphDeleteRequest("/{$comment_id}");
+	}
+
+	private function makeGraphPostRequest($path, $data, $params = array()) {
+		return $this->st->fromCurl()->post($this->base_path . $path, $data, $this->authenticated($params));
+	}
+
+	private function makeGraphDeleteRequest($path, $params = array()) {
+		return $this->st->fromCurl()->delete($this->base_path . $path, $this->authenticated($params));
+	}
+
 	/**
 	 * makeGraphApiRequest 
 	 *
@@ -106,14 +128,12 @@ class UsingFacebookGraphApi extends Prose
 	 * 
 	 * @return void
 	 */
-	private function makeGraphApiRequest($path){
+	private function makeGraphApiRequest($path, $params = array()){
 		$st = $this->st;
 
 		$environment = $st->getEnvironment();
-		$access_token = $environment->facebookAccessToken;
 
-		// GET $path/?access_token=$access_token
-		$resp = $st->fromCurl()->get($this->base_path.$path.'?access_token='. $access_token);
+		$resp = $st->fromCurl()->get($this->base_path . $path, $this->authenticated($params));
 
 		// Make sure it's well formed
 		$log = $st->startAction("make sure we have the 'data' key in the response");
@@ -135,5 +155,12 @@ class UsingFacebookGraphApi extends Prose
 		$log->endAction();
 
 		return $resp->data;
+	}
+
+	private function authenticated(array $params) {
+		if (!isset($params['access_token'])) {
+			$params['access_token'] = $this->st->getEnvironment()->facebookAccessToken;
+		}
+		return $params;
 	}
 }
