@@ -74,6 +74,34 @@ where:
 
 You'll find our docs at [http://datasift.github.io/storyplayer](http://datasift.github.io/storyplayer/).
 
+## Common issues
+
+If you try and run Storyplayer but get one of the following error messages, the OS you're using isn't currently supported:
+
+* fatal error: Unable to detect OS
+* fatal error: Unable to create from distributions: [distribution list]
+
+Currently supported OS's are:
+
+* OSX
+* Ubuntu
+* Linux Mint
+* Fedora
+* CentOS 5
+* CentOS 6
+
+If you're not using one of these but still want to use Storyplayer, we can help! To enable us to add support, open an issue and post the results of the following commands:
+
+```bash
+# This is how we detect the OS
+cat /etc/issue
+
+# This is how we get your IP address
+ifconfig
+```
+
+With this information, we can add support for your OS to Storyplayer.
+
 ## License
 
 New BSD license.  Full details are in the LICENSE.txt file.
