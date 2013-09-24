@@ -41,7 +41,7 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Stone\ObjectLib\BaseObject;
@@ -52,7 +52,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @uses Prose
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class ExpectsGenericTable extends Prose
+class FromGenericTable extends Prose
 {
     /**
      * getTable

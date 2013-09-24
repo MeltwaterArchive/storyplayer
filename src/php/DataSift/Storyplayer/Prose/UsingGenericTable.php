@@ -41,7 +41,7 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Stone\ObjectLib\BaseObject;
@@ -77,7 +77,9 @@ class UsingGenericTable extends Prose
 
 	// make sure it exists
 	if (!isset($runtimeConfig->$parent)){
-	    $runtimeConfig->$parent = new BaseObject();
+	    $log->addStep("{$parent} does not exist in the runtime config. creating empty table", function() use ($runtimeConfig){
+		$runtimeConfig->$parent = new BaseObject();
+	    });
 	}
 
 	// make sure we don't have a duplicate entry
@@ -88,10 +90,10 @@ class UsingGenericTable extends Prose
 	}
 
 	// add the entry
-	$runtimeConfig->$parent->key = $value;
+	$runtimeConfig->$parent->$key = $value;
 
 	// save the updated runtime config
-	$log->addSetp("saving runtime-config to disk", function() use ($st){
+	$log->addStep("saving runtime-config to disk", function() use ($st){
 	    $st->saveRuntimeConfig();
 	});
 
@@ -136,6 +138,16 @@ class UsingGenericTable extends Prose
 
 	// remove the entry
 	unset($runtimeConfig->$parent->$key);
+	
+	// remove the table if it's empty
+	if (!count(get_object_vars($runtimeConfig->$parent))) {
+	    $log->addStep("Table '{$parent}' is empty, removing from runtime config", function() use ($runtimeConfig, $parent){
+		unset($runtimeConfig->$parent);
+	    });
+	}
+
+	// save the changes
+	$st->saveRuntimeConfig();
 
 	// all done
 	$log->endAction();

@@ -41,7 +41,7 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;

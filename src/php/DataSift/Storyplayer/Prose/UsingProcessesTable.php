@@ -73,7 +73,7 @@ class UsingProcessesTable extends Prose
 	 */
 	public function addProcess($processDetails)
 	{
-		$this->st->usingGenericTable()->getItem($this->entryName, $processDetails->pid, $processDetails);
+		$this->st->usingGenericTable()->addItem($this->entryName, $processDetails->pid, $processDetails);
 	}
 
 	/**
