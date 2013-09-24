@@ -43,10 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  *
  * test the state of the internal processes table
@@ -60,49 +56,37 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class ExpectsProcessesTable extends Prose
 {
+
+	/**
+	 * entryName
+	 *
+	 * The key that this table stores it's data in the RuntimeConfig
+	 *
+	 * @var string
+	 */
+	protected $entryName = "processes";
+
+	/**
+	 * hasEntryForProcess
+	 *
+	 * @param mixed $pid The pid we're working with
+	 *
+	 * @return void
+	 */
 	public function hasEntryForProcess($pid)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("make sure process ID '{$pid}' has an entry in Storyplayer's processes table");
-
-		// get the processes table
-		$processesTable = $st->fromProcessesTable()->getProcessesTable();
-
-		// make sure we have the entry
-		if (!isset($processesTable->$pid)) {
-			$msg = "table does not contain an entry for '{$pid}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "processes table has an entry for '{$pid}'", "processes table has no entry for '{$pid}'");
-		}
-
-		// all done
-		$log->endAction();
+		$this->st->expectsGenericTable()->hasEntry($this->entryName, $pid);
 	}
 
+	/**
+	 * hasNoEntryForProcess
+	 *
+	 * @param mixed $pid The pid we're working with
+	 *
+	 * @return void
+	 */
 	public function hasNoEntryForProcess($pid)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("make sure process ID '{$pid}' has no entry in Storyplayer's processes table");
-
-		// get the processes table
-		$processesTable = $st->fromProcessesTable()->getProcessesTable();
-
-		// make sure we do not have the entry
-		if (isset($processesTable->$pid)) {
-			$msg = "table contains an entry for '{$pid}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "processes table has no entry for '{$pid}'", "processes table has an entry for '{$pid}'");
-		}
-
-		// all done
-		$log->endAction();
+		$this->st->expectsGenericTable()->hasNoEntry($this->entryName, $pid);
 	}
 }
