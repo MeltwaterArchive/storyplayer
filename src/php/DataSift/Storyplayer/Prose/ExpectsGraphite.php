@@ -43,9 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\ProseLib\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
 
 /**
  * test the data stored in Graphite
@@ -57,7 +55,7 @@ use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class GraphiteExpects extends Prose
+class ExpectsGraphite extends Prose
 {
 	public function metricIsAlwaysZero($metric, $startTime, $endTime)
 	{
