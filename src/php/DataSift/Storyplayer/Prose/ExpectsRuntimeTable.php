@@ -62,10 +62,13 @@ class ExpectsRuntimeTable extends Prose
      *
      * @return void
      */
-    public function hasEntry($tableName, $key)
+    public function hasEntry($key)
     {
 	// shorthand
 	$st = $this->st;
+
+        // get our table name from the constructor
+	$tableName = $this->args[0];
 
 	// what are we doing?
 	$log = $st->startAction("make sure host '{$key}' has an entry in the '{$tableName}' table");
@@ -101,10 +104,13 @@ class ExpectsRuntimeTable extends Prose
      *
      * @return void
      */
-    public function hasNoEntry($tableName, $key)
+    public function hasNoEntry($key)
     {
 	// shorthand
 	$st = $this->st;
+
+        // get our table name from the constructor
+	$tableName = $this->args[0];
 
 	// what are we doing?
 	$log = $st->startAction("make sure there is no existing entry for '{$key}' in '{$tableName}'");

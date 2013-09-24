@@ -65,9 +65,12 @@ class UsingRuntimeTable extends Prose
      *
      * @return void
      */
-    public function addItem($tableName, $key, $value)
+    public function addItem($key, $value)
     {
 	$st = $this->st;
+
+        // get our table name from the constructor
+        $tableName = $this->args[0];
 
 	$log = $st->startAction("add entry '{$key}' to {$tableName} table");
 
@@ -76,7 +79,7 @@ class UsingRuntimeTable extends Prose
 
 	// make sure it exists
 	if (!isset($runtimeConfig->$tableName)){
-	    $log->addStep("{$tableName} does not exist in the runtime config. creating empty table", function() use ($runtimeConfig){
+	    $log->addStep("{$tableName} does not exist in the runtime config. creating empty table", function() use ($runtimeConfig, $tableName){
 		$runtimeConfig->$tableName = new BaseObject();
 	    });
 	}
@@ -110,10 +113,13 @@ class UsingRuntimeTable extends Prose
      *
      * @return void
      */
-    public function removeItem($tableName, $key){
+    public function removeItem($key){
 
 	// shorthand
 	$st = $this->st;
+
+        // get our table name from the constructor
+	$tableName = $this->args[0];
 
 	// what are we doing?
 	$log = $st->startAction("remove entry '{$key}' from {$tableName} table");
@@ -140,7 +146,7 @@ class UsingRuntimeTable extends Prose
 
 	// remove the table if it's empty
 	if (!count(get_object_vars($runtimeConfig->$tableName))) {
-	    $log->addStep("Table '{$tableName}' is empty, removing from runtime config", function() use ($runtimeConfig, $parent){
+	    $log->addStep("Table '{$tableName}' is empty, removing from runtime config", function() use ($runtimeConfig, $tableName){
 		unset($runtimeConfig->$tableName);
 	    });
 	}

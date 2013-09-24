@@ -60,10 +60,13 @@ class FromRuntimeTable extends Prose
      *
      * @return object The table from the config
      */
-    public function getTable($tableName){
+    public function getTable(){
 
         // shorthand
         $st = $this->st;
+
+        // get our table name from the constructor
+        $tableName = $this->args[0];
 
         // what are we doing?
         $log = $st->startAction("get '{$tableName}' table from runtime config");
@@ -91,10 +94,13 @@ class FromRuntimeTable extends Prose
      *
      * @return object The details stored under $key
      */
-    public function getDetails($tableName, $key){
+    public function getDetails($key){
 
         // shorthand
         $st = $this->st;
+
+        // get our table name from the constructor
+        $tableName = $this->args[0];
 
         // what are we doing?
         $log = $st->startAction("get details for '{$key}' from {$tableName} table");

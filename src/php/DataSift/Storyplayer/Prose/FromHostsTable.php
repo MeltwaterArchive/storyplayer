@@ -72,7 +72,7 @@ class FromHostsTable extends Prose
 	 */
 	public function getHostsTable()
 	{
-		return $this->st->fromRuntimeTable()->getTable($this->entryKey);
+		return $this->st->fromRuntimeTable($this->entryKey)->getTable();
 	}
 
 	/**
@@ -84,6 +84,6 @@ class FromHostsTable extends Prose
 	 */
 	public function getDetailsForHost($hostName)
 	{
-		return $this->st->fromRuntimeTable()->getDetails($this->entryKey, $hostName);
+		return $this->st->fromRuntimeTable($this->entryKey)->getDetails($hostName);
 	}
 }
