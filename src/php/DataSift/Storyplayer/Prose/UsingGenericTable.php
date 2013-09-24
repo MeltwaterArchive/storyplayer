@@ -45,6 +45,7 @@ namespace Prose;
 
 use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 
 /**
  * UsingGenericTable

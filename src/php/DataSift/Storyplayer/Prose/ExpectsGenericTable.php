@@ -44,6 +44,8 @@
 namespace Prose;
 
 use DataSift\Storyplayer\Prose\Prose;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+
 
 /**
  * ExpectsGenericTable
