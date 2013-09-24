@@ -75,7 +75,7 @@ class ExpectsProcessesTable extends Prose
 	 */
 	public function hasEntryForProcess($pid)
 	{
-		$this->st->expectsGenericTable()->hasEntry($this->entryName, $pid);
+		$this->st->expectsRuntimeTable()->hasEntry($this->entryName, $pid);
 	}
 
 	/**
@@ -87,6 +87,6 @@ class ExpectsProcessesTable extends Prose
 	 */
 	public function hasNoEntryForProcess($pid)
 	{
-		$this->st->expectsGenericTable()->hasNoEntry($this->entryName, $pid);
+		$this->st->expectsRuntimeTable()->hasNoEntry($this->entryName, $pid);
 	}
 }

@@ -73,7 +73,7 @@ class UsingProcessesTable extends Prose
 	 */
 	public function addProcess($processDetails)
 	{
-		$this->st->usingGenericTable()->addItem($this->entryName, $processDetails->pid, $processDetails);
+		$this->st->usingRuntimeTable()->addItem($this->entryName, $processDetails->pid, $processDetails);
 	}
 
 	/**
@@ -85,6 +85,6 @@ class UsingProcessesTable extends Prose
 	 */
 	public function removeProcess($pid)
 	{
-		$this->st->usingGenericTable()->removeItem($this->entryName, $pid);
+		$this->st->usingRuntimeTable()->removeItem($this->entryName, $pid);
 	}
 }

@@ -75,7 +75,7 @@ class UsingHostsTable extends Prose
 	 */
 	public function addHost($hostName, $hostDetails)
 	{
-		$this->st->usingGenericTable()->addItem($this->entryKey, $hostname, $hostDetails);
+		$this->st->usingRuntimeTable()->addItem($this->entryKey, $hostname, $hostDetails);
 	}
 
 	/**
@@ -87,6 +87,6 @@ class UsingHostsTable extends Prose
 	 */
 	public function removeHost($hostName)
 	{
-		$this->st->usingGenericTable()->removeItem($this->entryKey, $hostName);
+		$this->st->usingRuntimeTable()->removeItem($this->entryKey, $hostName);
 	}
 }

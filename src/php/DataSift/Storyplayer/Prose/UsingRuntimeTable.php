@@ -48,12 +48,12 @@ use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 
 /**
- * UsingGenericTable
+ * UsingRuntimeTable
  *
  * @uses Prose
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class UsingGenericTable extends Prose
+class UsingRuntimeTable extends Prose
 {
     /**
      * addItem
