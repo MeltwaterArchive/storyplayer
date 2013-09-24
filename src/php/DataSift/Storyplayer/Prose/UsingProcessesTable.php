@@ -56,13 +56,13 @@ namespace DataSift\Storyplayer\Prose;
 class UsingProcessesTable extends Prose
 {
 	/**
-	 * entryName
+	 * tableName
 	 *
 	 * The key that this table stores it's data in the RuntimeConfig
 	 *
 	 * @var string
 	 */
-	protected $entryName = "processes";
+	protected $tableName = "processes";
 
 	/**
 	 * addProcess
@@ -73,7 +73,7 @@ class UsingProcessesTable extends Prose
 	 */
 	public function addProcess($processDetails)
 	{
-		$this->st->usingRuntimeTable($this->entryName)->addItem($processDetails->pid, $processDetails);
+		$this->st->usingRuntimeTable($this->tableName)->addItem($processDetails->pid, $processDetails);
 	}
 
 	/**
@@ -85,6 +85,6 @@ class UsingProcessesTable extends Prose
 	 */
 	public function removeProcess($pid)
 	{
-		$this->st->usingRuntimeTable($this->entryName)->removeItem($pid);
+		$this->st->usingRuntimeTable($this->tableName)->removeItem($pid);
 	}
 }

@@ -58,13 +58,13 @@ class ExpectsProcessesTable extends Prose
 {
 
 	/**
-	 * entryName
+	 * tableName
 	 *
 	 * The key that this table stores it's data in the RuntimeConfig
 	 *
 	 * @var string
 	 */
-	protected $entryName = "processes";
+	protected $tableName = "processes";
 
 	/**
 	 * hasEntryForProcess
@@ -75,7 +75,7 @@ class ExpectsProcessesTable extends Prose
 	 */
 	public function hasEntryForProcess($pid)
 	{
-		$this->st->expectsRuntimeTable($this->entryName)->hasEntry($pid);
+		$this->st->expectsRuntimeTable($this->tableName)->hasEntry($pid);
 	}
 
 	/**
@@ -87,6 +87,6 @@ class ExpectsProcessesTable extends Prose
 	 */
 	public function hasNoEntryForProcess($pid)
 	{
-		$this->st->expectsRuntimeTable($this->entryName)->hasNoEntry($pid);
+		$this->st->expectsRuntimeTable($this->tableName)->hasNoEntry($pid);
 	}
 }
