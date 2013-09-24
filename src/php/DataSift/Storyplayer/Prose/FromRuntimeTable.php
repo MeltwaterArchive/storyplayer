@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
@@ -57,29 +56,29 @@ class FromRuntimeTable extends Prose
     /**
      * getTable
      *
-     * @param string $parent Key to look for in the runtime config
+     * @param string $tableName Key to look for in the runtime config
      *
      * @return object The table from the config
      */
-    public function getTable($parent){
+    public function getTable($tableName){
 
-	// shorthand
-	$st = $this->st;
+        // shorthand
+        $st = $this->st;
 
-	// what are we doing?
-	$log = $st->startAction("get '{$parent}' table from runtime config");
+        // what are we doing?
+        $log = $st->startAction("get '{$tableName}' table from runtime config");
 
-	// get the runtime config
-	$runtimeConfig = $st->getRuntimeConfig();
+        // get the runtime config
+        $runtimeConfig = $st->getRuntimeConfig();
 
-	// make sure we have a table
-	if (!isset($runtimeConfig->$parent)){
-	    $runtimeConfig->$parent = new BaseObject();
-	}
+        // make sure we have a table
+        if (!isset($runtimeConfig->$tableName)){
+            $runtimeConfig->$tableName = new BaseObject();
+        }
 
-	// all done
-	$log->endAction();
-	return $runtimeConfig->$parent;
+        // all done
+        $log->endAction();
+        return $runtimeConfig->$tableName;
     }
 
     /**
@@ -87,40 +86,40 @@ class FromRuntimeTable extends Prose
      *
      * Get details for a specific key
      *
-     * @param string $parent parent Key to look for in the runtime config
-     * @param string $key key The key to look for inside the parent table
+     * @param string $tableName parent Key to look for in the runtime config
+     * @param string $key key The key to look for inside the tableName table
      *
      * @return object The details stored under $key
      */
-    public function getDetails($parent, $key){
+    public function getDetails($tableName, $key){
 
-	// shorthand
-	$st = $this->st;
+        // shorthand
+        $st = $this->st;
 
-	// what are we doing?
-	$log = $st->startAction("get details for '{$key}' from {$parent} table");
+        // what are we doing?
+        $log = $st->startAction("get details for '{$key}' from {$tableName} table");
 
-	// get the runtime config
-	$runtimeConfig = $st->getRuntimeConfig();
+        // get the runtime config
+        $runtimeConfig = $st->getRuntimeConfig();
 
-	// make sure we have a hosts table
-	if (!isset($runtimeConfig->$parent)) {
-	    $msg = "Table is empty / does not exist";
-	    $log->endAction($msg);
+        // make sure we have a hosts table
+        if (!isset($runtimeConfig->$tableName)) {
+            $msg = "Table is empty / does not exist";
+            $log->endAction($msg);
 
-	    return null;
-	}
+            return null;
+        }
 
-	// do we have the entry we're looking for?
-	if (!isset($runtimeConfig->$parent->$key)) {
-	    $msg = "Table does not contain an entry for '{$key}'";
-	    $log->endAction($msg);
-	    return null;
-	}
+        // do we have the entry we're looking for?
+        if (!isset($runtimeConfig->$tableName->$key)) {
+            $msg = "Table does not contain an entry for '{$key}'";
+            $log->endAction($msg);
+            return null;
+        }
 
-	// all done
-	$log->endAction();
-	return $runtimeConfig->$parent->$key;
+        // all done
+        $log->endAction();
+        return $runtimeConfig->$tableName->$key;
     }
 }
 

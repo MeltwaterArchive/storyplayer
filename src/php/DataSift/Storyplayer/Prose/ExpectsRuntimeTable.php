@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
 
 
@@ -58,36 +57,36 @@ class ExpectsRuntimeTable extends Prose
     /**
      * hasEntry
      *
-     * @param string $parent Key to look for in the runtime config
-     * @param string $key key The key to look for inside the parent table
+     * @param string $tableName Key to look for in the runtime config
+     * @param string $key key The key to look for inside the tableName table
      *
      * @return void
      */
-    public function hasEntry($parent, $key)
+    public function hasEntry($tableName, $key)
     {
 	// shorthand
 	$st = $this->st;
 
 	// what are we doing?
-	$log = $st->startAction("make sure host '{$key}' has an entry in the '{$parent}' table");
+	$log = $st->startAction("make sure host '{$key}' has an entry in the '{$tableName}' table");
 
 	// get the runtime config
 	$runtimeConfig = $st->getRuntimeConfig();
 
 	// make sure we have a hosts table
-	if (!isset($runtimeConfig->$parent)) {
+	if (!isset($runtimeConfig->$tableName)) {
 	    $msg = "Table is empty / does not exist";
 	    $log->endAction($msg);
 
-	    throw new E5xx_ExpectFailed(__METHOD__, "{$parent} table existed", "{$parent} table does not exist");
+	    throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table existed", "{$parent} table does not exist");
 	}
 
 	// make sure we don't have a duplicate entry
-	if (!isset($runtimeConfig->$parent->$key)) {
+	if (!isset($runtimeConfig->$tableName->$key)) {
 	    $msg = "Table does not contain an entry for '{$key}'";
 	    $log->endAction($msg);
 
-	    throw new E5xx_ExpectFailed(__METHOD__, "{$parent} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
+	    throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
 	}
 
 	// all done
@@ -97,35 +96,35 @@ class ExpectsRuntimeTable extends Prose
     /**
      * hasNoEntry
      *
-     * @param string $parent Key to look for in the runtime config
-     * @param string $key key The key to look for inside the parent table
+     * @param string $tableName Key to look for in the runtime config
+     * @param string $key key The key to look for inside the tableName table
      *
      * @return void
      */
-    public function hasNoEntry($parent, $key)
+    public function hasNoEntry($tableName, $key)
     {
 	// shorthand
 	$st = $this->st;
 
 	// what are we doing?
-	$log = $st->startAction("make sure there is no existing entry for '{$key}' in '{$parent}'");
+	$log = $st->startAction("make sure there is no existing entry for '{$key}' in '{$tableName}'");
 
 	// get the runtime config
 	$runtimeConfig = $st->getRuntimeConfig();
 
 	// make sure we have a hosts table
-	if (!isset($runtimeConfig->$parent)) {
+	if (!isset($runtimeConfig->$tableName)) {
 	    $msg = "Table is empty / does not exist";
 	    $log->endAction($msg);
 	    return;
 	}
 
 	// make sure we don't have a duplicate entry
-	if (isset($runtimeConfig->$parent->$key)) {
+	if (isset($runtimeConfig->$tableName->$key)) {
 	    $msg = "Table already contains an entry for '{$key}'";
 	    $log->endAction($msg);
 
-	    throw new E5xx_ExpectFailed(__METHOD__, "{$parent} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");
+	    throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");
 	}
 
 	// all done

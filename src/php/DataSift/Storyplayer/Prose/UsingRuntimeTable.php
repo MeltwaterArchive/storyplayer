@@ -43,9 +43,8 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 
 /**
  * UsingRuntimeTable
@@ -60,37 +59,37 @@ class UsingRuntimeTable extends Prose
      *
      * Add an item to a module's runtime config table
      *
-     * @param string $parent The parent key for a module
+     * @param string $tableName The parent key for a module
      * @param string $key The key to save data under
      * @param string $value The value to save
      *
      * @return void
      */
-    public function addItem($parent, $key, $value)
+    public function addItem($tableName, $key, $value)
     {
 	$st = $this->st;
 
-	$log = $st->startAction("add entry '{$key}' to {$parent} table");
+	$log = $st->startAction("add entry '{$key}' to {$tableName} table");
 
 	// get the runtime config
 	$runtimeConfig = $st->getRuntimeConfig();
 
 	// make sure it exists
-	if (!isset($runtimeConfig->$parent)){
-	    $log->addStep("{$parent} does not exist in the runtime config. creating empty table", function() use ($runtimeConfig){
-		$runtimeConfig->$parent = new BaseObject();
+	if (!isset($runtimeConfig->$tableName)){
+	    $log->addStep("{$tableName} does not exist in the runtime config. creating empty table", function() use ($runtimeConfig){
+		$runtimeConfig->$tableName = new BaseObject();
 	    });
 	}
 
 	// make sure we don't have a duplicate entry
-	if (isset($runtimeConfig->$parent->$key)){
+	if (isset($runtimeConfig->$tableName->$key)){
 	    $msg = "Table already contains an entry for '{$key}'";
 	    $log->endAction($msg);
 	    throw new E5xx_ActionFailed(__METHOD__, $msg);
 	}
 
 	// add the entry
-	$runtimeConfig->$parent->$key = $value;
+	$runtimeConfig->$tableName->$key = $value;
 
 	// save the updated runtime config
 	$log->addStep("saving runtime-config to disk", function() use ($st){
@@ -106,43 +105,43 @@ class UsingRuntimeTable extends Prose
      *
      * Removes an item from the runtimeConfig file
      *
-     * @param string $parent The module's parent key
+     * @param string $tableName The module's parent key
      * @param string $key The key that we want to remove
      *
      * @return void
      */
-    public function removeItem($parent, $key){
+    public function removeItem($tableName, $key){
 
 	// shorthand
 	$st = $this->st;
 
 	// what are we doing?
-	$log = $st->startAction("remove entry '{$key}' from {$parent} table");
+	$log = $st->startAction("remove entry '{$key}' from {$tableName} table");
 
 	// get the runtime config
 	$runtimeConfig = $st->getRuntimeConfig();
 
 	// make sure it exists
-	if (!isset($runtimeConfig->$parent)) {
+	if (!isset($runtimeConfig->$tableName)) {
 	    $msg = "Table is empty / does not exist. '{$key}' not removed";
 	    $log->endAction($msg);
 	    return;
 	}
 
 	// make sure we have an entry to remove
-	if (!isset($runtimeConfig->$parent->$key)) {
+	if (!isset($runtimeConfig->$tableName->$key)) {
 	    $msg = "Table does not contain an entry for '{$key}'";
 	    $log->endAction($msg);
 	    return;
 	}
 
 	// remove the entry
-	unset($runtimeConfig->$parent->$key);
-	
+	unset($runtimeConfig->$tableName->$key);
+
 	// remove the table if it's empty
-	if (!count(get_object_vars($runtimeConfig->$parent))) {
-	    $log->addStep("Table '{$parent}' is empty, removing from runtime config", function() use ($runtimeConfig, $parent){
-		unset($runtimeConfig->$parent);
+	if (!count(get_object_vars($runtimeConfig->$tableName))) {
+	    $log->addStep("Table '{$tableName}' is empty, removing from runtime config", function() use ($runtimeConfig, $parent){
+		unset($runtimeConfig->$tableName);
 	    });
 	}
 
