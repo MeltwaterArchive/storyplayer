@@ -43,12 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
-use DataSift\Stone\ObjectLib\BaseObject;
-
 /**
  * retrieve data from the internal hosts table
  *
@@ -61,55 +55,35 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class FromHostsTable extends Prose
 {
+	/**
+	 * entryKey
+	 * The key that this table interacts with in the RuntimeConfig
+	 *
+	 * @var string
+	 */
+	protected $entryKey = "hosts";
+
+
+	/**
+	 * getHostsTable
+	 *
+	 *
+	 * @return object The hosts table
+	 */
 	public function getHostsTable()
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
-
-		// all done
-		$log->endAction();
-		return $runtimeConfig->hosts;
+		return $this->st->fromGenericTable()->getTable($this->entryKey);
 	}
 
+	/**
+	 * getDetailsForHost
+	 *
+	 * @param string $hostName The host we're looking for
+	 *
+	 * @return object Details about $hostName
+	 */
 	public function getDetailsForHost($hostName)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get details for host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-
-			return null;
-		}
-
-		// make sure we don't have a duplicate entry
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return null;
-		}
-
-		// all done
-		$log->endAction();
-		return $runtimeConfig->hosts->$hostName;
+		return $this->st->fromGenericTable()->getDetails($this->entryKey, $hostName);
 	}
 }

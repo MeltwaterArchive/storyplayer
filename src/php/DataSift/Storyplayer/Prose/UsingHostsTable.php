@@ -43,11 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * manipulate the internal hosts table
@@ -61,71 +57,36 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingHostsTable extends Prose
 {
+	/**
+	 * entryKey
+	 * The key that this table interacts with in the RuntimeConfig
+	 *
+	 * @var string
+	 */
+	protected $entryKey = "hosts";
+
+	/**
+	 * addHost 
+	 * 
+	 * @param string $hostName Host name to add 
+	 * @param string $hostDetails Details about this host 
+	 * 
+	 * @return void
+	 */
 	public function addHost($hostName, $hostDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$runtimeConfig->hosts = new BaseObject();
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->hosts->$hostName = $hostDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
+		$this->st->usingGenericTable()->addItem($this->entryKey, $hostname, $hostDetails);
 	}
 
+	/**
+	 * removeHost 
+	 * 
+	 * @param string $hostName Host name to remove
+	 * 
+	 * @return void
+	 */
 	public function removeHost($hostName)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist. '{$hostName}' not removed.";
-			$log->endAction($msg);
-			return;
-		}
-
-		// make sure we have an entry to remove
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-			return;
-		}
-
-		// remove the entry
-		unset($runtimeConfig->hosts->$hostName);
-
-		// all done
-		$log->endAction();
+		$this->st->usingGenericTable()->removeItem($this->entryKey, $hostName);
 	}
 }
