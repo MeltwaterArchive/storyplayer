@@ -196,6 +196,17 @@ class PlayStoryCommand extends CliCommand
         // are we loading a story, or a list of stories?
         $arg2parts  = explode('.', $params[0]);
         $arg2suffix = end($arg2parts);
+
+        // create a new StoryTeller object
+        $teller = new StoryTeller();
+
+        // remember our $st object, as we'll need it for our
+        // shutdown function
+        $this->st = $teller;
+
+        // run our cleanup handlers before playing the story
+        $this->runCleanupHandlers("startup");
+
         switch($arg2suffix)
         {
         case "php":
@@ -206,20 +217,12 @@ class PlayStoryCommand extends CliCommand
 
             // create something to play this story
             $player = new StoryPlayer();
-            $teller = new StoryTeller($story);
-
-            // remember our $st object, as we'll need it for our
-            // shutdown function
-            $this->st = $teller;
+            $teller->setStory($story);
 
             // create the supporting context for this story
             $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
             $teller->setStoryContext($context);
             $teller->setRuntimeConfigManager($runtimeConfigManager);
-
-            // run our cleanup handlers before playing the story
-            $this->runCleanupHandlers("startup");
-
 
             // make the story happen
             $result = $player->play($teller, $staticConfig);
@@ -236,7 +239,7 @@ class PlayStoryCommand extends CliCommand
             // keep track of the results
             $results = array();
 
-            // run through our list of stories
+           // run through our list of stories
             foreach ($storyList->stories as $storyFile)
             {
                 // load our story
@@ -244,11 +247,7 @@ class PlayStoryCommand extends CliCommand
 
                 // create something to play this story
                 $player = new StoryPlayer();
-                $teller = new StoryTeller($story);
-
-                // remember our $st object, as we'll need it for our
-                // shutdown function
-                $this->st = $teller;
+                $teller->setStory($story);
 
                 // create the supporting context for this story
                 $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
