@@ -236,13 +236,18 @@ function main($argv)
 	// --------------------------------------------------------------------
 
 	// tidy up our list of background processes
-	if (isset($runtimeConfig->processes)) {
-		foreach ($runtimeConfig->processes as $pid => $details) {
+	if (isset($runtimeConfig->storyplayer->tables->processes)) {
+		foreach ($runtimeConfig->storyplayer->tables->processes as $pid => $details) {
 			if (!posix_kill($pid, 0)) {
 				// process no longer running
-				unset($runtimeConfig->processes->$pid);
+				unset($runtimeConfig->storyplayer->tables->processes->$pid);
 			}
 		}
+		
+		if (!count(get_object_vars($runtimeConfig->storyplayer->tables->processes))) {
+			unset($runtimeConfig->storyplayer->tables->processes);
+		}
+
 	}
 
 	// ====================================================================
