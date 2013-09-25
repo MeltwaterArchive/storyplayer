@@ -56,6 +56,14 @@ use DataSift\Storyplayer\Prose\E4xx_MissingArgument;
 class BaseRuntimeTable extends Prose
 {
 
+    /**
+     * __construct
+     *
+     * @param StoryTeller $st The StoryTeller object
+     * @param array $args Any arguments to be used in this Prose module
+     *
+     * @return parent::__construct
+     */
     public function __construct(StoryTeller $st, $args = array())
     {
         if (!isset($args[0])){
@@ -66,11 +74,11 @@ class BaseRuntimeTable extends Prose
     }
 
     /**
-     * &getAllTables 
-     * 
+     * getAllTables
+     *
      * Return our tables config that we can use for
      * in place editing
-     * 
+     *
      * @return BaseObject
      */
     public function getAllTables()
