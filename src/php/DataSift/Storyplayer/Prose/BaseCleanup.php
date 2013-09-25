@@ -43,18 +43,34 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E4xx_MissingArgument;
 
 /**
- * BaseRuntimeTable
+ * BaseCleanup
  *
  * @uses Prose
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class BaseRuntimeTable extends Prose
+abstract class BaseCleanup extends Prose
 {
+
+    /**
+     * key
+     * The key of the table we're working with
+     * 
+     * @var string
+     */
+    protected $key;
+
+
+    /**
+     * table 
+     *
+     * The actual table that we're working with
+     * 
+     * @var BaseObject
+     */
+    protected $table;
 
     /**
      * __construct
@@ -66,46 +82,51 @@ class BaseRuntimeTable extends Prose
      */
     public function __construct(StoryTeller $st, $args = array())
     {
-        if (!isset($args[0])){
-            throw new E4xx_MissingArgument(__METHOD__, "You must provide a table name to ".get_class($this)."::__construct");
-        }
 
-        // Let's ucfirst the table name for consistancy
-        $args[0] = ucfirst($args[0]);
+        // The key of the entry we're working with
+        $this->key = $args[0];
+
+        // Store the table we're working with in $this->table
+        // This is the *actual table*, not just the key
+        $this->table = $args[1];
 
         return parent::__construct($st, $args);
     }
 
     /**
-     * getAllTables
+     * startup 
      *
-     * Return our tables config that we can use for
-     * in place editing
-     *
-     * @return BaseObject
+     * The function to run before stories are run
+     * 
+     * @return void
      */
-    public function getAllTables()
-    {
-        // shorthand
-        $st = $this->st;
+    abstract public function startup();
 
-        // get the runtime config
-        $runtimeConfig = $st->getRuntimeConfig();
+    /**
+     * shutdown 
+     *
+     * The function to run after stories are run
+     * 
+     * 
+     * @return void
+     */
+    abstract public function shutdown();
 
-        // make sure the storyplayer section exists
-        if (!isset($runtimeConfig->storyplayer)){
-            $runtimeConfig->storyplayer = new BaseObject;
+    /**
+     * removeTableIfEmpty 
+     *
+     * Remove an entry in the runtime config if it is empty
+     * 
+     * 
+     * @return void
+     */
+    public function removeTableIfEmpty(){
+
+        $runtimeConfig = $this->st->getRuntimeConfig();
+        $key = $this->key;
+
+        if (!count(get_object_vars($runtimeConfig->storyplayer->tables->$key))) {
+            unset($runtimeConfig->storyplayer->tables->$key);
         }
-
-        // and that the tables section exists
-        if (!isset($runtimeConfig->storyplayer->tables)){
-            $runtimeConfig->storyplayer->tables = new BaseObject;
-        }
-
-        return $runtimeConfig->storyplayer->tables;
     }
-
 }
-
-
-
