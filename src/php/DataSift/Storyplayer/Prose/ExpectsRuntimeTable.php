@@ -52,7 +52,7 @@ use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
  * @uses Prose
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class ExpectsRuntimeTable extends RuntimeTableBase
+class ExpectsRuntimeTable extends BaseRuntimeTable
 {
     /**
      * hasEntry
@@ -74,7 +74,7 @@ class ExpectsRuntimeTable extends RuntimeTableBase
         $log = $st->startAction("make sure host '{$key}' has an entry in the '{$tableName}' table");
 
         // get the table config
-        $tables = $this->getTablesConfig();
+        $tables = $this->getAllTables();
 
         // make sure we have a hosts table
         if (!isset($tables->$tableName)) {
@@ -116,7 +116,7 @@ class ExpectsRuntimeTable extends RuntimeTableBase
         $log = $st->startAction("make sure there is no existing entry for '{$key}' in '{$tableName}'");
 
         // get the table config
-        $tables = $this->getTablesConfig();
+        $tables = $this->getAllTables();
 
         // make sure we have a hosts table
         if (!isset($tables->$tableName)) {

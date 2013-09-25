@@ -55,14 +55,14 @@ class BaseRuntimeTable extends Prose
 {
 
     /**
-     * &getTablesConfig 
+     * &getAllTables 
      * 
      * Return a reference to our tables config that we can use for
      * in place editing
      * 
      * @return BaseObject
      */
-    public function &getTablesConfig()
+    public function &getAllTables()
     {
         // shorthand
         $st = $this->st;

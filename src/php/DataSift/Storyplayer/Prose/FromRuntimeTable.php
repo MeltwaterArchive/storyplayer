@@ -72,7 +72,7 @@ class FromRuntimeTable extends BaseRuntimeTable
         $log = $st->startAction("get '{$tableName}' table from runtime config");
 
         // get the table config
-        $tables = $this->getTablesConfig();
+        $tables = $this->getAllTables();
 
         // make sure we have a table
         if (!isset($tables->$tableName)){
@@ -106,7 +106,7 @@ class FromRuntimeTable extends BaseRuntimeTable
         $log = $st->startAction("get details for '{$key}' from {$tableName} table");
 
         // get the table config
-        $tables = $this->getTablesConfig();
+        $tables = $this->getAllTables();
 
         // make sure we have a hosts table
         if (!isset($tables->$tableName)) {

@@ -75,7 +75,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $log = $st->startAction("add entry '{$key}' to {$tableName} table");
 
         // get the table config
-        $tables = $this->getTablesConfig();
+        $tables = $this->getAllTables();
 
         // make sure it exists
         if (!isset($tables->$tableName)){
@@ -125,7 +125,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $log = $st->startAction("remove entry '{$key}' from {$tableName} table");
 
         // get the table config
-        $tables = $this->getTablesConfig();
+        $tables = $this->getAllTables();
 
         // make sure it exists
         if (!isset($tables->$tableName)) {

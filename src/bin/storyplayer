@@ -243,6 +243,11 @@ function main($argv)
 				unset($runtimeConfig->storyplayer->tables->processes->$pid);
 			}
 		}
+		
+		if (!count(get_object_vars($runtimeConfig->storyplayer->tables->processes))) {
+			unset($runtimeConfig->storyplayer->tables->processes);
+		}
+
 	}
 
 	// ====================================================================
