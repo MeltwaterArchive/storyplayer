@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2013-present Mediasift Ltd
+ * Copyright (c) 2011-present Mediasift Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,58 +43,25 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E4xx_MissingArgument;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * BaseRuntimeTable
+ * Exception thrown when a required argument is not provided
  *
- * @uses Prose
- * @author Michael Heap <michael.heap@datasift.com>
+ * @category  Libraries
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
-class BaseRuntimeTable extends Prose
+class E4xx_MissingArgument extends Exxx_Exception
 {
-
-    public function __construct(StoryTeller $st, $args = array())
-    {
-        if (!isset($args[0])){
-            throw new E4xx_MissingArgument(__METHOD__, "You must provide a table name to ".get_class($this)."::__construct");
-        }
-
-        return parent::__construct($st, $args);
-    }
-
-    /**
-     * &getAllTables 
-     * 
-     * Return our tables config that we can use for
-     * in place editing
-     * 
-     * @return BaseObject
-     */
-    public function getAllTables()
-    {
-        // shorthand
-        $st = $this->st;
-
-        // get the runtime config
-        $runtimeConfig = $st->getRuntimeConfig();
-
-        // make sure the storyplayer section exists
-        if (!isset($runtimeConfig->storyplayer)){
-            $runtimeConfig->storyplayer = new BaseObject;
-        }
-
-        // and that the tables section exists
-        if (!isset($runtimeConfig->storyplayer->tables)){
-            $runtimeConfig->storyplayer->tables = new BaseObject;
-        }
-
-        return $runtimeConfig->storyplayer->tables;
-    }
-
+	public function __construct($method, $reason = '', $params = array()) {
+		$msg = "Missing argument in '$method'";
+		if (strlen($reason) > 0) {
+			$msg .= "; reason is '{$reason}'";
+		}
+		parent::__construct(400, $msg, $msg);
+	}
 }
-
-
-
