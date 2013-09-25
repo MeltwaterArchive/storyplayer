@@ -64,36 +64,36 @@ class ExpectsRuntimeTable extends RuntimeTableBase
      */
     public function hasEntry($key)
     {
-	// shorthand
-	$st = $this->st;
+        // shorthand
+        $st = $this->st;
 
         // get our table name from the constructor
-	$tableName = $this->args[0];
+        $tableName = $this->args[0];
 
-	// what are we doing?
-	$log = $st->startAction("make sure host '{$key}' has an entry in the '{$tableName}' table");
+        // what are we doing?
+        $log = $st->startAction("make sure host '{$key}' has an entry in the '{$tableName}' table");
 
-	// get the table config
-	$tables = $this->getTablesConfig();
+        // get the table config
+        $tables = $this->getTablesConfig();
 
-	// make sure we have a hosts table
-	if (!isset($tables->$tableName)) {
-	    $msg = "Table is empty / does not exist";
-	    $log->endAction($msg);
+        // make sure we have a hosts table
+        if (!isset($tables->$tableName)) {
+            $msg = "Table is empty / does not exist";
+            $log->endAction($msg);
 
-	    throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table existed", "{$parent} table does not exist");
-	}
+            throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table existed", "{$parent} table does not exist");
+        }
 
-	// make sure we don't have a duplicate entry
-	if (!isset($tables->$tableName->$key)) {
-	    $msg = "Table does not contain an entry for '{$key}'";
-	    $log->endAction($msg);
+        // make sure we don't have a duplicate entry
+        if (!isset($tables->$tableName->$key)) {
+            $msg = "Table does not contain an entry for '{$key}'";
+            $log->endAction($msg);
 
-	    throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
-	}
+            throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
+        }
 
-	// all done
-	$log->endAction();
+        // all done
+        $log->endAction();
     }
 
     /**
@@ -106,35 +106,35 @@ class ExpectsRuntimeTable extends RuntimeTableBase
      */
     public function hasNoEntry($key)
     {
-	// shorthand
-	$st = $this->st;
+        // shorthand
+        $st = $this->st;
 
         // get our table name from the constructor
-	$tableName = $this->args[0];
+        $tableName = $this->args[0];
 
-	// what are we doing?
-	$log = $st->startAction("make sure there is no existing entry for '{$key}' in '{$tableName}'");
+        // what are we doing?
+        $log = $st->startAction("make sure there is no existing entry for '{$key}' in '{$tableName}'");
 
-	// get the table config
-	$tables = $this->getTablesConfig();
+        // get the table config
+        $tables = $this->getTablesConfig();
 
-	// make sure we have a hosts table
-	if (!isset($tables->$tableName)) {
-	    $msg = "Table is empty / does not exist";
-	    $log->endAction($msg);
-	    return;
-	}
+        // make sure we have a hosts table
+        if (!isset($tables->$tableName)) {
+            $msg = "Table is empty / does not exist";
+            $log->endAction($msg);
+            return;
+        }
 
-	// make sure we don't have a duplicate entry
-	if (isset($tables->$tableName->$key)) {
-	    $msg = "Table already contains an entry for '{$key}'";
-	    $log->endAction($msg);
+        // make sure we don't have a duplicate entry
+        if (isset($tables->$tableName->$key)) {
+            $msg = "Table already contains an entry for '{$key}'";
+            $log->endAction($msg);
 
-	    throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");
-	}
+            throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");
+        }
 
-	// all done
-	$log->endAction();
+        // all done
+        $log->endAction();
     }
 }
 

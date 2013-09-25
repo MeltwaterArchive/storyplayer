@@ -67,40 +67,40 @@ class UsingRuntimeTable extends BaseRuntimeTable
      */
     public function addItem($key, $value)
     {
-	$st = $this->st;
+        $st = $this->st;
 
         // get our table name from the constructor
         $tableName = $this->args[0];
 
-	$log = $st->startAction("add entry '{$key}' to {$tableName} table");
+        $log = $st->startAction("add entry '{$key}' to {$tableName} table");
 
-	// get the table config
-	$tables = $this->getTablesConfig();
+        // get the table config
+        $tables = $this->getTablesConfig();
 
-	// make sure it exists
-	if (!isset($tables->$tableName)){
-	    $log->addStep("{$tableName} does not exist in the runtime config. creating empty table", function() use ($tables, $tableName){
-		$tables->$tableName = new BaseObject();
-	    });
-	}
+        // make sure it exists
+        if (!isset($tables->$tableName)){
+            $log->addStep("{$tableName} does not exist in the runtime config. creating empty table", function() use ($tables, $tableName){
+                $tables->$tableName = new BaseObject();
+            });
+        }
 
-	// make sure we don't have a duplicate entry
-	if (isset($tables->$tableName->$key)){
-	    $msg = "Table already contains an entry for '{$key}'";
-	    $log->endAction($msg);
-	    throw new E5xx_ActionFailed(__METHOD__, $msg);
-	}
+        // make sure we don't have a duplicate entry
+        if (isset($tables->$tableName->$key)){
+            $msg = "Table already contains an entry for '{$key}'";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-	// add the entry
-	$tables->$tableName->$key = $value;
+        // add the entry
+        $tables->$tableName->$key = $value;
 
-	// save the updated runtime config
-	$log->addStep("saving runtime-config to disk", function() use ($st){
-	    $st->saveRuntimeConfig();
-	});
+        // save the updated runtime config
+        $log->addStep("saving runtime-config to disk", function() use ($st){
+            $st->saveRuntimeConfig();
+        });
 
-	// all done
-	$log->endAction();
+        // all done
+        $log->endAction();
     }
 
     /**
@@ -115,47 +115,47 @@ class UsingRuntimeTable extends BaseRuntimeTable
      */
     public function removeItem($key){
 
-	// shorthand
-	$st = $this->st;
+        // shorthand
+        $st = $this->st;
 
         // get our table name from the constructor
-	$tableName = $this->args[0];
+        $tableName = $this->args[0];
 
-	// what are we doing?
-	$log = $st->startAction("remove entry '{$key}' from {$tableName} table");
+        // what are we doing?
+        $log = $st->startAction("remove entry '{$key}' from {$tableName} table");
 
-	// get the table config
-	$tables = $this->getTablesConfig();
+        // get the table config
+        $tables = $this->getTablesConfig();
 
-	// make sure it exists
-	if (!isset($tables->$tableName)) {
-	    $msg = "Table is empty / does not exist. '{$key}' not removed";
-	    $log->endAction($msg);
-	    return;
-	}
+        // make sure it exists
+        if (!isset($tables->$tableName)) {
+            $msg = "Table is empty / does not exist. '{$key}' not removed";
+            $log->endAction($msg);
+            return;
+        }
 
-	// make sure we have an entry to remove
-	if (!isset($tables->$tableName->$key)) {
-	    $msg = "Table does not contain an entry for '{$key}'";
-	    $log->endAction($msg);
-	    return;
-	}
+        // make sure we have an entry to remove
+        if (!isset($tables->$tableName->$key)) {
+            $msg = "Table does not contain an entry for '{$key}'";
+            $log->endAction($msg);
+            return;
+        }
 
-	// remove the entry
-	unset($tables->$tableName->$key);
+        // remove the entry
+        unset($tables->$tableName->$key);
 
-	// remove the table if it's empty
-	if (!count(get_object_vars($tables->$tableName))) {
-	    $log->addStep("Table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName){
-		unset($tables->$tableName);
-	    });
-	}
+        // remove the table if it's empty
+        if (!count(get_object_vars($tables->$tableName))) {
+            $log->addStep("Table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName){
+                unset($tables->$tableName);
+            });
+        }
 
-	// save the changes
-	$st->saveRuntimeConfig();
+        // save the changes
+        $st->saveRuntimeConfig();
 
-	// all done
-	$log->endAction();
+        // all done
+        $log->endAction();
 
     }
 }

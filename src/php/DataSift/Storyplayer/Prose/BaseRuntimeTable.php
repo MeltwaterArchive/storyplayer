@@ -54,25 +54,33 @@ use DataSift\Stone\ObjectLib\BaseObject;
 class BaseRuntimeTable extends Prose
 {
 
+    /**
+     * &getTablesConfig 
+     * 
+     * Return a reference to our tables config that we can use for
+     * in place editing
+     * 
+     * @return BaseObject
+     */
     public function &getTablesConfig()
     {
-	// shorthand
-	$st = $this->st;
+        // shorthand
+        $st = $this->st;
 
-	// get the runtime config
-	$runtimeConfig = $st->getRuntimeConfig();
+        // get the runtime config
+        $runtimeConfig = $st->getRuntimeConfig();
 
-	// make sure the storyplayer section exists
-	if (!isset($runtimeConfig->storyplayer)){
-	    $runtimeConfig->storyplayer = new BaseObject;
-	}
+        // make sure the storyplayer section exists
+        if (!isset($runtimeConfig->storyplayer)){
+            $runtimeConfig->storyplayer = new BaseObject;
+        }
 
-	// and that the tables section exists
-	if (!isset($runtimeConfig->storyplayer->tables)){
-	    $runtimeConfig->storyplayer->tables = new BaseObject;
-	}
+        // and that the tables section exists
+        if (!isset($runtimeConfig->storyplayer->tables)){
+            $runtimeConfig->storyplayer->tables = new BaseObject;
+        }
 
-	return $runtimeConfig->storyplayer->tables;
+        return $runtimeConfig->storyplayer->tables;
     }
 
 }
