@@ -35,55 +35,33 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+
 /**
- * retrieve data from the internal hosts table
+ * Exception thrown when an invalid argument is provided
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromHostsTable extends Prose
+class E4xx_InvalidArgument extends Exxx_Exception
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "hosts";
-
-
-	/**
-	 * getHostsTable
-	 *
-	 *
-	 * @return object The hosts table
-	 */
-	public function getHostsTable()
-	{
-		return $this->st->fromRuntimeTable($this->entryKey)->getTable();
-	}
-
-	/**
-	 * getDetailsForHost
-	 *
-	 * @param string $hostName The host we're looking for
-	 *
-	 * @return object Details about $hostName
-	 */
-	public function getDetailsForHost($hostName)
-	{
-		return $this->st->fromRuntimeTable($this->entryKey)->getDetails($hostName);
+	public function __construct($argumentName, $reason = '', $params = array()) {
+		$msg = "Missing argument '$argumentName'";
+		if (strlen($reason) > 0) {
+			$msg .= "; reason is '{$reason}'";
+		}
+		parent::__construct(400, $msg, $msg);
 	}
 }

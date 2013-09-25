@@ -43,10 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  *
  * test the state of the internal hosts table
@@ -60,64 +56,36 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class ExpectsHostsTable extends Prose
 {
+
+	/**
+	 * entryKey 
+	 * The key that this table interacts with in the RuntimeConfig
+	 * 
+	 * @var string
+	 */
+	protected $entryKey = "hosts";
+
+	/**
+	 * hasEntryForHost
+	 *
+	 * @param string $hostName The host we're looking for
+	 *
+	 * @return void
+	 */
 	public function hasEntryForHost($hostName)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("make sure host '{$hostName}' has an entry in Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table existed", "hosts table does not exist");
-		}
-
-		// make sure we don't have a duplicate entry
-		if (!isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table does not contain an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has an entry for '{$hostName}'", "hosts table has no entry for '{$hostName}'");
-		}
-
-		// all done
-		$log->endAction();
+		$this->st->expectsRuntimeTable($this->entryKey)->hasEntry($hostName);
 	}
 
+	/**
+	 * hasNoEntryForHost
+	 *
+	 * @param string $hostName The host we're looking for
+	 *
+	 * @return void
+	 */
 	public function hasNoEntryForHost($hostName)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("make sure there is no existing entry for host '{$hostName}' in Storyplayer's hosts table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a hosts table
-		if (!isset($runtimeConfig->hosts)) {
-			$msg = "Table is empty / does not exist";
-			$log->endAction($msg);
-			return;
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->hosts->$hostName)) {
-			$msg = "Table already contains an entry for '{$hostName}'";
-			$log->endAction($msg);
-
-			throw new E5xx_ExpectFailed(__METHOD__, "hosts table has no entry for '{$hostName}'", "hosts table has an entry for '{$hostName}'");
-		}
-
-		// all done
-		$log->endAction();
+		$this->st->expectsRuntimeTable($this->entryKey)->hasNoEntry($hostName);
 	}
 }

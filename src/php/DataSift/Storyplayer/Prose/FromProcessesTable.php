@@ -43,11 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ObjectLib\BaseObject;
-
 /**
  * retrieve data from the internal processes table
  *
@@ -60,47 +55,38 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class FromProcessesTable extends Prose
 {
+	/**
+	 * tableName
+	 *
+	 * The key that this table stores it's data in the RuntimeConfig
+	 *
+	 * @var string
+	 */
+	protected $tableName = "processes";
+
+	/**
+	 * getProcessesTable
+	 *
+	 * Get the entire processes table from the runtime config
+	 *
+	 * @return void
+	 */
 	public function getProcessesTable()
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get Storyplayer's processes table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a processes table
-		if (!isset($runtimeConfig->processes)) {
-			$runtimeConfig->processes = new BaseObject();
-		}
-
-		// all done
-		$log->endAction();
-		return $runtimeConfig->processes;
+		return $this->st->fromRuntimeTable($this->tableName)->getTable();
 	}
 
+	/**
+	 * getDetailsForPid
+	 *
+	 * Get the get a specific pid's details from the processes table
+	 *
+	 * @param mixed $pid The pid we're working with
+	 *
+	 * @return void
+	 */
 	public function getDetailsForPid($pid)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get details for process ID '{$pid}' from Storyplayer's processes table");
-
-		// get the processes table
-		$processesTable = $st->fromProcessesTable()->getProcessesTable();
-
-		// do we have an entry?
-		if (!isset($processesTable->$pid)) {
-			$msg = "table does not contain an entry for '{$pid}'";
-			$log->endAction($msg);
-			return null;
-		}
-
-		// all done
-		$log->endAction();
-		return $processesTable->$pid;
+		return $this->st->fromRuntimeTable($this->tableName)->getDetails($pid);
 	}
 }

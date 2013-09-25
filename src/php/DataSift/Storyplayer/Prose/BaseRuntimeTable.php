@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2011-present Mediasift Ltd
+ * Copyright (c) 2013-present Mediasift Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,55 +35,74 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Prose\E4xx_MissingArgument;
+
 /**
- * retrieve data from the internal hosts table
+ * BaseRuntimeTable
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @uses Prose
+ * @author Michael Heap <michael.heap@datasift.com>
  */
-class FromHostsTable extends Prose
+class BaseRuntimeTable extends Prose
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "hosts";
 
+    /**
+     * __construct
+     *
+     * @param StoryTeller $st The StoryTeller object
+     * @param array $args Any arguments to be used in this Prose module
+     *
+     * @return parent::__construct
+     */
+    public function __construct(StoryTeller $st, $args = array())
+    {
+        if (!isset($args[0])){
+            throw new E4xx_MissingArgument(__METHOD__, "You must provide a table name to ".get_class($this)."::__construct");
+        }
 
-	/**
-	 * getHostsTable
-	 *
-	 *
-	 * @return object The hosts table
-	 */
-	public function getHostsTable()
-	{
-		return $this->st->fromRuntimeTable($this->entryKey)->getTable();
-	}
+        return parent::__construct($st, $args);
+    }
 
-	/**
-	 * getDetailsForHost
-	 *
-	 * @param string $hostName The host we're looking for
-	 *
-	 * @return object Details about $hostName
-	 */
-	public function getDetailsForHost($hostName)
-	{
-		return $this->st->fromRuntimeTable($this->entryKey)->getDetails($hostName);
-	}
+    /**
+     * getAllTables
+     *
+     * Return our tables config that we can use for
+     * in place editing
+     *
+     * @return BaseObject
+     */
+    public function getAllTables()
+    {
+        // shorthand
+        $st = $this->st;
+
+        // get the runtime config
+        $runtimeConfig = $st->getRuntimeConfig();
+
+        // make sure the storyplayer section exists
+        if (!isset($runtimeConfig->storyplayer)){
+            $runtimeConfig->storyplayer = new BaseObject;
+        }
+
+        // and that the tables section exists
+        if (!isset($runtimeConfig->storyplayer->tables)){
+            $runtimeConfig->storyplayer->tables = new BaseObject;
+        }
+
+        return $runtimeConfig->storyplayer->tables;
+    }
+
 }
+
+
+
