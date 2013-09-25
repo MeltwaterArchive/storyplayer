@@ -52,7 +52,7 @@ use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
  * @uses Prose
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class UsingRuntimeTable extends Prose
+class UsingRuntimeTable extends BaseRuntimeTable
 {
     /**
      * addItem
@@ -74,25 +74,25 @@ class UsingRuntimeTable extends Prose
 
 	$log = $st->startAction("add entry '{$key}' to {$tableName} table");
 
-	// get the runtime config
-	$runtimeConfig = $st->getRuntimeConfig();
+	// get the table config
+	$tables = $this->getTablesConfig();
 
 	// make sure it exists
-	if (!isset($runtimeConfig->$tableName)){
-	    $log->addStep("{$tableName} does not exist in the runtime config. creating empty table", function() use ($runtimeConfig, $tableName){
-		$runtimeConfig->$tableName = new BaseObject();
+	if (!isset($tables->$tableName)){
+	    $log->addStep("{$tableName} does not exist in the runtime config. creating empty table", function() use ($tables, $tableName){
+		$tables->$tableName = new BaseObject();
 	    });
 	}
 
 	// make sure we don't have a duplicate entry
-	if (isset($runtimeConfig->$tableName->$key)){
+	if (isset($tables->$tableName->$key)){
 	    $msg = "Table already contains an entry for '{$key}'";
 	    $log->endAction($msg);
 	    throw new E5xx_ActionFailed(__METHOD__, $msg);
 	}
 
 	// add the entry
-	$runtimeConfig->$tableName->$key = $value;
+	$tables->$tableName->$key = $value;
 
 	// save the updated runtime config
 	$log->addStep("saving runtime-config to disk", function() use ($st){
@@ -124,30 +124,30 @@ class UsingRuntimeTable extends Prose
 	// what are we doing?
 	$log = $st->startAction("remove entry '{$key}' from {$tableName} table");
 
-	// get the runtime config
-	$runtimeConfig = $st->getRuntimeConfig();
+	// get the table config
+	$tables = $this->getTablesConfig();
 
 	// make sure it exists
-	if (!isset($runtimeConfig->$tableName)) {
+	if (!isset($tables->$tableName)) {
 	    $msg = "Table is empty / does not exist. '{$key}' not removed";
 	    $log->endAction($msg);
 	    return;
 	}
 
 	// make sure we have an entry to remove
-	if (!isset($runtimeConfig->$tableName->$key)) {
+	if (!isset($tables->$tableName->$key)) {
 	    $msg = "Table does not contain an entry for '{$key}'";
 	    $log->endAction($msg);
 	    return;
 	}
 
 	// remove the entry
-	unset($runtimeConfig->$tableName->$key);
+	unset($tables->$tableName->$key);
 
 	// remove the table if it's empty
-	if (!count(get_object_vars($runtimeConfig->$tableName))) {
-	    $log->addStep("Table '{$tableName}' is empty, removing from runtime config", function() use ($runtimeConfig, $tableName){
-		unset($runtimeConfig->$tableName);
+	if (!count(get_object_vars($tables->$tableName))) {
+	    $log->addStep("Table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName){
+		unset($tables->$tableName);
 	    });
 	}
 

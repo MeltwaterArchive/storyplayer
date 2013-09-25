@@ -46,87 +46,36 @@ namespace DataSift\Storyplayer\Prose;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * ExpectsRuntimeTable
+ * BaseRuntimeTable
  *
  * @uses Prose
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class FromRuntimeTable extends BaseRuntimeTable
+class BaseRuntimeTable extends Prose
 {
-    /**
-     * getTable
-     *
-     * @param string $tableName Key to look for in the runtime config
-     *
-     * @return object The table from the config
-     */
-    public function getTable(){
 
-        // shorthand
-        $st = $this->st;
+    public function &getTablesConfig()
+    {
+	// shorthand
+	$st = $this->st;
 
-        // get our table name from the constructor
-        $tableName = $this->args[0];
+	// get the runtime config
+	$runtimeConfig = $st->getRuntimeConfig();
 
-        // what are we doing?
-        $log = $st->startAction("get '{$tableName}' table from runtime config");
+	// make sure the storyplayer section exists
+	if (!isset($runtimeConfig->storyplayer)){
+	    $runtimeConfig->storyplayer = new BaseObject;
+	}
 
-        // get the table config
-        $tables = $this->getTablesConfig();
+	// and that the tables section exists
+	if (!isset($runtimeConfig->storyplayer->tables)){
+	    $runtimeConfig->storyplayer->tables = new BaseObject;
+	}
 
-        // make sure we have a table
-        if (!isset($tables->$tableName)){
-            $tables->$tableName = new BaseObject();
-        }
-
-        // all done
-        $log->endAction();
-        return $tables->$tableName;
+	return $runtimeConfig->storyplayer->tables;
     }
 
-    /**
-     * getDetails
-     *
-     * Get details for a specific key
-     *
-     * @param string $tableName parent Key to look for in the runtime config
-     * @param string $key key The key to look for inside the tableName table
-     *
-     * @return object The details stored under $key
-     */
-    public function getDetails($key){
-
-        // shorthand
-        $st = $this->st;
-
-        // get our table name from the constructor
-        $tableName = $this->args[0];
-
-        // what are we doing?
-        $log = $st->startAction("get details for '{$key}' from {$tableName} table");
-
-        // get the table config
-        $tables = $this->getTablesConfig();
-
-        // make sure we have a hosts table
-        if (!isset($tables->$tableName)) {
-            $msg = "Table is empty / does not exist";
-            $log->endAction($msg);
-
-            return null;
-        }
-
-        // do we have the entry we're looking for?
-        if (!isset($tables->$tableName->$key)) {
-            $msg = "Table does not contain an entry for '{$key}'";
-            $log->endAction($msg);
-            return null;
-        }
-
-        // all done
-        $log->endAction();
-        return $tables->$tableName->$key;
-    }
 }
+
 
 

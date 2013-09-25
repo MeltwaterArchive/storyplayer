@@ -52,7 +52,7 @@ use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
  * @uses Prose
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class ExpectsRuntimeTable extends Prose
+class ExpectsRuntimeTable extends RuntimeTableBase
 {
     /**
      * hasEntry
@@ -73,11 +73,11 @@ class ExpectsRuntimeTable extends Prose
 	// what are we doing?
 	$log = $st->startAction("make sure host '{$key}' has an entry in the '{$tableName}' table");
 
-	// get the runtime config
-	$runtimeConfig = $st->getRuntimeConfig();
+	// get the table config
+	$tables = $this->getTablesConfig();
 
 	// make sure we have a hosts table
-	if (!isset($runtimeConfig->$tableName)) {
+	if (!isset($tables->$tableName)) {
 	    $msg = "Table is empty / does not exist";
 	    $log->endAction($msg);
 
@@ -85,7 +85,7 @@ class ExpectsRuntimeTable extends Prose
 	}
 
 	// make sure we don't have a duplicate entry
-	if (!isset($runtimeConfig->$tableName->$key)) {
+	if (!isset($tables->$tableName->$key)) {
 	    $msg = "Table does not contain an entry for '{$key}'";
 	    $log->endAction($msg);
 
@@ -115,18 +115,18 @@ class ExpectsRuntimeTable extends Prose
 	// what are we doing?
 	$log = $st->startAction("make sure there is no existing entry for '{$key}' in '{$tableName}'");
 
-	// get the runtime config
-	$runtimeConfig = $st->getRuntimeConfig();
+	// get the table config
+	$tables = $this->getTablesConfig();
 
 	// make sure we have a hosts table
-	if (!isset($runtimeConfig->$tableName)) {
+	if (!isset($tables->$tableName)) {
 	    $msg = "Table is empty / does not exist";
 	    $log->endAction($msg);
 	    return;
 	}
 
 	// make sure we don't have a duplicate entry
-	if (isset($runtimeConfig->$tableName->$key)) {
+	if (isset($tables->$tableName->$key)) {
 	    $msg = "Table already contains an entry for '{$key}'";
 	    $log->endAction($msg);
 
