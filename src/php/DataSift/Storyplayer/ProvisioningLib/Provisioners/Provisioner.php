@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\ProvisioningLib\Provisioners;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 
 /**
