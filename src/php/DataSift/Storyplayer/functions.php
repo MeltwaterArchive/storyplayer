@@ -42,7 +42,7 @@
  */
 
 use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\ProseLib\E5xx_ProseException;
+use DataSift\Storyplayer\Prose\E5xx_ProseException;
 
 /**
  * Create a new story object

@@ -48,7 +48,7 @@ use Exception;
 use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**

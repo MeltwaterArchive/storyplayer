@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -50,7 +50,7 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * a child of the 'Prose' class
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -59,7 +59,7 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 class E5xx_NotAProseClass extends Exxx_Exception
 {
 	public function __construct($className) {
-		$msg = "Class '{$className}' does not inherit from DataSift\\StoryPlayer\\ProseLib\\Prose";
+		$msg = "Class '{$className}' does not inherit from DataSift\\StoryPlayer\\Prose\\Prose";
 		parent::__construct(500, $msg, $msg);
 	}
 }
