@@ -43,69 +43,41 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E4xx_MissingArgument;
-
 /**
- * BaseRuntimeTable
+ * CleanupProcesses
  *
- * @uses Prose
+ * @uses CleanupProcesses
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class BaseRuntimeTable extends Prose
+class CleanupProcesses extends BaseCleanup
 {
 
-    /**
-     * __construct
-     *
-     * @param StoryTeller $st The StoryTeller object
-     * @param array $args Any arguments to be used in this Prose module
-     *
-     * @return parent::__construct
-     */
-    public function __construct(StoryTeller $st, $args = array())
+    public function startup()
     {
-        if (!isset($args[0])){
-            throw new E4xx_MissingArgument(__METHOD__, "You must provide a table name to ".get_class($this)."::__construct");
-        }
+        return $this->pruneProcessList();
+    }
 
-        // Let's ucfirst the table name for consistancy
-        $args[0] = ucfirst($args[0]);
-
-        return parent::__construct($st, $args);
+    public function shutdown()
+    {
+        return $this->pruneProcessList();
     }
 
     /**
-     * getAllTables
-     *
-     * Return our tables config that we can use for
-     * in place editing
-     *
-     * @return BaseObject
+     * pruneProcessList 
+     * 
+     * Loop through our recorded processes and send them a `kill 0`
+     * If they don't respond, they're already dead so remove them from the table
+     * 
+     * @return void
      */
-    public function getAllTables()
+    private function pruneProcessList()
     {
-        // shorthand
-        $st = $this->st;
-
-        // get the runtime config
-        $runtimeConfig = $st->getRuntimeConfig();
-
-        // make sure the storyplayer section exists
-        if (!isset($runtimeConfig->storyplayer)){
-            $runtimeConfig->storyplayer = new BaseObject;
+        foreach ($this->table as $pid => $details) {
+            if (!posix_kill($pid, 0)) {
+                // process no longer running
+                unset($this->table->$pid);
+            }
         }
-
-        // and that the tables section exists
-        if (!isset($runtimeConfig->storyplayer->tables)){
-            $runtimeConfig->storyplayer->tables = new BaseObject;
-        }
-
-        return $runtimeConfig->storyplayer->tables;
     }
 
 }
-
-
-

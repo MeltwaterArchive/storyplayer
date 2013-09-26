@@ -98,11 +98,8 @@ class StoryTeller
 	 */
 	private $currentPhase = null;
 
-	public function __construct(Story $story)
+	public function __construct()
 	{
-		// this is the story that will be told
-		$this->setStory($story);
-
 		// set a default page context
 		$this->setPageContext(new PageContext);
 
