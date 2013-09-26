@@ -214,6 +214,7 @@ function main($argv)
 
 	// a list of sections that can have their own config file
 	$additionalConfigSections = array(
+		'devices'      => array(),
 		'environments' => array()
 	);
 
@@ -237,6 +238,7 @@ function main($argv)
 
 	// put all of that into something we can give to the CliEngine
 	$additionalContext = (object) array (
+		'deviceList'		   => $additionalConfigSections['devices'],
 		'envList'			   => $additionalConfigSections['environments'],
 		'runtimeConfig'        => $runtimeConfig,
 		'runtimeConfigManager' => $runtimeConfigManager,

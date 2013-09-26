@@ -107,6 +107,7 @@ class PlayStoryCommand extends CliCommand
             new LogLevelSwitch(),
             new EnvironmentSwitch($additionalContext->envList, $defaultEnvName),
             new DefineSwitch(),
+            new DeviceSwitch($additionalContext->deviceList),
             new PersistProcessesSwitch(),
             new PlatformSwitch(),
             new UseRemoteWebDriverSwitch(),
@@ -179,6 +180,25 @@ class PlayStoryCommand extends CliCommand
             //
             // this will be merged in with the default config
             $staticConfigManager->loadAdditionalConfig($staticConfig, $envName);
+        }
+
+        // do we need to load device-specific config?
+        //
+        // we do this AFTER loading environments, because that's the order
+        // we've told users it will happen in
+        if (isset($engine->options->device)) {
+            $deviceName = $engine->options->device;
+        }
+        else {
+            $deviceName = null;
+        }
+
+        if ($deviceName && !isset($staticConfig->devices, $staticConfig->devices->$deviceName))
+        {
+            // load our device-specific config
+            //
+            // this will be merged in with the default config
+            $staticConfigManager->loadAdditionalConfig($staticConfig, $deviceName);
         }
 
         // do we have any defines from the command-line to merge in?
