@@ -47,9 +47,9 @@ use Exception;
 use stdClass;
 use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
-use DataSift\Storyplayer\ProseLib\E5xx_NotImplemented;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\UserLib\UserGenerator;
 

@@ -43,8 +43,8 @@
 
 namespace DataSift\Storyplayer\ProvisioningLib;
 
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\Prose;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\DataLib\DataPrinter;

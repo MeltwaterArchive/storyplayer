@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 
 /**
  * provisioning adapter factory
