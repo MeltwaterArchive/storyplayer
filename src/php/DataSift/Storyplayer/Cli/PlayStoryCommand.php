@@ -94,6 +94,15 @@ class PlayStoryCommand extends CliCommand
         // for convenience, the current computer's hostname will be the
         // default environment
         $defaultEnvName = getHostname();
+
+        // we get different results on different operating systems
+        // make sure the hostname is not the FQDN
+        $dotPos = strpos($defaultEnvName, '.');
+        if ($dotPos) {
+            $defaultEnvName = substr($defaultEnvName, 0, $dotPos);
+        }
+
+        // the switches that this command supports
         $this->setSwitches(array(
             new LogLevelSwitch(),
             new EnvironmentSwitch($envList, $defaultEnvName),
@@ -399,7 +408,7 @@ class PlayStoryCommand extends CliCommand
     }
 
     protected function runCleanupHandlers($type){
-        
+
         // Run the any cleanup classes we have available
         $runtimeConfig = $this->st->getRuntimeConfig();
         $missingCleanupHandlers = "";
