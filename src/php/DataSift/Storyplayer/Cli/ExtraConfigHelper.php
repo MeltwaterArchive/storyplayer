@@ -47,7 +47,7 @@ use Exception;
 use DataSift\Stone\ConfigLib\LoadedConfig;
 
 /**
- * helper to create a list of available test environments
+ * helper to filter a list of available additional config
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,21 +56,21 @@ use DataSift\Stone\ConfigLib\LoadedConfig;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class EnvironmentsListHelper
+class ExtraConfigHelper
 {
-	static public function validateEnvironmentsList($staticConfig, $envList, $staticConfigManager)
+	static public function validateList($staticConfig, $parent, $listToFilter, $staticConfigManager)
 	{
 		// the list we will return
 		$return = array();
 
-		foreach ($envList as $envName) {
-			// is this in our staticConfig?
-			if (isset($staticConfig->environments, $staticConfig->environments->$envName)) {
-				$return[] = $envName;
+		foreach ($listToFilter as $key) {
+			// is this in the config that we've already loaded?
+			if (isset($staticConfig->$parent, $staticConfig->$parent->$key)) {
+				$return[] = $key;
 				continue;
 			}
 
-			// if we get here, then the environment is in an additional
+			// if we get here, then the extra config is in an additional
 			// config file on disk
 
 			// our dummy config
@@ -78,16 +78,17 @@ class EnvironmentsListHelper
 
 			// can we load the file?
 			try {
-				$staticConfigManager->loadAdditionalConfig($config, $envName);
+				$staticConfigManager->loadAdditionalConfig($config, $key);
 			}
 			catch (Exception $e) {
 				// didn't load - skip it
 				continue;
 			}
 
-			// do we have something that might be an environment?
-			if (isset($config->environments, $config->environments->$envName)) {
-				$return[] = $envName;
+			// does this additional config file contain the piece of
+			// config that we're expecting?
+			if (isset($config->$parent, $config->$parent->$key)) {
+				$return[] = $key;
 			}
 		}
 

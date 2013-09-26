@@ -78,7 +78,7 @@ class PlayStoryCommand extends CliCommand
      */
     protected $persistProcesses = false;
 
-    public function __construct($envList)
+    public function __construct($additionalContext)
     {
         // define the command
         $this->setName('play-story');
@@ -105,7 +105,7 @@ class PlayStoryCommand extends CliCommand
         // the switches that this command supports
         $this->setSwitches(array(
             new LogLevelSwitch(),
-            new EnvironmentSwitch($envList, $defaultEnvName),
+            new EnvironmentSwitch($additionalContext->envList, $defaultEnvName),
             new DefineSwitch(),
             new PersistProcessesSwitch(),
             new PlatformSwitch(),
