@@ -97,6 +97,10 @@ class DefaultStaticConfig extends LoadedConfig
         // defaults for defines
         $this->defines = new BaseObject();
 
+        // defaults for devices
+        $this->devices = new BaseObject();
+        $this->devices->defaults = new BaseObject();
+
         // all done
     }
 }
