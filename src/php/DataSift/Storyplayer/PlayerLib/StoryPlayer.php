@@ -150,7 +150,7 @@ class StoryPlayer
 		8 => self::TEARDOWN_FAIL
 	);
 
-	public function createContext(stdClass $staticConfig, stdClass $runtimeConfig, $envName, Story $story)
+	public function createContext(stdClass $staticConfig, stdClass $runtimeConfig, $envName, Story $story = null)
 	{
 		// create our context, which is just a container
 		$context = new StoryContext();
@@ -161,7 +161,8 @@ class StoryPlayer
 		try {
 			$context->env->mergeFrom($staticConfig->environments->$envName);
 		}catch (E5xx_NoSuchProperty $e){
-			echo "*** warning: using empty config instead of '{$envName}'";
+			// the StaticConfigManager warns people when the environment config can't be found
+			// so let's just treat this as a no-op
 		}
 
 		// we need to remember the name of the environment too!
@@ -176,8 +177,11 @@ class StoryPlayer
 		// write the changes out to disk after the story is complete
 		$context->runtime = $runtimeConfig;
 
-		// we need to create our user
-		$context->initUser($staticConfig, $runtimeConfig, $story);
+		// if we have a story provided, let's use it
+		if (!is_null($story)) {
+			// we need to create our user
+			$context->initUser($staticConfig, $runtimeConfig, $story);
+		}
 
 		// we need to know where to look for Prose classes
 		$context->prose = array();

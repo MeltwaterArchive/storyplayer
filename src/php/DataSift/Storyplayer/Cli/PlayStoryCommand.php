@@ -213,6 +213,16 @@ class PlayStoryCommand extends CliCommand
         // shutdown function
         $this->st = $teller;
 
+        // create something to play this story
+        $player = new StoryPlayer();
+
+        // set up our runtime config manager ready for running the cleanup handlers
+        $teller->setRuntimeConfigManager($runtimeConfigManager);
+
+        // create the supporting context
+        $context = $player->createContext($staticConfig, $runtimeConfig, $envName);
+        $teller->setStoryContext($context);
+
         // run our cleanup handlers before playing the story
         $this->runCleanupHandlers("startup");
 
@@ -224,14 +234,11 @@ class PlayStoryCommand extends CliCommand
             // load our story
             $story = StoryLoader::loadStory($params[0]);
 
-            // create something to play this story
-            $player = new StoryPlayer();
             $teller->setStory($story);
 
             // create the supporting context for this story
             $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
             $teller->setStoryContext($context);
-            $teller->setRuntimeConfigManager($runtimeConfigManager);
 
             // make the story happen
             $result = $player->play($teller, $staticConfig);
@@ -254,14 +261,11 @@ class PlayStoryCommand extends CliCommand
                 // load our story
                 $story = StoryLoader::loadStory($storyFile);
 
-                // create something to play this story
-                $player = new StoryPlayer();
                 $teller->setStory($story);
 
                 // create the supporting context for this story
                 $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
                 $teller->setStoryContext($context);
-                $teller->setRuntimeConfigManager($runtimeConfigManager);
 
                 // special case - reusable environments
                 if ($storyList->options->reuseTestEnvironment) {
