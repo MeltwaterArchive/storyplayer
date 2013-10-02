@@ -417,7 +417,7 @@ class PlayStoryCommand extends CliCommand
         $runtimeConfig = $this->st->getRuntimeConfig();
         $missingCleanupHandlers = "";
 
-        if (!isset($runtimeConfig->storyplayer->tables)){
+        if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables)){
             return true;
         }
 
