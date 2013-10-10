@@ -281,6 +281,9 @@ class PlayStoryCommand extends CliCommand
 
                 // load our story
                 $story = StoryLoader::loadStory($params[0]);
+
+                // create something to play this story
+                $player = new StoryPlayer();
                 $teller->setStory($story);
 
                 // make sure we've loaded the user
