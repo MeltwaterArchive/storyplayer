@@ -110,9 +110,6 @@ class PlayStoryCommand extends CliCommand
             new DeviceSwitch($additionalContext->deviceList),
             new PersistProcessesSwitch(),
             new PlatformSwitch(),
-            new UseRemoteWebDriverSwitch(),
-            new UseSauceLabsSwitch(),
-            new WebBrowserSwitch()
         ));
     }
 
