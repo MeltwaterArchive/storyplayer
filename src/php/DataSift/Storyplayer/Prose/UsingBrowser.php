@@ -133,17 +133,15 @@ class UsingBrowser extends Prose
 		$urlParts = parse_url($url);
 
 		// if we have no host, we cannot continue
-		if (!isset($urlParts['host'])) {
-			throw new E5xx_ActionFailed(__METHOD__, "the (possibly calculated) url '{$url}' has no host component; cannot continue");
-		}
+		if (isset($urlParts['host'])) {
+			// do we have any HTTP AUTH credentials to merge in?
+			if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
+				$adapter = $st->getWebBrowserAdapter();
 
-		// do we have any HTTP AUTH credentials to merge in?
-		if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
-			$adapter = $st->getWebBrowserAdapter();
-
-			// the adapter *might* embed the authentication details
-			// into the URL
-			$url = $adapter->applyHttpBasicAuthForHost($urlParts['host'], $url);
+				// the adapter *might* embed the authentication details
+				// into the URL
+				$url = $adapter->applyHttpBasicAuthForHost($urlParts['host'], $url);
+			}
 		}
 
 		// what are we doing?
