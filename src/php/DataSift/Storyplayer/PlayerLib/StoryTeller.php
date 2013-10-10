@@ -86,6 +86,10 @@ class StoryTeller
 	private $proseLoader = null;
 	private $configLoader = null;
 
+	// support for the current runtime config
+	private $runtimeConfig = null;
+	private $runtimeConfigManager = null;
+
 	/**
 	 * [$actionLogger description]
 	 * @var Datasift\Storyplayer\PlayerLib\ActionLogItem
@@ -275,6 +279,16 @@ class StoryTeller
 		return $this->storyContext->env->adminUser;
 	}
 
+	public function getDevice()
+	{
+		return $this->storyContext->device;
+	}
+
+	public function getDeviceName()
+	{
+		return $this->storyContext->deviceName;
+	}
+
 	public function getEnvironment()
 	{
 		return $this->storyContext->env;
@@ -282,12 +296,17 @@ class StoryTeller
 
 	public function getEnvironmentName()
 	{
-		return $this->storyContext->env->envName;
+		return $this->storyContext->envName;
 	}
 
 	public function getRuntimeConfig()
 	{
-		return $this->storyContext->runtime;
+		return $this->runtimeConfig;
+	}
+
+	public function setRuntimeConfig($runtimeConfig)
+	{
+		$this->runtimeConfig = $runtimeConfig;
 	}
 
 	public function saveRuntimeConfig()
@@ -296,7 +315,7 @@ class StoryTeller
 			throw new E5xx_ActionFailed(__METHOD__, "no runtimeConfigManager available");
 		}
 
-		$this->runtimeConfigManager->saveRuntimeConfig($this->storyContext->runtime);
+		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig);
 	}
 
 	public function getUser()
@@ -435,87 +454,14 @@ class StoryTeller
 
 	public function getWebBrowserDetails()
 	{
-		static $browserDetails = null;
+		// this is now an alias for getDevice()
+		return $this->getDevice();
+	}
 
-		// have we calculated this before?
-		if ($browserDetails) {
-			// yes - so use that
-			return $browserDetails;
-		}
-
-		// we're going to build up a picture of the web browser, and
-		// store the details into an object
-		$browserDetails = new BaseObject();
-		$browserDetails->desiredCapabilities = array();
-
-		// our default provider of a browser is a locally-running copy
-		// of Selenium WebDriver
-		$browserDetails->provider = "LocalWebDriver";
-
-		// our default browser is chrome
-		$browserDetails->browser = "chrome";
-
-		// get the currently loaded environment
-		$env = $this->getEnvironment();
-
-		// does this environment have settings for the web browser?
-		if (isset($env->webbrowser)) {
-			$browserDetails->mergeFrom($env->webbrowser);
-		}
-
-		// what (if anything) has the user overridden on the command-line?
-		$params = $this->getParams();
-		if (isset($params['webbrowser'])) {
-			$browserDetails->browser = $params['webbrowser'];
-		}
-		foreach ($params as $key => $value) {
-			if (substr($key, 0, 11) == 'webbrowser.') {
-				$detailsName = substr($key,11);
-				$browserDetails->desiredCapabilities[$detailsName] = $value;
-			}
-		}
-
-		// make sure we have the required info for Sauce Labs
-		if (isset($params['usesaucelabs']) && $params['usesaucelabs']) {
-			$browserDetails->provider = "SauceLabsWebDriver";
-
-			// do we have the sauce labs username and API key?
-			// they will have been previously merged from the environment
-			// if we have them
-			if (!isset($browserDetails->saucelabs)) {
-				throw new E5xx_NoSauceLabsConfig();
-			}
-
-			if (!isset($browserDetails->saucelabs->username)) {
-				throw new E5xx_NoSauceLabsUsername();
-			}
-
-			if (!isset($browserDetails->saucelabs->accesskey)) {
-				throw new E5xx_NoSauceLabsApiKey();
-			}
-		}
-
-		// make sure we have the required info for an arbitrary remote
-		// webdriver instance
-		if (isset($params['useremotewebdriver']) && $params['useremotewebdriver']) {
-			$browserDetails->provider = "RemoteWebDriver";
-
-			// do we have any remote webdriver config at all?
-			if (!isset($env->remotewebdriver)) {
-				throw new E5xx_NoRemoteWebDriverConfig();
-			}
-
-			// do we have the host:port of the webdriver instance?
-			if (!isset($env->remotewebdriver->url)) {
-				throw new E5xx_NoRemoteWebDriverUrl();
-			}
-
-			// remember the URL for Selenium Server
-			$browserDetails->url = $env->remotewebdriver->url;
-		}
-
-		// all done
-		return $browserDetails;
+	public function startDevice()
+	{
+		// just an alias for startWebBrowser()
+		return $this->startWebBrowser();
 	}
 
 	public function startWebBrowser()
@@ -538,6 +484,12 @@ class StoryTeller
 		// all done
 		$this->setWebBrowserAdapter($adapter);
 		$log->endAction();
+	}
+
+	public function stopDevice()
+	{
+		// just an alias for stopWebBrowser
+		return $this->stopWebBrowser();
 	}
 
 	public function stopWebBrowser()
