@@ -283,6 +283,9 @@ class PlayStoryCommand extends CliCommand
                 $story = StoryLoader::loadStory($params[0]);
                 $teller->setStory($story);
 
+                // make sure we've loaded the user
+                $context->initUser($staticConfig, $runtimeConfig, $story);
+
                 // make the story happen
                 $result = $player->play($teller, $staticConfig);
 
@@ -307,6 +310,9 @@ class PlayStoryCommand extends CliCommand
                     // create something to play this story
                     $player = new StoryPlayer();
                     $teller->setStory($story);
+
+                    // make sure we've loaded the user
+                    $context->initUser($staticConfig, $runtimeConfig, $story);
 
                     // special case - reusable environments
                     if ($storyList->options->reuseTestEnvironment) {
