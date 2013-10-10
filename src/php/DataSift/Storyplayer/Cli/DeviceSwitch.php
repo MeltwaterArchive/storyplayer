@@ -68,7 +68,7 @@ class DeviceSwitch extends CliSwitch
 			"If you have multiple devices listed in your configuration files, "
 			. "you can use this switch to choose which device to use when your test "
 			. "runs. If you omit this switch, Storyplayer will default to using "
-			. "Google Chrome as the default device."
+			. "your local copy of Google Chrome as the default device."
 			. PHP_EOL
 			. PHP_EOL
 			. "See http://datasift.github.io/storyplayer/ "
@@ -77,12 +77,14 @@ class DeviceSwitch extends CliSwitch
 
 		// what are the short switches?
 		$this->addShortSwitch('d');
+		$this->addShortSwitch('b');
 
 		// what are the long switches?
 		$this->addLongSwitch('device');
+		$this->addLongSwitch('webbrowser');
 
 		// do we have any devices defined?
-		$msg = "the device to test against";
+		$msg = "the device to test with";
 		if (count($deviceList)) {
 			$msg .= "; one of: " . implode(", ", $deviceList);
 		}
@@ -96,6 +98,9 @@ class DeviceSwitch extends CliSwitch
 
 		// how do we validate this argument?
 		$this->setArgValidator(new DeviceValidator($deviceList));
+
+		// chrome is our default device
+		$this->setArgHasDefaultValueOf('chrome');
 
 		// all done
 	}
