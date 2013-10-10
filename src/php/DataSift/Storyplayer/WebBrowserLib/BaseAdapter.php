@@ -70,7 +70,13 @@ class BaseAdapter
 
 	public function init($browserDetails)
 	{
+		// remember the browser to use
 		$this->browserDetails = $browserDetails;
+
+		// make sure this exists, as the adapters rely on it
+		if (!isset($browserDetails->desiredCapabilities)) {
+			$browserDetails->desiredCapabilities = array();
+		}
 	}
 
 	public function getProxy()
