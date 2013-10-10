@@ -150,50 +150,6 @@ class StoryPlayer
 		8 => self::TEARDOWN_FAIL
 	);
 
-	public function createContext(stdClass $staticConfig, stdClass $runtimeConfig, $envName, Story $story)
-	{
-		// create our context, which is just a container
-		$context = new StoryContext();
-
-		// we need to work out which environment we are running against,
-		// as all other decisions are affected by this
-		$context->env->mergeFrom($staticConfig->environments->defaults);
-		try {
-			$context->env->mergeFrom($staticConfig->environments->$envName);
-		}catch (E5xx_NoSuchProperty $e){
-			echo "*** warning: using empty config instead of '{$envName}'";
-		}
-
-		// we need to remember the name of the environment too!
-		$context->env->envName = $envName;
-
-		// if there are any 'defines', we need those
-		$context->defines->mergeFrom($staticConfig->defines);
-
-		// put our runtime data in place too
-		//
-		// we don't force a copy of this data, because we're going to
-		// write the changes out to disk after the story is complete
-		$context->runtime = $runtimeConfig;
-
-		// we need to create our user
-		$context->initUser($staticConfig, $runtimeConfig, $story);
-
-		// we need to know where to look for Prose classes
-		$context->prose = array();
-		if (isset($staticConfig->prose)) {
-			if (!is_array($staticConfig->prose)) {
-				throw new E5xx_InvalidConfig("the 'prose' section of the config must either be an array, or it must be left out");
-			}
-
-			// copy over where to look for Prose classes
-			$context->prose = $staticConfig->prose;
-		}
-
-		// all done
-		return $context;
-	}
-
 	public function play(StoryTeller $st, stdClass $staticConfig)
 	{
 		// set default callbacks up
@@ -938,17 +894,22 @@ class StoryPlayer
 	{
 		$story = $st->getStory();
 
-		echo "\n";
-		echo "=============================================================\n";
-		echo "\n";
-		echo "Story   : " . $story->getName() . "\n";
-		echo "Category: " . $story->getCategory() . "\n";
-		echo "Group   : " . $story->getGroup() . "\n";
-		echo "\n";
+		echo <<<EOS
+=============================================================
+
+      Story: {$story->getName()}
+   Category: {$story->getCategory()}
+      Group: {$story->getGroup()}
+
+Environment: {$st->getEnvironmentName()}
+     Device: {$st->getDeviceName()}
+
+EOS;
 	}
 
 	public function announcePhase($phaseName)
 	{
+		echo "\n";
 		echo "-------------------------------------------------------------\n";
 		echo "Now performing: $phaseName\n";
 		echo "\n";
