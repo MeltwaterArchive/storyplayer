@@ -57,7 +57,7 @@ class UsingBrowser extends Prose
 {
 	protected function initActions()
 	{
-		$this->initBrowser();
+		$this->initDevice();
 	}
 
 	// ==================================================================
@@ -121,7 +121,7 @@ class UsingBrowser extends Prose
 	{
 		// some shorthand to make things easier to read
 		$st      = $this->st;
-		$browser = $st->getRunningWebBrowser();
+		$browser = $this->device;
 
 		// relative, or absolute URL?
 		if (substr($url, 0, 1) == '/') {
@@ -136,7 +136,7 @@ class UsingBrowser extends Prose
 		if (isset($urlParts['host'])) {
 			// do we have any HTTP AUTH credentials to merge in?
 			if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
-				$adapter = $st->getWebBrowserAdapter();
+				$adapter = $st->getDeviceAdapter();
 
 				// the adapter *might* embed the authentication details
 				// into the URL
@@ -221,7 +221,7 @@ class UsingBrowser extends Prose
 	{
 		// shorthand
 		$st      = $this->st;
-		$browser = $st->getRunningWebBrowser();
+		$browser = $this->device;
 
 		// what are we doing?
 		$log = $st->startAction("change the current browser window size to be {$width} x {$height} (w x h)");
@@ -248,11 +248,8 @@ class UsingBrowser extends Prose
 		$log = $st->startAction("set HTTP basic auth for host '{$hostname}': user: '{$username}'; password: '{$password}'");
 
 		try {
-			// get the browser first to force a valid adapter to exist
-			$st->getRunningWebBrowser();
-
 			// get the browser adapter
-			$adapter = $st->getWebBrowserAdapter();
+			$adapter = $st->getDeviceAdapter();
 
 			// set the details
 			$adapter->setHttpBasicAuthForHost($hostname, $username, $password);

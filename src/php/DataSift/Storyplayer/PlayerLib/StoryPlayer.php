@@ -222,8 +222,8 @@ class StoryPlayer
 			$this->doTestEnvironmentTeardown($st, $staticConfig)
 		);
 
-		// stop the browser, if it is still running
-		$st->stopWebBrowser();
+		// stop the test device, if it is still running
+		$st->stopDevice();
 
 		// alright, so what happened?
 		//
@@ -579,8 +579,8 @@ class StoryPlayer
 			}
 		}
 
-		// stop the browser, if it is still running
-		$st->stopWebBrowser();
+		// stop the test device, if it is still running
+		$st->stopDevice();
 
 		// all done
 	}

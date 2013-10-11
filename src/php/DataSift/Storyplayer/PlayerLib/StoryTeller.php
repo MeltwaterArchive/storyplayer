@@ -48,7 +48,7 @@ use Exception;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\WebBrowserLib;
+use DataSift\Storyplayer\DeviceLib;
 
 use DataSift\Stone\HttpLib\HttpAddress;
 use DataSift\Stone\Log\LogLib;
@@ -81,8 +81,6 @@ class StoryTeller
 	private $pageContext = null;
 	private $checkpoint = null;
 
-	private $webBrowserAdapter = null;
-
 	private $proseLoader = null;
 	private $configLoader = null;
 
@@ -101,6 +99,9 @@ class StoryTeller
 	 * @var [type]
 	 */
 	private $currentPhase = null;
+
+	// test device support
+	private $deviceAdapter = null;
 
 	public function __construct()
 	{
@@ -279,16 +280,6 @@ class StoryTeller
 		return $this->storyContext->env->adminUser;
 	}
 
-	public function getDevice()
-	{
-		return $this->storyContext->device;
-	}
-
-	public function getDeviceName()
-	{
-		return $this->storyContext->deviceName;
-	}
-
 	public function getEnvironment()
 	{
 		return $this->storyContext->env;
@@ -404,98 +395,77 @@ class StoryTeller
 
 	// ==================================================================
 	//
-	// Web browser support
+	// Device support
 	//
 	// ------------------------------------------------------------------
 
-	/**
-	 * [description here]
-	 *
-	 * @return [type] [description]
-	 */
-	public function getWebBrowser() {
-		if (!isset($this->webBrowserAdapter)) {
+	public function getDeviceDetails()
+	{
+		return $this->storyContext->device;
+	}
+
+	public function getDeviceAdapter()
+	{
+		if (!isset($this->deviceAdapter)) {
 			return null;
 		}
 
-	    return $this->webBrowserAdapter->getWebBrowser();
+		return $this->deviceAdapter;
 	}
 
-	public function getRunningWebBrowser()
+	public function setDeviceAdapter($adapter)
 	{
-		if (!is_object($this->webBrowserAdapter))
-		{
-			$this->startWebBrowser();
-		}
-
-		if (!is_object($this->webBrowserAdapter))
-		{
-			throw new E5xx_CannotStartWebBrowser();
-		}
-
-		return $this->webBrowserAdapter->getWebBrowser();
-	}
-
-	public function getWebBrowserAdapter()
-	{
-		return $this->webBrowserAdapter;
-	}
-
-	/**
-	 * [Description]
-	 *
-	 * @param [type] $newbrowser [description]
-	 */
-	public function setWebBrowserAdapter($adapter) {
-	    $this->webBrowserAdapter = $adapter;
+	    $this->deviceAdapter = $adapter;
 
 	    return $this;
 	}
 
-	public function getWebBrowserDetails()
+	public function getDeviceName()
 	{
-		// this is now an alias for getDevice()
-		return $this->getDevice();
+		return $this->storyContext->deviceName;
+	}
+
+	public function getRunningDevice()
+	{
+		if (!is_object($this->deviceAdapter))
+		{
+			$this->startDevice();
+		}
+
+		if (!is_object($this->deviceAdapter))
+		{
+			throw new E5xx_CannotStartDevice();
+		}
+
+		return $this->deviceAdapter->getDevice();
 	}
 
 	public function startDevice()
 	{
-		// just an alias for startWebBrowser()
-		return $this->startWebBrowser();
-	}
-
-	public function startWebBrowser()
-	{
 		// what are we doing?
-		$log = $this->startAction('start a web browser');
+		$log = $this->startAction('start the test device');
 
 		// what sort of browser are we starting?
-		$browserDetails = $this->getWebBrowserDetails();
+		$deviceDetails = $this->getDeviceDetails();
 
 		// get the adapter
-		$adapter = WebBrowserLib::getWebBrowserAdapter($browserDetails);
+		$adapter = DeviceLib::getDeviceAdapter($deviceDetails);
 
 		// initialise the adapter
-		$adapter->init($browserDetails);
+		$adapter->init($deviceDetails);
 
 		// start the browser
 		$adapter->start($this);
 
 		// all done
-		$this->setWebBrowserAdapter($adapter);
+		$this->setDeviceAdapter($adapter);
 		$log->endAction();
 	}
 
 	public function stopDevice()
 	{
-		// just an alias for stopWebBrowser
-		return $this->stopWebBrowser();
-	}
-
-	public function stopWebBrowser()
-	{
 		// get the browser adapter
-		$adapter = $this->getWebBrowserAdapter();
+		$adapter = $this->getDeviceAdapter();
 
 		// stop the web browser
 		if (!$adapter) {
@@ -504,13 +474,13 @@ class StoryTeller
 		}
 
 		// what are we doing?
-		$log = $this->startAction('stop the web browser');
+		$log = $this->startAction('stop the test device');
 
 		// stop the browser
 		$adapter->stop();
 
 		// destroy the adapter
-		$this->setWebBrowserAdapter(null);
+		$this->setDeviceAdapter(null);
 
 		// all done
 		$log->endAction();

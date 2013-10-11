@@ -103,17 +103,17 @@ class DefaultStaticConfig extends LoadedConfig
 
         // defaults for Chrome, running locally
         $this->devices->chrome = new BaseObject;
-        $this->devices->chrome->provider = 'LocalWebDriver';
+        $this->devices->chrome->adapter = 'LocalWebDriver';
         $this->devices->chrome->browser  = 'chrome';
 
         // defaults for Firefox, running locally
         $this->devices->firefox = new BaseObject;
-        $this->devices->firefox->provider = 'LocalWebDriver';
+        $this->devices->firefox->adapter = 'LocalWebDriver';
         $this->devices->firefox->browser  = 'firefox';
 
         // defaults for Safari, running locally
         $this->devices->safari = new BaseObject;
-        $this->devices->safari->provider = 'LocalWebDriver';
+        $this->devices->safari->adapter = 'LocalWebDriver';
         $this->devices->safari->browser  = 'safari';
 
         // all done

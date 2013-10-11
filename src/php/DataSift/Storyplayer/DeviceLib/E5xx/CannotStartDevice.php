@@ -34,85 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\DeviceLib;
+
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Base class for web browser adapters
+ * Exception thrown when we've tried, but failed, to start the web browser
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-class BaseAdapter
+class E5xx_CannotStartDevice extends Exxx_Exception
 {
-	/**
-	 * details about the web browser that we want to use
-	 *
-	 * @var stdClass
-	 */
-	protected $browserDetails;
-
-	protected $browserSession;
-
-	protected $proxySession;
-
-	protected $httpAuthDetails = array();
-
-	public function init($browserDetails)
-	{
-		// remember the browser to use
-		$this->browserDetails = $browserDetails;
-
-		// make sure this exists, as the adapters rely on it
-		if (!isset($browserDetails->desiredCapabilities)) {
-			$browserDetails->desiredCapabilities = array();
-		}
-	}
-
-	public function getProxy()
-	{
-		return $this->proxySession();
-	}
-
-	public function getWebBrowser()
-	{
-		return $this->browserSession;
-	}
-
-	public function applyHttpBasicAuthForHost($hostname, $url)
-	{
-		throw new E5xx_NoHttpBasicAuthSupport();
-	}
-
-	public function hasHttpBasicAuthForHost($hostname)
-	{
-		return (isset($this->httpAuthDetails[$hostname]));
-	}
-
-	public function getHttpBasicAuthForHost($hostname)
-	{
-		if (!isset($this->httpAuthDetails[$hostname])) {
-			return null;
-		}
-
-		return $this->httpAuthDetails[$hostname];
-	}
-
-	public function setHttpBasicAuthForHost($hostname, $username, $password)
-	{
-		$this->httpAuthDetails[$hostname] = array(
-			'user' => $username,
-			'pass' => $password
-		);
+	public function __construct() {
+		$msg = "Cannot start the test device; are both browsermob-proxy and selenium running?";
+		parent::__construct(500, $msg, $msg);
 	}
 }

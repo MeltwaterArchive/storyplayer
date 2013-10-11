@@ -34,31 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\DeviceLib;
 
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Exception thrown when we don't support HTTP Basic Auth
+ * Exception thrown when we're asked to use a test device but there's no
+ * matching adapter available
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-class E5xx_NoHttpBasicAuthSupport extends Exxx_Exception
+class E4xx_NoSuchDeviceAdapter extends Exxx_Exception
 {
-	public function __construct() {
-		$msg = "no support for HTTP Basic Auth available; cannot continue";
-		parent::__construct(500, $msg, $msg);
+	public function __construct($provider) {
+		$msg = "Unknown device adapter '{$provider}'";
+		parent::__construct(400, $msg, $msg);
 	}
 }

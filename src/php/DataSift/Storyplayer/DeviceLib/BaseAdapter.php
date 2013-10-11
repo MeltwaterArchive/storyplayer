@@ -34,50 +34,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
-
-use Exception;
-use DataSift\BrowserMobProxy\BrowserMobProxyClient;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\WebDriver\WebDriverClient;
+namespace DataSift\Storyplayer\DeviceLib;
 
 /**
- * The adapter that talks to Browsermob-proxy running locally, and a
- * Selenium Server that is running in an arbitrary remote location
+ * Base class for web browser adapters
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-class RemoteWebDriverAdapter extends LocalWebDriverAdapter
+class BaseAdapter
 {
-	public function start(StoryTeller $st)
+	/**
+	 * details about the web browser that we want to use
+	 *
+	 * @var stdClass
+	 */
+	protected $browserDetails;
+
+	protected $browserSession;
+
+	protected $proxySession;
+
+	protected $httpAuthDetails = array();
+
+	public function init($browserDetails)
 	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('paramLogs');
+		// remember the browser to use
+		$this->browserDetails = $browserDetails;
 
-		$this->proxySession = $httpProxy->createProxy();
+		// make sure this exists, as the adapters rely on it
+		if (!isset($browserDetails->desiredCapabilities)) {
+			$browserDetails->desiredCapabilities = array();
+		}
+	}
 
-		// start recording
-		$this->proxySession->startHAR();
+	public function getProxy()
+	{
+		return $this->proxySession();
+	}
 
-		// create the browser session
-		$webDriver = new WebDriverClient($this->browserDetails->url);
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			array(
-				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			) + $this->browserDetails->desiredCapabilities
+	public function getDevice()
+	{
+		return $this->browserSession;
+	}
+
+	public function applyHttpBasicAuthForHost($hostname, $url)
+	{
+		throw new E5xx_NoHttpBasicAuthSupport();
+	}
+
+	public function hasHttpBasicAuthForHost($hostname)
+	{
+		return (isset($this->httpAuthDetails[$hostname]));
+	}
+
+	public function getHttpBasicAuthForHost($hostname)
+	{
+		if (!isset($this->httpAuthDetails[$hostname])) {
+			return null;
+		}
+
+		return $this->httpAuthDetails[$hostname];
+	}
+
+	public function setHttpBasicAuthForHost($hostname, $username, $password)
+	{
+		$this->httpAuthDetails[$hostname] = array(
+			'user' => $username,
+			'pass' => $password
 		);
 	}
 }

@@ -34,35 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\DeviceLib;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Interface that all WebBrowser adapter classes must implement
+ * Exception thrown when we don't support HTTP Basic Auth
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-interface WebBrowserAdapter
+class E5xx_NoHttpBasicAuthSupport extends Exxx_Exception
 {
-	public function init($browserDetails);
-	public function start(StoryTeller $st);
-	public function stop();
-	public function getWebBrowser();
-	public function applyHttpBasicAuthForHost($hostname, $url);
-	public function hasHttpBasicAuthForHost($hostname);
-	public function getHttpBasicAuthForHost($hostname);
-	public function setHttpBasicAuthForHost($hostname, $username, $password);
+	public function __construct() {
+		$msg = "no support for HTTP Basic Auth available; cannot continue";
+		parent::__construct(500, $msg, $msg);
+	}
 }
