@@ -34,20 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\DeviceLib;
 
 /**
  * Base class for web browser adapters
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -70,7 +70,13 @@ class BaseAdapter
 
 	public function init($browserDetails)
 	{
+		// remember the browser to use
 		$this->browserDetails = $browserDetails;
+
+		// make sure this exists, as the adapters rely on it
+		if (!isset($browserDetails->desiredCapabilities)) {
+			$browserDetails->desiredCapabilities = array();
+		}
 	}
 
 	public function getProxy()
@@ -78,7 +84,7 @@ class BaseAdapter
 		return $this->proxySession();
 	}
 
-	public function getWebBrowser()
+	public function getDevice()
 	{
 		return $this->browserSession;
 	}

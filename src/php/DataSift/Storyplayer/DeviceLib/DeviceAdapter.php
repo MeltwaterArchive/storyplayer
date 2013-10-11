@@ -34,55 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer;
+namespace DataSift\Storyplayer\DeviceLib;
 
-use DataSift\Storyplayer\WebBrowserLib\E4xx_NoSuchWebBrowserProvider;
-use DataSift\Storyplayer\WebBrowserLib\E5xx_BadWebBrowserAdapter;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * web browser factory
+ * Interface that all device adapter classes must implement
  *
- * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/DeviceLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-class WebBrowserLib
+interface DeviceAdapter
 {
-	static public function getWebBrowserAdapter($browserDetails)
-	{
-		// which namespace do our browser adapters live in?
-		$namespace = 'DataSift\Storyplayer\WebBrowserLib\\';
-
-		// where do we want to get the browser from?
-		$browserClass = $namespace . $browserDetails->provider . 'Adapter';
-
-		// do we have the adapter?
-		if (!class_exists($browserClass)) {
-			throw new E4xx_NoSuchWebBrowserProvider($browserDetails->provider);
-		}
-
-		// create the adapter
-		$browserAdapter = new $browserClass;
-
-		// is this an adapter we're happy with?
-		if (!$browserAdapter instanceof \DataSift\Storyplayer\WebBrowserLib\WebBrowserAdapter) {
-			throw new E5xx_BadWebBrowserAdapter($browserClass);
-		}
-
-		// initialise the adapter
-		$browserAdapter->init($browserDetails);
-
-		// all done
-		return $browserAdapter;
-	}
+	public function init($browserDetails);
+	public function start(StoryTeller $st);
+	public function stop();
+	public function getDevice();
+	public function applyHttpBasicAuthForHost($hostname, $url);
+	public function hasHttpBasicAuthForHost($hostname);
+	public function getHttpBasicAuthForHost($hostname);
+	public function setHttpBasicAuthForHost($hostname, $username, $password);
 }

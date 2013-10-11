@@ -34,50 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\DeviceLib;
 
-use Exception;
-use DataSift\BrowserMobProxy\BrowserMobProxyClient;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\WebDriver\WebDriverClient;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * The adapter that talks to Browsermob-proxy running locally, and a
- * Selenium Server that is running in an arbitrary remote location
+ * Exception thrown when we're asked to use a test device but there's no
+ * matching adapter available
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-class RemoteWebDriverAdapter extends LocalWebDriverAdapter
+class E4xx_NoSuchDeviceAdapter extends Exxx_Exception
 {
-	public function start(StoryTeller $st)
-	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('paramLogs');
-
-		$this->proxySession = $httpProxy->createProxy();
-
-		// start recording
-		$this->proxySession->startHAR();
-
-		// create the browser session
-		$webDriver = new WebDriverClient($this->browserDetails->url);
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			array(
-				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			) + $this->browserDetails->desiredCapabilities
-		);
+	public function __construct($provider) {
+		$msg = "Unknown device adapter '{$provider}'";
+		parent::__construct(400, $msg, $msg);
 	}
 }

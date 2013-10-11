@@ -24,7 +24,8 @@ use Phix_Project\CliEngine\Commands\HelpCommand;
 
 use DataSift\Storyplayer\Cli\CreateStoryCommand;
 use DataSift\Storyplayer\Cli\DefaultStaticConfig;
-use DataSift\Storyplayer\Cli\EnvironmentsListHelper;
+use DataSift\Storyplayer\Cli\DeviceListHelper;
+use DataSift\Storyplayer\Cli\ExtraConfigHelper;
 use DataSift\Storyplayer\Cli\InstallCommand;
 use DataSift\Storyplayer\Cli\KillProcessesCommand;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
@@ -197,8 +198,9 @@ function main($argv)
 		$runtimeConfigManager->makeConfigDir();
 
 		// get a list of the additional config files to load
-		// this is a list of the available test environments!
-		$envList = $staticConfigManager->getListOfAdditionalConfigFiles();
+		// this is a list of the available test environments,
+		// or of additional devices
+		$additionalConfigFiles = $staticConfigManager->getListOfAdditionalConfigFiles();
 
 		// load the runtime config,:data that has been created by previous runs of storyplayer
 		$runtimeConfig = $runtimeConfigManager->loadRuntimeConfig();
@@ -210,19 +212,34 @@ function main($argv)
 		exit(1);
 	}
 
-	// add into the list any environments in the default config file
-	foreach ($staticConfig->environments as $envName => $dummy) {
-		if ($envName !== 'defaults') {
-			$envList[] = $envName;
+	// a list of sections that can have their own config file
+	$additionalConfigSections = array(
+		'devices'      => array(),
+		'environments' => array()
+	);
+
+	// let's see if we have any additional config to offer
+	foreach ($additionalConfigSections as $sectionName => $dummy) {
+
+		// assume that all config files have this section in them
+		// (we will vet this list in a moment)
+		$additionalConfigSections[$sectionName] = $additionalConfigFiles;
+
+		// add into the list any sections in the default config file
+		foreach ($staticConfig->$sectionName as $key => $dummy) {
+			if ($key !== 'defaults') {
+				$additionalConfigSections[$sectionName][] = $key;
+			}
 		}
+		sort($additionalConfigSections[$sectionName]);
+		$additionalConfigSections[$sectionName] = array_unique($additionalConfigSections[$sectionName]);
+		$additionalConfigSections[$sectionName] = ExtraConfigHelper::validateList($staticConfig, $sectionName, $additionalConfigSections[$sectionName], $staticConfigManager);
 	}
-	sort($envList);
-	$envList = array_unique($envList);
-	$envList = EnvironmentsListHelper::validateEnvironmentsList($staticConfig, $envList, $staticConfigManager);
 
 	// put all of that into something we can give to the CliEngine
 	$additionalContext = (object) array (
-		'envList'			   => $envList,
+		'deviceList'		   => $additionalConfigSections['devices'],
+		'envList'			   => $additionalConfigSections['environments'],
 		'runtimeConfig'        => $runtimeConfig,
 		'runtimeConfigManager' => $runtimeConfigManager,
 		'staticConfig'         => $staticConfig,
@@ -257,7 +274,7 @@ function main($argv)
 
 	// what is our default command?
 	// this is normally some sort of help command
-	$engine->setDefaultCommand(new PlayStoryCommand($envList));
+	$engine->setDefaultCommand(new PlayStoryCommand($additionalContext));
 
 	// add any additional commands
 	// note - we do not have to add the default command a 2nd time
@@ -265,7 +282,7 @@ function main($argv)
 	//        and the user does not have to type it on the command line
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new CreateStoryCommand);
-	$engine->addCommand(new ListEnvironmentsCommand($envList));
+	$engine->addCommand(new ListEnvironmentsCommand($additionalConfigSections['environments']));
 	$engine->addCommand(new InstallCommand);
 	$engine->addCommand(new KillProcessesCommand);
 	$engine->addCommand(new ListHostsTableCommand);

@@ -61,7 +61,7 @@ class FromBrowser extends Prose
 {
 	protected function initActions()
 	{
-		$this->initBrowser();
+		$this->initDevice();
 	}
 
 	// ==================================================================
@@ -820,7 +820,7 @@ class FromBrowser extends Prose
 	{
 		// shorthand
 		$st      = $this->st;
-		$browser = $st->getRunningWebBrowser();
+		$browser = $this->device;
 
 		// what are we doing?
 		$log = $st->startAction("retrieve the current URL from the browser");
@@ -851,11 +851,8 @@ class FromBrowser extends Prose
 		// nothing else should really use this
 
 		try {
-			// get the browser first to force a valid adapter to exist
-			$st->getRunningWebBrowser();
-
 			// get the browser adapter
-			$adapter = $st->getWebBrowserAdapter();
+			$adapter = $st->getDeviceAdapter();
 
 			// get the details
 			$credentials = $adapter->getHttpBasicAuthForHost($hostname);
@@ -880,11 +877,8 @@ class FromBrowser extends Prose
 		// nothing else should really use this
 
 		try {
-			// get the browser first to force a valid adapter to exist
-			$st->getRunningWebBrowser();
-
 			// get the browser adapter
-			$adapter = $st->getWebBrowserAdapter();
+			$adapter = $st->getDeviceAdapter();
 
 			// get the details
 			return $adapter->hasHttpBasicAuthForHost($hostname);
@@ -905,7 +899,7 @@ class FromBrowser extends Prose
 	{
 		// some shorthand to make things easier to read
 		$st      = $this->st;
-		$browser = $st->getRunningWebBrowser();
+		$browser = $this->device;
 
 		$log = $st->startAction("retrieve the current page title");
 		$log->endAction("title is: " . $browser->title());
@@ -923,7 +917,7 @@ class FromBrowser extends Prose
 	{
 		// shorthand
 		$st      = $this->st;
-		$browser = $st->getRunningWebBrowser();
+		$browser = $this->device;
 
 		// what are we doing?
 		$log = $st->startAction("retrieve the current browser window's dimensions");
