@@ -34,64 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\DeviceLib;
 
-use Exception;
-use DataSift\Stone\ConfigLib\LoadedConfig;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * helper to create a list of available test environments
+ * Exception thrown when we've tried, but failed, to start the web browser
  *
- * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/DeviceLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-class EnvironmentsListHelper
+class E5xx_CannotStartDevice extends Exxx_Exception
 {
-	static public function validateEnvironmentsList($staticConfig, $envList, $staticConfigManager)
-	{
-		// the list we will return
-		$return = array();
-
-		foreach ($envList as $envName) {
-			// is this in our staticConfig?
-			if (isset($staticConfig->environments, $staticConfig->environments->$envName)) {
-				$return[] = $envName;
-				continue;
-			}
-
-			// if we get here, then the environment is in an additional
-			// config file on disk
-
-			// our dummy config
-			$config = new LoadedConfig();
-
-			// can we load the file?
-			try {
-				$staticConfigManager->loadAdditionalConfig($config, $envName);
-			}
-			catch (Exception $e) {
-				// didn't load - skip it
-				continue;
-			}
-
-			// do we have something that might be an environment?
-			if (isset($config->environments, $config->environments->$envName)) {
-				$return[] = $envName;
-			}
-		}
-
-		// all done
-		return $return;
+	public function __construct() {
+		$msg = "Cannot start the test device; are both browsermob-proxy and selenium running?";
+		parent::__construct(500, $msg, $msg);
 	}
 }

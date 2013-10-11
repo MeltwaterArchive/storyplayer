@@ -50,7 +50,11 @@ use Phix_Project\CliEngine\CliCommand;
 use Phix_Project\CliEngine\CliEngineSwitch;
 use Phix_Project\CliEngine\CliResult;
 
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\LogLib\Log;
+
+use DataSift\Storyplayer\PlayerLib\StoryContext;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\StoryLoader;
@@ -78,7 +82,7 @@ class PlayStoryCommand extends CliCommand
      */
     protected $persistProcesses = false;
 
-    public function __construct($envList)
+    public function __construct($additionalContext)
     {
         // define the command
         $this->setName('play-story');
@@ -105,13 +109,11 @@ class PlayStoryCommand extends CliCommand
         // the switches that this command supports
         $this->setSwitches(array(
             new LogLevelSwitch(),
-            new EnvironmentSwitch($envList, $defaultEnvName),
+            new EnvironmentSwitch($additionalContext->envList, $defaultEnvName),
             new DefineSwitch(),
+            new DeviceSwitch($additionalContext->deviceList),
             new PersistProcessesSwitch(),
             new PlatformSwitch(),
-            new UseRemoteWebDriverSwitch(),
-            new UseSauceLabsSwitch(),
-            new WebBrowserSwitch()
         ));
     }
 
@@ -172,13 +174,66 @@ class PlayStoryCommand extends CliCommand
         pcntl_signal(SIGTERM, array($this, 'sigtermHandler'));
         pcntl_signal(SIGINT , array($this, 'sigtermHandler'));
 
-        // do we need to load environment-specific config?
-        if (!isset($staticConfig->environments, $staticConfig->environments->$envName))
+        // let's go and get our environment
+        try
         {
             // load our environment-specific config
             //
             // this will be merged in with the default config
             $staticConfigManager->loadAdditionalConfig($staticConfig, $envName);
+        }
+        catch (E5xx_ConfigFileNotFound $e) {
+            // do we already have this device?
+            if (!isset($staticConfig->environments->$envName)) {
+                // no we don't ... report an error
+                echo "*** error: no config file '{$envName}.json' found\n";
+                exit(1);
+            }
+        }
+        catch (E5xx_InvalidConfigFile $e) {
+            echo "*** error: unable to load config file '{$envName}.json'\n\n";
+            echo $e->getMessage();
+            exit(1);
+        }
+
+        // do we have a defaults evironment section?
+        if (!isset($staticConfig->environments->defaults)) {
+            // create an empty one to keep PlayerLib happy
+            $staticConfig->environments->defaults = new stdClass;
+        }
+
+        // do we need to load device-specific config?
+        //
+        // we do this AFTER loading environments, because that's the order
+        // we've told users it will happen in
+        if (isset($engine->options->device)) {
+            $deviceName = $engine->options->device;
+        }
+        else {
+            $deviceName = null;
+        }
+
+        if ($deviceName)
+        {
+            try {
+                // load our device-specific config
+                //
+                // this will be merged in with the default config
+                $staticConfigManager->loadAdditionalConfig($staticConfig, $deviceName);
+            }
+            catch (E5xx_ConfigFileNotFound $e) {
+                // do we already have this device?
+                if (!isset($staticConfig->devices->$deviceName)) {
+                    // no we don't ... report an error
+                    echo "*** error: no config file '{$deviceName}.json' found\n";
+                    exit(1);
+                }
+            }
+            catch (E5xx_InvalidConfigFile $e) {
+                echo "*** error: unable to load config file '{$deviceName}.json'\n\n";
+                echo $e->getMessage();
+                exit(1);
+            }
         }
 
         // do we have any defines from the command-line to merge in?
@@ -187,12 +242,6 @@ class PlayStoryCommand extends CliCommand
         if (isset($engine->options->defines)) {
             // merge into the default + what was loaded from config files
             $staticConfig->defines->mergeFrom($engine->options->defines);
-        }
-
-        // do we have a defaults section?
-        if (!isset($staticConfig->environments->defaults)) {
-            // create an empty one to keep PlayerLib happy
-            $staticConfig->environments->defaults = new stdClass;
         }
 
         // create our user generator
@@ -213,107 +262,108 @@ class PlayStoryCommand extends CliCommand
         // shutdown function
         $this->st = $teller;
 
-        // create something to play this story
-        $player = new StoryPlayer();
-
-        // set up our runtime config manager ready for running the cleanup handlers
+        // tell $st about our runtime config
+        $teller->setRuntimeConfig($runtimeConfig);
         $teller->setRuntimeConfigManager($runtimeConfigManager);
 
-        // create the supporting context
-        $context = $player->createContext($staticConfig, $runtimeConfig, $envName);
+        // create the supporting context for this test run
+        $context = new StoryContext($staticConfig, $runtimeConfig, $envName, $deviceName);
         $teller->setStoryContext($context);
 
-        // run our cleanup handlers before playing the story
+        // run our cleanup handlers before playing the story,
+        // now that we have a context / environment to use
         $this->runCleanupHandlers("startup");
 
         switch($arg2suffix)
         {
-        case "php":
-            // we are running an individual story
+            case "php":
+                // we are running an individual story
 
-            // load our story
-            $story = StoryLoader::loadStory($params[0]);
-
-            $teller->setStory($story);
-
-            // create the supporting context for this story
-            $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
-            $teller->setStoryContext($context);
-
-            // make the story happen
-            $result = $player->play($teller, $staticConfig);
-
-            // all done
-            break;
-
-        case "json":
-            // we are running a list of stories
-
-            // load the list of stories
-            $storyList = StoryListLoader::loadList($params[0]);
-
-            // keep track of the results
-            $results = array();
-
-           // run through our list of stories
-            foreach ($storyList->stories as $storyFile)
-            {
                 // load our story
-                $story = StoryLoader::loadStory($storyFile);
+                $story = StoryLoader::loadStory($params[0]);
 
+                // create something to play this story
+                $player = new StoryPlayer();
                 $teller->setStory($story);
 
-                // create the supporting context for this story
-                $context = $player->createContext($staticConfig, $runtimeConfig, $envName, $story);
-                $teller->setStoryContext($context);
-
-                // special case - reusable environments
-                if ($storyList->options->reuseTestEnvironment) {
-                    // we need to remember the staticConfig, as we are
-                    // probably about to override it
-                    $origStaticConfig = clone $staticConfig;
-
-                    // story #1 - keep the test environment around
-                    if ($storyFile == $storyList->stories[0]) {
-                        // we do not override the user's preference for
-                        // the TestEnvironmentStartup
-
-                        // do not shutdown the TestEnvironment;
-                        // we want to re-use it in the other stories
-                        $staticConfig->phases->TestEnvironmentTeardown = false;
-                    }
-                    else if ($storyFile == end($storyList->stories)) {
-                        // do nothing - we do not want to override
-                        // the user's config file settings here
-                    }
-                    else {
-                        // we are running a story in the middle of the list
-                        //
-                        // do not re-create the test environment
-                        // do not destroy it afterwards
-                        $staticConfig->phases->TestEnvironmentSetup = false;
-                        $staticConfig->phases->testEnvironmentTeardown = false;
-                    }
-                }
+                // make sure we've loaded the user
+                $context->initUser($staticConfig, $runtimeConfig, $story);
 
                 // make the story happen
-                $results[] = $player->play($teller, $staticConfig);
+                $result = $player->play($teller, $staticConfig);
 
-                // special case - reusable environments
-                if ($storyList->options->reuseTestEnvironment) {
-                    // restore the original config
-                    $staticConfig = clone $origStaticConfig;
+                // all done
+                break;
+
+            case "json":
+                // we are running a list of stories
+
+                // load the list of stories
+                $storyList = StoryListLoader::loadList($params[0]);
+
+                // keep track of the results
+                $results = array();
+
+                // run through our list of stories
+                foreach ($storyList->stories as $storyFile)
+                {
+                    // load our story
+                    $story = StoryLoader::loadStory($storyFile);
+
+                    // create something to play this story
+                    $player = new StoryPlayer();
+                    $teller->setStory($story);
+
+                    // make sure we've loaded the user
+                    $context->initUser($staticConfig, $runtimeConfig, $story);
+
+                    // special case - reusable environments
+                    if ($storyList->options->reuseTestEnvironment) {
+                        // we need to remember the staticConfig, as we are
+                        // probably about to override it
+                        $origStaticConfig = clone $staticConfig;
+
+                        // story #1 - keep the test environment around
+                        if ($storyFile == $storyList->stories[0]) {
+                            // we do not override the user's preference for
+                            // the TestEnvironmentStartup
+
+                            // do not shutdown the TestEnvironment;
+                            // we want to re-use it in the other stories
+                            $staticConfig->phases->TestEnvironmentTeardown = false;
+                        }
+                        else if ($storyFile == end($storyList->stories)) {
+                            // do nothing - we do not want to override
+                            // the user's config file settings here
+                        }
+                        else {
+                            // we are running a story in the middle of the list
+                            //
+                            // do not re-create the test environment
+                            // do not destroy it afterwards
+                            $staticConfig->phases->TestEnvironmentSetup = false;
+                            $staticConfig->phases->testEnvironmentTeardown = false;
+                        }
+                    }
+
+                    // make the story happen
+                    $results[] = $player->play($teller, $staticConfig);
+
+                    // special case - reusable environments
+                    if ($storyList->options->reuseTestEnvironment) {
+                        // restore the original config
+                        $staticConfig = clone $origStaticConfig;
+                    }
                 }
-            }
 
-            // report on the final results
-            $this->summariseStoryList($results);
+                // report on the final results
+                $this->summariseStoryList($results);
 
-            // all done
-            break;
+                // all done
+                break;
 
-        default:
-            // unsupported!
+            default:
+                // unsupported!
         }
 
         // write out any changed runtime config to disk

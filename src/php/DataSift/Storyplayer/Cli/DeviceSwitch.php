@@ -43,16 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use stdClass;
-
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
 
-use Phix_Project\ValidationLib4\Type_MustBeString;
-
 /**
- * Tell Storyplayer which web browser to use in tests
+ * Tell Storyplayer which browser / app config to use with testing
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -61,42 +57,49 @@ use Phix_Project\ValidationLib4\Type_MustBeString;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class WebBrowserSwitch extends CliSwitch
+class DeviceSwitch extends CliSwitch
 {
-	public function __construct()
+	public function __construct($deviceList)
 	{
 		// define our name, and our description
-		$this->setName('webbrowser');
-		$this->setShortDescription('set the web browser to use in your tests');
+		$this->setName('device');
+		$this->setShortDescription('set the device (e.g. browser) to test with');
 		$this->setLongDesc(
-			"If your stories use a web browser, use this switch to tell Storyplayer "
-			."which web browser you want to use."
-			. PHP_EOL . PHP_EOL
-			."To avoid using this switch all the time, add the following to "
-			."your environment config:"
-			.PHP_EOL . PHP_EOL
-			.'{' .PHP_EOL
-			.'    "environments": {' . PHP_EOL
-			.'        "defaults": {' . PHP_EOL
-			.'            "webbrowser": {' . PHP_EOL
-			.'                "name": "<browser>"' .PHP_EOL
-			.'            }' . PHP_EOL
-			.'        }' . PHP_EOL
-			.'    }'.PHP_EOL
-			.'}'
-			.PHP_EOL.PHP_EOL
-			."This switch is an alias for '-Dwebbrowser=<browser>'."
+			"If you have multiple devices listed in your configuration files, "
+			. "you can use this switch to choose which device to use when your test "
+			. "runs. If you omit this switch, Storyplayer will default to using "
+			. "your local copy of Google Chrome as the default device."
+			. PHP_EOL
+			. PHP_EOL
+			. "See http://datasift.github.io/storyplayer/ "
+			. "for how to configure and use multiple devices."
 		);
 
 		// what are the short switches?
+		$this->addShortSwitch('d');
 		$this->addShortSwitch('b');
 
 		// what are the long switches?
-		$this->addLongSwitch('web-browser');
+		$this->addLongSwitch('device');
+		$this->addLongSwitch('webbrowser');
+
+		// do we have any devices defined?
+		$msg = "the device to test with";
+		if (count($deviceList)) {
+			$msg .= "; one of: " . implode(", ", $deviceList);
+		}
+		else {
+			// no devices found
+			$msg .= ". You current have no devices listed in your config files.";
+		}
 
 		// what is the required argument?
-		$this->setRequiredArg('<browser>', "the name of the browser to use (e.g. chrome, firefox, phantomjs)");
-		$this->setArgValidator(new Type_MustBeString);
+		$this->setRequiredArg('<device>', $msg);
+
+		// how do we validate this argument?
+		$this->setArgValidator(new DeviceValidator($deviceList));
+
+		// chrome is our default device
 		$this->setArgHasDefaultValueOf('chrome');
 
 		// all done
@@ -105,14 +108,7 @@ class WebBrowserSwitch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		if (!isset($engine->options->defines)) {
-			$engine->options->defines = new stdClass;
-		}
-		// we do not remember when the default is used, because that would
-		// override anything set in the config files
-		if (!$isDefaultParam) {
-			$engine->options->defines->webbrowser = $params[0];
-		}
+		$engine->options->device = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

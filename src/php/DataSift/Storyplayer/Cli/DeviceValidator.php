@@ -34,35 +34,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
 
-/**
- * Interface that all WebBrowser adapter classes must implement
- *
- * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
- */
-interface WebBrowserAdapter
+class DeviceValidator implements Validator
 {
-	public function init($browserDetails);
-	public function start(StoryTeller $st);
-	public function stop();
-	public function getWebBrowser();
-	public function applyHttpBasicAuthForHost($hostname, $url);
-	public function hasHttpBasicAuthForHost($hostname);
-	public function getHttpBasicAuthForHost($hostname);
-	public function setHttpBasicAuthForHost($hostname, $username, $password);
+    const MSG_NOTVALIDDEVICE = "Unknown device '%value%'";
+
+    public function __construct($deviceList)
+    {
+        $this->deviceList = $deviceList;
+    }
+
+    public function validate($value, ValidationResult $result = null)
+    {
+        if ($result === null) {
+            $result = new ValidationResult($value);
+        }
+
+        // the $value must be a valid environment name, but it's ok if it doesn't
+        // exist if it's the default env as we might not have created it yet
+        if (!in_array($value, $this->deviceList)) {
+            $result->addError(static::MSG_NOTVALIDDEVICE);
+            return $result;
+        }
+
+        return $result;
+    }
 }

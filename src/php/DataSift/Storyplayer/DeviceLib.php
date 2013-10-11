@@ -34,32 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use DataSift\Storyplayer\DeviceLib\E4xx_NoSuchDeviceAdapter;
+use DataSift\Storyplayer\DeviceLib\E5xx_BadDeviceAdapter;
 
 /**
- * Exception thrown when we're asked to use a web browser but there's no
- * matching adapter available
+ * device factory
  *
- * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/DeviceLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_NoSuchWebBrowserProvider extends Exxx_Exception
+class DeviceLib
 {
-	public function __construct($provider) {
-		$msg = "Unknown web browser provider '{$provider}'";
-		parent::__construct(400, $msg, $msg);
+	static public function getDeviceAdapter($deviceDetails)
+	{
+		// which namespace do our device adapters live in?
+		$namespace = 'DataSift\Storyplayer\DeviceLib\\';
+
+		// where do we want to get the device from?
+		$adapterClass = $namespace . $deviceDetails->adapter . 'Adapter';
+
+		// do we have the adapter?
+		if (!class_exists($adapterClass)) {
+			throw new E4xx_NoSuchDeviceAdapter($deviceDetails->adapter);
+		}
+
+		// create the adapter
+		$deviceAdapter = new $adapterClass;
+
+		// is this an adapter we're happy with?
+		if (!$deviceAdapter instanceof \DataSift\Storyplayer\DeviceLib\DeviceAdapter) {
+			throw new E5xx_BadDeviceAdapter($adapterClass);
+		}
+
+		// initialise the adapter
+		$deviceAdapter->init($deviceDetails);
+
+		// all done
+		return $deviceAdapter;
 	}
 }

@@ -61,6 +61,7 @@ class Prose
 	protected $args = array();
 	protected $topElement = null;
 	protected $topXpath   = null;
+	protected $device     = null;
 
 	public function __construct(StoryTeller $st, $args = array())
 	{
@@ -100,18 +101,25 @@ class Prose
 	{
 	}
 
-	protected function initBrowser()
+	protected function initDevice()
 	{
-		// do we have a web browser?
-		$browser = $this->st->getRunningWebBrowser();
+		// start the test device
+		$this->device = $this->st->getRunningDevice();
 
 		// set our top XPATH node
+		//
+		// for the moment, we are assuming that the test device is
+		// a web browser, because historically this has always been
+		// the case
+		//
+		// when this assumption is no longer valid, we will need to
+		// revisit this code
 		$this->setTopXpath("//html");
 
 		// set our top element
-		//$topElement = $browser->getElement('xpath', '/html');
-		//$this->setTopElement($topElement);
-		$this->setTopElement($browser);
+		//
+		// we cannot assume that the browser has any DOM loaded at all
+		$this->setTopElement($this->device);
 	}
 
 	public function __call($methodName, $params)
