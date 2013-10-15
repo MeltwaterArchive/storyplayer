@@ -104,6 +104,16 @@ class StoryTemplate
 		return method_exists($this, 'perPhaseTeardown');
 	}
 
+	public function hasDeviceSetup()
+	{
+		return method_exists($this, 'deviceSetup');
+	}
+
+	public function hasDeviceTeardown()
+	{
+		return method_exists($this, 'deviceTeardown');
+	}
+
 	public function hasHints()
 	{
 		return method_exists($this, 'hints');
@@ -159,6 +169,16 @@ class StoryTemplate
 	public function getPerPhaseTeardown()
 	{
 		return array($this, 'perPhaseTeardown');
+	}
+
+	public function getDeviceSetup()
+	{
+		return array($this, 'deviceSetup');
+	}
+
+	public function getDeviceTeardown()
+	{
+		return array($this, 'deviceTeardown');
 	}
 
 	public function getHints()
