@@ -457,8 +457,25 @@ class StoryTeller
 		// start the browser
 		$adapter->start($this);
 
-		// all done
+		// remember the adapter
 		$this->setDeviceAdapter($adapter);
+
+		// do we have a deviceSetup() phase?
+		if ($this->story->hasDeviceSetup()) {
+			// get the callbacks to call
+			$callbacks = $this->story->getDeviceSetup();
+
+			// make the call
+			//
+			// we do not need to wrap these in a TRY/CATCH block,
+			// as we are already running inside one of the story's
+			// phases
+			foreach ($callbacks as $callback){
+				call_user_func($callback, $this);
+			}
+		}
+
+		// all done
 		$log->endAction();
 	}
 
@@ -475,6 +492,24 @@ class StoryTeller
 
 		// what are we doing?
 		$log = $this->startAction('stop the test device');
+
+		// do we have a deviceTeardown() phase?
+		//
+		// we need to run this BEFORE we stop the device, otherwise
+		// the deviceTeardown() phase has no device to work with
+		if ($this->story->hasDeviceTeardown()) {
+			// get the callbacks to call
+			$callbacks = $this->story->getDeviceTeardown();
+
+			// make the call
+			//
+			// we do not need to wrap these in a TRY/CATCH block,
+			// as we are already running inside one of the story's
+			// phases
+			foreach ($callbacks as $callback){
+				call_user_func($callback, $this);
+			}
+		}
 
 		// stop the browser
 		$adapter->stop();
