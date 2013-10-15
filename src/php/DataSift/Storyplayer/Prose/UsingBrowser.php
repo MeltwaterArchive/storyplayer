@@ -242,9 +242,6 @@ class UsingBrowser extends Prose
 		// what are we doing?
 		$log = $st->startAction("switch to browser window called '{$name}'");
 
-		// remember which window we currently are
-		$currentHandle = $browser->window_handle();
-
 		// get the list of available window handles
 		$handles = $browser->window_handles();
 
@@ -263,10 +260,25 @@ class UsingBrowser extends Prose
 		}
 
 		// if we get here, then we could not find the window we wanted
-		// put the original window back, in case the caller wants to
-		// recover from this
-		$browser->focusWindow($currentHandle);
+		// the browser might be pointing at ANY of the open windows,
+		// and it might be pointing at no window at all
 		throw new E5xx_ActionFailed(__METHOD__, "No such window '{$name}'");
+	}
+
+	public function closeCurrentWindow()
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("close the current browser window");
+
+		// close the current window
+		$browser->deleteWindow();
+
+		// all done
+		$log->endAction();
 	}
 
 	// ==================================================================

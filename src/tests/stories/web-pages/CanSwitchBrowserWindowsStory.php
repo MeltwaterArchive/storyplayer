@@ -60,6 +60,14 @@ $story->addAction(function(StoryTeller $st) {
 
     // get the h1
     $checkpoint->secondHeader = $st->fromBrowser()->getText()->fromHeadingWithId('storyplayer_second_window');
+
+    // close the second window
+    // this leaves the browser in a bit of a state
+    $st->usingBrowser()->closeCurrentWindow();
+
+    // switch back to the first window
+    $st->usingBrowser()->switchToWindow("Storyplayer: Working With Windows");
+    var_dump($st->fromBrowser()->getPageSource());
 });
 
 // ========================================================================
