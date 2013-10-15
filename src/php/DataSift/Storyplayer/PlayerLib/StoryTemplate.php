@@ -106,7 +106,7 @@ class StoryTemplate
 
 	public function hasDeviceSetup()
 	{
-		return method_exists($this, 'deviceStartup');
+		return method_exists($this, 'deviceSetup');
 	}
 
 	public function hasDeviceTeardown()
@@ -173,12 +173,12 @@ class StoryTemplate
 
 	public function getDeviceSetup()
 	{
-		return array($this, 'perDeviceSetup');
+		return array($this, 'deviceSetup');
 	}
 
 	public function getDeviceTeardown()
 	{
-		return array($this, 'perDeviceTeardown');
+		return array($this, 'deviceTeardown');
 	}
 
 	public function getHints()
