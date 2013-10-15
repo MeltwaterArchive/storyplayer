@@ -140,6 +140,20 @@ class Story
 	protected $perPhaseTeardownCallback = array();
 
 	/**
+	 * the function that provides any story-specific setup work that
+	 * happens when we start a device
+	 * @var array
+	 */
+	protected $deviceSetupCallback = array();
+
+	/**
+	 * the function that provides any story-specific teardown work that
+	 * happens just before we stop a device
+	 * @var array
+	 */
+	protected $deviceTeardownCallback = array();
+
+	/**
 	 * the function that provides information about how this story has
 	 * changed the state of the system or user
 	 *
@@ -542,6 +556,8 @@ class Story
 		$tmpl->hasTestTeardown()            && $this->addTestTeardown($tmpl->getTestTeardown());
 		$tmpl->hasPerPhaseSetup()           && $this->addPerPhaseSetup($tmpl->getPerPhaseSetup());
 		$tmpl->hasPerPhaseTeardown()        && $this->addPerPhaseTeardown($tmpl->getPerPhaseTeardown());
+		$tmpl->hasDeviceSetup()             && $this->addDeviceSetup($tmpl->getDeviceSetup());
+		$tmpl->hasDeviceTeardown()          && $this->addDeviceTeardown($tmpl->getDeviceTeardown());
 		$tmpl->hasHints()                   && $this->addHints($tmpl->getHints());
 		$tmpl->hasPreTestPrediction()       && $this->addPreTestPrediction($tmpl->getPreTestPrediction());
 		$tmpl->hasPreTestInspection()       && $this->addPreTestInspection($tmpl->getPreTestInspection());
@@ -766,6 +782,62 @@ class Story
 	public function addPerPhaseTeardown($newCallback)
 	{
 		$this->perPhaseTeardownCallback[] = $newCallback;
+	}
+
+	// ====================================================================
+	//
+	// Actions to happen when starting and stopping test devices
+	//
+	// --------------------------------------------------------------------
+
+	/**
+	 * get the callback for device setup work
+	 *
+	 * @return $callback
+	 */
+	public function getDeviceSetup()
+	{
+	    return $this->deviceSetupCallback;
+	}
+
+	/**
+	 * do we have a device setup callback?
+	 *
+	 * @return boolean true if there is a device setup callback
+	 */
+	public function hasDeviceSetup()
+	{
+		return count($this->deviceSetupCallback) > 0;
+	}
+
+	public function addDeviceSetup($newCallback)
+	{
+		$this->deviceSetupCallback[] = $newCallback;
+	}
+
+	/**
+	 * get the callback for device teardown work
+	 *
+	 * @return $callback
+	 */
+	public function getDeviceTeardown()
+	{
+	    return $this->deviceTeardownCallback;
+	}
+
+	/**
+	 * do we have a device teardown callback?
+	 *
+	 * @return boolean true if there is a device teardown callback
+	 */
+	public function hasDeviceTeardown()
+	{
+		return count($this->deviceTeardownCallback) > 0;
+	}
+
+	public function addDeviceTeardown($newCallback)
+	{
+		$this->deviceTeardownCallback[] = $newCallback;
 	}
 
 	// ====================================================================
