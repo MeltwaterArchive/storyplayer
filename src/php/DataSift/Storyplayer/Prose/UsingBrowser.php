@@ -233,6 +233,42 @@ class UsingBrowser extends Prose
 		$log->endAction();
 	}
 
+	public function switchToWindow($name)
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("switch to browser window called '{$name}'");
+
+		// remember which window we currently are
+		$currentHandle = $browser->window_handle();
+
+		// get the list of available window handles
+		$handles = $browser->window_handles();
+
+		// we have to iterate over them, to find the window that we want
+		foreach ($handles as $handle) {
+			// switch to the window
+			$browser->focusWindow($handle);
+
+			// is this the window that we want?
+			$title = $browser->title();
+			if ($title == $name) {
+				// all done
+				$log->endAction();
+				return;
+			}
+		}
+
+		// if we get here, then we could not find the window we wanted
+		// put the original window back, in case the caller wants to
+		// recover from this
+		$browser->focusWindow($currentHandle);
+		throw new E5xx_ActionFailed(__METHOD__, "No such window '{$name}'");
+	}
+
 	// ==================================================================
 	//
 	// Authentication actions go here
