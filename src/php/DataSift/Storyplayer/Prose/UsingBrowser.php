@@ -255,6 +255,22 @@ class UsingBrowser extends Prose
 		$log->endAction();
 	}
 
+	public function switchToMainFrame()
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("switch to working with the main frame");
+
+		// switch to the iFrame
+		$browser->frame(array('id' => null));
+
+		// all done
+		$log->endAction();
+	}
+
 	// ==================================================================
 	//
 	// Authentication actions go here
