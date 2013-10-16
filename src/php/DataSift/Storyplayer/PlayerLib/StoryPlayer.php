@@ -90,6 +90,7 @@ class StoryPlayer
 	const RESULT_PASS         = 100;
 	const RESULT_FAIL         = 101;
 	const RESULT_UNKNOWN      = 102;
+	const RESULT_BLACKLISTED  = 103;
 
 	static public $outcomeToText = array(
 		1 => "Success",
@@ -116,7 +117,8 @@ class StoryPlayer
 
 		100 => "Pass",
 		101 => "Fail",
-		102 => "Unknown"
+		102 => "Unknown",
+		103 => "Blacklisted",
 	);
 
 	const PHASE_TESTENVIRONMENTSETUP = 1;
@@ -152,14 +154,47 @@ class StoryPlayer
 
 	public function play(StoryTeller $st, stdClass $staticConfig)
 	{
+		// shorthand
+		$story   = $st->getStory();
+		$env     = $st->getEnvironment();
+		$envName = $st->getEnvironmentName();
+
 		// set default callbacks up
-		$st->getStory()->setDefaultCallbacks();
+		$story->setDefaultCallbacks();
 
 		// keep track of how each phase goes
-		$result = new StoryResult($st->getStory());
+		$result = new StoryResult($story);
 
 		// tell the outside world what we're doing
 		$this->announceStory($st);
+
+		// is this story allowed to run on the current environment?
+		$blacklistedEnvironment = false;
+		if (isset($env->mustBeWhitelisted) && $env->mustBeWhitelisted) {
+			// by default, stories are not allowed to run on this environment
+			$blacklistedEnvironment = true;
+
+			// is this story allowed to run?
+			$whitelistedEnvironments = $story->getWhitelistedEnvironments();
+			if (isset($whitelistedEnvironments[$envName]) && $whitelistedEnvironments[$envName]) {
+				$blacklistedEnvironment = false;
+			}
+		}
+
+		// are we allowed to proceed?
+		if ($blacklistedEnvironment) {
+			// no, we are not
+			//
+			// tell the user what happened
+			Log::write(Log::LOG_NOTICE, "Cannot run story against the environment '{$envName}'");
+
+			// all done
+			return $result;
+		}
+
+		// if we get here, then the story is allowed to run against
+		// the current environment
+		$result->storyAttempted = true;
 
 		// setup the test environment
 		$setupEnvironmentResult = $result->addPhaseResult(
@@ -311,6 +346,10 @@ class StoryPlayer
 
 			case self::RESULT_FAIL:
 				$resultMessage .= ' result: FAIL';
+				break;
+
+			case self::RESULT_BLACKLISTED:
+				$resultMessage = 'result: DID NOT RUN (unsafe environment)';
 				break;
 
 			case self::RESULT_UNKNOWN:
