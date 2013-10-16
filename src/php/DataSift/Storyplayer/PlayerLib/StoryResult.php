@@ -62,6 +62,7 @@ class StoryResult
 	public $story = null;
 	public $phases = array();
 	public $storyResult = NULL;
+	public $storyAttempted = false;
 
 	public function __construct(Story $story)
 	{
