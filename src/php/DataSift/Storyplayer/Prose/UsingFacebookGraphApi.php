@@ -98,7 +98,7 @@ class UsingFacebookGraphApi extends Prose
 	}
 
 	public function getPostUpdatedTime($post_id) {
-		return $this->st->fromCurl()->get("{$this->base_path}/{$post_id}", $this->authenticated(array(
+		return $this->st->fromCurl()->get("{$this->base_path}/{$post_id}", $this->addAccessToken(array(
 			'fields' => 'updated_time',
 		)));
 	}
@@ -112,11 +112,11 @@ class UsingFacebookGraphApi extends Prose
 	}
 
 	private function makeGraphPostRequest($path, $data, $params = array()) {
-		return $this->st->fromCurl()->post($this->base_path . $path, $data, $this->authenticated($params));
+		return $this->st->fromCurl()->post($this->base_path . $path, $data, $this->addAccessToken($params));
 	}
 
 	private function makeGraphDeleteRequest($path, $params = array()) {
-		return $this->st->fromCurl()->delete($this->base_path . $path, $this->authenticated($params));
+		return $this->st->fromCurl()->delete($this->base_path . $path, $this->addAccessToken($params));
 	}
 
 	/**
@@ -133,7 +133,7 @@ class UsingFacebookGraphApi extends Prose
 
 		$environment = $st->getEnvironment();
 
-		$resp = $st->fromCurl()->get($this->base_path . $path, $this->authenticated($params));
+		$resp = $st->fromCurl()->get($this->base_path . $path, $this->addAccessToken($params));
 
 		// Make sure it's well formed
 		$log = $st->startAction("make sure we have the 'data' key in the response");
@@ -157,7 +157,7 @@ class UsingFacebookGraphApi extends Prose
 		return $resp->data;
 	}
 
-	private function authenticated(array $params) {
+	private function addAccessToken(array $params) {
 		if (!isset($params['access_token'])) {
 			$params['access_token'] = $this->st->getEnvironment()->facebookAccessToken;
 		}
