@@ -9,6 +9,8 @@ next: '<a href="../stories/test-setup-teardown.html">Next: Test Setup / Teardown
 
 Where you test your software is just as important as what your test does.  Storyplayer supports automated creation and destruction of test environments for _each and every story test_ to make your tests as repeatable as possible.
 
+*These phases are optional.*
+
 ## Running Order
 
 Creating and destroying test environments are the first and last phases of a story:

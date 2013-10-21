@@ -2,18 +2,18 @@
 layout: stories
 title: Test Setup / Teardown Phases
 prev: '<a href="../stories/test-environment-setup-teardown.html">Prev: Test Environment Setup / Teardown Phases</a>'
-next: '<a href="../stories/pre-test-prediction.html">Next: Pre-Test Prediction Phase</a>'
+next: '<a href="../stories/pre-test-prediction.html">Next: The Pre-Test Prediction Phase</a>'
 ---
 
 # Test Setup / Teardown Phases
 
 Repeatable testing is all about making sure that your test runs under the same conditions each and every time.  The only variable in your testing should be the software under test.  Once your test environment has been created, Storyplayer supports automated setup and teardown of your test conditions, to make your tests as repeatable as possible.
 
-*This phase is optional.*
+*These phases are optional.*
 
 ## Running Order
 
-Creating and destroying test environments are the first and last phases of a story:
+Test conditions are created after the test environment has been created, and they are reverted just before the test environment is destroyed:
 
 1. Test Environment Setup
 1. __Test Setup__
