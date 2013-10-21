@@ -42,4 +42,4 @@ When you're creating your pre-test prediction, it's important that your code mak
 
 ## Templating Your Pre-Test Predictions
 
-Stories that test your website will probably end up sharing the same `PreTestPrediction()` over time.  You can use Storyplayer's [story templating](story-templates.html) to share the same _PreTestPrediction()_ method across multiple stories.
+Stories that test your website will probably end up sharing the same `PreTestPrediction()` over time.  You can use Storyplayer's [story templating](story-templates.html) to share the same _PreTestPrediction()_ function across multiple stories.
