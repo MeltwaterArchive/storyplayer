@@ -14,15 +14,14 @@ To run Storyplayer, you'll need at least the following:
 ### PHP Dependencies
 
 * [PHP 5.3](http://php.net) or later
+* `apt-get install php5-json` on latest Debian / Ubuntu versions
 * cURL extension for PHP
 * YAML extension for PHP
 
 ### Other Dependencies
 
-* Python - 2.7 preferred
-* Python netifaces - `pip install netifaces` works on most systems
 * GNU screen - `apt-get install screen` works on Ubuntu
-* Google Chrome (if you want to test web pages)
+* Google Chrome or Mozilla Firefox or Apple Safari (if you want to test web pages)
 * Java JRE 1.6 or later (if you want to test web pages)
 * Vagrant (if you want to create test virtual machines)
 * Ansible (if you want to deploy into your test virtual machines from Storyplayer)
