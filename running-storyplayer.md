@@ -21,7 +21,7 @@ vendor/bin/storyplayer [ -e <environment> ] <path-to-story.php>
 
 where:
 
-* _environment_ is one of the environments listed in your [configuration file](configuration.html). If you only have one environment defined, the -e switch does nothing. Otherwise, the default &lt;environment&gt; is your computer's hostname.
+* _environment_ is one of the environments listed in your [configuration file](configuration/index.html). If you only have one environment defined, the -e switch does nothing. Otherwise, the default &lt;environment&gt; is your computer's hostname.
 * _path-to-story.php_ is the path to the PHP script containing the story that you want to run
 
 ## Running Batches Of Stories
@@ -34,7 +34,7 @@ vendor/bin/storyplayer [ -e <environment> ] <path-to-tale.json>
 
 where:
 
-* _environment_ is one of the environments listed in your [configuration file](configuration.html). If you only have one environment defined, the -e switch does nothing. Otherwise, the default &lt;environment&gt; is your computer's hostname.
+* _environment_ is one of the environments listed in your [configuration file](configuration/index.html). If you only have one environment defined, the -e switch does nothing. Otherwise, the default &lt;environment&gt; is your computer's hostname.
 * _path-to-tale.json_ is the path to the JSON file containing the list of stories that you want to run
 
 ### An Example tale.json File
