@@ -28,7 +28,7 @@ The `PreTestInspection()` happens once the test conditions have been setup, and 
 
 ## How To Inspect Before Your Story Makes Changes
 
-To make a pre-test inspect, add a `PreTestInspection()` function to your story:
+To make a pre-test inspection, add a `PreTestInspection()` function to your story:
 
 {% highlight php %}
 $story->addPreTestInspection(function(StoryTeller $st) {
