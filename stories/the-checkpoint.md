@@ -2,7 +2,7 @@
 layout: stories
 title: The Checkpoint
 prev: '<a href="../stories/phases.html">Prev: The Eight Phases Of A Story Test</a>'
-next: '<a href="../stories/test-environment-setup-teardown.html">Next: Test Environment Setup / Teardown Phases</a>'
+next: '<a href="../stories/the-environment.html">Next: The Environment</a>'
 ---
 
 # The Checkpoint
