@@ -53,6 +53,6 @@ Your storyplayer.json file may contain the following sections:
 
 ## The storyplayer.json.dist File
 
-If Storyplayer cannot find a _storyplayer.json_ file, it will look for _storyplayer.json.dist_.  This is an approach that PHPUnit does with its _phpunit.xml_ config file.
+If Storyplayer cannot find a _storyplayer.json_ file, it will look for _storyplayer.json.dist_.  This is the same approach that PHPUnit uses with its _phpunit.xml_ config file.
 
 For your open-source projects, it allows you to ship a _storyplayer.json.dist_ file, and if anyone wants their own settings instead, they can just write their own _storyplayer.json_ file - they don't have to edit the _storyplayer.json.dist_ file.
