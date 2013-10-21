@@ -137,7 +137,8 @@
 		"modules/zeromq/expectsZmq",
 		"modules/zeromq/usingZmq",
 		"changelog",
-		"copyright"
+		"copyright",
+		"editorial-guidelines"
 	],
 	"navbar": {
 		"Home": {
@@ -149,7 +150,8 @@
 			"Sep2": "",
 			"ChangeLog": "changelog",
 			"Sep3": "",
-			"Legal Stuff": "copyright"
+			"Legal Stuff": "copyright",
+			"Editorial Guidelines": "editorial-guidelines"
 		},
 		"Configuration": {
 			"Configuring Storyplayer": "configuration/index",
