@@ -66,23 +66,23 @@ class UsingHostsTable extends Prose
 	protected $entryKey = "hosts";
 
 	/**
-	 * addHost 
-	 * 
-	 * @param string $hostName Host name to add 
-	 * @param string $hostDetails Details about this host 
-	 * 
+	 * addHost
+	 *
+	 * @param string $hostName Host name to add
+	 * @param string $hostDetails Details about this host
+	 *
 	 * @return void
 	 */
 	public function addHost($hostName, $hostDetails)
 	{
-		$this->st->usingRuntimeTable($this->entryKey)->addItem($hostname, $hostDetails);
+		$this->st->usingRuntimeTable($this->entryKey)->addItem($hostName, $hostDetails);
 	}
 
 	/**
-	 * removeHost 
-	 * 
+	 * removeHost
+	 *
 	 * @param string $hostName Host name to remove
-	 * 
+	 *
 	 * @return void
 	 */
 	public function removeHost($hostName)
