@@ -218,6 +218,19 @@ class Story
 	 */
 	protected $params = array();
 
+	/**
+	 * the environments that a story states it runs on
+	 *
+	 * by default, a story is allowed to run on all environments, *but*
+	 * if an environment's config sets 'mustBeWhitelisted' to TRUE, then
+	 * the story is only allowed to run on that environment if the story
+	 * declares itself safe to run
+	 *
+	 * we believe that this is the safest approach to handling those
+	 * stories that simply aren't safe to run absolutely everywhere
+	 */
+	protected $whitelistedEnvironments = array();
+
 	// ====================================================================
 	//
 	// Metadata about the story itself
@@ -582,6 +595,29 @@ class Story
 	public function getStoryTemplates()
 	{
 		return $this->storyTemplates;
+	}
+
+	// ====================================================================
+	//
+	// Information about environments
+	//
+	// --------------------------------------------------------------------
+
+	public function runsOn($envName)
+	{
+		$this->whitelistedEnvironments[$envName] = true;
+		return $this;
+	}
+
+	public function andOn($envName)
+	{
+		$this->whitelistedEnvironments[$envName] = true;
+		return $this;
+	}
+
+	public function getWhitelistedEnvironments()
+	{
+		return $this->whitelistedEnvironments;
 	}
 
 	// ====================================================================

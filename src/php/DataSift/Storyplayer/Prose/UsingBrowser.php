@@ -233,6 +233,92 @@ class UsingBrowser extends Prose
 		$log->endAction();
 	}
 
+	public function switchToWindow($name)
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("switch to browser window called '{$name}'");
+
+		// get the list of available window handles
+		$handles = $browser->window_handles();
+
+		// we have to iterate over them, to find the window that we want
+		foreach ($handles as $handle) {
+			// switch to the window
+			$browser->focusWindow($handle);
+
+			// is this the window that we want?
+			$title = $browser->title();
+			if ($title == $name) {
+				// all done
+				$log->endAction();
+				return;
+			}
+		}
+
+		// if we get here, then we could not find the window we wanted
+		// the browser might be pointing at ANY of the open windows,
+		// and it might be pointing at no window at all
+		throw new E5xx_ActionFailed(__METHOD__, "No such window '{$name}'");
+	}
+
+	public function closeCurrentWindow()
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("close the current browser window");
+
+		// close the current window
+		$browser->deleteWindow();
+
+		// all done
+		$log->endAction();
+	}
+
+	// ==================================================================
+	//
+	// IFrame actions go here
+	//
+	// ------------------------------------------------------------------
+
+	public function switchToIframe($id)
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("switch to working inside the iFrame with the id '{$id}'");
+
+		// switch to the iFrame
+		$browser->frame(array('id' => $id));
+
+		// all done
+		$log->endAction();
+	}
+
+	public function switchToMainFrame()
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("switch to working with the main frame");
+
+		// switch to the iFrame
+		$browser->frame(array('id' => null));
+
+		// all done
+		$log->endAction();
+	}
+
 	// ==================================================================
 	//
 	// Authentication actions go here
