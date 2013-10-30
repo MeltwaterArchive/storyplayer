@@ -1,7 +1,7 @@
 ---
 layout: stories
 title: Story-Writing Tips
-prev: '<a href="../stories/soa-example.html">Prev: Example: Testing A Service</a>'
+prev: '<a href="../stories/test-users.html">Prev: Test Users</a>'
 next: '<a href="../stories/tales.html">Next: Tales</a>'
 ---
 
