@@ -2,7 +2,7 @@
 layout: stories
 title: Test Users
 prev: '<a href="../stories/story-params.html">Prev: Story Parameters</a>'
-next: '<a href="../stories/story-writing-tips.html">Next: Story-Writing Tips</a>'
+next: '<a href="../stories/tales.html">Next: Tales</a>'
 ---
 
 # Test Users

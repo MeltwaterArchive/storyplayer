@@ -30,7 +30,6 @@
 		"stories/story-templates",
 		"stories/story-params",
 		"stories/test-users",
-		"stories/story-writing-tips",
 		"stories/tales",
 		"prose/index",
 		"prose/the-st-object",
@@ -188,10 +187,6 @@
 			"Sep2": "",
 			"Test Users": "stories/test-users",
 			"Sep3": "",
-			"Web Example": "stories/web-example",
-			"SOA Example": "stories/soa-example",
-			"Story-Writing Tips": "stories/story-writing-tips",
-			"Sep4": "",
 			"Tales": "stories/tales"
 		},
 		"Prose": {
