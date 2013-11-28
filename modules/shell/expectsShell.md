@@ -22,10 +22,22 @@ Write your story as if every test must pass.
 
 ## isRunningInScreen()
 
-Use _$st->expectsShell()->isRunningInScreen()_ to make sure that a process you previously started is still running.
+Use `$st->expectsShell()->isRunningInScreen()` to make sure that a process you previously started is still running.
 
 {% highlight php %}
 $st->expectsShell()->isRunningIsScreen($screenName);
+{% endhighlight %}
+
+where:
+
+* _$screenName_ is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
+
+## isNotRunningInScreen()
+
+Use `$st->expectsShell()->isRunningInScreen()` to make sure that a process you previously started is no longer running.
+
+{% highlight php %}
+$st->expectsShell()->isNotRunningIsScreen($screenName);
 {% endhighlight %}
 
 where:

@@ -22,7 +22,7 @@ Write your story as if every action must succeed.
 
 ## runCommand()
 
-Use _$st->usingShell()->runCommand()_ to run an arbitrary command on the same computer that Storyplayer is running on.
+Use `$st->usingShell()->runCommand()` to run an arbitrary command on the same computer that Storyplayer is running on.
 
 {%highlight php %}
 $result = $st->usingShell()->runCommand($command);
@@ -37,7 +37,7 @@ This command is mostly for use by other modules (such as the _[Provisioning](../
 
 ## startInScreen()
 
-Use _$st->usingShell()->startInScreen()_ to start a process on the same computer that Storyplayer is running on.
+Use `$st->usingShell()->startInScreen()` to start a process on the same computer that Storyplayer is running on.
 
 {% highlight php %}
 $st->usingShell()->startInScreen($screenName, $commandLine);
@@ -58,7 +58,7 @@ In the background, Storyplayer starts a new `screen` session, and inside that se
 
 ## stopInScreen()
 
-Use _$st->usingShell()->stopInScreen()_ to stop a process that was originally started using _[usingShell()->startInScreen()](#startinscreen)_:
+Use `$st->usingShell()->stopInScreen()` to stop a process that was originally started using _[usingShell()->startInScreen()](#startinscreen)_:
 
 {% highlight php %}
 $st->usingShell()->stopInScreen($screenName);
@@ -70,7 +70,7 @@ where:
 
 ## stopAllScreens()
 
-Use _$st->stopAllScreens()_ to stop all processes that have been started using _[usingShell()->startInScreen()](#startinscreen)_:
+Use `$st->stopAllScreens()` to stop all processes that have been started using _[usingShell()->startInScreen()](#startinscreen)_:
 
 {% highlight php %}
 $st->usingShell()->stopAllScreens();
@@ -80,7 +80,7 @@ If there are no processes running, no error is thrown.
 
 ## stopProcess()
 
-Use _$st->stopProcess()_ to stop process that is running on the same computer that Storyplayer is running on.
+Use `$st->stopProcess()` to stop process that is running on the same computer that Storyplayer is running on.
 
 {% highlight php %}
 $st->usingShell()->stopProcess($pid);

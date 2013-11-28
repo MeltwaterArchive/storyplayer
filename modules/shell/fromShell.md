@@ -13,11 +13,11 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## Behaviour And Return Codes
 
-Every action either returns a value on success, or _NULL_ on failure. None of these actions throw exceptions on failure.
+Every action either returns a value on success, or `NULL` on failure. None of these actions throw exceptions on failure.
 
 ## getIsScreenRunning()
 
-Use _$st->fromShell()->getIsScreenRunning()_ to see if a process you previously started is still running.
+Use `$st->fromShell()->getIsScreenRunning()` to see if a process you previously started is still running.
 
 {% highlight php %}
 $isRunning = $st->fromShell()->getIsScreenRunning($screenName);
@@ -34,7 +34,7 @@ __See Also__:
 
 ## getIsProcessRunning()
 
-Use _$st->fromShell()->getIsProcessRunning()_ to see if a process you previously started is still running.
+Use `$st->fromShell()->getIsProcessRunning()` to see if a process you previously started is still running.
 
 {% highlight php %}
 $isRunning = $st->fromShell()->getIsProcessRunning($pid);
@@ -49,7 +49,7 @@ This call is used internally by _getIsScreenRunning()_.
 
 ## getScreenSessionDetails()
 
-Use _$st->fromShell()->getScreenSessionDetails()_ to get back all the details currently available for a process you previously started.
+Use `$st->fromShell()->getScreenSessionDetails()` to get back all the details currently available for a process you previously started.
 
 {% highlight php %}
 $details = $st->fromShell()->getScreenSessionDetails($screenName);
@@ -74,7 +74,7 @@ __Notes__:
 
 ## getAllScreenSessions()
 
-Use _$st->fromShell()->getAllScreenSessions()_ to get back all of the details for all of the processes that you have previously started.
+Use `$st->fromShell()->getAllScreenSessions()` to get back all of the details for all of the processes that you have previously started.
 
 {% highlight php %}
 $list = $st->fromShell()->getAllScreenSessions();
