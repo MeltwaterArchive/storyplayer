@@ -9,7 +9,7 @@ next: '<a href="../../modules/form/fromForm.html">Next: fromForm()</a>'
 
 _expectsForm()_ allows you to test a specific form inside the currently loaded HTML.  Use these tests to prove that your story can continue.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FormExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsForm_.
 
 ## Behaviour And Return Codes
 

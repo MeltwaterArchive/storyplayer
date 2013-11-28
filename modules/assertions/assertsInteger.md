@@ -9,7 +9,7 @@ next: '<a href="../../modules/assertions/assertsObject.html">Next: Object Assert
 
 _assertsInteger()_ allows you to test a PHP integer, and to compare it against another PHP integer.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\IntegerExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsInteger_.
 
 ## doesNotEqual()
 

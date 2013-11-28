@@ -9,7 +9,7 @@ next: '<a href="../../modules/form/index.html">Next: The Form Module</a>'
 
 _usingFile()_ allows you to remove files from the computer that Storyplayer is running on.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FileActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingFile_.
 
 ## Behaviour And Return Codes
 

@@ -9,9 +9,10 @@ next: '<a href="../../modules/vagrant/index.html">Next: The Vagrant Module</a>'
 
 _expectsUuid()_ allows you to test UUID strings and the dependencies for the UUID module.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UuidExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsUuid_.
 
 ## Behaviour And Return Codes
+
 Every action is a test of some kind.
 
 * If the test succeeds, the action returns control to your code, and does not return a value.

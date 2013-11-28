@@ -9,7 +9,7 @@ next: '<a href="../../modules/file/index.html">Next: The File Module</a>'
 
 _fromEnvironment()_ allows you to retrieve data from the environment that the current story is being run against.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\EnvironmentDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromEnvironment_.
 
 ## Behaviour And Return Codes
 

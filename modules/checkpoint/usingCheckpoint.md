@@ -9,7 +9,7 @@ next: '<a href="../../modules/environment/index.html">Next: The Environment Modu
 
 _usingCheckpoint()_ allows you to put data into the checkpoint without having to call _$st()->getCheckpoint()_ yourself.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\CheckpointActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingCheckpoint_.
 
 ## Behaviour And Return Codes
 

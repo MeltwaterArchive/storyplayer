@@ -9,7 +9,7 @@ next: '<a href="../../modules/ec2/usingEc2Instance.html">Next: usingEc2Instance(
 
 _usingEc2()_ allows you to start and stop virtual machines (known as _images_) on [Amazon's Elastic Compute Cloud](http://aws.amazon.com/ec2/).  Once the virtual machine has started, you can then use _[$st->usingHost()](../host/usingHost.html)_ to perform actions inside the virtual machine.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\Ec2Actions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingEc2_.
 
 ## Behaviour And Return Codes
 

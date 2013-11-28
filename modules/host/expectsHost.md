@@ -9,7 +9,7 @@ next: '<a href="../../modules/host/usingHost.html">Next: usingHost()</a>'
 
 _expectsHost()_ allows you to make sure that the host is in the state you need it to be.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HostExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsHost_.
 
 ## Behaviour And Return Codes
 

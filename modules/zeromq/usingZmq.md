@@ -8,6 +8,8 @@ next: '<a href="../../changelog.html">Next: ChangeLog</a>'
 
 _usingZmq()_ allows you to create ZeroMQ sockets, and to send and receive data over those sockets.
 
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingZmq_.
+
 ## Behaviour And Return Codes
 
 If the action succeeds, control is returned to your code.  __Most actions return a value__, which breaks the normal convention for a _usingXXXX()_ module, but which we feel makes sense in this specific case.

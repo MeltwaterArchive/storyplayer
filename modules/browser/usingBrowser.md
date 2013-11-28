@@ -9,7 +9,7 @@ next: '<a href="../../modules/browser/webdriver.html">Next: The WebDriver Librar
 
 _usingBrowser()_ allows you to load web pages into the browser, and to interact with the DOM elements inside the page.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\BrowserActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingBrowser_.
 
 ## Behaviour And Return Codes
 

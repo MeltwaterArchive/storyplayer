@@ -9,7 +9,7 @@ next: '<a href="../../modules/http/usingHttp.html">Next: usingHttp()</a>'
 
 _fromHttp()_ allows you to make a GET call to a (possibly) remote HTTP server.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HttpDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromHttp_.
 
 ## Behaviour And Return Codes
 

@@ -9,7 +9,7 @@ next: '<a href="../../modules/hoststable/usingHostsTable.html">Next: usingHostsT
 
 _expectsHost()_ allows you to make sure that the hosts table contains the data that you expect.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HostsTableExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsHostsTable_.
 
 ## Behaviour And Return Codes
 

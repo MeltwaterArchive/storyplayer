@@ -9,7 +9,7 @@ next: '<a href="../../modules/browser/expectsBrowser.html">Next: expectsBrowser(
 
 _fromBrowser()_ allows you to extract information and [WebDriverElement objects](webdriver.html) from the currently loaded HTML page.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\BrowserDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromBrowser_.
 
 ## Behaviour And Return Codes
 

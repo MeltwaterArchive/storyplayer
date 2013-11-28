@@ -11,7 +11,7 @@ _expectsHttpResponse()_ allows you to test the contents of a _[HttpClientRespons
 
 This is a convenience module to improve the readability of your tests. You can do the same tests by using [the Assertions module](../assertions/index.html) directly on the _HttpClientResponse's_ public API if you prefer.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HttpResponseExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsHttpResponse_.
 
 ## Behaviour And Return Codes
 

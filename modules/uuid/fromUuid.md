@@ -9,7 +9,7 @@ next: '<a href="../../modules/uuid/expectsUuid.html">Next: expectsUuid()</a>'
 
 _fromUuid()_ allows you to generate new UUID strings.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UuidDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromUuid_.
 
 ## Behaviour And Return Codes
 

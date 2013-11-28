@@ -9,7 +9,7 @@ next: '<a href="../../modules/shell/index.html">Next: The UNIX Shell Module</a>'
 
 _usingTimer()_ allows you to wait for something to happen.  If it doesn't happen within the timeout period, an exception is thrown.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\TimerActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingTimer_.
 
 ## Behaviour And Return Codes
 

@@ -9,7 +9,7 @@ next: '<a href="../../modules/assertions/assertsDouble.html">Next: Double Assert
 
 _assertsBoolean()_ allows you to test a PHP boolean, and to compare it against another PHP boolean.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\BooleanExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsBoolean_.
 
 ## Behaviour And Return Codes
 

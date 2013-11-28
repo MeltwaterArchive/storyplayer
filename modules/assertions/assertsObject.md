@@ -9,7 +9,7 @@ next: '<a href="../../modules/assertions/assertsString.html">Next: String Assert
 
 _assertsObject()_ allows you to test a PHP object and its contents, and to compare it against another PHP object.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ObjectExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsObject_.
 
 ## doesNotEqual()
 

@@ -9,7 +9,7 @@ next: '<a href="../../modules/zeromq/usingZmq.html">Next: usingZmq()</a>'
 
 _expectsZmq()_ allows you to make sure that a ZMQ socket would behave in the way that you expect it to.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ZmqExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsZmq_.
 
 ## Behaviour And Return Codes
 

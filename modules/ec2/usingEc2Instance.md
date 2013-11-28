@@ -9,7 +9,7 @@ next: '<a href="../../modules/assertions/index.html">Next: The Assertions Module
 
 _usingEc2Instance()_ allows you to manipulate EC2 virtual machines (known as instances) that you have previously created using _[usingEc2()->createVm()](usingEc2.html#createvm)_.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\Ec2InstanceActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingEc2Instance_.
 
 ## Behaviour And Return Codes
 

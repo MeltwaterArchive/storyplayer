@@ -9,7 +9,7 @@ next: '<a href="../../modules/http/index.html">Next: The HTTP Module</a>'
 
 _usingHostsTable()_ allows you to inject and remove entries from Storyplayer's [hosts table](how-hosts-are-remembered.html).
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HostsTableActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingHostsTable_.
 
 ## Behaviour And Return Codes
 

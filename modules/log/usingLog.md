@@ -9,7 +9,7 @@ next: '<a href="../../modules/provisioning/index.html">Next: The Provisioning Mo
 
 _usingLog()_ allows you to write a message into Storyplayer's output log.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\LogActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingLog_.
 
 ## Behaviour And Return Codes
 

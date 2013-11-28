@@ -9,7 +9,7 @@ next: '<a href="../../modules/shell/expectsShell.html">Next: expectsShell()</a>'
 
 _fromShell()_ allows you to extract information about the processes that your test has started.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ShellDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromShell_.
 
 ## Behaviour And Return Codes
 

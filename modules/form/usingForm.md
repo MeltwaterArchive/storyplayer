@@ -9,7 +9,7 @@ next: '<a href="../../modules/graphite/index.html">Next: The Graphite Module</a>
 
 _usingForm()_ allows you to interact with the specified form inside the page.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FormActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingForm_.
 
 ## Behaviour And Return Codes
 

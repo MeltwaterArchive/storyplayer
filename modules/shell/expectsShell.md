@@ -9,7 +9,7 @@ next: '<a href="../../modules/shell/usingShell.html">Next: usingShell()</a>'
 
 _expectsShell()_ allows you to test the state of a process you previously started using [usingShell()](usingShell.html).
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ShellExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsShell_.
 
 ## Behaviour And Return Codes
 

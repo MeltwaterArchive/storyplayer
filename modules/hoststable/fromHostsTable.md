@@ -9,7 +9,7 @@ next: '<a href="../../modules/hoststable/expectsHostsTable.html">Next: expectsHo
 
 _fromHostsTable()_ allows you to get the hosts table entry for a named host.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HostsTableDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromHostsTable_.
 
 ## Behaviour And Return Codes
 

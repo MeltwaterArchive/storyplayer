@@ -9,7 +9,7 @@ next: '<a href="../../modules/ec2/expectsEc2Image.html">Next: expectsEc2Image()<
 
 _fromEc2Instance()_ allows you to get information about a specific EC2 instance.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\Ec2InstanceDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromEc2Instance_.
 
 ## Behaviour And Return Codes
 

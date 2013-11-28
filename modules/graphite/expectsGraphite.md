@@ -8,7 +8,7 @@ next: '<a href="../../modules/host/index.html">Next: The Host Module</a>'
 
 _expectsGraphite()_ allows you to test the data in Graphite.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\GraphiteExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\ExpectsGraphite_.
 
 ## Behaviour And Return Codes
 

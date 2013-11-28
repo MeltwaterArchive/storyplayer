@@ -9,7 +9,7 @@ next: '<a href="../../modules/ec2/index.html">Next: The Amazon EC2 Module</a>'
 
 _fromAws()_ allows you to obtain PHP clients for Amazon Web Services.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AwsDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromAws_.
 
 ## Behaviour And Return Codes
 

@@ -9,7 +9,7 @@ next: '<a href="../../modules/file/usingFile.html">Next: usingFile()</a>'
 
 _fromFile()_ allows you to create unique names for temporary files.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FileDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromFile_.
 
 ## Behaviour And Return Codes
 

@@ -9,7 +9,7 @@ next: '<a href="../../modules/ec2/fromEc2Instance.html">Next: fromEc2Instance()<
 
 _fromEc2()_ allows you to get information about your EC2 account.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\Ec2Determine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromEc2_.
 
 ## Behaviour And Return Codes
 

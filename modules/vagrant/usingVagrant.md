@@ -9,7 +9,7 @@ next: '<a href="../../modules/vagrant/fromVagrant.html">Next: fromVagrant()</a>'
 
 _usingVagrant()_ allows you to start and stop virtual machines using the popular [Vagrant](http://www.vagrantup.com) command-line tool.  Once the virtual machine has started, you can then use _[$st->usingHost()](../host/usingHost.html)_ to perform actions inside the virtual machine.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\VagrantActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingVagrant_.
 
 ## Behaviour And Return Codes
 

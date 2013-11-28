@@ -8,6 +8,8 @@ next: '<a href="../../modules/provisioning/adding-more-engines.html">Next: Addin
 
 _usingProvisioningEngine()_ allows you to take a [provisioning definition](provisioning-definition.html) and apply it to one or more hosts.
 
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingProvisioningEngine_.
+
 ## Behaviour And Return Codes
 
 If the action succeeds, the action returns control to your code, and does not return a value.

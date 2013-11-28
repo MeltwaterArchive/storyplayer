@@ -9,7 +9,7 @@ next: '<a href="../../modules/host/expectsHost.html">Next: expectsHost()</a>'
 
 _fromHost()_ allows you to get information about host and its current state.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HostDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromHost_.
 
 ## Behaviour And Return Codes
 

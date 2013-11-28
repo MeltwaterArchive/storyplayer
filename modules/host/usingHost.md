@@ -9,7 +9,7 @@ next: '<a href="../../modules/hoststable/index.html">Next: The HostsTable Module
 
 _usingHost()_ allows you to run commands on the named host.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HostActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingHost_.
 
 ## Behaviour And Return Codes
 

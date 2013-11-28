@@ -9,7 +9,7 @@ next: '<a href="../../modules/ec2/usingEc2.html">Next: usingEc2()</a>'
 
 _expectsEc2Image()_ allows you to test the condition of an AMI registered to your Amazon account.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\Ec2ImageExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsEc2Image_.
 
 ## Behaviour And Return Codes
 

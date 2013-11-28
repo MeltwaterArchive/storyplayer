@@ -9,7 +9,7 @@ next: '<a href="../../modules/timer/index.html">Next: The Timer Module</a>'
 
 _usingSavageD()_ allows you to tell the [SavageD daemon](https://github.com/datasift/SavageD) which processes and server stats to monitor.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\SavageDActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingSavageD_.
 
 ## Behaviour And Return Codes
 

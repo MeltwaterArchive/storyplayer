@@ -9,7 +9,7 @@ next: '<a href="../../modules/browser/index.html">Next: The Browser Module</a>'
 
 _assertsString()_ allows you to test a PHP string, and to compare it against another PHP string.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\StringExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsString_.
 
 ## doesNotEndWith()
 

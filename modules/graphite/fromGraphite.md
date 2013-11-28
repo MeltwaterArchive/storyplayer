@@ -8,7 +8,7 @@ next: '<a href="../../modules/graphite/expectsGraphite.html">Next: expectsGraphi
 
 _fromGraphite()_ allows you to extract data from Graphite.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\GraphiteDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\FromGraphite_.
 
 ## Behaviour And Return Codes
 

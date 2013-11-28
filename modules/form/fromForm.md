@@ -9,7 +9,7 @@ next: '<a href="../../modules/form/usingForm.html">Next: usingForm()</a>'
 
 _fromForm()_ allows you to extract information and [WebDriverElement objects](webdriver.html) from a specified form on the currently loaded HTML page.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FormDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromForm_.
 
 ## Behaviour And Return Codes
 

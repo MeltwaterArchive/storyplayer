@@ -9,7 +9,7 @@ next: '<a href="../../modules/checkpoint/usingCheckpoint.html">Next: usingCheckp
 
 _fromCheckpoint()_ allows you to retrieve data stored in the checkpoint, without having to call _$st()->getCheckpoint()_ yourself.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\CheckpointDetermine_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromCheckpoint_.
 
 ## Behaviour And Return Codes
 

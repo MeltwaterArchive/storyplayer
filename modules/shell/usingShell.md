@@ -9,7 +9,7 @@ next: '<a href="../../modules/uuid/index.html">Next: The UUID Module</a>'
 
 _usingShell()_ allows you to start and stop processes on the same computer that Storyplayer is running on.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ShellActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingShell_.
 
 ## Behaviour And Return Codes
 

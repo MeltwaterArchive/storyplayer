@@ -9,7 +9,7 @@ next: '<a href="../../modules/log/index.html">Next: The Log Module</a>'
 
 _usingHttp()_ allows you to make HTTP requests to a (possibly) remote HTTP server.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\HttpActions_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingHttp_.
 
 ## Behaviour And Return Codes
 

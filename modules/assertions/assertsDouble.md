@@ -9,7 +9,7 @@ next: '<a href="../../modules/assertions/assertsInteger.html">Next: Integer Asse
 
 _assertsDouble()_ allows you to test a PHP double or float, and to compare it against another PHP double or float.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\DoubleExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsDouble_.
 
 ## doesNotEqual()
 
