@@ -22,7 +22,7 @@ Write your story as if every test must pass.
 
 ## doesNotEqual()
 
-Use _$st->assertsBoolean()->doesNotEqual()_ to make sure that two booleans are not the same.
+Use `$st->assertsBoolean()->doesNotEqual()` to make sure that two booleans are not the same.
 
 {% highlight php %}
 $expected = true;
@@ -34,7 +34,7 @@ See _[equals()](#equals)_ for a discussion of how this test works.
 
 ## equals()
 
-Use _$st->assertsBoolean()->equals()_ to make sure that two boolean values are the same.
+Use `$st->assertsBoolean()->equals()` to make sure that two boolean values are the same.
 
 {% highlight php %}
 $expected = true;
@@ -46,7 +46,7 @@ If the test fails, Storyplayer's output will contain a _[unified diff](http://en
 
 ## isBoolean()
 
-Use _$st->assertsBoolean()->isBoolean()_ to make sure that something really is a boolean.
+Use `$st->assertsBoolean()->isBoolean()` to make sure that something really is a boolean.
 
 {% highlight php %}
 $data = true;
@@ -69,7 +69,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 ## isFalse()
 
-Use _$st->assertsBoolean()->isFalse()_ to make sure that the PHP variable is FALSE.
+Use `$st->assertsBoolean()->isFalse()` to make sure that the PHP variable is FALSE.
 
 {% highlight php %}
 $data = false;
@@ -80,7 +80,7 @@ See _[isTrue()](#istrue)_ for a discussion on what TRUE and FALSE means to this 
 
 ## isNull()
 
-Use _$st->assertsBoolean()->isNull()_ to make sure that the PHP variable is actually NULL, rather than a boolean.
+Use `$st->assertsBoolean()->isNull()` to make sure that the PHP variable is actually NULL, rather than a boolean.
 
 {% highlight php %}
 $data = null;
@@ -91,7 +91,7 @@ This has been added for completeness; we'd always recommend using _[isBoolean()]
 
 ## isNotNull()
 
-Use _$st->assertsBoolean()->isNotNull()_ to make sure that the PHP variable is not NULL.
+Use `$st->assertsBoolean()->isNotNull()` to make sure that the PHP variable is not NULL.
 
 {% highlight php %}
 $data = true;
@@ -102,7 +102,7 @@ This has been added for completeness; we'd always recommend using _[isBoolean()]
 
 ## isNotSameAs()
 
-Use _$st->assertsBoolean()->isNotSameAs()_ to make sure that two PHP booleans are not references to each other.
+Use `$st->assertsBoolean()->isNotSameAs()` to make sure that two PHP booleans are not references to each other.
 
 {% highlight php %}
 $data1 = true;
@@ -115,7 +115,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 ## isSameAs()
 
-Use _$st->assertsBoolean()->isSameAs()_ to make sure that two PHP booleans are references to each other.
+Use `$st->assertsBoolean()->isSameAs()` to make sure that two PHP booleans are references to each other.
 
 {% highlight php %}
 $data1 = true;

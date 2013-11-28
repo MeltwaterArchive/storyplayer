@@ -17,7 +17,7 @@ Every action returns either a value on success, or _NULL_ on failure.  None of t
 
 ## has()
 
-Use _$st->fromForm()->has()_ to work out whether the form contains the content that you're looking for.
+Use `$st->fromForm()->has()` to work out whether the form contains the content that you're looking for.
 
 {% highlight php %}
 if ($st->fromForm('registration')->has()->buttonWithText('Register')) {
@@ -37,7 +37,7 @@ __See Also:__
 
 ## get()
 
-Use _$st->fromForm()->get()_ to get one or more [WebDriver element objects](webdriver.html#webdriver_elements) from the specified form.
+Use `$st->fromForm()->get()` to get one or more [WebDriver element objects](webdriver.html#webdriver_elements) from the specified form.
 
 {% highlight php %}
 $element = $st->fromForm('registration')->get()->fieldWithId('hidden_field');
@@ -47,7 +47,7 @@ This action is normally used when you need to run a custom XPath query to extrac
 
 ## getName()
 
-Use _$st->fromForm()->getName()_ to get the _name_ attribute from a specific DOM element in the specified form.
+Use `$st->fromForm()->getName()` to get the _name_ attribute from a specific DOM element in the specified form.
 
 {% highlight php %}
 $name = $st->fromForm('registration')->getName()->fromFieldWithLabel("Username");
@@ -59,7 +59,7 @@ It's also handy for web pages where the _name_ attribute is being used outside o
 
 ## getNames()
 
-Use _$st->fromForm()->getNames()_ to get the _name_ attribute from a set of specified DOM elements in the specified form.
+Use `$st->fromForm()->getNames()` to get the _name_ attribute from a set of specified DOM elements in the specified form.
 
 {% highlight php %}
 $names = $st->fromForm('registration')->getNames()->ofFieldsWithClass('input-error');
@@ -69,7 +69,7 @@ This action is normally only used with web pages where the _name_ attribute is b
 
 ## getOptions()
 
-Use _$st->fromForm()->getOptions()_ to get the list of possible values from a _&lt;select&gt;_ list in the specified form.
+Use `$st->fromForm()->getOptions()` to get the list of possible values from a _&lt;select&gt;_ list in the specified form.
 
 {% highlight php %}
 $options = $st->fromForm('personal_details')->getOptions()->fromDropdownWithLabel("Country");
@@ -94,7 +94,7 @@ $st->expectsArray($actualOptions)->equals($expectedOptions);
 
 ## getTag()
 
-Use _$st->fromForm()->getTag()_ to get the HTML tag used by a specified DOM element in the specified form.
+Use `$st->fromForm()->getTag()` to get the HTML tag used by a specified DOM element in the specified form.
 
 {% highlight php %}
 $tag = $st->fromForm('login_form')->getTag()->ofFieldWithText("Login");
@@ -104,7 +104,7 @@ This action is normally used when you want to perform a low-level check on the H
 
 ## getText()
 
-Use _$st->fromForm()->getText()_ to get the contents of the specified DOM element in the specified form.
+Use `$st->fromForm()->getText()` to get the contents of the specified DOM element in the specified form.
 
 {% highlight php %}
 $text = $st->fromForm('checkout')->getText()->fromFieldWithClass("total-amount");
@@ -122,7 +122,7 @@ You can use it to inspect any element inside the form - it doesn't have to be a 
 
 ## getTopElement()
 
-Use _$st->fromForm()->getTopElement()_ to get the specified form's _&lt;form&gt;_ DOM element.
+Use `$st->fromForm()->getTopElement()` to get the specified form's _&lt;form&gt;_ DOM element.
 
 {% highlight php %}
 $topElement = $st->fromForm('registration')->getTopElement();
@@ -132,7 +132,7 @@ This action returns a _[WebDriverElement](webdriver.html)_, which you can then u
 
 ## getValue()
 
-Use _$st->fromForm()->getValue()_ to get the _value_ attribute of a specified DOM element in the specified form.
+Use `$st->fromForm()->getValue()` to get the _value_ attribute of a specified DOM element in the specified form.
 
 {% highlight php %}
 $username = $st->fromForm('registration')->getValue()->ofBoxWithLabel('Username');

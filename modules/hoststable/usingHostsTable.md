@@ -21,7 +21,7 @@ Write your story as if every test must pass.
 
 ## addHost()
 
-Use _$st->usingHostsTable()->addHost()_ to inject a new host into the hosts table.
+Use `$st->usingHostsTable()->addHost()` to inject a new host into the hosts table.
 
 {% highlight php %}
 $st->usingHostsTable()->addHost($hostName, $hostDetails);
@@ -36,7 +36,7 @@ This has been added
 
 ## removeHost()
 
-Use _$st->usingHostsTable()->removeHost()_ to delete a host from the hosts table.
+Use `$st->usingHostsTable()->removeHost()` to delete a host from the hosts table.
 
 {% highlight php %}
 $st->usingHostsTable()->removeHost($hostName, $hostDetails);

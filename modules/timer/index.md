@@ -52,7 +52,7 @@ $st->usingTimer()->waitFor(function($st) use($title) {
 }, $timeout);
 {% endhighlight %}
 
-The callback function uses _$st->expectsBrowser()_, which will throw an exception for you if the current HTML page has the wrong title.  Internally, the Timer module catches this exception as long as the timeout hasn't been reached yet.
+The callback function uses `$st->expectsBrowser()`, which will throw an exception for you if the current HTML page has the wrong title.  Internally, the Timer module catches this exception as long as the timeout hasn't been reached yet.
 
 After 2 seconds (the value of _$timeout_ in the example), if the HTML page in the browser doesn't have the title 'Welcome To Example.com', _waitFor()_ stops polling and throws an exception.
 

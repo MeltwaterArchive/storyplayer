@@ -17,7 +17,7 @@ Every action returns either a value on success, or _NULL_ on failure.  These act
 
 ## getEc2Client()
 
-Use _$st->fromAws()->getEc2Client()_ to obtain an EC2 client object from the official Amazon AWS SDK.
+Use `$st->fromAws()->getEc2Client()` to obtain an EC2 client object from the official Amazon AWS SDK.
 
 {% highlight php %}
 $ec2Client = $st->fromAws()->getEc2Client();

@@ -22,7 +22,7 @@ Write your story as if every test must pass.
 
 ## doesntHave()
 
-Use _$st->expectsForm()->doesntHave()_ to ensure that the specified form _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[$st->expectsForm()->has()](#has)_.
+Use `$st->expectsForm()->doesntHave()` to ensure that the specified form _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[$st->expectsForm()->has()](#has)_.
 
 {% highlight php %}
 $st->expectsForm('registration')->doesntHave()->linkWithText("Login");
@@ -33,7 +33,7 @@ See _[has()](#has)_ below for a longer discussion.
 
 ## has()
 
-Use _$st->expectsForm()->has()_ to ensure that the specified form contains a specified DOM element or elements.
+Use `$st->expectsForm()->has()` to ensure that the specified form contains a specified DOM element or elements.
 
 {% highlight php %}
 $st->expectsForm('registration')->has()->linkWithText("Sign Up!");

@@ -24,7 +24,7 @@ Write your story as if every test must pass.
 
 ## hasStatusCode()
 
-Use _$st->expectsHttpResponse()->hasStatusCode()_ to make sure that a received _HttpClientResponse_ has the expected HTTP status code in the response.
+Use `$st->expectsHttpResponse()->hasStatusCode()` to make sure that a received _HttpClientResponse_ has the expected HTTP status code in the response.
 
 {% highlight php %}
 $response = $st->usingHttp()->get('http://api.datasift.com/balance');
@@ -33,7 +33,7 @@ $st->expectsHttpResponse($response)->hasStatusCode('200');
 
 ## hasBody()
 
-Use _$st->expectsHttpResponse()->hasBody()_ to make sure that a received _HttpClientResponse_ has the content you expect in the body.
+Use `$st->expectsHttpResponse()->hasBody()` to make sure that a received _HttpClientResponse_ has the content you expect in the body.
 
 {% highlight php %}
 $expectedBody = '{"status": "okay", "balance": 200}';

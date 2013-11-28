@@ -22,7 +22,7 @@ Write your story as if every action will be successful.
 
 ## removeFile()
 
-Use _$st->usingFile()->removeFile()_ to delete a file off disk.
+Use `$st->usingFile()->removeFile()` to delete a file off disk.
 
 {% highlight php %}
 $tmpName = $st->usingFile()->getTmpFileName();

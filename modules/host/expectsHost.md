@@ -22,7 +22,7 @@ Write your story as if every test must pass.
 
 ## hostIsRunning()
 
-Use _$st->expectsHost()->hostIsRunning()_ to ensure that a host is up and running.
+Use `$st->expectsHost()->hostIsRunning()` to ensure that a host is up and running.
 
 {% highlight php %}
 $st->expectsHost($hostName)->hostIsRunning();
@@ -36,7 +36,7 @@ If the host is not running (for example, it failed to start after being created 
 
 ## hostIsNotRunning()
 
-Use _$st->expectsHost()->hostIsNotRunning()_ to ensure that a host is currently shutdown.
+Use `$st->expectsHost()->hostIsNotRunning()` to ensure that a host is currently shutdown.
 
 {% highlight php %}
 $st->expectsHost($hostName)->hostIsNotRunning();
@@ -50,7 +50,7 @@ If the host is running (for example, it failed to shutdown when requested to), a
 
 ## packageIsInstalled()
 
-Use _$st->expectsHost()->packageIsInstalled()_ to ensure that a package is installed on the guest operating system.
+Use `$st->expectsHost()->packageIsInstalled()` to ensure that a package is installed on the guest operating system.
 
 {% highlight php %}
 $st->expectsHost($hostName)->packageIsInstalled($packageName);
@@ -65,7 +65,7 @@ If the package is not installed, an exception is thrown.
 
 ## packageIsNotInstalled()
 
-Use _$st->expectsHost()->packageIsNotInstalled()_ to ensure that a package is not installed on the guest operating system.
+Use `$st->expectsHost()->packageIsNotInstalled()` to ensure that a package is not installed on the guest operating system.
 
 {% highlight php %}
 $st->expectsHost($hostName)->packageIsNotInstalled($packageName);
@@ -80,7 +80,7 @@ If the package is installed, an exception is thrown.
 
 ## processIsRunning()
 
-Use _$st->expectsHost()->processIsRunning()_ to ensure that a process is running.
+Use `$st->expectsHost()->processIsRunning()` to ensure that a process is running.
 
 {% highlight php %}
 $st->expectsHost($hostName)->processIsRunning($processName);
@@ -95,7 +95,7 @@ If the process is not running, an exception is thrown.
 
 ## processIsNotRunning()
 
-Use _$st->expectsHost()->processIsNotRunning()_ to ensure that a process is not running.
+Use `$st->expectsHost()->processIsNotRunning()` to ensure that a process is not running.
 
 {% highlight php %}
 $st->expectsHost($hostName)->processIsNotRunning($processName);

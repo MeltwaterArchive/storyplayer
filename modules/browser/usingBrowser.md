@@ -22,7 +22,7 @@ Write your story as if every action will be successful.
 
 ## check()
 
-Use _$st->usingBrowser()->check()_ to tick a checkbox.
+Use `$st->usingBrowser()->check()` to tick a checkbox.
 
 {% highlight php %}
 $st->usingBrowser()->check()->boxWithLabel("T's & C's");
@@ -30,7 +30,7 @@ $st->usingBrowser()->check()->boxWithLabel("T's & C's");
 
 ## clear()
 
-Use _$st->usingBrowser()->clear()_ to clear out any values inside a form's input box.
+Use `$st->usingBrowser()->clear()` to clear out any values inside a form's input box.
 
 {% highlight php %}
 $st->usingBrowser()->clear()->fieldWithLabel("Username");
@@ -44,7 +44,7 @@ __See Also:__
 
 ## click()
 
-Use _$st->usingBrowser()->click()_ to click on a button, link, or other element on the page.
+Use `$st->usingBrowser()->click()` to click on a button, link, or other element on the page.
 
 {% highlight php %}
 $st->usingBrowser()->click()->linkWithText("Login");
@@ -56,7 +56,7 @@ If using _click()_ to get around is too slow or too much like hard work for you,
 
 ## gotoPage()
 
-Use _$st->usingBrowser()->gotoPage()_ to load a new page into the web browser:
+Use `$st->usingBrowser()->gotoPage()` to load a new page into the web browser:
 
 {% highlight php %}
 $st->usingBrowser()->gotoPage("http://datasift.com");
@@ -69,7 +69,7 @@ We recommend that you use _gotoPage()_ the first time your story needs to load a
 
 ## select()
 
-Use _$st->usingBrowser()->select()_ to pick an option in a dropdown list.
+Use `$st->usingBrowser()->select()` to pick an option in a dropdown list.
 
 {% highlight php %}
 $st->usingBrowser()->select("United Kingdom")->fromDropdownWithLabel("Country");
@@ -81,7 +81,7 @@ In general, we recommend using _[$st->usingForm()->select()](../form/usingForm.h
 
 ## type()
 
-Use _$st->usingBrowser()->type()_ to send a string of text to a selected DOM element.
+Use `$st->usingBrowser()->type()` to send a string of text to a selected DOM element.
 
 {% highlight php %}
 $st->usingBrowser()->type("Storyplayer lives!")->intoFieldWithLabel("progress");
@@ -166,7 +166,7 @@ After all of the keys have been typed into the browser, the modifier keys are re
 
 ## waitForOverlay()
 
-Use _$st->usingBrowser()->waitForOverlay()_ to wait for an overlay (such as an image lightbox) to appear on the current page in the web browser.
+Use `$st->usingBrowser()->waitForOverlay()` to wait for an overlay (such as an image lightbox) to appear on the current page in the web browser.
 
 {% highlight php %}
 $st->usingBrowser()->waitForOverlay(2, 'lightbox');
@@ -179,7 +179,7 @@ _waitForOverlay()_ takes two parameters:
 
 ## waitForTitle()
 
-Use _$st->usingBrowser()->waitForTitle()_ to wait for the page title to change.
+Use `$st->usingBrowser()->waitForTitle()` to wait for the page title to change.
 
 {% highlight php %}
 $st->usingBrowser()->gotoPage("http://datasift.com");
@@ -195,7 +195,7 @@ See _[gotoPage()](#gotopage)_ for a fuller discussion.
 
 ## waitForTitles()
 
-Use _$st->usingBrowser()->waitForTitles()_ to wait for the page title to change.
+Use `$st->usingBrowser()->waitForTitles()` to wait for the page title to change.
 
 {% highlight php %}
 $st->usingBrowser()->gotoPage("http://datasift.com");

@@ -13,7 +13,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## doesNotEqual()
 
-Use _$st->assertsInteger()->doesNotEqual()_ to make sure that two integer numbers are not the same.
+Use `$st->assertsInteger()->doesNotEqual()` to make sure that two integer numbers are not the same.
 
 {% highlight php %}
 $expected = 1;
@@ -25,7 +25,7 @@ See _[equals()](#equals)_ for a discussion of how this test works.
 
 ## equals()
 
-Use _$st->assertsInteger()->equals()_ to make sure that two integer numbers are the same.
+Use `$st->assertsInteger()->equals()` to make sure that two integer numbers are the same.
 
 {% highlight php %}
 $expected = 1;
@@ -37,7 +37,7 @@ If the test fails, Storyplayer's output will show the differences between the tw
 
 ## isEmpty()
 
-Use _$st->assertsInteger()->isEmpty()_ to make sure that a variable is empty.
+Use `$st->assertsInteger()->isEmpty()` to make sure that a variable is empty.
 
 {% highlight php %}
 $data = 0;
@@ -46,7 +46,7 @@ $st->assertsInteger($data)->isEmpty();
 
 ## isGreaterThan()
 
-Use _$st->assertsInteger()->isGreaterThan()_ to make sure that an integer number is larger than a value you provide.
+Use `$st->assertsInteger()->isGreaterThan()` to make sure that an integer number is larger than a value you provide.
 
 {% highlight php %}
 $data = 2;
@@ -55,7 +55,7 @@ $st->assertsInteger($data)->isGreaterThan(1);
 
 ## isGreaterThanOrEqualTo()
 
-Use _$st->assertsInteger()->isGreaterThan()_ to make sure that an integer number is at least a value you provide.
+Use `$st->assertsInteger()->isGreaterThan()` to make sure that an integer number is at least a value you provide.
 
 {% highlight php %}
 $data = 2;
@@ -64,7 +64,7 @@ $st->assertsInteger($data)->isGreaterThanOrEqualTo(1);
 
 ## isInteger()
 
-Use _$st->assertsInteger()->isInteger()_ to make sure that something really is an integer.
+Use `$st->assertsInteger()->isInteger()` to make sure that something really is an integer.
 
 {% highlight php %}
 $data = 1.1;
@@ -87,7 +87,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 ## isLessThan()
 
-Use _$st->assertsInteger()->isLessThan()_ to make sure that an integer number is smaller than a value you provide.
+Use `$st->assertsInteger()->isLessThan()` to make sure that an integer number is smaller than a value you provide.
 
 {% highlight php %}
 $data = 1;
@@ -96,7 +96,7 @@ $st->assertsInteger($data)->isLessThan(2);
 
 ## isLessThanOrEqualTo()
 
-Use _$st->assertsInteger()->isLessThanOrEqualTo()_ to make sure that an integer number is no larger than a value you provide.
+Use `$st->assertsInteger()->isLessThanOrEqualTo()` to make sure that an integer number is no larger than a value you provide.
 
 {% highlight php %}
 $data = 1;
@@ -105,7 +105,7 @@ $st->assertsInteger($data)->isLessThanOrEqualTo(1);
 
 ## isNotEmpty()
 
-Use _$st->assertsInteger()->isNotEmpty()_ to make sure that an integer number is not empty.
+Use `$st->assertsInteger()->isNotEmpty()` to make sure that an integer number is not empty.
 
 {% highlight php %}
 $data = 1;
@@ -114,7 +114,7 @@ $st->assertsInteger($data)->isNotEmpty();
 
 ## isNull()
 
-Use _$st->assertsInteger()->isNull()_ to make sure that the PHP variable is actually NULL, rather than an integer number.
+Use `$st->assertsInteger()->isNull()` to make sure that the PHP variable is actually NULL, rather than an integer number.
 
 {% highlight php %}
 $data = null;
@@ -125,7 +125,7 @@ This has been added for completeness; we'd always recommend using _[isInteger()]
 
 ## isNotNull()
 
-Use _$st->assertsInteger()->isNotNull()_ to make sure that the PHP variable is not NULL.
+Use `$st->assertsInteger()->isNotNull()` to make sure that the PHP variable is not NULL.
 
 {% highlight php %}
 $data = 1;
@@ -136,7 +136,7 @@ This has been added for completeness; we'd always recommend using _[isInteger()]
 
 ## isNotSameAs()
 
-Use _$st->assertsInteger()->isNotSameAs()_ to make sure that two PHP integer numbers are not references to each other.
+Use `$st->assertsInteger()->isNotSameAs()` to make sure that two PHP integer numbers are not references to each other.
 
 {% highlight php %}
 $data1 = 1;
@@ -149,7 +149,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 ## isSameAs()
 
-Use _$st->assertsInteger()->isSameAs()_ to make sure that two PHP integer numbers are references to each other.
+Use `$st->assertsInteger()->isSameAs()` to make sure that two PHP integer numbers are references to each other.
 
 {% highlight php %}
 $data1 = 1;

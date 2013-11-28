@@ -17,7 +17,7 @@ Every action returns either a value on success, or _NULL_ on failure.  These act
 
 ## getImage()
 
-Use _$st->fromEc2()->getImage()_ to get the full information on a single EC2 image registered to your account.
+Use `$st->fromEc2()->getImage()` to get the full information on a single EC2 image registered to your account.
 
 {% highlight php %}
 $imageData = $st->fromEc2()->getImage($amiId);
@@ -34,7 +34,7 @@ This method was added primarily as a helper for other Prose modules.
 
 ## getInstance()
 
-Use _$st->fromEc2()->getInstance()_ to get the full information on a single EC2 instance registered to your account.
+Use `$st->fromEc2()->getInstance()` to get the full information on a single EC2 instance registered to your account.
 
 {% highlight php %}
 $instanceData = $st->fromEc2()->getInstance($instanceName);

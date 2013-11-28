@@ -21,7 +21,7 @@ Write your story as if every test must pass.
 
 ## runCommand()
 
-Use _$st->usingHost()->runCommand()_ to run a command on the host.
+Use `$st->usingHost()->runCommand()` to run a command on the host.
 
 {% highlight php %}
 $result = $st->usingHost($hostName)->runCommand($command);
@@ -39,7 +39,7 @@ If the return code from running _$command_ is not zero, the command is assumed t
 
 ## runCommandAndIgnoreErrors()
 
-Use _$st->usingHost()->runCommandAndIgnoreErrors()_ to run a command on the host.
+Use `$st->usingHost()->runCommandAndIgnoreErrors()` to run a command on the host.
 
 {% highlight php %}
 $result = $st->usingHost($hostName)->runCommandAndIgnoreErrors($command);
@@ -57,7 +57,7 @@ This action does not throw an exception if the return code from running _$comman
 
 ## runCommandAsUser()
 
-Use _$st->usingHost()->runCommandAsUser()_ to run a command on the host as a specific user.
+Use `$st->usingHost()->runCommandAsUser()` to run a command on the host as a specific user.
 
 {% highlight php %}
 $result = $st->usingHost($hostName)->runCommandAsUser($command, $user);
@@ -78,7 +78,7 @@ If the return code from running _$command_ is not zero, the command is assumed t
 
 ## runCommandAsUserAndIgnoreErrors()
 
-Use _$st->usingHost()->runCommandAsUserAndIgnoreErrors()_ to run a command on the host as a specific user.
+Use `$st->usingHost()->runCommandAsUserAndIgnoreErrors()` to run a command on the host as a specific user.
 
 {% highlight php %}
 $result = $st->usingHost($hostName)->runCommandAsUser($command, $user);

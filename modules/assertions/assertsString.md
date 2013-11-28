@@ -13,7 +13,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## doesNotEndWith()
 
-Use _$st->assertsString()->doesNotEndWith()_ to make sure that a string does not end with a given string.
+Use `$st->assertsString()->doesNotEndWith()` to make sure that a string does not end with a given string.
 
 {% highlight php %}
 $data = "filename.png";
@@ -22,7 +22,7 @@ $st->expectsString($data)->doesNotEndWith('.gif');
 
 ## doesNotEqual()
 
-Use _$st->assertsString()->doesNotEqual()_ to make sure that two strings are not the same.
+Use `$st->assertsString()->doesNotEqual()` to make sure that two strings are not the same.
 
 {% highlight php %}
 $expected = "filename.png";
@@ -38,7 +38,7 @@ Not implemented yet.
 
 ## doesNotStartWith()
 
-Use _$st->assertsString()->doesNotStartWith()_ to make sure that a string does not start with a given string.
+Use `$st->assertsString()->doesNotStartWith()` to make sure that a string does not start with a given string.
 
 {% highlight php %}
 $data = "theme2/filename.png";
@@ -47,7 +47,7 @@ $st->expectsString($data)->doesNotStartWith("theme1");
 
 ## endsWith()
 
-Use _$st->assertsString()->endsWith()_ to make sure that a string does end with the string that you expect it to.
+Use `$st->assertsString()->endsWith()` to make sure that a string does end with the string that you expect it to.
 
 {% highlight php %}
 $data = "filename.png";
@@ -56,7 +56,7 @@ $st->expectsString($data)->doesNotEndWith('.png');
 
 ## equals()
 
-Use _$st->assertsString()->equals()_ to make sure that two strings contain the exact same values.
+Use `$st->assertsString()->equals()` to make sure that two strings contain the exact same values.
 
 {% highlight php %}
 $expected = "filename.png";
@@ -68,7 +68,7 @@ If the test fails, Storyplayer's output will contain a _[unified diff](http://en
 
 ## isEmpty()
 
-Use _$st->assertsString()->isEmpty()_ to make sure that a string has no contents.
+Use `$st->assertsString()->isEmpty()` to make sure that a string has no contents.
 
 {% highlight php %}
 $data = "";
@@ -77,7 +77,7 @@ $st->assertsString($data)->isEmpty();
 
 ## isHash()
 
-Use _$st->assertsString()->isHash()_ to make sure that a string is a hash value of some kind.
+Use `$st->assertsString()->isHash()` to make sure that a string is a hash value of some kind.
 
 {% highlight php %}
 $data = md5_sum("hello, world!");
@@ -88,7 +88,7 @@ A hash is any valid hexadecimal string of even length.
 
 ## isNotEmpty()
 
-Use _$st->assertsString()->isNotEmpty()_ to make sure that a string has contents.
+Use `$st->assertsString()->isNotEmpty()` to make sure that a string has contents.
 
 {% highlight php %}
 $data = "hello, world!";
@@ -97,7 +97,7 @@ $st->assertsString($data)->isNotEmpty();
 
 ## isNull()
 
-Use _$st->assertsString()->isNull()_ to make sure that the PHP variable is actually NULL, rather than a string.
+Use `$st->assertsString()->isNull()` to make sure that the PHP variable is actually NULL, rather than a string.
 
 {% highlight php %}
 $data = null;
@@ -108,7 +108,7 @@ This has been added for completeness; we'd always recommend using _[isString()](
 
 ## isNotNull()
 
-Use _$st->assertsString()->isNotNull()_ to make sure that the PHP variable is not NULL.
+Use `$st->assertsString()->isNotNull()` to make sure that the PHP variable is not NULL.
 
 {% highlight php %}
 $data = "hello, world!";
@@ -119,7 +119,7 @@ This has been added for completeness; we'd always recommend using _[isString()](
 
 ## isNotSameAs()
 
-Use _$st->assertsString()->isNotSameAs()_ to make sure that two PHP strings are not references to each other.
+Use `$st->assertsString()->isNotSameAs()` to make sure that two PHP strings are not references to each other.
 
 {% highlight php %}
 $data1 = "hello, world!";
@@ -132,7 +132,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 ## isNotValidJson()
 
-Use _$st->assertsString()->isNotValidJson()_ to make sure that a string is not JSON-encoded data.
+Use `$st->assertsString()->isNotValidJson()` to make sure that a string is not JSON-encoded data.
 
 {% highlight php %}
 $data = "hello, world!";
@@ -141,7 +141,7 @@ $st->assertsString($data)->isNotValidJson();
 
 ## isSameAs()
 
-Use _$st->assertsString()->isSameAs()_ to make sure that two PHP strings are references to each other.
+Use `$st->assertsString()->isSameAs()` to make sure that two PHP strings are references to each other.
 
 {% highlight php %}
 $data1 = "hello, world!";
@@ -154,7 +154,7 @@ This has been added for completeness; you'll probably use _[equals()](#equals)_ 
 
 ## isString()
 
-Use _$st->assertsString()->isString()_ to make sure that something really is a string.
+Use `$st->assertsString()->isString()` to make sure that something really is a string.
 
 {% highlight php %}
 $data = "hello, world!";
@@ -177,7 +177,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 ## isUuid()
 
-Use _$st->assertsString()->isUuid()_ to make sure that a string is a _[universally-unique identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)_ of some kind:
+Use `$st->assertsString()->isUuid()` to make sure that a string is a _[universally-unique identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)_ of some kind:
 
 {% highlight php %}
 $uuid = $st->fromUuid()->generateUuid();
@@ -188,7 +188,7 @@ A UUID is a 32 character hexadecimal string (with four '-' characters at various
 
 ## isValidJson()
 
-Use _$st->assertsString()->isValidJson()_ to make sure that a string contains valid JSON-encoded data.
+Use `$st->assertsString()->isValidJson()` to make sure that a string contains valid JSON-encoded data.
 
 {% highlight php %}
 $response = $st->usingHttp()->get("http://api.example.com/balance");
@@ -201,7 +201,7 @@ Not implemented yet.
 
 ## startsWith()
 
-Use _$st->assertsString()->startsWith()_ to make sure that a string starts with a given string.
+Use `$st->assertsString()->startsWith()` to make sure that a string starts with a given string.
 
 {% highlight php %}
 $data = "theme2/filename.png";

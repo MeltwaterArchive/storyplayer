@@ -22,7 +22,7 @@ Write your story as if every action will be successful.
 
 ## set()
 
-Use _$st->usingCheckpoint()->set()_ to store data in the checkpoint.
+Use `$st->usingCheckpoint()->set()` to store data in the checkpoint.
 
 {% highlight php %}
 $st->usingCheckpoint()->set('balance', 10);

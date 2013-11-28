@@ -22,7 +22,7 @@ Write your story as if every test must pass.
 
 ## doesntHave()
 
-Use _$st->expectsBrowser()->doesntHave()_ to ensure that the currently loaded HTML page _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[$st->expectsBrowser()->has()](#has)_.
+Use `$st->expectsBrowser()->doesntHave()` to ensure that the currently loaded HTML page _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[$st->expectsBrowser()->has()](#has)_.
 
 {% highlight php %}
 $st->expectsBrowser()->doesntHave()->linkWithText("Login");
@@ -33,7 +33,7 @@ See _[has()](#has)_ below for a longer discussion.
 
 ## has()
 
-Use _$st->expectsBrowser()->has()_ to ensure that the currently loaded HTML page contains a specified DOM element or elements.
+Use `$st->expectsBrowser()->has()` to ensure that the currently loaded HTML page contains a specified DOM element or elements.
 
 {% highlight php %}
 $st->expectsBrowser()->has()->formWithId("registration");
@@ -45,7 +45,7 @@ Some web-based applications can show different content on the same URL, dependin
 
 ## hasTitle()
 
-Use _$st->expectsBrowser()->hasTitle()_ to ensure that the currently loaded HTML page has the _&lt;title&gt;_ that you expect.
+Use `$st->expectsBrowser()->hasTitle()` to ensure that the currently loaded HTML page has the _&lt;title&gt;_ that you expect.
 
 {% highlight php %}
 $st->expectsBrowser()->hasTitle("Dashboard");
@@ -55,7 +55,7 @@ This is very commonly used after submitting a form, clicking on a link, or telli
 
 ## hasTitles()
 
-Use _$st->expectsBrowser()->hasTitles()_ to ensure that the currently loaded HTML page's _&lt;title&gt;_ matches one of the titles in your list.
+Use `$st->expectsBrowser()->hasTitles()` to ensure that the currently loaded HTML page's _&lt;title&gt;_ matches one of the titles in your list.
 
 {% highlight php %}
 $st->expectsBrowser()->hasTitles(array("Home", "Dashboard"));

@@ -19,7 +19,7 @@ Write your story as if every action will succeed.
 
 ## getAppSetting()
 
-Use _$st->fromEnvironment()->getAppSetting()_ to get a single piece of information from the environment.
+Use `$st->fromEnvironment()->getAppSetting()` to get a single piece of information from the environment.
 
 {% highlight php %}
 $value = $st->fromEnvironment()->getAppSetting($app, $setting);
@@ -38,7 +38,7 @@ Most tests tend to need to use all the available settings for _$app_ in the envi
 
 ## getAppSettings()
 
-Use _$st->fromEnvironment()->getAppSettings()_ to get all the information about an 'app' from the environment.
+Use `$st->fromEnvironment()->getAppSettings()` to get all the information about an 'app' from the environment.
 
 {% highlight php %}
 $settings = $st->fromEnvironment()->getAppSettings($app);

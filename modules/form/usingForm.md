@@ -22,7 +22,7 @@ Write your story as if every action will be successful.
 
 ## check()
 
-Use _$st->usingForm()->check()_ to tick a checkbox.
+Use `$st->usingForm()->check()` to tick a checkbox.
 
 {% highlight php %}
 $st->usingForm('registration')->check()->boxWithLabel("T's & C's");
@@ -30,7 +30,7 @@ $st->usingForm('registration')->check()->boxWithLabel("T's & C's");
 
 ## clear()
 
-Use _$st->usingForm()->clear()_ to clear out any values inside a form's input box.
+Use `$st->usingForm()->clear()` to clear out any values inside a form's input box.
 
 {% highlight php %}
 $st->usingForm('login')->clear()->fieldWithLabel("Username");
@@ -44,7 +44,7 @@ __See Also:__
 
 ## click()
 
-Use _$st->usingForm()->click()_ to click on a button, link, or other element on the page.
+Use `$st->usingForm()->click()` to click on a button, link, or other element on the page.
 
 {% highlight php %}
 $st->usingForm('login')->click()->linkWithText("Login");
@@ -52,7 +52,7 @@ $st->usingForm('login')->click()->linkWithText("Login");
 
 ## select()
 
-Use _$st->usingForm()->select()_ to pick an option in a dropdown list.
+Use `$st->usingForm()->select()` to pick an option in a dropdown list.
 
 {% highlight php %}
 $st->usingForm('registration')->select("United Kingdom")->fromDropdownWithLabel("Country");
@@ -62,7 +62,7 @@ _select()_ takes one parameter - the text of the option that you want to select.
 
 ## type()
 
-Use _$st->usingForm()->type()_ to send a string of text to a selected DOM element.
+Use `$st->usingForm()->type()` to send a string of text to a selected DOM element.
 
 {% highlight php %}
 $st->usingForm('feedback')->type("Storyplayer lives!")->intoFieldWithLabel("comments");

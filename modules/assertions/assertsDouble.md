@@ -13,7 +13,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## doesNotEqual()
 
-Use _$st->assertsDouble()->doesNotEqual()_ to make sure that two floating point numbers are not the same.
+Use `$st->assertsDouble()->doesNotEqual()` to make sure that two floating point numbers are not the same.
 
 {% highlight php %}
 $expected = 1.1;
@@ -25,7 +25,7 @@ See _[equals()](#equals)_ for a discussion of how this test works.
 
 ## equals()
 
-Use _$st->assertsDouble()->equals()_ to make sure that two floating point numbers are the same.
+Use `$st->assertsDouble()->equals()` to make sure that two floating point numbers are the same.
 
 {% highlight php %}
 $expected = 1.1;
@@ -37,7 +37,7 @@ If the test fails, Storyplayer's output will show the differences between the tw
 
 ## isDouble()
 
-Use _$st->assertsDouble()->isDouble()_ to make sure that something really is a floating point number.
+Use `$st->assertsDouble()->isDouble()` to make sure that something really is a floating point number.
 
 {% highlight php %}
 $data = 1.1;
@@ -60,7 +60,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 ## isEmpty()
 
-Use _$st->assertsDouble()->isEmpty()_ to make sure that a variable is empty.
+Use `$st->assertsDouble()->isEmpty()` to make sure that a variable is empty.
 
 {% highlight php %}
 $data = 0;
@@ -69,7 +69,7 @@ $st->assertsDouble($data)->isEmpty();
 
 ## isGreaterThan()
 
-Use _$st->assertsDouble()->isGreaterThan()_ to make sure that a floating point number is larger than a value you provide.
+Use `$st->assertsDouble()->isGreaterThan()` to make sure that a floating point number is larger than a value you provide.
 
 {% highlight php %}
 $data = 1.1;
@@ -78,7 +78,7 @@ $st->assertsDouble($data)->isGreaterThan(1.0);
 
 ## isGreaterThanOrEqualTo()
 
-Use _$st->assertsDouble()->isGreaterThan()_ to make sure that a floating point number is at least a value you provide.
+Use `$st->assertsDouble()->isGreaterThan()` to make sure that a floating point number is at least a value you provide.
 
 {% highlight php %}
 $data = 1.1;
@@ -87,7 +87,7 @@ $st->assertsDouble($data)->isGreaterThanOrEqualTo(1.1);
 
 ## isLessThan()
 
-Use _$st->assertsDouble()->isLessThan()_ to make sure that a floating point number is smaller than a value you provide.
+Use `$st->assertsDouble()->isLessThan()` to make sure that a floating point number is smaller than a value you provide.
 
 {% highlight php %}
 $data = 1.0;
@@ -96,7 +96,7 @@ $st->assertsDouble($data)->isLessThan(1.1);
 
 ## isLessThanOrEqualTo()
 
-Use _$st->assertsDouble()->isLessThanOrEqualTo()_ to make sure that a floating point number is no larger than a value you provide.
+Use `$st->assertsDouble()->isLessThanOrEqualTo()` to make sure that a floating point number is no larger than a value you provide.
 
 {% highlight php %}
 $data = 1.1;
@@ -105,7 +105,7 @@ $st->assertsDouble($data)->isLessThanOrEqualTo(1.1);
 
 ## isNotEmpty()
 
-Use _$st->assertsDouble()->isNotEmpty()_ to make sure that a floating point number is not empty.
+Use `$st->assertsDouble()->isNotEmpty()` to make sure that a floating point number is not empty.
 
 {% highlight php %}
 $data = 1.1;
@@ -114,7 +114,7 @@ $st->assertsDouble($data)->isNotEmpty();
 
 ## isNull()
 
-Use _$st->assertsDouble()->isNull()_ to make sure that the PHP variable is actually NULL, rather than a floating point number.
+Use `$st->assertsDouble()->isNull()` to make sure that the PHP variable is actually NULL, rather than a floating point number.
 
 {% highlight php %}
 $data = null;
@@ -125,7 +125,7 @@ This has been added for completeness; we'd always recommend using _[isDouble()](
 
 ## isNotNull()
 
-Use _$st->assertsDouble()->isNotNull()_ to make sure that the PHP variable is not NULL.
+Use `$st->assertsDouble()->isNotNull()` to make sure that the PHP variable is not NULL.
 
 {% highlight php %}
 $data = 1.1;
@@ -136,7 +136,7 @@ This has been added for completeness; we'd always recommend using _[isDouble()](
 
 ## isNotSameAs()
 
-Use _$st->assertsDouble()->isNotSameAs()_ to make sure that two PHP floating point numbers are not references to each other.
+Use `$st->assertsDouble()->isNotSameAs()` to make sure that two PHP floating point numbers are not references to each other.
 
 {% highlight php %}
 $data1 = 1.1;
@@ -149,7 +149,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 ## isSameAs()
 
-Use _$st->assertsDouble()->isSameAs()_ to make sure that two PHP floating point numbers are references to each other.
+Use `$st->assertsDouble()->isSameAs()` to make sure that two PHP floating point numbers are references to each other.
 
 {% highlight php %}
 $data1 = 1.1;

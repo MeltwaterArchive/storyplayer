@@ -21,7 +21,7 @@ Write your story as if every test must pass.
 
 ## metricIsAlwaysZero()
 
-Use _$st->expectsGraphite()->metricIsAlwaysZero()_ to ensure that data in Graphite for a given metric, between two given times, is always zero.
+Use `$st->expectsGraphite()->metricIsAlwaysZero()` to ensure that data in Graphite for a given metric, between two given times, is always zero.
 
 {% highlight php %}
 $now = time();
@@ -40,7 +40,7 @@ Missing data is treated as having a value of zero, for this test.
 
 ## metricSumIs()
 
-Use _$st->expectsGraphite()->metricSumIs()_ to ensure that data in Graphite for a given metric, between two given times, adds up to the value you expect.
+Use `$st->expectsGraphite()->metricSumIs()` to ensure that data in Graphite for a given metric, between two given times, adds up to the value you expect.
 
 {% highlight php %}
 $now = time();
@@ -58,7 +58,7 @@ If the data between _$startTime_ and _$endTime_ is less than, or greater than, _
 
 ## metricNeverExceeds()
 
-Use _$st->expectsGraphite()->metricNeverExceeds()_ to ensure that data in Graphite for a given metric, between two given times, never has a value higher than a given amount.
+Use `$st->expectsGraphite()->metricNeverExceeds()` to ensure that data in Graphite for a given metric, between two given times, never has a value higher than a given amount.
 
 {% highlight php %}
 $now = time();
@@ -76,7 +76,7 @@ If any of the data between _$startTime_ and _$endTime_ is greater than _$expecte
 
 ## metricAverageDoesntExceed()
 
-Use _$st->expectsGraphite()->metricAverageDoesntExceed()_ to ensure that the average of all the data in Graphite for a given metric, between two given times, doesn't has a value higher than a given amount.
+Use `$st->expectsGraphite()->metricAverageDoesntExceed()` to ensure that the average of all the data in Graphite for a given metric, between two given times, doesn't has a value higher than a given amount.
 
 This test uses the [arithmetic mean](http://en.wikipedia.org/wiki/Arithmetic_mean) for the average of the data.
 

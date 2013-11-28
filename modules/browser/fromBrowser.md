@@ -17,7 +17,7 @@ Every action returns either a value on success, or _NULL_ on failure.  None of t
 
 ## has()
 
-Use _$st->fromBrowser()->has()_ to work out whether the DOM contains the content that you're looking for.
+Use `$st->fromBrowser()->has()` to work out whether the DOM contains the content that you're looking for.
 
 {% highlight php %}
 if ($st->fromBrowser()->has()->buttonWithText('Register')) {
@@ -36,7 +36,7 @@ __See Also:__
 
 ## get()
 
-Use _$st->fromBrowser()->get()_ to get one or more [WebDriver element objects](webdriver.html#webdriver_elements) from the DOM.
+Use `$st->fromBrowser()->get()` to get one or more [WebDriver element objects](webdriver.html#webdriver_elements) from the DOM.
 
 {% highlight php %}
 $element = $st->fromBrowser()->get()->tableWithId('results');
@@ -46,7 +46,7 @@ This action is normally used when you need to run a custom XPath query to extrac
 
 ## getName()
 
-Use _$st->fromBrowser()->getName()_ to get the _name_ attribute from a specific DOM element.
+Use `$st->fromBrowser()->getName()` to get the _name_ attribute from a specific DOM element.
 
 {% highlight php %}
 $name = $st->fromBrowser()->getName()->fromFieldWithLabel("Username");
@@ -58,7 +58,7 @@ It's also handy for web pages where the _name_ attribute is being used outside o
 
 ## getNames()
 
-Use _$st->fromBrowser()->getNames()_ to get the _name_ attribute from a set of specified DOM elements.
+Use `$st->fromBrowser()->getNames()` to get the _name_ attribute from a set of specified DOM elements.
 
 {% highlight php %}
 $names = $st->fromBrowser()->getNames()->ofFieldsWithClass('input-error');
@@ -68,7 +68,7 @@ This action is normally only used with web pages where the _name_ attribute is b
 
 ## getOptions()
 
-Use _$st->fromBrowser()->getOptions()_ to get the list of possible values from a _&lt;select&gt;_ list.
+Use `$st->fromBrowser()->getOptions()` to get the list of possible values from a _&lt;select&gt;_ list.
 
 {% highlight php %}
 $options = $st->fromBrowser()->getOptions()->fromDropdownWithLabel("Country");
@@ -93,7 +93,7 @@ $st->expectsArray($actualOptions)->equals($expectedOptions);
 
 ## getTag()
 
-Use _$st->fromBrowser()->getTag()_ to get the HTML tag used by a specified DOM element.
+Use `$st->fromBrowser()->getTag()` to get the HTML tag used by a specified DOM element.
 
 {% highlight php %}
 $tag = $st->fromBrowser()->getTag()->ofFieldWithText("Login");
@@ -103,7 +103,7 @@ This action is normally used when you want to perform a low-level check on the H
 
 ## getText()
 
-Use _$st->fromBrowser()->getText()_ to get the contents of the specified DOM element.
+Use `$st->fromBrowser()->getText()` to get the contents of the specified DOM element.
 
 {% highlight php %}
 $text = $st->fromBrowser()->getText()->fromFieldWithClass("total-amount");
@@ -119,7 +119,7 @@ $st->expectsString($actualAmount)->equals($expectedAmount);
 
 ## getTopElement()
 
-Use _$st->fromBrowser()->getTopElement()_ to get the DOM element that's at the top of the document loaded in the browser.  This is always the element created by the _&lt;html&gt;_ tag.
+Use `$st->fromBrowser()->getTopElement()` to get the DOM element that's at the top of the document loaded in the browser.  This is always the element created by the _&lt;html&gt;_ tag.
 
 {% highlight php %}
 $topElement = $st->fromBrowser()->getTopElement();
@@ -129,7 +129,7 @@ This action returns a _[WebDriverElement](webdriver.html)_, which you can then u
 
 ## getTitle()
 
-Use _$st->fromBrowser()->getTitle()_ to get the _&lt;title&gt;_ of the currently loaded page.
+Use `$st->fromBrowser()->getTitle()` to get the _&lt;title&gt;_ of the currently loaded page.
 
 {% highlight php %}
 $title = $st->fromBrowser()->getTitle();
@@ -139,7 +139,7 @@ This action is normally used inside [local Prose dialects](../../prose/local-dia
 
 ## getValue()
 
-Use _$st->fromBrowser()->getValue()_ to get the _value_ attribute of a specified DOM element.
+Use `$st->fromBrowser()->getValue()` to get the _value_ attribute of a specified DOM element.
 
 {% highlight php %}
 $username = $st->fromBrowser()->getValue()->ofBoxWithLabel('Username');

@@ -13,7 +13,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## doesNotEqual()
 
-Use _$st->assertsObject()->doesNotEqual()_ to make sure that two objects are not the same.
+Use `$st->assertsObject()->doesNotEqual()` to make sure that two objects are not the same.
 
 {% highlight php %}
 $expectedObject = (object)array("count" => 1);
@@ -25,7 +25,7 @@ See _[equals()](#equals)_ for a discussion of how this test works.
 
 ## doesNotHaveAttribute()
 
-Use _$st->assertsObject()->doesNotHaveAttribute()_ to make sure that an object does not have an attribute it should not have.
+Use `$st->assertsObject()->doesNotHaveAttribute()` to make sure that an object does not have an attribute it should not have.
 
 {% highlight php %}
 $obj = (object)array("count" => 1);
@@ -34,7 +34,7 @@ $st->assertsObject($obj)->doesNotHaveAttribute("length");
 
 ## doesNotHaveMethod()
 
-Use _$st->assertsObejct()->doesNotHaveMethod()_ to make sure that an object does not have a particular method defined.
+Use `$st->assertsObejct()->doesNotHaveMethod()` to make sure that an object does not have a particular method defined.
 
 {% highlight php %}
 $obj = (object)array("count" => 1);
@@ -45,7 +45,7 @@ This has been added for completeness (it's part of Stone's _ObjectComparitor_ th
 
 ## equals()
 
-Use _$st->assertsObject()->equals()_ to make sure that two objects contain the exact same values.
+Use `$st->assertsObject()->equals()` to make sure that two objects contain the exact same values.
 
 {% highlight php %}
 $expectedObject = (object)array("count" => 1);
@@ -59,7 +59,7 @@ If the test fails, Storyplayer's output will contain a _[unified diff](http://en
 
 ## hasAttribute()
 
-Use _$st->assertsObject()->hasAttribute()_ to make sure that an object has an attribute that you expect to exist.
+Use `$st->assertsObject()->hasAttribute()` to make sure that an object has an attribute that you expect to exist.
 
 {% highlight php %}
 $obj = (object)array("count" => 1);
@@ -82,7 +82,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 ## hasMethod()
 
-Use _$st->assertsObject()->hasMethod()_ to make sure than an object has a method that you expect to exist.
+Use `$st->assertsObject()->hasMethod()` to make sure than an object has a method that you expect to exist.
 
 {% highlight php %}
 $st->expectsObject($st)->hasMethod('expectsObject');
@@ -92,7 +92,7 @@ This has been added for completeness (it's part of Stone's _ObjectComparitor_ th
 
 ## isEmpty()
 
-Use _$st->assertsObject()->isEmpty()_ to make sure that an object has no attributes.
+Use `$st->assertsObject()->isEmpty()` to make sure that an object has no attributes.
 
 {% highlight php %}
 $data = (object)array();
@@ -101,7 +101,7 @@ $st->assertsObject($data)->isEmpty();
 
 ## isNotEmpty()
 
-Use _$st->assertsObject()->isNotEmpty()_ to make sure that an object has attributes.
+Use `$st->assertsObject()->isNotEmpty()` to make sure that an object has attributes.
 
 {% highlight php %}
 $data = (object)array(1,2,3,4);
@@ -110,7 +110,7 @@ $st->assertsObject($data)->isNotEmpty();
 
 ## isInstanceOf()
 
-Use _$st->assertsObject()->isInstanceOf()_ to make sure that an object is an instance of the class that you're expecting.
+Use `$st->assertsObject()->isInstanceOf()` to make sure that an object is an instance of the class that you're expecting.
 
 {% highlight php %}
 $st->assertsObject($st)->isInstanceOf("DataSift\Storyplayer\PlayerLib\Storyteller");
@@ -120,7 +120,7 @@ This has been added for completeness (it's part of Stone's _ObjectComparitor_ th
 
 ## isNull()
 
-Use _$st->assertsObject()->isNull()_ to make sure that the PHP variable is actually NULL, rather than an object.
+Use `$st->assertsObject()->isNull()` to make sure that the PHP variable is actually NULL, rather than an object.
 
 {% highlight php %}
 $data = null;
@@ -131,7 +131,7 @@ This has been added for completeness; we'd always recommend using _[isObject()](
 
 ## isNotInstanceOf()
 
-Use _$st->assertsObject()->isNotInstanceOf()_ to make sure that an object is not an instance of the class that you're expecting.
+Use `$st->assertsObject()->isNotInstanceOf()` to make sure that an object is not an instance of the class that you're expecting.
 
 {% highlight php %}
 $st->assertsObject($st)->isNotInstanceOf("stdClass");
@@ -141,7 +141,7 @@ This has been added for completeness (it's part of Stone's _ObjectComparitor_ th
 
 ## isNotNull()
 
-Use _$st->assertsObject()->isNotNull()_ to make sure that the PHP variable is not NULL.
+Use `$st->assertsObject()->isNotNull()` to make sure that the PHP variable is not NULL.
 
 {% highlight php %}
 $data = (object)array(1,2,3,4);
@@ -152,7 +152,7 @@ This has been added for completeness; we'd always recommend using _[isObject()](
 
 ## isNotSameAs()
 
-Use _$st->assertsObject()->isNotSameAs()_ to make sure that two PHP objects are different PHP variables.
+Use `$st->assertsObject()->isNotSameAs()` to make sure that two PHP objects are different PHP variables.
 
 {% highlight php %}
 $data1 = (object)array(1,2,3,4);
@@ -165,7 +165,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 ## isObject()
 
-Use _$st->assertsObject()->isObject()_ to make sure that something really is an object.
+Use `$st->assertsObject()->isObject()` to make sure that something really is an object.
 
 {% highlight php %}
 $data = (object)array(1,2,3,4);
@@ -188,7 +188,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 ## isSameAs()
 
-Use _$st->assertsObject()->isSameAs()_ to make sure that two PHP objects are references to each other, or are in fact the same object.
+Use `$st->assertsObject()->isSameAs()` to make sure that two PHP objects are references to each other, or are in fact the same object.
 
 {% highlight php %}
 $data1 = (object)array(1,2,3,4);

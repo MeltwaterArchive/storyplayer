@@ -17,7 +17,7 @@ Every action returns either a value on success, or _NULL_ on failure.  These act
 
 ## getDetailsForHost()
 
-Use _$st->fromHostsTable()->getDetailsForHost()_ to retrieve the host's entry in Storyplayer's [hosts table](how-hosts-are-remembered.html).
+Use `$st->fromHostsTable()->getDetailsForHost()` to retrieve the host's entry in Storyplayer's [hosts table](how-hosts-are-remembered.html).
 
 {% highlight php %}
 $details = $st->fromHostsTable()->getDetailsForHost($hostName);
@@ -34,7 +34,7 @@ __NOTE__
 
 ## getHostsTable()
 
-Use _$st->fromHostsTable()->getHostsTable()_ to retrieve Storyplayer's [hosts table](how-hosts-are-remembered.html).
+Use `$st->fromHostsTable()->getHostsTable()` to retrieve Storyplayer's [hosts table](how-hosts-are-remembered.html).
 
 {% highlight php %}
 $table = $st->fromHostsTable()->getHostsTable();

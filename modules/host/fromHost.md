@@ -17,7 +17,7 @@ Every action returns either a value on success, or _NULL_ on failure.  These act
 
 ## getDetails()
 
-Use _$st->fromHost()->getDetails()_ to retrieve the host's entry in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html).
+Use `$st->fromHost()->getDetails()` to retrieve the host's entry in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html).
 
 {% highlight php %}
 $details = $st->fromHost($hostName)->getDetails();
@@ -34,7 +34,7 @@ __NOTE__
 
 ## getHostIsRunning()
 
-Use _$st->fromHost()->getHostIsRunning()_ to determine if the specified host is currently running or not.
+Use `$st->fromHost()->getHostIsRunning()` to determine if the specified host is currently running or not.
 
 {% highlight php %}
 $isRunning = $st->fromHost($hostName)->getHostIsRunning();
@@ -49,7 +49,7 @@ If the host is not running, this could be because your test has stopped the host
 
 ## getInstalledPackageDetails()
 
-Use _$st->fromHost()->getInstalledPackageDetails()_ to get information about an installed package from the guest operating system's inventory.
+Use `$st->fromHost()->getInstalledPackageDetails()` to get information about an installed package from the guest operating system's inventory.
 
 {% highlight php %}
 $details = $st->fromHost($hostName)->getInstalledPackageDetails($packageName);
@@ -68,7 +68,7 @@ __NOTE__
 
 ## getIpAddress()
 
-Use _$st->fromHost()->getIpAddress()_ to get the host's current IP address.
+Use `$st->fromHost()->getIpAddress()` to get the host's current IP address.
 
 {% highlight php %}
 $ipAddress = $st->fromHost($hostName)->getIpAddress();
@@ -85,7 +85,7 @@ __NOTE__
 
 ## getPid()
 
-Use _$st->fromHost()->getPid()_ to get the process ID of a running process.
+Use `$st->fromHost()->getPid()` to get the process ID of a running process.
 
 {% highlight php %}
 $pid = $st->fromHost($hostName)->getPid($processName);
@@ -103,7 +103,7 @@ __NOTE__
 
 ## getProcessIsRunning()
 
-Use _$st->fromHost()->getProcessIsRunning()_ to determine if a process is currently running or not.
+Use `$st->fromHost()->getProcessIsRunning()` to determine if a process is currently running or not.
 
 {% highlight php %}
 $isRunning = $st->fromHost($hostName)->getProcessIsRunning($processName);
@@ -117,7 +117,7 @@ where:
 
 ## getSshUsername()
 
-Use _$st->fromHost()->getSshUsername()_ to get the default username used for SSH'ing into the host.
+Use `$st->fromHost()->getSshUsername()` to get the default username used for SSH'ing into the host.
 
 {% highlight php %}
 $sshUsername = $st->fromHost($hostName)->getSshUsername();
@@ -130,7 +130,7 @@ where:
 
 ## getSshKeyFile()
 
-Use _$st->fromHost()->getSshKeyFile()_ to get the path to the SSH private key file that Storyplayer will use in _[$st->usingHost()->runCommand()](usingHost.html#runcommand)_ et al.
+Use `$st->fromHost()->getSshKeyFile()` to get the path to the SSH private key file that Storyplayer will use in _[$st->usingHost()->runCommand()](usingHost.html#runcommand)_ et al.
 
 {% highlight php %}
 $sshKeyFile = $st->fromHost($hostName)->getSshKeyFile();

@@ -22,7 +22,7 @@ Write your story as if every action will be successful.
 
 ## createImage()
 
-Use _$st->usingEc2Instance()->createImage()_ to create an new Amazon Machine Image (AMI) from a running EC2 instance.
+Use `$st->usingEc2Instance()->createImage()` to create an new Amazon Machine Image (AMI) from a running EC2 instance.
 
 {% highlight php %}
 $st->usingEc2Instance($vmName)->createImage($imageName);
@@ -35,7 +35,7 @@ where:
 
 ## markAllVolumesAsDeleteOnTermination
 
-Use _$st->usingEc2Instance()->markAllVolumesAsDeleteOnTermination()_ tell EC2 to delete all of the block devices that are attached to the instance whenever the instance is destroyed using _[usingEc2()->destroyVm()](usingEc2.html#destroyvm)_.
+Use `$st->usingEc2Instance()->markAllVolumesAsDeleteOnTermination()` tell EC2 to delete all of the block devices that are attached to the instance whenever the instance is destroyed using _[usingEc2()->destroyVm()](usingEc2.html#destroyvm)_.
 
 {% highlight php %}
 $st->usingEc2Instance($vmName)->markAllVolumesAsDeleteOnTermination();

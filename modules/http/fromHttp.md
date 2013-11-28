@@ -17,7 +17,7 @@ Every action returns either a value on success, or _NULL_ on failure.  None of t
 
 ## get()
 
-Use _$st->fromHttp()->get()_ to make a GET request to a (possibly) remote HTTP server.
+Use `$st->fromHttp()->get()` to make a GET request to a (possibly) remote HTTP server.
 
 {% highlight php %}
 $response = $st->usingHttp()->get('http://api.datasift.com/balance');

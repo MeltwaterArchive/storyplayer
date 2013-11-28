@@ -16,7 +16,7 @@ Every action returns either a value on success, or _NULL_ on failure. None of th
 
 ## getDataFor()
 
-Use _$st->fromGraphite()->getDataFor()_ to retrieve data from Graphite for a given metric, between two given times.
+Use `$st->fromGraphite()->getDataFor()` to retrieve data from Graphite for a given metric, between two given times.
 
 {% highlight php %}
 $now = time();
