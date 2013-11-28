@@ -22,7 +22,7 @@ Write your story as if every test must pass.
 
 ## requirementsAreMet()
 
-Use _$st->expectsUuid()->requirementsAreMet()_ to make sure that any calls to the UUID module will work.
+Use `$st->expectsUuid()->requirementsAreMet()` to make sure that any calls to the UUID module will work.
 
 {% highlight php %}
 $st->expectsUuid()->requirementsAreMet();
