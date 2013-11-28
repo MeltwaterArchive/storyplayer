@@ -21,7 +21,7 @@ Write your story as if every test must pass.
 
 ## waitFor()
 
-Use _$st->usingTimer()->waitFor()_ to wait for something to happen
+Use `$st->usingTimer()->waitFor()` to wait for something to happen
 
 {% highlight php %}
 $st->usingTimer()->waitFor($callback, $timeout);
@@ -43,7 +43,7 @@ $st->usingTimer()->waitFor(function($st) {
 
 ## waitWhile()
 
-Use _$st->usingTimer()->waitFor()_ to wait for something to change
+Use `$st->usingTimer()->waitFor()` to wait for something to change
 
 {% highlight php %}
 $st->usingTimer()->waitFor($callback, $timeout);
@@ -65,7 +65,7 @@ $st->usingTimer()->waitWhile(function($st) {
 
 ## wait()
 
-Use _$st->usingTimer()->wait()_ to add a pause to your test.
+Use `$st->usingTimer()->wait()` to add a pause to your test.
 
 {% highlight php %}
 $st->usingTimer()->wait($timeout, $reason);
