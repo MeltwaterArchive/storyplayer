@@ -22,7 +22,7 @@ Write your story as if every action will be successful.
 
 ## createVm()
 
-Use _$st->usingVagrant()->createVm()_ to start a new virtual machine using Vagrant.
+Use `$st->usingVagrant()->createVm()` to start a new virtual machine using Vagrant.
 
 {% highlight php %}
 $st->usingVagrant()->createVm($vmName, $osName, $homeFolder);
@@ -42,7 +42,7 @@ If the virtual machine starts successfully, we create an entry in Storyplayer's 
 
 ## destroyVm()
 
-Use _$st->usingVagrant()->destroyVm()_ to shutdown and delete a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `$st->usingVagrant()->destroyVm()` to shutdown and delete a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
 $st->usingVagrant->destroyVm($vmName);
@@ -58,7 +58,7 @@ Once this is done, we remove the virtual machine's entry from Storyplayer's [hos
 
 ## startVm()
 
-Use _$st->usingVagrant()->startVm()_ to start a virtual machine that was previous stopped using _[stopVm()](#stopvm)_ or _[powerOffVm()](#poweroffvm)_.
+Use `$st->usingVagrant()->startVm()` to start a virtual machine that was previous stopped using _[stopVm()](#stopvm)_ or _[powerOffVm()](#poweroffvm)_.
 
 {% highlight php %}
 $st->usingVagrant()->startVm($vmName);
@@ -77,7 +77,7 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 ## stopVm()
 
-Use _$st->usingVagrant()->stopVm()_ to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `$st->usingVagrant()->stopVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
 $st->usingVagrant()->stopVm($vmName);
@@ -93,7 +93,7 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 ## restartVm()
 
-Use _$st->usingVagrant()->restartVm()_ to reboot a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `$st->usingVagrant()->restartVm()` to reboot a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
 $st->usingVagrant()->restartVm($vmName);
@@ -109,7 +109,7 @@ Please note that Vagrant will re-run any provisioning plugin that you have liste
 
 ## powerOffVm()
 
-Use _$st->usingVagrant()->powerOffVm()_ to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `$st->usingVagrant()->powerOffVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
 $st->usingVagrant()->powerOffVm($vmName);
@@ -125,7 +125,7 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 ## runVagrantCommand()
 
-Use _$st->usingVagrant()->runVagrantCommand()_ to call the `vagrant` command line tool directly from your stories.
+Use `$st->usingVagrant()->runVagrantCommand()` to call the `vagrant` command line tool directly from your stories.
 
 {% highlight php %}
 $result = $st->usingVagrant()->runVagrantCommand($vmName, $command);
