@@ -13,7 +13,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## Behaviour And Return Codes
 
-Every action returns either a value on success, or _NULL_ on failure.  None of these actions throw exceptions on failure.
+Every action returns either a value on success, or `NULL` on failure.  None of these actions throw exceptions on failure.
 
 ## get()
 

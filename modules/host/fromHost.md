@@ -13,7 +13,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## Behaviour And Return Codes
 
-Every action returns either a value on success, or _NULL_ on failure.  These actions do throw an exception if you attempt to work with an unknown host.
+Every action returns either a value on success, or `NULL` on failure.  These actions do throw an exception if you attempt to work with an unknown host.
 
 ## getDetails()
 
@@ -95,7 +95,7 @@ where:
 
 * _$hostName_ is the name you set when you created the host
 * _$processName_ is the string to search the output of `ps` for
-* _$pid_ is the process ID of the process that you searched for, or _NULL_ if the process is not running
+* _$pid_ is the process ID of the process that you searched for, or `NULL` if the process is not running
 
 __NOTE__
 

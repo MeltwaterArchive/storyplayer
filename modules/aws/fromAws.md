@@ -13,7 +13,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 ## Behaviour And Return Codes
 
-Every action returns either a value on success, or _NULL_ on failure.  These actions do not throw an exception if you attempt to work with an unknown host.
+Every action returns either a value on success, or `NULL` on failure.  These actions do not throw an exception if you attempt to work with an unknown host.
 
 ## getEc2Client()
 

@@ -94,7 +94,7 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 ## recvMultiNonBlocking()
 
-Use `$st->usingZmq()->recvMultiNonBlocking()` to receive a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, _NULL_ is returned to the caller.
+Use `$st->usingZmq()->recvMultiNonBlocking()` to receive a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, `NULL` is returned to the caller.
 
 {% highlight php %}
 $message = $st->usingZmq()->recvMultiNonBlocking($socket);
@@ -109,7 +109,7 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 ## recvNonBlocking()
 
-Use `$st->usingZmq()->recvNonBlocking()` to receive a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, _NULL_ is returned to the caller.
+Use `$st->usingZmq()->recvNonBlocking()` to receive a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, `NULL` is returned to the caller.
 
 {% highlight php %}
 $message = $st->usingZmq()->recvNonBlocking($socket);
