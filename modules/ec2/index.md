@@ -247,7 +247,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function(StoryTeller $st) {
     // the information to guide our checks is in the checkpoint
     $checkpoint = $st->getCheckpoint();
 

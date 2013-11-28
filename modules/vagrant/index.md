@@ -142,7 +142,7 @@ $story = newStoryFor('Ogre Service Stories')
 
 // we do not need an initial setup phase
 
-$story->setTestEnvironmentTeardown(function(StoryTeller $st) {
+$story->addTestEnvironmentTeardown(function(StoryTeller $st) {
     // stop the VM
     tryTo(function() use($st) {
         $st->usingVagrant()->destroyVm('ogre');
@@ -191,7 +191,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function(StoryTeller $st) {
     // make sure the VM is running
     $st->expectsHost('ogre')->hostIsRunning();
 

@@ -66,7 +66,7 @@ $story = newStoryFor('Ogre Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->setTestEnvironmentSetup(function(StoryTeller $st) {
+$story->addTestEnvironmentSetup(function(StoryTeller $st) {
     // create the parameters to inject into our test VM
     $vmParams = array();
 
@@ -78,7 +78,7 @@ $story->setTestEnvironmentSetup(function(StoryTeller $st) {
     $st->expectsVagrant()->processIsRunning('ogre', 'ogre');
 });
 
-$story->setTestEnvironmentTeardown(function(StoryTeller $st) {
+$story->addTestEnvironmentTeardown(function(StoryTeller $st) {
     // stop the VM, and ignore any errors
     tryTo(function() use($st) {
         $st->usingVagrant()->stopBox('ogre');
@@ -91,7 +91,7 @@ $story->setTestEnvironmentTeardown(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setTestSetup(function(StoryTeller $st) {
+$story->addTestSetup(function(StoryTeller $st) {
     // what is the VM's ipAddress?
     $ipAddress = $st->fromVagrant()->getIpAddress('ogre');
 
@@ -100,7 +100,7 @@ $story->setTestSetup(function(StoryTeller $st) {
     $st->usingDatasiftCppDaemon()->startMonitoringStats('ogre', "http://{$ipAddress}:{$httpPort}/stats");
 });
 
-$story->setTestTeardown(function(StoryTeller $st) {
+$story->addTestTeardown(function(StoryTeller $st) {
     // stop any screen services that might be running
     tryTo(function() use($st) {
         $st->usingShell()->stopAllScreens();
@@ -125,7 +125,7 @@ $story->setTestTeardown(function(StoryTeller $st) {
 // ------------------------------------------------------------------------
 
 // we need to remember the value of the counters before our test
-$story->setPreTestInspection(function(StoryTeller $st) {
+$story->addPreTestInspection(function(StoryTeller $st) {
     // get our checkpoint ... we're going to store values in here
     $checkpoint = $st->getCheckpoint();
 
@@ -207,7 +207,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function(StoryTeller $st) {
     // the information to guide our checks is in the checkpoint
     $checkpoint = $st->getCheckpoint();
 
