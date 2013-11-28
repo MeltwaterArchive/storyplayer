@@ -9,7 +9,7 @@ next: '<a href="../../modules/assertions/assertsBoolean.html">Next: Boolean Asse
 
 _assertsArray()_ allows you to test a PHP array, and to compare it against another PHP array.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ArrayExpects_.
+The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsArray_.
 
 ## Behaviour And Return Codes
 
@@ -22,7 +22,7 @@ Write your story as if every test must pass.
 
 ## containsValue()
 
-Use _$st->assertsArray()->containsValue()_ to make sure that the array contains the value that you expect it to.
+Use `$st->assertsArray()->containsValue()` to make sure that the array contains the value that you expect it to.
 
 {% highlight php %}
 $expectedArray = array(1,2,3,4);
@@ -39,7 +39,7 @@ $st->assertsArray($expectedArray)->containsValue(1);
 
 ## doesNotContainValue()
 
-Use _$st->assertsArray()->doesNotContainValue()_ to make sure that the array does not contain the value that you do not expect it to.
+Use `$st->assertsArray()->doesNotContainValue()` to make sure that the array does not contain the value that you do not expect it to.
 
 {% highlight php %}
 $expectedArray = array(1,2,3,4);
@@ -50,7 +50,7 @@ See _[containsValue()](#containsvalue)_ for a discussion of the limits of this t
 
 ## doesNotEqual()
 
-Use _$st->assertsArray()->doesNotEqual()_ to make sure that two arrays are not the same.
+Use `$st->assertsArray()->doesNotEqual()` to make sure that two arrays are not the same.
 
 {% highlight php %}
 $expectedArray = array(1,2,3,4);
@@ -62,7 +62,7 @@ See _[equals()](#equals)_ for a discussion of how this test works.
 
 ## doesNotHaveKey()
 
-Use _$st->assertsArray()->doesNotHaveKey()_ to make sure that an array does not contain the key that you do not expect it to.
+Use `$st->assertsArray()->doesNotHaveKey()` to make sure that an array does not contain the key that you do not expect it to.
 
 {% highlight php %}
 $data = array("first_name" => "Stuart", "surname" => "Herbert");
@@ -73,7 +73,7 @@ See _[hasKey()](#haskey)_ for a discussion of the limits of this test.
 
 ## equals()
 
-Use _$st->assertsArray()->equals()_ to make sure that two arrays contain the exact same values.
+Use `$st->assertsArray()->equals()` to make sure that two arrays contain the exact same values.
 
 {% highlight php %}
 $expectedArray = array(1,2,3,4);
@@ -87,7 +87,7 @@ If the test fails, Storyplayer's output will contain a _[unified diff](http://en
 
 ## hasKey()
 
-Use _$st->assertsArray()->hasKey()_ to make sure that an array contains the key that you expect it to.
+Use `$st->assertsArray()->hasKey()` to make sure that an array contains the key that you expect it to.
 
 {% highlight php %}
 $data = array("first_name" => "Stuart", "surname" => "Herbert");
@@ -108,7 +108,7 @@ $st->assertsArray($data)->hasKey("line1");
 
 ## hasLength()
 
-Use _$st->assertsArray()->hasLength()_ to make sure that an array has the number of entries that you expect it to.
+Use `$st->assertsArray()->hasLength()` to make sure that an array has the number of entries that you expect it to.
 
 {% highlight php %}
 // single-dimensional array example
@@ -127,7 +127,7 @@ $st->assertsArray($data)->hasLength(1);
 
 ## isArray()
 
-Use _$st->assertsArray()->isArray()_ to make sure that something really is an array.
+Use `$st->assertsArray()->isArray()` to make sure that something really is an array.
 
 {% highlight php %}
 $data = array(1,2,3,4);
@@ -150,7 +150,7 @@ $story->setPostTestInspection(function(StoryTeller $st) {
 
 ## isEmpty()
 
-Use _$st->assertsArray()->isEmpty()_ to make sure that an array has no contents.
+Use `$st->assertsArray()->isEmpty()` to make sure that an array has no contents.
 
 {% highlight php %}
 $data = array();
@@ -159,7 +159,7 @@ $st->assertsArray($data)->isEmpty();
 
 ## isNotEmpty()
 
-Use _$st->assertsArray()->isNotEmpty()_ to make sure that an array has contents.
+Use `$st->assertsArray()->isNotEmpty()` to make sure that an array has contents.
 
 {% highlight php %}
 $data = array(1,2,3,4);
@@ -168,7 +168,7 @@ $st->assertsArray($data)->isNotEmpty();
 
 ## isNull()
 
-Use _$st->assertsArray()->isNull()_ to make sure that the PHP variable is actually NULL, rather than an array.
+Use `$st->assertsArray()->isNull()` to make sure that the PHP variable is actually NULL, rather than an array.
 
 {% highlight php %}
 $data = null;
@@ -179,7 +179,7 @@ This has been added for completeness; we'd always recommend using _[isArray()](#
 
 ## isNotNull()
 
-Use _$st->assertsArray()->isNotNull()_ to make sure that the PHP variable is not NULL.
+Use `$st->assertsArray()->isNotNull()` to make sure that the PHP variable is not NULL.
 
 {% highlight php %}
 $data = array(1,2,3,4);
@@ -190,7 +190,7 @@ This has been added for completeness; we'd always recommend using _[isArray()](#
 
 ## isNotSameAs()
 
-Use _$st->assertsArray()->isNotSameAs()_ to make sure that two PHP arrays are not references to each other.
+Use `$st->assertsArray()->isNotSameAs()` to make sure that two PHP arrays are not references to each other.
 
 {% highlight php %}
 $data1 = array(1,2,3,4);
@@ -203,7 +203,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 ## isSameAs()
 
-Use _$st->assertsArray()->isSameAs()_ to make sure that two PHP arrays are references to each other.
+Use `$st->assertsArray()->isSameAs()` to make sure that two PHP arrays are references to each other.
 
 {% highlight php %}
 $data1 = array(1,2,3,4);
@@ -216,7 +216,7 @@ This has been added for completeness; you'll probably use _[equals()](#equals)_ 
 
 ## isSameLengthAs()
 
-Use _$st->assertsArray()->isSameLengthAs()_ to make sure that two PHP arrays are the same length.
+Use `$st->assertsArray()->isSameLengthAs()` to make sure that two PHP arrays are the same length.
 
 {% highlight php %}
 $data1 = array(1,2,3,4);
