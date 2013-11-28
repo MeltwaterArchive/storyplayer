@@ -30,7 +30,7 @@ $st->expectsShell()->isRunningIsScreen($screenName);
 
 where:
 
-* _$screenName_ is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
+* `$screenName` is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
 
 ## isNotRunningInScreen()
 
@@ -42,4 +42,4 @@ $st->expectsShell()->isNotRunningIsScreen($screenName);
 
 where:
 
-* _$screenName_ is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
+* `$screenName` is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_

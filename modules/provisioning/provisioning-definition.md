@@ -29,9 +29,9 @@ $st->usingProvisioningDefinition($def)->addRole($roleName)->toHost($hostName);
 
 where:
 
-* _$def_ is the _provisioning definition_ created in Step 1
-* _$roleName_ is the name of a role to add to a host (this must be a role that you've added to your chosen provisioning engine)
-* _$hostName_ is the name of the host you want to add the role to (this is normally the same name that you've passed into _[$st->usingVagrant()->createBox()](../vagrant/usingVagrant.html#createbox)_)
+* `$def` is the _provisioning definition_ created in Step 1
+* `$roleName` is the name of a role to add to a host (this must be a role that you've added to your chosen provisioning engine)
+* `$hostName` is the name of the host you want to add the role to (this is normally the same name that you've passed into _[$st->usingVagrant()->createBox()](../vagrant/usingVagrant.html#createbox)_)
 
 ## Step 3: Add Parameters To The Provisioning Definition
 
@@ -43,9 +43,9 @@ $st->usingProvisioningDefinition($def)->addParams($params)->toHost($hostName);
 
 where:
 
-* _$def_ is the _provisioning definition_ created in Step 1
-* _$params_ is an array listing the variable names and values to use when the provisioning engine runs against _$hostName_
-* _$hostName_ is the name of the host you want to add the role to (this is normally the same name that you've passed into _[$st->usingVagrant()->createBox()](../vagrant/usingVagrant.html#createbox)_)
+* `$def` is the _provisioning definition_ created in Step 1
+* `$params` is an array listing the variable names and values to use when the provisioning engine runs against `$hostName`
+* `$hostName` is the name of the host you want to add the role to (this is normally the same name that you've passed into _[$st->usingVagrant()->createBox()](../vagrant/usingVagrant.html#createbox)_)
 
 ## Next Step
 

@@ -274,8 +274,8 @@ Storyplayer's solution is to create EC2 instances with the following names:
 
 where:
 
-* _$environmentName_ is the name of the test environment you are testing against
-* _$vmName_ is the name of the VM that you are using in your stories
+* `$environmentName` is the name of the test environment you are testing against
+* `$vmName` is the name of the VM that you are using in your stories
 
 For example, if I run Storyplayer like this:
 

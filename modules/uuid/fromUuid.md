@@ -25,7 +25,7 @@ $uuid = $st->fromUuid()->generateUuid();
 
 where:
 
-* _$uuid_ is a new Version 4 UUID string
+* `$uuid` is a new Version 4 UUID string
 
 You can use _[$st->expectsString()->isUuid()](../assertions/assertsString.html#isuuid)_ to test `$uuid` and make sure that it is a valud UUID string:
 

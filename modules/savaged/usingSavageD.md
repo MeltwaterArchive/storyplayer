@@ -84,7 +84,7 @@ $st->usingSavageD($ipAddress)->stopWatchingProcess($alias);
 
 where:
 
-* _$alias_ is the alias you originally used when you called _[startWatchingProcess()](#startwatchingprocess)_.
+* `$alias` is the alias you originally used when you called _[startWatchingProcess()](#startwatchingprocess)_.
 
 When you call _stopWatchingProcess()_, SavageD will forget about any monitoring you've setup for the specified process. If you want to start monitoring the process later during the same test, you'll need to setup the monitoring for that process again from scratch - i.e., you can't just call _startWatchingProcess()_ and have all of your previous stats start appearing once again.
 
@@ -100,7 +100,7 @@ $st->usingSavageD($ipAddress)->stopWatchingProcessCpu($alias);
 
 where:
 
-* _$alias_ is the alias you originally used when you called _[startWatchingProcess()](#startwatchingprocess)_.
+* `$alias` is the alias you originally used when you called _[startWatchingProcess()](#startwatchingprocess)_.
 
 Normally, you'd call _stopWatchingProcess()_ in your [test teardown phase](../../stories/test-setup-teardown.html), but _stopWatchingProcessCpu()_ is here for completeness.
 
@@ -114,7 +114,7 @@ $st->usingSavageD($ipAddress)->stopWatchingProcessMemory($alias);
 
 where:
 
-* _$alias_ is the alias you originally used when you called _[startWatchingProcess()](#startwatchingprocess)_.
+* `$alias` is the alias you originally used when you called _[startWatchingProcess()](#startwatchingprocess)_.
 
 Normally, you'd call _stopWatchingProcess()_ in your [test teardown phase](../../stories/test-setup-teardown.html), but _stopWatchingProcessMemory()_ is here for completeness.
 
@@ -144,7 +144,7 @@ $st->usingSavageD($ipAddress)->watchProcess($alias, $pid);
 
 where:
 
-* _$alias_ is the prefix for the stats you want to write into Graphite.  _$alias_ needs to be unique.  You'll also re-use _$alias_ when you call _[watchProcessCpu()](#watchprocesscpu)_ et al.
+* `$alias` is the prefix for the stats you want to write into Graphite.  `$alias` needs to be unique.  You'll also re-use `$alias` when you call _[watchProcessCpu()](#watchprocesscpu)_ et al.
 
 For example:
 

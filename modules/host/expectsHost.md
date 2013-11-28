@@ -30,7 +30,7 @@ $st->expectsHost($hostName)->hostIsRunning();
 
 where:
 
-* _$hostName_ is the name you set when you created the host
+* `$hostName` is the name you set when you created the host
 
 If the host is not running (for example, it failed to start after being created or rebooted), an exception is thrown.
 
@@ -44,7 +44,7 @@ $st->expectsHost($hostName)->hostIsNotRunning();
 
 where:
 
-* _$hostName_ is the name you set when you created the host
+* `$hostName` is the name you set when you created the host
 
 If the host is running (for example, it failed to shutdown when requested to), an exception is thrown.
 
@@ -58,8 +58,8 @@ $st->expectsHost($hostName)->packageIsInstalled($packageName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$packageName_ is the name of the package that must be installed
+* `$hostName` is the name you set when you created the host
+* `$packageName` is the name of the package that must be installed
 
 If the package is not installed, an exception is thrown.
 
@@ -73,8 +73,8 @@ $st->expectsHost($hostName)->packageIsNotInstalled($packageName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$packageName_ is the name of the package that must not be installed
+* `$hostName` is the name you set when you created the host
+* `$packageName` is the name of the package that must not be installed
 
 If the package is installed, an exception is thrown.
 
@@ -88,8 +88,8 @@ $st->expectsHost($hostName)->processIsRunning($processName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$processName_ is the string to search the output of `ps` for
+* `$hostName` is the name you set when you created the host
+* `$processName` is the string to search the output of `ps` for
 
 If the process is not running, an exception is thrown.
 
@@ -103,7 +103,7 @@ $st->expectsHost($hostName)->processIsNotRunning($processName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$processName_ is the string to search the output of `ps` for
+* `$hostName` is the name you set when you created the host
+* `$processName` is the string to search the output of `ps` for
 
 If the process is running, an exception is thrown.

@@ -25,6 +25,6 @@ $data = $st->fromGraphite()->getDataFor('qa.ogre.memory.VmRSS', $now - 300, $now
 
 _getDataFor()_ takes three parameters:
 
-* _$metric_ - the name of the Graphite metric to retrieve
-* _$startTime_ - the time in seconds (since the epoch) to start retrieving data from
-* _$endTime_ - the time in seconds (since the epoch) to retrieve data until
+* `$metric` - the name of the Graphite metric to retrieve
+* `$startTime` - the time in seconds (since the epoch) to start retrieving data from
+* `$endTime` - the time in seconds (since the epoch) to retrieve data until

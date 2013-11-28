@@ -104,63 +104,63 @@ $st->usingBrowser()->type(
 
 Selenium's [Json Wire Protocol](https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/value) defines the following non-printing keys, available as constants in the helper class _DataSift\WebDriver\WebDriverKey_:
 
-* WebDriverKey::NULL_KEY (resets any held-down modifer keys)
-* WebDriverKey::CANCEL_KEY
-* WebDriverKey::HELP_KEY
-* WebDriverKey::BACKSPACE_KEY
-* WebDriverKey::TAB_KEY
-* WebDriverKey::CLEAR_KEY
-* WebDriverKey::RETURN_KEY
-* WebDriverKey::ENTER_KEY
-* WebDriverKey::SHIFT_KEY
-* WebDriverKey::CONTROL_KEY
-* WebDriverKey::ALT_KEY
-* WebDriverKey::PAUSE_KEY
-* WebDriverKey::ESC_KEY
-* WebDriverKey::SPACE_KEY
-* WebDriverKey::PGUP_KEY
-* WebDriverKey::PGDN_KEY
-* WebDriverKey::END_KEY
-* WebDriverKey::HOME_KEY
-* WebDriverKey::LEFT_ARROW_KEY
-* WebDriverKey::UP_ARROW_KEY
-* WebDriverKey::RIGHT_ARROW_KEY
-* WebDriverKey::DOWN_ARROW_KEY
-* WebDriverKey::INSERT_KEY
-* WebDriverKey::DELETE_KEY
-* WebDriverKey::SEMICOLON_KEY
-* WebDriverKey::EQUALS_KEY
-* WebDriverKey::NUMPAD_0_KEY
-* WebDriverKey::NUMPAD_1_KEY
-* WebDriverKey::NUMPAD_2_KEY
-* WebDriverKey::NUMPAD_3_KEY
-* WebDriverKey::NUMPAD_4_KEY
-* WebDriverKey::NUMPAD_5_KEY
-* WebDriverKey::NUMPAD_6_KEY
-* WebDriverKey::NUMPAD_7_KEY
-* WebDriverKey::NUMPAD_8_KEY
-* WebDriverKey::NUMPAD_9_KEY
-* WebDriverKey::NUMPAD_MULTIPLY_KEY
-* WebDriverKey::NUMPAD_ADD_KEY
-* WebDriverKey::SEPARATOR_KEY
-* WebDriverKey::NUMPAD_SUBTRACT_KEY
-* WebDriverKey::NUMPAD_DECIMAL_KEY
-* WebDriverKey::NUMPAD_DIVIDE_KEY
-* WebDriverKey::F1_KEY
-* WebDriverKey::F2_KEY
-* WebDriverKey::F3_KEY
-* WebDriverKey::F4_KEY
-* WebDriverKey::F5_KEY
-* WebDriverKey::F6_KEY
-* WebDriverKey::F7_KEY
-* WebDriverKey::F8_KEY
-* WebDriverKey::F9_KEY
-* WebDriverKey::F10_KEY
-* WebDriverKey::F11_KEY
-* WebDriverKey::F12_KEY
-* WebDriverKey::META_KEY (the Windows key on Microsoft keyboards, the Command key on Apple keyboards)
+* `WebDriverKey::NULL_KEY` (resets any held-down modifer keys)
+* `WebDriverKey::CANCEL_KEY`
+* `WebDriverKey::HELP_KEY`
+* `WebDriverKey::BACKSPACE_KEY`
+* `WebDriverKey::TAB_KEY`
+* `WebDriverKey::CLEAR_KEY`
+* `WebDriverKey::RETURN_KEY`
+* `WebDriverKey::ENTER_KEY`
+* `WebDriverKey::SHIFT_KEY`
+* `WebDriverKey::CONTROL_KEY`
+* `WebDriverKey::ALT_KEY`
+* `WebDriverKey::PAUSE_KEY`
+* `WebDriverKey::ESC_KEY`
+* `WebDriverKey::SPACE_KEY`
+* `WebDriverKey::PGUP_KEY`
+* `WebDriverKey::PGDN_KEY`
+* `WebDriverKey::END_KEY`
+* `WebDriverKey::HOME_KEY`
+* `WebDriverKey::LEFT_ARROW_KEY`
+* `WebDriverKey::UP_ARROW_KEY`
+* `WebDriverKey::RIGHT_ARROW_KEY`
+* `WebDriverKey::DOWN_ARROW_KEY`
+* `WebDriverKey::INSERT_KEY`
+* `WebDriverKey::DELETE_KEY`
+* `WebDriverKey::SEMICOLON_KEY`
+* `WebDriverKey::EQUALS_KEY`
+* `WebDriverKey::NUMPAD_0_KEY`
+* `WebDriverKey::NUMPAD_1_KEY`
+* `WebDriverKey::NUMPAD_2_KEY`
+* `WebDriverKey::NUMPAD_3_KEY`
+* `WebDriverKey::NUMPAD_4_KEY`
+* `WebDriverKey::NUMPAD_5_KEY`
+* `WebDriverKey::NUMPAD_6_KEY`
+* `WebDriverKey::NUMPAD_7_KEY`
+* `WebDriverKey::NUMPAD_8_KEY`
+* `WebDriverKey::NUMPAD_9_KEY`
+* `WebDriverKey::NUMPAD_MULTIPLY_KEY`
+* `WebDriverKey::NUMPAD_ADD_KEY`
+* `WebDriverKey::SEPARATOR_KEY`
+* `WebDriverKey::NUMPAD_SUBTRACT_KEY`
+* `WebDriverKey::NUMPAD_DECIMAL_KEY`
+* `WebDriverKey::NUMPAD_DIVIDE_KEY`
+* `WebDriverKey::F1_KEY`
+* `WebDriverKey::F2_KEY`
+* `WebDriverKey::F3_KEY`
+* `WebDriverKey::F4_KEY`
+* `WebDriverKey::F5_KEY`
+* `WebDriverKey::F6_KEY`
+* `WebDriverKey::F7_KEY`
+* `WebDriverKey::F8_KEY`
+* `WebDriverKey::F9_KEY`
+* `WebDriverKey::F10_KEY`
+* `WebDriverKey::F11_KEY`
+* `WebDriverKey::F12_KEY`
+* `WebDriverKey::META_KEY` (the Windows key on Microsoft keyboards, the Command key on Apple keyboards)
 
-Modifier keys (WebDriverKey::SHIFT_KEY, WebDriverKey::CONTROL_KEY, WebDriverKey::ALT_KEY andWebDriverKey::META_KEY) are _sticky_ - send them once to hold the key down, send them a second time to release the key.
+Modifier keys (`WebDriverKey::SHIFT_KEY`, `WebDriverKey::CONTROL_KEY`, `WebDriverKey::ALT_KEY` and `WebDriverKey::META_KEY`) are _sticky_ - send them once to hold the key down, send them a second time to release the key.
 
 After all of the keys have been typed into the browser, the modifier keys are reset to their default state of not-pressed.
 
@@ -174,8 +174,8 @@ $st->usingBrowser()->waitForOverlay(2, 'lightbox');
 
 _waitForOverlay()_ takes two parameters:
 
-* _$timeout_ - how many seconds to wait before the action fails
-* _$id_ - the _id_ attribute of the overlay that should appear
+* `$timeout` - how many seconds to wait before the action fails
+* `$id` - the _id_ attribute of the overlay that should appear
 
 ## waitForTitle()
 
@@ -188,8 +188,8 @@ $st->usingBrowser()->waitForTitle(2, "Welcome To DataSift!");
 
 _waitForTitle()_ takes two parameters:
 
-* _$timeout_ - how many seconds to wait before deciding that the action has failed
-* _$title_ - the page title that you expect
+* `$timeout` - how many seconds to wait before deciding that the action has failed
+* `$title` - the page title that you expect
 
 See _[gotoPage()](#gotopage)_ for a fuller discussion.
 
@@ -207,7 +207,7 @@ $st->usingBrowser()->waitForTitles(2, array(
 
 _waitForTitles()_ takes two parameters:
 
-* _$timeout_ - how many seconds to wait before deciding that the action has failed
-* _$title_ - a list of the different page titles that you expect
+* `$timeout` - how many seconds to wait before deciding that the action has failed
+* `$title` - a list of the different page titles that you expect
 
 See _[gotoPage()](#gotopage)_ for a fuller discussion.

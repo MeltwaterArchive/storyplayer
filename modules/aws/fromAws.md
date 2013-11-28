@@ -25,6 +25,6 @@ $ec2Client = $st->fromAws()->getEc2Client();
 
 where:
 
-* _$ec2Client_ is the AWS SDK client for working with the Amazon EC2 API
+* `$ec2Client` is the AWS SDK client for working with the Amazon EC2 API
 
 When working with the EC2 client, you'll want to refer to [the PHP SDK documentation](http://docs.aws.amazon.com/aws-sdk-php-2/guide/latest/service-ec2.html) and the [Amazon EC2 API documentation](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/OperationList-query.html) together.

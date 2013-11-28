@@ -30,7 +30,7 @@ $st->expectsEc2Image($amiID)->hasFailed();
 
 where:
 
-* _$amiId_ is the AMI ID of the image to find
+* `$amiId` is the AMI ID of the image to find
 
 ## isAvailable()
 
@@ -42,7 +42,7 @@ $st->expectsEc2Image($amiID)->isAvailable();
 
 where:
 
-* _$amiId_ is the AMI ID of the image to find
+* `$amiId` is the AMI ID of the image to find
 
 ## isPending()
 
@@ -54,4 +54,4 @@ $st->expectsEc2Image($amiID)->isPending();
 
 where:
 
-* _$amiId_ is the AMI ID of the image to find
+* `$amiId` is the AMI ID of the image to find

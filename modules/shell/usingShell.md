@@ -30,8 +30,8 @@ $result = $st->usingShell()->runCommand($command);
 
 where:
 
-* _$command_ is a UNIX command to run
-* _$result_ is a _CommandResult_ object containing both the command's return code, and the command's output
+* `$command` is a UNIX command to run
+* `$result` is a _CommandResult_ object containing both the command's return code, and the command's output
 
 This command is mostly for use by other modules (such as the _[Provisioning](../provisioning/index.html)_ module), but you're free to use it in your tests if you like.
 
@@ -45,16 +45,16 @@ $st->usingShell()->startInScreen($screenName, $commandLine);
 
 where:
 
-* _$screenName_ is the name you want to give to this process
-* _$commandLine_ is the command to run
+* `$screenName` is the name you want to give to this process
+* `$commandLine` is the command to run
 
-You will re-use _$screenName_ when:
+You will re-use `$screenName` when:
 
 * calling _[fromShell()->getIsScreenRunning()](fromShell.html#getisscreenrunning)_ to see if the process you have started is still running
 * calling _[expectsShell()->isRunningInScreen()](expectsShell.html#isrunninginscreen)_ to make sure that the process you have started is still running
 * calling _[usingShell()->stopInScreen()](#stopinscreen)_ to stop the process from your test
 
-In the background, Storyplayer starts a new `screen` session, and inside that session then uses the `bash` shell to execute _$commandLine_.  You will need to escape any double quotes (") that appear in _$commandLine_.
+In the background, Storyplayer starts a new `screen` session, and inside that session then uses the `bash` shell to execute `$commandLine`.  You will need to escape any double quotes (") that appear in `$commandLine`.
 
 ## stopInScreen()
 
@@ -66,7 +66,7 @@ $st->usingShell()->stopInScreen($screenName);
 
 where:
 
-* _$screenName_ is the same name that you used when you called _[usingShell()->startInScreen()](#startinscreen)_
+* `$screenName` is the same name that you used when you called _[usingShell()->startInScreen()](#startinscreen)_
 
 ## stopAllScreens()
 
@@ -88,6 +88,6 @@ $st->usingShell()->stopProcess($pid);
 
 where:
 
-* _$pid_ is the UNIX process ID that you want to stop
+* `$pid` is the UNIX process ID that you want to stop
 
 Normally, you would call _[usingShell()->stopInScreen()](#stopinscreen)_ instead of _stopProcess()_.

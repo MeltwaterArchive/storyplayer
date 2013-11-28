@@ -30,8 +30,8 @@ $st->expectsZmq()->canSendmultiNonBlocking($socket, $message);
 
 where:
 
-* _$socket_ is a ZMQ_Socket created by _[usingZmq()->bind()](usingZmq.html#bind)_ or _[usingZmq()->connect()](usingZmq.html#connect)_
-* _$message_ is an array containing a multipart ZeroMQ message to send
+* `$socket` is a ZMQ_Socket created by _[usingZmq()->bind()](usingZmq.html#bind)_ or _[usingZmq()->connect()](usingZmq.html#connect)_
+* `$message` is an array containing a multipart ZeroMQ message to send
 
 If sending the message would cause ZeroMQ (and therefore your process) to block, an exception is thrown.  Otherwise, the message is sent.
 

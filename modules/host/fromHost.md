@@ -25,12 +25,12 @@ $details = $st->fromHost($hostName)->getDetails();
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$details_ is a PHP object containing the host's entry in the hosts table
+* `$hostName` is the name you set when you created the host
+* `$details` is a PHP object containing the host's entry in the hosts table
 
 __NOTE__
 
-* _$details_ isn't a clone of the hosts table entry; any changes you make to these details will be persistent
+* `$details` isn't a clone of the hosts table entry; any changes you make to these details will be persistent
 
 ## getHostIsRunning()
 
@@ -42,8 +42,8 @@ $isRunning = $st->fromHost($hostName)->getHostIsRunning();
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$isRunning_ is _TRUE_ if the host is currently running, or _FALSE_ otherwise
+* `$hostName` is the name you set when you created the host
+* `$isRunning` is _TRUE_ if the host is currently running, or _FALSE_ otherwise
 
 If the host is not running, this could be because your test has stopped the host or powered it off.  If your test has destroyed the host, then calling this action will throw an exception.
 
@@ -57,13 +57,13 @@ $details = $st->fromHost($hostName)->getInstalledPackageDetails($packageName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$packageName_ is the name of the package that you want details about
-* _$details_ is a PHP object containing information about the package
+* `$hostName` is the name you set when you created the host
+* `$packageName` is the name of the package that you want details about
+* `$details` is a PHP object containing information about the package
 
 __NOTE__
 
-* The contents of _$details_ are currently operating-system specific.
+* The contents of `$details` are currently operating-system specific.
 * If the package is not installed, _isset($details->version)_ will always be _FALSE_.
 
 ## getIpAddress()
@@ -76,8 +76,8 @@ $ipAddress = $st->fromHost($hostName)->getIpAddress();
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$ipAddress_ is the IP address of an active network interface
+* `$hostName` is the name you set when you created the host
+* `$ipAddress` is the IP address of an active network interface
 
 __NOTE__
 
@@ -93,13 +93,13 @@ $pid = $st->fromHost($hostName)->getPid($processName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$processName_ is the string to search the output of `ps` for
-* _$pid_ is the process ID of the process that you searched for, or `NULL` if the process is not running
+* `$hostName` is the name you set when you created the host
+* `$processName` is the string to search the output of `ps` for
+* `$pid` is the process ID of the process that you searched for, or `NULL` if the process is not running
 
 __NOTE__
 
-* If multiple processes match _$processName_, only one process ID will be returned.  This is an area which may require more work in a future release of Storyplayer.
+* If multiple processes match `$processName`, only one process ID will be returned.  This is an area which may require more work in a future release of Storyplayer.
 
 ## getProcessIsRunning()
 
@@ -111,9 +111,9 @@ $isRunning = $st->fromHost($hostName)->getProcessIsRunning($processName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$processName_ is the string to search the output of `ps` for
-* _$isRunning_ is _TRUE_ if the process is running, or _FALSE_ if the process is not running
+* `$hostName` is the name you set when you created the host
+* `$processName` is the string to search the output of `ps` for
+* `$isRunning` is _TRUE_ if the process is running, or _FALSE_ if the process is not running
 
 ## getSshUsername()
 
@@ -125,8 +125,8 @@ $sshUsername = $st->fromHost($hostName)->getSshUsername();
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$sshUsername_ is the default SSH username for that host
+* `$hostName` is the name you set when you created the host
+* `$sshUsername` is the default SSH username for that host
 
 ## getSshKeyFile()
 
@@ -138,7 +138,7 @@ $sshKeyFile = $st->fromHost($hostName)->getSshKeyFile();
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$sshKeyFile_ is the default SSH key file for that host
+* `$hostName` is the name you set when you created the host
+* `$sshKeyFile` is the default SSH key file for that host
 
 The SSH private key file is set when the host is originally created (e.g. when _[$st->usingVagrant()->createVm()](../vagrant/usingVagrant.html#createvm)_ is called).

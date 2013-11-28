@@ -25,8 +25,8 @@ $response = $st->usingHttp()->get('http://api.datasift.com/balance');
 
 _get()_ takes up to three parameters:
 
-* _$url_ - the URL to make the GET request to
-* _$params_ - (optional) list of query string parameters to use in the request
-* _$headers_ - (optional) list of extra HTTP headers to use in the request
+* `$url` - the URL to make the GET request to
+* `$params` - (optional) list of query string parameters to use in the request
+* `$headers` - (optional) list of extra HTTP headers to use in the request
 
 _get()_ returns a _[HttpClientResponse](HttpClientResponse.html)_ object with the resposne from the HTTP server.

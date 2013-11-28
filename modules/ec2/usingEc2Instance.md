@@ -30,8 +30,8 @@ $st->usingEc2Instance($vmName)->createImage($imageName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
-* _$imageName_ is the name for your new AMI (must be unique)
+* `$vmName` is the name of the virtual machine that you created earlier
+* `$imageName` is the name for your new AMI (must be unique)
 
 ## markAllVolumesAsDeleteOnTermination
 
@@ -43,4 +43,4 @@ $st->usingEc2Instance($vmName)->markAllVolumesAsDeleteOnTermination();
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier

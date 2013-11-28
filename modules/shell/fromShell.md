@@ -25,8 +25,8 @@ $isRunning = $st->fromShell()->getIsScreenRunning($screenName);
 
 where:
 
-* _$screenName_ is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
-* _$isRunning_ is _TRUE_ if the process is still running, or _FALSE_ otherwise
+* `$screenName` is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
+* `$isRunning` is _TRUE_ if the process is still running, or _FALSE_ otherwise
 
 __See Also__:
 
@@ -42,8 +42,8 @@ $isRunning = $st->fromShell()->getIsProcessRunning($pid);
 
 where:
 
-* _$pid_ is the process ID you want to test
-* _$isRunning_ is _TRUE_ if the process is still running, or _FALSE_ otherwise
+* `$pid` is the process ID you want to test
+* `$isRunning` is _TRUE_ if the process is still running, or _FALSE_ otherwise
 
 This call is used internally by _getIsScreenRunning()_.
 
@@ -57,10 +57,10 @@ $details = $st->fromShell()->getScreenSessionDetails($screenName);
 
 where:
 
-* _$screenName_ is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
-* _$details_ is a plain old PHP object containing all of the current details
+* `$screenName` is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
+* `$details` is a plain old PHP object containing all of the current details
 
-We may add additional information into _$details_ in the future, but we expect to keep it backwards-compatible, so that it is safe to use this inside your own Prose modules.
+We may add additional information into `$details` in the future, but we expect to keep it backwards-compatible, so that it is safe to use this inside your own Prose modules.
 
 Here are the current details available:
 
@@ -82,7 +82,7 @@ $list = $st->fromShell()->getAllScreenSessions();
 
 where:
 
-* _$list_ is a plain old PHP object, where each attribute is a plain old PHP object containing the current details for a process previously started using _[usingShell()->startInScreen()](usingShell.html#startinscreen)_.
+* `$list` is a plain old PHP object, where each attribute is a plain old PHP object containing the current details for a process previously started using _[usingShell()->startInScreen()](usingShell.html#startinscreen)_.
 
 You can iterate over the list safely:
 

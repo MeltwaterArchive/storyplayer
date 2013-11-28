@@ -1,10 +1,10 @@
 ---
 layout: modules-provisioning
-title: useProvisioningEngine()
+title: usingProvisioningEngine()
 prev: '<a href="../../modules/provisioning/provisioning-definition.html">Prev: Creating The Provisioning Definition</a>'
 next: '<a href="../../modules/provisioning/adding-more-engines.html">Next: Adding Additional Provisioning Engines</a>'
 ---
-# useProvisioningEngine()
+# usingProvisioningEngine()
 
 _usingProvisioningEngine()_ allows you to take a [provisioning definition](provisioning-definition.html) and apply it to one or more hosts.
 
@@ -28,5 +28,5 @@ $st->usingProvisioningEngine($engineName)->provisionHosts($def);
 
 where:
 
-* _$engineName_ is a supported provisioning engine (currently only `ansible` is supported)
-* _$def_ is the provisioning definition that you've already built
+* `$engineName` is a supported provisioning engine (currently only `ansible` is supported)
+* `$def` is the provisioning definition that you've already built

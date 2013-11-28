@@ -32,8 +32,8 @@ $elements = $topElement->getElements('xpath', $xpath);
 
 You can run XPath queries using either _getElement()_ or _getElements()_. Both take the same two parameters:
 
-* $type - the type of search to perform
-* $query - the query data to use in the search
+* `$type` - the type of search to perform
+* `$query` - the query data to use in the search
 
 _getElement()_ returns a single _WebDriverElement_ object (or NULL on failure), whilst _getElements()_ returns an array of _WebDriverElement_ objects.
 
@@ -49,7 +49,7 @@ Facebook's original WebDriver client library acts as a thin facade to the Json W
 
 ## WebDriver Sessions
 
-The _DataSift\WebDriver\WebDriverSession_ represents a single running instance of a web browser.  You can get the current session from the _$st_ object:
+The _DataSift\WebDriver\WebDriverSession_ represents a single running instance of a web browser.  You can get the current session from the `$st` object:
 
 {% highlight php %}
 $session = $st->getRunningWebBrowser();

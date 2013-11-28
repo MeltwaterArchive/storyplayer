@@ -29,9 +29,9 @@ $st->usingLog()->writeToLog($msg);
 
 where:
 
-* _$msg_ is the message you want to write to Storyplayer's output log.
+* `$msg` is the message you want to write to Storyplayer's output log.
 
 __NOTES:__
 
 * Only use this module from inside your story's phases.
-* Prose modules should create a _$log_ object via `$st->startAction()`.
+* Prose modules should create a `$log` object via `$st->startAction()`.

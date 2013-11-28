@@ -30,7 +30,7 @@ $st->expectsHostsTable()->hasEntryForHost($hostName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
+* `$hostName` is the name you set when you created the host
 
 If the host has no entry, an exception is thrown.
 

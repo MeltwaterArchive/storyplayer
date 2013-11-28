@@ -25,10 +25,10 @@ $imageData = $st->fromEc2()->getImage($amiId);
 
 where:
 
-* _$amiId_ is the AMI ID of the image to find
-* _$imageData_ is an array of data about the image, or NULL on failure.
+* `$amiId` is the AMI ID of the image to find
+* `$imageData` is an array of data about the image, or NULL on failure.
 
-For information about the structure of _$imageData_, please see [the Amazon SDK docs](http://docs.aws.amazon.com/aws-sdk-php-2/latest/class-Aws.Ec2.Ec2Client.html#_describeImages).
+For information about the structure of `$imageData`, please see [the Amazon SDK docs](http://docs.aws.amazon.com/aws-sdk-php-2/latest/class-Aws.Ec2.Ec2Client.html#_describeImages).
 
 This method was added primarily as a helper for other Prose modules.
 
@@ -42,9 +42,9 @@ $instanceData = $st->fromEc2()->getInstance($instanceName);
 
 where:
 
-* _$instanceName_ is the name (not the ID) of the EC2 instance to find
-* _$instanceData_ is an array of data about the instance, or NULL on failure.
+* `$instanceName` is the name (not the ID) of the EC2 instance to find
+* `$instanceData` is an array of data about the instance, or NULL on failure.
 
-For information about the structure of _$instanceData_, please see [the Amazon SDK docs](http://docs.aws.amazon.com/aws-sdk-php-2/latest/class-Aws.Ec2.Ec2Client.html#_describeInstances).
+For information about the structure of `$instanceData`, please see [the Amazon SDK docs](http://docs.aws.amazon.com/aws-sdk-php-2/latest/class-Aws.Ec2.Ec2Client.html#_describeInstances).
 
 This method was added primarily as a helper for other Prose modules.

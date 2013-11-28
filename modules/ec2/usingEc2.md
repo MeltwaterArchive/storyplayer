@@ -30,11 +30,11 @@ $st->usingEc2()->createVm($vmName, $osName, $amiId, $instanceType, $securityGrou
 
 where:
 
-* _$vmName_ is the alias you want Storyplayer to remember this VM as.  It's used as a parameter to practically all of the EC2 and [Host](../host/index.html) module actions.
-* _$osName_ is the name of the guest operating system that runs inside this VM.  See _[supported guest operating systems](supported-guests.html)_ for the latest list of valid values.
-* _$amiId_ is the ID of an Amazon Machine Image (AMI) to use as the template for this virtual machine.
-* _$instanceType_ tells EC2 what size of virtual machine to create. See [Amazon's list of Instance Types](http://aws.amazon.com/ec2/instance-types/#instance-details) for a complete list of valid values.
-* _$securityGroup_ is the name of one of the security groups that you've previously defined on EC2.  Use 'default' if you haven't defined any of your own.
+* `$vmName` is the alias you want Storyplayer to remember this VM as.  It's used as a parameter to practically all of the EC2 and [Host](../host/index.html) module actions.
+* `$osName` is the name of the guest operating system that runs inside this VM.  See _[supported guest operating systems](supported-guests.html)_ for the latest list of valid values.
+* `$amiId` is the ID of an Amazon Machine Image (AMI) to use as the template for this virtual machine.
+* `$instanceType` tells EC2 what size of virtual machine to create. See [Amazon's list of Instance Types](http://aws.amazon.com/ec2/instance-types/#instance-details) for a complete list of valid values.
+* `$securityGroup` is the name of one of the security groups that you've previously defined on EC2.  Use 'default' if you haven't defined any of your own.
 
 This action makes a _runInstances_ API call to EC2.
 
@@ -52,7 +52,7 @@ $st->usingEc2->destroyVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action makes a _terminateInstances_ API call to EC2. The instance is shut down and deregistered from EC2.  Any block volumes that are marked as 'DeleteOnTermination' will be deleted automatically.
 
@@ -72,7 +72,7 @@ $st->usingEc2()->startVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action makes a _startInstances_ API call to EC2.
 
@@ -88,7 +88,7 @@ $st->usingEc2()->stopVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action makes a _stopInstances_ API call to EC2.  The virtual machine image isn't deleted from disk, and the virtual machine still exists in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html), even after Storyplayer finishes running.
 
@@ -104,7 +104,7 @@ $st->usingEc2()->restartVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action makes a _stopInstances_ API call to EC2, followed by a _startInstances_ API call.  (We currently don't use an explicit _rebootInstances_ API call).  If the virtual machine doesn't shutdown, or doesn't boot back up as expected, an exception is thrown.
 

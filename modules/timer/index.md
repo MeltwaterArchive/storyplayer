@@ -33,12 +33,12 @@ $st->usingTimer()->ACTION($timeout);
 
 where:
 
-* _$callback_ is the method that polls (see [Repeated Polling](#repeated_polling) below)
-* _$timeout_ is how long to keep polling for (see [The DateInterval Is Your Friend](#the_dateinterval_is_your_friend) below)
+* `$callback` is the method that polls (see [Repeated Polling](#repeated_polling) below)
+* `$timeout` is how long to keep polling for (see [The DateInterval Is Your Friend](#the_dateinterval_is_your_friend) below)
 
 ## Repeated Polling
 
-Many of the Timer module's actions take a _$callback_ parameter.  This is a [PHP anonymous function](http://uk1.php.net/manual/en/functions.anonymous.php).  It takes one parameter ([the _$st_ object](../../Prose/the-st-object.html)), and its job is to run one or more tests to see if whatever you're waiting for has happened yet.
+Many of the Timer module's actions take a `$callback` parameter.  This is a [PHP anonymous function](http://uk1.php.net/manual/en/functions.anonymous.php).  It takes one parameter ([the `$st` object](../../Prose/the-st-object.html)), and its job is to run one or more tests to see if whatever you're waiting for has happened yet.
 
 The callback function should throw an exception if whatever you're waiting for hasn't happened yet.
 
@@ -54,7 +54,7 @@ $st->usingTimer()->waitFor(function($st) use($title) {
 
 The callback function uses `$st->expectsBrowser()`, which will throw an exception for you if the current HTML page has the wrong title.  Internally, the Timer module catches this exception as long as the timeout hasn't been reached yet.
 
-After 2 seconds (the value of _$timeout_ in the example), if the HTML page in the browser doesn't have the title 'Welcome To Example.com', _waitFor()_ stops polling and throws an exception.
+After 2 seconds (the value of `$timeout` in the example), if the HTML page in the browser doesn't have the title 'Welcome To Example.com', _waitFor()_ stops polling and throws an exception.
 
 ## The DateInterval Is Your Friend
 

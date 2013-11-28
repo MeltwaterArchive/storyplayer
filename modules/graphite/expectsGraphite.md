@@ -30,11 +30,11 @@ $data = $st->expectsGraphite()->metricIsAlwaysZero('qa.api.http.500', $now - 300
 
 _metricIsAlwaysZero()_ takes three parameters:
 
-* _$metric_ - the name of the Graphite metric to retrieve
-* _$startTime_ - the time in seconds (since the epoch) to start retrieving data from
-* _$endTime_ - the time in seconds (since the epoch) to retrieve data until
+* `$metric` - the name of the Graphite metric to retrieve
+* `$startTime` - the time in seconds (since the epoch) to start retrieving data from
+* `$endTime` - the time in seconds (since the epoch) to retrieve data until
 
-If any of the data between _$startTime_ and _$endTime_ has a value higher than zero, then this test fails, and an exception is thrown.
+If any of the data between `$startTime` and `$endTime` has a value higher than zero, then this test fails, and an exception is thrown.
 
 Missing data is treated as having a value of zero, for this test.
 
@@ -49,12 +49,12 @@ $data = $st->expectsGraphite()->metricSumIs('qa.api.http.200', 10000, $now - 300
 
 _metricSumIs()_ takes four parameters:
 
-* _$metric_ - the name of the Graphite metric to retrieve
-* _$expectedTotal_ - the expected sum of the data
-* _$startTime_ - the time in seconds (since the epoch) to start retrieving data from
-* _$endTime_ - the time in seconds (since the epoch) to retrieve data until
+* `$metric` - the name of the Graphite metric to retrieve
+* `$expectedTotal` - the expected sum of the data
+* `$startTime` - the time in seconds (since the epoch) to start retrieving data from
+* `$endTime` - the time in seconds (since the epoch) to retrieve data until
 
-If the data between _$startTime_ and _$endTime_ is less than, or greater than, _$expectedTotal_, then this test fails, and an exception is thrown.
+If the data between `$startTime` and `$endTime` is less than, or greater than, `$expectedTotal`, then this test fails, and an exception is thrown.
 
 ## metricNeverExceeds()
 
@@ -67,12 +67,12 @@ $data = $st->expectsGraphite()->metricNeverExceeds('qa.api.latency', 150, $now -
 
 _metricNeverExceeds()_ takes four parameters:
 
-* _$metric_ - the name of the Graphite metric to retrieve
-* _$expectedMax_ - the expected maximum value of the data
-* _$startTime_ - the time in seconds (since the epoch) to start retrieving data from
-* _$endTime_ - the time in seconds (since the epoch) to retrieve data until
+* `$metric` - the name of the Graphite metric to retrieve
+* `$expectedMax` - the expected maximum value of the data
+* `$startTime` - the time in seconds (since the epoch) to start retrieving data from
+* `$endTime` - the time in seconds (since the epoch) to retrieve data until
 
-If any of the data between _$startTime_ and _$endTime_ is greater than _$expectedMax_, then this test fails, and an exception is thrown.
+If any of the data between `$startTime` and `$endTime` is greater than `$expectedMax`, then this test fails, and an exception is thrown.
 
 ## metricAverageDoesntExceed()
 
@@ -87,9 +87,9 @@ $data = $st->expectsGraphite()->metricAverageDoesntExceed('qa.api.latency', 100,
 
 _metricAverageDoesntExceed()_ takes four parameters:
 
-* _$metric_ - the name of the Graphite metric to retrieve
-* _$expectedAverage_ - the expected maximum average value of the data
-* _$startTime_ - the time in seconds (since the epoch) to start retrieving data from
-* _$endTime_ - the time in seconds (since the epoch) to retrieve data until
+* `$metric` - the name of the Graphite metric to retrieve
+* `$expectedAverage` - the expected maximum average value of the data
+* `$startTime` - the time in seconds (since the epoch) to start retrieving data from
+* `$endTime` - the time in seconds (since the epoch) to retrieve data until
 
-If the average of the data between _$startTime_ and _$endTime_ is greater than _$expectedAverage_, then this test fails, and an exception is thrown.
+If the average of the data between `$startTime` and `$endTime` is greater than `$expectedAverage`, then this test fails, and an exception is thrown.

@@ -29,13 +29,13 @@ $result = $st->usingHost($hostName)->runCommand($command);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$command_ is the command to execute
-* _$result_ is a _CommandResult_ object containing the _returnCode_ and the _output_
+* `$hostName` is the name you set when you created the host
+* `$command` is the command to execute
+* `$result` is a _CommandResult_ object containing the _returnCode_ and the _output_
 
 __NOTE:__
 
-If the return code from running _$command_ is not zero, the command is assumed to have failed, and an exception is thrown.  This can be problematic, as many modern tools don't follow the correct UNIX standards for return codes.  You can use _[usingHost()->runCommandAndIgnoreErrors()](#runcommandandignoreerrors)_ instead to get around this.
+If the return code from running `$command` is not zero, the command is assumed to have failed, and an exception is thrown.  This can be problematic, as many modern tools don't follow the correct UNIX standards for return codes.  You can use _[usingHost()->runCommandAndIgnoreErrors()](#runcommandandignoreerrors)_ instead to get around this.
 
 ## runCommandAndIgnoreErrors()
 
@@ -47,13 +47,13 @@ $result = $st->usingHost($hostName)->runCommandAndIgnoreErrors($command);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$command_ is the command to execute
-* _$result_ is a _CommandResult_ object containing the _returnCode_ and the _output_
+* `$hostName` is the name you set when you created the host
+* `$command` is the command to execute
+* `$result` is a _CommandResult_ object containing the _returnCode_ and the _output_
 
 __NOTE:__
 
-This action does not throw an exception if the return code from running _$command_ is not zero.  This allows you to work with badly-behaved commands and tools.
+This action does not throw an exception if the return code from running `$command` is not zero.  This allows you to work with badly-behaved commands and tools.
 
 ## runCommandAsUser()
 
@@ -65,16 +65,16 @@ $result = $st->usingHost($hostName)->runCommandAsUser($command, $user);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$command_ is the command to execute
-* _$user_ is the user you want to run the command as
-* _$result_ is a _CommandResult_ object containing the _returnCode_ and the _output_
+* `$hostName` is the name you set when you created the host
+* `$command` is the command to execute
+* `$user` is the user you want to run the command as
+* `$result` is a _CommandResult_ object containing the _returnCode_ and the _output_
 
 Whenever a host is created, details about the host are added to Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html). The host's details normally include a default SSH user to use (e.g. the _vagrant_ user for Vagrant VMs).  Sometimes (e.g. when creating virtual machine images on Amazon EC2) it's useful to be able to override this default SSH user on a one-off basis.
 
 __NOTE:__
 
-If the return code from running _$command_ is not zero, the command is assumed to have failed, and an exception is thrown.  This can be problematic, as many modern tools don't follow the correct UNIX standards for return codes.  You can use _[usingHost()->runCommandAsUserAndIgnoreErrors()](#runcommandasuserandignoreerrors)_ instead to get around this.
+If the return code from running `$command` is not zero, the command is assumed to have failed, and an exception is thrown.  This can be problematic, as many modern tools don't follow the correct UNIX standards for return codes.  You can use _[usingHost()->runCommandAsUserAndIgnoreErrors()](#runcommandasuserandignoreerrors)_ instead to get around this.
 
 ## runCommandAsUserAndIgnoreErrors()
 
@@ -86,13 +86,13 @@ $result = $st->usingHost($hostName)->runCommandAsUser($command, $user);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$command_ is the command to execute
-* _$user_ is the user you want to run the command as
-* _$result_ is a _CommandResult_ object containing the _returnCode_ and the _output_
+* `$hostName` is the name you set when you created the host
+* `$command` is the command to execute
+* `$user` is the user you want to run the command as
+* `$result` is a _CommandResult_ object containing the _returnCode_ and the _output_
 
 Whenever a host is created, details about the host are added to Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html). The host's details normally include a default SSH user to use (e.g. the _vagrant_ user for Vagrant VMs).  Sometimes (e.g. when creating virtual machine images on Amazon EC2) it's useful to be able to override this default SSH user on a one-off basis.
 
 __NOTE:__
 
-This action does not throw an exception if the return code from running _$command_ is not zero.  This allows you to work with badly-behaved commands and tools.
+This action does not throw an exception if the return code from running `$command` is not zero.  This allows you to work with badly-behaved commands and tools.

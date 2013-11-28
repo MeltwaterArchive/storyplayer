@@ -29,8 +29,8 @@ $st->usingTimer()->waitFor($callback, $timeout);
 
 where:
 
-* _$callback_ is a PHP callback of some kind, which throws an exception if the 'something' hasn't happened yet (see [Repeated Polling](index.html#repeated_polling) for a longer discussion)
-* _$timeout_ is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
+* `$callback` is a PHP callback of some kind, which throws an exception if the 'something' hasn't happened yet (see [Repeated Polling](index.html#repeated_polling) for a longer discussion)
+* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
 
 For example:
 
@@ -51,8 +51,8 @@ $st->usingTimer()->waitFor($callback, $timeout);
 
 where:
 
-* _$callback_ is a PHP callback of some kind, which throws an exception if the 'something' hasn't changed yet (see [Repeated Polling](index.html#repeated_polling) for a longer discussion)
-* _$timeout_ is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
+* `$callback` is a PHP callback of some kind, which throws an exception if the 'something' hasn't changed yet (see [Repeated Polling](index.html#repeated_polling) for a longer discussion)
+* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
 
 For example:
 
@@ -73,5 +73,5 @@ $st->usingTimer()->wait($timeout, $reason);
 
 where:
 
-* _$timeout_ is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
-* _$reason_ is a text message for the log files to explain why this pause is there.
+* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
+* `$reason` is a text message for the log files to explain why this pause is there.

@@ -30,11 +30,11 @@ $st->usingVagrant()->createVm($vmName, $osName, $homeFolder);
 
 where:
 
-* _$vmName_ is the alias you want Storyplayer to remember this VM as.  It's used as a parameter to practically all of the Vagrant and [Host](../host/index.html) module actions.
-* _$osName_ is the name of the guest operating system that runs inside this VM.  See _[supported guest operating systems](supported-guests.html)_ for the latest list of valid values.
-* _$homeFolder_ is the path to the folder where the _Vagrantfile_ for this VM lives.
+* `$vmName` is the alias you want Storyplayer to remember this VM as.  It's used as a parameter to practically all of the Vagrant and [Host](../host/index.html) module actions.
+* `$osName` is the name of the guest operating system that runs inside this VM.  See _[supported guest operating systems](supported-guests.html)_ for the latest list of valid values.
+* `$homeFolder` is the path to the folder where the _Vagrantfile_ for this VM lives.
 
-This action runs a `vagrant up` using the Vagrantfile in _$homeFolder_.  If your Vagrantfile includes a provisioning plugin, that will get executed too.
+This action runs a `vagrant up` using the Vagrantfile in `$homeFolder`.  If your Vagrantfile includes a provisioning plugin, that will get executed too.
 
 If the virtual machine was already running, it will be destroyed and re-created when you call _createVm()_.
 
@@ -50,7 +50,7 @@ $st->usingVagrant->destroyVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action runs a `vagrant destroy --force` against the virtual machine.  Vagrant shuts down the virtual machine, and then erases the VM image from disk.
 
@@ -66,7 +66,7 @@ $st->usingVagrant()->startVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action runs a `vagrant up` to start the virtual machine.
 
@@ -85,7 +85,7 @@ $st->usingVagrant()->stopVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action runs a `vagrant halt` to shutdown the virtual machine.  The virtual machine image isn't deleted from disk, and the virtual machine still exists in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html), even after Storyplayer finishes running.
 
@@ -101,7 +101,7 @@ $st->usingVagrant()->restartVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action runs `vagrant halt && vagrant up` to gracefully shutdown the virtual machine, and then to boot the virtual machine back up.  If the virtual machine doesn't shutdown, or doesn't boot back up as expected, an exception is thrown.
 
@@ -117,7 +117,7 @@ $st->usingVagrant()->powerOffVm($vmName);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
+* `$vmName` is the name of the virtual machine that you created earlier
 
 This action runs a `vagrant halt --force` to shutdown the virtual machine immediately.  The virtual machine image isn't deleted from disk, and the virtual machine still exists in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html), even after Storyplayer finishes running.
 
@@ -133,10 +133,10 @@ $result = $st->usingVagrant()->runVagrantCommand($vmName, $command);
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier
-* _$command_ is the command that you want to run
-* _$result_ is a _DataSift\Storyplayer\CommandLib\CommandResult_ object containing the return code and any output
+* `$vmName` is the name of the virtual machine that you created earlier
+* `$command` is the command that you want to run
+* `$result` is a _DataSift\Storyplayer\CommandLib\CommandResult_ object containing the return code and any output
 
-This action temporarily changes the current working directory to be the folder where the virtual machine's Vagrantfile is stored, and then executes _$command_.  You'll need to include the `vagrant` command at the front of _$command_; it isn't prepended for you.
+This action temporarily changes the current working directory to be the folder where the virtual machine's Vagrantfile is stored, and then executes `$command`.  You'll need to include the `vagrant` command at the front of `$command`; it isn't prepended for you.
 
 If you want to run commands inside the virtual machine, you'd normally use _[$st->usingHost()->runCommand()](../host/usingHost.html#runcommand)_.

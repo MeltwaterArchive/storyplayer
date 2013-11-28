@@ -29,8 +29,8 @@ $st->usingHostsTable()->addHost($hostName, $hostDetails);
 
 where:
 
-* _$hostName_ is the name you want to use when working with this host
-* _$hostDetails_ is the entry to inject into the hosts table
+* `$hostName` is the name you want to use when working with this host
+* `$hostDetails` is the entry to inject into the hosts table
 
 This has been added
 
@@ -44,7 +44,7 @@ $st->usingHostsTable()->removeHost($hostName, $hostDetails);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
+* `$hostName` is the name you set when you created the host
 
 __NOTE:__
 

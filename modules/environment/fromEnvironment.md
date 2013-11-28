@@ -34,7 +34,7 @@ $value = $env->$app->$setting
 
 ... with the added advantage of throwing an exception if the environment doesn't define the information that you're looking for.
 
-Most tests tend to need to use all the available settings for _$app_ in the environment; you might find [getAppSettings()](#getappsettings) to be more convenient.
+Most tests tend to need to use all the available settings for `$app` in the environment; you might find [getAppSettings()](#getappsettings) to be more convenient.
 
 ## getAppSettings()
 
@@ -52,4 +52,4 @@ $env = $st->getEnvironment();
 $settings = $env->$app;
 {% endhighlight %}
 
-.. with the added advangage of throwing an exception if the environment has no entry for _$app_.
+.. with the added advangage of throwing an exception if the environment has no entry for `$app`.

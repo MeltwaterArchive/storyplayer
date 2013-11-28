@@ -25,12 +25,12 @@ $details = $st->fromHostsTable()->getDetailsForHost($hostName);
 
 where:
 
-* _$hostName_ is the name you set when you created the host
-* _$details_ is a PHP object containing the host's entry in the hosts table
+* `$hostName` is the name you set when you created the host
+* `$details` is a PHP object containing the host's entry in the hosts table
 
 __NOTE__
 
-* _$details_ isn't a clone of the hosts table entry; any changes you make to these details will be persistent
+* `$details` isn't a clone of the hosts table entry; any changes you make to these details will be persistent
 
 ## getHostsTable()
 
@@ -42,8 +42,8 @@ $table = $st->fromHostsTable()->getHostsTable();
 
 where:
 
-* _$table_ is a PHP object containing one attribute for each known host
+* `$table` is a PHP object containing one attribute for each known host
 
 __NOTE__
 
-* _$table_ isn't a clone of the hosts table; any changes you make to this tbale will be persistent
+* `$table` isn't a clone of the hosts table; any changes you make to this tbale will be persistent

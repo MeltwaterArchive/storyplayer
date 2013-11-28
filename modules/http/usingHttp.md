@@ -33,10 +33,10 @@ $response = $st->usingHttp()->delete('http://api.example.com/destination/ec2-1')
 
 _delete()_ takes up to four parameters:
 
-* _$url_ - the URL to send the DELETE request to
-* _$params_ - (optional) additional parameters to add to the query string
-* _$body_ - (optional) content to send (such as a JSON payload)
-* _$headers_ - (optional) additional headers to add to the request
+* `$url` - the URL to send the DELETE request to
+* `$params` - (optional) additional parameters to add to the query string
+* `$body` - (optional) content to send (such as a JSON payload)
+* `$headers` - (optional) additional headers to add to the request
 
 ## post()
 
@@ -49,10 +49,10 @@ $response = $st->usingHttp()->post('http://api.example.com/destination/ec2-1', a
 
 _post()_ takes up to four parameters:
 
-* _$url_ - the URL to send the DELETE request to
-* _$params_ - (optional) additional parameters to add to the query string
-* _$body_ - (optional) content to send (such as a JSON payload)
-* _$headers_ - (optional) additional headers to add to the request
+* `$url` - the URL to send the DELETE request to
+* `$params` - (optional) additional parameters to add to the query string
+* `$body` - (optional) content to send (such as a JSON payload)
+* `$headers` - (optional) additional headers to add to the request
 
 ## put()
 
@@ -65,7 +65,7 @@ $response = $st->usingHttp()->delete('http://api.example.com/destination/');
 
 _put()_ takes up to four parameters:
 
-* _$url_ - the URL to send the DELETE request to
-* _$params_ - (optional) additional parameters to add to the query string
-* _$body_ - (optional) content to send (such as a JSON payload)
-* _$headers_ - (optional) additional headers to add to the request
+* `$url` - the URL to send the DELETE request to
+* `$params` - (optional) additional parameters to add to the query string
+* `$body` - (optional) content to send (such as a JSON payload)
+* `$headers` - (optional) additional headers to add to the request

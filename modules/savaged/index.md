@@ -64,9 +64,9 @@ $st->usingSavageD($ipAddress)->ACTION();
 
 where:
 
-* _$ipAddress_ is the IP address (not hostname!!) of the machine where SavageD is installed and running,
+* `$ipAddress` is the IP address (not hostname!!) of the machine where SavageD is installed and running,
 * __action__ is one of the documented actions available from _[usingSavageD](usingSavageD.html)_
 
-_$ipAddress_ might be a setting retrieved from your environments config file, or it might be the IP address of a virtual machine started by [the Vagrant module](../modules/vagrant.html).
+`$ipAddress` might be a setting retrieved from your environments config file, or it might be the IP address of a virtual machine started by [the Vagrant module](../modules/vagrant.html).
 
 To get and/or test the data created by SavageD, use the [Graphite module](../graphite/index.html).

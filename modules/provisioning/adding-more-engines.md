@@ -32,7 +32,7 @@ You'll probably need to add extra methods to the class _DataSift\Storyplayer\Pro
 
 Each supported provisioning engine needs a class inside the _DataSift\Storyplayer\ProvisioningLib\Provisioners_ namespace.
 
-Storyplayer loads these classes dynamically, based on the _$engineName_ parameter passed to _[usingProvisioningEngine()](usingProvisioningEngine.html)_:
+Storyplayer loads these classes dynamically, based on the `$engineName` parameter passed to _[usingProvisioningEngine()](usingProvisioningEngine.html)_:
 
 {% highlight php %}
 $className = ucfirst($engineName) . "Provisioner";
@@ -41,6 +41,6 @@ $fqClassName = 'DataSift\Storyplayer\ProvisioningLib\Provisioners\\' . $classNam
 $obj = new fqClassName($st);
 {% endhighlight %}
 
-For example, the _$engineName_ of "ansible" becomes the fully-qualified class name of _DataSift\Storyplayer\ProvisioningLib\Provisioners\AnsibleProvisioner_.
+For example, the `$engineName` of "ansible" becomes the fully-qualified class name of _DataSift\Storyplayer\ProvisioningLib\Provisioners\AnsibleProvisioner_.
 
 Each provisioner needs to implement just one public method, _provisionHosts()_.  This method accepts a single _ProvisioningDefinition_ object, and executes all of the steps required to provision every host listed in the provisioning definition.

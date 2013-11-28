@@ -25,8 +25,8 @@ $isRunning = $st->fromEc2Instance($vmName)->getInstanceIsRunning();
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
-* _$isRunning_ is _TRUE_ if the EC2 instance is in the running state, or _FALSE_ otherwise.
+* `$vmName` is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
+* `$isRunning` is _TRUE_ if the EC2 instance is in the running state, or _FALSE_ otherwise.
 
 ## getInstanceVolumes()
 
@@ -38,8 +38,8 @@ $volumes = $st->fromEc2Instance($vmName)->getInstanceVolumes();
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
-* _$volumes_ is an array of block devices that are attached to the EC2 instance.
+* `$vmName` is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
+* `$volumes` is an array of block devices that are attached to the EC2 instance.
 
 ## getPublicDnsName()
 
@@ -51,5 +51,5 @@ $fqdn = $st->fromEc2Instance($vmName)->getPublicDnsName();
 
 where:
 
-* _$vmName_ is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
-* _$fqdn_ is the public hostname of the EC2 instance
+* `$vmName` is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
+* `$fqdn` is the public hostname of the EC2 instance
