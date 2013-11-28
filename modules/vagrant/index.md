@@ -11,7 +11,7 @@ The __Vagrant__ module allows you to create and destroy virtual machines using t
 
 The source code for this Prose module can be found in this PHP class:
 
-* DataSift\Storyplayer\Prose\VagrantActions
+* DataSift\Storyplayer\Prose\UsingVagrant
 
 ## Does Your Code Actually Work?
 

@@ -11,9 +11,9 @@ The __Provisioning__ module allows you to deploy exactly the software that you n
 
 The source code for this Prose module can be found in this PHP class:
 
-* DataSift\Storyplayer\Prose\ProvisionerActions
-* DataSift\Storyplayer\Prose\ProvisioningActions
-* DataSift\Storyplayer\Prose\ProvisioningDefinitionActions
+* DataSift\Storyplayer\Prose\UsingProvisioner
+* DataSift\Storyplayer\Prose\UsingProvisioning
+* DataSift\Storyplayer\Prose\UsingProvisioningDefinition
 
 ## Building Test Environments
 

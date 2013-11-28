@@ -11,7 +11,7 @@ The __Log__ module allows your story to write a message into Storyplayer's outpu
 
 The source code for this Prose module can be found in this PHP class:
 
-* DataSift\Storyplayer\Prose\LogActions
+* DataSift\Storyplayer\Prose\UsingLog
 
 ## Using The Log Module
 

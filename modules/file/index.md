@@ -15,8 +15,8 @@ It currently doesn't do anything more than this because, at DataSift, we normall
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\FileActions
-* DataSift\Storyplayer\Prose\FileDetermines
+* DataSift\Storyplayer\Prose\FromFile
+* DataSift\Storyplayer\Prose\UsingFile
 
 ## Dependencies
 

@@ -11,7 +11,7 @@ The __Timer__ module allows you to wait for something to happen, and to timeout 
 
 The source code for this Prose module can be found in this PHP class:
 
-* DataSift\Storyplayer\Prose\TimerActions
+* DataSift\Storyplayer\Prose\UsingTimer
 
 ## Dependencies
 

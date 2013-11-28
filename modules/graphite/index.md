@@ -13,8 +13,8 @@ The _Graphite_ module allows you to extract data from [Graphite](https://github.
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\GraphiteDetermine
-* DataSift\Storyplayer\Prose\GraphiteExpects
+* DataSift\Storyplayer\Prose\ExpectsGraphite
+* DataSift\Storyplayer\Prose\FromGraphite
 
 ## How Does Data Get Into Graphite?
 

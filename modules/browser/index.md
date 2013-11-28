@@ -13,9 +13,9 @@ The __Browser__ module allows you to load and inspect HTML pages.  It also has (
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\BrowserActions
-* DataSift\Storyplayer\Prose\BrowserDetermine
-* DataSift\Storyplayer\Prose\BrowserExpects
+* DataSift\Storyplayer\Prose\ExpectsBrowser
+* DataSift\Storyplayer\Prose\FromBrowser
+* DataSift\Storyplayer\Prose\UsingBrowser
 
 ## We Only Support Real Web Browsers
 

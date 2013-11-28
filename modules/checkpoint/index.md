@@ -15,8 +15,8 @@ This module is here for convenience; you can achieve the same results using a mi
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\CheckpointActions
-* DataSift\Storyplayer\Prose\CheckpointDetermines
+* DataSift\Storyplayer\Prose\FromCheckpoint
+* DataSift\Storyplayer\Prose\UsingCheckpoint
 
 ## Dependencies
 

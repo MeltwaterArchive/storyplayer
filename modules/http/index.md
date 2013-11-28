@@ -13,9 +13,9 @@ The __HTTP__ module allows you to send GET, POST, PUT and DELETE requests to a H
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\HttpActions
-* DataSift\Storyplayer\Prose\HttpDetermine
-* DataSift\Storyplayer\Prose\HttpResponseExpects
+* DataSift\Storyplayer\Prose\ExpectsHttpResponse
+* DataSift\Storyplayer\Prose\FromHttp
+* DataSift\Storyplayer\Prose\UsingHttp
 
 ## Which Module Should I Use - HTTP or Browser / Form?
 

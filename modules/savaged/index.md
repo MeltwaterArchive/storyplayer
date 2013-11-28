@@ -11,7 +11,7 @@ The __SavageD__ module allows you to control one or more (possibly) remote Savag
 
 The source code for this Prose module can be found in this PHP class:
 
-* DataSift\Storyplayer\Prose\SavagedActions
+* DataSift\Storyplayer\Prose\UsingSavageD
 
 ## What Is SavageD?
 

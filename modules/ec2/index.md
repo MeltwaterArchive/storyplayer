@@ -13,13 +13,13 @@ Additionally, the __EC2__ module allows you to convert an EC2 virtual machine in
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\Ec2Actions
-* DataSift\Storyplayer\Prose\Ec2Determine
 * DataSift\Storyplayer\Prose\Ec2ImageBase
-* DataSift\Storyplayer\Prose\Ec2ImageExpects
-* DataSift\Storyplayer\Prose\Ec2InstanceActions
 * DataSift\Storyplayer\Prose\Ec2InstanceBase
-* DataSift\Storyplayer\Prose\Ec2InstanceDetermine
+* DataSift\Storyplayer\Prose\FromEc2
+* DataSift\Storyplayer\Prose\FromEc2Image
+* DataSift\Storyplayer\Prose\FromEc2Instance
+* DataSift\Storyplayer\Prose\UsingEc2
+* DataSift\Storyplayer\Prose\UsingEc2Instance
 
 ## Does Your Code Actually Work?
 

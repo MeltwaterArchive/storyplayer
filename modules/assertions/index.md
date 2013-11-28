@@ -13,11 +13,11 @@ The __Assertions__ module allows you to test data that you've obtained from othe
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\ArrayExpects
-* DataSift\Storyplayer\Prose\DoubleExpects
-* DataSift\Storyplayer\Prose\IntegerExpects
-* DataSift\Storyplayer\Prose\ObjectExpects
-* DataSift\Storyplayer\Prose\StringExpects
+* DataSift\Storyplayer\Prose\AssertsArray
+* DataSift\Storyplayer\Prose\AssertsDouble
+* DataSift\Storyplayer\Prose\AssertsInteger
+* DataSift\Storyplayer\Prose\AssertsObject
+* DataSift\Storyplayer\Prose\AssertsString
 
 ## Dependencies
 
