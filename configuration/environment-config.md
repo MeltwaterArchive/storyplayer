@@ -2,7 +2,7 @@
 layout: configuration
 title: Per-Environment Configuration
 prev: '<a href="../configuration/test-phases.html">Prev: Test Phases Configuration</a>'
-next: '<a href="../configuration/user-config.html">Next: Per-User Configuration</a>'
+next: '<a href="../configuration/device-config.html">Next: Per-Device Configuration</a>'
 ---
 
 # Per-Environment Configuration

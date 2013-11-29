@@ -1,7 +1,7 @@
 ---
 layout: devices
 title: Testing With Different Devices
-prev: '<a href="../environments/vagrant.html">Prev: Creating Test Environments Using Vagrant</a>'
+prev: '<a href="../environments/safeguarding.html">Prev: Safeguarding Environments</a>'
 next: '<a href="../devices/how-it-works.html">Next: How We Control Web Browsers</a>'
 ---
 

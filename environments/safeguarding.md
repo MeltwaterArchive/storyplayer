@@ -1,8 +1,8 @@
 ---
 layout: environments
 title: Safeguarding Environments
-prev: '<a href="../prose/using-classes.html">Prev: Using Classes</a>'
-next: '<a href="../environments/your-machine.html">Next: Testing On Your Machine</a>'
+prev: '<a href="../environments/vagrant.html">Prev: Creating Test Environments Using Vagrant</a>'
+next: '<a href="../devices/index.html">Next: Testing With Different Devices</a>'
 ---
 
 # Safeguarding Environments

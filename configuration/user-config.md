@@ -1,7 +1,7 @@
 ---
 layout: configuration
 title: Per-User Configuration
-prev: '<a href="../configuration/environment-config.html">Prev: Per-Environment Configuration</a>'
+prev: '<a href="../configuration/device-config.html">Prev: Per-Device Configuration</a>'
 next: '<a href="../configuration/prose-namespaces.html">Next: Prose Namespaces</a>'
 ---
 

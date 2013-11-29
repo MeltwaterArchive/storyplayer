@@ -11,6 +11,7 @@
 		"configuration/logging",
 		"configuration/test-phases",
 		"configuration/environment-config",
+		"configuration/device-config",
 		"configuration/user-config",
 		"configuration/prose-namespaces",
 		"configuration/runtime-config",
@@ -48,6 +49,7 @@
 		"environments/ec2",
 		"environments/physical-hosts",
 		"environments/vagrant",
+		"environments/safeguarding",
 		"devices/index",
 		"devices/how-it-works",
 		"devices/localbrowsers",
@@ -160,6 +162,7 @@
 			"Test Phases": "configuration/test-phases",
 			"Sep2": "",
 			"Per-Environment Config": "configuration/environment-config",
+			"Per-Device Config": "configuration/device-config",
 			"Per-User Config": "configuration/user-config",
 			"Sep3": "",
 			"Prose Namespaces": "configuration/prose-namespaces",
@@ -211,7 +214,9 @@
 			"Sep1": "",
 			"Amazon EC2": "environments/ec2",
 			"Physical Hosts": "environments/physical-hosts",
-			"Vagrant": "environments/vagrant"
+			"Vagrant": "environments/vagrant",
+			"Sep2": "",
+			"Safeguarding Environments": "environments/safeguarding"
 		},
 		"Devices": {
 			"Introduction": "devices/index",

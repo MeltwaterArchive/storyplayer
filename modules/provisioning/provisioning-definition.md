@@ -2,7 +2,7 @@
 layout: modules-provisioning
 title: Creating The Provisioning Definition
 prev: '<a href="../../modules/provisioning/index.html">Prev: The Provisioning Module</a>'
-next: '<a href="../../modules/provisioning/usingProvisioningEngine.html">Next: useProvisioningEngine()</a>'
+next: '<a href="../../modules/provisioning/usingProvisioningEngine.html">Next: usingProvisioningEngine()</a>'
 ---
 
 # Creating The Provisioning Definition
