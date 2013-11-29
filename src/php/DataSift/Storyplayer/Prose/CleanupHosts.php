@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2011-present Mediasift Ltd
+ * Copyright (c) 2013-present Mediasift Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,58 +35,29 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
- * manipulate the internal hosts table
+ * CleanupHosts
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @uses CleanupHosts
+ * @author Stuart Herbert <stuart@datasift.com>
  */
-class UsingHostsTable extends Prose
+class CleanupHosts extends BaseCleanup
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "hosts";
+    public function startup()
+    {
+        // do nothing
+    }
 
-	/**
-	 * addHost
-	 *
-	 * @param string $hostName Host name to add
-	 * @param string $hostDetails Details about this host
-	 *
-	 * @return void
-	 */
-	public function addHost($hostName, $hostDetails)
-	{
-		$this->st->usingRuntimeTable($this->entryKey)->addItem($hostName, $hostDetails);
-	}
-
-	/**
-	 * removeHost
-	 *
-	 * @param string $hostName Host name to remove
-	 *
-	 * @return void
-	 */
-	public function removeHost($hostName)
-	{
-		$this->st->usingRuntimeTable($this->entryKey)->removeItem($hostName);
-	}
+    public function shutdown()
+    {
+        // do nothing
+    }
 }
