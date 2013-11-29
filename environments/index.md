@@ -7,11 +7,17 @@ next: '<a href="../environments/your-machine.html">Next: Testing On Your Machine
 
 # Test Environments
 
-Storyplayer can take away the pain of testing complex software by creating new test environments on demand.
+No matter where you need to test - on your local machine, against a virtual machine, against a dedicated test environment or against your production environment - you can do so with Storyplayer.
 
-## Why Are Test Environments Important?
+Testing against your dev box is the quickest way to work on your code, whilst testing against representative and reproducible test environments is the most reliable way to re-use your automated tests.  Finally, testing against production helps you prove that your customers really can use your new features once they've been shipped.
 
-Whenever you are testing complex software, the environment you're using to test it in has a big impact on whether or not your tests are _reproducible_.  If you can re-create the test environment every time that you run your tests, you're much more likely to get the same results each time.
+## Testing In Development
+
+Most of us prefer to develop code on the desktop or laptop that we're sat in front of.  It allows us to use our full set of chosen development editors / IDEs and tools, and to make the _code -> test -> fix_ cycle of development as quick as it possibly can be.
+
+It's always a good idea to make sure that the code you're working on actually works before you commit it to source control and push it to be shared with your colleagues.  You need to make sure both that the new code works, and that you haven't broken any existing functionality with your changes.  Experienced developers are used to doing this with unit tests, but their role isn't to prove that all your stories work.
+
+Storyplayer is designed to [run tests against your local computer](your-machine.html) by default.
 
 ## Representative Environments
 
@@ -33,19 +39,35 @@ If you test all of your app's parts on a single box, you might miss that your ap
 
 Make your test environments look like the production environment.
 
-## A Discussion About Hardware And Virtual Machines
+Storyplayer comes with built-in support for testing against as few or as many servers as you need for your application.  You can run the same test against any dev/test environment [running on your own machine](local-vms.html), [in your datacentre](dedicated.html), or even [against your production environment](production.html).
+
+## Reproducible Test Environments
+
+Your software should be tested in an environment that you can destroy and re-create on demand.  By running your tests against an environment that is in an identical state each and every time, you're one step closer to making your tests _reproducible_.
+
+There'll always be a temptation to make manual changes to your test environment to get things working, especially when there's a deadline looming.  The problem with this is that you'll probably forget about the change you made, and no-one else will ever know about it.  That is, until they try and run the tests for themselves in their own test environment - where the tests will fail.  The last thing anyone wants is to waste time tracking down a problem that has been caused by a manual change you've made to your test environment.
+
+Automating your test environments does require an initial investment in time.  Even using the latest tools such as Vagrant and Ansible, it's a job that can take days not hours.  But once it's done, you'll quickly get all that time back - and more - because you can now spin up a test environment whenever you need one.  And if you're working in a team, everyone else will benefit immediately from your automation efforts.
+
+Storyplayer comes with built-in support for [creating and destroying test environments every time you run a story](../stories/test-environment-setup-teardown.html).
+
+## Virtual Machines, Or Hardware?
 
 Should you test on physical hardware, or are virtual machines good enough?
 
-There are many advantages to using virtual machines to test on.  They're fast enough for most testing.  You can run them directly on your dev box.  If you've got a laptop, you can run them on your laptop, which is great if you're working out of the office.  You can create and destroy them whenever you want, and it won't affect anyone else.  There are some great tools out there to help you work with virtual machines.  All you need is enough RAM and disk space.
+There are many advantages to using virtual machines to test on.  They're fast enough for most testing.  You can run them directly on your dev box.  If you've got a laptop, you can run them on your laptop, which is great if you're working out of the office.  You can create and destroy them whenever you want, and it won't affect anyone else.  There are some great tools out there to help you work with virtual machines.  All you need is enough RAM and disk space, and some spare CPU.
 
 And, it has to be said, most apps simply aren't busy enough to need anything else.
 
-Once your business starts to scale, then testing on physical hardware becomes more important.  The hardware - your server choice, your network topology, your switches, your gateways - becomes part of your app, because it becomes part of how your app works at scale.  Here, testing inside a virtual machine doesn't test all of your app any more, and won't catch all of reasons why a test will fail.
+Once your business starts to scale, and your app becomes larger than a single entity, then testing on physical hardware becomes more important.  The hardware - your server choice, your network topology, your switches, your gateways - becomes part of your app, because it becomes part of how your app works at scale.  Here, testing inside a virtual machine doesn't test all of your app any more, and won't catch all of reasons why a test will fail.
 
-When we got to this point, we adopted a dual testing strategy:
+When we got to this point, we adopted a three-way testing strategy:
 
-* virtual machines for the functional tests - making sure our stories worked at all
+* virtual machines for the functional tests during development - making sure our stories worked at all
 * dedicated test hardware for the non-functional tests - making sure our stories worked at scale
+* testing directly against production environment - making sure our code worked after it had shipped
 
 With this approach, anyone can still run tests at any time inside virtual machines - which is good, because you don't want your developers to have excuses not to run tests.  And, our quality assurance folks can run larger, more demanding tests in parallel to catch any problems before new builds go out to production.
+
+Storyplayer supports virtual machines created by [Vagrant](vagrant.html) and [Amazon EC2](ec2.html).  When you need to test against [physical hosts](physical-hosts.html), that's very easy to do too.  [You can even run the same test against either](multiple-environments.html) - we do it all the time.
+
