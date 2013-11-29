@@ -77,6 +77,8 @@ class BaseAdapter
 		if (!isset($browserDetails->desiredCapabilities)) {
 			$browserDetails->desiredCapabilities = array();
 		}
+		// make sure it is an array, as that is what the
+		// underlying WebDriver library requires
 		else if (is_object($browserDetails->desiredCapabilities)) {
 			$browserDetails->desiredCapabilities = (array) ($browserDetails->desiredCapabilities);
 		}
