@@ -1,7 +1,7 @@
 ---
 layout: environments
 title: Creating Test Environments On Amazon EC2
-prev: '<a href="../environments/production.html">Prev: Testing Against Production</a>'
+prev: '<a href="../environments/multiple-environments.html">Prev: Testing Against Multiple Environments</a>'
 next: '<a href="../environments/physical-hosts.html">Next: Creating Test Environments On Physical Hosts</a>'
 ---
 
