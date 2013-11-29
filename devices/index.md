@@ -25,9 +25,6 @@ We support testing web sites that are running behind your firewalls, and also we
 
 We've got pretty good support for desktop browsers, but we know that we've got the following stuff still to add:
 
-* Per-device configuration
-* IFrame support in all browsers
-* Multi-window support in all browsers
 * Touch gestures in mobile browsers
 * Full HAR support for browsermob-proxy (provides network-related information to your tests)
 

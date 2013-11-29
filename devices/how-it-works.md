@@ -11,9 +11,7 @@ next: '<a href="../devices/localbrowsers.html">Next: Testing With Locally Runnin
 
 Storyplayer talks to web browsers via [Selenium WebDriver](http://docs.seleniumhq.org) and [the JSON Wire Protocol](https://code.google.com/p/selenium/wiki/JsonWireProtocol).
 
-Selenium WebDriver is the successor to the popular Selenium browser-testing toolkit.  It's built around an automation API known as WebDriver.  Each browser provides support for WebDriver; some browsers have that support built-in, and some browsers need an app to act as a bridge between WebDriver and the browser's own automation API.  Finally, the Selenium Server acts as a bridge between apps such as Storyplayer and each browser (and their bridge, if they have one).
-
-Storyplayer talks to the Selenium Server over the network using the JSON Wire Protocol.  It's a simple HTTP-based request/response API.
+Selenium WebDriver is the successor to the popular Selenium browser-testing toolkit.  It's built around an automation API known as WebDriver.  Each browser provides support for WebDriver; some browsers have that support built-in, and some browsers need an app to act as a bridge between WebDriver and the browser's own automation API.  The Selenium Server acts as a bridge between apps such as Storyplayer and each browser (and their bridge, if they have one).  Storyplayer talks to the Selenium Server over the network using the JSON Wire Protocol.  It's a simple HTTP-based request/response API.
 
 ## Browsermob-Proxy
 

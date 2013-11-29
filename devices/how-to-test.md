@@ -16,7 +16,7 @@ The first thing to do is to identity which environments you are going to be runn
 Here at DataSift, we support running tests against all of the following environments:
 
 * development environments
-* QA environments
+* dedicated QA environments
 * staging environment
 * production environment
 
@@ -29,9 +29,9 @@ When we write a new test, we get it working in one environment first.  We only r
 There's a few things we sometimes have to adjust when we start running a new test against the other environments:
 
 * Anything that's been hard-coded into the test, but which is different in different environments, needs turning into a config file entry.  It's normally URLs that are the problem here.
-* Timeouts on page loads often need adjusting.  Some of our environments are virtual, and some run on pretty decent hardware, and as a result, they perform differently.  (This is something we're going to look at in a future release; I'm sure we can make this much easier than it currently is).
+* Timeouts on page loads often need adjusting.  Some of our environments are virtual, whilst others run on dedicated hardware, and as a result, they perform differently.  (This is something we're going to look at in a future release; I'm sure we can make this much easier than it currently is).
 * Different environments run different versions of the code, and have different functionality. You've got to be careful here; the more `if` statements in your tests, the more fragile your tests become.  You're better off maintaining different tests for different versions of your app.
-* Some tests are too dangerous to run in production, especially when attempting to test superadmin functionality.  (A future release of Storyplayer will allow tests to blacklist environments).
+* Some tests are too dangerous to run in production, especially when attempting to test superadmin functionality.  You can use Storyplayer's support for [safeguarding environments](../environments/safeguarding.html) to help with this.
 
 ## Pick One Browser And Device, Then Adapt
 

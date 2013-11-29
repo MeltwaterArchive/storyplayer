@@ -15,13 +15,13 @@ That's where [Sauce Labs](http://saucelabs.com) comes in.
 
 Sauce Labs provides [a hosted collection of browser versions and platforms](https://saucelabs.com/docs/platforms), so that you don't have to maintain these yourself.  Their collection includes the usual suspects (Internet Explorer, Firefox and Chrome) on various versions of Microsoft Windows, plus Safari on OS X, and browsers running on Linux too (handy if your target audience are software engineers).  They've also recently started providing mobile browsers too.  (They also have useful features such as recording videos of each test run, and recording screenshots too, which can be very helpful when a test works in one browser but fails in another).
 
-Sauce Labs isn't free, but we use it here at DataSift because (for us) it's a lot cheaper than maintaining our own collection of browser versions and platforms to use in cross-browser testing.  Storyplayer now includes Sauce Labs support.
+Sauce Labs isn't free, but we use it here at DataSift because (for us) it's a lot cheaper than maintaining our own collection of browser versions and platforms to use in cross-browser testing.
 
 ## Getting Started
 
 Here's what you need to run your tests using Sauce Lab's browsers instead of browsers running on your desktop machine:
 
-* Sign up for a Sauce Labs account
+* A Sauce Labs account ([sign up here](https://saucelabs.com/signup))
 * Your Sauce Labs username
 * Your Sauce Labs access key
 
@@ -44,7 +44,7 @@ You need to add your Sauce Labs details to your Storyplayer config file.
 
 (Tip: for private repos, it's fine to put them in the main [storyplayer.json](../../configuration/storyplayer-json.html) file, but for public repos, it's best to add them to your [per-user config file](../../configuration/user-config.html) instead).
 
-Make sure you've installed the latest version of Storyplayer (to get the latest features and bug fixes), and that you're run `storyplayer install` to download dependencies such as _browsermob-proxy_ and _Sauce Connect_.
+Make sure you've installed the latest version of Storyplayer (to get the latest features and bug fixes), and that you have run `storyplayer install` to download dependencies such as _browsermob-proxy_ and _Sauce Connect_.
 
 {% highlight php %}
 storyplayer install
@@ -59,57 +59,247 @@ Finally, before you use Storyplayer's Sauce Labs integration for the first time,
 
 ## Running A Test
 
-Running a test via Sauce Labs is very similar to running a test against a browser on your own desktop:
-
-* use the `--usesaucelabs` switch to tell Storyplayer to talk to Sauce Labs instead of the local Selenium server
-* use the `-b` switch to tell Sauce Labs which browser you want
-* use the `-Dwebbrowser.*` switches to tell Sauce Labs which platforms and browser versions you want
+Running a test via Sauce Labs is very similar to running a test against a browser on your own desktop.  Just use the `-d` switch to tell Sauce Labs which browser you want.  You'll find the list of device names below.
 
 For example, here's how to run a test using Internet Explorer 9 on Windows 7 via Sauce Labs:
 
 {% highlight bash %}
-storyplayer -b 'internet explorer' --usesaucelabs -Dwebbrowser.platform='Windows 7' -Dwebbrowser.version=9 stories/registration/signup/RegisterUsingRegistrationFormStory.php
+storyplayer -d sl_ie9_win7 stories/registration/signup/RegisterUsingRegistrationFormStory.php
 {% endhighlight %}
 
 ## Selecting A Browser
 
-The list of available browsers at Sauce Labs is constantly changing, as they add support for new browsers and drop support for obsolete versions.  As a result, we can't give you a comprehensive list of Storyplayer command-line switches to use for each browser.
+Storyplayer ships with support for the following browsers running at Sauce Labs.  To use the browser you want, use the corresponding `-d` switch on the command-line when you run Storyplayer.
 
-However, it's very easy to work out the switches required for each browser version:
+Our list is based on the [Supported Device, OS and Browser Platforms list](https://saucelabs.com/docs/platforms) published by Sauce Labs.
 
-1. Go to [Sauce Lab's list of supported platforms](https://saucelabs.com/docs/platforms)
-1. Click on the operating system you want to test against
-1. Click on the specific browser version you want to test against
+### Android - Phone
 
-On the right-hand side of the page, you'll see a helpful box called _Automate Your Test!_.  This box contains two dropdowns.  Make sure the first dropdown says _Webdriver_, and that the second dropdown says _PHP_.
+* Android 4.0 (Portrait) - `-d sl_android_phone_4_0_portrait`
 
-![Automate Your Test! box](testsbox.png "Automate Your Test! box")
+### Android - Tablet
 
-At this point, you'll see a code snippet that looks something like this:
+* Android 4.0 (Portrait) - `-d sl_android_tablet_4_0_portrait`
 
-{% highlight php %}
-$web_driver = new WebDriver();
-$session = $web_driver->session('firefox', $desiredCapabilities);
-$desiredCapabilities['platform'] = 'Windows 8';
-$desiredCapabilities['version'] = '23';
-{% endhighlight %}
+### iOS - iPad
 
-This is example code for use with their own WebDriver library.  We just need to convert this into Storyplayer command-line switches:
+* Safari on iOS 6.1 (Portrait): `-d sl_safari_ipad_ios6_1_portrait`
+* Safari on iOS 6.0 (Portrait): `-d sl_safari_ipad_ios6_0_portrait`
+* Safari on iOS 5.1 (Portrait): `-d sl_safari_ipad_ios5_1_portrait`
+* Safari on iOS 5.0 (Portrait): `-d sl_safari_ipad_ios5_0_portrait`
+* Safari on iOS 4 (Portrait): `-d sl_safari_ipad_ios4_portrait`
 
-* The first parameter to `$web_driver->session()` is the browser name.  Pass this to Storyplayer using the `-b` switch.
-* Every entry in the `$desiredCapabilities` array needs passing to Storyplayer using the `-D webbrowser.*` switches.
+### iOS - iPhone
 
-The example code becomes:
+* Safari on iOS 6.1 (Portrait): `-d sl_safari_iphone_ios6_1_portrait`
+* Safari on iOS 6.0 (Portrait): `-d sl_safari_iphone_ios6_0_portrait`
+* Safari on iOS 5.1 (Portrait): `-d sl_safari_iphone_ios5_1_portrait`
+* Safari on iOS 5.0 (Portrait): `-d sl_safari_iphone_ios5_0_portrait`
+* Safari on iOS 4 (Portrait): `-d sl_safari_iphone_ios4_portrait`
 
-{% highlight bash %}
-storyplayer --usesaucelabs -b 'firefox' -Dwebdriver.platform='Windows 8' -Dwebdriver.version='23'
-{% endhighlight %}
+### Linux
 
-If you have trouble running your tests via Sauce Labs, always check first to make sure that you've got the right switches on the command-line, and that you haven't missed any out.  If you have, Sauce Labs won't know which browser you're asking for!
+* Chrome 31: `-d sl_chrome31_linux`
+* Chrome 30: `-d sl_chrome30_linux`
+* Chrome 29: `-d sl_chrome29_linux`
+* Chrome 28: `-d sl_chrome28_linux`
+* Chrome 27: `-d sl_chrome27_linux`
+* Chrome 26: `-d sl_chrome26_linux`
+* Firefox 25: `-d sl_firefox25_linux`
+* Firefox 24: `-d sl_firefox24_linux`
+* Firefox 23: `-d sl_firefox23_linux`
+* Firefox 22: `-d sl_firefox22_linux`
+* Firefox 21: `-d sl_firefox21_linux`
+* Firefox 20: `-d sl_firefox20_linux`
+* Firefox 19: `-d sl_firefox19_linux`
+* Firefox 18: `-d sl_firefox18_linux`
+* Firefox 17: `-d sl_firefox17_linux`
+* Firefox 16: `-d sl_firefox16_linux`
+* Firefox 15: `-d sl_firefox15_linux`
+* Firefox 14: `-d sl_firefox14_linux`
+* Firefox 13: `-d sl_firefox13_linux`
+* Firefox 12: `-d sl_firefox12_linux`
+* Firefox 11: `-d sl_firefox11_linux`
+* Firefox 10: `-d sl_firefox10_linux`
+* Firefox 9: `-d sl_firefox9_linux`
+* Firefox 8: `-d sl_firefox8_linux`
+* Firefox 7: `-d sl_firefox7_linux`
+* Firefox 6: `-d sl_firefox6_linux`
+* Firefox 5: `-d sl_firefox5_linux`
+* Firefox 4: `-d sl_firefox4_linux`
+* Opera 12: `-d sl_opera12_linux`
+
+### OSX 10.6 Snow Leopard
+
+* Chrome 28: `-d sl_chrome28_osx10_6`
+* Firefox 25: `-d sl_firefox25_osx10_6`
+* Firefox 24: `-d sl_firefox24_osx10_6`
+* Firefox 23: `-d sl_firefox23_osx10_6`
+* Firefox 22: `-d sl_firefox22_osx10_6`
+* Firefox 21: `-d sl_firefox21_osx10_6`
+* Firefox 20: `-d sl_firefox20_osx10_6`
+* Firefox 19: `-d sl_firefox19_osx10_6`
+* Firefox 18: `-d sl_firefox18_osx10_6`
+* Firefox 17: `-d sl_firefox17_osx10_6`
+* Firefox 16: `-d sl_firefox16_osx10_6`
+* Firefox 15: `-d sl_firefox15_osx10_6`
+* Firefox 14: `-d sl_firefox14_osx10_6`
+* Firefox 13: `-d sl_firefox13_osx10_6`
+* Firefox 12: `-d sl_firefox12_osx10_6`
+* Firefox 11: `-d sl_firefox11_osx10_6`
+* Firefox 10: `-d sl_firefox10_osx10_6`
+* Firefox 9: `-d sl_firefox9_osx10_6`
+* Firefox 8: `-d sl_firefox8_osx10_6`
+* Firefox 7: `-d sl_firefox7_osx10_6`
+* Firefox 6: `-d sl_firefox6_osx10_6`
+* Firefox 5: `-d sl_firefox5_osx10_6`
+* Firefox 4: `-d sl_firefox4_osx10_6`
+* Internet Explorer 5: `-d sl_ie5_osx10_6`
+
+### OSX 10.8 Mountain Lion
+
+* Chrome 27: `-d sl_chrome27_osx10_8`
+* Internet Explorer 6: `-d sl_ie6_osx10_8`
+
+### Windows 7
+
+* Chrome 31: `-d sl_chrome31_win7`
+* Chrome 30: `-d sl_chrome30_win7`
+* Chrome 29: `-d sl_chrome29_win7`
+* Chrome 28: `-d sl_chrome28_win7`
+* Chrome 27: `-d sl_chrome27_win7`
+* Chrome 26: `-d sl_chrome26_win7`
+* Firefox 25: `-d sl_firefox25_win7`
+* Firefox 24: `-d sl_firefox24_win7`
+* Firefox 23: `-d sl_firefox23_win7`
+* Firefox 22: `-d sl_firefox22_win7`
+* Firefox 21: `-d sl_firefox21_win7`
+* Firefox 20: `-d sl_firefox20_win7`
+* Firefox 19: `-d sl_firefox19_win7`
+* Firefox 18: `-d sl_firefox18_win7`
+* Firefox 17: `-d sl_firefox17_win7`
+* Firefox 16: `-d sl_firefox16_win7`
+* Firefox 15: `-d sl_firefox15_win7`
+* Firefox 14: `-d sl_firefox14_win7`
+* Firefox 13: `-d sl_firefox13_win7`
+* Firefox 12: `-d sl_firefox12_win7`
+* Firefox 11: `-d sl_firefox11_win7`
+* Firefox 10: `-d sl_firefox10_win7`
+* Firefox 9: `-d sl_firefox9_win7`
+* Firefox 8: `-d sl_firefox8_win7`
+* Firefox 7: `-d sl_firefox7_win7`
+* Firefox 6: `-d sl_firefox6_win7`
+* Firefox 5: `-d sl_firefox5_win7`
+* Firefox 4: `-d sl_firefox4_win7`
+* Internet Explorer 10: `-d sl_ie10_win7`
+* Internet Explorer 9: `-d sl_ie9_win7`
+* Internet Explorer 8: `-d sl_ie8_win7`
+* Opera 12: `-d sl_opera12_win7`
+* Opera 11: `-d sl_opera11_win7`
+* Safari 5: `-d sl_safari5_win7`
+
+### Windows 8
+
+* Chrome 30: `-d sl_chrome30_win8`
+* Chrome 29: `-d sl_chrome29_win8`
+* Chrome 28: `-d sl_chrome28_win8`
+* Chrome 27: `-d sl_chrome27_win8`
+* Chrome 26: `-d sl_chrome26_win8`
+* Firefox 25: `-d sl_firefox25_win8`
+* Firefox 24: `-d sl_firefox24_win8`
+* Firefox 23: `-d sl_firefox23_win8`
+* Firefox 22: `-d sl_firefox22_win8`
+* Firefox 21: `-d sl_firefox21_win8`
+* Firefox 20: `-d sl_firefox20_win8`
+* Firefox 19: `-d sl_firefox19_win8`
+* Firefox 18: `-d sl_firefox18_win8`
+* Firefox 17: `-d sl_firefox17_win8`
+* Firefox 16: `-d sl_firefox16_win8`
+* Firefox 15: `-d sl_firefox15_win8`
+* Firefox 14: `-d sl_firefox14_win8`
+* Firefox 13: `-d sl_firefox13_win8`
+* Firefox 12: `-d sl_firefox12_win8`
+* Firefox 11: `-d sl_firefox11_win8`
+* Firefox 10: `-d sl_firefox10_win8`
+* Firefox 9: `-d sl_firefox9_win8`
+* Firefox 8: `-d sl_firefox8_win8`
+* Firefox 7: `-d sl_firefox7_win8`
+* Firefox 6: `-d sl_firefox6_win8`
+* Firefox 5: `-d sl_firefox5_win8`
+* Firefox 4: `-d sl_firefox4_win8`
+* Internet Explorer 10: `-d sl_ie10_win8`
+
+### Windows 8.1
+
+* Chrome 31: `-d sl_chrome31_win8_1`
+* Chrome 30: `-d sl_chrome30_win8_1`
+* Chrome 29: `-d sl_chrome29_win8_1`
+* Chrome 28: `-d sl_chrome28_win8_1`
+* Chrome 27: `-d sl_chrome27_win8_1`
+* Chrome 26: `-d sl_chrome26_win8_1`
+* Firefox 25: `-d sl_firefox25_win8_1`
+* Firefox 24: `-d sl_firefox24_win8_1`
+* Firefox 23: `-d sl_firefox23_win8_1`
+* Firefox 22: `-d sl_firefox22_win8_1`
+* Firefox 21: `-d sl_firefox21_win8_1`
+* Firefox 20: `-d sl_firefox20_win8_1`
+* Firefox 19: `-d sl_firefox19_win8_1`
+* Firefox 18: `-d sl_firefox18_win8_1`
+* Firefox 17: `-d sl_firefox17_win8_1`
+* Firefox 16: `-d sl_firefox16_win8_1`
+* Firefox 15: `-d sl_firefox15_win8_1`
+* Firefox 14: `-d sl_firefox14_win8_1`
+* Firefox 13: `-d sl_firefox13_win8_1`
+* Firefox 12: `-d sl_firefox12_win8_1`
+* Firefox 11: `-d sl_firefox11_win8_1`
+* Firefox 10: `-d sl_firefox10_win8_1`
+* Firefox 9: `-d sl_firefox9_win8_1`
+* Firefox 8: `-d sl_firefox8_win8_1`
+* Firefox 7: `-d sl_firefox7_win8_1`
+* Firefox 6: `-d sl_firefox6_win8_1`
+* Firefox 5: `-d sl_firefox5_win8_1`
+* Firefox 4: `-d sl_firefox4_win8_1`
+* Internet Explorer 11: `-d sl_ie11_win8_1`
+
+### Windows XP
+
+* Chrome 31: `-d sl_chrome31_winxp`
+* Chrome 30: `-d sl_chrome30_winxp`
+* Chrome 29: `-d sl_chrome29_winxp`
+* Chrome 28: `-d sl_chrome28_winxp`
+* Chrome 27: `-d sl_chrome27_winxp`
+* Chrome 26: `-d sl_chrome26_winxp`
+* Firefox 25: `-d sl_firefox25_winxp`
+* Firefox 24: `-d sl_firefox24_winxp`
+* Firefox 23: `-d sl_firefox23_winxp`
+* Firefox 22: `-d sl_firefox22_winxp`
+* Firefox 21: `-d sl_firefox21_winxp`
+* Firefox 20: `-d sl_firefox20_winxp`
+* Firefox 19: `-d sl_firefox19_winxp`
+* Firefox 18: `-d sl_firefox18_winxp`
+* Firefox 17: `-d sl_firefox17_winxp`
+* Firefox 16: `-d sl_firefox16_winxp`
+* Firefox 15: `-d sl_firefox15_winxp`
+* Firefox 14: `-d sl_firefox14_winxp`
+* Firefox 13: `-d sl_firefox13_winxp`
+* Firefox 12: `-d sl_firefox12_winxp`
+* Firefox 11: `-d sl_firefox11_winxp`
+* Firefox 10: `-d sl_firefox10_winxp`
+* Firefox 9: `-d sl_firefox9_winxp`
+* Firefox 8: `-d sl_firefox8_winxp`
+* Firefox 7: `-d sl_firefox7_winxp`
+* Firefox 6: `-d sl_firefox6_winxp`
+* Firefox 5: `-d sl_firefox5_winxp`
+* Firefox 4: `-d sl_firefox4_winxp`
+* Internet Explorer 8: `-d sl_ie8_winxp`
+* Internet Explorer 7: `-d sl_ie7_winxp`
+* Internet Explorer 6: `-d sl_ie6_winxp`
+* Opera 12: `-d sl_opera12_win7`
+* Opera 11: `-d sl_opera11_win7`
 
 ## Testing Websites Behind Your Firewall
 
-Sauce Lab's browsers normally connect to websites over the internet.  If you are trying to test a website that is firewalled off from the internet (or maybe on private IP addresses in your office), then you'll need to use Sauce Connect.
+Sauce Lab's browsers normally connect to websites over the internet.  If you are trying to test a website that is firewalled off from the internet (or maybe on private IP addresses in your office), then you'll need to use _Sauce Connect_.
 
 [Sauce Connect](https://saucelabs.com/docs/connect) is a network tunnel and HTTP proxy combined into a single JAR file.  Storyplayer will download it for you; you just need to start it up before you run any tests:
 
@@ -121,7 +311,7 @@ java -jar vendor/bin/Sauce-Connect.jar <saucelabs-username> <saucelabs-accesskey
 
 Just wait for it to say _Connected! You may start your tests._, and then you can run your Storyplayer tests, and Sauce Labs will automatically reconfigure its browsers to make their network connections through Sauce Connect.
 
-If you don't use Sauce Connect for a period of time, it will automatically shut itself down.  It's also a good idea to restart it periodically (Sauce Labs call this keeping it 'fresh').
+If you don't use Sauce Connect for a period of time, it will automatically shut itself down.  It's also a good idea to restart it periodically (Sauce Labs call this keeping it 'fresh') to deal with memory leaks and the like.
 
 ## Testing Websites Behind HTTP Basic Auth
 

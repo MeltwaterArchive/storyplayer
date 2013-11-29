@@ -23,7 +23,7 @@ You need to install the web browser that you're going to use.  At the moment, we
 
 (We don't use Windows ourselves, which is the only reason why we're not able to support running Storyplayer on Windows at the moment.  If you want to help us and become the Windows maintainer of Storyplayer, please get in touch!)
 
-Make sure you've installed the latest version of Storyplayer (to get the latest features and bug fixes), and that you're run `storyplayer install` to download dependencies such as _browsermob-proxy_ and _Selenium Standalone Server_.  You'll also need to start _browsermob-proxy_ and _Selenium Server_.
+Make sure you've installed the latest version of Storyplayer (to get the latest features and bug fixes), and that you have run `storyplayer install` to download dependencies such as _browsermob-proxy_ and _Selenium Standalone Server_.  You'll also need to start _browsermob-proxy_ and _Selenium Server_.
 
 {% highlight php %}
 storyplayer install
@@ -39,7 +39,8 @@ We've looked at the possibility of having Storyplayer start these for you, but d
 
 Running a test against a browser on your own desktop is very straight forward:
 
-* use the `-b` switch to tell Sauce Labs which browser you want, if you don't want the default browser
+* the default browser is [Google Chrome](https://www.google.com/intl/en/chrome/browser/)
+* use the `-d` switch if you want to use a different browser
 
 For example, here's how to run a test using Chrome:
 
@@ -50,17 +51,23 @@ storyplayer stories/registration/signup/RegisterUsingRegistrationFormStory.php
 and here's how to run the same test using Firefox:
 
 {% highlight bash %}
-storyplayer -b firefox stories/registration/signup/RegisterUsingRegistrationFormStory.php
+storyplayer -d firefox stories/registration/signup/RegisterUsingRegistrationFormStory.php
 {% endhighlight %}
 
 and, if you're on OS X, here's how to run the same test using Safari:
 
 {% highlight bash %}
-storyplayer -b safari stories/registration/signup/RegisterUsingRegistrationFormStory.php
+storyplayer -d safari stories/registration/signup/RegisterUsingRegistrationFormStory.php
 {% endhighlight %}
+
+## Starting And Stopping Web Browsers
+
+Storyplayer will automatically open your chosen web browser when you use any of the browser-related Prose modules; you don't need to explicitly open the browser yourself.
+
+Storyplayer will automatically close the web browser at the end of each phase of the story; you don't need to explicitly close the browser yourself.
 
 ## Testing Websites Behind HTTP Basic Auth
 
 At the time of writing, Selenium WebDriver (the technology Storyplayer uses to control web browsers) does not provide working support for authenticating via HTTP Basic Auth.  To get around this, when you run tests against a browser on your own desktop, we proxy the web browser through browsermob-proxy, which can inject the HTTP Basic Auth credentials for us.
 
-If your website requires HTTP Basic Auth, then your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling [$st->usingBrowser()->setHttpBasicAuthForHost()](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost).
+If your website requires HTTP Basic Auth, then your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling _[$st->usingBrowser()->setHttpBasicAuthForHost()](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost)_.
