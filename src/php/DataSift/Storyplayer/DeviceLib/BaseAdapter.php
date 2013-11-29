@@ -77,6 +77,9 @@ class BaseAdapter
 		if (!isset($browserDetails->desiredCapabilities)) {
 			$browserDetails->desiredCapabilities = array();
 		}
+		else if (is_object($browserDetails->desiredCapabilities)) {
+			$browserDetails->desiredCapabilities = (array) ($browserDetails->desiredCapabilities);
+		}
 	}
 
 	public function getProxy()
