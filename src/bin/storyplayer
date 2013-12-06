@@ -33,6 +33,7 @@ use DataSift\Storyplayer\Cli\ListHostsTableCommand;
 use DataSift\Storyplayer\Cli\ListProcessesCommand;
 use DataSift\Storyplayer\Cli\PlayStoryCommand;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
+use DataSift\Storyplayer\Cli\ShowEnvironmentCommand;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
@@ -287,6 +288,7 @@ function main($argv)
 	$engine->addCommand(new KillProcessesCommand);
 	$engine->addCommand(new ListHostsTableCommand);
 	$engine->addCommand(new ListProcessesCommand);
+	$engine->addCommand(new ShowEnvironmentCommand($additionalContext));
 
 	// all set - let's go
 	try {
