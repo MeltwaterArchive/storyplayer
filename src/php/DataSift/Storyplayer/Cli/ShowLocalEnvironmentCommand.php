@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -44,12 +44,20 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
 use Phix_Project\CliEngine\CliResult;
-use Phix_Project\CliEngine\CliSwitch;
+
+use DataSift\Stone\DownloadLib\FileDownloader;
+
+use DataSift\WebDriver\WebDriverConfiguration;
+
+use Exception;
+use stdClass;
 
 /**
- * Tell Storyplayer which test environment to test against; for when there
- * is more than one test environment defined
+ * Command to list the current default environment, suitable for use
+ * inside shell scripts
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -58,49 +66,29 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class EnvironmentSwitch extends CliSwitch
+class ShowLocalEnvironmentCommand extends CliCommand
 {
-	public function __construct($envList, $defaultEnvName)
+	protected $localEnvName;
+
+	public function __construct($additionalContext)
 	{
-		// define our name, and our description
-		$this->setName('environment');
-		$this->setShortDescription('set the environment to test against');
-		$this->setLongDesc(
-			"If you have multiple test environments listed in your configuration files, "
-			. "you can use this switch to choose which test environment to run the test(s) "
-			. "against. If you omit this switch, Storyplayer will default to using your "
-			. "computer's hostname as the value for <environment>."
-			. PHP_EOL
-			. PHP_EOL
-			. "If you only have one test environment listed, then this switch has no "
-			. "effect when used, and Storyplayer will always use the test environment "
-			. "from your configuration file."
-			. PHP_EOL
-			. PHP_EOL
-			. "See http://datasift.github.io/storyplayer/ "
-			. "for how to configure and use multiple test environments."
+		// define the command
+		$this->setName('show-local-environment');
+		$this->setShortDescription('display environment name for my computer');
+		$this->setLongDescription(
+			"Use this command to see what Storyplayer thinks the environment "
+			."name is for the computer it is running on"
+			.PHP_EOL
 		);
 
-		// what are the short switches?
-		$this->addShortSwitch('e');
-
-		// what are the long switches?
-		$this->addLongSwitch('environment');
-
-		// what is the required argument?
-		$this->setRequiredArg('<environment>', "the environment to test against; one of: " . implode(", ", $envList));
-		$this->setArgValidator(new EnvironmentValidator($envList, $defaultEnvName));
-		$this->setArgHasDefaultValueOf($defaultEnvName);
-
-		// all done
+        // for convenience, the current computer's hostname will be the
+        // default environment
+        $this->localEnvName = EnvironmentHelper::getLocalEnvironmentName();
 	}
 
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
-		// remember the setting
-		$engine->options->environment = $params[0];
-
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
+		// output the default environment name
+		echo $this->localEnvName . PHP_EOL;
 	}
 }
