@@ -61,7 +61,7 @@ use stdClass;
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Michael Heap <michael.heap@datasift.com>
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
