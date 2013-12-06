@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -43,58 +43,52 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use stdClass;
-
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
 use Phix_Project\CliEngine\CliEngineSwitch;
 use Phix_Project\CliEngine\CliResult;
 
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\DownloadLib\FileDownloader;
 
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\StoryLib\StoryLoader;
-use DataSift\Storyplayer\StoryListLib\StoryListLoader;
-use DataSift\Storyplayer\UserLib\User;
-use DataSift\Storyplayer\UserLib\GenericUserGenerator;
-use DataSift\Storyplayer\UserLib\ConfigUserLoader;
-use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
+use DataSift\WebDriver\WebDriverConfiguration;
+
+use Exception;
+use stdClass;
 
 /**
- * A command to play a story, or a list of stories
+ * Command to list the current default environment, suitable for use
+ * inside shell scripts
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultEnvironmentHelper
+class ShowLocalEnvironmentCommand extends CliCommand
 {
-    static public function getDefaultEnvironment($envList)
-    {
+	protected $localEnvName;
+
+	public function __construct($additionalContext)
+	{
+		// define the command
+		$this->setName('show-local-environment');
+		$this->setShortDescription('display environment name for my computer');
+		$this->setLongDescription(
+			"Use this command to see what Storyplayer thinks the environment "
+			."name is for the computer it is running on"
+			.PHP_EOL
+		);
+
         // for convenience, the current computer's hostname will be the
         // default environment
-        $defaultEnvName = getHostname();
+        $this->localEnvName = EnvironmentHelper::getLocalEnvironmentName();
+	}
 
-        // we get different results on different operating systems
-        // make sure the hostname is not the FQDN
-        $dotPos = strpos($defaultEnvName, '.');
-        if ($dotPos) {
-            $defaultEnvName = substr($defaultEnvName, 0, $dotPos);
-        }
-
-        // is there more than one test environment?
-        if (count($envList) == 1) {
-            $defaultEnvName = $envList[0];
-        }
-
-        // all done
-        return $defaultEnvName;
-    }
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// output the default environment name
+		echo $this->localEnvName . PHP_EOL;
+	}
 }

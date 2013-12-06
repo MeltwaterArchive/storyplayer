@@ -97,7 +97,7 @@ class PlayStoryCommand extends CliCommand
 
         // for convenience, the current computer's hostname will be the
         // default environment
-        $defaultEnvName = DefaultEnvironmentHelper::getDefaultEnvironment($additionalContext->envList);
+        $defaultEnvName = EnvironmentHelper::getDefaultEnvironmentName($additionalContext->envList);
 
         // the switches that this command supports
         $this->setSwitches(array(

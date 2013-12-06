@@ -66,14 +66,14 @@ use stdClass;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ShowEnvironmentCommand extends CliCommand
+class ShowDefaultEnvironmentCommand extends CliCommand
 {
 	protected $defaultEnvName;
 
 	public function __construct($additionalContext)
 	{
 		// define the command
-		$this->setName('show-environment');
+		$this->setName('show-default-environment');
 		$this->setShortDescription('display default environment');
 		$this->setLongDescription(
 			"Use this command to see what environment Storyplayer will use "
@@ -83,7 +83,7 @@ class ShowEnvironmentCommand extends CliCommand
 
         // for convenience, the current computer's hostname will be the
         // default environment
-        $defaultEnvName = DefaultEnvironmentHelper::getDefaultEnvironment($additionalContext->envList);
+        $defaultEnvName = EnvironmentHelper::getDefaultEnvironmentName($additionalContext->envList);
 
 		// remember the default environment name
 		$this->defaultEnvName = $defaultEnvName;
