@@ -25,4 +25,14 @@ For your first stories, you don't need any Storyplayer configuration at all.  As
 
 ## Writing Your Stories
 
-You don't need to create [TestEnvironmentSetup or Teardown phases](../stories/testenvironmentsetup-teardown.html) in your stories, as you'll be running your software manually before you start your tests.
+You don't need to create [TestEnvironmentSetup or Teardown phases](../stories/testenvironmentsetup-teardown.html) in your stories, as you'll be deploy / running your software manually before you start your tests.
+
+## Running Your Stories
+
+Running your stories will normally be as simple as:
+
+{% highlight bash %}
+vendor/bin/storyplayer <storyfile>
+{% endhighlight %}
+
+You normally won't need to pass any switches into the Storyplayer command at all.

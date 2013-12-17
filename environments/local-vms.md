@@ -45,16 +45,14 @@ We recommend that you create system-installer packages for your software (e.g. R
 
 You can get Vagrant plugins for all the popular provisioning tools.  With these plugins, when you run `vagrant up` to create your virtual machine, your provisioning scripts are run at the same time.
 
-Don't use these plugins.
-
-Why?  Your story is going to want to inject parameters into the provisioning scripts, such as port numbers and the like.  You can't do so if your provisioning scripts run when `vagrant up` is executed.
+Don't use these plugins in your tests.  Your story is going to need to inject parameters into the provisioning scripts, such as port numbers and the like.  You can't do so if your provisioning scripts run when `vagrant up` is executed.
 
 ## Configuring Your Environment
 
 You can do this in one of two ways:
 
 1. If you do all your dev testing in a local VM, simply edit the config for your local environment to have the right settings for your VM.  That way, you can run Storyplayer without the `-e` switch to save a bit of effort every time.
-1. If you [run tests against your local computer](your-machine.html) _and_ you run tests against a local VM too, you'll need to define separate environments for each.  You'll also need to remember to use the `-e` switch every time you run Storyplayer against a local VM.
+1. If you [run tests against your local computer](your-machine.html) _and_ you run tests against a local VM too, you'll need to define separate environments for each.  For example, you might call the environment *local_vm*. You'll also need to remember to use the `-e` switch every time you run Storyplayer against a local VM.
 
 If you're not sure, go with the second option for now.
 
@@ -62,10 +60,26 @@ _What should go into your environment's config?_  Anything that is unique to tha
 
 ## Writing Your Stories
 
+You should create and destroy your virtual machine in the [TestEnvironmentSetup / Teardown](../stories/testenvironmentsetup-teardown.html) phases of your story.  You'll probably want to use a [story template](../stories/story-templates.html) to avoid repeating the same setup / teardown code in all of your stories.
+
 You'll find the following modules useful:
 
 * To create your virtual machine, use the [Vagrant module](../modules/vagrant/index.html) to boot the virtual machine, and the [Provisioning module](../modules/provisioning/index.html) to deploy software inside your VM.
 * Use the [Host module](../modules/host/index.html) to do useful things such as [finding the IP address of your VM](../modules/host/fromHost.html#getipaddress).
 * When you've finished with your test, use the Vagrant module again to destroy your virtual machine.
 
-You should create and destroy your virtual machine in the [TestEnvironmentSetup / Teardown](../stories/testenvironmentsetup-teardown.html) phases of your story.  You'll probably want to use a [story template](../stories/story-templates.html) to avoid repeating the same setup / teardown code in all of your stories.
+You'll need to store your provisioning rules somewhere.  There's a few options:
+
+* _store them in a folder alongside your stories_: keeps everything in one place
+* _store them in their own Git repo_: makes it much easier to reuse provisioning rules across multiple projects
+* _run a provisioning server on your network_: this is probably how your sysadmins already do their own provisioning
+
+## Running Your Stories
+
+Running your stories against a local VM is very similiar to running against code running on your own computer; you just have to remember to tell Storyplayer about any additional environment you've defined:
+
+{% highlight bash %}
+vendor/bin/storyplayer -e local_vm <storyfile>
+{% endhighlight %}
+
+You don't need the `-e local_vm` switch if you went with option 1 in _[Configuring Your Environment](#configuring_your_environment)_ above.
