@@ -131,7 +131,7 @@ You might want to run your tests against environments that Storyplayer does not 
 * Don't add _TestEnvironmentSetup_ and _TestEnvironmentTeardown_ functions to your story - best approach if the test is always going to run against environments that Storyplayer does not manage
 * Or, if you need to deploy an environment some of the time, take advantage of the `-P` switch.  Simply add a setting to your [per-environment config file](../configuration/environment-config.html) to tell Storyplayer what the default platform should be for your environment, and make one of the platforms a no-operation:
 
-{% highlight php %}
+```php
 $st->addTestEnvironmentSetup(function(StoryTeller $st) {
     // get the settings for this environment
     $settings = $st->fromEnvironment()->getAppSettings('testEnvSetup')
@@ -158,7 +158,7 @@ $st->addTestEnvironmentSetup(function(StoryTeller $st) {
             // add steps here to build locally
     }
 });
-{% endhighlight %}
+```
 
 ## Disabling The Test Environment Setup / Teardown Phases
 
