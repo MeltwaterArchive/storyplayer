@@ -134,7 +134,7 @@ You might want to run your tests against environments that Storyplayer does not 
 ```php
 $st->addTestEnvironmentSetup(function(StoryTeller $st) {
     // get the settings for this environment
-    $settings = $st->fromEnvironment()->getAppSettings('testEnvSetup')
+    $settings = $st->fromEnvironment()->getAppSettings('testEnvSetup');
 
     // set the defaults for this story / template
     $st->setParams(array(
