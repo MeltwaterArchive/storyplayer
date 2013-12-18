@@ -11,20 +11,45 @@ Story parameters are configuration that are defined by your story (and / or by y
 
 ## Defining Story Parameters
 
-Call `$this->setParams()` in your stories and / or your story templates to set the parameters for your story:
+Call `$st->setParams()` in your stories and / or `$this->setParams()` in your story templates to set the parameters for your story:
 
 {% highlight php %}
+//
+// example of how to set story parameters from
+// inside a story
+//
+
 $story->addTestEnvironmentSetup(function(StoryTeller $st) {
 	// build up the list of settings
 	//
 	// these can be overridden from the command-line
-	$this->setParams(array(
+	$st->setParams(array(
 		'platform' => 'vagrant-centos6'
 	));
 });
 {% endhighlight %}
 
-`setParams()` is a method available on stories and story templates, and it takes 1 parameter: an array of named parameters.
+{% highlight php %}
+//
+// example of how to set story parameters from
+// inside a story template
+//
+class MyTemplate extends StoryTemplate
+{
+	public function testEnvironmentSetup()
+	{
+		// build up the list of settings
+		//
+		// these can be overridden from the story,
+		// and from the command-line
+		$this->setParams(array(
+			'platform' => 'vagrant-centos6'
+		));
+	}
+}
+{% endhighlight %}
+
+`setParams()` takes 1 parameter: an array of named parameters.
 
 ## Retrieving Story Parameters
 
@@ -35,7 +60,7 @@ $story->addTestEnvironmentSetup(function(StoryTeller $st) {
 	// build up the list of settings
 	//
 	// these can be overridden from the command-line
-	$this->setParams(array(
+	$st->setParams(array(
 		'platform' => 'vagrant-centos6'
 	));
 
@@ -47,9 +72,9 @@ $story->addTestEnvironmentSetup(function(StoryTeller $st) {
 
 `$st->getParams()` will merge (in this order of precidence):
 
-1. Any params defined by any of your story templates
-1. Any params defined by your story
-1. Any params overridden from the command-line
+1. any params defined by any of your story templates
+1. any params defined by your story
+1. any params overridden from the command-line
 
 and return them as a single array for you to use in your code.
 
@@ -59,6 +84,14 @@ Use the `-D` switch to override any params from the command-line:
 
 {% highlight bash %}
 vendor/bin/storyplayer -D platform=ec2-centos6 ...
+{% endhighlight %}
+
+The `-p / --platform` switch is the same as the `-D platform=` switch:
+
+{% highlight bash %}
+vendor/bin/storyplayer -P ec2-centos6
+vendor/bin/storyplayer --platform=ec2-centos6
+vendor/bin/storyplayer -D platform=ec2-centos6
 {% endhighlight %}
 
 ## Uses Of Story Parameters
