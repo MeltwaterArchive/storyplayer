@@ -31,8 +31,8 @@ You don't need to create [TestEnvironmentSetup or Teardown phases](../stories/te
 
 Running your stories will normally be as simple as:
 
-{% highlight bash %}
-vendor/bin/storyplayer <storyfile>
-{% endhighlight %}
+<pre>
+vendor/bin/storyplayer &lt;storyfile&gt;
+</pre>
 
 You normally won't need to pass any switches into the Storyplayer command at all.

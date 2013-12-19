@@ -25,11 +25,11 @@ You need to install the web browser that you're going to use.  At the moment, we
 
 Make sure you've installed the latest version of Storyplayer (to get the latest features and bug fixes), and that you have run `storyplayer install` to download dependencies such as _browsermob-proxy_ and _Selenium Standalone Server_.  You'll also need to start _browsermob-proxy_ and _Selenium Server_.
 
-{% highlight php %}
+<pre>
 storyplayer install
 vendor/bin/browsermob-proxy.sh start
 vendor/bin/selenium-server.sh start
-{% endhighlight %}
+</pre>
 
 This will start _browsermob-proxy_ and _selenium_ in _[screen](http://www.gnu.org/software/screen/)_ sessions in the background.
 
@@ -44,21 +44,21 @@ Running a test against a browser on your own desktop is very straight forward:
 
 For example, here's how to run a test using Chrome:
 
-{% highlight bash %}
+<pre>
 storyplayer stories/registration/signup/RegisterUsingRegistrationFormStory.php
-{% endhighlight %}
+</pre>
 
 and here's how to run the same test using Firefox:
 
-{% highlight bash %}
+<pre>
 storyplayer -d firefox stories/registration/signup/RegisterUsingRegistrationFormStory.php
-{% endhighlight %}
+</pre>
 
 and, if you're on OS X, here's how to run the same test using Safari:
 
-{% highlight bash %}
+<pre>
 storyplayer -d safari stories/registration/signup/RegisterUsingRegistrationFormStory.php
-{% endhighlight %}
+</pre>
 
 ## Starting And Stopping Web Browsers
 

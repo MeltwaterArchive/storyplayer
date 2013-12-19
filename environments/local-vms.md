@@ -78,8 +78,8 @@ You'll need to store your provisioning rules somewhere.  There's a few options:
 
 Running your stories against a local VM is very similiar to running against code running on your own computer; you just have to remember to tell Storyplayer about any additional environment you've defined:
 
-{% highlight bash %}
-vendor/bin/storyplayer -e local_vm <storyfile>
-{% endhighlight %}
+<pre>
+vendor/bin/storyplayer -e local_vm &lt;storyfile&gt;
+</pre>
 
 You don't need the `-e local_vm` switch if you went with option 1 in _[Configuring Your Environment](#configuring_your_environment)_ above.

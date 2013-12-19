@@ -46,10 +46,10 @@ You need to add your Sauce Labs details to your Storyplayer config file.
 
 Make sure you've installed the latest version of Storyplayer (to get the latest features and bug fixes), and that you have run `storyplayer install` to download dependencies such as _browsermob-proxy_ and _Sauce Connect_.
 
-{% highlight php %}
+<pre>
 storyplayer install
 vendor/bin/browsermob-proxy.sh start
-{% endhighlight %}
+</pre>
 
 This will start _browsermob-proxy_ in a _[screen](http://www.gnu.org/software/screen/)_ session in the background.
 
@@ -63,9 +63,9 @@ Running a test via Sauce Labs is very similar to running a test against a browse
 
 For example, here's how to run a test using Internet Explorer 9 on Windows 7 via Sauce Labs:
 
-{% highlight bash %}
+<pre>
 storyplayer -d sl_ie9_win7 stories/registration/signup/RegisterUsingRegistrationFormStory.php
-{% endhighlight %}
+</pre>
 
 ## Selecting A Browser
 
@@ -303,11 +303,11 @@ Sauce Lab's browsers normally connect to websites over the internet.  If you are
 
 [Sauce Connect](https://saucelabs.com/docs/connect) is a network tunnel and HTTP proxy combined into a single JAR file.  Storyplayer will download it for you; you just need to start it up before you run any tests:
 
-{% highlight bash %}
+<pre>
 vendor/bin/storyplayer install
 vendor/bin/browsermob-proxy.sh start
-java -jar vendor/bin/Sauce-Connect.jar <saucelabs-username> <saucelabs-accesskey> -p localhost:9091
-{% endhighlight %}
+java -jar vendor/bin/Sauce-Connect.jar &lt;saucelabs-username&gt; &lt;saucelabs-accesskey&gt; -p localhost:9091
+</pre>
 
 Just wait for it to say _Connected! You may start your tests._, and then you can run your Storyplayer tests, and Sauce Labs will automatically reconfigure its browsers to make their network connections through Sauce Connect.
 
@@ -319,10 +319,10 @@ At the time of writing, Selenium WebDriver (the technology Storyplayer uses to c
 
 If your website requires HTTP Basic Auth, then you need to use the Sauce Connect tunnel to test your website.  This is true even if your website is on a public IP address.  Sauce Connect will use the locally-running browsermob-proxy, which allows us to inject the HTTP Basic Auth credentials.
 
-{% highlight bash %}
+<pre>
 vendor/bin/browsermob-proxy.sh start
-java -jar vendor/bin/Sauce-Connect.jar <saucelabs-username> <saucelabs-accesskey> -p localhost:9091
-{% endhighlight %}
+java -jar vendor/bin/Sauce-Connect.jar &lt;saucelabs-username&gt; &lt;saucelabs-accesskey&gt; -p localhost:9091
+</pre>
 
 Your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling [$st->usingBrowser()->setHttpBasicAuthForHost()](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost).
 
@@ -348,10 +348,12 @@ Our advice is to use Sauce Connect tunnels for functional testing, but to use St
 
 Sauce Lab's Sauce Connect is a network tunnel.  It allows web browsers running on their network to see web servers running on your network.  This means that network traffic goes like this:
 
-    Sauce Labs     Internet         Your Network        Your Network and/or Internet
-    ----------     --------         ------------        ----------------------------
-    web browser -> Sauce Connect -> browsermob-proxy -> web server -> -\
-    web browser <- Sauce Connect <- browsermob-proxy <-----------------/
+<pre>
+Sauce Labs     Internet         Your Network        Your Network and/or Internet
+----------     --------         ------------        ----------------------------
+web browser -&gt; Sauce Connect -&gt; browsermob-proxy -&gt; web server -&gt; -\
+web browser &lt;- Sauce Connect &lt;- browsermob-proxy &lt;-----------------/
+</pre>
 
 If your connection to the internet is asymetrical (ie, you're on broadband, with different up and down speeds) or simply slow, then this is going to slow down your tests a bit.  How much depends on the speed of your connection to the internet, and how congested that is at the time that you run your tests.
 

@@ -15,9 +15,9 @@ _You can run `storyplayer --help` to get a list of all of the options and comman
 
 Running a single story is very straight-forward.
 
-{% highlight bash %}
-vendor/bin/storyplayer [ -e <environment> ] <path-to-story.php>
-{% endhighlight %}
+<pre>
+vendor/bin/storyplayer [ -e &lt;environment&gt; ] &lt;path-to-story.php&gt;
+</pre>
 
 where:
 
@@ -28,9 +28,9 @@ where:
 
 Storyplayer can run a batch of stories too.  We call these batches _tales_, in keeping with the story telling theme.
 
-{% highlight bash %}
-vendor/bin/storyplayer [ -e <environment> ] <path-to-tale.json>
-{% endhighlight %}
+<pre>
+vendor/bin/storyplayer [ -e &lt;environment&gt; ] &lt;path-to-tale.json&gt;
+</pre>
 
 where:
 
@@ -66,20 +66,20 @@ Your JSON file can also contain the following optional options:
 
 Storyplayer supports running the same tests against different test environments.  You can always get a list of the environments available by running:
 
-{% highlight bash %}
+<pre>
 storyplayer list-environments
-{% endhighlight %}
+</pre>
 
 ## Other Storyplayer Commands
 
 Storyplayer has other commands built-in too, and comprehensive built-in help.  You can always get a list of everything Storyplayer can do by running:
 
-{% highlight bash %}
+<pre>
 storyplayer --help
-{% endhighlight %}
+</pre>
 
 and comprehensive help about a specific command by running:
 
-{% highlight bash %}
-storyplayer help <command>
-{% endhighlight %}
+<pre>
+storyplayer help &lt;command&gt;
+</pre>

@@ -72,6 +72,6 @@ $story->addTestEnvironmentTeardown(function($st) {
 
 Running your stories against a dedicated environment is very straight-forward: use the `-e` switch to tell Storyplayer about the environment:
 
-{% highlight bash %}
-vendor/bin/storyplayer -e integration <storyfile>
-{% endhighlight %}
+<pre>
+vendor/bin/storyplayer -e integration &lt;storyfile&gt;
+</pre>

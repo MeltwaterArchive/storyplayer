@@ -82,17 +82,17 @@ and return them as a single array for you to use in your code.
 
 Use the `-D` switch to override any params from the command-line:
 
-{% highlight bash %}
+<pre>
 vendor/bin/storyplayer -D platform=ec2-centos6 ...
-{% endhighlight %}
+</pre>
 
 The `-p / --platform` switch is the same as the `-D platform=` switch:
 
-{% highlight bash %}
+<pre>
 vendor/bin/storyplayer -P ec2-centos6
 vendor/bin/storyplayer --platform=ec2-centos6
 vendor/bin/storyplayer -D platform=ec2-centos6
-{% endhighlight %}
+</pre>
 
 ## Uses Of Story Parameters
 

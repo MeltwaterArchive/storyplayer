@@ -42,14 +42,14 @@ Then run `composer update` if Composer is installed globally or `php composer.ph
 
 After this, if you want to use the [Browser module](modules/browser/index.html), you will need to ask Storyplayer to download Selenium and ChromeDriver, like so (versions downloaded may differ from this example):
 
-{% highlight bash %}
+<pre>
 $ vendor/bin/storyplayer install
 Additional files will be added to the vendor/ folder
 Downloading: http://chromedriver.googlecode.com/files/chromedriver_linux64_2.1.zip (7.026mb)
 Downloading: http://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar (32.708mb)
 $ vendor/bin/browsermob-proxy.sh start
 $ vendor/bin/selenium-server.sh start
-{% endhighlight %}
+</pre>
 
 This will download some additional tools into your project's `vendor/bin` folder, and start them running in the background on your computer.
 
@@ -57,23 +57,23 @@ This will download some additional tools into your project's `vendor/bin` folder
 
 You can also run the very latest Storyplayer from a GitHub checkout:
 
-{% highlight bash %}
+<pre>
 git clone https://github.com/datasift/storyplayer.git
 cd storyplayer
 composer install
 export PATH=`pwd`/src/bin:$PATH
-{% endhighlight %}
+</pre>
 
 After this, if you want to use the [Browser module](modules/browser/index.html), you will need to ask Storyplayer to download Selenium and ChromeDriver, like so (versions downloaded may differ from this example):
 
-{% highlight bash %}
-$ cd <your-project-folder>
+<pre>
+$ cd &lt;your-project-folder&gt;
 $ storyplayer install
 Additional files will be added to the vendor/ folder
 Downloading: http://chromedriver.googlecode.com/files/chromedriver_linux64_2.1.zip (7.026mb)
 Downloading: http://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar (32.708mb)
 $ vendor/bin/browsermob-proxy.sh start
 $ vendor/bin/selenium-server.sh start
-{% endhighlight %}
+</pre>
 
 This will download some additional tools into your project's `vendor/bin` folder, and start them running in the background on your computer.

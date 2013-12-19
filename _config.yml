@@ -1,4 +1,5 @@
 safe: true
-pygments: false
+pygments: true
 url: http://datasift.github.io/storyplayer
 baseurl: /storyplayer
+markdown: redcarpet

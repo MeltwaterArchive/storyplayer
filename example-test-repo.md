@@ -13,7 +13,7 @@ To get started with Storyplayer, we recommend setting up a separate VCS reposito
 
 A typical project structure would look like this:
 
-{% highlight bash %}
+<pre>
 storyplayer.json.dist
 bin/
     - contains test tools for our tests
@@ -52,7 +52,7 @@ tales/
             overnight-tests.json
             post-deployment-tests.json
             smoke-tests.json
-{% endhighlight %}
+</pre>
 
 ### The storyplayer.json File
 

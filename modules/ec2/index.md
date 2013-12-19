@@ -279,9 +279,9 @@ where:
 
 For example, if I run Storyplayer like this:
 
-{% highlight bash %}
+<pre>
 storyplayer -e stu-office stories/ec2/CanCreateEc2InstanceStory.php
-{% endhighlight %}
+</pre>
 
 and that story includes:
 

@@ -32,9 +32,9 @@ where:
 
 Running a tale is very similiar to [running a single story](../running-storyplayer.html):
 
-{% highlight bash %}
-vendor/bin/storyplayer [ -e &lt;environment&gt; ]&lt;path-to-tale.json&gt;
-{% endhighlight %}
+<pre>
+vendor/bin/storyplayer [ -e &lt;environment&gt; ] &lt;path-to-tale.json&gt;
+</pre>
 
 ## Reusing Test Environments In Your Tale
 

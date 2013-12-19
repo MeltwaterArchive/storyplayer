@@ -19,7 +19,9 @@ Your first step is to get WebDriver running on whatever virtual machine, server,
 
 Once you've got your WebDriver instance up and running, you should have a URL for Storyplayer to connect for.  It should look something like this:
 
-    http://localhost:4444/wd/hub
+<pre>
+http://localhost:4444/wd/hub
+</pre>
 
 except _localhost_ will be a hostname or IP address, and port _4444_ might well be different.  You need to add this URL to your config file:
 
@@ -39,10 +41,10 @@ except _localhost_ will be a hostname or IP address, and port _4444_ might well 
 
 Make sure you've installed the latest version of Storyplayer (to get the latest features and bug fixes), and that you've run `storyplayer install` to download dependencies such as _browsermob-proxy_.  You'll need to start _browsermob-proxy_, as Storyplayer will tell your web browser to proxy all traffic through it:
 
-{% highlight php %}
+<pre>
 storyplayer install
 vendor/bin/browsermob-proxy.sh start
-{% endhighlight %}
+</pre>
 
 This will start _browsermob-proxy_ in a _[screen](http://www.gnu.org/software/screen/)_ session in the background.
 

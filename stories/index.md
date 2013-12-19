@@ -90,10 +90,12 @@ Each test is stored as a separate PHP script on disk.  For example:
 
 might be stored as the script:
 
-    | - stories
-        |- billing
-           |- invoices
-              |- CanSeeAllInvoicesStory.php
+<pre>
+| - stories
+    |- billing
+       |- invoices
+          |- CanSeeAllInvoicesStory.php
+</pre>
 
 Stories are meant to be independent from each other, and therefore story tests should be too.  _Changing one story test should have no impact at all on any other story tests._
 

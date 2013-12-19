@@ -115,9 +115,9 @@ $st->addTestEnvironmentSetup(function(StoryTeller $st) {
 
 To pick an alternative platform, use the `-P` flag to override the 'platform' parameter:
 
-{% highlight php %}
-storyplayer -P ec2 <your story>
-{% endhighlight %}
+<pre>
+storyplayer -P ec2 &lt;your story&gt;
+</pre>
 
 __Notes:__
 

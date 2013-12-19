@@ -149,6 +149,10 @@ code {
     padding: 1px 2px;
 }
 
+pre {
+  font-size: 12px;
+}
+
 .popover-inner {
     width: 320px;
 }

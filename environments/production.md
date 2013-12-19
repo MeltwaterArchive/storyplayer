@@ -42,6 +42,6 @@ In production, if your tests have to cheat at all, it's nearly always because yo
 
 Running your stories against production is just like running your stories against any other dedicated environment.  Use the `-e` switch to tell Storyplayer which environment you want to run against:
 
-{% highlight bash %}
-vendor/bin/storyplayer -e production <storyfile>
-{% endhighlight %}
+<pre>
+vendor/bin/storyplayer -e production &lt;storyfile&gt;
+</pre>

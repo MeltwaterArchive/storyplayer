@@ -1,0 +1,54 @@
+/**
+ * Phix style
+ * by Stuart Herbert (https://github.com/stuartherbert)
+ */
+
+pre code,
+pre .cli {
+    display: block; padding: 0.5em;
+    background: #232323;
+    color: #e6e0db;
+}
+
+pre .variable,
+pre .attribute,
+pre .operator {
+    color: #f8fa83;
+}
+
+pre .string,
+pre .number {
+    color: #78add2;
+}
+
+pre .comment {
+    color: #969696;
+}
+
+pre .keyword {
+    color: #e09146;
+}
+
+pre .built_in,
+pre .value .literal {
+    color: #CA729E;
+}
+
+pre .decorator,
+pre .phpdoc,
+pre .javadoctag {
+    color: #e09146;
+}
+
+pre .constant {
+    color: #a4c460;
+}
+
+pre .class .title {
+    color: #a4c460;
+    font-style: italic;
+}
+
+pre .function .title {
+    color: #a4c460;
+}

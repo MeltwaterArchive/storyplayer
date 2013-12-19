@@ -61,17 +61,17 @@ Splitting things up like this means that each of us can tailor the app settings 
 
 If you are testing against code running on your local computer, use the `show-local-environment` to find out which name Storyplayer recommends for your local config file:
 
-{% highlight bash %}
+<pre>
 $ vendor/bin/storyplayer show-local-environment
 qa-air-2
-{% endhighlight %}
+</pre>
 
 If you create a per-environment config file with the same name (e.g. `etc/qa-air-2.json`), then Storyplayer will use this file by default in future.  This saves you having to pass in the `-e` switch when you run Storyplayer.  Once you've created the file, you can verify that Storyplayer will use this by using the `show-default-environment` command:
 
-{% highlight bash %}
+<pre>
 $ vendor/bin/storyplayer show-default-environment
 qa-air-2
-{% endhighlight %}
+</pre>
 
 ## Each File Is A Complete Configuration File
 
