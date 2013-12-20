@@ -19,7 +19,7 @@ _storyplayer.json_ is the main configuration file for your tests.  You should pl
                 "url": "https://api.dev0",
                 "streamUrl": "https://stream.dev0"
             },
-            "vagrant" {
+            "vagrant": {
                 "provisioning_vars_file": "ansible-playbooks/vars/storyplayer.yml"
             }
         },
