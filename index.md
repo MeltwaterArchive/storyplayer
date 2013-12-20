@@ -59,15 +59,13 @@ Storyplayer works with a large variety of [web browser and platform combinations
 
 ## Documentation
 
-You're reading the front-page of Storyplayer's online manual, over 50,000 words covering:
+You're reading the front-page of Storyplayer's online manual, over 65,000 words covering:
 
 * [installation](installation.html) and [configuration](configuration/index.html) of Storyplayer
 * what [stories](stories/index.html) are, and their [test phases](stories/phases.html)
 * how to [write tests for your stories](prose/index.html), and how to [create your own Storyplayer modules](prose/creating-prose-modules.html)
 * how to [create test environments](environments/index.html) to test your apps in
 * a [comprehensive reference to every module that ships with Storyplayer](modules/index.html)
-
-The documentation is still a work in progress, with regular updates as we get everything thoroughly documented for you.
 
 ## Licensing
 
