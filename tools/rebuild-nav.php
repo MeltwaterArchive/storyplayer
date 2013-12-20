@@ -300,7 +300,7 @@ function getPageInfo($filename)
 	$page['title'] = $matches[1];
 
 	// extract the h2 headings
-	preg_match_all('|<h2 id=\'(.*)\'>(.*)</h2>|', $pageHtml, $matches);
+	preg_match_all('|<h2 id="(.*)">(.*)</h2>|', $pageHtml, $matches);
 	if (isset($matches[1]))
 	{
 		$i = 0;
