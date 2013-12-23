@@ -2,7 +2,7 @@
           </div>
         </div>
         <!-- main content -->
-        <div class="span9">
+        <div class="col-sm-8 col-md-9">
           <div class="maincontent">
             <!-- top nextbar -->
             <div class="nextbar nextbar-top">
@@ -20,11 +20,11 @@
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
             <!-- facebook likes -->
-            <div class="facebook-likes hidden-phone">
+            <div class="facebook-likes hidden-xs">
               <fb:like send="true" width="640" show_faces="false"></fb:like>
             </div>
 
-            <div class="facebook-likes visible-phone">
+            <div class="facebook-likes visible-xs">
               <fb:like send="true" width="300" show_faces="false"></fb:like>
             </div>
 
@@ -37,22 +37,28 @@
             </div>
 
             <!-- facebook comments -->
-            <div class="visible-desktop">
+            <div class="visible-lg">
               <div class="well">
                 <h2>Reader Comments And Feedback</h2>
-                <div class="fb-comments hidden-phone" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="640" mobile="false"></div>
+                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="830" mobile="false"></div>
               </div>
             </div>
-            <div class="visible-tablet">
+            <div class="visible-md">
               <div class="well">
                 <h2>Reader Comments And Feedback</h2>
-                <div class="fb-comments hidden-phone" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="500" mobile="false"></div>
+                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="640" mobile="false"></div>
               </div>
             </div>
-            <div class="visible-phone">
+            <div class="visible-sm">
+              <div class="well">
+                <h2>Reader Comments And Feedback</h2>
+                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="440" mobile="false"></div>
+              </div>
+            </div>
+            <div class="visible-xs">
               <div class="100%">
                 <h2>Reader Comments And Feedback</h2>
-                <div class="fb-comments visible-phone" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="300"></div>
+                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="300"></div>
               </div>
             </div>
 
@@ -68,7 +74,7 @@
     </div> <!-- close fluid container -->
     <!-- javascript -->
     <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="/storyplayer/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/storyplayer/bootstrap3/js/bootstrap.min.js"></script>
     <script src="/storyplayer/assets/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
   </body>

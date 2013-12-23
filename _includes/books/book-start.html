@@ -6,67 +6,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta author="Mediasift Ltd">
 
-    <link href="/storyplayer/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/storyplayer/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/storyplayer/bootstrap3/css/bootstrap.min.css" rel="stylesheet">
     <link href="/storyplayer/assets/book.css" rel="stylesheet">
     <link href="/storyplayer/assets/highlight-phix.css" rel="stylesheet">
   </head>
   <body>
     <!-- facebook comments -->
     <div id="fb-root"></div>
-  <script>
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '338583862880236', // App ID
-        channelUrl : '{{ page.url }}/channel.html', // Channel File
-        status     : true, // check login status
-        cookie     : true, // enable cookies to allow the server to access the session
-        xfbml      : true  // parse XFBML
-      });
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '338583862880236', // App ID
+          channelUrl : '{{ page.url }}/channel.html', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
 
-      // Additional initialization code here
-    };
+        // Additional initialization code here
+      };
 
-    // Load the SDK Asynchronously
-    (function(d){
-       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement('script'); js.id = id; js.async = true;
-       js.src = "//connect.facebook.net/en_US/all.js";
-       ref.parentNode.insertBefore(js, ref);
-     }(document));
-  </script>
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+    </script>
 
     <!-- top navbar -->
-    <div class="navbar navbar-fixed-top navbar-inverse">
-      <div class="navbar-inner">
-        <div class="container">
-          <a href="http://datasift.com" style="padding-top: 0; padding-bottom: 0">
-            <img src="http://datasift.com/images/logo.png" class="pull-left" style="padding-top: 5px; padding-right: 10px">
-          </a>
-          <a href="http://datasift.github.io" class="brand">
-            Open Source Projects
-          </a>
-
-          <!-- wrap the main navbar in the collapsable container -->
-          <div class="nav-collapse collapse">
-            {% include nav.html %}
+    <header class="navbar navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="navbar-brand">
+            <a href="http://datasift.com" style="padding-top: 0; padding-bottom: 0">
+              <img src="http://datasift.com/images/logo.png" class="pull-left" style="padding-top: 0px; padding-right: 10px; vertical-align: middle">
+            </a>
+            <a href="http://datasift.github.io" class="brand navbar-link">
+              Open Source Projects
+            </a>
           </div>
-
-          <!-- make the navbar collapsable when viewing on a smaller device -->
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
         </div>
+
+        <nav class="collapse navbar-collapse navbar-right" id="navbar-menu" role="navigation">
+          <!-- wrap the main navbar in the collapsable container -->
+          <ul class="nav navbar-nav">
+            {% include nav.html %}
+          </ul>
+        </nav>
       </div>
-    </div>
+    </header>
 
     <!-- rest of the page -->
-    <div class="container-fluid page">
-      <div class="row-fluid">
+    <div class="container page">
+      <div class="row">
         <!-- sidebar -->
-        <div class="span3">
+        <div class="col-sm-4 col-md-3">
           <div class="sidebar well">
             <div class="sidebody">

@@ -2,6 +2,11 @@ html,body {
     height: 100%;
     font-size: 13px;
     line-height: 18px;
+    padding-top: 30px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
 }
 
 h1 {
@@ -19,8 +24,24 @@ h3 {
   margin-bottom: 10px;
 }
 
+.navbar-brand {
+  line-height: 30px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.navbar-nav li.dropdown a.dropdown-toggle {
+ line-height: 30px;
+ padding-top: 10px;
+ padding-bottom: 5px;
+}
+
+.dropdown-menu {
+  font-size: 13px;
+}
+
 .page {
-    padding-left: 0;
+    padding: 0 15px;
     min-height: 100%;
 }
 
@@ -47,25 +68,14 @@ h3 {
       */
       min-height: 100%;
       margin-left: 0;
-      margin-top: 20px;
-      padding-top: 40px;
       margin-right: 0;
       margin-bottom: 40px;
   }
-
-  .sidebar .sidebody {
-      padding-left: 0px;
-      padding-right: 10px;
-  }
-
-  .container-fluid .maincontent {
-      margin-top: 20px;
-      padding-top: 40px;
-      padding-right: 1.93%;
-      min-height: 100%;
-  }
 }
 
+.container {
+  width: 100%;
+}
 
 .body .maincontent {
     border-top: #bbb solid 1px;
@@ -88,8 +98,29 @@ h3 {
 }
 */
 
+.sidebar {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.sidebar .sidebody {
+    padding-top: 0;
+}
+
+.sidebody h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .well h2 {
-    padding-top: 0px;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.sidebar ol, .sidebar ol ul {
+    padding-left: 19px;
 }
 
 .maincontent blockquote p {
@@ -253,9 +284,10 @@ img.panel {
 }
 
 .nextbar li.next {
+    margin-left: 0;
+    width: 50%;
     float: right;
     text-align: right;
-    width: 50%;
 }
 
 .nextbar-top {
