@@ -31,7 +31,7 @@ function buildNavBar($toc)
 	//
 	// let's convert the data into a navbar
 
-	$navBarHtml = '<ul class="nav">' . "\n";
+	$navBarHtml = '';
 
 	foreach ($toc->navbar as $sectionName => $contents)
 	{
@@ -62,9 +62,6 @@ function buildNavBar($toc)
 		// all done - close the dropdown
 		$navBarHtml .= "</ul>\n</li>\n";
 	}
-
-	// close the navBar
-	$navBarHtml .= "</ul>\n";
 
 	// all done
 	return $navBarHtml;
