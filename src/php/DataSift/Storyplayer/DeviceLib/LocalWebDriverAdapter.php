@@ -64,7 +64,7 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 	public function start(StoryTeller $st)
 	{
 		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('paramLogs');
+		$httpProxy->enableFeature('enhancedReplies');
 
 		$this->proxySession = $httpProxy->createProxy();
 

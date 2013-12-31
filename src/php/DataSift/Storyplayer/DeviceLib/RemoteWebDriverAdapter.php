@@ -64,7 +64,7 @@ class RemoteWebDriverAdapter extends LocalWebDriverAdapter
 	public function start(StoryTeller $st)
 	{
 		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('paramLogs');
+		$httpProxy->enableFeature('enhancedReplies');
 
 		$this->proxySession = $httpProxy->createProxy();
 
