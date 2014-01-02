@@ -9,7 +9,25 @@ next: '<a href="copyright.html">Next: Legal Stuff</a>'
 
 ## v1.5.0
 
-Currently under development.
+Released 2nd January 2014.
+
+### New
+
+* Per-device config files
+* `deviceSetup()` / `deviceTeardown()` support
+* Environment safeguarding
+* Prose module shutdown hooks
+* Iframe support in browsers
+* Multi-window support in browsers
+* Can close browser windows without closing the browser session
+* `storyplayer show-environment` command
+* Sauce Labs devices supported out of the box
+* storyplayer.phar (experimental!)
+
+### Fixed
+
+* default environment is never the FQDN
+* `tryTo()` works once again
 
 ## v1.4.2
 
