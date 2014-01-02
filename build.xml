@@ -586,7 +586,10 @@
       </fileset>
     </copy>
 
+    <!-- delete the hashbang at the top of the storyplayer command -->
     <exec command="sed -i.bak '1d' '${project.pkgdir}/src/bin/storyplayer'" logoutput="true" checkreturn="true" />
+
+    <!-- create the phar file -->
     <pharpackage
       destfile="${project.pharfile}"
       basedir="${project.pkgdir}"
@@ -597,7 +600,11 @@
         <include name="**/**" />
         <exclude name="**/datasift/webdriver/src/bin/**" />
         <exclude name="**/datasift/webdriver/src/data/**" />
-        <exclude name="vendor/bin/*.jar" />
+        <exclude name="**/*.jar" />
+        <exclude name="**/.git" />
+        <exclude name="**/chromedriver" />
+        <exclude name="**/chromedriver.exe" />
+        <exclude name="**/*.bak" />
       </fileset>
       <metadata>
         <element name="version" value="{$project.version}" />

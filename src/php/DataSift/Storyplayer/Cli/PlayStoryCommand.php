@@ -160,9 +160,6 @@ class PlayStoryCommand extends CliCommand
         }
         Log::init("storyplayer", $loggingConfig);
 
-        // setup shutdown handling
-        register_shutdown_function(array($this, 'shutdownHandler'));
-
         // setup signal handling
         pcntl_signal(SIGTERM, array($this, 'sigtermHandler'));
         pcntl_signal(SIGINT , array($this, 'sigtermHandler'));
@@ -262,6 +259,12 @@ class PlayStoryCommand extends CliCommand
         // create the supporting context for this test run
         $context = new StoryContext($staticConfig, $runtimeConfig, $envName, $deviceName);
         $teller->setStoryContext($context);
+
+        // setup shutdown handling
+        //
+        // only at this point have we set everything up that the
+        // shutdown handlers expect to find
+        register_shutdown_function(array($this, 'shutdownHandler'));
 
         // run our cleanup handlers before playing the story,
         // now that we have a context / environment to use
