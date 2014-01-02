@@ -3,7 +3,10 @@
 <project default="help" basedir=".">
   <!-- Human-readable info about our component -->
   <property file="build.properties" />
-  <taskdef name="now" classname="Phix_Project.ComponentManager.Phing.NowTask" />
+  <path id="stuart.phingtasks">
+    <pathelement dir="vendor/stuart/phingtasks/src/php" />
+  </path>
+  <taskdef name="now" classname="Stuart.PhingTasks.NowTask" classpathref="stuart.phingtasks"/>
   <now name="date.now"/>
   <if>
     <and>
@@ -125,7 +128,7 @@
     <exclude name="**/.git"/>
   </fileset>
 
-  <taskdef name="phingcallifexists" classname="Phix_Project.ComponentManager.Phing.PhingCallIfExistsTask" />
+  <taskdef name="phingcallifexists" classname="Stuart.PhingTasks.PhingCallIfExistsTask" classpathref="stuart.phingtasks"/>
   <import file="build.local.xml"/>
 
   <!-- Tell the user what this build file supports -->
@@ -583,7 +586,10 @@
       </fileset>
     </copy>
 
+    <!-- delete the hashbang at the top of the storyplayer command -->
     <exec command="sed -i.bak '1d' '${project.pkgdir}/src/bin/storyplayer'" logoutput="true" checkreturn="true" />
+
+    <!-- create the phar file -->
     <pharpackage
       destfile="${project.pharfile}"
       basedir="${project.pkgdir}"
@@ -594,6 +600,11 @@
         <include name="**/**" />
         <exclude name="**/datasift/webdriver/src/bin/**" />
         <exclude name="**/datasift/webdriver/src/data/**" />
+        <exclude name="**/*.jar" />
+        <exclude name="**/.git" />
+        <exclude name="**/chromedriver" />
+        <exclude name="**/chromedriver.exe" />
+        <exclude name="**/*.bak" />
       </fileset>
       <metadata>
         <element name="version" value="{$project.version}" />

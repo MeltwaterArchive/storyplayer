@@ -89,14 +89,7 @@ class EnvironmentSwitch extends CliSwitch
 
 		// what is the required argument?
 		$this->setRequiredArg('<environment>', "the environment to test against; one of: " . implode(", ", $envList));
-
-		// is there more than one test environment?
-		if (count($envList) == 1) {
-			$defaultEnvName = $envList[0];
-		}
-
 		$this->setArgValidator(new EnvironmentValidator($envList, $defaultEnvName));
-
 		$this->setArgHasDefaultValueOf($defaultEnvName);
 
 		// all done

@@ -34,79 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\DeviceLib;
+
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Base class for web browser adapters
+ * Exception thrown when we're asked to use a test device but there's no
+ * matching adapter available
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-class BaseAdapter
+class E4xx_NoSuchDeviceAdapter extends Exxx_Exception
 {
-	/**
-	 * details about the web browser that we want to use
-	 *
-	 * @var stdClass
-	 */
-	protected $browserDetails;
-
-	protected $browserSession;
-
-	protected $proxySession;
-
-	protected $httpAuthDetails = array();
-
-	public function init($browserDetails)
-	{
-		$this->browserDetails = $browserDetails;
-	}
-
-	public function getProxy()
-	{
-		return $this->proxySession();
-	}
-
-	public function getWebBrowser()
-	{
-		return $this->browserSession;
-	}
-
-	public function applyHttpBasicAuthForHost($hostname, $url)
-	{
-		throw new E5xx_NoHttpBasicAuthSupport();
-	}
-
-	public function hasHttpBasicAuthForHost($hostname)
-	{
-		return (isset($this->httpAuthDetails[$hostname]));
-	}
-
-	public function getHttpBasicAuthForHost($hostname)
-	{
-		if (!isset($this->httpAuthDetails[$hostname])) {
-			return null;
-		}
-
-		return $this->httpAuthDetails[$hostname];
-	}
-
-	public function setHttpBasicAuthForHost($hostname, $username, $password)
-	{
-		$this->httpAuthDetails[$hostname] = array(
-			'user' => $username,
-			'pass' => $password
-		);
+	public function __construct($provider) {
+		$msg = "Unknown device adapter '{$provider}'";
+		parent::__construct(400, $msg, $msg);
 	}
 }

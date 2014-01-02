@@ -43,11 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ObjectLib\BaseObject;
-
 /**
  * manipulate the internal processes table
  *
@@ -60,67 +55,36 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingProcessesTable extends Prose
 {
+	/**
+	 * tableName
+	 *
+	 * The key that this table stores it's data in the RuntimeConfig
+	 *
+	 * @var string
+	 */
+	protected $tableName = "processes";
+
+	/**
+	 * addProcess
+	 *
+	 * @param object $processDetails Details about the process we're working with
+	 *
+	 * @return void
+	 */
 	public function addProcess($processDetails)
 	{
-		// shorthand
-		$st  = $this->st;
-		$pid = $processDetails->pid;
-
-		// what are we doing?
-		$log = $st->startAction("add process '{$pid}' to Storyplayer's processes table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a processes table
-		if (!isset($runtimeConfig->processes)) {
-			$runtimeConfig->processes = new BaseObject();
-		}
-
-		// make sure we don't have a duplicate entry
-		if (isset($runtimeConfig->processes->$pid)) {
-			$msg = "table already contains an entry for '{$pid}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// add the entry
-		$runtimeConfig->processes->$pid = $processDetails;
-
-		// save the updated runtimeConfig, in case Storyplayer terminates
-		// with a fatal error at some point
-		$log->addStep("saving runtime-config to disk", function() use($st, $runtimeConfig) {
-			$st->saveRuntimeConfig();
-		});
-
-		// all done
-		$log->endAction();
+		$this->st->usingRuntimeTable($this->tableName)->addItem($processDetails->pid, $processDetails);
 	}
 
+	/**
+	 * removeProcess
+	 *
+	 * @param mixed $pid The pid we're working with
+	 *
+	 * @return void
+	 */
 	public function removeProcess($pid)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("remove process '{$pid}' from Storyplayer's processes table");
-
-		// get the runtime config
-		$runtimeConfig = $st->getRuntimeConfig();
-
-		// make sure we have a processes table
-		if (!isset($runtimeConfig->processes)) {
-			$msg = "table is empty / does not exist. '{$pid}' not removed.";
-			$log->endAction($msg);
-			return;
-		}
-
-		// remove the entry
-		if (isset($runtimeConfig->processes->$pid)) {
-			unset($runtimeConfig->processes->$pid);
-		}
-
-		// all done
-		$log->endAction();
+		$this->st->usingRuntimeTable($this->tableName)->removeItem($pid);
 	}
 }

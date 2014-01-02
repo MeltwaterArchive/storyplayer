@@ -34,50 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\DeviceLib;
 
-use Exception;
-use DataSift\BrowserMobProxy\BrowserMobProxyClient;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\WebDriver\WebDriverClient;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * The adapter that talks to Browsermob-proxy running locally, and a
- * Selenium Server that is running in an arbitrary remote location
+ * Exception thrown when we've loaded a device adapter, but it doesn't
+ * implement the DeviceAdapter interface
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-class RemoteWebDriverAdapter extends LocalWebDriverAdapter
+class E5xx_BadDeviceAdapter extends Exxx_Exception
 {
-	public function start(StoryTeller $st)
-	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('paramLogs');
-
-		$this->proxySession = $httpProxy->createProxy();
-
-		// start recording
-		$this->proxySession->startHAR();
-
-		// create the browser session
-		$webDriver = new WebDriverClient($this->browserDetails->url);
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			array(
-				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			) + $this->browserDetails->desiredCapabilities
-		);
+	public function __construct($classname) {
+		$msg = "Unable to use class '{$classname}' as a device adapter; it does not implement the DeviceAdapter interface";
+		parent::__construct(500, $msg, $msg);
 	}
 }

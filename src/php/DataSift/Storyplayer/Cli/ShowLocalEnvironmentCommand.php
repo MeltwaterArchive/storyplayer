@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -43,16 +43,21 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
+use Phix_Project\CliEngine\CliResult;
+
+use DataSift\Stone\DownloadLib\FileDownloader;
+
+use DataSift\WebDriver\WebDriverConfiguration;
+
+use Exception;
 use stdClass;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliResult;
-use Phix_Project\CliEngine\CliSwitch;
-
-use Phix_Project\ValidationLib4\Type_MustBeString;
-
 /**
- * Tell Storyplayer to use web browsers provided by sauce labs
+ * Command to list the current default environment, suitable for use
+ * inside shell scripts
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -61,64 +66,29 @@ use Phix_Project\ValidationLib4\Type_MustBeString;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UseSauceLabsSwitch extends CliSwitch
+class ShowLocalEnvironmentCommand extends CliCommand
 {
-	public function __construct()
+	protected $localEnvName;
+
+	public function __construct($additionalContext)
 	{
-		// define our name, and our description
-		$this->setName('usesaucelabs');
-		$this->setShortDescription('use Sauce Labs to run web browsers used in this test');
-		$this->setLongDesc(
-			"If your stories use a web browser, use this switch to tell Storyplayer "
-			."to use a web browser hosted at Sauce Labs"
-			. PHP_EOL . PHP_EOL
-			."To avoid using this switch all the time, add the following to "
-			."your environment config:"
-			.PHP_EOL . PHP_EOL
-			.'{' .PHP_EOL
-			.'    "environments": {' . PHP_EOL
-			.'        "defaults": {' . PHP_EOL
-			.'            "webbrowser": {' .PHP_EOL
-			.'                "provider": "SauceLabs"' .PHP_EOL
-			.'            }'.PHP_EOL
-			.'        }' . PHP_EOL
-			.'    }'.PHP_EOL
-			.'}'
-			.PHP_EOL.PHP_EOL
-			."You will also need to add your SauceLabs username and access key to "
-			."your environment config:"
-			.PHP_EOL.PHP_EOL
-			.'{' .PHP_EOL
-			.'    "environments": {' . PHP_EOL
-			.'        "defaults": {' . PHP_EOL
-			.'            "webbrowser": {' .PHP_EOL
-			.'                "saucelabs": {' . PHP_EOL
-			.'                    "username": "<saucelabs-username>",' . PHP_EOL
-			.'                    "accesskey": "<saucelabs-accesskey>"' . PHP_EOL
-			.'                }'.PHP_EOL
-			.'            }'.PHP_EOL
-			.'        }' . PHP_EOL
-			.'    }'.PHP_EOL
-			.'}'
-			.PHP_EOL.PHP_EOL
-			."This switch is an alias for '-Dusesaucelabs=1'."
+		// define the command
+		$this->setName('show-local-environment');
+		$this->setShortDescription('display environment name for my computer');
+		$this->setLongDescription(
+			"Use this command to see what Storyplayer thinks the environment "
+			."name is for the computer it is running on"
+			.PHP_EOL
 		);
 
-		// what are the long switches?
-		$this->addLongSwitch('usesaucelabs');
-
-		// all done
+        // for convenience, the current computer's hostname will be the
+        // default environment
+        $this->localEnvName = EnvironmentHelper::getLocalEnvironmentName();
 	}
 
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
-		// remember the setting
-		if (!isset($engine->options->defines)) {
-			$engine->options->defines = new stdClass;
-		}
-		$engine->options->defines->usesaucelabs = true;
-
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
+		// output the default environment name
+		echo $this->localEnvName . PHP_EOL;
 	}
 }

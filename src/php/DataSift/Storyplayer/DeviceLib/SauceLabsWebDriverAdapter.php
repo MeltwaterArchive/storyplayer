@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\DeviceLib;
 
 use Exception;
 use DataSift\BrowserMobProxy\BrowserMobProxySession;
@@ -53,13 +53,13 @@ use DataSift\WebDriver\WebDriverClient;
  * running on the same host as Storyplayer
  *
  * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
+ * @package     Storyplayer/DeviceLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
-class SauceLabsWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
+class SauceLabsWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 {
 	public function start(StoryTeller $st)
 	{

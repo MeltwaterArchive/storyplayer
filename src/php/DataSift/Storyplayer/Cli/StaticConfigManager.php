@@ -88,7 +88,7 @@ class StaticConfigManager extends ConfigManagerBase
 			// current config
 			$newConfig = $userConfig;
 		}
-		
+
 		// merge the new config with the existing
 		$config->mergeFrom($newConfig);
 
@@ -97,12 +97,7 @@ class StaticConfigManager extends ConfigManagerBase
 
 	public function loadAdditionalConfig($config, $configName)
 	{
-		try {
-			return $this->configLoader->loadAdditionalConfig($config, $configName);
-		}
-		catch (E5xx_ConfigFileNotFound $e){
-			echo "*** warning: config file {$configName} not found - for more information on configuring Storyplayer, see http://datasift.github.io/storyplayer/configuration/\n";
-		}
+		return $this->configLoader->loadAdditionalConfig($config, $configName);
 	}
 
 	public function loadRuntimeConfig()

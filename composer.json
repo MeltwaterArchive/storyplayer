@@ -25,9 +25,12 @@
 		"phix/autoloader": "4.*",
 		"phix/cliengine": "@dev",
 		"datasift/stone": ">=1.5.0",
-		"datasift/webdriver": ">=1.4.7",
+		"datasift/webdriver": ">=1.5.0",
 		"aws/aws-sdk-php": "2.*",
 		"datasift/netifaces": "*"
+	},
+	"require-dev": {
+		"stuart/phingtasks": "1.0.0"
 	},
 	"autoload": {
 		"psr-0": { "" : "src/php/" }

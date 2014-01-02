@@ -34,32 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Exception thrown when we're asked to use a web browser but there's no
- * matching adapter available
+ * Exception thrown when a required argument is not provided
  *
- * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_NoSuchWebBrowserProvider extends Exxx_Exception
+class E4xx_MissingArgument extends Exxx_Exception
 {
-	public function __construct($provider) {
-		$msg = "Unknown web browser provider '{$provider}'";
+	public function __construct($method, $reason = '', $params = array()) {
+		$msg = "Missing argument in '$method'";
+		if (strlen($reason) > 0) {
+			$msg .= "; reason is '{$reason}'";
+		}
 		parent::__construct(400, $msg, $msg);
 	}
 }

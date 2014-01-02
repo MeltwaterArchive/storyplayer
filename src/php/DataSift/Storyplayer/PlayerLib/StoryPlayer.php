@@ -47,9 +47,9 @@ use Exception;
 use stdClass;
 use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-use DataSift\Storyplayer\ProseLib\E5xx_ActionFailed;
-use DataSift\Storyplayer\ProseLib\E5xx_ExpectFailed;
-use DataSift\Storyplayer\ProseLib\E5xx_NotImplemented;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\UserLib\UserGenerator;
 
@@ -90,6 +90,7 @@ class StoryPlayer
 	const RESULT_PASS         = 100;
 	const RESULT_FAIL         = 101;
 	const RESULT_UNKNOWN      = 102;
+	const RESULT_BLACKLISTED  = 103;
 
 	static public $outcomeToText = array(
 		1 => "Success",
@@ -116,7 +117,8 @@ class StoryPlayer
 
 		100 => "Pass",
 		101 => "Fail",
-		102 => "Unknown"
+		102 => "Unknown",
+		103 => "Blacklisted",
 	);
 
 	const PHASE_TESTENVIRONMENTSETUP = 1;
@@ -150,60 +152,49 @@ class StoryPlayer
 		8 => self::TEARDOWN_FAIL
 	);
 
-	public function createContext(stdClass $staticConfig, stdClass $runtimeConfig, $envName, Story $story)
-	{
-		// create our context, which is just a container
-		$context = new StoryContext();
-
-		// we need to work out which environment we are running against,
-		// as all other decisions are affected by this
-		$context->env->mergeFrom($staticConfig->environments->defaults);
-		try {
-			$context->env->mergeFrom($staticConfig->environments->$envName);
-		}catch (E5xx_NoSuchProperty $e){
-			echo "*** warning: using empty config instead of '{$envName}'";
-		}
-
-		// we need to remember the name of the environment too!
-		$context->env->envName = $envName;
-
-		// if there are any 'defines', we need those
-		$context->defines->mergeFrom($staticConfig->defines);
-
-		// put our runtime data in place too
-		//
-		// we don't force a copy of this data, because we're going to
-		// write the changes out to disk after the story is complete
-		$context->runtime = $runtimeConfig;
-
-		// we need to create our user
-		$context->initUser($staticConfig, $runtimeConfig, $story);
-
-		// we need to know where to look for Prose classes
-		$context->prose = array();
-		if (isset($staticConfig->prose)) {
-			if (!is_array($staticConfig->prose)) {
-				throw new E5xx_InvalidConfig("the 'prose' section of the config must either be an array, or it must be left out");
-			}
-
-			// copy over where to look for Prose classes
-			$context->prose = $staticConfig->prose;
-		}
-
-		// all done
-		return $context;
-	}
-
 	public function play(StoryTeller $st, stdClass $staticConfig)
 	{
+		// shorthand
+		$story   = $st->getStory();
+		$env     = $st->getEnvironment();
+		$envName = $st->getEnvironmentName();
+
 		// set default callbacks up
-		$st->getStory()->setDefaultCallbacks();
+		$story->setDefaultCallbacks();
 
 		// keep track of how each phase goes
-		$result = new StoryResult($st->getStory());
+		$result = new StoryResult($story);
 
 		// tell the outside world what we're doing
 		$this->announceStory($st);
+
+		// is this story allowed to run on the current environment?
+		$blacklistedEnvironment = false;
+		if (isset($env->mustBeWhitelisted) && $env->mustBeWhitelisted) {
+			// by default, stories are not allowed to run on this environment
+			$blacklistedEnvironment = true;
+
+			// is this story allowed to run?
+			$whitelistedEnvironments = $story->getWhitelistedEnvironments();
+			if (isset($whitelistedEnvironments[$envName]) && $whitelistedEnvironments[$envName]) {
+				$blacklistedEnvironment = false;
+			}
+		}
+
+		// are we allowed to proceed?
+		if ($blacklistedEnvironment) {
+			// no, we are not
+			//
+			// tell the user what happened
+			Log::write(Log::LOG_NOTICE, "Cannot run story against the environment '{$envName}'");
+
+			// all done
+			return $result;
+		}
+
+		// if we get here, then the story is allowed to run against
+		// the current environment
+		$result->storyAttempted = true;
 
 		// setup the test environment
 		$setupEnvironmentResult = $result->addPhaseResult(
@@ -266,8 +257,8 @@ class StoryPlayer
 			$this->doTestEnvironmentTeardown($st, $staticConfig)
 		);
 
-		// stop the browser, if it is still running
-		$st->stopWebBrowser();
+		// stop the test device, if it is still running
+		$st->stopDevice();
 
 		// alright, so what happened?
 		//
@@ -355,6 +346,10 @@ class StoryPlayer
 
 			case self::RESULT_FAIL:
 				$resultMessage .= ' result: FAIL';
+				break;
+
+			case self::RESULT_BLACKLISTED:
+				$resultMessage = 'result: DID NOT RUN (unsafe environment)';
 				break;
 
 			case self::RESULT_UNKNOWN:
@@ -623,8 +618,8 @@ class StoryPlayer
 			}
 		}
 
-		// stop the browser, if it is still running
-		$st->stopWebBrowser();
+		// stop the test device, if it is still running
+		$st->stopDevice();
 
 		// all done
 	}
@@ -938,17 +933,22 @@ class StoryPlayer
 	{
 		$story = $st->getStory();
 
-		echo "\n";
-		echo "=============================================================\n";
-		echo "\n";
-		echo "Story   : " . $story->getName() . "\n";
-		echo "Category: " . $story->getCategory() . "\n";
-		echo "Group   : " . $story->getGroup() . "\n";
-		echo "\n";
+		echo <<<EOS
+=============================================================
+
+      Story: {$story->getName()}
+   Category: {$story->getCategory()}
+      Group: {$story->getGroup()}
+
+Environment: {$st->getEnvironmentName()}
+     Device: {$st->getDeviceName()}
+
+EOS;
 	}
 
 	public function announcePhase($phaseName)
 	{
+		echo "\n";
 		echo "-------------------------------------------------------------\n";
 		echo "Now performing: $phaseName\n";
 		echo "\n";

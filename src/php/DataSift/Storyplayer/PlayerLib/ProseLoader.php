@@ -49,7 +49,7 @@ use DataSift\Storyplayer\Prose\Prose;
  * Helper class to load Prose classes and create objects from them
  *
  * @category  Libraries
- * @package   Storyplayer/ProseLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License

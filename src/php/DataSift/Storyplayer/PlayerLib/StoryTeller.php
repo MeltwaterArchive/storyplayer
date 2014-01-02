@@ -48,7 +48,7 @@ use Exception;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\WebBrowserLib;
+use DataSift\Storyplayer\DeviceLib;
 
 use DataSift\Stone\HttpLib\HttpAddress;
 use DataSift\Stone\Log\LogLib;
@@ -81,10 +81,12 @@ class StoryTeller
 	private $pageContext = null;
 	private $checkpoint = null;
 
-	private $webBrowserAdapter = null;
-
 	private $proseLoader = null;
 	private $configLoader = null;
+
+	// support for the current runtime config
+	private $runtimeConfig = null;
+	private $runtimeConfigManager = null;
 
 	/**
 	 * [$actionLogger description]
@@ -98,11 +100,11 @@ class StoryTeller
 	 */
 	private $currentPhase = null;
 
-	public function __construct(Story $story)
-	{
-		// this is the story that will be told
-		$this->setStory($story);
+	// test device support
+	private $deviceAdapter = null;
 
+	public function __construct()
+	{
 		// set a default page context
 		$this->setPageContext(new PageContext);
 
@@ -285,12 +287,17 @@ class StoryTeller
 
 	public function getEnvironmentName()
 	{
-		return $this->storyContext->env->envName;
+		return $this->storyContext->envName;
 	}
 
 	public function getRuntimeConfig()
 	{
-		return $this->storyContext->runtime;
+		return $this->runtimeConfig;
+	}
+
+	public function setRuntimeConfig($runtimeConfig)
+	{
+		$this->runtimeConfig = $runtimeConfig;
 	}
 
 	public function saveRuntimeConfig()
@@ -299,7 +306,7 @@ class StoryTeller
 			throw new E5xx_ActionFailed(__METHOD__, "no runtimeConfigManager available");
 		}
 
-		$this->runtimeConfigManager->saveRuntimeConfig($this->storyContext->runtime);
+		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig);
 	}
 
 	public function getUser()
@@ -388,165 +395,94 @@ class StoryTeller
 
 	// ==================================================================
 	//
-	// Web browser support
+	// Device support
 	//
 	// ------------------------------------------------------------------
 
-	/**
-	 * [description here]
-	 *
-	 * @return [type] [description]
-	 */
-	public function getWebBrowser() {
-		if (!isset($this->webBrowserAdapter)) {
+	public function getDeviceDetails()
+	{
+		return $this->storyContext->device;
+	}
+
+	public function getDeviceAdapter()
+	{
+		if (!isset($this->deviceAdapter)) {
 			return null;
 		}
 
-	    return $this->webBrowserAdapter->getWebBrowser();
+		return $this->deviceAdapter;
 	}
 
-	public function getRunningWebBrowser()
+	public function setDeviceAdapter($adapter)
 	{
-		if (!is_object($this->webBrowserAdapter))
-		{
-			$this->startWebBrowser();
-		}
-
-		if (!is_object($this->webBrowserAdapter))
-		{
-			throw new E5xx_CannotStartWebBrowser();
-		}
-
-		return $this->webBrowserAdapter->getWebBrowser();
-	}
-
-	public function getWebBrowserAdapter()
-	{
-		return $this->webBrowserAdapter;
-	}
-
-	/**
-	 * [Description]
-	 *
-	 * @param [type] $newbrowser [description]
-	 */
-	public function setWebBrowserAdapter($adapter) {
-	    $this->webBrowserAdapter = $adapter;
+	    $this->deviceAdapter = $adapter;
 
 	    return $this;
 	}
 
-	public function getWebBrowserDetails()
+	public function getDeviceName()
 	{
-		static $browserDetails = null;
-
-		// have we calculated this before?
-		if ($browserDetails) {
-			// yes - so use that
-			return $browserDetails;
-		}
-
-		// we're going to build up a picture of the web browser, and
-		// store the details into an object
-		$browserDetails = new BaseObject();
-		$browserDetails->desiredCapabilities = array();
-
-		// our default provider of a browser is a locally-running copy
-		// of Selenium WebDriver
-		$browserDetails->provider = "LocalWebDriver";
-
-		// our default browser is chrome
-		$browserDetails->browser = "chrome";
-
-		// get the currently loaded environment
-		$env = $this->getEnvironment();
-
-		// does this environment have settings for the web browser?
-		if (isset($env->webbrowser)) {
-			$browserDetails->mergeFrom($env->webbrowser);
-		}
-
-		// what (if anything) has the user overridden on the command-line?
-		$params = $this->getParams();
-		if (isset($params['webbrowser'])) {
-			$browserDetails->browser = $params['webbrowser'];
-		}
-		foreach ($params as $key => $value) {
-			if (substr($key, 0, 11) == 'webbrowser.') {
-				$detailsName = substr($key,11);
-				$browserDetails->desiredCapabilities[$detailsName] = $value;
-			}
-		}
-
-		// make sure we have the required info for Sauce Labs
-		if (isset($params['usesaucelabs']) && $params['usesaucelabs']) {
-			$browserDetails->provider = "SauceLabsWebDriver";
-
-			// do we have the sauce labs username and API key?
-			// they will have been previously merged from the environment
-			// if we have them
-			if (!isset($browserDetails->saucelabs)) {
-				throw new E5xx_NoSauceLabsConfig();
-			}
-
-			if (!isset($browserDetails->saucelabs->username)) {
-				throw new E5xx_NoSauceLabsUsername();
-			}
-
-			if (!isset($browserDetails->saucelabs->accesskey)) {
-				throw new E5xx_NoSauceLabsApiKey();
-			}
-		}
-
-		// make sure we have the required info for an arbitrary remote
-		// webdriver instance
-		if (isset($params['useremotewebdriver']) && $params['useremotewebdriver']) {
-			$browserDetails->provider = "RemoteWebDriver";
-
-			// do we have any remote webdriver config at all?
-			if (!isset($env->remotewebdriver)) {
-				throw new E5xx_NoRemoteWebDriverConfig();
-			}
-
-			// do we have the host:port of the webdriver instance?
-			if (!isset($env->remotewebdriver->url)) {
-				throw new E5xx_NoRemoteWebDriverUrl();
-			}
-
-			// remember the URL for Selenium Server
-			$browserDetails->url = $env->remotewebdriver->url;
-		}
-
-		// all done
-		return $browserDetails;
+		return $this->storyContext->deviceName;
 	}
 
-	public function startWebBrowser()
+	public function getRunningDevice()
+	{
+		if (!is_object($this->deviceAdapter))
+		{
+			$this->startDevice();
+		}
+
+		if (!is_object($this->deviceAdapter))
+		{
+			throw new E5xx_CannotStartDevice();
+		}
+
+		return $this->deviceAdapter->getDevice();
+	}
+
+	public function startDevice()
 	{
 		// what are we doing?
-		$log = $this->startAction('start a web browser');
+		$log = $this->startAction('start the test device');
 
 		// what sort of browser are we starting?
-		$browserDetails = $this->getWebBrowserDetails();
+		$deviceDetails = $this->getDeviceDetails();
 
 		// get the adapter
-		$adapter = WebBrowserLib::getWebBrowserAdapter($browserDetails);
+		$adapter = DeviceLib::getDeviceAdapter($deviceDetails);
 
 		// initialise the adapter
-		$adapter->init($browserDetails);
+		$adapter->init($deviceDetails);
 
 		// start the browser
 		$adapter->start($this);
 
+		// remember the adapter
+		$this->setDeviceAdapter($adapter);
+
+		// do we have a deviceSetup() phase?
+		if ($this->story->hasDeviceSetup()) {
+			// get the callbacks to call
+			$callbacks = $this->story->getDeviceSetup();
+
+			// make the call
+			//
+			// we do not need to wrap these in a TRY/CATCH block,
+			// as we are already running inside one of the story's
+			// phases
+			foreach ($callbacks as $callback){
+				call_user_func($callback, $this);
+			}
+		}
+
 		// all done
-		$this->setWebBrowserAdapter($adapter);
 		$log->endAction();
 	}
 
-	public function stopWebBrowser()
+	public function stopDevice()
 	{
 		// get the browser adapter
-		$adapter = $this->getWebBrowserAdapter();
+		$adapter = $this->getDeviceAdapter();
 
 		// stop the web browser
 		if (!$adapter) {
@@ -555,13 +491,31 @@ class StoryTeller
 		}
 
 		// what are we doing?
-		$log = $this->startAction('stop the web browser');
+		$log = $this->startAction('stop the test device');
+
+		// do we have a deviceTeardown() phase?
+		//
+		// we need to run this BEFORE we stop the device, otherwise
+		// the deviceTeardown() phase has no device to work with
+		if ($this->story->hasDeviceTeardown()) {
+			// get the callbacks to call
+			$callbacks = $this->story->getDeviceTeardown();
+
+			// make the call
+			//
+			// we do not need to wrap these in a TRY/CATCH block,
+			// as we are already running inside one of the story's
+			// phases
+			foreach ($callbacks as $callback){
+				call_user_func($callback, $this);
+			}
+		}
 
 		// stop the browser
 		$adapter->stop();
 
 		// destroy the adapter
-		$this->setWebBrowserAdapter(null);
+		$this->setDeviceAdapter(null);
 
 		// all done
 		$log->endAction();

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2011-present Mediasift Ltd
+ * Copyright (c) 2013-present Mediasift Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,32 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
-
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * Exception thrown when we've loaded a web browser adapter, but it doesn't
- * implement the WebBrowserAdapter interface
+ * CleanupProcesses
  *
- * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
+ * @uses CleanupProcesses
+ * @author Michael Heap <michael.heap@datasift.com>
  */
-class E5xx_BadWebBrowserAdapter extends Exxx_Exception
+class CleanupProcesses extends BaseCleanup
 {
-	public function __construct($classname) {
-		$msg = "Unable to use class '{$classname}' as a web browser adapter; it does not implement the WebBrowserAdapter interface";
-		parent::__construct(500, $msg, $msg);
-	}
+
+    public function startup()
+    {
+        return $this->pruneProcessList();
+    }
+
+    public function shutdown()
+    {
+        return $this->pruneProcessList();
+    }
+
+    /**
+     * pruneProcessList 
+     * 
+     * Loop through our recorded processes and send them a `kill 0`
+     * If they don't respond, they're already dead so remove them from the table
+     * 
+     * @return void
+     */
+    private function pruneProcessList()
+    {
+        foreach ($this->table as $pid => $details) {
+            if (!posix_kill($pid, 0)) {
+                // process no longer running
+                unset($this->table->$pid);
+            }
+        }
+    }
+
 }

@@ -43,55 +43,31 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use DataSift\Stone\ConfigLib\LoadedConfig;
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
 
-/**
- * helper to create a list of available test environments
- *
- * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class EnvironmentsListHelper
+class DeviceValidator implements Validator
 {
-	static public function validateEnvironmentsList($staticConfig, $envList, $staticConfigManager)
-	{
-		// the list we will return
-		$return = array();
+    const MSG_NOTVALIDDEVICE = "Unknown device '%value%'";
 
-		foreach ($envList as $envName) {
-			// is this in our staticConfig?
-			if (isset($staticConfig->environments, $staticConfig->environments->$envName)) {
-				$return[] = $envName;
-				continue;
-			}
+    public function __construct($deviceList)
+    {
+        $this->deviceList = $deviceList;
+    }
 
-			// if we get here, then the environment is in an additional
-			// config file on disk
+    public function validate($value, ValidationResult $result = null)
+    {
+        if ($result === null) {
+            $result = new ValidationResult($value);
+        }
 
-			// our dummy config
-			$config = new LoadedConfig();
+        // the $value must be a valid environment name, but it's ok if it doesn't
+        // exist if it's the default env as we might not have created it yet
+        if (!in_array($value, $this->deviceList)) {
+            $result->addError(static::MSG_NOTVALIDDEVICE);
+            return $result;
+        }
 
-			// can we load the file?
-			try {
-				$staticConfigManager->loadAdditionalConfig($config, $envName);
-			}
-			catch (Exception $e) {
-				// didn't load - skip it
-				continue;
-			}
-
-			// do we have something that might be an environment?
-			if (isset($config->environments, $config->environments->$envName)) {
-				$return[] = $envName;
-			}
-		}
-
-		// all done
-		return $return;
-	}
+        return $result;
+    }
 }

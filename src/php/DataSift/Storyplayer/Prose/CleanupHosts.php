@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2011-present Mediasift Ltd
+ * Copyright (c) 2013-present Mediasift Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,53 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
-
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * Helper for creating provisioning definitions
+ * CleanupHosts
  *
- * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @uses CleanupHosts
+ * @author Stuart Herbert <stuart@datasift.com>
  */
-class DelayedProvisioningDefinitionAction
+class CleanupHosts extends BaseCleanup
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
-	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
-	}
+    public function startup()
+    {
+        // do nothing
+    }
 
-	public function toHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
-
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
+    public function shutdown()
+    {
+        // do nothing
+    }
 }

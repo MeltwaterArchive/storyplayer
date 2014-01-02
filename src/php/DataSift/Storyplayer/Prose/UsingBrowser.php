@@ -57,7 +57,7 @@ class UsingBrowser extends Prose
 {
 	protected function initActions()
 	{
-		$this->initBrowser();
+		$this->initDevice();
 	}
 
 	// ==================================================================
@@ -121,7 +121,7 @@ class UsingBrowser extends Prose
 	{
 		// some shorthand to make things easier to read
 		$st      = $this->st;
-		$browser = $st->getRunningWebBrowser();
+		$browser = $this->device;
 
 		// relative, or absolute URL?
 		if (substr($url, 0, 1) == '/') {
@@ -133,17 +133,15 @@ class UsingBrowser extends Prose
 		$urlParts = parse_url($url);
 
 		// if we have no host, we cannot continue
-		if (!isset($urlParts['host'])) {
-			throw new E5xx_ActionFailed(__METHOD__, "the (possibly calculated) url '{$url}' has no host component; cannot continue");
-		}
+		if (isset($urlParts['host'])) {
+			// do we have any HTTP AUTH credentials to merge in?
+			if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
+				$adapter = $st->getDeviceAdapter();
 
-		// do we have any HTTP AUTH credentials to merge in?
-		if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
-			$adapter = $st->getWebBrowserAdapter();
-
-			// the adapter *might* embed the authentication details
-			// into the URL
-			$url = $adapter->applyHttpBasicAuthForHost($urlParts['host'], $url);
+				// the adapter *might* embed the authentication details
+				// into the URL
+				$url = $adapter->applyHttpBasicAuthForHost($urlParts['host'], $url);
+			}
 		}
 
 		// what are we doing?
@@ -223,13 +221,99 @@ class UsingBrowser extends Prose
 	{
 		// shorthand
 		$st      = $this->st;
-		$browser = $st->getRunningWebBrowser();
+		$browser = $this->device;
 
 		// what are we doing?
 		$log = $st->startAction("change the current browser window size to be {$width} x {$height} (w x h)");
 
 		// resize the window
 		$browser->window()->postSize(array("width" => $width, "height" => $height));
+
+		// all done
+		$log->endAction();
+	}
+
+	public function switchToWindow($name)
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("switch to browser window called '{$name}'");
+
+		// get the list of available window handles
+		$handles = $browser->window_handles();
+
+		// we have to iterate over them, to find the window that we want
+		foreach ($handles as $handle) {
+			// switch to the window
+			$browser->focusWindow($handle);
+
+			// is this the window that we want?
+			$title = $browser->title();
+			if ($title == $name) {
+				// all done
+				$log->endAction();
+				return;
+			}
+		}
+
+		// if we get here, then we could not find the window we wanted
+		// the browser might be pointing at ANY of the open windows,
+		// and it might be pointing at no window at all
+		throw new E5xx_ActionFailed(__METHOD__, "No such window '{$name}'");
+	}
+
+	public function closeCurrentWindow()
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("close the current browser window");
+
+		// close the current window
+		$browser->deleteWindow();
+
+		// all done
+		$log->endAction();
+	}
+
+	// ==================================================================
+	//
+	// IFrame actions go here
+	//
+	// ------------------------------------------------------------------
+
+	public function switchToIframe($id)
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("switch to working inside the iFrame with the id '{$id}'");
+
+		// switch to the iFrame
+		$browser->frame(array('id' => $id));
+
+		// all done
+		$log->endAction();
+	}
+
+	public function switchToMainFrame()
+	{
+		// shorthand
+		$st      = $this->st;
+		$browser = $this->device;
+
+		// what are we doing?
+		$log = $st->startAction("switch to working with the main frame");
+
+		// switch to the iFrame
+		$browser->frame(array('id' => null));
 
 		// all done
 		$log->endAction();
@@ -250,11 +334,8 @@ class UsingBrowser extends Prose
 		$log = $st->startAction("set HTTP basic auth for host '{$hostname}': user: '{$username}'; password: '{$password}'");
 
 		try {
-			// get the browser first to force a valid adapter to exist
-			$st->getRunningWebBrowser();
-
 			// get the browser adapter
-			$adapter = $st->getWebBrowserAdapter();
+			$adapter = $st->getDeviceAdapter();
 
 			// set the details
 			$adapter->setHttpBasicAuthForHost($hostname, $username, $password);

@@ -34,35 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Interface that all WebBrowser adapter classes must implement
+ * Exception thrown when an invalid argument is provided
  *
- * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/Prose
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
-interface WebBrowserAdapter
+class E4xx_InvalidArgument extends Exxx_Exception
 {
-	public function init($browserDetails);
-	public function start(StoryTeller $st);
-	public function stop();
-	public function getWebBrowser();
-	public function applyHttpBasicAuthForHost($hostname, $url);
-	public function hasHttpBasicAuthForHost($hostname);
-	public function getHttpBasicAuthForHost($hostname);
-	public function setHttpBasicAuthForHost($hostname, $username, $password);
+	public function __construct($argumentName, $reason = '', $params = array()) {
+		$msg = "Missing argument '$argumentName'";
+		if (strlen($reason) > 0) {
+			$msg .= "; reason is '{$reason}'";
+		}
+		parent::__construct(400, $msg, $msg);
+	}
 }

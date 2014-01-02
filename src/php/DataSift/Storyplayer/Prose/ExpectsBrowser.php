@@ -60,7 +60,7 @@ class ExpectsBrowser extends Prose
 {
 	protected function initActions()
 	{
-		$this->initBrowser();
+		$this->initDevice();
 	}
 
 	public function doesntHave()
@@ -129,7 +129,7 @@ class ExpectsBrowser extends Prose
 		$log = $st->startAction("page title must be {$title}");
 
 		// get the browser title
-		$browserTitle = $this->st->fromBrowser()->getTitle();
+		$browserTitle = $st->fromBrowser()->getTitle();
 
 		if ($title != $browserTitle) {
 			throw new E5xx_ExpectFailed('BrowserExpects::title', $title, $browserTitle);
@@ -149,7 +149,7 @@ class ExpectsBrowser extends Prose
 		$log = $st->startAction("page title must be one of: {$titlesString}");
 
 		// get the browser title
-		$browserTitle = $this->st->fromBrowser()->getTitle();
+		$browserTitle = $st->fromBrowser()->getTitle();
 
 		if (!in_array($browserTitle, $titles)) {
 			throw new E5xx_ExpectFailed(__METHOD__, $titlesString, $browserTitle);

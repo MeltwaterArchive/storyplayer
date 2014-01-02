@@ -34,53 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\DeviceLib;
 
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
+use Exception;
+use DataSift\BrowserMobProxy\BrowserMobProxyClient;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\WebDriver\WebDriverClient;
 
 /**
- * Helper for creating provisioning definitions
+ * The adapter that talks to Browsermob-proxy running locally, and a
+ * Selenium Server that is running in an arbitrary remote location
  *
- * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/DeviceLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class RemoteWebDriverAdapter extends LocalWebDriverAdapter
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	public function start(StoryTeller $st)
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
-	}
+		$httpProxy = new BrowserMobProxyClient();
+		$httpProxy->enableFeature('enhancedReplies');
 
-	public function toHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
+		$this->proxySession = $httpProxy->createProxy();
 
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// start recording
+		$this->proxySession->startHAR();
+
+		// create the browser session
+		$webDriver = new WebDriverClient($this->browserDetails->url);
+		$this->browserSession = $webDriver->newSession(
+			$this->browserDetails->browser,
+			array(
+				'proxy' => $this->proxySession->getWebDriverProxyConfig()
+			) + $this->browserDetails->desiredCapabilities
+		);
 	}
 }

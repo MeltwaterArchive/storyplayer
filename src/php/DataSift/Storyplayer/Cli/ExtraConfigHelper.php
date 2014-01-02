@@ -34,86 +34,65 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/WebBrowserLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\WebBrowserLib;
+namespace DataSift\Storyplayer\Cli;
 
 use Exception;
-use DataSift\BrowserMobProxy\BrowserMobProxyClient;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\WebDriver\WebDriverClient;
+use DataSift\Stone\ConfigLib\LoadedConfig;
 
 /**
- * The adapter that talks to Browsermob-proxy and Selenium-standalone-server
- * running on the same host as Storyplayer
+ * helper to filter a list of available additional config
  *
- * @category    Libraries
- * @package     Storyplayer/WebBrowserLib
- * @author      Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright   2011-present Mediasift Ltd www.datasift.com
- * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link        http://datasift.github.io/storyplayer
+ * @category  Libraries
+ * @package   Storyplayer/Cli
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
  */
-class LocalWebDriverAdapter extends BaseAdapter implements WebBrowserAdapter
+class ExtraConfigHelper
 {
-	public function start(StoryTeller $st)
+	static public function validateList($staticConfig, $parent, $listToFilter, $staticConfigManager)
 	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('paramLogs');
+		// the list we will return
+		$return = array();
 
-		$this->proxySession = $httpProxy->createProxy();
+		foreach ($listToFilter as $key) {
+			// is this in the config that we've already loaded?
+			if (isset($staticConfig->$parent, $staticConfig->$parent->$key)) {
+				$return[] = $key;
+				continue;
+			}
 
-		// start recording
-		$this->proxySession->startHAR();
+			// if we get here, then the extra config is in an additional
+			// config file on disk
 
-		// create the browser session
-		$webDriver = new WebDriverClient();
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			array(
-				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			) + $this->browserDetails->desiredCapabilities
+			// our dummy config
+			$config = new LoadedConfig();
 
-		);
-	}
-
-	public function stop()
-	{
-		// stop the web browser
-		if (is_object($this->browserSession))
-		{
-			$this->browserSession->close();
-			$this->browserSession = null;
-		}
-
-		// now stop the proxy
-		if (is_object($this->proxySession))
-		{
+			// can we load the file?
 			try {
-				$this->proxySession->close();
+				$staticConfigManager->loadAdditionalConfig($config, $key);
 			}
 			catch (Exception $e) {
-				// do nothing - we don't care!
+				// didn't load - skip it
+				continue;
 			}
-			$this->proxySession = null;
-		}
-	}
 
-	public function applyHttpBasicAuthForHost($hostname, $url)
-	{
-		// get the auth credentials
-		$credentials = $this->getHttpBasicAuthForHost($hostname);
-
-		if (isset($this->proxySession)) {
-			$this->proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
+			// does this additional config file contain the piece of
+			// config that we're expecting?
+			if (isset($config->$parent, $config->$parent->$key)) {
+				$return[] = $key;
+			}
 		}
 
 		// all done
-		return $url;
+		return $return;
 	}
 }

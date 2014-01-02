@@ -46,12 +46,26 @@ namespace DataSift\Storyplayer\Cli;
 use stdClass;
 
 use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliEngineSwitch;
 use Phix_Project\CliEngine\CliResult;
-use Phix_Project\CliEngine\CliSwitch;
+
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Stone\LogLib\Log;
+
+use DataSift\Storyplayer\PlayerLib\StoryContext;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\StoryLib\StoryLoader;
+use DataSift\Storyplayer\StoryListLib\StoryListLoader;
+use DataSift\Storyplayer\UserLib\User;
+use DataSift\Storyplayer\UserLib\GenericUserGenerator;
+use DataSift\Storyplayer\UserLib\ConfigUserLoader;
+use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 
 /**
- * Tell Storyplayer to use web browsers provided a copy of selenium
- * webdriver that is running remotely
+ * A command to play a story, or a list of stories
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -60,64 +74,37 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UseRemoteWebDriverSwitch extends CliSwitch
+class EnvironmentHelper
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('useremotewebdriver');
-		$this->setShortDescription('use a remote WebDriver to run web browsers used in this test');
-		$this->setLongDesc(
-			"If your stories use a web browser, use this switch to tell Storyplayer "
-			."to use a web browser running at a remote location.  An example of this "
-			."is a WebDriver running on an iPad or iPhone, for mobile testing."
-			. PHP_EOL . PHP_EOL
-			."To avoid using this switch all the time, add the following to "
-			."your environment config:"
-			.PHP_EOL . PHP_EOL
-			.'{' .PHP_EOL
-			.'    "environments": {' . PHP_EOL
-			.'        "defaults": {' . PHP_EOL
-			.'            "webbrowser": {' .PHP_EOL
-			.'                "provider": "RemoteWebDriver"' .PHP_EOL
-			.'            }'.PHP_EOL
-			.'        }' . PHP_EOL
-			.'    }'.PHP_EOL
-			.'}'
-			.PHP_EOL.PHP_EOL
-			."You will also need to add the URL for your remotely running WebDriver to "
-			."your environment config:"
-			.PHP_EOL.PHP_EOL
-			.'{' .PHP_EOL
-			.'    "environments": {' . PHP_EOL
-			.'        "defaults": {' . PHP_EOL
-			.'            "webbrowser": {' .PHP_EOL
-			.'                "remotewebdriver": {' . PHP_EOL
-			.'                    "url": "<selenium-url>"' . PHP_EOL
-			.'                }'.PHP_EOL
-			.'            }'.PHP_EOL
-			.'        }' . PHP_EOL
-			.'    }'.PHP_EOL
-			.'}'
-			.PHP_EOL.PHP_EOL
-			."This switch is an alias for '-Duseremotewebdriver=1'."
-		);
+    static public function getDefaultEnvironmentName($envList)
+    {
+        // what is the name of the environment for the computer that
+        // we are running on?
+        $defaultEnvName = self::getLocalEnvironmentName();
 
-		// what are the long switches?
-		$this->addLongSwitch('useremotewebdriver');
+        // is there more than one test environment?
+        if (count($envList) == 1) {
+            $defaultEnvName = $envList[0];
+        }
 
-		// all done
-	}
+        // all done
+        return $defaultEnvName;
+    }
 
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		if (!isset($engine->options->defines)) {
-			$engine->options->defines = new stdClass;
-		}
-		$engine->options->defines->useremotewebdriver = true;
+    static public function getLocalEnvironmentName()
+    {
+        // for convenience, the current computer's hostname will be the
+        // default environment
+        $defaultEnvName = getHostname();
 
-		// tell the engine to continue processing switches
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // we get different results on different operating systems
+        // make sure the hostname is not the FQDN
+        $dotPos = strpos($defaultEnvName, '.');
+        if ($dotPos) {
+            $defaultEnvName = substr($defaultEnvName, 0, $dotPos);
+        }
+
+        // all done
+        return $defaultEnvName;
+    }
 }

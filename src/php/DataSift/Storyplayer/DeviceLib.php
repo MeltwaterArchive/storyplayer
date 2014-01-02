@@ -34,53 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer;
 
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\DeviceLib\E4xx_NoSuchDeviceAdapter;
+use DataSift\Storyplayer\DeviceLib\E5xx_BadDeviceAdapter;
 
 /**
- * Helper for creating provisioning definitions
+ * device factory
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class DeviceLib
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
+	static public function getDeviceAdapter($deviceDetails)
 	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
-	}
+		// which namespace do our device adapters live in?
+		$namespace = 'DataSift\Storyplayer\DeviceLib\\';
 
-	public function toHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
+		// where do we want to get the device from?
+		$adapterClass = $namespace . $deviceDetails->adapter . 'Adapter';
 
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		// do we have the adapter?
+		if (!class_exists($adapterClass)) {
+			throw new E4xx_NoSuchDeviceAdapter($deviceDetails->adapter);
+		}
+
+		// create the adapter
+		$deviceAdapter = new $adapterClass;
+
+		// is this an adapter we're happy with?
+		if (!$deviceAdapter instanceof \DataSift\Storyplayer\DeviceLib\DeviceAdapter) {
+			throw new E5xx_BadDeviceAdapter($adapterClass);
+		}
+
+		// initialise the adapter
+		$deviceAdapter->init($deviceDetails);
+
+		// all done
+		return $deviceAdapter;
 	}
 }

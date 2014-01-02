@@ -34,53 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
+ * @package   Storyplayer/DeviceLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\ProvisioningLib;
+namespace DataSift\Storyplayer\DeviceLib;
 
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\Prose;
-use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Helper for creating provisioning definitions
+ * Exception thrown when we've tried, but failed, to start the web browser
  *
- * @category  Libraries
- * @package   Storyplayer/ProvisioningLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/DeviceLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-class DelayedProvisioningDefinitionAction
+class E5xx_CannotStartDevice extends Exxx_Exception
 {
-	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
-	{
-		// remember for later
-		$this->st     = $st;
-		$this->def    = $def;
-		$this->action = $callback;
-	}
-
-	public function toHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
-	}
-
-	public function forHost($hostName)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+	public function __construct() {
+		$msg = "Cannot start the test device; are both browsermob-proxy and selenium running?";
+		parent::__construct(500, $msg, $msg);
 	}
 }
