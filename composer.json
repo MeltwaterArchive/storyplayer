@@ -29,6 +29,9 @@
 		"aws/aws-sdk-php": "2.*",
 		"datasift/netifaces": "*"
 	},
+	"require-dev": {
+		"stuart/phingtasks": "1.0.0"
+	},
 	"autoload": {
 		"psr-0": { "" : "src/php/" }
 	},
