@@ -11,7 +11,7 @@ Storyplayer should be installed via [Composer](http://getcomposer.org/). To inst
 ```json
 {
     "require": {
-        "datasift/storyplayer": "1.4.2"
+        "datasift/storyplayer": "1.5.0"
     }
 }
 ```
