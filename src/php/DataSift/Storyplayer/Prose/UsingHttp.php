@@ -105,6 +105,9 @@ class UsingHttp extends Prose
 			foreach ($body as $key => $value) {
 				$request->addData($key, $value);
 			}
+		}elseif(is_string($body)){
+			// If the body is a string, then send it as-is.
+			$request->setPayload($body);
 		}
 
 		// make the call
