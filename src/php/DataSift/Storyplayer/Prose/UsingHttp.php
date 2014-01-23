@@ -119,6 +119,8 @@ class UsingHttp extends Prose
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
 
+		$log->endAction();
+
 		// all done
 		return $response;
 	}
