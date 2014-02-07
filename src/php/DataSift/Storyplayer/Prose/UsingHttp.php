@@ -105,7 +105,9 @@ class UsingHttp extends Prose
 			foreach ($body as $key => $value) {
 				$request->addData($key, $value);
 			}
-		}
+		}else{
+            $request->setPayload($body);
+        }
 
 		// make the call
 		$client = new HttpClient();
