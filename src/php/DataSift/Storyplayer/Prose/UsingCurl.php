@@ -59,11 +59,11 @@ use DataSift\Storyplayer\Prose\CurlBase;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromCurl extends CurlBase
+class UsingCurl extends CurlBase
 {
 	/**
-	 * get 
-	 * 
+	 * post
+	 *
 	 * @param mixed $url URL to request
 	 * @param array $params GET params to add to the URL
 	 * @param array $headers HTTP headers to use
@@ -71,8 +71,39 @@ class FromCurl extends CurlBase
 	 * 
 	 * @return object|string Response sent by the server. If it's JSON, we'll decode it
 	 */
-	public function get($url, $params = array(), $headers = array(), $options = array())
+	public function post($url, $params = array(), $headers = array(), $options = array())
 	{
-		return $this->doRequest($url, 'GET', $params, $headers, $options);
+		return $this->doRequest($url, 'POST', $params, $headers, $options);
+	}
+
+	/**
+	 * put
+	 *
+	 * @param mixed $url URL to request
+	 * @param array $params GET params to add to the URL
+	 * @param array $headers HTTP headers to use
+	 * @param array $options Curl opts array
+	 * 
+	 * @return object|string Response sent by the server. If it's JSON, we'll decode it
+	 */
+	public function put($url, $params = array(), $headers = array(), $options = array())
+	{
+		return $this->doRequest($url, 'PUT', $params, $headers, $options);
+	}
+
+	/**
+	 * delete
+	 *
+	 * @param mixed $url URL to request
+	 * @param array $params GET params to add to the URL
+	 * @param array $headers HTTP headers to use
+	 * @param array $options Curl opts array
+	 * 
+	 * @return object|string Response sent by the server. If it's JSON, we'll decode it
+	 */
+	public function delete($url, $params = array(), $headers = array(), $options = array())
+	{
+		return $this->doRequest($url, 'DELETE', $params, $headers, $options);
 	}
 }
+
