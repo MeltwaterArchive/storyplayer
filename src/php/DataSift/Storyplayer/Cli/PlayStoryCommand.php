@@ -102,6 +102,7 @@ class PlayStoryCommand extends CliCommand
         // the switches that this command supports
         $this->setSwitches(array(
             new LogLevelSwitch(),
+            new ColorSwitch(),
             new EnvironmentSwitch($additionalContext->envList, $defaultEnvName),
             new DefineSwitch(),
             new DeviceSwitch($additionalContext->deviceList),
