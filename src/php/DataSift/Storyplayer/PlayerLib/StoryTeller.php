@@ -84,6 +84,9 @@ class StoryTeller
 	private $proseLoader = null;
 	private $configLoader = null;
 
+	// support for the loaded static config
+	private $staticConfig = null;
+
 	// support for the current runtime config
 	private $runtimeConfig = null;
 	private $runtimeConfigManager = null;
@@ -122,6 +125,9 @@ class StoryTeller
 
 		// create our Prose Loader
 		$this->setProseLoader();
+
+		// our static config
+		$this->setStaticConfig($injectables->staticConfig);
 
         // our runtime config
         $this->setRuntimeConfig($injectables->runtimeConfig);
@@ -288,6 +294,16 @@ class StoryTeller
 	public function setOutput($output)
 	{
 		$this->output = $output;
+	}
+
+	public function getStaticConfig()
+	{
+		return $this->staticConfig;
+	}
+
+	public function setStaticConfig($staticConfig)
+	{
+		$this->staticConfig = $staticConfig;
 	}
 
 	// ====================================================================

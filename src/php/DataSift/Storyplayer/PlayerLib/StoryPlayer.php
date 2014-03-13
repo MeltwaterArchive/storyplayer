@@ -65,93 +65,6 @@ use DataSift\Storyplayer\UserLib\UserGenerator;
  */
 class StoryPlayer
 {
-	const SETUP_SUCCESS       = 1;
-	const SETUP_FAIL          = 2;
-
-	const PREDICT_SUCCESS     = 10;
-	const PREDICT_FAIL        = 11;
-	const PREDICT_INCOMPLETE  = 12;
-	const PREDICT_UNKNOWN     = 13;
-
-	const ACTION_COMPLETED    = 20;
-	const ACTION_FAILED       = 21;
-	const ACTION_INCOMPLETE   = 22;
-	const ACTION_UNKNOWN      = 23;
-	const ACTION_HASNOACTIONS = 24;
-
-	const INSPECT_SUCCESS     = 30;
-	const INSPECT_FAIL        = 31;
-	const INSPECT_INCOMPLETE  = 32;
-	const INSPECT_UNKNOWN     = 33;
-
-	const TEARDOWN_SUCCESS    = 40;
-	const TEARDOWN_FAIL       = 41;
-
-	const RESULT_PASS         = 100;
-	const RESULT_FAIL         = 101;
-	const RESULT_UNKNOWN      = 102;
-	const RESULT_BLACKLISTED  = 103;
-
-	static public $outcomeToText = array(
-		1 => "Success",
-		2 => "Fail",
-
-		10 => "Success",
-		11 => "Fail",
-		12 => "Incomplete",
-		13 => "Unknown",
-
-		20 => "Completed",
-		21 => "Failed",
-		22 => "Incomplete",
-		23 => "Unknown",
-		24 => "Has No Actions",
-
-		30 => "Success",
-		31 => "Fail",
-		32 => "Incomplete",
-		33 => "Unkowwn",
-
-		30 => "Success",
-		31 => "Fail",
-
-		100 => "Pass",
-		101 => "Fail",
-		102 => "Unknown",
-		103 => "Blacklisted",
-	);
-
-	const PHASE_TESTENVIRONMENTSETUP = 1;
-	const PHASE_TESTSETUP = 2;
-	const PHASE_PRETESTPREDICTION = 3;
-	const PHASE_PRETESTINSPECTION = 4;
-	const PHASE_ACTION = 5;
-	const PHASE_POSTTESTINSPECTION = 6;
-	const PHASE_TESTTEARDOWN = 7;
-	const PHASE_TESTENVIRONMENTTEARDOWN = 8;
-
-	static public $phaseToText = array(
-		1 => "Test Environment Setup",
-		2 => "Test Setup",
-		3 => "Pre-Test Prediction",
-		4 => "Pre-Test Inspection",
-		5 => "Action",
-		6 => "Post-Test Inspection",
-		7 => "Test Teardown",
-		8 => "Test Environment Teardown"
-	);
-
-	static public $defaultPhaseOutcomes = array(
-		1 => self::SETUP_FAIL,
-		2 => self::SETUP_FAIL,
-		3 => self::PREDICT_UNKNOWN,
-		4 => NULL,
-		5 => self::ACTION_UNKNOWN,
-		6 => self::INSPECT_UNKNOWN,
-		7 => self::TEARDOWN_FAIL,
-		8 => self::TEARDOWN_FAIL
-	);
-
 	public function play(StoryTeller $st, stdClass $staticConfig)
 	{
 		// shorthand
@@ -197,25 +110,34 @@ class StoryPlayer
 		// the current environment
 		$result->storyAttempted = true;
 
+		// execute each phase
+		foreach (StoryPhases::$phasesToClasses as $phaseNumber => $phaseClass) {
+			// what is the full name of the class for this phase?
+			$class  = 'DataSift\StoryPlayer\PlayerLib\\' . $phaseClass;
+			$phase  = new $class($st, $phaseNumber);
+
+			$result->addPhaseResult($phase->runPhase($st));
+		}
+
 		// setup the test environment
 		$setupEnvironmentResult = $result->addPhaseResult(
-			self::PHASE_TESTENVIRONMENTSETUP,
+			StoryPhases::PHASE_TESTENVIRONMENTSETUP,
 			$this->doTestEnvironmentSetup($st, $staticConfig)
 		);
 
 		// setup the test itself ... but only if we have a valid
 		// test environment
-		if ($setupEnvironmentResult == self::SETUP_SUCCESS) {
+		if ($setupEnvironmentResult == StoryResults::SETUP_SUCCESS) {
 			$setupTestResult = $result->addPhaseResult(
-				self::PHASE_TESTSETUP,
+				StoryPhases::PHASE_TESTSETUP,
 				$this->doTestSetup($st, $staticConfig)
 			);
 		}
 
 		// work out if this story should pass or fail
-		if ($setupEnvironmentResult == self::SETUP_SUCCESS && $setupTestResult == self::SETUP_SUCCESS) {
+		if ($setupEnvironmentResult == StoryResults::SETUP_SUCCESS && $setupTestResult == StoryResults::SETUP_SUCCESS) {
 			$actionShouldWork = $result->addPhaseResult(
-				self::PHASE_PRETESTPREDICTION,
+				StoryPhases::PHASE_PRETESTPREDICTION,
 				$this->doPreTestPrediction($st, $staticConfig)
 			);
 
@@ -224,29 +146,29 @@ class StoryPlayer
 
 			// keep track of what happens with the action
 			$actionResult = $result->addPhaseResult(
-				self::PHASE_ACTION,
+				StoryPhases::PHASE_ACTION,
 				$this->doOneAction($st, $staticConfig)
 			);
 
 			// are we happy with the test results?
 			$actionWorked = $result->addPhaseResult(
-				self::PHASE_POSTTESTINSPECTION,
+				StoryPhases::PHASE_POSTTESTINSPECTION,
 				$this->doPostTestInspection($st, $staticConfig)
 			);
 		}
 		else {
 			// as the setup steps failed, we do not know what the
 			// outcome of the other setups would have been
-			$actionShouldWork = self::$defaultPhaseOutcomes[self::PHASE_PRETESTPREDICTION];
-			$actionResult     = self::$defaultPhaseOutcomes[self::PHASE_ACTION];
-			$actionWorked     = self::$defaultPhaseOutcomes[self::PHASE_POSTTESTINSPECTION];
+			$actionShouldWork = StoryResults::$defaultPhaseOutcomes[StoryPhases::PHASE_PRETESTPREDICTION];
+			$actionResult     = StoryResults::$defaultPhaseOutcomes[StoryPhases::PHASE_ACTION];
+			$actionWorked     = StoryResults::$defaultPhaseOutcomes[StoryPhases::PHASE_POSTTESTINSPECTION];
 		}
 
 		// tidy up the test, if we had a working test environment
 		// to attempt to set the test up within
-		if ($setupEnvironmentResult == self::SETUP_SUCCESS) {
+		if ($setupEnvironmentResult == StoryResults::SETUP_SUCCESS) {
 			$result->addPhaseResult(
-				self::PHASE_TESTTEARDOWN,
+				StoryPhases::PHASE_TESTTEARDOWN,
 				$this->doTestTeardown($st, $staticConfig)
 			);
 		}
@@ -254,112 +176,31 @@ class StoryPlayer
 		// tidy up the environment, regardless of whether setting it up
 		// failed or not
 		$result->addPhaseResult(
-			self::PHASE_TESTENVIRONMENTTEARDOWN,
+			StoryPhases::PHASE_TESTENVIRONMENTTEARDOWN,
 			$this->doTestEnvironmentTeardown($st, $staticConfig)
 		);
 
 		// stop the test device, if it is still running
 		$st->stopDevice();
 
-		// alright, so what happened?
-		//
-		// let's look at what should have happened, and compare it to what
-		// did happen
-
-		$resultMessage = '';
-		switch ($actionShouldWork) {
-			case self::PREDICT_SUCCESS:
-				$resultMessage = 'expected: SUCCESS         ;';
-				break;
-
-			case self::PREDICT_FAIL:
-				$resultMessage = 'expected: FAIL            ;';
-				break;
-
-			case self::PREDICT_INCOMPLETE:
-				$resultMessage = 'expected: DID NOT COMPLETE;';
-				break;
-
-			case self::PREDICT_UNKNOWN:
-			default:
-				$resultMessage = 'expected: UNKNOWN :(      ;';
-				break;
-		}
-
-		switch ($actionResult) {
-			case self::ACTION_COMPLETED:
-				$resultMessage .= ' action: COMPLETED ;';
-				break;
-
-			case self::ACTION_FAILED:
-				$resultMessage .= ' action: FAILED    ;';
-				break;
-
-			case self::ACTION_INCOMPLETE:
-				$resultMessage .= ' action: INCOMPLETE;';
-				break;
-
-			case self::ACTION_HASNOACTIONS:
-				$resultMessage .= ' action: NO ACTION ;';
-				break;
-
-			default:
-				$resultMessage .= ' action: UNKNOWN   ;';
-		}
-
-		switch ($actionWorked) {
-			case self::INSPECT_SUCCESS:
-				$resultMessage .= ' actual: SUCCESS         ;';
-				break;
-
-			case self::INSPECT_FAIL:
-				$resultMessage .= ' actual: FAIL            ;';
-				break;
-
-			case self::INSPECT_INCOMPLETE:
-				$resultMessage .= ' actual: DID NOT COMPLETE;';
-				break;
-
-			case self::INSPECT_UNKNOWN:
-			default:
-				$resultMessage .= ' actual: UNKNOWN :(      ;';
-				break;
-		}
-
 		// if the action completed successfully, then the user may have
 		// changed state ... let's deal with that
-		if ($actionResult == self::ACTION_COMPLETED && $actionWorked == self::INSPECT_SUCCESS) {
+		if ($actionResult == StoryResults::ACTION_COMPLETED && $actionWorked == StoryResults::INSPECT_SUCCESS) {
 			$this->announcePhase($st, 8, 'Role Changes');
 			$this->applyRoleChanges($st, $staticConfig);
 		}
 
 		// calculate the final result
-		$result->calculateStoryResult();
+		$finalResults = [
+			'prediction' => $actionShouldWork,
+			'action'     => $actionResult,
+			'validation' => $actionWorked
+		];
+		$result->calculateStoryResult($finalResults);
 
 		// announce the results
 		$this->announcePhase($st, 9, 'Final Results');
-
-		switch($result->storyResult)
-		{
-			case self::RESULT_PASS:
-				$resultMessage .= ' result: PASS';
-				break;
-
-			case self::RESULT_FAIL:
-				$resultMessage .= ' result: FAIL';
-				break;
-
-			case self::RESULT_BLACKLISTED:
-				$resultMessage = 'result: DID NOT RUN (unsafe environment)';
-				break;
-
-			case self::RESULT_UNKNOWN:
-			default:
-				$resultMessage .= ' result: UNKNOWN';
-		}
-
-		// tell the user what happened
-		Log::write(Log::LOG_NOTICE, $resultMessage);
+		$output->endStory($result->storyResult);
 
 		// all done
 		return $result;
@@ -374,7 +215,7 @@ class StoryPlayer
 	public function doTestEnvironmentSetup(StoryTeller $st, stdClass $staticConfig)
 	{
 		// our return value
-		$return = self::SETUP_SUCCESS;
+		$return = StoryResults::SETUP_SUCCESS;
 
 		// shorthand
 		$story = $st->getStory();
@@ -406,14 +247,14 @@ class StoryPlayer
 
 		// make the call
 		try {
-			$st->setCurrentPhase(self::PHASE_TESTENVIRONMENTSETUP);
+			$st->setCurrentPhase(StoryPhases::PHASE_TESTENVIRONMENTSETUP);
 			foreach ($callbacks as $callback){
 				call_user_func($callback, $st);
 			}
 		}
 		catch (Exception $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString());
-			$return = self::SETUP_FAIL;
+			$return = StoryResults::SETUP_FAIL;
 		}
 
 		// close off any open log actions
@@ -449,7 +290,7 @@ class StoryPlayer
 
 		// make the call
 		try {
-			$st->setCurrentPhase(self::PHASE_TESTENVIRONMENTTEARDOWN);
+			$st->setCurrentPhase(StoryPhases::PHASE_TESTENVIRONMENTTEARDOWN);
 			foreach ($callbacks as $callback){
 				call_user_func($callback, $st);
 			}
@@ -473,7 +314,7 @@ class StoryPlayer
 	public function doTestSetup(StoryTeller $st, stdClass $staticConfig)
 	{
 		// our return value
-		$return = self::SETUP_SUCCESS;
+		$return = StoryResults::SETUP_SUCCESS;
 
 		// shorthand
 		$story = $st->getStory();
@@ -501,7 +342,7 @@ class StoryPlayer
 		}
 
 		// setup the phase
-		$st->setCurrentPhase(self::PHASE_TESTSETUP);
+		$st->setCurrentPhase(StoryPhases::PHASE_TESTSETUP);
 		$this->doPerPhaseSetup($st);
 
 		// get the callback to call
@@ -516,7 +357,7 @@ class StoryPlayer
 		catch (Exception $e)
 		{
 			Log::write(Log::LOG_CRITICAL, "unable to perform test setup; " . (string)$e . "\n" . $e->getTraceAsString());
-			$return = self::SETUP_FAIL;
+			$return = StoryResults::SETUP_FAIL;
 		}
 
 		// close off any open log actions
@@ -555,7 +396,7 @@ class StoryPlayer
 
 		// make the call
 		try {
-			$st->setCurrentPhase(self::PHASE_TESTTEARDOWN);
+			$st->setCurrentPhase(StoryPhases::PHASE_TESTTEARDOWN);
 			foreach ($callbacks as $callback) {
 				call_user_func($callback, $st);
 			}
@@ -637,7 +478,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// our default return value
-		$actionShouldWork = self::PREDICT_SUCCESS;
+		$actionShouldWork = StoryResults::PREDICT_SUCCESS;
 
 		try {
 			$this->announcePhase($st, 3, 'Pre-test prediction');
@@ -658,7 +499,7 @@ class StoryPlayer
 			}
 
 			// setup the phase
-			$st->setCurrentPhase(self::PHASE_PRETESTPREDICTION);
+			$st->setCurrentPhase(StoryPhases::PHASE_PRETESTPREDICTION);
 			$this->doPerPhaseSetup($st);
 
 			// make the call
@@ -675,21 +516,21 @@ class StoryPlayer
 		// an E5xx_ActionFailed will be thrown
 		catch (E5xx_ActionFailed $e) {
 			Log::write(Log::LOG_CRITICAL, "pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionShouldWork = self::PREDICT_FAIL;
+			$actionShouldWork = StoryResults::PREDICT_FAIL;
 		}
 		catch (E5xx_ExpectFailed $e) {
 			Log::write(Log::LOG_CRITICAL, "pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionShouldWork = self::PREDICT_FAIL;
+			$actionShouldWork = StoryResults::PREDICT_FAIL;
 		}
 		// if any of the tests are incomplete, deal with that too
 		catch (E5xx_NotImplemented $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to perform pre-test prediction; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionShouldWork = self::PREDICT_INCOMPLETE;
+			$actionShouldWork = StoryResults::PREDICT_INCOMPLETE;
 		}
 		// deal with the things that go wrong
 		catch (Exception $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to perform pre-test prediction; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionShouldWork = self::PREDICT_UNKNOWN;
+			$actionShouldWork = StoryResults::PREDICT_UNKNOWN;
 		}
 
 		// close off any open log actions
@@ -734,7 +575,7 @@ class StoryPlayer
 		// with it if it explodes
 		try {
 			// do any required setup
-			$st->setCurrentPhase(self::PHASE_PRETESTINSPECTION);
+			$st->setCurrentPhase(StoryPhases::PHASE_PRETESTINSPECTION);
 			$this->doPerPhaseSetup($st);
 
 			// if the callback exists, use it
@@ -769,7 +610,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// keep track of what happens with the action
-		$actionResult = self::ACTION_COMPLETED;
+		$actionResult = StoryResults::ACTION_COMPLETED;
 
 		// tell the user what we are doing
 		$this->announcePhase($st, 5, 'Action');
@@ -778,20 +619,20 @@ class StoryPlayer
 		if (!$story->hasActions())
 		{
 			Log::write(Log::LOG_INFO, "story has no action instructions");
-			return self::ACTION_HASNOACTIONS;
+			return StoryResults::ACTION_HASNOACTIONS;
 		}
 
 		// should we do this stage?
 		if (!$this->shouldExecutePhase('PreTestInspection', $staticConfig)) {
 			Log::write(Log::LOG_INFO, "actions are disabled; skipping");
-			return self::ACTION_HASNOACTIONS;
+			return StoryResults::ACTION_HASNOACTIONS;
 		}
 
 		// run ONE of the actions, picked at random
 		try {
 
 			// do any setup
-			$st->setCurrentPhase(self::PHASE_ACTION);
+			$st->setCurrentPhase(StoryResults::PHASE_ACTION);
 			$this->doPerPhaseSetup($st);
 
 			// make the call
@@ -802,11 +643,11 @@ class StoryPlayer
 		// if the set of actions fails, it will throw this exception
 		catch (E5xx_ActionFailed $e) {
 			Log::write(Log::LOG_CRITICAL, "action failed; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionResult = self::ACTION_FAILED;
+			$actionResult = StoryResults::ACTION_FAILED;
 		}
 		catch (E5xx_ExpectFailed $e) {
 			Log::write(Log::LOG_CRITICAL, "action failed; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionResult = self::ACTION_FAILED;
+			$actionResult = StoryResults::ACTION_FAILED;
 		}
 		// deal with the things that go wrong ... but do NOT bail out,
 		// because we need to run the postflight checks no matter what!
@@ -815,14 +656,14 @@ class StoryPlayer
 			Log::write(Log::LOG_CRITICAL, "unable to complete actions; " . (string)$e . "\n" . $e->getTraceAsString());
 
 			// mark this story as incomplete
-			$actionResult = self::ACTION_INCOMPLETE;
+			$actionResult = StoryResults::ACTION_INCOMPLETE;
 		}
 		catch (Exception $e) {
 			// log what happened
 			Log::write(Log::LOG_CRITICAL, "unable to complete actions; " . (string)$e . "\n" . $e->getTraceAsString());
 
 			// mark this story as failed
-			$actionResult = self::ACTION_FAILED;
+			$actionResult = StoryResults::ACTION_FAILED;
 		}
 
 		// close off any open log actions
@@ -849,7 +690,7 @@ class StoryPlayer
 		// we don't care whether the action did not complete ... we want
 		// to know whether the story thinks the actions that DID complete
 		// were successful
-		$actionWorked = self::INSPECT_SUCCESS;
+		$actionWorked = StoryResults::INSPECT_SUCCESS;
 
 		try {
 			$this->announcePhase($st, 6, 'Post-test inspection');
@@ -870,7 +711,7 @@ class StoryPlayer
 			}
 
 			// do any necessary setup
-			$st->setCurrentPhase(self::PHASE_POSTTESTINSPECTION);
+			$st->setCurrentPhase(StoryResults::PHASE_POSTTESTINSPECTION);
 			$this->doPerPhaseSetup($st);
 
 			// make the call
@@ -884,19 +725,19 @@ class StoryPlayer
 		}
 		catch (E5xx_ActionFailed $e) {
 			Log::write(Log::LOG_CRITICAL, "post-test inspection failed; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionWorked = self::INSPECT_FAIL;
+			$actionWorked = StoryResults::INSPECT_FAIL;
 		}
 		catch (E5xx_ExpectFailed $e) {
 			Log::write(Log::LOG_CRITICAL, "post-test inspection failed; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionWorked = self::INSPECT_FAIL;
+			$actionWorked = StoryResults::INSPECT_FAIL;
 		}
 		catch (E5xx_NotImplemented $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to complete post-test inspection; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionWorked = self::INSPECT_INCOMPLETE;
+			$actionWorked = StoryResults::INSPECT_INCOMPLETE;
 		}
 		catch (Exception $e) {
 			Log::write(Log::LOG_CRITICAL, "unable to complete post-test inspection; " . (string)$e . "\n" . $e->getTraceAsString());
-			$actionWorked = self::INSPECT_UNKNOWN;
+			$actionWorked = StoryResults::INSPECT_UNKNOWN;
 		}
 
 		// close off any open log actions
@@ -944,23 +785,5 @@ class StoryPlayer
 			$st->getEnvironmentName(),
 			$st->getDeviceName()
 		);
-	}
-
-	public function announcePhase(StoryTeller $st, $phaseNumber, $phaseName)
-	{
-		// shorthand
-		$output = $st->getOutput();
-
-		$output->startStoryPhase($phaseNumber, $phaseName);
-	}
-
-	public function shouldExecutePhase($phaseName, stdClass $staticConfig)
-	{
-		if (!isset($staticConfig->phases, $staticConfig->phases->$phaseName) || !$staticConfig->phases->$phaseName)
-		{
-			return false;
-		}
-
-		return true;
 	}
 }

@@ -84,6 +84,87 @@ EOS;
 
 	public function endStory()
 	{
+		$resultMessage = '';
+		switch ($actionShouldWork) {
+			case self::PREDICT_SUCCESS:
+				$resultMessage = 'expected: SUCCESS         ;';
+				break;
+
+			case self::PREDICT_FAIL:
+				$resultMessage = 'expected: FAIL            ;';
+				break;
+
+			case self::PREDICT_INCOMPLETE:
+				$resultMessage = 'expected: DID NOT COMPLETE;';
+				break;
+
+			case self::PREDICT_UNKNOWN:
+			default:
+				$resultMessage = 'expected: UNKNOWN :(      ;';
+				break;
+		}
+
+		switch ($actionResult) {
+			case self::ACTION_COMPLETED:
+				$resultMessage .= ' action: COMPLETED ;';
+				break;
+
+			case self::ACTION_FAILED:
+				$resultMessage .= ' action: FAILED    ;';
+				break;
+
+			case self::ACTION_INCOMPLETE:
+				$resultMessage .= ' action: INCOMPLETE;';
+				break;
+
+			case self::ACTION_HASNOACTIONS:
+				$resultMessage .= ' action: NO ACTION ;';
+				break;
+
+			default:
+				$resultMessage .= ' action: UNKNOWN   ;';
+		}
+
+		switch ($actionWorked) {
+			case self::INSPECT_SUCCESS:
+				$resultMessage .= ' actual: SUCCESS         ;';
+				break;
+
+			case self::INSPECT_FAIL:
+				$resultMessage .= ' actual: FAIL            ;';
+				break;
+
+			case self::INSPECT_INCOMPLETE:
+				$resultMessage .= ' actual: DID NOT COMPLETE;';
+				break;
+
+			case self::INSPECT_UNKNOWN:
+			default:
+				$resultMessage .= ' actual: UNKNOWN :(      ;';
+				break;
+		}
+
+		switch($result->storyResult)
+		{
+			case StoryResult::RESULT_PASS:
+				$resultMessage .= ' result: PASS';
+				break;
+
+			case StoryResult::RESULT_FAIL:
+				$resultMessage .= ' result: FAIL';
+				break;
+
+			case StoryResult::RESULT_BLACKLISTED:
+				$resultMessage = 'result: DID NOT RUN (unsafe environment)';
+				break;
+
+			case StoryResult::RESULT_UNKNOWN:
+			default:
+				$resultMessage .= ' result: UNKNOWN';
+		}
+
+		// tell the user what happened
+		Log::write(Log::LOG_NOTICE, $resultMessage);
 
 	}
 

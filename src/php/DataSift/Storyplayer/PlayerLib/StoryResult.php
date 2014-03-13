@@ -133,27 +133,27 @@ class StoryResult
 	public function calculateStoryResult()
 	{
 		// shorthand
-		$actionShouldWork = $this->getPhaseOutcome(StoryPlayer::PHASE_PRETESTPREDICTION);
-		$actionResult     = $this->getPhaseOutcome(StoryPlayer::PHASE_ACTION);
-		$actionWorked	  = $this->getPhaseOutcome(StoryPlayer::PHASE_POSTTESTINSPECTION);
+		$actionShouldWork = $this->getPhaseOutcome(StoryPhases::PHASE_PRETESTPREDICTION);
+		$actionResult     = $this->getPhaseOutcome(StoryPhases::PHASE_ACTION);
+		$actionWorked	  = $this->getPhaseOutcome(StoryPhases::PHASE_POSTTESTINSPECTION);
 
-		if ($actionShouldWork == StoryPlayer::PREDICT_SUCCESS && ($actionResult == StoryPlayer::ACTION_COMPLETED || $actionResult == StoryPlayer::ACTION_HASNOACTIONS) && $actionWorked == StoryPlayer::INSPECT_SUCCESS) {
-			$this->storyResult = StoryPlayer::RESULT_PASS;
+		if ($actionShouldWork == StoryResults::PREDICT_SUCCESS && ($actionResult == StoryResults::ACTION_COMPLETED || $actionResult == StoryResults::ACTION_HASNOACTIONS) && $actionWorked == StoryResults::INSPECT_SUCCESS) {
+			$this->storyResult = StoryResults::RESULT_PASS;
 		}
-		else if ($actionShouldWork == StoryPlayer::PREDICT_FAIL && ($actionResult == StoryPlayer::ACTION_FAILED || $actionResult == StoryPlayer::ACTION_HASNOACTIONS) && $actionWorked == StoryPlayer::INSPECT_FAIL) {
-			$this->storyResult = StoryPlayer::RESULT_PASS;
+		else if ($actionShouldWork == StoryResults::PREDICT_FAIL && ($actionResult == StoryResults::ACTION_FAILED || $actionResult == StoryResults::ACTION_HASNOACTIONS) && $actionWorked == StoryResults::INSPECT_FAIL) {
+			$this->storyResult = StoryResults::RESULT_PASS;
 		}
-		else if ($actionShouldWork == StoryPlayer::PREDICT_UNKNOWN || $actionShouldWork == StoryPlayer::PREDICT_INCOMPLETE) {
-			$this->storyResult = StoryPlayer::RESULT_UNKNOWN;
+		else if ($actionShouldWork == StoryResults::PREDICT_UNKNOWN || $actionShouldWork == StoryResults::PREDICT_INCOMPLETE) {
+			$this->storyResult = StoryResults::RESULT_UNKNOWN;
 		}
-		else if ($actionResult == StoryPlayer::ACTION_INCOMPLETE || $actionResult == StoryPlayer::ACTION_UNKNOWN) {
-			$this->storyResult = StoryPlayer::RESULT_UNKNOWN;
+		else if ($actionResult == StoryResults::ACTION_INCOMPLETE || $actionResult == StoryResults::ACTION_UNKNOWN) {
+			$this->storyResult = StoryResults::RESULT_UNKNOWN;
 		}
-		else if ($actionWorked == StoryPlayer::INSPECT_UNKNOWN || $actionWorked == StoryPlayer::INSPECT_INCOMPLETE) {
-			$this->storyResult = StoryPlayer::RESULT_UNKNOWN;
+		else if ($actionWorked == StoryResults::INSPECT_UNKNOWN || $actionWorked == StoryResults::INSPECT_INCOMPLETE) {
+			$this->storyResult = StoryResults::RESULT_UNKNOWN;
 		}
 		else {
-			$this->storyResult = StoryPlayer::RESULT_FAIL;
+			$this->storyResult = StoryResults::RESULT_FAIL;
 		}
 	}
 }
