@@ -27,7 +27,8 @@
 		"datasift/stone": ">=1.5.0",
 		"datasift/webdriver": ">=1.5.0",
 		"aws/aws-sdk-php": "2.*",
-		"datasift/netifaces": "*"
+		"datasift/netifaces": "*",
+		"phix/injectables": "*"
 	},
 	"require-dev": {
 		"stuart/phingtasks": "1.0.0"
