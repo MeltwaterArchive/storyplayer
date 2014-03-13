@@ -103,6 +103,7 @@ class PlayStoryCommand extends CliCommand
         $this->setSwitches(array(
             new LogLevelSwitch(),
             new ColorSwitch(),
+            new DevModeSwitch(),
             new EnvironmentSwitch($additionalContext->envList, $defaultEnvName),
             new DefineSwitch(),
             new DeviceSwitch($additionalContext->deviceList),
@@ -187,7 +188,7 @@ class PlayStoryCommand extends CliCommand
             exit(1);
         }
 
-        // do we have a defaults evironment section?
+        // do we have a defaults environment section?
         if (!isset($staticConfig->environments->defaults)) {
             // create an empty one to keep PlayerLib happy
             $staticConfig->environments->defaults = new stdClass;
