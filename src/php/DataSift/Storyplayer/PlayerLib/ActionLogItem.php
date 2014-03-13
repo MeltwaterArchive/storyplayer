@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Stone\LogLib\Log;
 
 /**
@@ -66,10 +67,12 @@ class ActionLogItem
 	private $steps = array();
 	private $logLevel = null;
 
-	public function __construct($nestLevel, $logLevel = null)
+	public function __construct($injectables, $nestLevel, $logLevel = null)
 	{
-		$this->nestLevel = $nestLevel;
-		$this->logLevel  = $logLevel;
+		$this->nestLevel   = $nestLevel;
+		$this->logLevel    = $logLevel;
+		$this->injectables = $injectables;
+		$this->output      = $injectables->output;
 	}
 
 	public function startAction($user, $text)
@@ -110,7 +113,7 @@ class ActionLogItem
 
 		if (!is_object($openItem) || $openItem->isComplete()) {
 			// we have no open actions - start a new one
-			$openItem = new ActionLogItem($this->nestLevel + 1, $this->getLogLevel());
+			$openItem = new ActionLogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
 			$this->nestedActions[] = $openItem;
 		}
 		else {
@@ -226,7 +229,7 @@ class ActionLogItem
 	public function addStep($text, $callable)
 	{
 		// create a log item for this step
-		$action = new ActionLogItem($this->nestLevel + 1, $this->getLogLevel());
+		$action = new ActionLogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
 		$action->startAction($this->user, $text);
 
 		// add it to our collection
@@ -326,6 +329,6 @@ class ActionLogItem
 		$logLevel = $this->getLogLevel();
 		list($startText, $endText) = $this->getMessageBookends($logLevel);
 
-		Log::write($logLevel, str_repeat("  ", $this->nestLevel - 1) . $startText . $text . $endText);
+		$this->output->logStoryActivity($logLevel, str_repeat("  ", $this->nestLevel - 1) . $startText . $text . $endText);
 	}
 }

@@ -76,8 +76,8 @@ class DefaultStaticConfig extends LoadedConfig
         $levels->LOG_WARNING = true;
         $levels->LOG_NOTICE = true;
         $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = true;
-        $levels->LOG_TRACE = true;
+        $levels->LOG_DEBUG = false;
+        $levels->LOG_TRACE = false;
 
         $this->logger->levels = $levels;
 

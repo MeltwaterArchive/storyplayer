@@ -130,7 +130,7 @@ class PlayStoryCommand extends CliCommand
         $this->output = $output;
 
         // switch output plugins first, before we do anything else at all
-        if ($engine->options->dev) {
+        if (isset($engine->options->dev) && $engine->options->dev) {
             $output->usePlugin('console', new DevModeConsolePlugin());
         }
 
@@ -175,6 +175,17 @@ class PlayStoryCommand extends CliCommand
         if (isset($engine->options->logLevels)) {
             $loggingConfig->levels = $engine->options->logLevels;
         }
+        else {
+            $verbosity = $engine->options->verbosity;
+            if ($verbosity > 0) {
+                $loggingConfig->levels->LOG_DEBUG = true;
+            }
+            if ($verbosity > 1) {
+                $loggingConfig->levels->LOG_TRACE = true;
+            }
+        }
+
+        // we're ready to switch logging on now
         Log::init("storyplayer", $loggingConfig);
 
         // setup signal handling
@@ -267,15 +278,11 @@ class PlayStoryCommand extends CliCommand
         $arg2suffix = end($arg2parts);
 
         // create a new StoryTeller object
-        $teller = new StoryTeller();
+        $teller = new StoryTeller($injectables);
 
         // remember our $st object, as we'll need it for our
         // shutdown function
         $this->st = $teller;
-
-        // tell $st about our runtime config
-        $teller->setRuntimeConfig($runtimeConfig);
-        $teller->setRuntimeConfigManager($runtimeConfigManager);
 
         // create the supporting context for this test run
         $context = new StoryContext($staticConfig, $runtimeConfig, $envName, $deviceName);
@@ -506,7 +513,7 @@ class PlayStoryCommand extends CliCommand
 
         // If we have any missing cleanup handlers, output it to the screen
         // and exit with an error code
-        if (strlen($missingCleanupHandlers)){
+        if (count($missingCleanupHandlers)){
             foreach ($missingCleanupHandlers as $msg) {
                 $this->output->logCliError($msg);
             }

@@ -78,19 +78,13 @@ class DevModeSwitch extends CliSwitch
 		// what are the long switches?
 		$this->addLongSwitch('dev');
 
-		// what is the argument to this switch?
-		$this->setOptionalArg('<on|off>', "enable / disable dev mode");
-		$this->setArgValidator(new DevModeValidator());
-		$this->setArgHasDefaultValueOf('off');
-		$this->setArgHasImplicitValueOf('on');
-
 		// all done
 	}
 
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->dev = DevModeHelper::stringToValue($params[0]);
+		$engine->options->dev = true;
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

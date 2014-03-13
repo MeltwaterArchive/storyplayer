@@ -138,11 +138,11 @@ class Output
 	 *
 	 * @return void
 	 */
-	public function startPhase()
+	public function startStoryPhase()
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startPhase();
+			$plugin->startStoryPhase();
 		}
 	}
 
@@ -151,11 +151,11 @@ class Output
 	 *
 	 * @return void
 	 */
-	public function endPhase()
+	public function endStoryPhase()
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endPhase();
+			$plugin->endStoryPhase();
 		}
 	}
 
@@ -164,11 +164,11 @@ class Output
 	 *
 	 * @return void
 	 */
-	public function logStoryActivity()
+	public function logStoryActivity($level, $msg)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->logActivity();
+			$plugin->logStoryActivity($level, $msg);
 		}
 	}
 
@@ -181,7 +181,7 @@ class Output
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->logError();
+			$plugin->logStoryError();
 		}
 	}
 

@@ -57,12 +57,17 @@ class ActionLogger
 {
 	private $actions = array();
 
+	public function __construct($injectables)
+	{
+		$this->injectables = $injectables;
+	}
+
 	public function startAction($user, $text)
 	{
 		// is this our first action?
 		if (count($this->actions) == 0)
 		{
-			$openItem = new ActionLogItem(1);
+			$openItem = new ActionLogItem($this->injectables, 1);
 			$this->actions[] = $openItem;
 		}
 		else {
@@ -73,7 +78,7 @@ class ActionLogger
 				$openItem = $endItem->newNestedAction();
 			}
 			else {
-				$openItem = new ActionLogItem(1);
+				$openItem = new ActionLogItem($this->injectables, 1);
 				$this->actions[] = $openItem;
 			}
 		}

@@ -61,9 +61,9 @@ interface OutputPlugin
 	public function endStoryplayer();
 	public function startStory();
 	public function endStory();
-	public function startPhase();
-	public function endPhase();
-	public function logStoryActivity();
+	public function startStoryPhase();
+	public function endStoryPhase();
+	public function logStoryActivity($level, $msg);
 	public function logStoryError();
 	public function logCliWarning($msg);
 	public function logCliError($msg);

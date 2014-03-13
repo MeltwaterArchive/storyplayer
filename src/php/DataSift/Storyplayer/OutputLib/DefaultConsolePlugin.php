@@ -77,19 +77,20 @@ class DefaultConsolePlugin implements OutputPlugin
 
 	}
 
-	public function startPhase()
+	public function startStoryPhase()
 	{
 
 	}
 
-	public function endPhase()
+	public function endStoryPhase()
 	{
 
 	}
 
-	public function logStoryActivity()
+	public function logStoryActivity($level, $msg)
 	{
-
+		// this is a no-op for us
+		echo ".";
 	}
 
 	public function logStoryError()

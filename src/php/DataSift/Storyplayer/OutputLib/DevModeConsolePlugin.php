@@ -77,19 +77,20 @@ class DevModeConsolePlugin implements OutputPlugin
 
 	}
 
-	public function startPhase()
+	public function startStoryPhase()
 	{
 
 	}
 
-	public function endPhase()
+	public function endStoryPhase()
 	{
 
 	}
 
-	public function logStoryActivity()
+	public function logStoryActivity($level, $msg)
 	{
-
+		// send this to the default logger
+		Log::write($level, $msg);
 	}
 
 	public function logStoryError()

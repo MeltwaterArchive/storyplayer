@@ -88,6 +88,9 @@ class StoryTeller
 	private $runtimeConfig = null;
 	private $runtimeConfigManager = null;
 
+	// our output
+	private $output = null;
+
 	/**
 	 * [$actionLogger description]
 	 * @var Datasift\Storyplayer\PlayerLib\ActionLogItem
@@ -103,19 +106,27 @@ class StoryTeller
 	// test device support
 	private $deviceAdapter = null;
 
-	public function __construct()
+	public function __construct($injectables)
 	{
+		// remember our output object
+		$this->setOutput($injectables->output);
+
 		// set a default page context
 		$this->setPageContext(new PageContext);
 
 		// create the actionlog
-		$this->setActionLogger(new ActionLogger());
+		$this->setActionLogger(new ActionLogger($injectables));
 
-		// create an empty context
+		// create an empty checkpoint
 		$this->setCheckpoint(new StoryCheckpoint($this));
 
 		// create our Prose Loader
 		$this->setProseLoader();
+
+        // our runtime config
+        $this->setRuntimeConfig($injectables->runtimeConfig);
+        $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
+
 	}
 
 	// ==================================================================
@@ -267,6 +278,16 @@ class StoryTeller
 	public function setProseLoader()
 	{
 		$this->proseLoader = new ProseLoader();
+	}
+
+	public function getOutput()
+	{
+		return $this->output;
+	}
+
+	public function setOutput($output)
+	{
+		$this->output = $output;
 	}
 
 	// ====================================================================
