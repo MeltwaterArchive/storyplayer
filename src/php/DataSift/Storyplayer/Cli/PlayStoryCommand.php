@@ -82,6 +82,9 @@ class PlayStoryCommand extends CliCommand
      */
     protected $persistProcesses = false;
 
+    protected $st;
+    protected $output;
+
     public function __construct($additionalContext)
     {
         // define the command
@@ -112,14 +115,18 @@ class PlayStoryCommand extends CliCommand
         ));
     }
 
-    public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+    public function processCommand(CliEngine $engine, $params = array(), $injectables)
     {
         // shorthand
-        $envList              = $additionalContext->envList;
-        $runtimeConfig        = $additionalContext->runtimeConfig;
-        $runtimeConfigManager = $additionalContext->runtimeConfigManager;
-        $staticConfig         = $additionalContext->staticConfig;
-        $staticConfigManager  = $additionalContext->staticConfigManager;
+        $envList              = $injectables->envList;
+        $runtimeConfig        = $injectables->runtimeConfig;
+        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $staticConfig         = $injectables->staticConfig;
+        $staticConfigManager  = $injectables->staticConfigManager;
+        $output               = $injectables->output;
+
+        // save the output for use in other methods
+        $this->output = $output;
 
         // which environment are we using?
         //
@@ -131,9 +138,10 @@ class PlayStoryCommand extends CliCommand
         else if (!isset($engine->options->environment)) {
             // this switch is optional ... *if* there is only one environment
             // in the list
-            echo "*** error: there is more than one test environment defined\n\n";
-            echo "use 'storyplayer list-environments' to see the list\n";
-            echo "use '-e <environment>' to select one\n";
+            $msg = "there is more than one test environment defined" . PHP_EOL . PHP_EOL
+                   . "use 'storyplayer list-environments' to see the list" . PHP_EOL
+                   . "use '-e <environment>' to select one" . PHP_EOL;
+            $output->logCliError($msg);
             return 1;
         }
         else {
@@ -148,7 +156,8 @@ class PlayStoryCommand extends CliCommand
 
         // do we have a story, or list of stories?
         if (!isset($params[0])) {
-            echo "*** error: you must specify which story to play\n";
+            $msg = "you must specify which story to play" . PHP_EOL;
+            $output->logCliError($msg);
             return 1;
         }
 
@@ -178,13 +187,15 @@ class PlayStoryCommand extends CliCommand
             // do we already have this device?
             if (!isset($staticConfig->environments->$envName)) {
                 // no we don't ... report an error
-                echo "*** error: no config file '{$envName}.json' found\n";
+                $msg = "no config file '{$envName}.json' found" . PHP_EOL;
+                $output->logCliError($msg);
                 exit(1);
             }
         }
         catch (E5xx_InvalidConfigFile $e) {
-            echo "*** error: unable to load config file '{$envName}.json'\n\n";
-            echo $e->getMessage();
+            $msg = "unable to load config file '{$envName}.json'" . PHP_EOL . PHP_EOL
+                   . $e->getMessage();
+            $output->logCliError($msg);
             exit(1);
         }
 
@@ -217,13 +228,15 @@ class PlayStoryCommand extends CliCommand
                 // do we already have this device?
                 if (!isset($staticConfig->devices->$deviceName)) {
                     // no we don't ... report an error
-                    echo "*** error: no config file '{$deviceName}.json' found\n";
+                    $msg = "no config file '{$deviceName}.json' found" . PHP_EOL;
+                    $output->logCliError($msg);
                     exit(1);
                 }
             }
             catch (E5xx_InvalidConfigFile $e) {
-                echo "*** error: unable to load config file '{$deviceName}.json'\n\n";
-                echo $e->getMessage();
+                $msg = "unable to load config file '{$deviceName}.json'" . PHP_EOL . PHP_EOL
+                       . $e->getMessage();
+                $output->logCliError($msg);
                 exit(1);
             }
         }
@@ -426,7 +439,8 @@ class PlayStoryCommand extends CliCommand
     protected function warnScreenProcesses()
     {
         // shorthand
-        $st = $this->st;
+        $st     = $this->st;
+        $output = $this->output;
 
         // do we have anything to shutdown?
         $screenSessions = $st->fromShell()->getAllScreenSessions();
@@ -438,13 +452,13 @@ class PlayStoryCommand extends CliCommand
         // if we get here, there are background jobs running
         echo "\n";
         if (count($screenSessions) == 1) {
-            echo "There is 1 background process still running\n";
+            $output->logCliInfo("There is 1 background process still running");
         }
         else {
-            echo "There are " . count($screenSessions) . " background processes still running\n";
+            $output->logCliInfo("There are " . count($screenSessions) . " background processes still running");
         }
-        echo "Use 'storyplayer list-processes' to see the list of background processes\n";
-        echo "Use 'storyplayer kill-processes' to stop any background processes\n";
+        $output->logCliInfo("Use 'storyplayer list-processes' to see the list of background processes");
+        $output->logCliInfo("Use 'storyplayer kill-processes' to stop any background processes");
     }
 
     public function sigtermHandler($signo)
@@ -463,7 +477,7 @@ class PlayStoryCommand extends CliCommand
 
         // Run the any cleanup classes we have available
         $runtimeConfig = $this->st->getRuntimeConfig();
-        $missingCleanupHandlers = "";
+        $missingCleanupHandlers = [];
 
         if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables)){
             return true;
@@ -477,7 +491,7 @@ class PlayStoryCommand extends CliCommand
                 $this->st->$className($key, $value)->removeTableIfEmpty();
             } catch(E5xx_NoMatchingActions $e){
                 // We don't know about a cleanup module for this, SHOUT LOUDLY
-                $missingCleanupHandlers .= "*** error: Missing cleanup module for '{$key}'".PHP_EOL;
+                $missingCleanupHandlers[] = "Missing cleanup module for '{$key}'".PHP_EOL;
             }
         }
 
@@ -487,7 +501,9 @@ class PlayStoryCommand extends CliCommand
         // If we have any missing cleanup handlers, output it to the screen
         // and exit with an error code
         if (strlen($missingCleanupHandlers)){
-            echo $missingCleanupHandlers;
+            foreach ($missingCleanupHandlers as $msg) {
+                $this->output->logCliError($msg);
+            }
             exit(1);
         }
 
