@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\OutputLib;
 use DataSift\Stone\LogLib\Log;
 
 /**
- * the base class for output plugins
+ * the console plugin we use unless the user specifies something else
  *
  * @category  Libraries
  * @package   Storyplayer/OutputLib
@@ -55,7 +55,7 @@ use DataSift\Stone\LogLib\Log;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultOutputPlugin implements OutputPlugin
+class DefaultConsolePlugin implements OutputPlugin
 {
 	public function startStoryplayer()
 	{

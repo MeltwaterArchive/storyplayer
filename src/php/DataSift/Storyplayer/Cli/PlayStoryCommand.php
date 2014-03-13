@@ -63,6 +63,7 @@ use DataSift\Storyplayer\UserLib\User;
 use DataSift\Storyplayer\UserLib\GenericUserGenerator;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
+use DataSift\Storyplayer\OutputLib\DevModeConsolePlugin;
 
 /**
  * A command to play a story, or a list of stories
@@ -115,7 +116,7 @@ class PlayStoryCommand extends CliCommand
         ));
     }
 
-    public function processCommand(CliEngine $engine, $params = array(), $injectables)
+    public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
     {
         // shorthand
         $envList              = $injectables->envList;
@@ -127,6 +128,11 @@ class PlayStoryCommand extends CliCommand
 
         // save the output for use in other methods
         $this->output = $output;
+
+        // switch output plugins first, before we do anything else at all
+        if ($engine->options->dev) {
+            $output->usePlugin('console', new DevModeConsolePlugin());
+        }
 
         // which environment are we using?
         //
