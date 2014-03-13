@@ -112,11 +112,11 @@ class Output
 	 *
 	 * @return void
 	 */
-	public function startStory()
+	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startStory();
+			$plugin->startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
 		}
 	}
 

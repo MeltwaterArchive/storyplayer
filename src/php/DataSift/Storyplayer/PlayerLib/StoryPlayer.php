@@ -158,6 +158,7 @@ class StoryPlayer
 		$story   = $st->getStory();
 		$env     = $st->getEnvironment();
 		$envName = $st->getEnvironmentName();
+		$output  = $st->getOutput();
 
 		// set default callbacks up
 		$story->setDefaultCallbacks();
@@ -931,19 +932,18 @@ class StoryPlayer
 
 	public function announceStory(StoryTeller $st)
 	{
+		// shorthand
 		$story = $st->getStory();
+		$output = $st->getOutput();
 
-		echo <<<EOS
-=============================================================
-
-      Story: {$story->getName()}
-   Category: {$story->getCategory()}
-      Group: {$story->getGroup()}
-
-Environment: {$st->getEnvironmentName()}
-     Device: {$st->getDeviceName()}
-
-EOS;
+		// tell all of our output plugins that the story has begun
+		$output->startStory(
+			$story->getName(),
+			$story->getCategory(),
+			$story->getGroup(),
+			$st->getEnvironmentName(),
+			$st->getDeviceName()
+		);
 	}
 
 	public function announcePhase($phaseName)

@@ -67,9 +67,19 @@ class DevModeConsolePlugin implements OutputPlugin
 
 	}
 
-	public function startStory()
+	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
+		echo <<<EOS
+=============================================================
 
+      Story: {$storyName}
+   Category: {$storyCategory}
+      Group: {$storyGroup}
+
+Environment: {$envName}
+     Device: {$deviceName}
+
+EOS;
 	}
 
 	public function endStory()

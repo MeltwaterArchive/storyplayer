@@ -67,9 +67,9 @@ class DefaultConsolePlugin implements OutputPlugin
 
 	}
 
-	public function startStory()
+	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
-
+		echo PHP_EOL . $storyName . ': ';
 	}
 
 	public function endStory()

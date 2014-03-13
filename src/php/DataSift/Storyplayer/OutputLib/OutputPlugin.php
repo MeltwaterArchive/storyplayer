@@ -59,7 +59,7 @@ interface OutputPlugin
 {
 	public function startStoryplayer();
 	public function endStoryplayer();
-	public function startStory();
+	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
 	public function endStory();
 	public function startStoryPhase();
 	public function endStoryPhase();
