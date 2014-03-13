@@ -70,7 +70,7 @@ class ShowLocalEnvironmentCommand extends CliCommand
 {
 	protected $localEnvName;
 
-	public function __construct($additionalContext)
+	public function __construct()
 	{
 		// define the command
 		$this->setName('show-local-environment');

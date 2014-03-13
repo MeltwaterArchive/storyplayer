@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Michael Heap <michael.heap@datasift.com>
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -43,21 +43,10 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\CliEngine\CliEngineSwitch;
-use Phix_Project\CliEngine\CliResult;
-
-use DataSift\Stone\DownloadLib\FileDownloader;
-
-use DataSift\WebDriver\WebDriverConfiguration;
-
-use Exception;
-use stdClass;
+use DataSift\Storyplayer\Output;
 
 /**
- * Command to list the current default environment, suitable for use
- * inside shell scripts
+ * support for working with the persistent, app-generated config
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -66,32 +55,23 @@ use stdClass;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ShowDefaultEnvironmentCommand extends CliCommand
+trait RuntimeConfigSupport
 {
-	protected $defaultEnvName;
+	public $runtimeConfigManager;
+	public $runtimeConfig;
 
-	public function __construct($envList)
+	public function initRuntimeConfigSupport()
 	{
-		// define the command
-		$this->setName('show-default-environment');
-		$this->setShortDescription('display default environment');
-		$this->setLongDescription(
-			"Use this command to see what environment Storyplayer will use "
-			."by default if you omit the -e switch"
-			.PHP_EOL
-		);
+		// create the runtime config's manager
+		$this->runtimeConfigManager = new RuntimeConfigManager();
 
-        // for convenience, the current computer's hostname will be the
-        // default environment
-        $defaultEnvName = EnvironmentHelper::getDefaultEnvironmentName($envList);
+		// create the folder where we will store the persistent config
+		$this->runtimeConfigManager->makeConfigDir();
 
-		// remember the default environment name
-		$this->defaultEnvName = $defaultEnvName;
-	}
+		// load any config from the last time Storyplayer ran
+		$this->runtimeConfig = $this->runtimeConfigManager->loadRuntimeConfig();
 
-	public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
-	{
-		// output the default environment name
-		echo $this->defaultEnvName . PHP_EOL;
+		// all done
+		return $this->runtimeConfigManager;
 	}
 }
