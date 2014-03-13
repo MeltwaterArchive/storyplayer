@@ -137,7 +137,13 @@ class AnsibleProvisioner extends Provisioner
 		$command .= ' "' . $ansibleSettings->dir . DIRECTORY_SEPARATOR . $ansibleSettings->playbook . '"';
 
 		// let's run the command
+		//
+		// this looks like a hack, but it is the only way to work with Ansible
+		// if there's an ansible.cfg in the root of the playbook :(
+		$cwd = getcwd();
+		chdir($ansibleSettings->dir);
 		$result = $st->usingShell()->runCommand($command);
+		chdir($cwd);
 
 		// what happened?
 		if (!$result->didCommandSucceed()) {
@@ -219,8 +225,21 @@ class AnsibleProvisioner extends Provisioner
 		// get our ansible settings
 		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
 
+		// is there an Ansible.cfg file?
+		$cfgFile = $ansibleSettings->dir . DIRECTORY_SEPARATOR . 'ansible.cfg';
+		$invDir = '';
+		if (file_exists($cfgFile)) {
+			$ansibleCfg = parse_ini_file($cfgFile);
+			if (is_array($ansibleCfg) && isset($ansibleCfg['defaults'], $ansibleCfg['defaults']['inventory'])) {
+				$invDir = $ansibleSettings->dir . DIRECTORY_SEPARATOR . $ansibleCfg['defaults']['inventory'] . DIRECTORY_SEPARATOR;
+				if (!is_dir($invDir)) {
+					$invDir = '';
+				}
+			}
+		}
+
 		// what is the path to the file?
-		$filename = $ansibleSettings->dir . DIRECTORY_SEPARATOR . 'host_vars' . DIRECTORY_SEPARATOR . $hostName;
+		$filename = $ansibleSettings->dir . DIRECTORY_SEPARATOR . $invDir . 'host_vars' . DIRECTORY_SEPARATOR . $hostName;
 
 		// all done
 		$log->endAction("filename is: " . $filename);
