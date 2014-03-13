@@ -61,7 +61,7 @@ interface OutputPlugin
 	public function endStoryplayer();
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
 	public function endStory();
-	public function startStoryPhase();
+	public function startStoryPhase($phaseNumber, $phaseName);
 	public function endStoryPhase();
 	public function logStoryActivity($level, $msg);
 	public function logStoryError();

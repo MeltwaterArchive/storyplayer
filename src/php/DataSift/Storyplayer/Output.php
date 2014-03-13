@@ -138,11 +138,11 @@ class Output
 	 *
 	 * @return void
 	 */
-	public function startStoryPhase()
+	public function startStoryPhase($phaseNumber, $phaseName)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startStoryPhase();
+			$plugin->startStoryPhase($phaseNumber, $phaseName);
 		}
 	}
 

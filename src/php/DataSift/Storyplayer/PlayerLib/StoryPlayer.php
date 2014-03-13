@@ -329,7 +329,7 @@ class StoryPlayer
 		// if the action completed successfully, then the user may have
 		// changed state ... let's deal with that
 		if ($actionResult == self::ACTION_COMPLETED && $actionWorked == self::INSPECT_SUCCESS) {
-			$this->announcePhase('Role Changes');
+			$this->announcePhase($st, 8, 'Role Changes');
 			$this->applyRoleChanges($st, $staticConfig);
 		}
 
@@ -337,7 +337,7 @@ class StoryPlayer
 		$result->calculateStoryResult();
 
 		// announce the results
-		$this->announcePhase('Final Results');
+		$this->announcePhase($st, 9, 'Final Results');
 
 		switch($result->storyResult)
 		{
@@ -380,7 +380,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announcePhase('Setup test environment');
+		$this->announcePhase($st, 1, 'Setup test environment');
 
 		// do we have anything to do?
 		if (!$story->hasTestEnvironmentSetup())
@@ -429,7 +429,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announcePhase('Teardown test environment');
+		$this->announcePhase($st, 8, 'Teardown test environment');
 
 		// do we have anything to do?
 		if (!$story->hasTestEnvironmentTeardown())
@@ -479,7 +479,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announcePhase('Setup story');
+		$this->announcePhase($st, 2, 'Setup story');
 
 		// do we have anything to do?
 		if (!$story->hasTestSetup())
@@ -535,7 +535,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announcePhase('Teardown story');
+		$this->announcePhase($st, 7, 'Teardown story');
 
 		// do we have anything to do?
 		if (!$story->hasTestTeardown())
@@ -640,7 +640,7 @@ class StoryPlayer
 		$actionShouldWork = self::PREDICT_SUCCESS;
 
 		try {
-			$this->announcePhase('Pre-test prediction');
+			$this->announcePhase($st, 3, 'Pre-test prediction');
 
 			// do we have anything to do?
 			if (!$story->hasPreTestPrediction())
@@ -714,7 +714,7 @@ class StoryPlayer
 		$story = $st->getStory();
 
 		// what are we doing?
-		$this->announcePhase('Pre-test inspection');
+		$this->announcePhase($st, 4, 'Pre-test inspection');
 
 		// do we have anything to do?
 		if (!$story->hasPreTestInspection())
@@ -772,7 +772,7 @@ class StoryPlayer
 		$actionResult = self::ACTION_COMPLETED;
 
 		// tell the user what we are doing
-		$this->announcePhase('Action');
+		$this->announcePhase($st, 5, 'Action');
 
 		// do we have anything to do?
 		if (!$story->hasActions())
@@ -852,7 +852,7 @@ class StoryPlayer
 		$actionWorked = self::INSPECT_SUCCESS;
 
 		try {
-			$this->announcePhase('Post-test inspection');
+			$this->announcePhase($st, 6, 'Post-test inspection');
 
 			// do we have anything to do?
 			if (!$story->hasPostTestInspection())
@@ -946,12 +946,12 @@ class StoryPlayer
 		);
 	}
 
-	public function announcePhase($phaseName)
+	public function announcePhase(StoryTeller $st, $phaseNumber, $phaseName)
 	{
-		echo "\n";
-		echo "-------------------------------------------------------------\n";
-		echo "Now performing: $phaseName\n";
-		echo "\n";
+		// shorthand
+		$output = $st->getOutput();
+
+		$output->startStoryPhase($phaseNumber, $phaseName);
 	}
 
 	public function shouldExecutePhase($phaseName, stdClass $staticConfig)

@@ -69,7 +69,7 @@ class DefaultConsolePlugin implements OutputPlugin
 
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
-		echo PHP_EOL . $storyName . ': ';
+		echo PHP_EOL . $storyName . ':';
 	}
 
 	public function endStory()
@@ -77,9 +77,9 @@ class DefaultConsolePlugin implements OutputPlugin
 
 	}
 
-	public function startStoryPhase()
+	public function startStoryPhase($phaseNumber, $phaseName)
 	{
-
+		echo ' ' . $phaseNumber;
 	}
 
 	public function endStoryPhase()

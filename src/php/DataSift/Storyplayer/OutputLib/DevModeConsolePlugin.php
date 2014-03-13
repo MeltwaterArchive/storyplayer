@@ -87,9 +87,12 @@ EOS;
 
 	}
 
-	public function startStoryPhase()
+	public function startStoryPhase($phaseNumber, $phaseName)
 	{
-
+		echo PHP_EOL;
+		echo "-------------------------------------------------------------" . PHP_EOL;
+		echo "Now performing: $phaseNumber: $phaseName" . PHP_EOL;
+		echo PHP_EOL;
 	}
 
 	public function endStoryPhase()
