@@ -7,6 +7,21 @@ next: '<a href="copyright.html">Next: Legal Stuff</a>'
 
 # ChangeLog
 
+## v1.5.2
+
+Released 14th March 2014.
+
+### Fixed
+
+* support complex Ansible inventories and ansible.cfg files
+* custom Prose namespaces now matches the documentation - thanks [Keith Pope](https://github.com/muteor)
+* $st->usingHttp()->post() now sends the body for non-form posts - thanks [Courtney Robinson](https://github.com/zcourts)
+* detect network interfaces on fresh Ubuntu 13.10 installs - thanks [Jon Parish](https://github.com/jonparish)
+
+## v1.5.1
+
+Trivial release.  I forgot to bump the version numbers when releasing 1.5.0 (doh!)
+
 ## v1.5.0
 
 Released 2nd January 2014.
