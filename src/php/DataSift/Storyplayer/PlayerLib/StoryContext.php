@@ -160,9 +160,9 @@ class StoryContext extends BaseObject
 		$this->prose = array();
 
 		// where are we looking?
-		if (isset($staticConfig->prose)) {
-			if (!is_array($staticConfig->prose)) {
-				throw new E5xx_InvalidConfig("the 'prose' section of the config must either be an array, or it must be left out");
+		if (isset($staticConfig->prose, $staticConfig->prose->namespaces)) {
+			if (!is_array($staticConfig->prose->namespaces)) {
+				throw new E5xx_InvalidConfig("the 'prose.namespaces' section of the config must either be an array, or it must be left out");
 			}
 
 			// copy over where to look for Prose classes
@@ -214,7 +214,7 @@ class StoryContext extends BaseObject
 		// reliable :(
 
 		try {
-			$searchList = array("br0", "p20p1", "eth0", "en2", "en0", "en1", "wlan0");
+			$searchList = array("br0", "p2p1", "eth0", "en2", "en0", "en1", "wlan0");
 			foreach ($searchList as $adapterToTest) {
 				// skip over any adapters that don't exist on this machine
 				if (!in_array($adapterToTest, $adapters)) {

@@ -73,27 +73,16 @@ class AnsibleProvisioner extends Provisioner
 		// what are we doing?
 		$log = $st->startAction("use Ansible to provision host(s)");
 
+		// get our ansible configuration
+		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
+
 		// our reverse list of roles => hosts
 		$rolesToHosts = array();
 
-		// process each host
+		// build up the list of roles
 		foreach($hosts as $hostName => $hostProps) {
 			// what is the host's IP address?
 			$ipAddress   = $st->fromHost($hostName)->getIpAddress();
-			$sshUsername = $st->fromHost($hostName)->getSshUsername();
-			$sshKeyFile  = $st->fromHost($hostName)->getSshKeyFile();
-
-			// do we have any vars to write?
-			if (!isset($hostProps->params) || $hostProps->params === null || (is_array($hostProps) && count($hostProps) == 0)) {
-				// we'd better remove any host_vars file that exists,
-				// in case what's there (if anything) is left over from
-				// a different test run
-				$this->removeHostVarsFile($ipAddress);
-			}
-			else {
-				// write the host vars file
-				$this->writeHostVarsFile($ipAddress, $hostProps->params);
-			}
 
 			// add the host to the required roles
 			if (isset($hostProps->roles)) {
@@ -110,12 +99,12 @@ class AnsibleProvisioner extends Provisioner
 		//
 		// build up the inventory file
 		$inventory = "";
-		foreach ($rolesToHosts as $role => $hosts) {
+		foreach ($rolesToHosts as $role => $hostsForRole) {
 			// add the role marker
 			$inventory .= "[{$role}]" . PHP_EOL;
 
 			// add the list of hosts
-			foreach ($hosts as $host) {
+			foreach ($hostsForRole as $host) {
 				$inventory .= $host . PHP_EOL;
 			}
 
@@ -126,8 +115,28 @@ class AnsibleProvisioner extends Provisioner
 		// write out the inventory
 		$inventoryFile = $this->writeInventoryFile($inventory);
 
-		// get our ansible configuration
-		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
+		// where should we create the host_vars?
+		$inventoryFolder = dirname($inventoryFile);
+
+		// now we need to write out the host files
+		foreach($hosts as $hostName => $hostProps) {
+			// what is the host's IP address?
+			$ipAddress   = $st->fromHost($hostName)->getIpAddress();
+			$sshUsername = $st->fromHost($hostName)->getSshUsername();
+			$sshKeyFile  = $st->fromHost($hostName)->getSshKeyFile();
+
+			// do we have any vars to write?
+			if (!isset($hostProps->params) || $hostProps->params === null || (is_array($hostProps) && count($hostProps) == 0)) {
+				// we'd better remove any host_vars file that exists,
+				// in case what's there (if anything) is left over from
+				// a different test run
+				$this->removeHostVarsFile($inventoryFolder, $ipAddress);
+			}
+			else {
+				// write the host vars file
+				$this->writeHostVarsFile($inventoryFolder, $ipAddress, $hostProps->params);
+			}
+		}
 
 		// build the command for Ansible
 		$command = 'ansible-playbook -i "' . $inventoryFile . '"'
@@ -137,7 +146,13 @@ class AnsibleProvisioner extends Provisioner
 		$command .= ' "' . $ansibleSettings->dir . DIRECTORY_SEPARATOR . $ansibleSettings->playbook . '"';
 
 		// let's run the command
+		//
+		// this looks like a hack, but it is the only way to work with Ansible
+		// if there's an ansible.cfg in the root of the playbook :(
+		$cwd = getcwd();
+		chdir($ansibleSettings->dir);
 		$result = $st->usingShell()->runCommand($command);
+		chdir($cwd);
 
 		// what happened?
 		if (!$result->didCommandSucceed()) {
@@ -148,7 +163,7 @@ class AnsibleProvisioner extends Provisioner
 		$log->endAction();
 	}
 
-	protected function removeHostVarsFile($ipAddress)
+	protected function removeHostVarsFile($inventoryFolder, $ipAddress)
 	{
 		// shorthand
 		$st = $this->st;
@@ -157,7 +172,7 @@ class AnsibleProvisioner extends Provisioner
 		$log = $st->startAction("remove host_vars file for '{$ipAddress}'");
 
 		// what is the path to the file?
-		$filename = $this->getHostVarsFilename($ipAddress);
+		$filename = $this->getHostVarsFilename($inventoryFolder, $ipAddress);
 
 		// remove the file
 		if (file_exists($filename)) {
@@ -171,7 +186,7 @@ class AnsibleProvisioner extends Provisioner
 		// all done
 	}
 
-	protected function writeHostVarsFile($ipAddress, $vars)
+	protected function writeHostVarsFile($inventoryFolder, $ipAddress, $vars)
 	{
 		// shorthand
 		$st = $this->st;
@@ -180,7 +195,13 @@ class AnsibleProvisioner extends Provisioner
 		$log = $st->startAction("write host_vars file for '{$ipAddress}'");
 
 		// what is the path to the file?
-		$filename = $this->getHostVarsFilename($ipAddress);
+		$filename = $this->getHostVarsFilename($inventoryFolder, $ipAddress);
+
+		// does the target folder exist?
+		$hostVarsFolder = dirname($filename);
+		if (!file_exists($hostVarsFolder)) {
+			mkdir ($hostVarsFolder);
+		}
 
 		// write the data
 		$st->usingYamlFile($filename)->writeDataToFile($vars);
@@ -208,7 +229,7 @@ class AnsibleProvisioner extends Provisioner
 		return $filename;
 	}
 
-	protected function getHostVarsFilename($hostName)
+	protected function getHostVarsFilename($inventoryFolder, $hostName)
 	{
 		// shorthand
 		$st = $this->st;
@@ -219,11 +240,50 @@ class AnsibleProvisioner extends Provisioner
 		// get our ansible settings
 		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
 
+		// get our inventory folder
+		$invFolder = $this->getInventoryFolder($ansibleSettings, $inventoryFolder);
+
 		// what is the path to the file?
-		$filename = $ansibleSettings->dir . DIRECTORY_SEPARATOR . 'host_vars' . DIRECTORY_SEPARATOR . $hostName;
+		$filename = $invFolder . DIRECTORY_SEPARATOR . 'host_vars' . DIRECTORY_SEPARATOR . $hostName;
 
 		// all done
 		$log->endAction("filename is: " . $filename);
 		return $filename;
+	}
+
+	protected function getInventoryFolder($ansibleSettings, $inventoryFolder)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// is there an Ansible.cfg file?
+		$cfgFile = $ansibleSettings->dir . DIRECTORY_SEPARATOR . 'ansible.cfg';
+
+		if (!file_exists($cfgFile)) {
+			return $inventoryFolder;
+		}
+
+		// if we get here, there is a config file to parse
+		$ansibleCfg = parse_ini_file($cfgFile, true);
+
+		if (!is_array($ansibleCfg)) {
+			// we can't parse the file
+			return $inventoryFolder;
+		}
+
+		if (!isset($ansibleCfg['defaults'], $ansibleCfg['defaults']['hostfile'])) {
+			// there's no inventory in the config file
+			return $inventoryFolder;
+		}
+
+		// is the inventory a folder?
+		$invDir = $inventoryFolder . DIRECTORY_SEPARATOR . $ansibleCfg['defaults']['hostfile'];
+		if (is_dir($invDir)) {
+			// this is where we need to write our variables to
+			return $invDir;
+		}
+
+		// give up
+		return $inventoryFolder;
 	}
 }
