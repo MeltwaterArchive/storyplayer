@@ -73,9 +73,6 @@ class ActionPhase extends StoryPhase
 		// keep track of what happens with the action
 		$phaseResult = new PhaseResult;
 
-		// tell the user what we are doing
-		$this->announcePhase();
-
 		// do we have anything to do?
 		if (!$story->hasActions())
 		{
@@ -90,7 +87,6 @@ class ActionPhase extends StoryPhase
 		try {
 
 			// do any setup
-			$st->setCurrentPhase($this);
 			$this->doPerPhaseSetup();
 
 			// make the call

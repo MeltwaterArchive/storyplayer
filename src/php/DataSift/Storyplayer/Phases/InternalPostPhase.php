@@ -62,7 +62,7 @@ abstract class InternalPostPhase extends Phase
 {
 	public function getPhaseType()
 	{
-		return self::INTERNAL_POSTPHASE;
+		return self::INTERNALPOST_PHASE;
 	}
 
 	public function doPerPhaseSetup()

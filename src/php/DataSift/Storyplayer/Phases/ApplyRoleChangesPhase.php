@@ -83,8 +83,6 @@ class ApplyRoleChangesPhase extends InternalPostPhase
 			return $phaseResult;
 		}
 
-		$this->announcePhase();
-		$st->setPhase($this);
 		$callbacks = $story->getRoleChanges();
 
 		try {

@@ -62,7 +62,7 @@ abstract class InternalPrePhase extends Phase
 {
 	public function getPhaseType()
 	{
-		return self::INTERNAL_PREPHASE;
+		return self::INTERNALPRE_PHASE;
 	}
 
 	public function doPerPhaseSetup()

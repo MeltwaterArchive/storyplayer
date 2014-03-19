@@ -73,9 +73,6 @@ class TestSetupPhase extends StoryPhase
 		// our return value
 		$phaseResult = new PhaseResult($this);
 
-		// what are we doing?
-		$this->announcePhase();
-
 		// do we have anything to do?
 		if (!$story->hasTestSetup())
 		{
@@ -88,9 +85,6 @@ class TestSetupPhase extends StoryPhase
 			// a success
 			return $phaseResult;
 		}
-
-		// setup the phase
-		$st->setCurrentPhase($this);
 
 		// get the callback to call
 		$callbacks = $story->getTestSetup();

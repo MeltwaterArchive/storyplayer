@@ -73,9 +73,6 @@ class TestTeardownPhase extends StoryPhase
 		// our result
 		$phaseResult = new PhaseResult;
 
-		// what are we doing?
-		$this->announcePhase();
-
 		// do we have anything to do?
 		if (!$story->hasTestTeardown())
 		{
@@ -91,7 +88,6 @@ class TestTeardownPhase extends StoryPhase
 
 		// make the call
 		try {
-			$st->setCurrentPhase($this);
 			foreach ($callbacks as $callback) {
 				call_user_func($callback, $st);
 			}

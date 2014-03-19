@@ -74,8 +74,6 @@ class PreTestPredictionPhase extends StoryPhase
 		$phaseResult = new PhaseResult;
 
 		try {
-			$this->announcePhase();
-
 			// do we have anything to do?
 			if (!$story->hasPreTestPrediction())
 			{
@@ -87,7 +85,6 @@ class PreTestPredictionPhase extends StoryPhase
 			}
 
 			// setup the phase
-			$st->setCurrentPhase($this);
 			$this->doPerPhaseSetup();
 
 			// make the call

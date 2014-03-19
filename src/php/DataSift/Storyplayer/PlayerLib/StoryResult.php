@@ -59,11 +59,10 @@ use DataSift\Storyplayer\StoryLib\Story;
  */
 class StoryResult
 {
-	public $story = null;
-	public $phases = array();
-	public $storyResult = NULL;
-	public $storyAttempted = false;
+	public $story           = null;
+	public $phases          = array();
 	public $storyShouldFail = false;
+	public $storyResult     = 1;
 
 	const PASS        = 1;
 	const FAIL        = 2;
@@ -115,6 +114,11 @@ class StoryResult
 		$this->storyShouldFail = true;
 	}
 
+	public function setStoryHasSucceeded()
+	{
+		$this->storyResult = self::PASS;
+	}
+
 	public function setStoryHasBeenBlacklisted()
 	{
 		$this->storyResult = self::BLACKLISTED;
@@ -132,29 +136,6 @@ class StoryResult
 
 	public function calculateStoryResult()
 	{
-		return;
-		// shorthand
-		$actionShouldWork = $this->getPhaseOutcome(StoryPhases::PHASE_PRETESTPREDICTION);
-		$actionResult     = $this->getPhaseOutcome(StoryPhases::PHASE_ACTION);
-		$actionWorked	  = $this->getPhaseOutcome(StoryPhases::PHASE_POSTTESTINSPECTION);
 
-		if ($actionShouldWork == StoryResults::PREDICT_SUCCESS && ($actionResult == StoryResults::ACTION_COMPLETED || $actionResult == StoryResults::ACTION_HASNOACTIONS) && $actionWorked == StoryResults::INSPECT_SUCCESS) {
-			$this->storyResult = StoryResults::RESULT_PASS;
-		}
-		else if ($actionShouldWork == StoryResults::PREDICT_FAIL && ($actionResult == StoryResults::ACTION_FAILED || $actionResult == StoryResults::ACTION_HASNOACTIONS) && $actionWorked == StoryResults::INSPECT_FAIL) {
-			$this->storyResult = StoryResults::RESULT_PASS;
-		}
-		else if ($actionShouldWork == StoryResults::PREDICT_UNKNOWN || $actionShouldWork == StoryResults::PREDICT_INCOMPLETE) {
-			$this->storyResult = StoryResults::RESULT_UNKNOWN;
-		}
-		else if ($actionResult == StoryResults::ACTION_INCOMPLETE || $actionResult == StoryResults::ACTION_UNKNOWN) {
-			$this->storyResult = StoryResults::RESULT_UNKNOWN;
-		}
-		else if ($actionWorked == StoryResults::INSPECT_UNKNOWN || $actionWorked == StoryResults::INSPECT_INCOMPLETE) {
-			$this->storyResult = StoryResults::RESULT_UNKNOWN;
-		}
-		else {
-			$this->storyResult = StoryResults::RESULT_FAIL;
-		}
 	}
 }

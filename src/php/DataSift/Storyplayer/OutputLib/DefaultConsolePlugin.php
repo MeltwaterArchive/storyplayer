@@ -64,6 +64,39 @@ class DefaultConsolePlugin implements OutputPlugin
 
 	protected $verbosityLevel = 0;
 
+	protected $resultStrings = array();
+
+	public function __construct()
+	{
+		$this->resultStrings = array (
+			StoryResult::PASS => array (
+				0 => ' [PASS]',
+				1 => PHP_EOL . PHP_EOL . "Result: PASS",
+				2 => PHP_EOL . PHP_EOL . "Result: PASS"
+			),
+			StoryResult::FAIL => array (
+				0 => ' [FAIL]',
+				1 => PHP_EOL . PHP_EOL . "Result: FAIL",
+				2 => PHP_EOL . PHP_EOL . "Result: FAIL"
+			),
+			StoryResult::UNKNOWN => array (
+				0 => ' [UNKNOWN]',
+				1 => PHP_EOL . PHP_EOL . "Result: UNKNOWN",
+				2 => PHP_EOL . PHP_EOL . "Result: UNKNOWN"
+			),
+			StoryResult::INCOMPLETE => array (
+				0 => ' [INCOMPLETE]',
+				1 => PHP_EOL . PHP_EOL . "Result: INCOMPLETE",
+				2 => PHP_EOL . PHP_EOL . "Result: INCOMPLETE"
+			),
+			StoryResult::BLACKLISTED => array (
+				0 => ' [BLACKLISTED]',
+				1 => PHP_EOL . PHP_EOL . "Result: BLACKLISTED",
+				2 => PHP_EOL . PHP_EOL . "Result: BLACKLISTED"
+			),
+		);
+	}
+
 	public function setVerbosity($verbosityLevel)
 	{
 		$this->verbosityLevel = $verbosityLevel;
@@ -111,14 +144,20 @@ EOS;
 
 	public function endStory(StoryResult $storyResult)
 	{
-		// output any errors that we have
-		echo PHP_EOL
-		     . "This story failed with the following errors:"
-		     . PHP_EOL . PHP_EOL;
+		// var_dump($storyResult);
 
-		foreach ($this->phaseErrors as $phaseName => $msg)
-		{
-			echo $phaseName . ': ' . $msg . PHP_EOL;
+		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel] . PHP_EOL;
+
+		if (count($this->phaseErrors) > 0) {
+			// output any errors that we have
+			echo PHP_EOL
+			     . "This story failed with the following errors:"
+			     . PHP_EOL . PHP_EOL;
+
+			foreach ($this->phaseErrors as $phaseName => $msg)
+			{
+				echo $phaseName . ': ' . $msg . PHP_EOL;
+			}
 		}
 	}
 

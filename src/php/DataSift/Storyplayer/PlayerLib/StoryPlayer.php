@@ -47,6 +47,7 @@ use Exception;
 use stdClass;
 use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
+use DataSift\Storyplayer\Phases\PhaseResult;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
 use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
@@ -101,20 +102,23 @@ class StoryPlayer
 		// when we're part-way through executing our code
 		$phases = [];
 		foreach ($context->phases->toRun as $phaseName => $isActive) {
-			// is the phase active?
-			if (!$isActive) {
-				// no, it has been marked for skipping
-				continue;
-			}
 			$phase = $phaseLoader->loadPhase($st, $phaseName);
-			$phases[$phaseName] = $phase;
+			$phases[$phaseName] = [
+				'phase' => $phase,
+				'isActive' => $isActive
+			];
 		}
 
 		// execute each phase, until either:
 		//
 		// 1. all listed phases have been executed, or
 		// 2. one of the phases says that the story has failed
-		foreach ($phases as $phaseName => $phase) {
+		foreach ($phases as $phaseName => $phaseData)
+		{
+			// shorthand
+			$phase    = $phaseData['phase'];
+			$isActive = $phaseData['isActive'];
+
 			// remove this phase from the list of paired phases
 			//
 			// this ensures we do not accidentally execute a phase
@@ -124,12 +128,25 @@ class StoryPlayer
 			}
 
 			try {
+				// announce the phase
+				//
+				// we want the announcement to always happen, even if
+				// the phase is subsequently skipped
+				$phase->announcePhase();
+
 				// execute the phase
 				//
 				// the phase is responsible for all exception handling,
 				// as different exceptions can mean different things depending
 				// on which phase we are running
-				$phaseResult = $phase->doPhase($storyResult);
+				if ($isActive) {
+					$st->setCurrentPhase($phase);
+					$phaseResult = $phase->doPhase($storyResult);
+				}
+				else {
+					$phaseResult = new PhaseResult;
+					$phaseResult->setContinueStory(PhaseResult::SKIPPED);
+				}
 
 				// close off any open log actions
 				$st->closeAllOpenActions();

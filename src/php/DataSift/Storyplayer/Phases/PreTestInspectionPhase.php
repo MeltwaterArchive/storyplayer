@@ -73,9 +73,6 @@ class PreTestInspectionPhase extends StoryPhase
 		// our result
 		$phaseResult = new PhaseResult;
 
-		// what are we doing?
-		$this->announcePhase();
-
 		// do we have anything to do?
 		if (!$story->hasPreTestInspection())
 		{
@@ -90,7 +87,6 @@ class PreTestInspectionPhase extends StoryPhase
 		// with it if it explodes
 		try {
 			// do any required setup
-			$st->setCurrentPhase($this);
 			$this->doPerPhaseSetup($st);
 
 			// if the callback exists, use it

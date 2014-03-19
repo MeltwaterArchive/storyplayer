@@ -74,8 +74,6 @@ class PostTestInspectionPhase extends StoryPhase
 		$phaseResult = new PhaseResult;
 
 		try {
-			$this->announcePhase();
-
 			// do we have anything to do?
 			if (!$story->hasPostTestInspection())
 			{
@@ -87,7 +85,6 @@ class PostTestInspectionPhase extends StoryPhase
 			}
 
 			// do any necessary setup
-			$st->setCurrentPhase($this);
 			$this->doPerPhaseSetup();
 
 			// make the call

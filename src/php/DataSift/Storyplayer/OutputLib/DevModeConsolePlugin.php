@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\OutputLib;
 
 use DataSift\Stone\LogLib\Log;
+use DataSift\StoryPlayer\Phases\Phase;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
 
 /**
@@ -59,6 +60,38 @@ use DataSift\StoryPlayer\PlayerLib\StoryResult;
 class DevModeConsolePlugin implements OutputPlugin
 {
 	protected $verbosityLevel = 0;
+	protected $resultStrings  = array();
+
+	public function __construct()
+	{
+		$this->resultStrings = array (
+			StoryResult::PASS => array (
+				0 => PHP_EOL . "Result: PASS",
+				1 => PHP_EOL . "Result: PASS",
+				2 => PHP_EOL . "Result: PASS"
+			),
+			StoryResult::FAIL => array (
+				0 => PHP_EOL . "Result: FAIL",
+				1 => PHP_EOL . "Result: FAIL",
+				2 => PHP_EOL . "Result: FAIL"
+			),
+			StoryResult::UNKNOWN => array (
+				0 => PHP_EOL . "Result: UNKNOWN",
+				1 => PHP_EOL . "Result: UNKNOWN",
+				2 => PHP_EOL . "Result: UNKNOWN"
+			),
+			StoryResult::INCOMPLETE => array (
+				0 => PHP_EOL . "Result: INCOMPLETE",
+				1 => PHP_EOL . "Result: INCOMPLETE",
+				2 => PHP_EOL . "Result: INCOMPLETE"
+			),
+			StoryResult::BLACKLISTED => array (
+				0 => PHP_EOL . "Result: BLACKLISTED",
+				1 => PHP_EOL . "Result: BLACKLISTED",
+				2 => PHP_EOL . "Result: BLACKLISTED"
+			),
+		);
+	}
 
 	public function setVerbosity($verbosityLevel)
 	{
@@ -103,95 +136,17 @@ EOS;
 Final Result
 
 EOS;
-		var_dump($storyResult);
-		return;
 
-		$resultMessage = '';
-		switch ($actionShouldWork) {
-			case self::PREDICT_SUCCESS:
-				$resultMessage = 'expected: SUCCESS         ;';
-				break;
-
-			case self::PREDICT_FAIL:
-				$resultMessage = 'expected: FAIL            ;';
-				break;
-
-			case self::PREDICT_INCOMPLETE:
-				$resultMessage = 'expected: DID NOT COMPLETE;';
-				break;
-
-			case self::PREDICT_UNKNOWN:
-			default:
-				$resultMessage = 'expected: UNKNOWN :(      ;';
-				break;
-		}
-
-		switch ($actionResult) {
-			case self::ACTION_COMPLETED:
-				$resultMessage .= ' action: COMPLETED ;';
-				break;
-
-			case self::ACTION_FAILED:
-				$resultMessage .= ' action: FAILED    ;';
-				break;
-
-			case self::ACTION_INCOMPLETE:
-				$resultMessage .= ' action: INCOMPLETE;';
-				break;
-
-			case self::ACTION_HASNOACTIONS:
-				$resultMessage .= ' action: NO ACTION ;';
-				break;
-
-			default:
-				$resultMessage .= ' action: UNKNOWN   ;';
-		}
-
-		switch ($actionWorked) {
-			case self::INSPECT_SUCCESS:
-				$resultMessage .= ' actual: SUCCESS         ;';
-				break;
-
-			case self::INSPECT_FAIL:
-				$resultMessage .= ' actual: FAIL            ;';
-				break;
-
-			case self::INSPECT_INCOMPLETE:
-				$resultMessage .= ' actual: DID NOT COMPLETE;';
-				break;
-
-			case self::INSPECT_UNKNOWN:
-			default:
-				$resultMessage .= ' actual: UNKNOWN :(      ;';
-				break;
-		}
-
-		switch($result->storyResult)
-		{
-			case StoryResult::RESULT_PASS:
-				$resultMessage .= ' result: PASS';
-				break;
-
-			case StoryResult::RESULT_FAIL:
-				$resultMessage .= ' result: FAIL';
-				break;
-
-			case StoryResult::RESULT_BLACKLISTED:
-				$resultMessage = 'result: DID NOT RUN (unsafe environment)';
-				break;
-
-			case StoryResult::RESULT_UNKNOWN:
-			default:
-				$resultMessage .= ' result: UNKNOWN';
-		}
-
-		// tell the user what happened
-		Log::write(Log::LOG_NOTICE, $resultMessage);
-
+		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel] . PHP_EOL;
 	}
 
 	public function startStoryPhase($phaseName, $phaseType)
 	{
+		// we only announce story phases
+		if ($phaseType != Phase::STORY_PHASE) {
+			return;
+		}
+
 		echo PHP_EOL;
 		echo "-------------------------------------------------------------" . PHP_EOL;
 		echo "Now performing: $phaseName" . PHP_EOL;

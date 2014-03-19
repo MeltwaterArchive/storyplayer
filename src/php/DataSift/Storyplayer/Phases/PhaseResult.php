@@ -68,7 +68,6 @@ use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
 
 class PhaseResult
 {
-	protected $phase;
 	protected $message;
 	protected $nextAction;
 	protected $pairedPhases = array();
@@ -152,6 +151,15 @@ class PhaseResult
 	public function getPhaseIsBlacklisted()
 	{
 		if ($this->result == self::BLACKLISTED) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function getPhaseIsSkipped()
+	{
+		if ($this->result == self::SKIPPED) {
 			return true;
 		}
 

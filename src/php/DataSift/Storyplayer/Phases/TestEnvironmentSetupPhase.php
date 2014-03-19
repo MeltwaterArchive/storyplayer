@@ -74,9 +74,6 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		// shorthand
 		$story = $st->getStory();
 
-		// what are we doing?
-		$this->announcePhase();
-
 		// do we have anything to do?
 		if (!$story->hasTestEnvironmentSetup())
 		{
@@ -96,7 +93,6 @@ class TestEnvironmentSetupPhase extends StoryPhase
 
 		// make the call
 		try {
-			$st->setCurrentPhase($this);
 			foreach ($callbacks as $callback){
 				call_user_func($callback, $st);
 			}
