@@ -34,31 +34,84 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * the PreTestPrediction phase
+ * the TestTeardown phase
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class PreTestPredictionPhase extends StoryPhase
+class TestTeardownPhase extends StoryPhase
 {
+	public function doPhase(StoryResult $storyResult)
+	{
+		// shorthand
+		$st    = $this->st;
+		$story = $st->getStory();
 
+		// what are we doing?
+		$this->announcePhase();
+
+		// do we have anything to do?
+		if (!$story->hasTestTeardown())
+		{
+			$phaseResult->setContinueStory(
+				PhaseResult::SKIPPED,
+				"story has no test teardown instructions"
+			);
+			return $phaseResult;
+		}
+
+		// get the callback to call
+		$callbacks = $story->getTestTeardown();
+
+		// make the call
+		try {
+			$st->setCurrentPhase($this);
+			foreach ($callbacks as $callback) {
+				call_user_func($callback, $st);
+			}
+
+			// all is good
+			$phaseResult->setContinueStory();
+		}
+		catch (Exception $e)
+		{
+			// we still want to continue at this stage
+			$phaseResult->setContinueStory(
+				PhaseResult::FAILED,
+				"unable to perform test teardown; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
+		}
+
+		// close off any open log actions
+		$st->closeAllOpenActions();
+
+		// tidy up after ourselves
+		$this->doPerPhaseTeardown();
+
+		// all done
+		return $phaseResult;
+	}
 }

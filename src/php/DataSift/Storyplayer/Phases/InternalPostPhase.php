@@ -34,31 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
-use Exception;
-use DataSift\Stone\ObjectLib\BaseObject;
+use stdClass;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * the Action phase
+ * base class for all post-story phases
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class ActionPhase extends StoryPhase
+abstract class InternalPostPhase extends Phase
 {
+	public function getPhaseType()
+	{
+		return self::INTERNAL_POSTPHASE;
+	}
 
+	public function doPerPhaseSetup()
+	{
+		// this is a no-op for us
+	}
+
+	public function doPerPhaseTeardown()
+	{
+		// this is also a no-op for us
+	}
 }

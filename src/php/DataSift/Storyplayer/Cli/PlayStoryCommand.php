@@ -177,6 +177,7 @@ class PlayStoryCommand extends CliCommand
         }
         else {
             $verbosity = $engine->options->verbosity;
+            $output->setVerbosity($engine->options->verbosity);
             if ($verbosity > 0) {
                 $loggingConfig->levels->LOG_DEBUG = true;
             }
@@ -314,7 +315,7 @@ class PlayStoryCommand extends CliCommand
                 $context->initUser($staticConfig, $runtimeConfig, $story);
 
                 // make the story happen
-                $result = $player->play($teller, $staticConfig);
+                $player->play($teller, $staticConfig);
 
                 // all done
                 break;

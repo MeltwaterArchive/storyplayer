@@ -83,6 +83,7 @@ class DefaultStaticConfig extends LoadedConfig
 
         // defaults for phases
         $phases = new BaseObject();
+        $phases->CheckBlacklisted = true;
         $phases->TestEnvironmentSetup = true;
         $phases->TestSetup = true;
         $phases->PreTestPrediction = true;
@@ -91,6 +92,7 @@ class DefaultStaticConfig extends LoadedConfig
         $phases->PostTestInspection = true;
         $phases->TestTeardown = true;
         $phases->TestEnvironmentTeardown = true;
+        $phases->ApplyRoleChanges = true;
 
         $this->phases = $phases;
 

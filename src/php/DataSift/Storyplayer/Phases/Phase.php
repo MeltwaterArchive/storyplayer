@@ -34,31 +34,118 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
-use Exception;
-use DataSift\Stone\ObjectLib\BaseObject;
+use stdClass;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * the TestTeardown phase
+ * base class for all phases
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class TestTeardownPhase extends StoryPhase
+abstract class Phase
 {
+	const INTERNALPRE_PHASE  = 1;
+	const STORY_PHASE        = 2;
+	const INTERNALPOST_PHASE = 3;
 
+	protected $st;
+
+	public function __construct(StoryTeller $st)
+	{
+		$this->st = $st;
+	}
+
+	public function announcePhase()
+	{
+		// shorthand
+		$output = $this->st->getOutput();
+
+		// what is our name?
+		$phaseName = $this->getPhaseName();
+
+		// what kind of phase are we?
+		$phaseType = $this->getPhaseType();
+
+		// tell the world who we are
+		$output->startStoryPhase($phaseName, $phaseType);
+	}
+
+	public function getPhaseName()
+	{
+		static $phaseName = null;
+
+		if (!isset($phaseName)) {
+			$parts = explode('\\', get_class($this));
+			$phaseName = str_replace('Phase', '', end($parts));
+		}
+
+		return $phaseName;
+	}
+
+	public function doPerPhaseSetup()
+	{
+		// shorthand
+		$st    = $this->st;
+		$story = $st->getStory();
+
+		// do we have anything to do?
+		if (!$story->hasPerPhaseSetup())
+		{
+			return;
+		}
+
+		// get the callback to call
+		$callbacks = $story->getPerPhaseSetup();
+
+		// make the call
+		foreach ($callbacks as $callback) {
+			call_user_func($callback, $st);
+		}
+
+		// all done
+	}
+
+	public function doPerPhaseTeardown()
+	{
+		// shorthand
+		$st    = $this->st;
+		$story = $st->getStory();
+
+		// do we have anything to do?
+		if ($story->hasPerPhaseTeardown())
+		{
+			// get the callback to call
+			$callbacks = $story->getPerPhaseTeardown();
+
+			// make the call
+			foreach ($callbacks as $callback) {
+				call_user_func($callback, $st);
+			}
+		}
+
+		// stop the test device, if it is still running
+		$st->stopDevice();
+
+		// all done
+	}
+
+	abstract public function getPhaseType();
+	abstract public function doPhase(StoryResult $storyResult);
 }

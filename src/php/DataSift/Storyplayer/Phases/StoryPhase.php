@@ -34,31 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
-use Exception;
-use DataSift\Stone\ObjectLib\BaseObject;
+use stdClass;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * the TestEnvironmentTeardown phase
+ * base class for all story phases
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class TestEnvironmentTeardownPhase extends StoryPhase
+abstract class StoryPhase extends Phase
 {
-
+	public function getPhaseType()
+	{
+		return self::STORY_PHASE;
+	}
 }

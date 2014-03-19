@@ -44,6 +44,8 @@
 namespace DataSift\Storyplayer\OutputLib;
 
 use DataSift\Stone\LogLib\Log;
+use DataSift\StoryPlayer\Phases\Phase;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
 
 /**
  * the console plugin we use unless the user specifies something else
@@ -57,6 +59,16 @@ use DataSift\Stone\LogLib\Log;
  */
 class DefaultConsolePlugin implements OutputPlugin
 {
+	protected $phaseNumber = 0;
+	protected $phaseErrors = array();
+
+	protected $verbosityLevel = 0;
+
+	public function setVerbosity($verbosityLevel)
+	{
+		$this->verbosityLevel = $verbosityLevel;
+	}
+
 	public function startStoryplayer()
 	{
 
@@ -69,17 +81,59 @@ class DefaultConsolePlugin implements OutputPlugin
 
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
-		echo PHP_EOL . $storyName . ':';
+		if ($this->verbosityLevel > 0) {
+			echo <<<EOS
+=============================================================
+
+      Story: {$storyName}
+   Category: {$storyCategory}
+      Group: {$storyGroup}
+
+Environment: {$envName}
+     Device: {$deviceName}
+
+EOS;
+		}
+		else {
+			echo PHP_EOL . $storyName . ':';
+		}
+
+
+		// reset the phaseNumber counter
+		$this->phaseNumber = 0;
 	}
 
-	public function endStory()
+	public function endStory(StoryResult $storyResult)
 	{
+		// output any errors that we have
+		echo PHP_EOL
+		     . "This story failed with the following errors:"
+		     . PHP_EOL . PHP_EOL;
 
+		foreach ($this->phaseErrors as $phaseName => $msg)
+		{
+			echo $phaseName . ': ' . $msg . PHP_EOL;
+		}
 	}
 
-	public function startStoryPhase($phaseNumber, $phaseName)
+	public function startStoryPhase($phaseName, $phaseType)
 	{
-		echo ' ' . $phaseNumber;
+		// we're only interested in telling the user about the
+		// phases of a story
+		if ($phaseType !== Phase::STORY_PHASE) {
+			return;
+		}
+
+		// increment our internal counter
+		$this->phaseNumber++;
+
+		// tell the user which phase we're doing
+		if ($this->verbosityLevel > 0) {
+			echo PHP_EOL . $phaseName . ': ';
+		}
+		else {
+			echo ' ' . $this->phaseNumber;
+		}
 	}
 
 	public function endStoryPhase()
@@ -93,9 +147,20 @@ class DefaultConsolePlugin implements OutputPlugin
 		echo ".";
 	}
 
-	public function logStoryError()
+	public function logStoryError($phaseName, $msg)
 	{
+		// we have to show this now, and save it for final output later
+		echo "E";
 
+		$this->phaseErrors[$phaseName] = $msg;
+	}
+
+	public function logStorySkipped($phaseName, $msg)
+	{
+		// we have to show this now, and save it for final output later
+		echo "S";
+
+		$this->phaseErrors[$phaseName] = $msg;
 	}
 
 	public function logCliError($msg)

@@ -34,74 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
+
+use stdClass;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * container for metadata about story phases
+ * base class for all pre-story phases
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryPhases
+
+abstract class InternalPrePhase extends Phase
 {
-	const PHASE_TESTENVIRONMENTSETUP = 1;
-	const PHASE_TESTSETUP = 2;
-	const PHASE_PRETESTPREDICTION = 3;
-	const PHASE_PRETESTINSPECTION = 4;
-	const PHASE_ACTION = 5;
-	const PHASE_POSTTESTINSPECTION = 6;
-	const PHASE_TESTTEARDOWN = 7;
-	const PHASE_TESTENVIRONMENTTEARDOWN = 8;
-	const PHASE_ROLECHANGES = 9;
-	const PHASE_RESULTS = 10;
+	public function getPhaseType()
+	{
+		return self::INTERNAL_PREPHASE;
+	}
 
-	static public $phaseToName = array(
-		1  => "TestEnvironmentSetup",
-		2  => "TestSetup",
-		3  => "PreTestPrediction",
-		4  => "PreTestInspection",
-		5  => "Action",
-		6  => "PostTestInspection",
-		7  => "TestTeardown",
-		8  => "TestEnvironmentTeardown",
-		9  => "RoleChanges",
-		10 => "Results"
-	);
+	public function doPerPhaseSetup()
+	{
+		// this is a no-op for us
+	}
 
-	static public $phaseToText = array(
-		1  => "Test Environment Setup",
-		2  => "Test Setup",
-		3  => "Pre-Test Prediction",
-		4  => "Pre-Test Inspection",
-		5  => "Action",
-		6  => "Post-Test Inspection",
-		7  => "Test Teardown",
-		8  => "Test Environment Teardown",
-		9  => "Role Changes",
-		10 => "Results"
-	);
-
-	static public $phaseToClass = array(
-		1  => "TestEnvironmentSetupPhase",
-		2  => "TestSetupPhase",
-		3  => "PreTestPredictionPhase",
-		4  => "PreTestInspectionPhase",
-		5  => "ActionPhase",
-		6  => "PostTestInspectionPhase",
-		7  => "TestTeardownPhase",
-		8  => "TestEnvironmentTeardownPhase",
-		9  => "RoleChangesPhase",
-		10 => "ResultsPhase",
-	);
+	public function doPerPhaseTeardown()
+	{
+		// this is also a no-op for us
+	}
 }

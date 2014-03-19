@@ -34,84 +34,113 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * the TestEnvironmentSetup phase
+ * the PreTestPrediction phase
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class TestEnvironmentSetupPhase extends StoryPhase
+class PreTestPredictionPhase extends StoryPhase
 {
-	public function runPhase(StoryTeller $st)
+	public function doPhase(StoryResult $storyResult)
 	{
 		// shorthand
-		$staticConfig = $st->getStaticConfig();
-
-		// our return value
-		$return = StoryResults::SETUP_SUCCESS;
-
-		// shorthand
+		$st    = $this->st;
 		$story = $st->getStory();
 
-		// what are we doing?
-		$this->announcePhase($st, $this->phaseNumber, 'Setup test environment');
+		// our return value
+		$phaseResult = new PhaseResult;
 
-		// do we have anything to do?
-		if (!$story->hasTestEnvironmentSetup())
-		{
-			Log::write(Log::LOG_INFO, "story has no test environment setup instructions");
-
-			// as far as the rest of the test is concerned, the setup was
-			// a success
-			return $return;
-		}
-
-		// should we do this stage?
-		if (!$this->shouldExecutePhase('TestEnvironmentSetup', $staticConfig)) {
-			Log::write(Log::LOG_INFO, "test environment setup is disabled; skipping");
-
-			// as far as the rest of the test is concerned, the setup
-			// was a success
-			return $return;
-		}
-
-		// get the callbacks to call
-		$callbacks = $story->getTestEnvironmentSetup();
-
-		// make the call
 		try {
-			$st->setCurrentPhase(StoryPhases::PHASE_TESTENVIRONMENTSETUP);
-			foreach ($callbacks as $callback){
-				call_user_func($callback, $st);
+			$this->announcePhase();
+
+			// do we have anything to do?
+			if (!$story->hasPreTestPrediction())
+			{
+				$phaseResult->setContinueStory(
+					PhaseResult::HASNOACTIONS,
+					"story has no pre-test prediction instructions; skipping"
+				);
+				return $phaseResult;
 			}
+
+			// setup the phase
+			$st->setCurrentPhase($this);
+			$this->doPerPhaseSetup();
+
+			// make the call
+			$callbacks = $story->getPreTestPrediction();
+
+			foreach ($callbacks as $callback) {
+				if (is_callable($callback)) {
+					call_user_func($callback, $st);
+				}
+			}
+
+			// if we get here, the PreTestPrediction worked with
+			// no problems at all
+			$phaseResult->setContinueStory();
 		}
+		// in any of the expects() calls in the preflight checks fails,
+		// an E5xx_ActionFailed will be thrown
+		catch (E5xx_ActionFailed $e) {
+			$phaseResult->setStoryShouldFail();
+			$phaseResult->setContinueStory(
+				PhaseResult::FAILED,
+				"pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			$phaseResult->setStoryShouldFail();
+			$phaseResult->setContinueStory(
+				PhaseResult::FAILED,
+				"pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
+		}
+		// if any of the tests are incomplete, deal with that too
+		catch (E5xx_NotImplemented $e) {
+			$phaseResult->setFailStory(
+				PhaseResult::INCOMPLETE,
+				"unable to perform pre-test prediction; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
+		}
+		// deal with the things that go wrong
 		catch (Exception $e) {
-			Log::write(Log::LOG_CRITICAL, "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString());
-			$return = StoryResults::SETUP_FAIL;
+			$phaseResult->setFailStory(
+				PhaseResult::FAILED,
+				"unable to perform pre-test prediction; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
 		}
 
 		// close off any open log actions
 		$st->closeAllOpenActions();
 
+		// tidy up after ourselves
+		$this->doPerPhaseTeardown($st);
+
 		// all done
-		return $return;
+		return $phaseResult;
 	}
 }

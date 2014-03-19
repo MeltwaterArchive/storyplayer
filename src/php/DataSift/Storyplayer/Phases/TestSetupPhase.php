@@ -34,24 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
  * the TestSetup phase
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -60,5 +64,53 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class TestSetupPhase extends StoryPhase
 {
+	public function doPhase(StoryResult $storyResult)
+	{
+		// shorthand
+		$st    = $this->st;
+		$story = $st->getStory();
 
+		// our return value
+		$phaseResult = new PhaseResult($this);
+
+		// what are we doing?
+		$this->announcePhase();
+
+		// do we have anything to do?
+		if (!$story->hasTestSetup())
+		{
+			$phaseResult->setContinueStory(
+				PhaseResult::HASNOACTIONS,
+				"story has no test setup instructions"
+			);
+
+			// as far as the rest of the test is concerned, the setup was
+			// a success
+			return $phaseResult;
+		}
+
+		// setup the phase
+		$st->setCurrentPhase($this);
+
+		// get the callback to call
+		$callbacks = $story->getTestSetup();
+
+		// make the call
+		try {
+			foreach ($callbacks as $callback) {
+				call_user_func($callback, $st);
+			}
+		}
+		catch (Exception $e)
+		{
+			$phaseResult->setFailStory(
+				PhaseResult::FAILED,
+				"unable to perform test setup; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
+		}
+
+		// all done
+		$phaseResult->setContinueStory();
+		return $phaseResult;
+	}
 }

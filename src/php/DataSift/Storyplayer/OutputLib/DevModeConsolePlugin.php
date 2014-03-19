@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\OutputLib;
 
 use DataSift\Stone\LogLib\Log;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
 
 /**
  * the console plugin loaded when DevMode is active
@@ -57,6 +58,13 @@ use DataSift\Stone\LogLib\Log;
  */
 class DevModeConsolePlugin implements OutputPlugin
 {
+	protected $verbosityLevel = 0;
+
+	public function setVerbosity($verbosityLevel)
+	{
+		$this->verbosityLevel = $verbosityLevel;
+	}
+
 	public function startStoryplayer()
 	{
 
@@ -82,8 +90,16 @@ Environment: {$envName}
 EOS;
 	}
 
-	public function endStory()
+	public function endStory(StoryResult $storyResult)
 	{
+		echo <<<EOS
+-------------------------------------------------------------
+Final Result
+
+EOS;
+		var_dump($storyResult);
+		return;
+
 		$resultMessage = '';
 		switch ($actionShouldWork) {
 			case self::PREDICT_SUCCESS:
@@ -168,11 +184,11 @@ EOS;
 
 	}
 
-	public function startStoryPhase($phaseNumber, $phaseName)
+	public function startStoryPhase($phaseName, $phaseType)
 	{
 		echo PHP_EOL;
 		echo "-------------------------------------------------------------" . PHP_EOL;
-		echo "Now performing: $phaseNumber: $phaseName" . PHP_EOL;
+		echo "Now performing: $phaseName" . PHP_EOL;
 		echo PHP_EOL;
 	}
 
@@ -187,9 +203,16 @@ EOS;
 		Log::write($level, $msg);
 	}
 
-	public function logStoryError()
+	public function logStoryError($phaseName, $msg)
 	{
+		// send this to the default logger
+		Log::write(Log::LOG_CRITICAL, $msg);
+	}
 
+	public function logStorySkipped($phaseName, $msg)
+	{
+		// send this to the default logger
+		Log::write(Log::LOG_NOTICE, $msg);
 	}
 
 	public function logCliError($msg)

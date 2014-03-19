@@ -34,31 +34,73 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * the PostTestInspection phase
+ * the Action phase
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class PostTestInspectionPhase extends StoryPhase
+class ApplyRoleChangesPhase extends InternalPostPhase
 {
+	public function doPhase(StoryResult $storyResult)
+	{
+		// shorthand
+		$st    = $this->st;
+		$story = $st->getStory();
 
+		// are there any role changes to apply?
+		if (!$story->hasRoleChanges()) {
+			// nothing to see ... move along, move along
+			$phaseResult->setContinueStory(
+				PhaseResult::SKIPPED,
+				"story has no role changes to apply"
+			);
+			return $phaseResult;
+		}
+
+		$this->announcePhase();
+		$st->setPhase($this);
+		$callbacks = $story->getRoleChanges();
+
+		try {
+			foreach ($callbacks as $callback) {
+				call_user_func($callback, $st);
+			}
+
+			// all is good
+			$phaseResult->setContinueStory();
+		}
+		catch (Exception $e) {
+			// we treat any failures here as a total failure
+			$phaseResult->setFailStory(
+				PhaseResult::FAILED,
+				"unable to apply role changes; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
+		}
+
+		// all done
+		return $phaseResult;
+	}
 }

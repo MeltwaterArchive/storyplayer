@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
+use DataSift\Storyplayer\PlayerLib\StoryResult;
 use DataSift\Storyplayer\OutputLib\OutputPlugin;
 use DataSift\Storyplayer\OutputLib\DefaultConsolePlugin;
 
@@ -56,7 +57,7 @@ use DataSift\Storyplayer\OutputLib\DefaultConsolePlugin;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Output
+class Output implements OutputPlugin
 {
 	protected $plugins = array();
 
@@ -77,6 +78,20 @@ class Output
 	public function usePlugin($slot, OutputPlugin $plugin)
 	{
 		$this->plugins[$slot] = $plugin;
+	}
+
+	/**
+	 * tell our output plugins how chatty they should be
+	 *
+	 * @param int $verbosityLevel
+	 *        the amount (0-2) of verbosity to be
+	 */
+	public function setVerbosity($verbosityLevel)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->setVerbosity($verbosityLevel);
+		}
 	}
 
 	/**
@@ -125,11 +140,11 @@ class Output
 	 *
 	 * @return void
 	 */
-	public function endStory()
+	public function endStory(StoryResult $storyResult)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endStory();
+			$plugin->endStory($storyResult);
 		}
 	}
 
@@ -138,11 +153,11 @@ class Output
 	 *
 	 * @return void
 	 */
-	public function startStoryPhase($phaseNumber, $phaseName)
+	public function startStoryPhase($phaseName, $phaseType)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startStoryPhase($phaseNumber, $phaseName);
+			$plugin->startStoryPhase($phaseName, $phaseType);
 		}
 	}
 
@@ -177,11 +192,24 @@ class Output
 	 *
 	 * @return void
 	 */
-	public function logStoryError()
+	public function logStoryError($phaseName, $msg)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->logStoryError();
+			$plugin->logStoryError($phaseName, $msg);
+		}
+	}
+
+	/**
+	 * called when a story is skipped
+	 *
+	 * @return void
+	 */
+	public function logStorySkipped($phaseName, $msg)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->logStorySkipped($phaseName, $msg);
 		}
 	}
 

@@ -34,79 +34,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
+use Exception;
+use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * base class for all story phases
+ * the TestEnvironmentSetup phase
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class StoryPhase
+class TestEnvironmentSetupPhase extends StoryPhase
 {
-	protected $st;
-	protected $phaseNumber;
-
-	public function __construct(Storyplayer $st, $phaseNumber)
-	{
-		$this->phaseNumber = $phaseNumber;
-	}
-
-	public function announcePhase(StoryTeller $st)
+	public function doPhase(StoryResult $storyResult)
 	{
 		// shorthand
-		$output = $st->getOutput();
+		$st = $this->st;
 
-		// what is our name?
-		$phaseName = $this->getPhaseText();
+		// our return value
+		$phaseResult = new PhaseResult($this);
 
-		// tell the world who we are
-		$output->startStoryPhase($phaseNumber, $phaseName);
-	}
+		// shorthand
+		$story = $st->getStory();
 
-	public function shouldExecutePhase(stdClass $staticConfig)
-	{
-		// what is our name?
-		$phaseName = $this->getPhaseName();
+		// what are we doing?
+		$this->announcePhase();
 
-		// is this phase disabled in the config?
-		if (!isset($staticConfig->phases, $staticConfig->phases->$phaseName) || !$staticConfig->phases->$phaseName)
+		// do we have anything to do?
+		if (!$story->hasTestEnvironmentSetup())
 		{
-			return false;
+			// nothing to do
+			$phaseResult->setContinueStory(
+				PhaseResult::HASNOACTIONS,
+				"story has no test environment setup instructions"
+			);
+
+			// as far as the rest of the test is concerned, the setup was
+			// a success
+			return $phaseResult;
 		}
 
-		return true;
-	}
+		// get the callbacks to call
+		$callbacks = $story->getTestEnvironmentSetup();
 
-	public function getPhaseName()
-	{
-		// what is our name?
-		$phaseName = StoryPhases::$phaseToName[$this->phaseNumber];
+		// make the call
+		try {
+			$st->setCurrentPhase($this);
+			foreach ($callbacks as $callback){
+				call_user_func($callback, $st);
+			}
+		}
+		catch (Exception $e) {
+			$msg = "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString();
+			$phaseResult->setFailStory(PhaseResult::FAILED, $msg);
+			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
+			return $phaseResult;
+		}
 
 		// all done
-		return $phaseName;
-	}
+		$phaseResult->setPhaseResult(PhaseResult::COMPLETED);
+		$phaseResult->setNextAction(StoryPlayer::STEP_CONTINUE);
+		$phaseResult->addPairedPhase('TestEnvironmentTeardown');
 
-	public function getPhaseText()
-	{
-		// what is our human-readable name?
-		$phaseText = StoryPhases::$phaseToText[$this->phaseNumber];
-
-		// all done
-		return $phaseText;
+		return $phaseResult;
 	}
 }

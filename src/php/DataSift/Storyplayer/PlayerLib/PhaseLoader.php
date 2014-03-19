@@ -43,12 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use Exception;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\Phases\Phase;
 
 /**
- * a record of what happened with a story
+ * Helper class to load Phase classes and create objects from them
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -57,72 +55,75 @@ use DataSift\Storyplayer\StoryLib\Story;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryResults
+class PhaseLoader
 {
-	const SETUP_SUCCESS       = 1;
-	const SETUP_FAIL          = 2;
+	private $namespaces = array();
 
-	const PREDICT_SUCCESS     = 10;
-	const PREDICT_FAIL        = 11;
-	const PREDICT_INCOMPLETE  = 12;
-	const PREDICT_UNKNOWN     = 13;
+	public function setNamespaces(StoryTeller $st)
+	{
+		// a list of the namespaces we're going to search for this class
+		//
+		// we always search the generic 'Phases' namespace first, in case
+		// users don't want to uniquely namespace their Phase classes
+		$this->namespaces = array ("Phases");
 
-	const ACTION_COMPLETED    = 20;
-	const ACTION_FAILED       = 21;
-	const ACTION_INCOMPLETE   = 22;
-	const ACTION_UNKNOWN      = 23;
-	const ACTION_HASNOACTIONS = 24;
+		// does the user have any namespaces of their own that they
+		// want to search?
+		$context = $st->getStoryContext();
 
-	const INSPECT_SUCCESS     = 30;
-	const INSPECT_FAIL        = 31;
-	const INSPECT_INCOMPLETE  = 32;
-	const INSPECT_UNKNOWN     = 33;
+		if (isset($context->phases, $context->phases->namespaces) && is_array($context->phases->namespaces)) {
 
-	const TEARDOWN_SUCCESS    = 40;
-	const TEARDOWN_FAIL       = 41;
+			// yes, the user does have some namespaces
+			// copy them across into our list
+			foreach ($context->phases->namespaces as $namespace) {
+				$this->namespaces[] = $namespace;
+			}
+		}
 
-	const RESULT_PASS         = 100;
-	const RESULT_FAIL         = 101;
-	const RESULT_UNKNOWN      = 102;
-	const RESULT_BLACKLISTED  = 103;
+		// we search our own namespace last, as it allows the user to
+		// replace our Phases with their own if they prefer
+		$this->namespaces[] = "DataSift\\Storyplayer\\Phases";
+	}
 
-	static public $outcomeToText = array(
-		1 => "Success",
-		2 => "Fail",
+	public function determinePhaseClassFor($phaseName)
+	{
+		$className = ucfirst($phaseName) . 'Phase';
 
-		10 => "Success",
-		11 => "Fail",
-		12 => "Incomplete",
-		13 => "Unknown",
+		// all done
+		return $className;
+	}
 
-		20 => "Completed",
-		21 => "Failed",
-		22 => "Incomplete",
-		23 => "Unknown",
-		24 => "Has No Actions",
+	public function loadPhase(StoryTeller $st, $phaseName, $constructorArgs = null)
+	{
+		// can we find the class?
+		foreach ($this->namespaces as $namespace) {
+			// what is the full name of the class (inc namespace) to
+			// search for?
+			$className           = $this->determinePhaseClassFor($phaseName);
+			$namespacedClassName = $namespace . "\\" . $className;
 
-		30 => "Success",
-		31 => "Fail",
-		32 => "Incomplete",
-		33 => "Unkowwn",
+			// is there such a class?
+			if (class_exists($namespacedClassName)) {
+				// yes there is!!
+				//
+				// create an instance of the class
+				$return = new $namespacedClassName(
+					$st,
+					$constructorArgs
+				);
 
-		30 => "Success",
-		31 => "Fail",
+				// make sure our new object is an instance of 'Phase'
+				if (!$return instanceof Phase) {
+					throw new E5xx_NotAPhaseClass($namespacedClassName);
+				}
 
-		100 => "Pass",
-		101 => "Fail",
-		102 => "Unknown",
-		103 => "Blacklisted",
-	);
+				// return our newly-minted object
+				return $return;
+			}
+		}
 
-	static public $defaultPhaseOutcomes = array(
-		1 => self::SETUP_FAIL,
-		2 => self::SETUP_FAIL,
-		3 => self::PREDICT_UNKNOWN,
-		4 => NULL,
-		5 => self::ACTION_UNKNOWN,
-		6 => self::INSPECT_UNKNOWN,
-		7 => self::TEARDOWN_FAIL,
-		8 => self::TEARDOWN_FAIL
-	);
+		// if we get there, then we cannot find a suitable class in
+		// any of the namespaces that we know about
+		return null;
+	}
 }

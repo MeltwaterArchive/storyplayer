@@ -311,7 +311,7 @@ class VagrantVm implements SupportedHost
 		$log = $st->startAction("run vagrant command '{$command}'");
 
 		// build the command
-		$fullCommand = "cd '{$vmDetails->dir}' && $command";
+		$fullCommand = "cd '{$vmDetails->dir}' && $command 2>&1";
 
 		// run the command
 		$returnCode = 0;

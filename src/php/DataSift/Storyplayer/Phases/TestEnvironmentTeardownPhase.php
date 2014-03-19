@@ -34,40 +34,84 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\OutputLib;
+namespace DataSift\Storyplayer\Phases;
 
+use Exception;
 use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * the API for output plugins
+ * the TestEnvironmentTeardown phase
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface OutputPlugin
+
+class TestEnvironmentTeardownPhase extends StoryPhase
 {
-	public function startStoryplayer();
-	public function endStoryplayer();
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
-	public function endStory(StoryResult $storyResult);
-	public function startStoryPhase($phaseName, $phaseType);
-	public function endStoryPhase();
-	public function logStoryActivity($level, $msg);
-	public function logStoryError($phaseName, $msg);
-	public function logStorySkipped($phaseName, $msg);
-	public function logCliWarning($msg);
-	public function logCliError($msg);
-	public function logCliInfo($msg);
+	public function doPhase(StoryResult $storyResult)
+	{
+		// shorthand
+		$st    = $this->st;
+		$story = $st->getStory();
+
+		// our result object
+		$phaseResult = new PhaseResult;
+
+		// what are we doing?
+		$this->announcePhase();
+
+		// do we have anything to do?
+		if (!$story->hasTestEnvironmentTeardown())
+		{
+			$phaseResult->setContinueStory(
+				PhaseResult::SKIPPED,
+				"story has no test environment teardown instructions"
+			);
+			return $phaseResult;
+		}
+
+		// get the callback to call
+		$callbacks = $story->getTestEnvironmentTeardown();
+
+		// make the call
+		try {
+			$st->setCurrentPhase($this);
+			foreach ($callbacks as $callback){
+				call_user_func($callback, $st);
+			}
+
+			// all is good
+			$phaseResult->setContinueStory();
+		}
+		catch (Exception $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinueStory(
+				PhaseResult::FAILED,
+				"unable to complete test environment teardown; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
+		}
+
+		// close off any open log actions
+		$st->closeAllOpenActions();
+
+		// all done
+		return $phaseResult;
+	}
 }

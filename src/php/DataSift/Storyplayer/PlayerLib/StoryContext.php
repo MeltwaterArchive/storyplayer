@@ -88,6 +88,8 @@ class StoryContext extends BaseObject
 	public $device;
 	public $deviceName;
 
+	public $phases;
+
 	/**
 	 * persistent config (users, vms, etc) that gets cached to disk
 	 * between runs
@@ -111,6 +113,9 @@ class StoryContext extends BaseObject
 
 		// we need to know where to look for Prose classes
 		$this->initProse($staticConfig);
+
+		// we need to know which Phases to run, and where to find them
+		$this->initPhases($staticConfig);
 	}
 
 	public function initDefines($staticConfig)
@@ -152,6 +157,41 @@ class StoryContext extends BaseObject
 		// are running on
 		$this->env->host = new BaseObject;
 		list($this->env->host->networkInterface, $this->env->host->ipAddress) = $this->getHostIpAddress();
+	}
+
+	public function initPhases($staticConfig)
+	{
+		// start with an empty list
+		$this->phases = new BaseObject;
+
+		// where are we looking?
+		if (!isset($staticConfig->phases)) {
+			// nothing here
+			return;
+		}
+
+		// copy across what we have
+		$this->phases->toRun = (array)$staticConfig->phases;
+
+		// strip out special cases from the list of phases to run
+		//
+		// yes, this is ugly, and necessary. I don't want to break
+		// backwards-compatibility with the user-visible config
+		foreach (array('namespaces') as $key) {
+			if (isset($this->phases->toRun->$key)) {
+				unset($this->phases->toRun->$key);
+			}
+		}
+
+		// now, process the special case(s) that we have
+		if (isset($staticConfig->phases->namespaces)) {
+			if (!is_array($staticConfig->phases->namespaces)) {
+				throw new E5xx_InvalidConfig("the 'phases.namespaces' section of the config must either be an array, or it must be left out");
+			}
+
+			// copy over where to look for Prose classes
+			$this->prose->namespaces = $staticConfig->prose->namespaces;
+		}
 	}
 
 	public function initProse($staticConfig)

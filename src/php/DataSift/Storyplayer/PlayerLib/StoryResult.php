@@ -63,75 +63,76 @@ class StoryResult
 	public $phases = array();
 	public $storyResult = NULL;
 	public $storyAttempted = false;
+	public $storyShouldFail = false;
+
+	const PASS        = 1;
+	const FAIL        = 2;
+	const UNKNOWN     = 3;
+	const INCOMPLETE  = 4;
+	const BLACKLISTED = 5;
 
 	public function __construct(Story $story)
 	{
 		// remember the story we are reporting on
 		$this->story = $story;
-
-		// initialise the phases
-		foreach (StoryPlayer::$phaseToText as $phase => $name) {
-			$this->initPhase($phase, $name);
-		}
 	}
 
-	public function initPhase($phase, $name)
+	public function addPhaseResult($phase, $phaseResult)
 	{
-		// we need to collate the result data
-		$data = new BaseObject();
-
-		$data->phase    = $phase;
-		$data->executed = false;
-		$data->outcome  = null;
-		$data->cause    = null;
-
-		// remember what happened
-		$this->phases[$phase] = $data;
+		$phaseName = $phase->getPhaseName();
+		$this->phases[$phaseName] = $phaseResult;
 	}
 
-	public function addPhaseResult($phase, $outcome, Exception $cause = null)
-	{
-		// is this a valid phase?
-		if (!isset($this->phases[$phase])) {
-			throw new E5xx_NoSuchStoryPhase($phase);
-		}
-
-		// shorthand
-		$data = $this->phases[$phase];
-
-		// update the information
-		$data->executed = true;
-		$data->outcome  = $outcome;
-		$data->cause    = $cause;
-
-		// all done
-		return $outcome;
-	}
-
-	public function getPhaseResult($phase)
+	public function getPhaseResult($phaseName)
 	{
 		// do we have the data?
-		if (isset($this->phases[$phase])) {
-			return $this->phases[$phase];
+		if (isset($this->phases[$phaseName])) {
+			return $this->phases[$phaseName];
 		}
 
 		// if we get here, we have no data
-		throw new E5xx_NoResultForPhase($phase);
+		throw new E5xx_NoResultForPhase($phaseName);
 	}
 
-	public function getPhaseOutcome($phase)
+	public function getPhaseOutcome($phaseName)
 	{
 		// do we have the data?
-		if (isset($this->phases[$phase])) {
-			return $this->phases[$phase]->outcome;
+		if (isset($this->phases[$phaseName])) {
+			return $this->phases[$phaseName]->outcome;
 		}
 
 		// if we get here, we have no data
-		throw new E5xx_NoResultForPhase($phase);
+		throw new E5xx_NoResultForPhase($phaseName);
+	}
+
+	public function getStoryShouldFail()
+	{
+		return $this->storyShouldFail;
+	}
+
+	public function setStoryShouldFail()
+	{
+		$this->storyShouldFail = true;
+	}
+
+	public function setStoryHasBeenBlacklisted()
+	{
+		$this->storyResult = self::BLACKLISTED;
+	}
+
+	public function setStoryIsIncomplete()
+	{
+		$this->storyResult = self::SKIPPED;
+	}
+
+	public function setStoryHasFailed()
+	{
+		$this->storyResult = self::FAIL;
 	}
 
 	public function calculateStoryResult()
 	{
+		return;
 		// shorthand
 		$actionShouldWork = $this->getPhaseOutcome(StoryPhases::PHASE_PRETESTPREDICTION);
 		$actionResult     = $this->getPhaseOutcome(StoryPhases::PHASE_ACTION);

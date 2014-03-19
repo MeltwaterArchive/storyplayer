@@ -34,40 +34,75 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\OutputLib;
+namespace DataSift\Storyplayer\Phases;
 
+use Exception;
 use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
+use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * the API for output plugins
+ * the Action phase
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface OutputPlugin
+
+class CheckBlacklistedPhase extends InternalPrePhase
 {
-	public function startStoryplayer();
-	public function endStoryplayer();
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
-	public function endStory(StoryResult $storyResult);
-	public function startStoryPhase($phaseName, $phaseType);
-	public function endStoryPhase();
-	public function logStoryActivity($level, $msg);
-	public function logStoryError($phaseName, $msg);
-	public function logStorySkipped($phaseName, $msg);
-	public function logCliWarning($msg);
-	public function logCliError($msg);
-	public function logCliInfo($msg);
+	public function getPhaseName()
+	{
+		return "Check Blacklist";
+	}
+
+	public function doPhase(StoryResult $storyResult)
+	{
+		// shorthand
+		$st      = $this->st;
+		$story   = $st->getStory();
+		$env     = $st->getEnvironment();
+		$envName = $st->getEnvironmentName();
+		$output  = $st->getOutput();
+
+		// our result object
+		$phaseResult = new PhaseResult();
+
+		// is this story allowed to run on the current environment?
+		$blacklistedEnvironment = false;
+		if (isset($env->mustBeWhitelisted) && $env->mustBeWhitelisted) {
+			// by default, stories are not allowed to run on this environment
+			$blacklistedEnvironment = true;
+
+			// is this story allowed to run?
+			$whitelistedEnvironments = $story->getWhitelistedEnvironments();
+			if (isset($whitelistedEnvironments[$envName]) && $whitelistedEnvironments[$envName]) {
+				$blacklistedEnvironment = false;
+			}
+		}
+
+		// are we allowed to proceed?
+		if ($blacklistedEnvironment) {
+			// no, we are not
+			$phaseResult->setSkipStory(PhaseResult::FAILED, "Cannot run story against the environment '{$envName}'");
+			return $phaseResult;
+		}
+
+		// if we get here, all is well
+		$phaseResult->setContinueStory();
+		return $phaseResult;
+	}
 }

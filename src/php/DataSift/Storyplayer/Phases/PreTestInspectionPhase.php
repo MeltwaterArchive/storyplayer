@@ -34,24 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
  * the PreTestInspectionSetup phase
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -60,5 +64,56 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class PreTestInspectionPhase extends StoryPhase
 {
+	public function doPhase(StoryResult $storyResult)
+	{
+		// shorthand
+		$st    = $this->st;
+		$story = $st->getStory();
 
+		// our result
+		$phaseResult = new PhaseResult;
+
+		// what are we doing?
+		$this->announcePhase();
+
+		// do we have anything to do?
+		if (!$story->hasPreTestInspection())
+		{
+			$phaseResult->setContinueStory(
+				PhaseResult::HASNOACTIONS,
+				"story has no pre-test inspection instructions"
+			);
+			return $phaseResult;
+		}
+
+		// this could all go horribly wrong ... so wrap it up and deal
+		// with it if it explodes
+		try {
+			// do any required setup
+			$st->setCurrentPhase($this);
+			$this->doPerPhaseSetup($st);
+
+			// if the callback exists, use it
+			$story     = $st->getStory();
+			$callbacks = $story->getPreTestInspection();
+			foreach ($callbacks as $callback) {
+				call_user_func($callback, $st);
+			}
+		}
+		catch (Exception $e) {
+			$phaseResult->setFailStory(
+				PhaseResult::FAILED,
+				"unable to perform pre-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
+			);
+		}
+
+		// close off any open log actions
+		$st->closeAllOpenActions();
+
+		// tidy up after ourselves
+		$this->doPerPhaseTeardown($st);
+
+		// all done
+		return $phaseResult;
+	}
 }
