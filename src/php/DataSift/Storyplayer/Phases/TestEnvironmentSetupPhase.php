@@ -109,8 +109,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		}
 
 		// all done
-		$phaseResult->setPhaseResult(PhaseResult::COMPLETED);
-		$phaseResult->setNextAction(StoryPlayer::STEP_CONTINUE);
+		$phaseResult->setContinueStory();
 		$phaseResult->addPairedPhase('TestEnvironmentTeardown');
 
 		return $phaseResult;

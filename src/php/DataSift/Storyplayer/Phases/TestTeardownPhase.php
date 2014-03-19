@@ -70,6 +70,9 @@ class TestTeardownPhase extends StoryPhase
 		$st    = $this->st;
 		$story = $st->getStory();
 
+		// our result
+		$phaseResult = new PhaseResult;
+
 		// what are we doing?
 		$this->announcePhase();
 

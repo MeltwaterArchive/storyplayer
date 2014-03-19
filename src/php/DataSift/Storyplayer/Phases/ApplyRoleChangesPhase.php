@@ -70,6 +70,9 @@ class ApplyRoleChangesPhase extends InternalPostPhase
 		$st    = $this->st;
 		$story = $st->getStory();
 
+		// our results object
+		$phaseResult = new PhaseResult;
+
 		// are there any role changes to apply?
 		if (!$story->hasRoleChanges()) {
 			// nothing to see ... move along, move along
