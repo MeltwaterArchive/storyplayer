@@ -58,7 +58,7 @@ use DataSift\StoryPlayer\PlayerLib\StoryResult;
  */
 interface OutputPlugin
 {
-	public function startStoryplayer();
+	public function startStoryplayer($version, $url, $copyright, $license);
 	public function endStoryplayer();
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
 	public function endStory(StoryResult $storyResult);

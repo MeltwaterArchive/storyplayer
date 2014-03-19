@@ -189,6 +189,14 @@ class PlayStoryCommand extends CliCommand
         // we're ready to switch logging on now
         Log::init("storyplayer", $loggingConfig);
 
+        // and we're ready to tell the world that we're here
+        $output->startStoryplayer(
+            $engine->getAppVersion(),
+            $engine->getAppUrl(),
+            $engine->getAppCopyright(),
+            $engine->getAppLicense()
+        );
+
         // setup signal handling
         pcntl_signal(SIGTERM, array($this, 'sigtermHandler'));
         pcntl_signal(SIGINT , array($this, 'sigtermHandler'));

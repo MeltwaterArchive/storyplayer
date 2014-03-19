@@ -99,11 +99,11 @@ class Output implements OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function startStoryplayer()
+	public function startStoryplayer($version, $url, $copyright, $license)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startStoryplayer();
+			$plugin->startStoryplayer($version, $url, $copyright, $license);
 		}
 	}
 

@@ -69,9 +69,15 @@ class DefaultConsolePlugin implements OutputPlugin
 		$this->verbosityLevel = $verbosityLevel;
 	}
 
-	public function startStoryplayer()
+	public function startStoryplayer($version, $url, $copyright, $license)
 	{
+		echo <<<EOS
+Storyplayer {$version} - {$url}
+{$copyright}
+{$license}
 
+
+EOS;
 	}
 
 	public function endStoryplayer()

@@ -97,7 +97,10 @@ class CheckBlacklistedPhase extends InternalPrePhase
 		// are we allowed to proceed?
 		if ($blacklistedEnvironment) {
 			// no, we are not
-			$phaseResult->setSkipStory(PhaseResult::FAILED, "Cannot run story against the environment '{$envName}'");
+			$phaseResult->setSkipStory(
+				PhaseResult::FAILED,
+				"Cannot run story against the environment '{$envName}'"
+			);
 			return $phaseResult;
 		}
 
