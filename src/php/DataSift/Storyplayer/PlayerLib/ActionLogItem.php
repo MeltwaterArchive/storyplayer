@@ -78,7 +78,7 @@ class ActionLogItem
 	public function startAction($user, $text)
 	{
 		// when did this happen?
-		$this->start = microtime(true);
+		$this->startTime = microtime(true);
 
 		// what is about to happen?
 		$this->text = $text;
