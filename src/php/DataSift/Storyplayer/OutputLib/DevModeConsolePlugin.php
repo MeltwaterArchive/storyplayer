@@ -190,4 +190,22 @@ EOS;
 	{
 		echo $msg . PHP_EOL;
 	}
+
+	public function logVardump($name, $var)
+	{
+		// grab the output buffer
+		ob_start();
+
+		// dump the variable
+		var_dump($var);
+
+		// get the contents of the output buffer
+		$output = ob_get_contents();
+
+		// we're done with the output buffer
+		ob_end_clean();
+
+		// send the output to the default logger
+		Log::write(Log::LOG_DEBUG, $name . ' => ' . $output);
+	}
 }

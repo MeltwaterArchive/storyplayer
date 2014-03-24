@@ -245,11 +245,38 @@ class Output implements OutputPlugin
 		}
 	}
 
+	/**
+	 * called when the outer CLI shell needs to tell the user something
+	 *
+	 * @param  string $msg
+	 *         the message to show the user
+	 *
+	 * @return void
+	 */
 	public function logCliInfo($msg)
 	{
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logCliInfo($msg);
+		}
+	}
+
+	/**
+	 * an alternative to using PHP's built-in var_dump()
+	 *
+	 * @param  string $name
+	 *         a human-readable name to describe $var
+	 *
+	 * @param  mixed $var
+	 *         the variable to dump
+	 *
+	 * @return void
+	 */
+	public function logVardump($name, $var)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->logVardump($name, $var);
 		}
 	}
 }

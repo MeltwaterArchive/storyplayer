@@ -70,4 +70,5 @@ interface OutputPlugin
 	public function logCliWarning($msg);
 	public function logCliError($msg);
 	public function logCliInfo($msg);
+	public function logVardump($name, $var);
 }

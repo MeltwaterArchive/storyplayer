@@ -69,4 +69,16 @@ class UsingLog extends Prose
 		// all done
 		$log->endAction();
 	}
+
+	public function vardump($name, $var)
+	{
+		// shorthand
+		$st = $this->st;
+		$output = $st->getOutput();
+
+		// dump our variable
+		$output->logVardump($name, $var);
+
+		// all done
+	}
 }

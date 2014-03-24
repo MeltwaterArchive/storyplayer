@@ -222,4 +222,9 @@ EOS;
 	{
 		echo $msg . PHP_EOL;
 	}
+
+	public function logVardump($name, $var)
+	{
+		// this is a no-op for us
+	}
 }
