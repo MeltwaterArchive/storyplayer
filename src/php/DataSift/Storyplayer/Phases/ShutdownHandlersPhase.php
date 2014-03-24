@@ -69,7 +69,7 @@ class ShutdownHandlersPhase extends InternalPostPhase
 		return "ShutdownHandlers";
 	}
 
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
 		$st      = $this->st;
@@ -85,7 +85,7 @@ class ShutdownHandlersPhase extends InternalPostPhase
 		$helper->runHandlers($st, 'shutdown');
 
 		// if we get here, then all is well
-		$phaseResult->setContinueStory();
+		$phaseResult->setContinuePlaying();
 		return $phaseResult;
 	}
 }

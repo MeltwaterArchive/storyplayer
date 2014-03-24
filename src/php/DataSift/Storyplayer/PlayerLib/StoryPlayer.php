@@ -66,60 +66,16 @@ use DataSift\Storyplayer\UserLib\UserGenerator;
  */
 class StoryPlayer
 {
-	const NEXT_CONTINUE  = 1;
-	const NEXT_SKIPSTORY = 2;
-	const NEXT_FAILSTORY = 3;
-
-	public function play(StoryTeller $st, $phaseTypes)
+	public function playStory(StoryTeller $st)
 	{
 		// shorthand
-		$story   = $st->getStory();
-		$env     = $st->getEnvironment();
-		$envName = $st->getEnvironmentName();
-		$output  = $st->getOutput();
-		$context = $st->getStoryContext();
+		$story  = $st->getStory();
+		$output = $st->getOutput();
 
 		// set default callbacks up
 		$story->setDefaultCallbacks();
 
-		// keep track of how each phase goes
-		$storyResult = new StoryResult($story);
-
-		// this will keep track of any paired phases that we need to
-		// attempt if we fail to execute the whole story
-		$pairedPhases = array();
-		foreach ($phaseTypes as $phaseType) {
-			$pairedPhases[$phaseType] = [];
-		}
-
 		// tell the outside world what we're doing
-		$this->announceStory($st);
-
-		// we are going to need something to help us load each of our
-		// phases
-		$phasePlayer = new PhasePlayer;
-		foreach($phaseTypes as $phaseType)
-		{
-			$phasePlayer->playPhases($st, $storyResult, $phaseType, $pairedPhases);
-		}
-
-		// make sense of what happened
-		$storyResult->calculateStoryResult();
-
-		// announce the results
-		$output->endStory($storyResult);
-
-		// all done
-		return $storyResult;
-	}
-
-	public function announceStory(StoryTeller $st)
-	{
-		// shorthand
-		$story = $st->getStory();
-		$output = $st->getOutput();
-
-		// tell all of our output plugins that the story has begun
 		$output->startStory(
 			$story->getName(),
 			$story->getCategory(),
@@ -127,5 +83,19 @@ class StoryPlayer
 			$st->getEnvironmentName(),
 			$st->getDeviceName()
 		);
+
+		// run the phases in the 'story' section
+		$phasesPlayer = new PhasesPlayer();
+		$phaseResults = $phasesPlayer->playPhases($st, 'story');
+
+		// make sense of what happened
+		$storyResult = $st->getStoryResult();
+		$storyResult->calculateStoryResult($phaseResults);
+
+		// announce the results
+		$output->endStory($storyResult);
+
+		// all done
+		return $storyResult;
 	}
 }

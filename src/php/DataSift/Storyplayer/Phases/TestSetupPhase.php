@@ -64,7 +64,7 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class TestSetupPhase extends StoryPhase
 {
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
 		$st    = $this->st;
@@ -76,7 +76,7 @@ class TestSetupPhase extends StoryPhase
 		// do we have anything to do?
 		if (!$story->hasTestSetup())
 		{
-			$phaseResult->setContinueStory(
+			$phaseResult->setContinuePlaying(
 				PhaseResult::HASNOACTIONS,
 				"story has no test setup instructions"
 			);
@@ -97,14 +97,14 @@ class TestSetupPhase extends StoryPhase
 		}
 		catch (Exception $e)
 		{
-			$phaseResult->setFailStory(
+			$phaseResult->setPlayingFailed(
 				PhaseResult::FAILED,
 				"unable to perform test setup; " . (string)$e . "\n" . $e->getTraceAsString()
 			);
 		}
 
 		// all done
-		$phaseResult->setContinueStory();
+		$phaseResult->setContinuePlaying();
 		return $phaseResult;
 	}
 }

@@ -94,6 +94,9 @@ class StoryTeller
 	// our output
 	private $output = null;
 
+	// the ongoing result of this story
+	private $storyResult = null;
+
 	/**
 	 * [$actionLogger description]
 	 * @var Datasift\Storyplayer\PlayerLib\ActionLogItem
@@ -132,7 +135,6 @@ class StoryTeller
         // our runtime config
         $this->setRuntimeConfig($injectables->runtimeConfig);
         $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
-
 	}
 
 	// ==================================================================
@@ -211,13 +213,27 @@ class StoryTeller
 	}
 
 	/**
-	 * [Description]
+	 * track the story that we are testing
 	 *
-	 * @param [type] $newstory [description]
+	 * NOTE: setting the story also creates a new StoryResult object
+	 *       so that we can track how the story is getting on
+	 *
+	 * @param Story $story
 	 */
-	public function setStory($story) {
+	public function setStory($story)
+	{
+		// are we already tracking this story?
+		if ($this->story == $story) {
+			return;
+		}
+
+		// we're now tracking this story
 	    $this->story = $story;
 
+	    // we need to track the result of the story too
+	    $this->storyResult = new StoryResult($story);
+
+	    // all done
 	    return $this;
 	}
 
@@ -244,6 +260,11 @@ class StoryTeller
 
 	    // all done
 	    return $this;
+	}
+
+	public function getStoryResult()
+	{
+		return $this->storyResult;
 	}
 
 	/**

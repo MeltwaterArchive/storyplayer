@@ -153,11 +153,11 @@ class Output implements OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function startStoryPhase($phaseName, $phaseType)
+	public function startPhase($phaseName, $phaseType)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startStoryPhase($phaseName, $phaseType);
+			$plugin->startPhase($phaseName, $phaseType);
 		}
 	}
 
@@ -166,11 +166,11 @@ class Output implements OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function endStoryPhase()
+	public function endPhase($phaseName, $phaseType)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endStoryPhase();
+			$plugin->endPhase($phaseName, $phaseType);
 		}
 	}
 
@@ -179,11 +179,11 @@ class Output implements OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function logStoryActivity($level, $msg)
+	public function logPhaseActivity($level, $msg)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->logStoryActivity($level, $msg);
+			$plugin->logPhaseActivity($level, $msg);
 		}
 	}
 
@@ -192,11 +192,11 @@ class Output implements OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function logStoryError($phaseName, $msg)
+	public function logPhaseError($phaseName, $msg)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->logStoryError($phaseName, $msg);
+			$plugin->logPhaseError($phaseName, $msg);
 		}
 	}
 
@@ -205,7 +205,7 @@ class Output implements OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function logStorySkipped($phaseName, $msg)
+	public function logPhaseSkipped($phaseName, $msg)
 	{
 		foreach ($this->plugins as $plugin)
 		{

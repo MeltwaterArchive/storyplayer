@@ -140,7 +140,7 @@ EOS;
 		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel] . PHP_EOL;
 	}
 
-	public function startStoryPhase($phaseName, $phaseType)
+	public function startPhase($phaseName, $phaseType)
 	{
 		// we only announce story phases
 		if ($phaseType != Phase::STORY_PHASE) {
@@ -153,24 +153,23 @@ EOS;
 		echo PHP_EOL;
 	}
 
-	public function endStoryPhase()
+	public function endPhase($phaseName, $phaseResult)
 	{
-
 	}
 
-	public function logStoryActivity($level, $msg)
+	public function logPhaseActivity($level, $msg)
 	{
 		// send this to the default logger
 		Log::write($level, $msg);
 	}
 
-	public function logStoryError($phaseName, $msg)
+	public function logPhaseError($phaseName, $msg)
 	{
 		// send this to the default logger
 		Log::write(Log::LOG_CRITICAL, $msg);
 	}
 
-	public function logStorySkipped($phaseName, $msg)
+	public function logPhaseSkipped($phaseName, $msg)
 	{
 		// send this to the default logger
 		Log::write(Log::LOG_NOTICE, $msg);

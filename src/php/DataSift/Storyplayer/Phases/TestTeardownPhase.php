@@ -64,7 +64,7 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class TestTeardownPhase extends StoryPhase
 {
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
 		$st    = $this->st;
@@ -76,8 +76,8 @@ class TestTeardownPhase extends StoryPhase
 		// do we have anything to do?
 		if (!$story->hasTestTeardown())
 		{
-			$phaseResult->setContinueStory(
-				PhaseResult::SKIPPED,
+			$phaseResult->setContinuePlaying(
+				PhaseResult::HASNOACTIONS,
 				"story has no test teardown instructions"
 			);
 			return $phaseResult;
@@ -93,12 +93,12 @@ class TestTeardownPhase extends StoryPhase
 			}
 
 			// all is good
-			$phaseResult->setContinueStory();
+			$phaseResult->setContinuePlaying();
 		}
 		catch (Exception $e)
 		{
 			// we still want to continue at this stage
-			$phaseResult->setContinueStory(
+			$phaseResult->setContinuePlaying(
 				PhaseResult::FAILED,
 				"unable to perform test teardown; " . (string)$e . "\n" . $e->getTraceAsString()
 			);

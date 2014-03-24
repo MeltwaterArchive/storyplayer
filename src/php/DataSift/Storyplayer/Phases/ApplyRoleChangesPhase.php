@@ -64,7 +64,7 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class ApplyRoleChangesPhase extends InternalPostPhase
 {
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
 		$st    = $this->st;
@@ -76,13 +76,14 @@ class ApplyRoleChangesPhase extends InternalPostPhase
 		// are there any role changes to apply?
 		if (!$story->hasRoleChanges()) {
 			// nothing to see ... move along, move along
-			$phaseResult->setContinueStory(
-				PhaseResult::SKIPPED,
+			$phaseResult->setContinuePlaying(
+				PhaseResult::HASNOACTIONS,
 				"story has no role changes to apply"
 			);
 			return $phaseResult;
 		}
 
+		// get the actions to call
 		$callbacks = $story->getRoleChanges();
 
 		try {
@@ -91,11 +92,11 @@ class ApplyRoleChangesPhase extends InternalPostPhase
 			}
 
 			// all is good
-			$phaseResult->setContinueStory();
+			$phaseResult->setContinuePlaying();
 		}
 		catch (Exception $e) {
 			// we treat any failures here as a total failure
-			$phaseResult->setFailStory(
+			$phaseResult->setPlayingFailed(
 				PhaseResult::FAILED,
 				"unable to apply role changes; " . (string)$e . "\n" . $e->getTraceAsString()
 			);

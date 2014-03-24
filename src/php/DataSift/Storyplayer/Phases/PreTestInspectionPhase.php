@@ -64,11 +64,12 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class PreTestInspectionPhase extends StoryPhase
 {
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+		$st          = $this->st;
+		$story       = $st->getStory();
+		$storyResult = $st->getStoryResult();
 
 		// our result
 		$phaseResult = new PhaseResult;
@@ -76,7 +77,7 @@ class PreTestInspectionPhase extends StoryPhase
 		// do we have anything to do?
 		if (!$story->hasPreTestInspection())
 		{
-			$phaseResult->setContinueStory(
+			$phaseResult->setContinuePlaying(
 				PhaseResult::HASNOACTIONS,
 				"story has no pre-test inspection instructions"
 			);
@@ -95,9 +96,12 @@ class PreTestInspectionPhase extends StoryPhase
 			foreach ($callbacks as $callback) {
 				call_user_func($callback, $st);
 			}
+
+			// if we get here, the pre-test inspection was successful
+			$phaseResult->setContinuePlaying();
 		}
 		catch (Exception $e) {
-			$phaseResult->setFailStory(
+			$phaseResult->setPlayingFailed(
 				PhaseResult::FAILED,
 				"unable to perform pre-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
 			);

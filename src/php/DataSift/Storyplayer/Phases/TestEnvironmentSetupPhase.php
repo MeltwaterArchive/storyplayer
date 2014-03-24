@@ -63,7 +63,7 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class TestEnvironmentSetupPhase extends StoryPhase
 {
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
 		$st = $this->st;
@@ -78,7 +78,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		if (!$story->hasTestEnvironmentSetup())
 		{
 			// nothing to do
-			$phaseResult->setContinueStory(
+			$phaseResult->setContinuePlaying(
 				PhaseResult::HASNOACTIONS,
 				"story has no test environment setup instructions"
 			);
@@ -99,13 +99,13 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		}
 		catch (Exception $e) {
 			$msg = "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString();
-			$phaseResult->setFailStory(PhaseResult::FAILED, $msg);
+			$phaseResult->setPlayingFailed(PhaseResult::FAILED, $msg);
 			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
 			return $phaseResult;
 		}
 
 		// all done
-		$phaseResult->setContinueStory();
+		$phaseResult->setContinuePlaying();
 		$phaseResult->addPairedPhase('TestEnvironmentTeardown');
 
 		return $phaseResult;

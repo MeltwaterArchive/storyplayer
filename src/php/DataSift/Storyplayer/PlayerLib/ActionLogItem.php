@@ -329,6 +329,6 @@ class ActionLogItem
 		$logLevel = $this->getLogLevel();
 		list($startText, $endText) = $this->getMessageBookends($logLevel);
 
-		$this->output->logStoryActivity($logLevel, str_repeat("  ", $this->nestLevel - 1) . $startText . $text . $endText);
+		$this->output->logPhaseActivity($logLevel, str_repeat("  ", $this->nestLevel - 1) . $startText . $text . $endText);
 	}
 }

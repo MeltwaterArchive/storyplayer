@@ -43,10 +43,7 @@
 
 namespace DataSift\Storyplayer\Phases;
 
-use stdClass;
 use DataSift\StoryPlayer\PlayerLib\StoryTeller;
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
-use DataSift\Storyplayer\StoryLib\Story;
 
 /**
  * base class for all phases
@@ -72,7 +69,7 @@ abstract class Phase
 		$this->st = $st;
 	}
 
-	public function announcePhase()
+	public function announcePhaseStart()
 	{
 		// shorthand
 		$output = $this->st->getOutput();
@@ -84,7 +81,22 @@ abstract class Phase
 		$phaseType = $this->getPhaseType();
 
 		// tell the world who we are
-		$output->startStoryPhase($phaseName, $phaseType);
+		$output->startPhase($phaseName, $phaseType);
+	}
+
+	public function announcePhaseEnd()
+	{
+		// shorthand
+		$output = $this->st->getOutput();
+
+		// what is our name?
+		$phaseName = $this->getPhaseName();
+
+		// what kind of phase are we?
+		$phaseType = $this->getPhaseType();
+
+		// all done
+		$output->endPhase($phaseName, $phaseType);
 	}
 
 	public function getPhaseName()
@@ -147,5 +159,5 @@ abstract class Phase
 	}
 
 	abstract public function getPhaseType();
-	abstract public function doPhase(StoryResult $storyResult);
+	abstract public function doPhase();
 }

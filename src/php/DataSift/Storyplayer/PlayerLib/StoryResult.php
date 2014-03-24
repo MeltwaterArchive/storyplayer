@@ -76,34 +76,6 @@ class StoryResult
 		$this->story = $story;
 	}
 
-	public function addPhaseResult($phase, $phaseResult)
-	{
-		$phaseName = $phase->getPhaseName();
-		$this->phases[$phaseName] = $phaseResult;
-	}
-
-	public function getPhaseResult($phaseName)
-	{
-		// do we have the data?
-		if (isset($this->phases[$phaseName])) {
-			return $this->phases[$phaseName];
-		}
-
-		// if we get here, we have no data
-		throw new E5xx_NoResultForPhase($phaseName);
-	}
-
-	public function getPhaseOutcome($phaseName)
-	{
-		// do we have the data?
-		if (isset($this->phases[$phaseName])) {
-			return $this->phases[$phaseName]->outcome;
-		}
-
-		// if we get here, we have no data
-		throw new E5xx_NoResultForPhase($phaseName);
-	}
-
 	public function getStoryShouldFail()
 	{
 		return $this->storyShouldFail;
@@ -134,8 +106,7 @@ class StoryResult
 		$this->storyResult = self::FAIL;
 	}
 
-	public function calculateStoryResult()
+	public function calculateStoryResult(PhaseResults $phaseResults)
 	{
-
 	}
 }

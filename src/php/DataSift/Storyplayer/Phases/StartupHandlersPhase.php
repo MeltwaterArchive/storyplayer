@@ -43,14 +43,6 @@
 
 namespace DataSift\Storyplayer\Phases;
 
-use Exception;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\StoryPlayer\PlayerLib\StoryTeller;
-use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
-use DataSift\Storyplayer\StoryLib\Story;
-
 /**
  * the StartupHandlers phase
  *
@@ -69,7 +61,7 @@ class StartupHandlersPhase extends InternalPostPhase
 		return "StartupHandlers";
 	}
 
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
 		$st      = $this->st;
@@ -85,7 +77,7 @@ class StartupHandlersPhase extends InternalPostPhase
 		$helper->runHandlers($st, 'startup');
 
 		// if we get here, then all is well
-		$phaseResult->setContinueStory();
+		$phaseResult->setContinuePlaying();
 		return $phaseResult;
 	}
 }

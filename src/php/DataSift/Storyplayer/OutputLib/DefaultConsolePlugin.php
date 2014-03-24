@@ -137,7 +137,7 @@ Environment: {$envName}
 EOS;
 		}
 		else {
-			echo $storyName . ':';
+			echo $storyName . ': ';
 		}
 
 
@@ -168,7 +168,7 @@ EOS;
 		}
 	}
 
-	public function startStoryPhase($phaseName, $phaseType)
+	public function startPhase($phaseName, $phaseType)
 	{
 		// we're only interested in telling the user about the
 		// phases of a story
@@ -188,8 +188,14 @@ EOS;
 		}
 	}
 
-	public function endStoryPhase()
+	public function endPhase($phaseName, $phaseType)
 	{
+		// we're only interested in telling the user about the
+		// phases of a story
+		if ($phaseType !== Phase::STORY_PHASE) {
+			return;
+		}
+
 		if ($this->verbosityLevel > 0) {
 			echo PHP_EOL;
 		}
@@ -198,24 +204,24 @@ EOS;
 		}
 	}
 
-	public function logStoryActivity($level, $msg)
+	public function logPhaseActivity($level, $msg)
 	{
 		// this is a no-op for us
 		echo ".";
 	}
 
-	public function logStoryError($phaseName, $msg)
+	public function logPhaseError($phaseName, $msg)
 	{
 		// we have to show this now, and save it for final output later
-		echo "E";
+		echo "e";
 
 		$this->phaseErrors[$phaseName] = $msg;
 	}
 
-	public function logStorySkipped($phaseName, $msg)
+	public function logPhaseSkipped($phaseName, $msg)
 	{
 		// we have to show this now, and save it for final output later
-		echo "S";
+		echo "s";
 
 		$this->phaseErrors[$phaseName] = $msg;
 	}

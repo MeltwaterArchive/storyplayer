@@ -49,6 +49,9 @@ use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
 use DataSift\StoryPlayer\PlayerLib\StoryTeller;
+use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
+use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
+use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
@@ -64,11 +67,12 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class PostTestInspectionPhase extends StoryPhase
 {
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+		$st          = $this->st;
+		$story       = $st->getStory();
+		$storyResult = $st->getStoryResult();
 
 		// our results object
 		$phaseResult = new PhaseResult;
@@ -77,7 +81,7 @@ class PostTestInspectionPhase extends StoryPhase
 			// do we have anything to do?
 			if (!$story->hasPostTestInspection())
 			{
-				$phaseResult->setContinueStory(
+				$phaseResult->setContinuePlaying(
 					PhaseResult::HASNOACTIONS,
 					"story has no post-test inspection instructions"
 				);
@@ -95,17 +99,30 @@ class PostTestInspectionPhase extends StoryPhase
 					call_user_func($callback, $st);
 				}
 			}
+
+			// if we get here, the post-test inspection did not fail
+			// ... but should it have?
+			if ($storyResult->getStoryShouldFail()) {
+				$phaseResult->setPlayingFailed(
+					PhaseResult::SUCCESS,
+					"post-test inspection succeeded when it was expected to fail"
+				);
+			}
+			else {
+				$phaseResult->setContinuePlaying();
+			}
 		}
 		catch (E5xx_ActionFailed $e) {
 			$msg = "post-test inspection failed; " . (string)$e . "\n" . $e->getTraceAsString();
 			if ($storyResult->getStoryShouldFail()) {
-				$phaseResult->setContinueStory(
+				$phaseResult->setContinuePlaying(
 					PhaseResult::SUCCESS,
 					$msg
 				);
 			}
 			else {
-				$phaseResult->setFailStory(
+				$storyResult->setStoryHasFailed();
+				$phaseResult->setPlayingFailed(
 					PhaseResult::FAILED,
 					$msg
 				);
@@ -114,13 +131,14 @@ class PostTestInspectionPhase extends StoryPhase
 		catch (E5xx_ExpectFailed $e) {
 			$msg = "post-test inspection failed; " . (string)$e . "\n" . $e->getTraceAsString();
 			if ($storyResult->getStoryShouldFail()) {
-				$phaseResult->setContinueStory(
+				$phaseResult->setContinuePlaying(
 					PhaseResult::SUCCESS,
 					$msg
 				);
 			}
 			else {
-				$phaseResult->setFailStory(
+				$storyResult->setStoryHasFailed();
+				$phaseResult->setPlayingFailed(
 					PhaseResult::FAILED,
 					$msg
 				);
@@ -129,14 +147,14 @@ class PostTestInspectionPhase extends StoryPhase
 
 		// this is treated as a hard fail
 		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setFailStory(
+			$phaseResult->setPlayingFailed(
 				PhaseResult::INCOMPLETE,
 				"unable to complete post-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
 			);
 		}
 		// this only happens when something has gone very badly wrong
 		catch (Exception $e) {
-			$phaseResult->setFailStory(
+			$phaseResult->setPlayingFailed(
 				PhaseResult::INCOMPLETE,
 				"unable to complete post-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
 			);

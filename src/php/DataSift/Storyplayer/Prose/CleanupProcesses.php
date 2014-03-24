@@ -63,11 +63,11 @@ class CleanupProcesses extends BaseCleanup
     }
 
     /**
-     * pruneProcessList 
-     * 
+     * pruneProcessList
+     *
      * Loop through our recorded processes and send them a `kill 0`
      * If they don't respond, they're already dead so remove them from the table
-     * 
+     *
      * @return void
      */
     private function pruneProcessList()
@@ -78,6 +78,31 @@ class CleanupProcesses extends BaseCleanup
                 unset($this->table->$pid);
             }
         }
+
+        return;
+
+                // shorthand
+        $st     = $this->st;
+        $output = $this->output;
+
+        // do we have anything to shutdown?
+        $screenSessions = $st->fromShell()->getAllScreenSessions();
+        if (count($screenSessions) == 0) {
+            // nothing to do
+            return;
+        }
+
+        // if we get here, there are background jobs running
+        echo "\n";
+        if (count($screenSessions) == 1) {
+            $output->logCliInfo("There is 1 background process still running");
+        }
+        else {
+            $output->logCliInfo("There are " . count($screenSessions) . " background processes still running");
+        }
+        $output->logCliInfo("Use 'storyplayer list-processes' to see the list of background processes");
+        $output->logCliInfo("Use 'storyplayer kill-processes' to stop any background processes");
+
     }
 
 }

@@ -34,80 +34,71 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Phases;
+namespace DataSift\Storyplayer\PlayerLib;
 
-use Exception;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
-use DataSift\StoryPlayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\StoryPlayer\Phases\Phase;
+use DataSift\StoryPlayer\Phases\PhaseResult;
 
 /**
- * the TestEnvironmentTeardown phase
+ * tracks the result from executing multiple phases
  *
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class TestEnvironmentTeardownPhase extends StoryPhase
+class PhaseResults
 {
-	public function doPhase()
+	const RESULT_COMPLETE    = 1;
+	const RESULT_FAILED      = 2;
+	const RESULT_BLACKLISTED = 3;
+	const RESULT_INCOMPLETE  = 4;
+
+	protected $phaseResults = [];
+
+	protected $finalResult = 1;
+
+	public function addResult(Phase $phase, PhaseResult $phaseResult)
 	{
-		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+		$phaseName = $phase->getPhaseName();
+		$this->phaseResults[$phaseName] = [
+			'phase'  => $phase,
+			'result' => $phaseResult
+		];
+	}
 
-		// our result object
-		$phaseResult = new PhaseResult;
+	public function getFinalResult()
+	{
+		return $this->finalResult;
+	}
 
-		// do we have anything to do?
-		if (!$story->hasTestEnvironmentTeardown())
-		{
-			$phaseResult->setContinuePlaying(
-				PhaseResult::HASNOACTIONS,
-				"story has no test environment teardown instructions"
-			);
-			return $phaseResult;
-		}
+	public function setPhasesHaveSucceeded()
+	{
+		$this->finalResult = self::RESULT_COMPLETE;
+	}
 
-		// get the callback to call
-		$callbacks = $story->getTestEnvironmentTeardown();
+	public function setPhasesHaveFailed()
+	{
+		$this->finalResult = self::RESULT_FAILED;
+	}
 
-		// make the call
-		try {
-			foreach ($callbacks as $callback){
-				call_user_func($callback, $st);
-			}
+	public function setPhasesAreBlacklisted()
+	{
+		$this->finalResult = self::RESULT_BLACKLISTED;
+	}
 
-			// all is good
-			$phaseResult->setContinuePlaying();
-		}
-		catch (Exception $e) {
-			// we always continue at this point, even though the phase
-			// itself failed
-			$phaseResult->setContinuePlaying(
-				PhaseResult::FAILED,
-				"unable to complete test environment teardown; " . (string)$e . "\n" . $e->getTraceAsString()
-			);
-		}
-
-		// close off any open log actions
-		$st->closeAllOpenActions();
-
-		// all done
-		return $phaseResult;
+	public function setPhasesAreIncomplete()
+	{
+		$this->finalResult = self::RESULT_INCOMPLETE;
 	}
 }

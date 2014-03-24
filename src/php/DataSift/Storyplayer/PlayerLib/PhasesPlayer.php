@@ -64,16 +64,33 @@ use DataSift\Storyplayer\UserLib\UserGenerator;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PhasePlayer
+class PhasesPlayer
 {
-	public function playPhases(StoryTeller $st, StoryResult $storyResult, $phaseType, &$pairedPhases)
+	const NEXT_CONTINUE = 1;
+	const NEXT_SKIP     = 2;
+	const NEXT_FAIL     = 3;
+
+	const MSG_PHASE_BLACKLISTED = 'phase is not allowed to run against this environment';
+	const MSG_PHASE_FAILED      = 'phase failed with an unexpected error';
+	const MSG_PHASE_INCOMPLETE  = 'phase is incomplete';
+	const MSG_PHASE_NOT_ACTIVE  = 'phase is marked as inactive';
+
+	protected $pairedPhases = [];
+
+	public function playPhases(StoryTeller $st, $phaseType)
 	{
 		// shorthand
-		$story   = $st->getStory();
-		$env     = $st->getEnvironment();
-		$envName = $st->getEnvironmentName();
 		$output  = $st->getOutput();
 		$context = $st->getStoryContext();
+
+		// keep track of our results
+		$phaseResults = new PhaseResults;
+
+		// keep track of any paired phases
+		//
+		// these are phases that need to run on cleanup because an
+		// earlier phase was attempted
+		$this->pairedPhases = [];
 
 		// we are going to need something to help us load each of our
 		// phases
@@ -106,8 +123,8 @@ class PhasePlayer
 			//
 			// this ensures we do not accidentally execute a phase
 			// twice or more!
-			if (isset($pairedPhases[$phaseType][$phaseName])) {
-				unset($pairedPhases[$phaseType][$phaseName]);
+			if (isset($this->pairedPhases[$phaseName])) {
+				unset($this->pairedPhases[$phaseName]);
 			}
 
 			try {
@@ -115,7 +132,7 @@ class PhasePlayer
 				//
 				// we want the announcement to always happen, even if
 				// the phase is subsequently skipped
-				$phase->announcePhase();
+				$phase->announcePhaseStart();
 
 				// execute the phase
 				//
@@ -124,11 +141,11 @@ class PhasePlayer
 				// on which phase we are running
 				if ($isActive) {
 					$st->setCurrentPhase($phase);
-					$phaseResult = $phase->doPhase($storyResult);
+					$phaseResult = $phase->doPhase();
 				}
 				else {
 					$phaseResult = new PhaseResult;
-					$phaseResult->setContinueStory(PhaseResult::SKIPPED);
+					$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
 				}
 
 				// close off any open log actions
@@ -136,7 +153,7 @@ class PhasePlayer
 
 				// add any paired phases to our teardown list
 				if ($phaseResult->hasPairedPhases()) {
-					$pairedPhases += $phaseResult->getPairedPhases();
+					$this->pairedPhases += $phaseResult->getPairedPhases();
 				}
 
 				// stop any running test devices
@@ -146,49 +163,84 @@ class PhasePlayer
 				// test device
 				$st->closeAllOpenActions();
 
-				// add the result to our story
-				$storyResult->addPhaseResult($phase, $phaseResult);
+				// remember the result of this phase
+				$phaseResults->addResult($phase, $phaseResult);
 
 				// now, what do we do?
 				$nextAction = $phaseResult->getNextAction();
 				switch ($nextAction)
 				{
-					case StoryPlayer::NEXT_SKIPSTORY:
+					case self::NEXT_SKIP:
 						// why?
 						if ($phaseResult->phaseIsBlacklisted()) {
-							$storyResult->setStoryHasBeenBlacklisted();
+							$phaseResults->setPhasesAreBlacklisted();
+							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED);
 						}
 						else {
-							$storyResult->setStoryIsIncomplete();
+							$phaseResults->setPhasesAreIncomplete();
+							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_INCOMPLETE);
 						}
-						// tell the world that we're skipping the story
-						$output->logStorySkipped($phaseName, $phaseResult->getMessage());
-						$output->endStory($storyResult);
 						break 2;
 
-					case StoryPlayer::NEXT_FAILSTORY:
-						$storyResult->setStoryHasFailed();
-						// tell the world that the story has failed
-						$output->logStoryError($phaseName, $phaseResult->getMessage());
-						$output->endStory($storyResult);
+					case self::NEXT_FAIL:
+						$phaseResults->setPhasesHaveFailed();
+						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED);
 						break 2;
 
-					case StoryPlayer::NEXT_CONTINUE:
+					case self::NEXT_CONTINUE:
 						// do nothing
-						$output->endStoryPhase();
 				}
+
+				// tell the output plugins that this phase is over
+				$phase->announcePhaseEnd();
 			}
+
 			// our ultimate safety net
 			//
 			// ANY TIME this gets executed, the phase itself has not
 			// done sufficient error handling of its own!!
 			catch (Exception $e) {
-				$storyResult->setStoryHasFailed();
-				$output->endStory($storyResult);
-				$output->logCliError("uncaught exception: " . (string)$e->getMessage() . PHP_EOL . $e->getTraceAsString());
+				// tell our output plugins what happened
+				$output->logPhaseError($phaseName, 'e', "uncaught exception: " . (string)$e->getMessage() . PHP_EOL . $e->getTraceAsString());
+
+				// we need to create a dummy phase result for this
+				$phaseResult = new PhaseResult;
+				$phaseResult->setPlayingFailed();
+				$phaseResults->addPhaseResult($phaseName, $phaseResult);
+
+				// this is a fatal exception
+				$phaseResults->setPhasesHaveFailed();
+
+				// tell the world that this phase is over
+				$phase->announcePhaseEnd();
+
+				// run no more phases
 				break 2;
 			}
 		}
+
+		// all done
+		return $phaseResults;
+	}
+
+	public function playPairedPhases(StoryTeller $st, $phaseType)
+	{
+		// special case
+		//
+		// do we actually have any work to do?
+		if (!isset($this->pairedPhases)) {
+			// nope - so let's bail now
+			return;
+		}
+
+		// shorthand
+		$output  = $st->getOutput();
+		$context = $st->getStoryContext();
+
+		// we are going to need something to help us load each of our
+		// phases
+		$phaseLoader = new PhaseLoader();
+		$phaseLoader->setNamespaces($st);
 
 		// ----------------------------------------------------------------
 		// CLEANUP TIME
@@ -197,7 +249,10 @@ class PhasePlayer
 		//
 		// we execute all of the paired phases here, even if they fail,
 		// because we want all of the cleaning up to at least be attempted
-		foreach ($pairedPhases[$phaseType] as $phaseName)
+		//
+		// this is (essentially) a slimmed down version of playPhases()
+
+		foreach ($this->pairedPhases as $phaseName)
 		{
 			// is the phase active?
 			//
@@ -210,17 +265,19 @@ class PhasePlayer
 				$isActive = $context->phases->$phaseType->$phaseName;
 			}
 
-			// what was the final decision?
-			if (!$isActive) {
-				// no, it has been marked for skipping
-				continue;
-			}
-
 			// load the phase
 			$phase = $phaseLoader->loadPhase($st, $phaseName);
 
-			// run the phase
-			$phase->doPhase($storyResult);
+			// tell the world that we're running this phase
+			$phase->announcePhaseStart();
+
+			// run the phase if we're allowed to
+			if ($isActive) {
+				$phase->doPhase();
+			}
+			else {
+				$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
+			}
 
 			// close off any open log actions
 			$st->closeAllOpenActions();
@@ -231,8 +288,9 @@ class PhasePlayer
 			// close off any log actions left open by closing down
 			// the test device
 			$st->closeAllOpenActions();
-		}
 
-		// all done
+			// tell the world that the phase is over
+			$phase->announcePhaseEnd();
+		}
 	}
 }

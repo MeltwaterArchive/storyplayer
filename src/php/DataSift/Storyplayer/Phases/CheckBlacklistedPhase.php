@@ -64,12 +64,7 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class CheckBlacklistedPhase extends InternalPrePhase
 {
-	public function getPhaseName()
-	{
-		return "Check Blacklist";
-	}
-
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
 		$st      = $this->st;
@@ -97,15 +92,15 @@ class CheckBlacklistedPhase extends InternalPrePhase
 		// are we allowed to proceed?
 		if ($blacklistedEnvironment) {
 			// no, we are not
-			$phaseResult->setSkipStory(
-				PhaseResult::FAILED,
+			$phaseResult->setSkipPhases(
+				PhaseResult::BLACKLISTED,
 				"Cannot run story against the environment '{$envName}'"
 			);
 			return $phaseResult;
 		}
 
 		// if we get here, all is well
-		$phaseResult->setContinueStory();
+		$phaseResult->setContinuePlaying();
 		return $phaseResult;
 	}
 }

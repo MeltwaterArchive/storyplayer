@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Phases;
 
-use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
+use DataSift\StoryPlayer\PlayerLib\PhasesPlayer;
 
 /**
  * tracks the result from a single phase
@@ -157,7 +157,7 @@ class PhaseResult
 		return false;
 	}
 
-	public function getPhaseIsSkipped()
+	public function getPhaseWasSkipped()
 	{
 		if ($this->result == self::SKIPPED) {
 			return true;
@@ -171,23 +171,23 @@ class PhaseResult
 		return $this->nextAction;
 	}
 
-	public function setContinueStory($result = 1, $msg = null)
+	public function setContinuePlaying($result = 1, $msg = null)
 	{
-		$this->nextAction = StoryPlayer::NEXT_CONTINUE;
+		$this->nextAction = PhasesPlayer::NEXT_CONTINUE;
 		$this->result     = $result;
 		$this->message    = $msg;
 	}
 
-	public function setFailStory($result, $msg)
+	public function setPlayingFailed($result, $msg)
 	{
-		$this->nextAction = StoryPlayer::NEXT_FAILSTORY;
+		$this->nextAction = PhasesPlayer::NEXT_FAIL;
 		$this->result     = $result;
 		$this->message    = $msg;
 	}
 
-	public function setSkipStory($result, $msg)
+	public function setSkipPhases($result, $msg)
 	{
-		$this->nextAction = StoryPlayer::NEXT_SKIPSTORY;
+		$this->nextAction = PhasesPlayer::NEXT_SKIP;
 		$this->result     = $result;
 		$this->message    = $msg;
 	}

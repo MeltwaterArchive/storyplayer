@@ -49,6 +49,9 @@ use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
 use DataSift\StoryPlayer\PlayerLib\StoryTeller;
+use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
+use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
+use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
@@ -64,7 +67,7 @@ use DataSift\Storyplayer\StoryLib\Story;
 
 class PreTestPredictionPhase extends StoryPhase
 {
-	public function doPhase(StoryResult $storyResult)
+	public function doPhase()
 	{
 		// shorthand
 		$st    = $this->st;
@@ -77,7 +80,7 @@ class PreTestPredictionPhase extends StoryPhase
 			// do we have anything to do?
 			if (!$story->hasPreTestPrediction())
 			{
-				$phaseResult->setContinueStory(
+				$phaseResult->setContinuePlaying(
 					PhaseResult::HASNOACTIONS,
 					"story has no pre-test prediction instructions; skipping"
 				);
@@ -98,34 +101,34 @@ class PreTestPredictionPhase extends StoryPhase
 
 			// if we get here, the PreTestPrediction worked with
 			// no problems at all
-			$phaseResult->setContinueStory();
+			$phaseResult->setContinuePlaying();
 		}
 		// in any of the expects() calls in the preflight checks fails,
 		// an E5xx_ActionFailed will be thrown
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setStoryShouldFail();
-			$phaseResult->setContinueStory(
+			$phaseResult->setContinuePlaying(
 				PhaseResult::FAILED,
 				"pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString()
 			);
 		}
 		catch (E5xx_ExpectFailed $e) {
 			$phaseResult->setStoryShouldFail();
-			$phaseResult->setContinueStory(
+			$phaseResult->setContinuePlaying(
 				PhaseResult::FAILED,
 				"pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString()
 			);
 		}
 		// if any of the tests are incomplete, deal with that too
 		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setFailStory(
+			$phaseResult->setPlayingFailed(
 				PhaseResult::INCOMPLETE,
 				"unable to perform pre-test prediction; " . (string)$e . "\n" . $e->getTraceAsString()
 			);
 		}
 		// deal with the things that go wrong
 		catch (Exception $e) {
-			$phaseResult->setFailStory(
+			$phaseResult->setPlayingFailed(
 				PhaseResult::FAILED,
 				"unable to perform pre-test prediction; " . (string)$e . "\n" . $e->getTraceAsString()
 			);

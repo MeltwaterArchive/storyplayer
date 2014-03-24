@@ -54,7 +54,7 @@ use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\LogLib\Log;
 
-use DataSift\Storyplayer\PlayerLib\PhasePlayer;
+use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryContext;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryResult;
@@ -299,12 +299,19 @@ class PlayStoryCommand extends CliCommand
         // shutdown function
         $this->st = $teller;
 
+        // create something to play this story
+        $storyPlayer = new StoryPlayer();
+
+        // remember our player, as we'll need it for our
+        // shutdown function
+        $this->player = $storyPlayer;
+
         // create the supporting context for this test run
         $context = new StoryContext($staticConfig, $runtimeConfig, $envName, $deviceName);
         $teller->setStoryContext($context);
 
-        // a list of the phases that we want to execute
-        $phaseTypes = ['startup', 'story', 'shutdown'];
+        // we're going to use this to play our setup and teardown phases
+        $phasesPlayer = new PhasesPlayer();
 
         switch($arg2suffix)
         {
@@ -313,16 +320,15 @@ class PlayStoryCommand extends CliCommand
 
                 // load our story
                 $story = StoryLoader::loadStory($params[0]);
-
-                // create something to play this story
-                $player = new StoryPlayer();
                 $teller->setStory($story);
 
                 // make sure we've loaded the user
                 $context->initUser($staticConfig, $runtimeConfig, $story);
 
                 // make the story happen
-                $player->play($teller, $phaseTypes);
+                $phasesPlayer->playPhases($teller, 'startup');
+                $storyPlayer->playStory($teller);
+                $phasesPlayer->playPhases($teller, 'shutdown');
 
                 // all done
                 break;
@@ -341,9 +347,6 @@ class PlayStoryCommand extends CliCommand
                 {
                     // load our story
                     $story = StoryLoader::loadStory($storyFile);
-
-                    // create something to play this story
-                    $player = new StoryPlayer();
                     $teller->setStory($story);
 
                     // make sure we've loaded the user
@@ -379,7 +382,9 @@ class PlayStoryCommand extends CliCommand
                     }
 
                     // make the story happen
-                    $results[] = $player->play($teller, $phaseTypes);
+                    $phasesPlayer->playPhases($teller, 'startup');
+                    $results[] = $storyPlayer->playStory($teller);
+                    $phasePslayer->playPhases($teller, 'shutdown');
 
                     // special case - reusable environments
                     if ($storyList->options->reuseTestEnvironment) {
@@ -429,11 +434,8 @@ class PlayStoryCommand extends CliCommand
         echo "\n";
 
         // cleanup
-        $shutdownStory = new Story();
-        $storyResult = new StoryResult($shutdownStory);
-        $pairedPhases['shutdown'] = [];
-        $phasePlayer = new PhasePlayer();
-        $phasePlayer->playPhases($this->st, $storyResult, 'shutdown', $pairedPhases);
+        $phasesPlayer = new PhasesPlayer();
+        $phasesPlayer->playPhases($this->st, 'shutdown');
 
         // force a clean shutdown
         exit(1);

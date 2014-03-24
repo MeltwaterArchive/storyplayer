@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\OutputLib;
 
-use DataSift\Stone\LogLib\Log;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
 
 /**
@@ -62,11 +61,11 @@ interface OutputPlugin
 	public function endStoryplayer();
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
 	public function endStory(StoryResult $storyResult);
-	public function startStoryPhase($phaseName, $phaseType);
-	public function endStoryPhase();
-	public function logStoryActivity($level, $msg);
-	public function logStoryError($phaseName, $msg);
-	public function logStorySkipped($phaseName, $msg);
+	public function startPhase($phaseName, $phaseType);
+	public function endPhase($phaseName, $phaseType);
+	public function logPhaseActivity($level, $msg);
+	public function logPhaseError($phaseName, $msg);
+	public function logPhaseSkipped($phaseName, $msg);
 	public function logCliWarning($msg);
 	public function logCliError($msg);
 	public function logCliInfo($msg);
