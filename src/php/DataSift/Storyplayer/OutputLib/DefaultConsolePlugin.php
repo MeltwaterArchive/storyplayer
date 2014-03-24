@@ -100,6 +100,9 @@ class DefaultConsolePlugin implements OutputPlugin
 	public function setVerbosity($verbosityLevel)
 	{
 		$this->verbosityLevel = $verbosityLevel;
+		if ($this->verbosityLevel > 2) {
+			$this->verbosityLevel = 2;
+		}
 	}
 
 	public function startStoryplayer($version, $url, $copyright, $license)
@@ -134,7 +137,7 @@ Environment: {$envName}
 EOS;
 		}
 		else {
-			echo PHP_EOL . $storyName . ':';
+			echo $storyName . ':';
 		}
 
 
@@ -158,6 +161,10 @@ EOS;
 			{
 				echo $phaseName . ': ' . $msg . PHP_EOL;
 			}
+
+			// finish with a blank line so that any subsequent story is
+			// easier to see
+			echo PHP_EOL;
 		}
 	}
 
@@ -174,16 +181,21 @@ EOS;
 
 		// tell the user which phase we're doing
 		if ($this->verbosityLevel > 0) {
-			echo PHP_EOL . $phaseName . ': ';
+			echo $phaseName . ': ';
 		}
 		else {
-			echo ' ' . $this->phaseNumber;
+			echo $this->phaseNumber;
 		}
 	}
 
 	public function endStoryPhase()
 	{
-
+		if ($this->verbosityLevel > 0) {
+			echo PHP_EOL;
+		}
+		else {
+			echo ' ';
+		}
 	}
 
 	public function logStoryActivity($level, $msg)

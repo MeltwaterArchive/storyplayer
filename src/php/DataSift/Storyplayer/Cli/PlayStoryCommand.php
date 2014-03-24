@@ -54,10 +54,13 @@ use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\LogLib\Log;
 
+use DataSift\Storyplayer\PlayerLib\PhasePlayer;
 use DataSift\Storyplayer\PlayerLib\StoryContext;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryResult;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\StoryLoader;
+use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\StoryListLib\StoryListLoader;
 use DataSift\Storyplayer\UserLib\User;
 use DataSift\Storyplayer\UserLib\GenericUserGenerator;
@@ -83,7 +86,10 @@ class PlayStoryCommand extends CliCommand
      */
     protected $persistProcesses = false;
 
+    // we need to track this for handling CTRL-C
     protected $st;
+
+    // we track this for convenience
     protected $output;
 
     public function __construct($additionalContext)
@@ -297,15 +303,8 @@ class PlayStoryCommand extends CliCommand
         $context = new StoryContext($staticConfig, $runtimeConfig, $envName, $deviceName);
         $teller->setStoryContext($context);
 
-        // setup shutdown handling
-        //
-        // only at this point have we set everything up that the
-        // shutdown handlers expect to find
-        register_shutdown_function(array($this, 'shutdownHandler'));
-
-        // run our cleanup handlers before playing the story,
-        // now that we have a context / environment to use
-        $this->runCleanupHandlers("startup");
+        // a list of the phases that we want to execute
+        $phaseTypes = ['startup', 'story', 'shutdown'];
 
         switch($arg2suffix)
         {
@@ -323,7 +322,7 @@ class PlayStoryCommand extends CliCommand
                 $context->initUser($staticConfig, $runtimeConfig, $story);
 
                 // make the story happen
-                $player->play($teller, $staticConfig);
+                $player->play($teller, $phaseTypes);
 
                 // all done
                 break;
@@ -363,7 +362,7 @@ class PlayStoryCommand extends CliCommand
 
                             // do not shutdown the TestEnvironment;
                             // we want to re-use it in the other stories
-                            $staticConfig->phases->TestEnvironmentTeardown = false;
+                            $staticConfig->phases->story->TestEnvironmentTeardown = false;
                         }
                         else if ($storyFile == end($storyList->stories)) {
                             // do nothing - we do not want to override
@@ -374,13 +373,13 @@ class PlayStoryCommand extends CliCommand
                             //
                             // do not re-create the test environment
                             // do not destroy it afterwards
-                            $staticConfig->phases->TestEnvironmentSetup = false;
-                            $staticConfig->phases->testEnvironmentTeardown = false;
+                            $staticConfig->phases->story->TestEnvironmentSetup = false;
+                            $staticConfig->phases->story->TestEnvironmentTeardown = false;
                         }
                     }
 
                     // make the story happen
-                    $results[] = $player->play($teller, $staticConfig);
+                    $results[] = $player->play($teller, $phaseTypes);
 
                     // special case - reusable environments
                     if ($storyList->options->reuseTestEnvironment) {
@@ -421,68 +420,6 @@ class PlayStoryCommand extends CliCommand
         }
     }
 
-    public function shutdownHandler()
-    {
-        // we need to shutdown any running processes
-        if (!$this->persistProcesses) {
-            $this->shutdownScreenProcesses();
-        }
-        else {
-            $this->warnScreenProcesses();
-        }
-
-        $this->runCleanupHandlers("shutdown");
-    }
-
-    protected function shutdownScreenProcesses()
-    {
-        // shorthand
-        $st = $this->st;
-
-        // do we have anything to shutdown?
-        $screenSessions = $st->fromShell()->getAllScreenSessions();
-        if (count($screenSessions) == 0) {
-            // nothing to do
-            return;
-        }
-
-        // if we get here, there are things to stop
-        echo "\n";
-        echo "============================================================\n";
-        echo "SHUTDOWN - STOP SCREEN PROCESSES\n";
-        echo "\n";
-
-        foreach ($screenSessions as $processDetails) {
-            $st->usingShell()->stopProcess($processDetails->pid);
-            $st->usingProcessesTable()->removeProcess($processDetails->pid);
-        }
-    }
-
-    protected function warnScreenProcesses()
-    {
-        // shorthand
-        $st     = $this->st;
-        $output = $this->output;
-
-        // do we have anything to shutdown?
-        $screenSessions = $st->fromShell()->getAllScreenSessions();
-        if (count($screenSessions) == 0) {
-            // nothing to do
-            return;
-        }
-
-        // if we get here, there are background jobs running
-        echo "\n";
-        if (count($screenSessions) == 1) {
-            $output->logCliInfo("There is 1 background process still running");
-        }
-        else {
-            $output->logCliInfo("There are " . count($screenSessions) . " background processes still running");
-        }
-        $output->logCliInfo("Use 'storyplayer list-processes' to see the list of background processes");
-        $output->logCliInfo("Use 'storyplayer kill-processes' to stop any background processes");
-    }
-
     public function sigtermHandler($signo)
     {
         echo "\n";
@@ -491,43 +428,14 @@ class PlayStoryCommand extends CliCommand
         echo "============================================================\n";
         echo "\n";
 
+        // cleanup
+        $shutdownStory = new Story();
+        $storyResult = new StoryResult($shutdownStory);
+        $pairedPhases['shutdown'] = [];
+        $phasePlayer = new PhasePlayer();
+        $phasePlayer->playPhases($this->st, $storyResult, 'shutdown', $pairedPhases);
+
         // force a clean shutdown
         exit(1);
-    }
-
-    protected function runCleanupHandlers($type){
-
-        // Run the any cleanup classes we have available
-        $runtimeConfig = $this->st->getRuntimeConfig();
-        $missingCleanupHandlers = [];
-
-        if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables)){
-            return true;
-        }
-
-        // Take a look at all of our process list tables
-        foreach ($runtimeConfig->storyplayer->tables as $key => $value){
-            $className = "cleanup".ucfirst($key);
-            try {
-                $this->st->$className($key, $value)->$type();
-                $this->st->$className($key, $value)->removeTableIfEmpty();
-            } catch(E5xx_NoMatchingActions $e){
-                // We don't know about a cleanup module for this, SHOUT LOUDLY
-                $missingCleanupHandlers[] = "Missing cleanup module for '{$key}'".PHP_EOL;
-            }
-        }
-
-        // Now we've cleaned everything up, save the runtime config
-        $this->st->saveRuntimeConfig();
-
-        // If we have any missing cleanup handlers, output it to the screen
-        // and exit with an error code
-        if (count($missingCleanupHandlers)){
-            foreach ($missingCleanupHandlers as $msg) {
-                $this->output->logCliError($msg);
-            }
-            exit(1);
-        }
-
     }
 }

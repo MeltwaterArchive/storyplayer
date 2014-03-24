@@ -171,26 +171,13 @@ class StoryContext extends BaseObject
 		}
 
 		// copy across what we have
-		$this->phases->toRun = (array)$staticConfig->phases;
-
-		// strip out special cases from the list of phases to run
-		//
-		// yes, this is ugly, and necessary. I don't want to break
-		// backwards-compatibility with the user-visible config
-		foreach (array('namespaces') as $key) {
-			if (isset($this->phases->toRun->$key)) {
-				unset($this->phases->toRun->$key);
-			}
-		}
+		$this->phases = $staticConfig->phases;
 
 		// now, process the special case(s) that we have
 		if (isset($staticConfig->phases->namespaces)) {
 			if (!is_array($staticConfig->phases->namespaces)) {
 				throw new E5xx_InvalidConfig("the 'phases.namespaces' section of the config must either be an array, or it must be left out");
 			}
-
-			// copy over where to look for Prose classes
-			$this->prose->namespaces = $staticConfig->prose->namespaces;
 		}
 	}
 

@@ -34,98 +34,75 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use stdClass;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-use DataSift\Storyplayer\Phases\PhaseResult;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
-use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
-use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\UserLib\UserGenerator;
+use DataSift\StoryPlayer\PlayerLib\StoryTeller;
+use DataSift\StoryPlayer\Prose\E5xx_NoMatchingActions;
 
 /**
- * the main class for animating a single story
+ * a helper for phases that cleanup our persistent tables
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryPlayer
-{
-	const NEXT_CONTINUE  = 1;
-	const NEXT_SKIPSTORY = 2;
-	const NEXT_FAILSTORY = 3;
 
-	public function play(StoryTeller $st, $phaseTypes)
+class TableHandlersHelper
+{
+	public function runHandlers(StoryTeller $st, $type)
 	{
 		// shorthand
-		$story   = $st->getStory();
 		$env     = $st->getEnvironment();
 		$envName = $st->getEnvironmentName();
 		$output  = $st->getOutput();
-		$context = $st->getStoryContext();
 
-		// set default callbacks up
-		$story->setDefaultCallbacks();
+        // Do we have any persistent tables to cleanup?
+        $runtimeConfig = $st->getRuntimeConfig();
+        if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables)){
+            // there are no tables at all
+            return;
+        }
 
-		// keep track of how each phase goes
-		$storyResult = new StoryResult($story);
+        // if we get here, then we know that there are persistent
+        // tables that we need to cleanup
 
-		// this will keep track of any paired phases that we need to
-		// attempt if we fail to execute the whole story
-		$pairedPhases = array();
-		foreach ($phaseTypes as $phaseType) {
-			$pairedPhases[$phaseType] = [];
-		}
+        // this will keep track of any tables that have no associated
+        // cleanup handler
+        $missingCleanupHandlers = [];
 
-		// tell the outside world what we're doing
-		$this->announceStory($st);
+        // Take a look at all of our process list tables
+        foreach ($runtimeConfig->storyplayer->tables as $key => $value) {
+            $className = "cleanup".ucfirst($key);
+            try {
+                $st->$className($key, $value)->$type();
+                $st->$className($key, $value)->removeTableIfEmpty();
+            } catch(E5xx_NoMatchingActions $e){
+                // We don't know about a cleanup module for this, SHOUT LOUDLY
+                $missingCleanupHandlers[] = "Missing cleanup module for '{$key}'".PHP_EOL;
+            }
+        }
 
-		// we are going to need something to help us load each of our
-		// phases
-		$phasePlayer = new PhasePlayer;
-		foreach($phaseTypes as $phaseType)
-		{
-			$phasePlayer->playPhases($st, $storyResult, $phaseType, $pairedPhases);
-		}
+        // Now we've cleaned everything up, save the runtime config
+        $st->saveRuntimeConfig();
 
-		// make sense of what happened
-		$storyResult->calculateStoryResult();
-
-		// announce the results
-		$output->endStory($storyResult);
-
-		// all done
-		return $storyResult;
-	}
-
-	public function announceStory(StoryTeller $st)
-	{
-		// shorthand
-		$story = $st->getStory();
-		$output = $st->getOutput();
-
-		// tell all of our output plugins that the story has begun
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getEnvironmentName(),
-			$st->getDeviceName()
-		);
+        // If we have any missing cleanup handlers, output it to the screen
+        // and exit with an error code
+        if (count($missingCleanupHandlers)) {
+            foreach ($missingCleanupHandlers as $msg) {
+                $output->logCliError($msg);
+            }
+            exit(1);
+        }
 	}
 }

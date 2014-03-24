@@ -83,16 +83,21 @@ class DefaultStaticConfig extends LoadedConfig
 
         // defaults for phases
         $phases = new BaseObject();
-        $phases->CheckBlacklisted = true;
-        $phases->TestEnvironmentSetup = true;
-        $phases->TestSetup = true;
-        $phases->PreTestPrediction = true;
-        $phases->PreTestInspection = true;
-        $phases->Action = true;
-        $phases->PostTestInspection = true;
-        $phases->TestTeardown = true;
-        $phases->TestEnvironmentTeardown = true;
-        $phases->ApplyRoleChanges = true;
+        $phases->startup = new BaseObject();
+        $phases->startup->StartupHandlers = true;
+        $phases->story = new BaseObject();
+        $phases->story->CheckBlacklisted = true;
+        $phases->story->TestEnvironmentSetup = true;
+        $phases->story->TestSetup = true;
+        $phases->story->PreTestPrediction = true;
+        $phases->story->PreTestInspection = true;
+        $phases->story->Action = true;
+        $phases->story->PostTestInspection = true;
+        $phases->story->TestTeardown = true;
+        $phases->story->TestEnvironmentTeardown = true;
+        $phases->story->ApplyRoleChanges = true;
+        $phases->shutdown = new BaseObject();
+        $phases->shutdown->ShutdownHandlers = true;
 
         $this->phases = $phases;
 
