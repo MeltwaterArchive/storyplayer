@@ -132,6 +132,7 @@ EOS;
 	public function endStory(StoryResult $storyResult)
 	{
 		echo <<<EOS
+
 -------------------------------------------------------------
 Final Result
 
