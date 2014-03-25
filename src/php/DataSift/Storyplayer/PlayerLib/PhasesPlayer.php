@@ -180,19 +180,23 @@ class PhasesPlayer
 							$phaseResults->setPhasesAreIncomplete();
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_INCOMPLETE);
 						}
+
+						// tell the output plugins that this phase is over
+						$phase->announcePhaseEnd();
 						break 2;
 
 					case self::NEXT_FAIL:
 						$phaseResults->setPhasesHaveFailed();
-						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED);
+						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED . PHP_EOL . $phaseResult->getMessage());
+
+						// tell the output plugins that this phase is over
+						$phase->announcePhaseEnd();
 						break 2;
 
 					case self::NEXT_CONTINUE:
-						// do nothing
+						// tell the output plugins that this phase is over
+						$phase->announcePhaseEnd();
 				}
-
-				// tell the output plugins that this phase is over
-				$phase->announcePhaseEnd();
 			}
 
 			// our ultimate safety net

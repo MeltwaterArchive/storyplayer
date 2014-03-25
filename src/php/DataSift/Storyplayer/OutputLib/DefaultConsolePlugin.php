@@ -59,8 +59,11 @@ use DataSift\StoryPlayer\PlayerLib\StoryResult;
  */
 class DefaultConsolePlugin implements OutputPlugin
 {
+	protected $currentPhase;
 	protected $phaseNumber = 0;
 	protected $phaseErrors = array();
+
+	protected $phaseActivity = array();
 
 	protected $verbosityLevel = 0;
 
@@ -70,27 +73,27 @@ class DefaultConsolePlugin implements OutputPlugin
 	{
 		$this->resultStrings = array (
 			StoryResult::PASS => array (
-				0 => ' [PASS]',
+				0 => '[PASS]',
 				1 => PHP_EOL . PHP_EOL . "Result: PASS",
 				2 => PHP_EOL . PHP_EOL . "Result: PASS"
 			),
 			StoryResult::FAIL => array (
-				0 => ' [FAIL]',
+				0 => '[FAIL]',
 				1 => PHP_EOL . PHP_EOL . "Result: FAIL",
 				2 => PHP_EOL . PHP_EOL . "Result: FAIL"
 			),
 			StoryResult::UNKNOWN => array (
-				0 => ' [UNKNOWN]',
+				0 => '[UNKNOWN]',
 				1 => PHP_EOL . PHP_EOL . "Result: UNKNOWN",
 				2 => PHP_EOL . PHP_EOL . "Result: UNKNOWN"
 			),
 			StoryResult::INCOMPLETE => array (
-				0 => ' [INCOMPLETE]',
+				0 => '[INCOMPLETE]',
 				1 => PHP_EOL . PHP_EOL . "Result: INCOMPLETE",
 				2 => PHP_EOL . PHP_EOL . "Result: INCOMPLETE"
 			),
 			StoryResult::BLACKLISTED => array (
-				0 => ' [BLACKLISTED]',
+				0 => '[BLACKLISTED]',
 				1 => PHP_EOL . PHP_EOL . "Result: BLACKLISTED",
 				2 => PHP_EOL . PHP_EOL . "Result: BLACKLISTED"
 			),
@@ -152,14 +155,13 @@ EOS;
 		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel] . PHP_EOL;
 
 		if (count($this->phaseErrors) > 0) {
-			// output any errors that we have
-			echo PHP_EOL
-			     . "This story failed with the following errors:"
-			     . PHP_EOL . PHP_EOL;
-
 			foreach ($this->phaseErrors as $phaseName => $msg)
 			{
-				echo $phaseName . ': ' . $msg . PHP_EOL;
+				// what activity was the phase doing?
+				$this->showActivityForPhase($phaseName);
+
+				// what was the final error message?
+				echo $msg . PHP_EOL;
 			}
 
 			// finish with a blank line so that any subsequent story is
@@ -168,8 +170,32 @@ EOS;
 		}
 	}
 
+	protected function showActivityForPhase($phaseName)
+	{
+		if (!isset($this->phaseMessages[$phaseName]) || !count($this->phaseMessages[$phaseName])) {
+			// we have nothing to show
+			return;
+		}
+
+		// tell the world
+		echo PHP_EOL . "The story failed in the {$phaseName} phase:" . PHP_EOL . PHP_EOL;
+
+		// show the activity of the phase
+		foreach ($this->phaseMessages[$phaseName] as $msg) {
+			echo "[" . date("Y-m-d H:i:s", $msg['ts']) . "] "
+			     . $msg['text'] . PHP_EOL;
+		}
+
+		// leave a blank line afterwards
+		echo PHP_EOL;
+	}
+
 	public function startPhase($phaseName, $phaseType)
 	{
+		// make sure we can keep track of what the phase is doing
+		$this->phaseMessages[$phaseName] = [];
+		$this->currentPhase = $phaseName;
+
 		// we're only interested in telling the user about the
 		// phases of a story
 		if ($phaseType !== Phase::STORY_PHASE) {
@@ -206,7 +232,15 @@ EOS;
 
 	public function logPhaseActivity($level, $msg)
 	{
-		// this is a no-op for us
+		// keep track of what was attempted, in case we need to show
+		// the user what was attempted
+		$this->phaseMessages[$this->currentPhase][] = [
+			'ts'    => time(),
+			'level' => $level,
+			'text'  => $msg
+		];
+
+		// show the user that *something* happened
 		echo ".";
 	}
 
