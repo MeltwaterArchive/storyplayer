@@ -137,9 +137,11 @@ class PlayStoryCommand extends CliCommand
 
         // switch output plugins first, before we do anything else at all
         if (isset($engine->options->dev) && $engine->options->dev) {
+            // switch our main output to 'dev mode'
             $output->usePlugin('console', new DevModeConsolePlugin());
+
             // dev mode means 'show me everything'
-            $output->setVerbosity(2);
+            $engine->options->verbosity = 2;
         }
 
         // which environment are we using?
@@ -183,15 +185,15 @@ class PlayStoryCommand extends CliCommand
         if (isset($engine->options->logLevels)) {
             $loggingConfig->levels = $engine->options->logLevels;
         }
-        else {
-            $verbosity = $engine->options->verbosity;
-            $output->setVerbosity($engine->options->verbosity);
-            if ($verbosity > 0) {
-                $loggingConfig->levels->LOG_DEBUG = true;
-            }
-            if ($verbosity > 1) {
-                $loggingConfig->levels->LOG_TRACE = true;
-            }
+
+        // allow the command-line to override the config
+        $verbosity = $engine->options->verbosity;
+        $output->setVerbosity($engine->options->verbosity);
+        if ($verbosity > 0) {
+            $loggingConfig->levels->LOG_DEBUG = true;
+        }
+        if ($verbosity > 1 ) {
+            $loggingConfig->levels->LOG_TRACE = true;
         }
 
         // we're ready to switch logging on now
