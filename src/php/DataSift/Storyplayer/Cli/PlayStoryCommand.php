@@ -138,6 +138,8 @@ class PlayStoryCommand extends CliCommand
         // switch output plugins first, before we do anything else at all
         if (isset($engine->options->dev) && $engine->options->dev) {
             $output->usePlugin('console', new DevModeConsolePlugin());
+            // dev mode means 'show me everything'
+            $output->setVerbosity(2);
         }
 
         // which environment are we using?
