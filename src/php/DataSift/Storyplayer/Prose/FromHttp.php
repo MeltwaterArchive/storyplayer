@@ -94,6 +94,7 @@ class FromHttp extends Prose
 		}
 
 		// all done
+		$log->endAction();
 		return $response;
 	}
 }

@@ -115,6 +115,7 @@ class ExpectsBrowser extends Prose
 		// how do we find the element to test?
 		$action = function() use ($st, $searchTerm) {
 			$element = $st->fromBrowser()->getElementByLabelIdOrName($searchTerm);
+			return $element;
 		};
 
 		return new TargettedBrowserExpects($st, $action, $searchTerm, 'field');

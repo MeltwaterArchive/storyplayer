@@ -63,9 +63,7 @@ class TableHandlersHelper
 	public function runHandlers(StoryTeller $st, $type)
 	{
 		// shorthand
-		$env     = $st->getEnvironment();
-		$envName = $st->getEnvironmentName();
-		$output  = $st->getOutput();
+		$output = $st->getOutput();
 
         // Do we have any persistent tables to cleanup?
         $runtimeConfig = $st->getRuntimeConfig();

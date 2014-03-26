@@ -164,9 +164,9 @@ class ExpectsGraphite extends Prose
 			//
 			// NOTE: this can also happen when the test is asking for
 			//       the wrong metric :(
-		 	if ($expectedTotal !== 0) {
+		 	if ($expectedMax !== 0) {
 		 		// we were expecting there to be some data
-				throw new E5xx_ExpectFailed(__METHOD__, "no data available for metric '{$metric}'");
+				throw new E5xx_ExpectFailed(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
 			}
 
 			// if we get here, it's reasonable to assume that everything is
@@ -197,7 +197,7 @@ class ExpectsGraphite extends Prose
 		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
 		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' average never exceeds value '{$expectedMax}' between '{$humanStartTime}' and '{$humanEndTime}'");
+		$log = $st->startAction("ensure metric '{$metric}' average never exceeds value '{$expectedAverage}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
 		// get the data from graphite
 		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
@@ -208,9 +208,9 @@ class ExpectsGraphite extends Prose
 			//
 			// NOTE: this can also happen when the test is asking for
 			//       the wrong metric :(
-		 	if ($expectedTotal !== 0) {
+		 	if ($expectedAverage !== 0) {
 		 		// we were expecting there to be some data
-				throw new E5xx_ExpectFailed(__METHOD__, "no data available for metric '{$metric}'");
+				throw new E5xx_ExpectFailed(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
 			}
 
 			// if we get here, it's reasonable to assume that everything is

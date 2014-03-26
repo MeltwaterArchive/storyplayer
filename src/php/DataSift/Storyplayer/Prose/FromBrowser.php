@@ -132,9 +132,6 @@ class FromBrowser extends Prose
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -252,9 +249,6 @@ class FromBrowser extends Prose
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -286,9 +280,6 @@ class FromBrowser extends Prose
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -322,9 +313,6 @@ class FromBrowser extends Prose
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -356,9 +344,6 @@ class FromBrowser extends Prose
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -399,9 +384,6 @@ class FromBrowser extends Prose
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -463,9 +445,6 @@ class FromBrowser extends Prose
 		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("get '{$tag}' elements with CSS class '{$class}'");
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -495,9 +474,6 @@ class FromBrowser extends Prose
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("get '{$tag}' elements with id '{$id}'");
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -529,9 +505,6 @@ class FromBrowser extends Prose
 		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("get '{$tag}' elements with name '{$name}'");
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -561,9 +534,6 @@ class FromBrowser extends Prose
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("get '{$tag}' elements with text '{$text}'");
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {

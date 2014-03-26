@@ -62,6 +62,10 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class DelayedProvisioningDefinitionAction
 {
+	protected $st;
+	protected $def;
+	protected $action;
+
 	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
 	{
 		// remember for later

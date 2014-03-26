@@ -81,6 +81,7 @@ class CleanupProcesses extends BaseCleanup
 
         return;
 
+        /*
                 // shorthand
         $st     = $this->st;
         $output = $this->output;
@@ -102,7 +103,7 @@ class CleanupProcesses extends BaseCleanup
         }
         $output->logCliInfo("Use 'storyplayer list-processes' to see the list of background processes");
         $output->logCliInfo("Use 'storyplayer kill-processes' to stop any background processes");
-
+        */
     }
 
 }

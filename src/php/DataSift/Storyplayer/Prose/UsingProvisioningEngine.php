@@ -59,6 +59,8 @@ use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
  */
 class UsingProvisioningEngine extends Prose
 {
+	protected $adapter;
+
 	public function __construct(StoryTeller $st, $args)
 	{
 		// call our parent

@@ -74,7 +74,7 @@ class UsingSavageD extends Prose
 
 		// did it work?
 		$newPrefix = $st->fromHttp()->get($url);
-		$st->assertsString($newPrefix)->equals($prefix);
+		$st->assertsString($newPrefix)->equals('');
 
 		// all done
 		$log->endAction();

@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use Exception;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;

@@ -46,6 +46,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
 
 use Datasift\Os;
 use Datasift\IfconfigParser;
@@ -220,9 +221,6 @@ class StoryContext extends BaseObject
 
 	protected function getHostIpAddress()
 	{
-		// we can't use constants inside our strings
-		$BIN_DIR=APP_BINDIR;
-
 		// step 1 - how many adapters do we have on this box?
 		// @todo Maybe we want to move this somewhere more central later?
 		$os = Os::getOs();

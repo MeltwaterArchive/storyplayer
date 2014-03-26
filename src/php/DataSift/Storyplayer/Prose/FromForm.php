@@ -58,6 +58,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class FromForm extends FromBrowser
 {
+	protected $formId;
+
 	protected function initActions()
 	{
 		// shorthand

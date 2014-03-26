@@ -58,6 +58,9 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class SauceLabsRestApi extends Prose
 {
+	protected $sauceLabsUsername;
+	protected $sauceLabsAccessKey;
+
 	public function __construct(StoryTeller $st, $params = array())
 	{
 		// call our parent

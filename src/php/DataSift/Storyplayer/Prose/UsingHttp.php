@@ -119,6 +119,7 @@ class UsingHttp extends Prose
 		}
 
 		// all done
+		$log->endAction();
 		return $response;
 	}
 }

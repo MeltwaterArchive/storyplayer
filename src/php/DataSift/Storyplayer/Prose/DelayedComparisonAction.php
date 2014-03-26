@@ -63,7 +63,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 class DelayedComparisonAction
 {
 	protected $st;
-	protected $topElement;
+	protected $newStats;
+	protected $action;
 
 	public function __construct(StoryTeller $st, $newStats, $action)
 	{

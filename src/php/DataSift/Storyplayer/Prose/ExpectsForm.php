@@ -58,6 +58,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class ExpectsForm extends ExpectsBrowser
 {
+	protected $formId;
+
 	protected function initActions()
 	{
 		// shorthand

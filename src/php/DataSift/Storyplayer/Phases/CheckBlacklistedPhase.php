@@ -71,7 +71,6 @@ class CheckBlacklistedPhase extends InternalPrePhase
 		$story   = $st->getStory();
 		$env     = $st->getEnvironment();
 		$envName = $st->getEnvironmentName();
-		$output  = $st->getOutput();
 
 		// our result object
 		$phaseResult = new PhaseResult();

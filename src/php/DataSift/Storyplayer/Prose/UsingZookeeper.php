@@ -59,6 +59,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 class UsingZookeeper extends Prose
 {
 	protected $connect_timeout = 0.5;
+	protected $host;
+	protected $zk;
 
 	protected $default_acl = array( array(
 		"perms"  => Zookeeper::PERM_ALL,
