@@ -55,6 +55,11 @@ namespace DataSift\Storyplayer\Cli;
  */
 class EnvironmentHelper
 {
+    /**
+     *
+     * @param  stdClass $envList
+     * @return string
+     */
     static public function getDefaultEnvironmentName($envList)
     {
         // what is the name of the environment for the computer that
@@ -70,6 +75,10 @@ class EnvironmentHelper
         return $defaultEnvName;
     }
 
+    /**
+     *
+     * @return string
+     */
     static public function getLocalEnvironmentName()
     {
         // for convenience, the current computer's hostname will be the

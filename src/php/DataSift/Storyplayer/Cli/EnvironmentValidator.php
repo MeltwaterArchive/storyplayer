@@ -53,12 +53,23 @@ class EnvironmentValidator implements Validator
     protected $envList;
     protected $defaultValue;
 
+    /**
+     *
+     * @param stdClass $envList
+     * @param string $defaultValue
+     */
     public function __construct($envList, $defaultValue)
     {
         $this->envList = $envList;
         $this->defaultValue = $defaultValue;
     }
 
+    /**
+     *
+     * @param  mixed $value
+     * @param  Phix_Project\ValidationLib4\ValidationResult $result
+     * @return Phix_Project\ValidationLib4\ValidationResult
+     */
     public function validate($value, ValidationResult $result = null)
     {
         if ($result === null) {

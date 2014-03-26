@@ -77,6 +77,13 @@ class ShowLocalEnvironmentCommand extends CliCommand
         $this->localEnvName = EnvironmentHelper::getLocalEnvironmentName();
 	}
 
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return Phix_Project\CliEngine\CliResult
+	 */
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// output the default environment name

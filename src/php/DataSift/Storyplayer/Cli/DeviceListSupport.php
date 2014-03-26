@@ -57,6 +57,11 @@ trait DeviceListSupport
 {
 	public $deviceList;
 
+	/**
+	 *
+	 * @param  stdClass $devices
+	 * @return stdClass
+	 */
 	public function initDeviceListSupport($devices)
 	{
 		// take a copy of the list of devices

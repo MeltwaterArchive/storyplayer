@@ -52,11 +52,21 @@ class DeviceValidator implements Validator
 
     const MSG_NOTVALIDDEVICE = "Unknown device '%value%'";
 
+    /**
+     *
+     * @param stdClass $deviceList
+     */
     public function __construct($deviceList)
     {
         $this->deviceList = $deviceList;
     }
 
+    /**
+     *
+     * @param  mixed $value
+     * @param  Phix_Project\ValidationLib4\ValidationResult $result
+     * @return Phix_Project\ValidationLib4\ValidationResult
+     */
     public function validate($value, ValidationResult $result = null)
     {
         if ($result === null) {

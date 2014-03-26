@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliResult;
 
 /**
  * A command to list the supported test environments
@@ -75,6 +76,13 @@ class ListEnvironmentsCommand extends CliCommand
 		$this->envList = $envList;
 	}
 
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return Phix_Project\CliEngine\CliResult
+	 */
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// list the environments (if any) in a machine-friendly way
@@ -83,6 +91,6 @@ class ListEnvironmentsCommand extends CliCommand
 		}
 
 		// all done
-		return 0;
+		return new CliResult(0);
 	}
 }

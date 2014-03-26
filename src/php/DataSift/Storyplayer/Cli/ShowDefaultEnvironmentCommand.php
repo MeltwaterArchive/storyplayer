@@ -80,6 +80,13 @@ class ShowDefaultEnvironmentCommand extends CliCommand
 		$this->defaultEnvName = $defaultEnvName;
 	}
 
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return Phix_Project\CliEngine\CliResult
+	 */
 	public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
 	{
 		// output the default environment name

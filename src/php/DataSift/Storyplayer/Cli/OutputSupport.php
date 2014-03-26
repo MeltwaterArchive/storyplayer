@@ -59,6 +59,10 @@ trait OutputSupport
 {
 	public $output;
 
+	/**
+	 *
+	 * @return void
+	 */
 	public function initOutputSupport()
 	{
 		$this->output = new Output();

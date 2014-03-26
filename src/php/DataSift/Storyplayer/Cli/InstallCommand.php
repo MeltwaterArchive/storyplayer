@@ -74,6 +74,13 @@ class InstallCommand extends CliCommand
 		);
 	}
 
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return void
+	 */
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// tell the user what is happening

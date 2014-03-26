@@ -50,6 +50,12 @@ class DevModeValidator implements Validator
 {
     const MSG_UNKNOWNOPTION = "Unknown dev mode option '%value%'";
 
+    /**
+     *
+     * @param  mixed $value
+     * @param  Phix_Project\ValidationLib4\ValidationResult $result
+     * @return Phix_Project\ValidationLib4\ValidationResult
+     */
     public function validate($value, ValidationResult $result = null)
     {
         if ($result === null) {

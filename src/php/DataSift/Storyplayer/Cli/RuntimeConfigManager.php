@@ -60,6 +60,10 @@ use DataSift\Stone\LogLib\Log;
  */
 class RuntimeConfigManager extends ConfigManagerBase
 {
+	/**
+	 *
+	 * @return string
+	 */
 	public function getConfigDir()
 	{
 		static $configDir = null;
@@ -73,6 +77,10 @@ class RuntimeConfigManager extends ConfigManagerBase
 		return $configDir;
 	}
 
+	/**
+	 *
+	 * @return void
+	 */
 	public function makeConfigDir()
 	{
 		// what is the path to the config directory?
@@ -91,11 +99,20 @@ class RuntimeConfigManager extends ConfigManagerBase
 		}
 	}
 
+	/**
+	 *
+	 * @return stdClass
+	 */
 	public function loadRuntimeConfig()
 	{
 		return $this->configLoader->loadRuntimeConfig();
 	}
 
+	/**
+	 *
+	 * @param stdClass $config
+	 * @return void
+	 */
 	public function saveRuntimeConfig($config)
 	{
 		return $this->configLoader->saveRuntimeConfig($config);

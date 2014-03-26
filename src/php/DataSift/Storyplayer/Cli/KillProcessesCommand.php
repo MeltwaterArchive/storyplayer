@@ -71,6 +71,13 @@ class KillProcessesCommand extends CliCommand
 		);
 	}
 
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return Phix_Project\CliEngine\CliResult
+	 */
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// shorthand
@@ -91,6 +98,12 @@ class KillProcessesCommand extends CliCommand
 		return new CliResult(0);
 	}
 
+	/**
+	 *
+	 * @param  integer $pid
+	 * @param  string  $processName
+	 * @return void
+	 */
 	public function killProcess($pid, $processName)
 	{
 		// is the process running?

@@ -60,6 +60,7 @@ class StaticConfigManager extends ConfigManagerBase
 {
 	/**
 	 * @param DefaultStaticConfig $config
+	 * @return void
 	 */
 	public function loadConfig($config)
 	{
@@ -97,16 +98,30 @@ class StaticConfigManager extends ConfigManagerBase
 		// all done
 	}
 
+	/**
+	 *
+	 * @param  stdClass $config
+	 * @param  string   $configName
+	 * @return void
+	 */
 	public function loadAdditionalConfig($config, $configName)
 	{
 		return $this->configLoader->loadAdditionalConfig($config, $configName);
 	}
 
+	/**
+	 *
+	 * @return stdClass
+	 */
 	public function loadRuntimeConfig()
 	{
 		return $this->configLoader->loadRuntimeConfig();
 	}
 
+	/**
+	 *
+	 * @return array<string>
+	 */
 	public function getListOfAdditionalConfigFiles()
 	{
 		return $this->configLoader->getListOfAdditionalConfigFiles();

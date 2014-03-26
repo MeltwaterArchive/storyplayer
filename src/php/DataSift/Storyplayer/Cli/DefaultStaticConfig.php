@@ -59,11 +59,11 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class DefaultStaticConfig extends LoadedConfig
 {
-	public function __construct()
-	{
-		// defaults for LogLib
-		$this->logger = new BaseObject();
-		$this->logger->writer = "StdErrWriter";
+    public function __construct()
+    {
+        // defaults for LogLib
+        $this->logger = new BaseObject();
+        $this->logger->writer = "StdErrWriter";
 
         $this->environments = new BaseObject();
         $this->environments->defaults = new BaseObject();

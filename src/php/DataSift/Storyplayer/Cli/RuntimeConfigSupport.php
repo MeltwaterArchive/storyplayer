@@ -58,6 +58,10 @@ trait RuntimeConfigSupport
 	public $runtimeConfigManager;
 	public $runtimeConfig;
 
+	/**
+	 *
+	 * @return RuntimeConfigManager
+	 */
 	public function initRuntimeConfigSupport()
 	{
 		// create the runtime config's manager

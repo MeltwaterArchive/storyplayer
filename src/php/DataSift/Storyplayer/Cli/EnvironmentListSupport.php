@@ -57,6 +57,11 @@ trait EnvironmentListSupport
 {
 	public $envList;
 
+	/**
+	 *
+	 * @param  stdClass $environments
+	 * @return stdClass
+	 */
 	public function initEnvironmentListSupport($environments)
 	{
 		// take a copy of the list of environments

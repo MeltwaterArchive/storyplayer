@@ -66,6 +66,7 @@ class DevModeHelper
 
     /**
      * @param string $input
+     * @return boolean|null
      */
     static public function stringToValue($input)
     {

@@ -81,6 +81,13 @@ class CreateStoryCommand extends CliCommand
         ));
     }
 
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  array     $params
+     * @param  mixed     $additionalContext
+     * @return [Phix_Project\CliEngine\CliResult
+     */
     public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
     {
         // do we have the name of the file to create?

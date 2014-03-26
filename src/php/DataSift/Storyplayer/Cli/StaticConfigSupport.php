@@ -58,6 +58,10 @@ trait StaticConfigSupport
 	public $staticConfigManager;
 	public $staticConfig;
 
+	/**
+	 *
+	 * @return StaticConfigManager
+	 */
 	public function initStaticConfigSupport()
 	{
 		// create an object to manage the static config
