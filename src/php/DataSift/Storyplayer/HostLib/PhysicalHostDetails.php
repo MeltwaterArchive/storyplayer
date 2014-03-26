@@ -43,12 +43,8 @@
 
 namespace DataSift\Storyplayer\HostLib;
 
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-
 /**
- * the things you can do / learn about a physical host
+ * holds the details of a physical host
  *
  * @category  Libraries
  * @package   Storyplayer/HostLib
@@ -57,77 +53,10 @@ use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PhysicalHost implements SupportedHost
+class PhysicalHostDetails extends HostDetails
 {
-	protected $st;
-
-	public function __construct(StoryTeller $st)
-	{
-		// remember
-		$this->st = $st;
-	}
-
-	public function createHost(PhysicalHostDetails $vmDetails, $provisioningVars = array())
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot create a physical host");
-	}
-
-	public function startHost(PhysicalHostDetails $vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot start a physical host");
-	}
-
-	public function stopHost(PhysicalHostDetails $vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot stop a physical host");
-	}
-
-	public function restartHost(PhysicalHostDetails $vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot restart a physical host");
-	}
-
-	public function powerOffHost(PhysicalHostDetails $vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot power off a physical host");
-	}
-
-	public function destroyHost(PhysicalHostDetails $vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot destroy a physical host");
-	}
-
-	public function runCommandAgainstHostManager(PhysicalHostDetails $vmDetails, $command)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands against");
-	}
-
-	public function runCommandViaHostManager(PhysicalHostDetails $vmDetails, $command)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands via");
-	}
-
-	public function isRunning(PhysicalHostDetails $vmDetails)
-	{
-		return true;
-	}
-
-	public function determineIpAddress(PhysicalHostDetails $vmDetails)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->name}'");
-
-		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
-
-		// get the IP address
-		$ipAddress = $host->determineIpAddress($vmDetails, $this);
-
-		// all done
-		$log->endAction("IP address is '{$ipAddress}'");
-		return $ipAddress;
-	}
+	public $name;
+	public $osName;
+	public $ipAddress;
+	public $provisioned = false;
 }
