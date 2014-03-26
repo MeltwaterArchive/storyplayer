@@ -71,7 +71,7 @@ class Ec2Vm implements SupportedHost
 		$this->st = $st;
 	}
 
-	public function createHost($vmDetails, $provisioningVars = array())
+	public function createHost(Ev2VmDetails $vmDetails, $provisioningVars = array())
 	{
 		// shorthand
 		$st = $this->st;
