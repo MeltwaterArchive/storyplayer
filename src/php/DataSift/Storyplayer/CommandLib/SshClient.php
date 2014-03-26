@@ -122,8 +122,20 @@ class SshClient
 
 	public function convertParamsForUse($params)
 	{
+		// our list of what to convert from
+		$convertFrom = [
+			'\'',
+			'*'
+		];
+
+		// our list of what to convert to
+		$convertTo = [
+			'\\\'',
+			'\'*\''
+		];
+
 		// our return value
-		$result = str_replace('\'', '\\\'', $params);
+		$result = str_replace($convertFrom, $convertTo, $params);
 
 		// all done
 		return rtrim($result);

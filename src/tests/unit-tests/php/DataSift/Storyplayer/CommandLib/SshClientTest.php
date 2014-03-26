@@ -44,8 +44,8 @@
 namespace DataSift\Storyplayer\CommandLib;
 
 use PHPUnit_Framework_TestCase;
+use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\StoryLib\Story;
 
 class SshClientTest extends PHPUnit_Framework_TestCase
 {
@@ -57,8 +57,9 @@ class SshClientTest extends PHPUnit_Framework_TestCase
 		// ----------------------------------------------------------------
 		// setup your test
 
-		$story = new Story();
-		$st    = new StoryTeller($story);
+		$i  = new Injectables;
+		$i->initOutputSupport();
+		$st = new StoryTeller($i);
 
 	    // ----------------------------------------------------------------
 	    // perform the change
@@ -74,53 +75,19 @@ class SshClientTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers DataSift\Storyplayer\CommandLib\SshClient::convertParamsForUse
 	 */
-	public function testCanConvertParamsArrayToString()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
-
-		$story = new Story();
-		$st    = new StoryTeller($story);
-
-		$obj   = new SshClient($st);
-
-		$inputParams = array(
-			"ls",
-			"*"
-		);
-
-		$expectedParams = "ls *";
-
-	    // ----------------------------------------------------------------
-	    // perform the change
-
-	    $actualParams = $obj->convertParamsForUse($inputParams);
-
-	    // ----------------------------------------------------------------
-	    // test the results
-
-	    $this->assertEquals($expectedParams, $actualParams);
-	}
-
-	/**
-	 * @covers DataSift\Storyplayer\CommandLib\SshClient::convertParamsForUse
-	 */
 	public function testCanEscapeParamsForRemoteGlobbing()
 	{
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-		$story = new Story();
-		$st    = new StoryTeller($story);
+		$i  = new Injectables;
+		$i->initOutputSupport();
+		$st = new StoryTeller($i);
 
 		$obj   = new SshClient($st);
 
-		$inputParams = array(
-			"ls",
-			"'*'"
-		);
-
-		$expectedParams = "ls \'*\'";
+		$inputParams    = "ls *";
+		$expectedParams = "ls '*'";
 
 	    // ----------------------------------------------------------------
 	    // perform the change
