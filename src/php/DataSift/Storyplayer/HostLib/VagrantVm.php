@@ -61,15 +61,29 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class VagrantVm implements SupportedHost
 {
+	/**
+	 *
+	 * @var StoryTeller
+	 */
 	protected $st;
 
+	/**
+	 *
+	 * @param StoryTeller $st
+	 */
 	public function __construct(StoryTeller $st)
 	{
 		// remember
 		$this->st = $st;
 	}
 
-	public function createHost(VagrantVmDetails $vmDetails, $provisioningVars = array())
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @param  array $provisioningVars
+	 * @return void
+	 */
+	public function createHost($vmDetails, $provisioningVars = array())
 	{
 		// shorthand
 		$st = $this->st;
@@ -149,7 +163,12 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
-	public function startHost(VagrantVmDetails $vmDetails)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
+	public function startHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -190,7 +209,12 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
-	public function stopHost(VagrantVmDetails $vmDetails)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
+	public function stopHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -221,7 +245,12 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully stopped");
 	}
 
-	public function restartHost(VagrantVmDetails $vmDetails)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
+	public function restartHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -237,7 +266,12 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully restarted");
 	}
 
-	public function powerOffHost(VagrantVmDetails $vmDetails)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
+	public function powerOffHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -268,7 +302,12 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully powered off");
 	}
 
-	public function destroyHost(VagrantVmDetails $vmDetails)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
+	public function destroyHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -298,7 +337,13 @@ class VagrantVm implements SupportedHost
 		$log->endAction();
 	}
 
-	public function runCommandAgainstHostManager(VagrantVmDetails $vmDetails, $command)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @param  string $command
+	 * @return CommandResult
+	 */
+	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
 		// shorthand
 		$st = $this->st;
@@ -321,7 +366,13 @@ class VagrantVm implements SupportedHost
 		return $result;
 	}
 
-	public function runCommandViaHostManager(VagrantVmDetails $vmDetails, $command)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @param string $command
+	 * @return CommandResult
+	 */
+	public function runCommandViaHostManager($vmDetails, $command)
 	{
 		// shorthand
 		$st = $this->st;
@@ -344,7 +395,12 @@ class VagrantVm implements SupportedHost
 		return $result;
 	}
 
-	public function isRunning(VagrantVmDetails $vmDetails)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return boolean
+	 */
+	public function isRunning($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -366,7 +422,12 @@ class VagrantVm implements SupportedHost
 		return true;
 	}
 
-	public function determineIpAddress(VagrantVmDetails $vmDetails)
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return string
+	 */
+	public function determineIpAddress($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;

@@ -63,15 +63,29 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class Ec2Vm implements SupportedHost
 {
+	/**
+	 *
+	 * @var StoryTeller
+	 */
 	protected $st;
 
+	/**
+	 *
+	 * @param StoryTeller $st
+	 */
 	public function __construct(StoryTeller $st)
 	{
 		// remember
 		$this->st = $st;
 	}
 
-	public function createHost(Ev2VmDetails $vmDetails, $provisioningVars = array())
+	/**
+	 *
+	 * @param  Ev2VmDetails $vmDetails
+	 * @param  array        $provisioningVars
+	 * @return void
+	 */
+	public function createHost($vmDetails, $provisioningVars = array())
 	{
 		// shorthand
 		$st = $this->st;
@@ -179,7 +193,12 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
-	public function startHost(Ec2VmDetails $vmDetails)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
+	public function startHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -242,7 +261,12 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
-	public function stopHost(Ec2VmDetails $vmDetails)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
+	public function stopHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -295,7 +319,12 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully stopped");
 	}
 
-	public function restartHost(Ec2VmDetails $vmDetails)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
+	public function restartHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -311,7 +340,12 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully restarted");
 	}
 
-	public function powerOffHost(Ec2VmDetails $vmDetails)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
+	public function powerOffHost($vmDetails)
 	{
 		// sadly, not supported by EC2
 		//
@@ -319,7 +353,12 @@ class Ec2Vm implements SupportedHost
 		return $this->stopHost($vmDetails);
 	}
 
-	public function destroyHost(Ec2VmDetails $vmDetails)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
+	public function destroyHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -364,17 +403,34 @@ class Ec2Vm implements SupportedHost
 		$log->endAction();
 	}
 
-	public function runCommandAgainstHostManager(Ec2VmDetails $vmDetails, $command)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @param  string $command
+	 * @return void
+	 */
+	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
-	public function runCommandViaHostManager(Ec2VmDetails $vmDetails, $command)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @param  string $command
+	 * @return void
+	 */
+	public function runCommandViaHostManager($vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
-	public function isRunning(Ec2VmDetails $vmDetails)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return boolean
+	 */
+	public function isRunning($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -399,7 +455,12 @@ class Ec2Vm implements SupportedHost
 		return true;
 	}
 
-	public function determineIpAddress(Ec2VmDetails $vmDetails)
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return string
+	 */
+	public function determineIpAddress($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;

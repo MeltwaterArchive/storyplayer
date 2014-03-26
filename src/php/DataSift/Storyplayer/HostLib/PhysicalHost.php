@@ -59,60 +59,119 @@ use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
  */
 class PhysicalHost implements SupportedHost
 {
+	/**
+	 *
+	 * @var StoryTeller
+	 */
 	protected $st;
 
+	/**
+	 *
+	 * @param StoryTeller $st
+	 */
 	public function __construct(StoryTeller $st)
 	{
 		// remember
 		$this->st = $st;
 	}
 
-	public function createHost(PhysicalHostDetails $vmDetails, $provisioningVars = array())
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @param  array $provisioningVars
+	 * @return void
+	 */
+	public function createHost($vmDetails, $provisioningVars = array())
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "cannot create a physical host");
 	}
 
-	public function startHost(PhysicalHostDetails $vmDetails)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return void
+	 */
+	public function startHost($vmDetails)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "cannot start a physical host");
 	}
 
-	public function stopHost(PhysicalHostDetails $vmDetails)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return void
+	 */
+	public function stopHost($vmDetails)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "cannot stop a physical host");
 	}
 
-	public function restartHost(PhysicalHostDetails $vmDetails)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return void
+	 */
+	public function restartHost($vmDetails)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "cannot restart a physical host");
 	}
 
-	public function powerOffHost(PhysicalHostDetails $vmDetails)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return void
+	 */
+	public function powerOffHost($vmDetails)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "cannot power off a physical host");
 	}
 
-	public function destroyHost(PhysicalHostDetails $vmDetails)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return void
+	 */
+	public function destroyHost($vmDetails)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "cannot destroy a physical host");
 	}
 
-	public function runCommandAgainstHostManager(PhysicalHostDetails $vmDetails, $command)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return void
+	 */
+	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands against");
 	}
 
-	public function runCommandViaHostManager(PhysicalHostDetails $vmDetails, $command)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return void
+	 */
+	public function runCommandViaHostManager($vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands via");
 	}
 
-	public function isRunning(PhysicalHostDetails $vmDetails)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return boolean
+	 */
+	public function isRunning($vmDetails)
 	{
 		return true;
 	}
 
-	public function determineIpAddress(PhysicalHostDetails $vmDetails)
+	/**
+	 *
+	 * @param  PhysicalHostDetails $vmDetails
+	 * @return string
+	 */
+	public function determineIpAddress($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
