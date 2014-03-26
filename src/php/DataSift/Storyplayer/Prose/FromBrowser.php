@@ -399,9 +399,6 @@ class FromBrowser extends Prose
 		// search using the xpath
 		$elements = $this->getElementsByXpath($xpathList);
 
-		// get the possibly matching elements
-		$elements = $this->getElementsByXpath($xpathList);
-
 		// find the first one that the user can see
 		return $this->returnFirstVisibleElement(
 			$log, $elements, __METHOD__, $successMsg, $failureMsg
@@ -417,26 +414,30 @@ class FromBrowser extends Prose
 		// what are we doing?
 		$log = $st->startAction("find element using xpath list");
 
-		try{
-			foreach ($xpathList as $xpath) {
+		// search the list
+		foreach ($xpathList as $xpath) {
+			try {
+				// does the xpath match?
 				$element = $log->addStep("find element using xpath '{$xpath}'", function() use($topElement, $xpath) {
 					return $topElement->getElement('xpath', $xpath);
 				});
 
 				// if we get here, then we have found a match
+				$log->endAction("success!");
 				return $element;
 			}
-		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction("no matching elements");
-
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+			catch (Exception $e) {
+				// do nothing, so that we can move on to the next
+				// element in the list
+			}
 		}
 
 		// if we get here, we found a match
-		return $element;
+		// log the result
+		$log->endAction("no matching elements");
+
+		// report the failure
+		throw new E5xx_ActionFailed(__METHOD__);
 	}
 
 	public function getElementsByClass($class, $tags = '*')
@@ -665,7 +666,7 @@ class FromBrowser extends Prose
 			$log = $st->startAction("retrieve the names of the $elementDesc '$elementName'");
 			if (!is_array($elements)) {
 				$log->endAction('1 element found');
-				return $element->attribute('name');
+				return $elements->attribute('name');
 			}
 
 			$return = array();

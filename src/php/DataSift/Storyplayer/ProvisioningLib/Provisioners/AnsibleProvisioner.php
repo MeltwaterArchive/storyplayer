@@ -253,9 +253,6 @@ class AnsibleProvisioner extends Provisioner
 
 	protected function getInventoryFolder($ansibleSettings, $inventoryFolder)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// is there an Ansible.cfg file?
 		$cfgFile = $ansibleSettings->dir . DIRECTORY_SEPARATOR . 'ansible.cfg';
 

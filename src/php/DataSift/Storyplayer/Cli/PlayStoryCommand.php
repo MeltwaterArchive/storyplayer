@@ -334,6 +334,10 @@ class PlayStoryCommand extends CliCommand
                 // keep track of the results
                 $results = array();
 
+                // we need to remember the staticConfig, as we are
+                // probably about to override it
+                $origStaticConfig = clone $staticConfig;
+
                 // run through our list of stories
                 foreach ($storyList->stories as $storyFile)
                 {
@@ -346,10 +350,6 @@ class PlayStoryCommand extends CliCommand
 
                     // special case - reusable environments
                     if ($storyList->options->reuseTestEnvironment) {
-                        // we need to remember the staticConfig, as we are
-                        // probably about to override it
-                        $origStaticConfig = clone $staticConfig;
-
                         // story #1 - keep the test environment around
                         if ($storyFile == $storyList->stories[0]) {
                             // we do not override the user's preference for
