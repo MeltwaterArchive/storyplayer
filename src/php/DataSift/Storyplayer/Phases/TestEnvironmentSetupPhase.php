@@ -66,7 +66,8 @@ class TestEnvironmentSetupPhase extends StoryPhase
 	public function doPhase()
 	{
 		// shorthand
-		$st = $this->st;
+		$st          = $this->st;
+		$storyResult = $st->getStoryResult();
 
 		// our return value
 		$phaseResult = new PhaseResult($this);
@@ -99,6 +100,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		}
 		catch (Exception $e) {
 			$msg = "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString();
+			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(PhaseResult::FAILED, $msg);
 			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
 			return $phaseResult;

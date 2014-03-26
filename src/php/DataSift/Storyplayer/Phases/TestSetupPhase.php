@@ -67,8 +67,9 @@ class TestSetupPhase extends StoryPhase
 	public function doPhase()
 	{
 		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+		$st          = $this->st;
+		$story       = $st->getStory();
+		$storyResult = $st->getStoryResult();
 
 		// our return value
 		$phaseResult = new PhaseResult($this);
@@ -97,6 +98,7 @@ class TestSetupPhase extends StoryPhase
 		}
 		catch (Exception $e)
 		{
+			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
 				PhaseResult::FAILED,
 				"unable to perform test setup; " . (string)$e . "\n" . $e->getTraceAsString()

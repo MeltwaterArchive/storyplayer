@@ -55,7 +55,8 @@ namespace DataSift\Storyplayer\PlayerLib;
  */
 class ActionLogger
 {
-	private $actions = array();
+	protected $actions = array();
+	protected $injectables;
 
 	public function __construct($injectables)
 	{

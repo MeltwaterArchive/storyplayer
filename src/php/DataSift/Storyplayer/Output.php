@@ -209,7 +209,7 @@ class Output implements OutputPlugin
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->logStorySkipped($phaseName, $msg);
+			$plugin->logPhaseSkipped($phaseName, $msg);
 		}
 	}
 

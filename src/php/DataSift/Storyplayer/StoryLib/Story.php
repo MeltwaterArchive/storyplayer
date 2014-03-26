@@ -629,7 +629,7 @@ class Story
 	/**
 	 * get the callback for per-environment setup work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getTestEnvironmentSetup()
 	{
@@ -659,7 +659,7 @@ class Story
 	/**
 	 * get the callback for per-environment teardown work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getTestEnvironmentTeardown()
 	{
@@ -695,7 +695,7 @@ class Story
 	/**
 	 * get the callback for per-story setup work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getTestSetup()
 	{
@@ -725,7 +725,7 @@ class Story
 	/**
 	 * get the callback for post-story teardown work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getTestTeardown()
 	{
@@ -762,7 +762,7 @@ class Story
 	/**
 	 * get the callback for per-phase setup work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getPerPhaseSetup()
 	{
@@ -793,7 +793,7 @@ class Story
 	/**
 	 * get the callback for per-phase teardown work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getPerPhaseTeardown()
 	{
@@ -829,7 +829,7 @@ class Story
 	/**
 	 * get the callback for device setup work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getDeviceSetup()
 	{
@@ -854,7 +854,7 @@ class Story
 	/**
 	 * get the callback for device teardown work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getDeviceTeardown()
 	{
@@ -885,7 +885,7 @@ class Story
 	/**
 	 * get the hints callback
 	 *
-	 * @return callback
+	 * @return callable
 	 */
 	public function getHints()
 	{
@@ -921,7 +921,7 @@ class Story
 	/**
 	 * get the callback to use to perform the preflight checks
 	 *
-	 * @return callback
+	 * @return array
 	 */
 	public function getPreTestPrediction()
 	{
@@ -956,7 +956,7 @@ class Story
 	/**
 	 * get the callback to use to perform the preflight checkpoint
 	 *
-	 * @return callback
+	 * @return array
 	 */
 	public function getPreTestInspection()
 	{
@@ -1037,7 +1037,7 @@ class Story
 	/**
 	 * get the callback to use to work out the test results
 	 *
-	 * @return callback
+	 * @return array
 	 */
 	public function getPostTestInspection()
 	{

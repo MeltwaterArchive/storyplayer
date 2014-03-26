@@ -106,14 +106,14 @@ class PreTestPredictionPhase extends StoryPhase
 		// in any of the expects() calls in the preflight checks fails,
 		// an E5xx_ActionFailed will be thrown
 		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setStoryShouldFail();
+			$storyResult->setStoryShouldFail();
 			$phaseResult->setContinuePlaying(
 				PhaseResult::FAILED,
 				"pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString()
 			);
 		}
 		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setStoryShouldFail();
+			$storyResult->setStoryShouldFail();
 			$phaseResult->setContinuePlaying(
 				PhaseResult::FAILED,
 				"pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString()

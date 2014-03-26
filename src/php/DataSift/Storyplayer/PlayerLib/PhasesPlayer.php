@@ -209,8 +209,8 @@ class PhasesPlayer
 
 				// we need to create a dummy phase result for this
 				$phaseResult = new PhaseResult;
-				$phaseResult->setPlayingFailed();
-				$phaseResults->addPhaseResult($phaseName, $phaseResult);
+				$phaseResult->setPlayingFailed(PhaseResult::FAILED, self::MSG_PHASE_FAILED);
+				// $phaseResults->addPhaseResult($phaseName, $phaseResult);
 
 				// this is a fatal exception
 				$phaseResults->setPhasesHaveFailed();

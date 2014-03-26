@@ -66,6 +66,8 @@ class ActionLogItem
 	private $nestedActions = array();
 	private $steps = array();
 	private $logLevel = null;
+	private $injectables;
+	private $output;
 
 	public function __construct($injectables, $nestLevel, $logLevel = null)
 	{

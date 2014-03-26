@@ -71,6 +71,7 @@ class PhaseResult
 	protected $message;
 	protected $nextAction;
 	protected $pairedPhases = array();
+	protected $result;
 
 	const MIN_RESULT = 1;
 	const MAX_RESULT = 5;

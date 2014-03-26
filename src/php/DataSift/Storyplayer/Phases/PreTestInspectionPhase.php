@@ -101,6 +101,7 @@ class PreTestInspectionPhase extends StoryPhase
 			$phaseResult->setContinuePlaying();
 		}
 		catch (Exception $e) {
+			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
 				PhaseResult::FAILED,
 				"unable to perform pre-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()

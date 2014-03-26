@@ -306,10 +306,6 @@ class PlayStoryCommand extends CliCommand
         // create something to play this story
         $storyPlayer = new StoryPlayer();
 
-        // remember our player, as we'll need it for our
-        // shutdown function
-        $this->player = $storyPlayer;
-
         // create the supporting context for this test run
         $context = new StoryContext($staticConfig, $runtimeConfig, $envName, $deviceName);
         $teller->setStoryContext($context);
@@ -388,7 +384,7 @@ class PlayStoryCommand extends CliCommand
                     // make the story happen
                     $phasesPlayer->playPhases($teller, 'startup');
                     $results[] = $storyPlayer->playStory($teller);
-                    $phasePslayer->playPhases($teller, 'shutdown');
+                    $phasesPlayer->playPhases($teller, 'shutdown');
 
                     // special case - reusable environments
                     if ($storyList->options->reuseTestEnvironment) {

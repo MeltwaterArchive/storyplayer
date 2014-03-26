@@ -63,7 +63,7 @@ class DefaultConsolePlugin implements OutputPlugin
 	protected $phaseNumber = 0;
 	protected $phaseErrors = array();
 
-	protected $phaseActivity = array();
+	protected $phaseMessages = array();
 
 	protected $verbosityLevel = 0;
 
