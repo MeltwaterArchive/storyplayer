@@ -58,10 +58,33 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class SshClient
 {
+	/**
+	 *
+	 * @var StoryTeller
+	 */
 	protected $st;
+
+	/**
+	 *
+	 * @var string
+	 */
 	protected $ipAddress;
+
+	/**
+	 *
+	 * @var string
+	 */
 	protected $sshKey = '';
+
+	/**
+	 * @var string
+	 */
 	protected $sshUsername;
+
+	/**
+	 *
+	 * @var array<string>
+	 */
 	protected $sshOptions = array("-n");
 
 	public function __construct(StoryTeller $st, $sshOptions = array())
@@ -75,51 +98,96 @@ class SshClient
 		}
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function getIpAddress()
 	{
 		return $this->ipAddress;
 	}
 
+	/**
+	 *
+	 * @param string $ipAddress
+	 */
 	public function setIpAddress($ipAddress)
 	{
 		$this->ipAddress = $ipAddress;
 	}
 
+	/**
+	 *
+	 * @return array<string>
+	 */
 	public function getSshOptions()
 	{
 		return $this->sshOptions;
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function getSshOptionsForUse()
 	{
 		return implode(' ', $this->sshOptions);
 	}
 
+	/**
+	 *
+	 * @param string $option
+	 * @return void
+	 */
 	public function addSshOption($option)
 	{
 		$this->sshOptions[] = $option;
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function getSshUsername()
 	{
 		return $this->sshUsername;
 	}
 
+	/**
+	 *
+	 * @param string $username
+	 * @return void
+	 */
 	public function setSshUsername($username)
 	{
 		$this->sshUsername = $username;
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function getSshKey()
 	{
 		return $this->sshKey;
 	}
 
+	/**
+	 *
+	 * @param string $path
+	 * @return void
+	 */
 	public function setSshKey($path)
 	{
 		$this->sshKey = "-i '{$path}'";
 	}
 
+	/**
+	 *
+	 * @param  string $params
+	 * @return string
+	 * @deprecated
+	 */
 	public function convertParamsForUse($params)
 	{
 		// our list of what to convert from
@@ -141,6 +209,11 @@ class SshClient
 		return rtrim($result);
 	}
 
+	/**
+	 *
+	 * @param  string $command
+	 * @return CommandResult
+	 */
 	public function runCommand($command)
 	{
 		// shorthand

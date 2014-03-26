@@ -69,6 +69,10 @@ class CommandResult
 		$this->output     = $output;
 	}
 
+	/**
+	 *
+	 * @return boolean
+	 */
 	public function didCommandFail()
 	{
 		if ($this->returnCode != 0) {
@@ -78,6 +82,10 @@ class CommandResult
 		return false;
 	}
 
+	/**
+	 *
+	 * @return boolean
+	 */
 	public function didCommandSucceed()
 	{
 		if ($this->returnCode == 0) {
