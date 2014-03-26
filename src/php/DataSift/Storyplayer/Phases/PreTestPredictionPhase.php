@@ -70,8 +70,9 @@ class PreTestPredictionPhase extends StoryPhase
 	public function doPhase()
 	{
 		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+		$st          = $this->st;
+		$story       = $st->getStory();
+		$storyResult = $st->getStoryResult();
 
 		// our return value
 		$phaseResult = new PhaseResult;

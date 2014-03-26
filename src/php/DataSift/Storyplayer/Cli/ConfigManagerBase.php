@@ -57,6 +57,8 @@ use DataSift\Stone\ConfigLib\JsonConfigLoader;
  */
 class ConfigManagerBase
 {
+	protected $configLoader;
+
 	public function __construct()
 	{
 		// create our config loader

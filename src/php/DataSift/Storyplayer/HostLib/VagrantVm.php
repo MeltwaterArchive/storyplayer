@@ -153,7 +153,6 @@ class VagrantVm implements SupportedHost
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("start VM");
@@ -195,7 +194,6 @@ class VagrantVm implements SupportedHost
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("stop VM");
@@ -243,7 +241,6 @@ class VagrantVm implements SupportedHost
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("power off VM");
@@ -275,7 +272,6 @@ class VagrantVm implements SupportedHost
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("destroy VM");

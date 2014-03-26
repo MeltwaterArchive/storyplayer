@@ -86,7 +86,7 @@ class BaseAdapter
 
 	public function getProxy()
 	{
-		return $this->proxySession();
+		return $this->proxySession;
 	}
 
 	public function getDevice()

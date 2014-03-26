@@ -60,6 +60,8 @@ use Phix_Project\CliEngine\CliResult;
  */
 class ListEnvironmentsCommand extends CliCommand
 {
+	protected $envList;
+
 	public function __construct($envList)
 	{
 		// define the command

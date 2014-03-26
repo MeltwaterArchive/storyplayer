@@ -86,7 +86,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 			if (!$success)
 			{
 				// cannot create it - bail out now
-				Log::logError("Unable to create config directory '{$configDir}'");
+				Log::write(Log::LOG_ERROR, "Unable to create config directory '{$configDir}'");
 				exit(1);
 			}
 		}

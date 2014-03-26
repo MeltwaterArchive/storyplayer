@@ -48,6 +48,8 @@ use Phix_Project\ValidationLib4\ValidationResult;
 
 class DeviceValidator implements Validator
 {
+    protected $deviceList;
+
     const MSG_NOTVALIDDEVICE = "Unknown device '%value%'";
 
     public function __construct($deviceList)

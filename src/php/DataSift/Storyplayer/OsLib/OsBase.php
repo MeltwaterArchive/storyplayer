@@ -60,6 +60,11 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 abstract class OsBase implements SupportedOs
 {
+	/**
+	 *
+	 * @var DataSift\StoryPlayer\PlayerLib\StoryTeller;
+	 */
+	protected $st;
 	protected $sshClients;
 
 	public function __construct(StoryTeller $st)

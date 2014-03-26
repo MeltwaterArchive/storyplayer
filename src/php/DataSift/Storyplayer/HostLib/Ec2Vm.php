@@ -382,9 +382,6 @@ class Ec2Vm implements SupportedHost
 		// what are we doing?
 		$log = $st->startAction("determine status of EC2 VM '{$vmDetails->name}'");
 
-		// get our Ec2 client from the SDK
-		$client = $st->fromAws()->getEc2Client();
-
 		// get the instance data
 		$instance = $st->fromEc2()->getInstance($vmDetails->name);
 		if (!$instance) {

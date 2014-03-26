@@ -60,7 +60,7 @@ class SshClient
 {
 	protected $st;
 	protected $ipAddress;
-	protected $sshKey;
+	protected $sshKey = '';
 	protected $sshUsername;
 	protected $sshOptions = array("-n");
 
@@ -110,10 +110,20 @@ class SshClient
 		$this->sshUsername = $username;
 	}
 
+	public function getSshKey()
+	{
+		return $this->sshKey;
+	}
+
+	public function setSshKey($path)
+	{
+		$this->sshKey = "-i '{$path}'";
+	}
+
 	public function convertParamsForUse($params)
 	{
 		// our return value
-		$result = str_replace('\'', '\\\'', $stringParam);
+		$result = str_replace('\'', '\\\'', $params);
 
 		// all done
 		return rtrim($result);
@@ -146,6 +156,7 @@ class SshClient
 		//    the command to run on the remote/guest OS
 		//    (assumes the command will be globbed by the remote shell)
 		$fullCommand = 'ssh -o StrictHostKeyChecking=no'
+					 . ' ' . $this->getSshKey()
 					 . ' ' . $this->getSshOptionsForUse()
 					 . ' ' . $this->getSshUsername() . '@' . $this->getIpAddress()
 					 . ' "' . str_replace('"', '\"', $command) . '"';

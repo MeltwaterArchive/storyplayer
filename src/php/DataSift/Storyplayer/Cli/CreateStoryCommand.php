@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Exception;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
 use Phix_Project\CliEngine\CliEngineSwitch;

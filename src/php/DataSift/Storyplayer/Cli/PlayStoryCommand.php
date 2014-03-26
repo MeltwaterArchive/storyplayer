@@ -63,7 +63,6 @@ use DataSift\Storyplayer\StoryLib\StoryLoader;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\StoryListLib\StoryListLoader;
 use DataSift\Storyplayer\UserLib\User;
-use DataSift\Storyplayer\UserLib\GenericUserGenerator;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\OutputLib\DevModeConsolePlugin;
@@ -284,13 +283,6 @@ class PlayStoryCommand extends CliCommand
             // merge into the default + what was loaded from config files
             $staticConfig->defines->mergeFrom($engine->options->defines);
         }
-
-        // create our user generator
-        $userGenerator = new GenericUserGenerator();
-
-        // create our user loader
-        // it will use our user generator if no cached user is found
-        $userLoader = new ConfigUserLoader($userGenerator);
 
         // are we loading a story, or a list of stories?
         $arg2parts  = explode('.', $params[0]);
