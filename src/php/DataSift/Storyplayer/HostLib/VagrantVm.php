@@ -69,7 +69,7 @@ class VagrantVm implements SupportedHost
 		$this->st = $st;
 	}
 
-	public function createHost($vmDetails, $provisioningVars = array())
+	public function createHost(VagrantVmDetails $vmDetails, $provisioningVars = array())
 	{
 		// shorthand
 		$st = $this->st;
@@ -149,7 +149,7 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
-	public function startHost($vmDetails)
+	public function startHost(VagrantVmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -190,7 +190,7 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
-	public function stopHost($vmDetails)
+	public function stopHost(VagrantVmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -221,7 +221,7 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully stopped");
 	}
 
-	public function restartHost($vmDetails)
+	public function restartHost(VagrantVmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -237,7 +237,7 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully restarted");
 	}
 
-	public function powerOffHost($vmDetails)
+	public function powerOffHost(VagrantVmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -268,7 +268,7 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully powered off");
 	}
 
-	public function destroyHost($vmDetails)
+	public function destroyHost(VagrantVmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -298,7 +298,7 @@ class VagrantVm implements SupportedHost
 		$log->endAction();
 	}
 
-	public function runCommandAgainstHostManager($vmDetails, $command)
+	public function runCommandAgainstHostManager(VagrantVmDetails $vmDetails, $command)
 	{
 		// shorthand
 		$st = $this->st;
@@ -321,7 +321,7 @@ class VagrantVm implements SupportedHost
 		return $result;
 	}
 
-	public function runCommandViaHostManager($vmDetails, $command)
+	public function runCommandViaHostManager(VagrantVmDetails $vmDetails, $command)
 	{
 		// shorthand
 		$st = $this->st;
@@ -344,7 +344,7 @@ class VagrantVm implements SupportedHost
 		return $result;
 	}
 
-	public function isRunning($vmDetails)
+	public function isRunning(VagrantVmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -366,7 +366,7 @@ class VagrantVm implements SupportedHost
 		return true;
 	}
 
-	public function determineIpAddress($vmDetails)
+	public function determineIpAddress(VagrantVmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
