@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\TokenLib\TokenGenerator;
-
 /**
  * generate a uuid on demand, without requiring the uuid extension
  *

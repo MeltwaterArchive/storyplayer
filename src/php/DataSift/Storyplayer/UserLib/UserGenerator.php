@@ -8,6 +8,14 @@ use DataSift\Storyplayer\PlayerLib\StoryContext;
 interface UserGenerator
 {
 	public function getUser($staticConfig, $runtimeConfig, StoryContext $context, Story $story);
+
+    /**
+     * @return void
+     */
     public function storeUser($user, $staticConfig, $runtimeConfig);
+
+    /**
+     * @return void
+     */
     public function emptyCache($staticConfig, $runtimeConfig, StoryContext $context);
 }

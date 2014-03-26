@@ -143,6 +143,9 @@ class Prose
 		return $this->topXpath;
 	}
 
+	/**
+	 * @param string $xpath
+	 */
 	protected function setTopXpath($xpath)
 	{
 		$this->topXpath = $xpath;

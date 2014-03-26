@@ -57,7 +57,6 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
     /**
      * hasEntry
      *
-     * @param string $tableName Key to look for in the runtime config
      * @param string $key key The key to look for inside the tableName table
      *
      * @return void
@@ -99,7 +98,6 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
     /**
      * hasNoEntry
      *
-     * @param string $tableName Key to look for in the runtime config
      * @param string $key key The key to look for inside the tableName table
      *
      * @return void

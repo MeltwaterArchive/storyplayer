@@ -45,7 +45,6 @@ namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\CliEngine\CliEngineSwitch;
 use Phix_Project\CliEngine\CliResult;
 
 /**

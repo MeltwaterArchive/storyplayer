@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  *
  * write messages to the log

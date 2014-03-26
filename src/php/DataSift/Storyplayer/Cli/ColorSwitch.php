@@ -43,13 +43,9 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use stdClass;
-
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
-
-use DataSift\Stone\LogLib\Log;
 
 /**
  * Tell Storyplayer when to use color output

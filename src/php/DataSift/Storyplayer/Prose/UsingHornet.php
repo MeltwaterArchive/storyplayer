@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  * do things with Hornet. Hornet is DataSift's evil load-test tool.
  *

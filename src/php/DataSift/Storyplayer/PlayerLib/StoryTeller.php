@@ -43,18 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use Exception;
-
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\DeviceLib;
-
-use DataSift\Stone\HttpLib\HttpAddress;
-use DataSift\Stone\Log\LogLib;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\PathLib\PathTo;
-use DataSift\Stone\ProcessLib\SubProcess;
 
 /**
  * our main facilitation class
@@ -155,7 +147,7 @@ class StoryTeller
 	/**
 	 * [Description]
 	 *
-	 * @param [type] $newactionLogger [description]
+	 * @param [type] $actionLogger [description]
 	 */
 	public function setActionLogger(ActionLogger $actionLogger) {
 	    $this->actionLogger = $actionLogger;
@@ -175,7 +167,7 @@ class StoryTeller
 	/**
 	 * [Description]
 	 *
-	 * @param [type] $newcheckpoint [description]
+	 * @param [type] $checkpoint [description]
 	 */
 	public function setCheckpoint(StoryCheckpoint $checkpoint) {
 	    $this->checkpoint = $checkpoint;
@@ -195,7 +187,7 @@ class StoryTeller
 	/**
 	 * [Description]
 	 *
-	 * @param [type] $newPageContext [description]
+	 * @param [type] $pageContext [description]
 	 */
 	public function setPageContext(PageContext $pageContext) {
 	    $this->pageContext = $pageContext;
@@ -249,7 +241,7 @@ class StoryTeller
 	/**
 	 * [Description]
 	 *
-	 * @param [type] $newstoryContext [description]
+	 * @param [type] $storyContext [description]
 	 */
 	public function setStoryContext(StoryContext $storyContext) {
 	    $this->storyContext = $storyContext;
@@ -471,6 +463,9 @@ class StoryTeller
 		return $this->deviceAdapter;
 	}
 
+	/**
+	 * @param DeviceLib\DeviceAdapter|null $adapter
+	 */
 	public function setDeviceAdapter($adapter)
 	{
 	    $this->deviceAdapter = $adapter;

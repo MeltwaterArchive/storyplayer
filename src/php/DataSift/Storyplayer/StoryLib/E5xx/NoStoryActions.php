@@ -56,6 +56,9 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_NoStoryActions extends Exxx_Exception
 {
+    /**
+     * @param string $storyName
+     */
     public function __construct($storyName)
     {
     	$msg = "No actions for story '$storyName'";

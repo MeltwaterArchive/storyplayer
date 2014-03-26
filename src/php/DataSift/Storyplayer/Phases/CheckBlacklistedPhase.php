@@ -43,14 +43,6 @@
 
 namespace DataSift\Storyplayer\Phases;
 
-use Exception;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\StoryPlayer\PlayerLib\StoryTeller;
-use DataSift\StoryPlayer\PlayerLib\StoryPlayer;
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
-use DataSift\Storyplayer\StoryLib\Story;
-
 /**
  * the Action phase
  *

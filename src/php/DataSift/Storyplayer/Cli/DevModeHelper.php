@@ -64,6 +64,9 @@ class DevModeHelper
         'no' => false
     );
 
+    /**
+     * @param string $input
+     */
     static public function stringToValue($input)
     {
         // do we understand the input string?

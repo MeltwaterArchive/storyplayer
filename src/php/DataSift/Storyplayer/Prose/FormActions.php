@@ -44,12 +44,8 @@
 namespace DataSift\Storyplayer\Prose;
 
 use Exception;
-use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\TargettedBrowserAction;
-use DataSift\Storyplayer\Prose\TargettedBrowserSearch;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
  * do things to forms in the web browser

@@ -43,9 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use Exception;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  * prove a negative
  *

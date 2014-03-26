@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use ZMQ;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
  * test ZeroMQ connections

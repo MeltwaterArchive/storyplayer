@@ -44,27 +44,17 @@
 namespace DataSift\Storyplayer\Cli;
 
 use stdClass;
-
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\CliEngine\CliEngineSwitch;
-use Phix_Project\CliEngine\CliResult;
-
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\LogLib\Log;
-
 use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryContext;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryResult;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\StoryLoader;
-use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\StoryListLib\StoryListLoader;
-use DataSift\Storyplayer\UserLib\User;
-use DataSift\Storyplayer\UserLib\ConfigUserLoader;
-use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\OutputLib\DevModeConsolePlugin;
 
 /**

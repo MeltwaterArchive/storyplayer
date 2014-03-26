@@ -44,8 +44,6 @@
 namespace DataSift\Storyplayer\CommandLib;
 
 use PHPUnit_Framework_TestCase;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\StoryLib\Story;
 
 class CommandResultTest extends PHPUnit_Framework_TestCase
 {

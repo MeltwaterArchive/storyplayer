@@ -163,6 +163,9 @@ class AnsibleProvisioner extends Provisioner
 		$log->endAction();
 	}
 
+	/**
+	 * @param string $inventoryFolder
+	 */
 	protected function removeHostVarsFile($inventoryFolder, $ipAddress)
 	{
 		// shorthand
@@ -186,6 +189,9 @@ class AnsibleProvisioner extends Provisioner
 		// all done
 	}
 
+	/**
+	 * @param string $inventoryFolder
+	 */
 	protected function writeHostVarsFile($inventoryFolder, $ipAddress, $vars)
 	{
 		// shorthand
@@ -210,6 +216,11 @@ class AnsibleProvisioner extends Provisioner
 		$log->endAction("written to file '{$filename}'");
 	}
 
+	/**
+	 * @param string $inventory
+	 *
+	 * @return string
+	 */
 	protected function writeInventoryFile($inventory)
 	{
 		// shorthand

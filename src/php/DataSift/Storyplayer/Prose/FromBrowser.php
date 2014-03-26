@@ -70,6 +70,9 @@ class FromBrowser extends Prose
 	//
 	// ------------------------------------------------------------------
 
+	/**
+	 * @param string $tags
+	 */
 	protected function convertTagsToString($tags)
 	{
 		if (is_string($tags)) {
@@ -79,6 +82,10 @@ class FromBrowser extends Prose
 		return implode('|', $tags);
 	}
 
+	/**
+	 * @param string $successMsg
+	 * @param string $failureMsg
+	 */
 	protected function returnFirstVisibleElement(ActionLogItem $log, $elements, $method, $successMsg, $failureMsg)
 	{
 		// if the page contains multiple matches, return the first one

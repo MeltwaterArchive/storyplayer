@@ -56,7 +56,6 @@ class FromRuntimeTable extends BaseRuntimeTable
     /**
      * getTable
      *
-     * @param string $tableName Key to look for in the runtime config
      *
      * @return object The table from the config
      */
@@ -89,7 +88,6 @@ class FromRuntimeTable extends BaseRuntimeTable
      *
      * Get details for a specific key
      *
-     * @param string $tableName parent Key to look for in the runtime config
      * @param string $key key The key to look for inside the tableName table
      *
      * @return object The details stored under $key

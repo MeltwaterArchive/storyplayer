@@ -14,6 +14,9 @@ class User extends BaseObject
 		$this->roles = new stdClass;
 	}
 
+	/**
+	 * @param string $role
+	 */
 	public function addRole($role)
 	{
 		$this->roles->$role = $role;

@@ -45,15 +45,6 @@ namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\CliEngine\CliEngineSwitch;
-use Phix_Project\CliEngine\CliResult;
-
-use DataSift\Stone\DownloadLib\FileDownloader;
-
-use DataSift\WebDriver\WebDriverConfiguration;
-
-use Exception;
-use stdClass;
 
 /**
  * Command to list the current default environment, suitable for use

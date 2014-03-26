@@ -43,17 +43,6 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use Exception;
-use stdClass;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-use DataSift\Storyplayer\Phases\PhaseResult;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
-use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
-use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\UserLib\UserGenerator;
-
 /**
  * the main class for animating a single story
  *

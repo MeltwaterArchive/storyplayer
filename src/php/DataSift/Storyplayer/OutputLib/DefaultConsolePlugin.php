@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\OutputLib;
 
-use DataSift\Stone\LogLib\Log;
 use DataSift\StoryPlayer\Phases\Phase;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
 

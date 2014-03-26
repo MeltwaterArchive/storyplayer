@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Stone\LogLib\Log;
 
 /**
@@ -69,6 +68,9 @@ class ActionLogItem
 	private $injectables;
 	private $output;
 
+	/**
+	 * @param integer $nestLevel
+	 */
 	public function __construct($injectables, $nestLevel, $logLevel = null)
 	{
 		$this->nestLevel   = $nestLevel;

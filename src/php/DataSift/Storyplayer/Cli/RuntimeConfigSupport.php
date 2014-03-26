@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\Output;
-
 /**
  * support for working with the persistent, app-generated config
  *

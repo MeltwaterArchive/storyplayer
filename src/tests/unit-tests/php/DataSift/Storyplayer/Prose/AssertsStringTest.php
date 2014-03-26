@@ -44,7 +44,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use stdClass;
 use PHPUnit_Framework_TestCase;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;

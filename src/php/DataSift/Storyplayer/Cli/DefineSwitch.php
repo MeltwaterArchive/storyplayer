@@ -44,11 +44,9 @@
 namespace DataSift\Storyplayer\Cli;
 
 use stdClass;
-
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
-
 use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
 
 /**

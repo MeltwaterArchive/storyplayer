@@ -98,6 +98,9 @@ class ProseLoader
 		return $className;
 	}
 
+	/**
+	 * @param string $className
+	 */
 	public function loadProse(StoryTeller $st, $className, $constructorArgs)
 	{
 		// can we find the class?

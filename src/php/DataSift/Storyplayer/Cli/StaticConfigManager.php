@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\LoadedConfig;
 
@@ -59,6 +58,9 @@ use DataSift\Stone\ConfigLib\LoadedConfig;
  */
 class StaticConfigManager extends ConfigManagerBase
 {
+	/**
+	 * @param DefaultStaticConfig $config
+	 */
 	public function loadConfig($config)
 	{
 		// load the main config file

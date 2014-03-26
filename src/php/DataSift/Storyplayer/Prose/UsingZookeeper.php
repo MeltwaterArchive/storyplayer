@@ -168,6 +168,9 @@ class UsingZookeeper extends Prose
 		$log->endAction();
 	}
 
+	/**
+	 * @param string $key
+	 */
 	public function delete($key)
 	{
 		// shorthand

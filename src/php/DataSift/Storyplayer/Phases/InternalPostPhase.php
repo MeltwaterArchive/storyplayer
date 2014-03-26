@@ -43,10 +43,6 @@
 
 namespace DataSift\Storyplayer\Phases;
 
-use stdClass;
-use DataSift\StoryPlayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\StoryLib\Story;
-
 /**
  * base class for all post-story phases
  *

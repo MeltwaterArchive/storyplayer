@@ -59,8 +59,26 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 interface SupportedOs
 {
 	public function determineIpAddress($hostDetails, SupportedHost $vm);
+
+	/**
+	 * @param  $packageName
+	 */
 	public function getInstalledPackageDetails($hostDetails, $packageName);
+
+	/**
+	 * @param  $processName
+	 */
 	public function getProcessIsRunning($hostDetails, $processName);
+
+	/**
+	 * @param  $processName
+	 */
 	public function getPid($hostDetails, $processName);
+
+	/**
+	 * @param  $command
+	 *
+	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
+	 */
 	public function runCommand($hostDetails, $command, $params = array());
 }

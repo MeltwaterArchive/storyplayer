@@ -47,12 +47,10 @@ use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-
 use Datasift\Os;
 use Datasift\IfconfigParser;
 use Datasift\netifaces;
 use Datasift\netifaces\NetifacesException;
-
 use Exception;
 
 /**

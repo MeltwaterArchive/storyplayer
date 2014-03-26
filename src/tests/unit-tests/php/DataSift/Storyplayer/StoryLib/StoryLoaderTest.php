@@ -46,7 +46,6 @@ namespace DataSift\Storyplayer\StoryLib;
 
 use Exception;
 use PHPUnit_Framework_TestCase;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 // load our global functions, used for defining stories
 require APP_TOPDIR . "/DataSift/Storyplayer/functions.php";

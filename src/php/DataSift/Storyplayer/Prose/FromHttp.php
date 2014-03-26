@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use Exception;
 use DataSift\Stone\HttpLib\HttpClient;
 use DataSift\Stone\HttpLib\HttpClientRequest;
 use DataSift\Stone\HttpLib\HttpClientResponse;

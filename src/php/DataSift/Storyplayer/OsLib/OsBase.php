@@ -87,6 +87,9 @@ abstract class OsBase implements SupportedOs
 		return $sshClient->runCommand($command, $params);
 	}
 
+	/**
+	 * @param  $hostDetails
+	 */
 	protected function getSshClient($hostDetails)
 	{
 		// shorthand

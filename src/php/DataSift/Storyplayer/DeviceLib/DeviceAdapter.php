@@ -57,12 +57,41 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 interface DeviceAdapter
 {
+	/**
+	 * @return void
+	 */
 	public function init($browserDetails);
+
+	/**
+	 * @return void
+	 */
 	public function start(StoryTeller $st);
+
+	/**
+	 * @return void
+	 */
 	public function stop();
+
+	/**
+	 * @return \DataSift\WebDriver\WebDriverSession|null
+	 */
 	public function getDevice();
+
+	/**
+	 * @param  $url
+	 *
+	 * @return 
+	 */
 	public function applyHttpBasicAuthForHost($hostname, $url);
+
+	/**
+	 * @return boolean
+	 */
 	public function hasHttpBasicAuthForHost($hostname);
 	public function getHttpBasicAuthForHost($hostname);
+
+	/**
+	 * @return void
+	 */
 	public function setHttpBasicAuthForHost($hostname, $username, $password);
 }

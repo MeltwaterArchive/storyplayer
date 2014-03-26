@@ -104,6 +104,9 @@ class BaseAdapter
 		return (isset($this->httpAuthDetails[$hostname]));
 	}
 
+	/**
+	 * @param  $hostname
+	 */
 	public function getHttpBasicAuthForHost($hostname)
 	{
 		if (!isset($this->httpAuthDetails[$hostname])) {

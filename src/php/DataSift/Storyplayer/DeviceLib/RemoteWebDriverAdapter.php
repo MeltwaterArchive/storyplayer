@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\DeviceLib;
 
-use Exception;
 use DataSift\BrowserMobProxy\BrowserMobProxyClient;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\WebDriver\WebDriverClient;

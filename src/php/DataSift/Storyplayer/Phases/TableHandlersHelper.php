@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\Phases;
 
-use Exception;
 use DataSift\StoryPlayer\PlayerLib\StoryTeller;
 use DataSift\StoryPlayer\Prose\E5xx_NoMatchingActions;
 
@@ -60,6 +59,9 @@ use DataSift\StoryPlayer\Prose\E5xx_NoMatchingActions;
 
 class TableHandlersHelper
 {
+	/**
+	 * @param string $type
+	 */
 	public function runHandlers(StoryTeller $st, $type)
 	{
 		// shorthand

@@ -59,7 +59,6 @@ class UsingRuntimeTable extends BaseRuntimeTable
      *
      * Add an item to a module's runtime config table
      *
-     * @param string $tableName The parent key for a module
      * @param string $key The key to save data under
      * @param string $value The value to save
      *
@@ -108,7 +107,6 @@ class UsingRuntimeTable extends BaseRuntimeTable
      *
      * Removes an item from the runtimeConfig file
      *
-     * @param string $tableName The module's parent key
      * @param string $key The key that we want to remove
      *
      * @return void

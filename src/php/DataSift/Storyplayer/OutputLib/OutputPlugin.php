@@ -57,17 +57,76 @@ use DataSift\StoryPlayer\PlayerLib\StoryResult;
  */
 interface OutputPlugin
 {
+	/**
+	 * @return void
+	 */
 	public function startStoryplayer($version, $url, $copyright, $license);
+
+	/**
+	 * @return void
+	 */
 	public function endStoryplayer();
+
+	/**
+	 * @return void
+	 */
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
+
+	/**
+	 * @return void
+	 */
 	public function endStory(StoryResult $storyResult);
+
+	/**
+	 * @return void
+	 */
 	public function startPhase($phaseName, $phaseType);
+
+	/**
+	 * @return void
+	 */
 	public function endPhase($phaseName, $phaseType);
+
+	/**
+	 * @return void
+	 */
 	public function logPhaseActivity($level, $msg);
+
+	/**
+	 * @return void
+	 */
 	public function logPhaseError($phaseName, $msg);
+
+	/**
+	 * @return void
+	 */
 	public function logPhaseSkipped($phaseName, $msg);
+
+	/**
+	 * @param string $msg
+	 *
+	 * @return void
+	 */
 	public function logCliWarning($msg);
+
+	/**
+	 * @param string $msg
+	 *
+	 * @return void
+	 */
 	public function logCliError($msg);
+
+	/**
+	 * @param string $msg
+	 *
+	 * @return void
+	 */
 	public function logCliInfo($msg);
+
+	/**
+	 * @param string $name
+	 *
+	 * @return void
+	 */
 	public function logVardump($name, $var);
 }

@@ -45,7 +45,6 @@ namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\ValidationLib4\Validator;
 use Phix_Project\ValidationLib4\ValidationResult;
-
 use DataSift\Stone\LogLib\Log;
 
 class LogLevelValidator implements Validator

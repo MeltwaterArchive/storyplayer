@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use Exception;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
  * do things to forms in the web browser

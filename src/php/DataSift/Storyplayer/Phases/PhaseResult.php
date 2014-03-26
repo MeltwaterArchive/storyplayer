@@ -172,6 +172,9 @@ class PhaseResult
 		return $this->nextAction;
 	}
 
+	/**
+	 * @param string $msg
+	 */
 	public function setContinuePlaying($result = 1, $msg = null)
 	{
 		$this->nextAction = PhasesPlayer::NEXT_CONTINUE;
@@ -179,6 +182,9 @@ class PhaseResult
 		$this->message    = $msg;
 	}
 
+	/**
+	 * @param string $msg
+	 */
 	public function setPlayingFailed($result, $msg)
 	{
 		$this->nextAction = PhasesPlayer::NEXT_FAIL;
@@ -193,6 +199,9 @@ class PhaseResult
 		$this->message    = $msg;
 	}
 
+	/**
+	 * @param string $phaseName
+	 */
 	public function addPairedPhase($phaseName)
 	{
 		$this->pairedPhases[$phaseName] = $phaseName;

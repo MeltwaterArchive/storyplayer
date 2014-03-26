@@ -77,6 +77,9 @@ class UsingHttp extends Prose
 		return $this->makeHttpRequest($url, "PUT", $params, $body, $headers);
 	}
 
+	/**
+	 * @param string $verb
+	 */
 	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array())
 	{
 		// shorthand

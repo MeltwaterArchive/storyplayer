@@ -43,12 +43,8 @@
 
 namespace DataSift\Storyplayer\ProvisioningLib;
 
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * Helper for creating provisioning definitions
@@ -66,6 +62,9 @@ class DelayedProvisioningDefinitionAction
 	protected $def;
 	protected $action;
 
+	/**
+	 * @param \Closure $callback
+	 */
 	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
 	{
 		// remember for later

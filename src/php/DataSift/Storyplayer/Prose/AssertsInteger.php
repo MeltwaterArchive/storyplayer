@@ -58,6 +58,9 @@ use DataSift\Stone\ComparisonLib\IntegerComparitor;
  */
 class AssertsInteger extends AssertionsBase
 {
+	/**
+	 * @param integer[] $params
+	 */
 	public function __construct(StoryTeller $st, $params)
 	{
 		parent::__construct($st, new IntegerComparitor($params[0]));

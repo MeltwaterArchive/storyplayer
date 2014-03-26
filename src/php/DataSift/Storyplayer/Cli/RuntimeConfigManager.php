@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
 use DataSift\Stone\LogLib\Log;
 
 /**

@@ -59,6 +59,10 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class HostTypeSwitch extends CliSwitch
 {
+	/**
+	 * @param string $shortDesc
+	 * @param string $argDesc
+	 */
 	public function __construct($shortDesc, $argDesc)
 	{
 		// define our name, and our description

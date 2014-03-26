@@ -63,6 +63,10 @@ class TargettedBrowserAction extends TargettedBrowserBase
 	protected $actionDesc;
 	protected $baseElement;
 
+	/**
+	 * @param \Closure $action
+	 * @param string $actionDesc
+	 */
 	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
 	{
 		$this->st          = $st;

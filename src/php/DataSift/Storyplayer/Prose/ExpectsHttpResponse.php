@@ -71,7 +71,6 @@ class ExpectsHttpResponse extends Prose
 	 * ourselves.
 	 *
 	 * @param StoryTeller $st       [description]
-	 * @param [type]      $response [description]
 	 */
 	public function __construct(StoryTeller $st, $params)
 	{

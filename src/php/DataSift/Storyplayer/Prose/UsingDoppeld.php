@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  * Do things with doppelgangerd - DataSift's mocking daemon
  *

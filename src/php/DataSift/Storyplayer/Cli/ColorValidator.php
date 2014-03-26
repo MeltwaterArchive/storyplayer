@@ -46,8 +46,6 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\ValidationLib4\Validator;
 use Phix_Project\ValidationLib4\ValidationResult;
 
-use DataSift\Stone\LogLib\Log;
-
 class ColorValidator implements Validator
 {
     const MSG_UNKNOWNCOLORLEVEL = "Unknown color option '%value%'";

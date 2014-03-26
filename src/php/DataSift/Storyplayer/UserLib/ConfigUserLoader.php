@@ -2,11 +2,8 @@
 
 namespace DataSift\Storyplayer\UserLib;
 
-use stdClass;
-use DataSift\Stone\PasswordLib\BasicGenerator;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryCheckpoint;
 
 class ConfigUserLoader implements UserGenerator
 {

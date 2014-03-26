@@ -45,7 +45,6 @@ namespace DataSift\Storyplayer\StoryLib;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\StoryTemplate;
-
 use DataSift\Stone\LogLib\Log;
 
 /**
@@ -313,7 +312,7 @@ class Story
 	 * The 'group' is the specific group _inside_ the category that the
 	 * user story belongs to.  The groups are specific to the category.
 	 *
-	 * @param  string $category the category that this story belongs to
+	 * @param  string $newCategory the category that this story belongs to
 	 * @return Story  $this
 	 */
 	public function setCategory($newCategory)
@@ -371,7 +370,6 @@ class Story
 	 * The 'group' is the specific group _inside_ the category that the
 	 * user story belongs to.  The groups are specific to the category.
 	 *
-	 * @param  string $group the group that this story belongs to
 	 * @return Story  $this
 	 */
 	public function setGroup($newGroup)
@@ -429,7 +427,7 @@ class Story
 	 * The 'group' is the specific group _inside_ the category that the
 	 * user story belongs to.  The groups are specific to the category.
 	 *
-	 * @param  string $name the name of this story
+	 * @param  string $newName the name of this story
 	 * @return Story  $this
 	 */
 	public function setName($newName)
@@ -564,7 +562,7 @@ class Story
 	/**
 	 * set up any templated methods from a predefined class
 	 *
-	 * @return void
+	 * @return Story
 	 */
 	public function basedOn(StoryTemplate $tmpl)
 	{
