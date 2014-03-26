@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use stdClass;
 use PHPUnit_Framework_TestCase;
-use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class AssertsObjectTest extends PHPUnit_Framework_TestCase
@@ -59,7 +59,10 @@ class AssertsObjectTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $st = new StoryTeller(new Story());
+		$i  = new Injectables;
+		$i->initOutputSupport();
+	    $st = new StoryTeller($i);
+
 	    $expectedArray = array(new stdClass());
 
 	    // ----------------------------------------------------------------
