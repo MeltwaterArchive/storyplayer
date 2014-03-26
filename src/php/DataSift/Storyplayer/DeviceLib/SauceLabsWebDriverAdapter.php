@@ -61,6 +61,11 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class SauceLabsWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 {
+	/**
+	 *
+	 * @param  StoryTeller $st
+	 * @return void
+	 */
 	public function start(StoryTeller $st)
 	{
 		// Sauce Labs handles proxying for us (if required)
@@ -92,6 +97,10 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 		);
 	}
 
+	/**
+	 *
+	 * @return void
+	 */
 	public function stop()
 	{
 		// stop the web browser
@@ -140,6 +149,12 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 		return $url;
 	}*/
 
+	/**
+	 *
+	 * @param  string $hostname
+	 * @param  string $url
+	 * @return string
+	 */
 	public function applyHttpBasicAuthForHost($hostname, $url)
 	{
 		// get the auth credentials

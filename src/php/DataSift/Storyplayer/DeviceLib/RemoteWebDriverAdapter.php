@@ -60,6 +60,11 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class RemoteWebDriverAdapter extends LocalWebDriverAdapter
 {
+	/**
+	 *
+	 * @param  StoryTeller $st
+	 * @return void
+	 */
 	public function start(StoryTeller $st)
 	{
 		$httpProxy = new BrowserMobProxyClient();

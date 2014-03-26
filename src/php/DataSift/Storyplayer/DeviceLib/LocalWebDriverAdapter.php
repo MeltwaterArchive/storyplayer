@@ -61,6 +61,11 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 {
+	/**
+	 *
+	 * @param  StoryTeller $st
+	 * @return void
+	 */
 	public function start(StoryTeller $st)
 	{
 		$httpProxy = new BrowserMobProxyClient();
@@ -82,6 +87,10 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 		);
 	}
 
+	/**
+	 *
+	 * @return void
+	 */
 	public function stop()
 	{
 		// stop the web browser
@@ -104,6 +113,12 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 		}
 	}
 
+	/**
+	 *
+	 * @param  string $hostname
+	 * @param  string $url
+	 * @return string
+	 */
 	public function applyHttpBasicAuthForHost($hostname, $url)
 	{
 		// get the auth credentials

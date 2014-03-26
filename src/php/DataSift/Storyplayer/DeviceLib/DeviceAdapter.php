@@ -80,14 +80,20 @@ interface DeviceAdapter
 	/**
 	 * @param   $url
 	 *
-	 * @return 
-	 
+	 * @return void
+	 */
 	public function applyHttpBasicAuthForHost($hostname, $url);
 
 	/**
 	 * @return boolean
 	 */
 	public function hasHttpBasicAuthForHost($hostname);
+
+	/**
+	 *
+	 * @param  string $hostname
+	 * @return array<string>|null
+	 */
 	public function getHttpBasicAuthForHost($hostname);
 
 	/**
