@@ -179,7 +179,7 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
-	public function startHost($vmDetails)
+	public function startHost(Ec2VmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -242,7 +242,7 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
-	public function stopHost($vmDetails)
+	public function stopHost(Ec2VmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -295,7 +295,7 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully stopped");
 	}
 
-	public function restartHost($vmDetails)
+	public function restartHost(Ec2VmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -311,7 +311,7 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully restarted");
 	}
 
-	public function powerOffHost($vmDetails)
+	public function powerOffHost(Ec2VmDetails $vmDetails)
 	{
 		// sadly, not supported by EC2
 		//
@@ -319,7 +319,7 @@ class Ec2Vm implements SupportedHost
 		return $this->stopHost($vmDetails);
 	}
 
-	public function destroyHost($vmDetails)
+	public function destroyHost(Ec2VmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -364,17 +364,17 @@ class Ec2Vm implements SupportedHost
 		$log->endAction();
 	}
 
-	public function runCommandAgainstHostManager($vmDetails, $command)
+	public function runCommandAgainstHostManager(Ec2VmDetails $vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
-	public function runCommandViaHostManager($vmDetails, $command)
+	public function runCommandViaHostManager(Ec2VmDetails $vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
-	public function isRunning($vmDetails)
+	public function isRunning(Ec2VmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
@@ -399,7 +399,7 @@ class Ec2Vm implements SupportedHost
 		return true;
 	}
 
-	public function determineIpAddress($vmDetails)
+	public function determineIpAddress(Ec2VmDetails $vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
