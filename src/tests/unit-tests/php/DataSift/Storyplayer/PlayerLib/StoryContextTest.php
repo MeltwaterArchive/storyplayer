@@ -42,14 +42,14 @@
  * @link        http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\StoryLib;
+namespace DataSift\Storyplayer\PlayerLib;
 
 use PHPUnit_Framework_TestCase;
 
 class StoryContextTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers DataSift\Storyplayer\StoryLib\StoryContext::__construct
+	 * @covers DataSift\Storyplayer\PlayerLib\StoryContext::__construct
 	 */
 	public function testCanInstantiate()
 	{
@@ -65,8 +65,8 @@ class StoryContextTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers DataSift\Storyplayer\StoryLib\StoryContext::__construct
-	 * @covers DataSift\Storyplayer\StoryLib\StoryContext::getHostIpAddress
+	 * @covers DataSift\Storyplayer\PlayerLib\StoryContext::__construct
+	 * @covers DataSift\Storyplayer\PlayerLib\StoryContext::getHostIpAddress
 	 */
 	public function testGetsHostIpAddressWhenInstantiated()
 	{
