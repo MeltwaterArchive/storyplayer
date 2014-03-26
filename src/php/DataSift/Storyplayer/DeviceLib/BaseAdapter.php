@@ -105,7 +105,7 @@ class BaseAdapter
 	}
 
 	/**
-	 * @param  $hostname
+	 * @param   $hostname
 	 */
 	public function getHttpBasicAuthForHost($hostname)
 	{

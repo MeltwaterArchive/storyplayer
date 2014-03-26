@@ -61,22 +61,22 @@ interface SupportedOs
 	public function determineIpAddress($hostDetails, SupportedHost $vm);
 
 	/**
-	 * @param  $packageName
+	 * @param   $packageName
 	 */
 	public function getInstalledPackageDetails($hostDetails, $packageName);
 
 	/**
-	 * @param  $processName
+	 * @param   $processName
 	 */
 	public function getProcessIsRunning($hostDetails, $processName);
 
 	/**
-	 * @param  $processName
+	 * @param   $processName
 	 */
 	public function getPid($hostDetails, $processName);
 
 	/**
-	 * @param  $command
+	 * @param   $command
 	 *
 	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
 	 */

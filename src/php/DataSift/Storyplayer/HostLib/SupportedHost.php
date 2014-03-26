@@ -87,7 +87,7 @@ interface SupportedHost
 	public function powerOffHost($hostDetails);
 
 	/**
-	 * @param  $command
+	 * @param   $command
 	 *
 	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
 	 */
@@ -95,7 +95,7 @@ interface SupportedHost
 
 	/**
 	 * @param \DataSift\Storyplayer\OsLib $hostDetails
-	 * @param  $command
+	 * @param   $command
 	 *
 	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
 	 */

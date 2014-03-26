@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
@@ -104,7 +105,7 @@ class StoryTeller
 	// test device support
 	private $deviceAdapter = null;
 
-	public function __construct($injectables)
+	public function __construct(Injectables $injectables)
 	{
 		// remember our output object
 		$this->setOutput($injectables->output);

@@ -88,7 +88,7 @@ abstract class OsBase implements SupportedOs
 	}
 
 	/**
-	 * @param  $hostDetails
+	 * @param   $hostDetails
 	 */
 	protected function getSshClient($hostDetails)
 	{

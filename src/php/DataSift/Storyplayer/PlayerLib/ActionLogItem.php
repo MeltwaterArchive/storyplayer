@@ -100,6 +100,9 @@ class ActionLogItem
 		return $this;
 	}
 
+	/**
+	 * @param string $resultText
+	 */
 	public function endAction($resultText = null)
 	{
 		// remember when the action completed

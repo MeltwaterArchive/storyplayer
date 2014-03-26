@@ -240,6 +240,9 @@ class AnsibleProvisioner extends Provisioner
 		return $filename;
 	}
 
+	/**
+	 * @param string $inventoryFolder
+	 */
 	protected function getHostVarsFilename($inventoryFolder, $hostName)
 	{
 		// shorthand
