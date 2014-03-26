@@ -48,10 +48,10 @@ use PHPUnit_Framework_TestCase;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-class ExpectsIntegerTest extends PHPUnit_Framework_TestCase
+class AssertsArrayTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers DataSift\Storyplayer\Prose\ExpectsInteger::__construct
+	 * @covers DataSift\Storyplayer\Prose\AssertsArray::__construct
 	 */
 	public function testCanInstantiate()
 	{
@@ -59,17 +59,17 @@ class ExpectsIntegerTest extends PHPUnit_Framework_TestCase
 	    // setup your test
 
 	    $st = new StoryTeller(new Story());
-	    $expectedArray = array(1);
+	    $expectedArray = array(array());
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj = new ExpectsInteger($st, $expectedArray);
+	    $obj = new AssertsArray($st, $expectedArray);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $this->assertTrue($obj instanceof ExpectsInteger);
+	    $this->assertTrue($obj instanceof AssertsArray);
 	}
 
 }
