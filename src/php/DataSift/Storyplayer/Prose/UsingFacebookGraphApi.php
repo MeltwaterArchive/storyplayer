@@ -62,12 +62,12 @@ class UsingFacebookGraphApi extends Prose
 	protected $base_path = "https://graph.facebook.com";
 
 	/**
-	 * getPostsFromPage 
+	 * getPostsFromPage
 	 *
 	 * Get the first page of posts from a Facebook page
-	 * 
+	 *
 	 * @param int $id ID of the page to get data from
-	 * 
+	 *
 	 * @return array Posts from the page
 	 */
 	public function getPostsFromPage($id)
@@ -87,9 +87,9 @@ class UsingFacebookGraphApi extends Prose
 	 * getLatestPostFromPage
 	 *
 	 * Get only the latest post from a page
-	 * 
+	 *
 	 * @param int $id ID of the page to get data from
-	 * 
+	 *
 	 * @return array First post from a page
 	 */
 	public function getLatestPostFromPage($id){
@@ -98,13 +98,13 @@ class UsingFacebookGraphApi extends Prose
 	}
 
 	/**
-	 * makeGraphApiRequest 
+	 * makeGraphApiRequest
 	 *
 	 * Make a request to the Graph API, including a user access token
-	 * 
+	 *
 	 * @param string $path URL to call in the graph API
-	 * 
-	 * @return void
+	 *
+	 * @return stdClass
 	 */
 	private function makeGraphApiRequest($path){
 		$st = $this->st;
