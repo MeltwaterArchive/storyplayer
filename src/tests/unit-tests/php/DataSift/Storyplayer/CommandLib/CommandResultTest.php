@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category    Libraries
- * @package     Storyplayer/OsLib
+ * @package     Storyplayer/CommandLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\OsLib;
+namespace DataSift\Storyplayer\CommandLib;
 
 use PHPUnit_Framework_TestCase;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
@@ -50,7 +50,7 @@ use DataSift\Storyplayer\StoryLib\Story;
 class CommandResultTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers DataSift\Storyplayer\OsLib\CommandResult::__construct
+	 * @covers DataSift\Storyplayer\CommandLib\CommandResult::__construct
 	 */
 	public function testCanInstantiate()
 	{
@@ -66,7 +66,7 @@ class CommandResultTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers DataSift\Storyplayer\OsLib\CommandResult::didCommandFail
+	 * @covers DataSift\Storyplayer\CommandLib\CommandResult::didCommandFail
 	 */
 	public function testCanDetectFailedCommand()
 	{
@@ -97,7 +97,7 @@ class CommandResultTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers DataSift\Storyplayer\OsLib\CommandResult::didCommandFail
+	 * @covers DataSift\Storyplayer\CommandLib\CommandResult::didCommandFail
 	 */
 	public function testCanDetectSucceededCommand()
 	{

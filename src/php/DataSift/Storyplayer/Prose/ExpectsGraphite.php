@@ -236,7 +236,7 @@ class ExpectsGraphite extends Prose
 		$st->assertsDouble($average)->isLessThanOrEqualTo($expectedAverage);
 
 		// all done
-		$log->endAction("data was available, metric '{$metric}' never exceeds '{$expectedMax}'");
+		$log->endAction("data was available, metric '{$metric}' never exceeds '{$expectedAverage}'");
 		return;
 	}
 

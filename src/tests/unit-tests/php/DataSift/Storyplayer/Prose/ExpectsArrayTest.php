@@ -44,15 +44,14 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use stdClass;
 use PHPUnit_Framework_TestCase;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-class StringExpectsTest extends PHPUnit_Framework_TestCase
+class ExpectsArrayTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers DataSift\Storyplayer\Prose\StringExpects::__construct
+	 * @covers DataSift\Storyplayer\Prose\ExpectsArray::__construct
 	 */
 	public function testCanInstantiate()
 	{
@@ -60,17 +59,17 @@ class StringExpectsTest extends PHPUnit_Framework_TestCase
 	    // setup your test
 
 	    $st = new StoryTeller(new Story());
-	    $expectedArray = array("hello, world!");
+	    $expectedArray = array(array());
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj = new StringExpects($st, $expectedArray);
+	    $obj = new ExpectsArray($st, $expectedArray);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $this->assertTrue($obj instanceof StringExpects);
+	    $this->assertTrue($obj instanceof ExpectsArray);
 	}
 
 }

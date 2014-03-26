@@ -34,42 +34,102 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category    Libraries
- * @package     Storyplayer
- * @subpackage  Prose
+ * @package     Storyplayer/CommandLib
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\CommandLib;
 
 use PHPUnit_Framework_TestCase;
-use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\StoryLib\Story;
 
-class ArrayExpectsTest extends PHPUnit_Framework_TestCase
+class SshClientTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers DataSift\Storyplayer\Prose\ArrayExpects::__construct
+	 * @covers DataSift\Storyplayer\CommandLib\SshClient::__construct
 	 */
 	public function testCanInstantiate()
 	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+		// ----------------------------------------------------------------
+		// setup your test
 
-	    $st = new StoryTeller(new Story());
-	    $expectedArray = array(array());
+		$story = new Story();
+		$st    = new StoryTeller($story);
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj = new ArrayExpects($st, $expectedArray);
+	    $obj = new SshClient($st);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $this->assertTrue($obj instanceof ArrayExpects);
+	    $this->assertTrue($obj instanceof SshClient);
 	}
 
+	/**
+	 * @covers DataSift\Storyplayer\CommandLib\SshClient::convertParamsForUse
+	 */
+	public function testCanConvertParamsArrayToString()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+		$story = new Story();
+		$st    = new StoryTeller($story);
+
+		$obj   = new SshClient($st);
+
+		$inputParams = array(
+			"ls",
+			"*"
+		);
+
+		$expectedParams = "ls *";
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actualParams = $obj->convertParamsForUse($inputParams);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expectedParams, $actualParams);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\CommandLib\SshClient::convertParamsForUse
+	 */
+	public function testCanEscapeParamsForRemoteGlobbing()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+		$story = new Story();
+		$st    = new StoryTeller($story);
+
+		$obj   = new SshClient($st);
+
+		$inputParams = array(
+			"ls",
+			"'*'"
+		);
+
+		$expectedParams = "ls \'*\'";
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actualParams = $obj->convertParamsForUse($inputParams);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expectedParams, $actualParams);
+	}
 }

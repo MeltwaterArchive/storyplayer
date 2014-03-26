@@ -34,102 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category    Libraries
- * @package     Storyplayer/OsLib
+ * @package     Storyplayer
+ * @subpackage  Prose
  * @author      Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright   2011-present Mediasift Ltd www.datasift.com
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\OsLib;
+namespace DataSift\Storyplayer\Prose;
 
+use stdClass;
 use PHPUnit_Framework_TestCase;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-class SshClientTest extends PHPUnit_Framework_TestCase
+class ExpectsStringTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers DataSift\Storyplayer\OsLib\SshClient::__construct
+	 * @covers DataSift\Storyplayer\Prose\ExpectsString::__construct
 	 */
 	public function testCanInstantiate()
 	{
-		// ----------------------------------------------------------------
-		// setup your test
-
-		$story = new Story();
-		$st    = new StoryTeller($story);
-
-	    // ----------------------------------------------------------------
-	    // perform the change
-
-	    $obj = new SshClient($st);
-
-	    // ----------------------------------------------------------------
-	    // test the results
-
-	    $this->assertTrue($obj instanceof SshClient);
-	}
-
-	/**
-	 * @covers DataSift\Storyplayer\OsLib\SshClient::convertParamsForUse
-	 */
-	public function testCanConvertParamsArrayToString()
-	{
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-		$story = new Story();
-		$st    = new StoryTeller($story);
-
-		$obj   = new SshClient($st);
-
-		$inputParams = array(
-			"ls",
-			"*"
-		);
-
-		$expectedParams = "ls *";
+	    $st = new StoryTeller(new Story());
+	    $expectedArray = array("hello, world!");
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actualParams = $obj->convertParamsForUse($inputParams);
+	    $obj = new ExpectsString($st, $expectedArray);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $this->assertEquals($expectedParams, $actualParams);
+	    $this->assertTrue($obj instanceof ExpectsString);
 	}
 
-	/**
-	 * @covers DataSift\Storyplayer\OsLib\SshClient::convertParamsForUse
-	 */
-	public function testCanEscapeParamsForRemoteGlobbing()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
-
-		$story = new Story();
-		$st    = new StoryTeller($story);
-
-		$obj   = new SshClient($st);
-
-		$inputParams = array(
-			"ls",
-			"'*'"
-		);
-
-		$expectedParams = "ls \'*\'";
-
-	    // ----------------------------------------------------------------
-	    // perform the change
-
-	    $actualParams = $obj->convertParamsForUse($inputParams);
-
-	    // ----------------------------------------------------------------
-	    // test the results
-
-	    $this->assertEquals($expectedParams, $actualParams);
-	}
 }

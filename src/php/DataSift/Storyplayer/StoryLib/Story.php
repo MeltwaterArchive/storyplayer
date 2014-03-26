@@ -107,6 +107,12 @@ class Story
 	protected $testEnvironmentSetupCallback = array();
 
 	/**
+	 * the function that provides any (optional) environment teardown action
+	 * @var array
+	 */
+	protected $testEnvironmentTeardownCallback = array();
+
+	/**
 	 * the function that provides any story-specific setup work
 	 *
 	 * @var array
@@ -118,12 +124,6 @@ class Story
 	 * @var array
 	 */
 	protected $testTeardownCallback = array();
-
-	/**
-	 * the function that provides any (optional) environment teardown action
-	 * @var array
-	 */
-	protected $testEnvironmentTeardownCallback = array();
 
 	/**
 	 * the function that provides any story-specific setup work that
@@ -184,6 +184,14 @@ class Story
 	 * @var array
 	 */
 	protected $preTestInspectionCallback = array();
+
+	/**
+	 * the callback used to see if the action *did* change the state of
+	 * the system under test
+	 *
+	 * @var array
+	 */
+	protected $postTestInspectionCallback = array();
 
 	/**
 	 * the actions that execute the story on behalf of the user

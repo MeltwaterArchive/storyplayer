@@ -58,6 +58,8 @@ use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
  */
 abstract class Provisioner
 {
+	protected $st;
+
 	abstract public function __construct(StoryTeller $st);
 	abstract public function provisionHosts(ProvisioningDefinition $hosts);
 }

@@ -414,13 +414,16 @@ class FromBrowser extends Prose
 		$st = $this->st;
 		$topElement = $this->getTopElement();
 
+		// what are we doing?
+		$log = $st->startAction("find element using xpath list");
+
 		try{
 			foreach ($xpathList as $xpath) {
 				$element = $log->addStep("find element using xpath '{$xpath}'", function() use($topElement, $xpath) {
 					return $topElement->getElement('xpath', $xpath);
 				});
 
-				// return the element
+				// if we get here, then we have found a match
 				return $element;
 			}
 		}
