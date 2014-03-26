@@ -66,7 +66,7 @@ class TestSetupPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our return value
-		$phaseResult = new PhaseResult($this);
+		$phaseResult = new PhaseResult();
 
 		// do we have anything to do?
 		if (!$story->hasTestSetup())

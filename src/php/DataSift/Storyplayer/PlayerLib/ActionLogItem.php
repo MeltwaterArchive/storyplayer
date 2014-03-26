@@ -107,7 +107,7 @@ class ActionLogItem
 
 		// do we any output to log?
 		if (!empty($resultText)) {
-			$this->writeToLog('... ' . $resultText, true);
+			$this->writeToLog('... ' . $resultText);
 		}
 	}
 

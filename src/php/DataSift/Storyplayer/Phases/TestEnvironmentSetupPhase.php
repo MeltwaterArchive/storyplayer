@@ -65,7 +65,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our return value
-		$phaseResult = new PhaseResult($this);
+		$phaseResult = new PhaseResult();
 
 		// shorthand
 		$story = $st->getStory();

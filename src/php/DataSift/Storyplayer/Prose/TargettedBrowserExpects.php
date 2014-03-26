@@ -69,7 +69,7 @@ class TargettedBrowserExpects
 	/**
 	 * @param string $elemendDesc
 	 */
-	public function __construct(StoryTeller $st, callable $searchFunction, $searchTerm, $elemendDesc)
+	public function __construct(StoryTeller $st, callable $searchFunction, $searchTerm, $elementDesc)
 	{
 		$this->st             = $st;
 		$this->searchFunction = $searchFunction;

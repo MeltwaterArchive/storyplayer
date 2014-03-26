@@ -73,7 +73,8 @@ class FromCurl extends Prose
 	{
 
 		if (count($headers)){
-			throw new E5xx_NotImplemented(__METHOD__, "FromCurl does not support headers yet");
+			// "FromCurl does not support headers yet"
+			throw new E5xx_NotImplemented(__METHOD__);
 		}
 
 		// shorthand

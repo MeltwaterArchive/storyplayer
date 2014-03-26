@@ -219,7 +219,7 @@ class FromBrowser extends Prose
 
 		// can we find this puppy by its label?
 		try {
-			$return = $this->getElementByLabel($searchTerm, $tags);
+			$return = $this->getElementByLabel($searchTerm);
 			$log->endAction("found one by its label");
 			return $return;
 		}
@@ -772,7 +772,7 @@ class FromBrowser extends Prose
 						$log->endAction("value is: " . $option->text());
 						return $option->text();
 					}
-					break;
+
 				case 'input':
 					$log->endAction("value is: " . $element->attribute("value"));
 					return $element->attribute("value");

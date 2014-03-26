@@ -130,7 +130,6 @@ class UsingForm extends UsingBrowser
 				case null:
 					$log->endAction("cannot find field labelled '{$labelText}'");
 					throw new E5xx_ActionFailed(__METHOD__);
-					break;
 
 				default:
 					$log->endAction("* field labelled '{$labelText}' has unsupported tag '{$tag}' *");

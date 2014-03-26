@@ -82,7 +82,7 @@ class PreTestInspectionPhase extends StoryPhase
 		// with it if it explodes
 		try {
 			// do any required setup
-			$this->doPerPhaseSetup($st);
+			$this->doPerPhaseSetup();
 
 			// if the callback exists, use it
 			$story     = $st->getStory();
@@ -106,7 +106,7 @@ class PreTestInspectionPhase extends StoryPhase
 		$st->closeAllOpenActions();
 
 		// tidy up after ourselves
-		$this->doPerPhaseTeardown($st);
+		$this->doPerPhaseTeardown();
 
 		// all done
 		return $phaseResult;

@@ -68,6 +68,6 @@ class UsingProvisioning extends Prose
 		// all done
 		$log->endAction();
 
-		return new ProvisioningDefinition($st);
+		return new ProvisioningDefinition();
 	}
 }

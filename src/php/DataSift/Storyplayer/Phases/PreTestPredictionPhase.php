@@ -133,7 +133,7 @@ class PreTestPredictionPhase extends StoryPhase
 		$st->closeAllOpenActions();
 
 		// tidy up after ourselves
-		$this->doPerPhaseTeardown($st);
+		$this->doPerPhaseTeardown();
 
 		// all done
 		return $phaseResult;
