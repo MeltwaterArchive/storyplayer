@@ -69,7 +69,7 @@ class StoryContext extends BaseObject
 	/**
 	 * the details about the user that has been chosen
 	 *
-	 * @var DataSift\Stone\ObjectLib\BaseObject
+	 * @var DataSift\StoryPlayer\UserLib\User
 	 */
 	public $user;
 
