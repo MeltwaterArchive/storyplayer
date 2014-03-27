@@ -90,7 +90,7 @@ interface SupportedOs
 	/**
 	 * @param HostDetails $hostDetails
 	 * @param string $command
-	 * @param array $$params
+	 * @param array $params
 	 *
 	 * @return DataSift\Storyplayer\CommandLib\CommandResult
 	 */
