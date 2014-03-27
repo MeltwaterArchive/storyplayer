@@ -200,7 +200,7 @@ class PhasesPlayer
 			// done sufficient error handling of its own!!
 			catch (Exception $e) {
 				// tell our output plugins what happened
-				$output->logPhaseError($phaseName, 'e', "uncaught exception: " . (string)$e->getMessage() . PHP_EOL . $e->getTraceAsString());
+				$output->logPhaseError($phaseName, "uncaught exception: " . (string)$e->getMessage() . PHP_EOL . $e->getTraceAsString());
 
 				// we need to create a dummy phase result for this
 				$phaseResult = new PhaseResult;
