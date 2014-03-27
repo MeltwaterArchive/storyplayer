@@ -97,6 +97,10 @@ class Output implements OutputPlugin
 	/**
 	 * called when storyplayer starts
 	 *
+	 * @param string $version
+	 * @param string $url
+	 * @param string $copyright
+	 * @param string $license
 	 * @return void
 	 */
 	public function startStoryplayer($version, $url, $copyright, $license)
@@ -125,6 +129,11 @@ class Output implements OutputPlugin
 	 *
 	 * a single copy of Storyplayer may execute multiple tests
 	 *
+	 * @param string $storyName
+	 * @param string $storyCategory
+	 * @param string $storyGroup
+	 * @param string $envName
+	 * @param string $deviceName
 	 * @return void
 	 */
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
@@ -138,6 +147,7 @@ class Output implements OutputPlugin
 	/**
 	 * called when a story finishes
 	 *
+	 * @param StoryResult $storyResult
 	 * @return void
 	 */
 	public function endStory(StoryResult $storyResult)
@@ -151,6 +161,8 @@ class Output implements OutputPlugin
 	/**
 	 * called when a story starts a new phase
 	 *
+	 * @param string $phaseName
+	 * @param integer $phaseType
 	 * @return void
 	 */
 	public function startPhase($phaseName, $phaseType)
@@ -164,6 +176,8 @@ class Output implements OutputPlugin
 	/**
 	 * called when a story ends a phase
 	 *
+	 * @param string $phaseName
+	 * @param integer $phaseType
 	 * @return void
 	 */
 	public function endPhase($phaseName, $phaseType)
@@ -177,6 +191,8 @@ class Output implements OutputPlugin
 	/**
 	 * called when a story logs an action
 	 *
+	 * @param integer $level
+	 * @param string $msg
 	 * @return void
 	 */
 	public function logPhaseActivity($level, $msg)
@@ -190,6 +206,8 @@ class Output implements OutputPlugin
 	/**
 	 * called when a story logs an error
 	 *
+	 * @param string $phaseName
+	 * @param string $msg
 	 * @return void
 	 */
 	public function logPhaseError($phaseName, $msg)
@@ -203,6 +221,8 @@ class Output implements OutputPlugin
 	/**
 	 * called when a story is skipped
 	 *
+	 * @param string $phaseName
+	 * @param string $msg
 	 * @return void
 	 */
 	public function logPhaseSkipped($phaseName, $msg)
