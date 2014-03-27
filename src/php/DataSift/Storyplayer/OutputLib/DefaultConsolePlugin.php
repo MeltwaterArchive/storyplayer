@@ -201,6 +201,9 @@ EOS;
 		}
 	}
 
+	/**
+	 * @param string $phaseName
+	 */
 	protected function showActivityForPhase($phaseName)
 	{
 		if (!isset($this->phaseMessages[$phaseName]) || !count($this->phaseMessages[$phaseName])) {

@@ -91,7 +91,7 @@ interface SupportedOs
 	 * @param HostDetails $hostDetails
 	 * @param string $command
 	 *
-	 * @return DataSift\Storyplayer\CommandLib\CommandResult
+	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
 	 */
 	public function runCommand($hostDetails, $command);
 }
