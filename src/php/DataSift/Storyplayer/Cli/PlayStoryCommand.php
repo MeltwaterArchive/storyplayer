@@ -115,8 +115,7 @@ class PlayStoryCommand extends CliCommand
      *
      * @param  CliEngine $engine
      * @param  array     $params
-     * @param  mixed     $additionalContext
-     * @return Phix_Project\CliEngine\CliResult
+     * @return integer|null
      */
     public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
     {

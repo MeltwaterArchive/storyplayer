@@ -60,6 +60,9 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class EnvironmentSwitch extends CliSwitch
 {
+	/**
+	 * @param string $defaultEnvName
+	 */
 	public function __construct($envList, $defaultEnvName)
 	{
 		// define our name, and our description
@@ -101,7 +104,7 @@ class EnvironmentSwitch extends CliSwitch
 	 * @param  integer   $invokes
 	 * @param  array     $params
 	 * @param  boolean   $isDefaultParam
-	 * @return Phix_Project\CliEngine\CliResult
+	 * @return CliResult
 	 */
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{

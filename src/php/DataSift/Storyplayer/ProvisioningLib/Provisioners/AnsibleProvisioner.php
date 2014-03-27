@@ -265,6 +265,9 @@ class AnsibleProvisioner extends Provisioner
 		return $filename;
 	}
 
+	/**
+	 * @param string $inventoryFolder
+	 */
 	protected function getInventoryFolder($ansibleSettings, $inventoryFolder)
 	{
 		// is there an Ansible.cfg file?

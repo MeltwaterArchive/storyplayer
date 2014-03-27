@@ -78,7 +78,7 @@ interface DeviceAdapter
 	public function getDevice();
 
 	/**
-	 * @param   $url
+	 * @param   string $url
 	 *
 	 * @return void
 	 */
@@ -97,6 +97,8 @@ interface DeviceAdapter
 	public function getHttpBasicAuthForHost($hostname);
 
 	/**
+	 * @param string $username
+	 * @param string $password
 	 * @return void
 	 */
 	public function setHttpBasicAuthForHost($hostname, $username, $password);

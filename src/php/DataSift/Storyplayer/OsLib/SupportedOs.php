@@ -76,7 +76,7 @@ interface SupportedOs
 	public function getPid($hostDetails, $processName);
 
 	/**
-	 * @param   $command
+	 * @param    $command
 	 *
 	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
 	 */

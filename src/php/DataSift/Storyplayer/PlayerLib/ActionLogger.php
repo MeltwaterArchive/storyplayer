@@ -58,6 +58,9 @@ class ActionLogger
 	protected $actions = array();
 	protected $injectables;
 
+	/**
+	 * @param \DataSift\Storyplayer\Cli\Injectables $injectables
+	 */
 	public function __construct($injectables)
 	{
 		$this->injectables = $injectables;

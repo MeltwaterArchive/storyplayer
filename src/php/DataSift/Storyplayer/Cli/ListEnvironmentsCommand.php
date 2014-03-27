@@ -81,7 +81,7 @@ class ListEnvironmentsCommand extends CliCommand
 	 * @param  CliEngine $engine
 	 * @param  array     $params
 	 * @param  mixed     $additionalContext
-	 * @return Phix_Project\CliEngine\CliResult
+	 * @return CliResult
 	 */
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{

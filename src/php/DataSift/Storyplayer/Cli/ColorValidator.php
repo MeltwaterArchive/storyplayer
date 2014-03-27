@@ -59,8 +59,8 @@ class ColorValidator implements Validator
     /**
      *
      * @param  mixed $value
-     * @param  Phix_Project\ValidationLib4\ValidationResult $result
-     * @return Phix_Project\ValidationLib4\ValidationResult
+     * @param  ValidationResult $result
+     * @return ValidationResult
      */
     public function validate($value, ValidationResult $result = null)
     {
