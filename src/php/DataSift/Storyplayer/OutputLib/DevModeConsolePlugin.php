@@ -200,8 +200,9 @@ EOS;
 	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function endPhase($phaseName, $phaseResult)
+	public function endPhase($phaseName, $phaseType)
 	{
+		// this is a no-op for us
 	}
 
 	/**
