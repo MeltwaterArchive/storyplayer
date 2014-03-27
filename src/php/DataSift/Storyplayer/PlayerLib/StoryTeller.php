@@ -89,6 +89,8 @@ use DataSift\Storyplayer\DeviceLib;
  * @method DataSift\Storyplayer\Prose\FromForm fromForm(string $formId)
  * @method DataSift\Storyplayer\Prose\FromGraphite fromGraphite()
  * @method DataSift\Storyplayer\Prose\FromHost fromHost(string $hostname)
+ * @method DataSift\Storyplayer\Prose\FromHostsTable fromHostsTable()
+ * @method DataSift\Storyplayer\Prose\FromHttp fromHttp()
  * @method DataSift\Storyplayer\Prose\FromIframe fromIframe(string $id)
  * @method DataSift\Storyplayer\Prose\FromProcessesTable fromProcessesTable()
  * @method DataSift\Storyplayer\Prose\FromRuntimeTable fromRuntimeTable(string $tableName)
