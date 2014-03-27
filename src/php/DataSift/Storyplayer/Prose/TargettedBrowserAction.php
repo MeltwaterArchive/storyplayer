@@ -220,6 +220,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @method void unorderedlistWithPlaceholder(string $text)
  * @method void unorderedlistWithTitle(string $title)
  * @method void unorderedlistWithLabelTextOrId(string $labelTextOrId)
+ * @method void intoElement($element)
+ * @method void inElement($element)
  *
  * @category  Libraries
  * @package   Storyplayer/Prose

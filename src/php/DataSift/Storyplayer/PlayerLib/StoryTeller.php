@@ -43,7 +43,11 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Cli\DefaultStaticConfig;
 use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Cli\RuntimeConfigManager;
+use DataSift\Storyplayer\Cli\StaticConfigManager;
+use DataSift\Storyplayer\Output;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
@@ -162,14 +166,14 @@ class StoryTeller
 	private $storyResult = null;
 
 	/**
-	 * [$actionLogger description]
+	 *
 	 * @var Datasift\Storyplayer\PlayerLib\ActionLogItem
 	 */
 	private $actionLogger;
 
 	/**
 	 * which of the steps is currently being executed?
-	 * @var [type]
+	 * @var DataSift\Storyplayer\Phases\Phase
 	 */
 	private $currentPhase = null;
 
@@ -208,18 +212,19 @@ class StoryTeller
 	// ------------------------------------------------------------------
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return ActionLogger
 	 */
 	public function getActionLogger() {
 	    return $this->actionLogger;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $actionLogger [description]
+	 *
+	 * @param ActionLogger $actionLogger
+	 * @return StoryTeller
 	 */
 	public function setActionLogger(ActionLogger $actionLogger) {
 	    $this->actionLogger = $actionLogger;
@@ -228,18 +233,19 @@ class StoryTeller
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return StoryCheckpoint
 	 */
 	public function getCheckpoint() {
 	    return $this->checkpoint;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $checkpoint [description]
+	 *
+	 * @param StoryCheckpoint $checkpoint
+	 * @return StoryTeller
 	 */
 	public function setCheckpoint(StoryCheckpoint $checkpoint) {
 	    $this->checkpoint = $checkpoint;
@@ -248,18 +254,19 @@ class StoryTeller
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return PageContext
 	 */
 	public function getPageContext() {
 	    return $this->pageContext;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $pageContext [description]
+	 *
+	 * @param PageContext $pageContext
+	 * @return StoryTeller
 	 */
 	public function setPageContext(PageContext $pageContext) {
 	    $this->pageContext = $pageContext;
@@ -268,9 +275,9 @@ class StoryTeller
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return Story
 	 */
 	public function getStory() {
 	    return $this->story;
@@ -283,8 +290,9 @@ class StoryTeller
 	 *       so that we can track how the story is getting on
 	 *
 	 * @param Story $story
+	 * @return StoryTeller
 	 */
-	public function setStory($story)
+	public function setStory(Story $story)
 	{
 		// are we already tracking this story?
 		if ($this->story == $story) {
@@ -302,18 +310,19 @@ class StoryTeller
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return StoryContext
 	 */
 	public function getStoryContext() {
 	    return $this->storyContext;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $storyContext [description]
+	 *
+	 * @param StoryContext $storyContext
+	 * @return StoryTeller
 	 */
 	public function setStoryContext(StoryContext $storyContext) {
 	    $this->storyContext = $storyContext;
@@ -326,67 +335,105 @@ class StoryTeller
 	    return $this;
 	}
 
+	/**
+	 *
+	 * @return StoryResult
+	 */
 	public function getStoryResult()
 	{
 		return $this->storyResult;
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return RuntimeConfigManager
 	 */
 	public function getRuntimeConfigManager() {
 	    return $this->runtimeConfigManager;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $runtimeConfigManager [description]
+	 *
+	 * @param RuntimeConfigManager $runtimeConfigManager
+	 * @return StoryTeller
 	 */
-	public function setRuntimeConfigManager($runtimeConfigManager) {
+	public function setRuntimeConfigManager(RuntimeConfigManager $runtimeConfigManager) {
 	    $this->runtimeConfigManager = $runtimeConfigManager;
 
 	    return $this;
 	}
 
+	/**
+	 *
+	 * @return Phase
+	 */
 	public function getCurrentPhase()
 	{
 		return $this->currentPhase;
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function getCurrentPhaseName()
 	{
-		return Storyplayer::$phaseToText[$this->currentPhase];
+		return $this->currentPhase->getPhaseName();
 	}
 
-	public function setCurrentPhase($newPhase)
+	/**
+	 *
+	 * @param Phase $newPhase
+	 * @return void
+	 */
+	public function setCurrentPhase(Phase $newPhase)
 	{
 		$this->currentPhase = $newPhase;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function setProseLoader()
 	{
 		$this->proseLoader = new ProseLoader();
 	}
 
+	/**
+	 *
+	 * @return Output
+	 */
 	public function getOutput()
 	{
 		return $this->output;
 	}
 
-	public function setOutput($output)
+	/**
+	 *
+	 * @param Output $output
+	 * @return void
+	 */
+	public function setOutput(Output $output)
 	{
 		$this->output = $output;
 	}
 
+	/**
+	 *
+	 * @return BaseObject
+	 */
 	public function getStaticConfig()
 	{
 		return $this->staticConfig;
 	}
 
-	public function setStaticConfig($staticConfig)
+	/**
+	 *
+	 * @param BaseObject $staticConfig
+	 */
+	public function setStaticConfig(DefaultStaticConfig $staticConfig)
 	{
 		$this->staticConfig = $staticConfig;
 	}
@@ -431,6 +478,10 @@ class StoryTeller
 		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig);
 	}
 
+	/**
+	 *
+	 * @return DataSift\Storyplayer\UserLib\User
+	 */
 	public function getUser()
 	{
 		return $this->storyContext->user;
