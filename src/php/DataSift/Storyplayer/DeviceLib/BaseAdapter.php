@@ -142,6 +142,7 @@ class BaseAdapter
 	 * @param string $hostname
 	 * @param string $username
 	 * @param string $password
+	 * @return void
 	 */
 	public function setHttpBasicAuthForHost($hostname, $username, $password)
 	{

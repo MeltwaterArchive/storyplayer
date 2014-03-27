@@ -98,6 +98,15 @@ class DevModeConsolePlugin implements OutputPlugin
 		$this->verbosityLevel = $verbosityLevel;
 	}
 
+	/**
+	 * called when storyplayer starts
+	 *
+	 * @param string $version
+	 * @param string $url
+	 * @param string $copyright
+	 * @param string $license
+	 * @return void
+	 */
 	public function startStoryplayer($version, $url, $copyright, $license)
 	{
 		echo <<<EOS
@@ -109,11 +118,28 @@ Storyplayer {$version} - {$url}
 EOS;
 	}
 
+	/**
+	 * called when Storyplayer exits
+	 *
+	 * @return void
+	 */
 	public function endStoryplayer()
 	{
 
 	}
 
+	/**
+	 * called when a new story starts
+	 *
+	 * a single copy of Storyplayer may execute multiple tests
+	 *
+	 * @param string $storyName
+	 * @param string $storyCategory
+	 * @param string $storyGroup
+	 * @param string $envName
+	 * @param string $deviceName
+	 * @return void
+	 */
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
 		echo <<<EOS
@@ -129,6 +155,12 @@ Environment: {$envName}
 EOS;
 	}
 
+	/**
+	 * called when a story finishes
+	 *
+	 * @param StoryResult $storyResult
+	 * @return void
+	 */
 	public function endStory(StoryResult $storyResult)
 	{
 		echo <<<EOS
@@ -141,6 +173,13 @@ EOS;
 		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel] . PHP_EOL;
 	}
 
+	/**
+	 * called when a story starts a new phase
+	 *
+	 * @param string $phaseName
+	 * @param integer $phaseType
+	 * @return void
+	 */
 	public function startPhase($phaseName, $phaseType)
 	{
 		// we only announce story phases
@@ -154,43 +193,106 @@ EOS;
 		echo PHP_EOL;
 	}
 
+	/**
+	 * called when a story ends a phase
+	 *
+	 * @param string $phaseName
+	 * @param integer $phaseType
+	 * @return void
+	 */
 	public function endPhase($phaseName, $phaseResult)
 	{
 	}
 
+	/**
+	 * called when a story logs an action
+	 *
+	 * @param integer $level
+	 * @param string $msg
+	 * @return void
+	 */
 	public function logPhaseActivity($level, $msg)
 	{
 		// send this to the default logger
 		Log::write($level, $msg);
 	}
 
+	/**
+	 * called when a story logs an error
+	 *
+	 * @param string $phaseName
+	 * @param string $msg
+	 * @return void
+	 */
 	public function logPhaseError($phaseName, $msg)
 	{
 		// send this to the default logger
 		Log::write(Log::LOG_CRITICAL, $msg);
 	}
 
+	/**
+	 * called when a story is skipped
+	 *
+	 * @param string $phaseName
+	 * @param string $msg
+	 * @return void
+	 */
 	public function logPhaseSkipped($phaseName, $msg)
 	{
 		// send this to the default logger
 		Log::write(Log::LOG_NOTICE, $msg);
 	}
 
+	/**
+	 * called when the outer CLI shell encounters a fatal error
+	 *
+	 * @param  string $msg
+	 *         the error message to show the user
+	 *
+	 * @return void
+	 */
 	public function logCliError($msg)
 	{
 		echo "*** error: $msg" . PHP_EOL;
 	}
 
+	/**
+	 * called when the outer CLI shell needs to publish a warning
+	 *
+	 * @param  string $msg
+	 *         the warning message to show the user
+	 *
+	 * @return void
+	 */
 	public function logCliWarning($msg)
 	{
 		echo "*** warning: $msg" . PHP_EOL;
 	}
 
+	/**
+	 * called when the outer CLI shell needs to tell the user something
+	 *
+	 * @param  string $msg
+	 *         the message to show the user
+	 *
+	 * @return void
+	 */
 	public function logCliInfo($msg)
 	{
 		echo $msg . PHP_EOL;
 	}
 
+	/**
+	 * an alternative to using PHP's built-in var_dump()
+	 *
+	 * @param  string $name
+	 *         a human-readable name to describe $var
+	 *
+	 * @param  mixed $var
+	 *         the variable to dump
+	 *
+	 * @return void
+	 */
 	public function logVardump($name, $var)
 	{
 		// grab the output buffer

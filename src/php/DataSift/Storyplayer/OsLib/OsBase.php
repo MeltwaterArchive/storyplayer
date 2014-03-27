@@ -73,11 +73,45 @@ abstract class OsBase implements SupportedOs
 		$this->st = $st;
 	}
 
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  SupportedHost $host
+	 * @return string
+	 */
 	abstract public function determineIpAddress($hostDetails, SupportedHost $host);
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $packageName
+	 * @return BaseObject
+	 */
 	abstract public function getInstalledPackageDetails($hostDetails, $packageName);
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return boolean
+	 */
 	abstract public function getProcessIsRunning($hostDetails, $processName);
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return integer
+	 */
 	abstract public function getPid($hostDetails, $processName);
 
+	/**
+	 * @param HostDetails $hostDetails
+	 * @param string $command
+	 * @param array $params
+	 *
+	 * @return DataSift\Storyplayer\CommandLib\CommandResult
+	 */
 	public function runCommand($hostDetails, $command, $params = array())
 	{
 		// get an SSH client
@@ -88,7 +122,8 @@ abstract class OsBase implements SupportedOs
 	}
 
 	/**
-	 * @param   $hostDetails
+	 * @param HostDetails $hostDetails
+	 * @return SshClient
 	 */
 	protected function getSshClient($hostDetails)
 	{

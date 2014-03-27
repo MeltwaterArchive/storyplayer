@@ -107,6 +107,15 @@ class DefaultConsolePlugin implements OutputPlugin
 		}
 	}
 
+	/**
+	 * called when storyplayer starts
+	 *
+	 * @param string $version
+	 * @param string $url
+	 * @param string $copyright
+	 * @param string $license
+	 * @return void
+	 */
 	public function startStoryplayer($version, $url, $copyright, $license)
 	{
 		echo <<<EOS
@@ -118,11 +127,28 @@ Storyplayer {$version} - {$url}
 EOS;
 	}
 
+	/**
+	 * called when Storyplayer exits
+	 *
+	 * @return void
+	 */
 	public function endStoryplayer()
 	{
 
 	}
 
+	/**
+	 * called when a new story starts
+	 *
+	 * a single copy of Storyplayer may execute multiple tests
+	 *
+	 * @param string $storyName
+	 * @param string $storyCategory
+	 * @param string $storyGroup
+	 * @param string $envName
+	 * @param string $deviceName
+	 * @return void
+	 */
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
 		if ($this->verbosityLevel > 0) {
@@ -147,6 +173,12 @@ EOS;
 		$this->phaseNumber = 0;
 	}
 
+	/**
+	 * called when a story finishes
+	 *
+	 * @param StoryResult $storyResult
+	 * @return void
+	 */
 	public function endStory(StoryResult $storyResult)
 	{
 		// var_dump($storyResult);
@@ -189,6 +221,13 @@ EOS;
 		echo PHP_EOL;
 	}
 
+	/**
+	 * called when a story starts a new phase
+	 *
+	 * @param string $phaseName
+	 * @param integer $phaseType
+	 * @return void
+	 */
 	public function startPhase($phaseName, $phaseType)
 	{
 		// make sure we can keep track of what the phase is doing
@@ -213,6 +252,13 @@ EOS;
 		}
 	}
 
+	/**
+	 * called when a story ends a phase
+	 *
+	 * @param string $phaseName
+	 * @param integer $phaseType
+	 * @return void
+	 */
 	public function endPhase($phaseName, $phaseType)
 	{
 		// we're only interested in telling the user about the
@@ -229,6 +275,13 @@ EOS;
 		}
 	}
 
+	/**
+	 * called when a story logs an action
+	 *
+	 * @param integer $level
+	 * @param string $msg
+	 * @return void
+	 */
 	public function logPhaseActivity($level, $msg)
 	{
 		// keep track of what was attempted, in case we need to show
@@ -243,6 +296,13 @@ EOS;
 		echo ".";
 	}
 
+	/**
+	 * called when a story logs an error
+	 *
+	 * @param string $phaseName
+	 * @param string $msg
+	 * @return void
+	 */
 	public function logPhaseError($phaseName, $msg)
 	{
 		// we have to show this now, and save it for final output later
@@ -251,6 +311,13 @@ EOS;
 		$this->phaseErrors[$phaseName] = $msg;
 	}
 
+	/**
+	 * called when a story is skipped
+	 *
+	 * @param string $phaseName
+	 * @param string $msg
+	 * @return void
+	 */
 	public function logPhaseSkipped($phaseName, $msg)
 	{
 		// we have to show this now, and save it for final output later
@@ -259,21 +326,56 @@ EOS;
 		$this->phaseErrors[$phaseName] = $msg;
 	}
 
+	/**
+	 * called when the outer CLI shell encounters a fatal error
+	 *
+	 * @param  string $msg
+	 *         the error message to show the user
+	 *
+	 * @return void
+	 */
 	public function logCliError($msg)
 	{
 		echo "*** error: $msg" . PHP_EOL;
 	}
 
+	/**
+	 * called when the outer CLI shell needs to publish a warning
+	 *
+	 * @param  string $msg
+	 *         the warning message to show the user
+	 *
+	 * @return void
+	 */
 	public function logCliWarning($msg)
 	{
 		echo "*** warning: $msg" . PHP_EOL;
 	}
 
+	/**
+	 * called when the outer CLI shell needs to tell the user something
+	 *
+	 * @param  string $msg
+	 *         the message to show the user
+	 *
+	 * @return void
+	 */
 	public function logCliInfo($msg)
 	{
 		echo $msg . PHP_EOL;
 	}
 
+	/**
+	 * an alternative to using PHP's built-in var_dump()
+	 *
+	 * @param  string $name
+	 *         a human-readable name to describe $var
+	 *
+	 * @param  mixed $var
+	 *         the variable to dump
+	 *
+	 * @return void
+	 */
 	public function logVardump($name, $var)
 	{
 		// this is a no-op for us
