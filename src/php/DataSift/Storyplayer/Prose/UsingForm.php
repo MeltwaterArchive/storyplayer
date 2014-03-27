@@ -120,11 +120,11 @@ class UsingForm extends UsingBrowser
 			switch ($tag) {
 				case 'input':
 				case 'textarea':
-					$this->type($fieldValue)->intoElement($element, $labelText);
+					$this->type($fieldValue)->intoElement($element);
 					break;
 
 				case 'select':
-					$this->select($fieldValue)->inElement($element, $labelText);
+					$this->select($fieldValue)->fromElement($element);
 					break;
 
 				case null:
@@ -172,11 +172,11 @@ class UsingForm extends UsingBrowser
 			switch ($tag) {
 				case 'input':
 				case 'textarea':
-					$this->type($fieldValue)->intoElement($element, $labelText);
+					$this->type($fieldValue)->intoElement($element);
 					break;
 
 				case 'select':
-					$this->select($fieldValue)->inElement($element, $labelText);
+					$this->select($fieldValue)->fromElement($element);
 					break;
 
 				default:

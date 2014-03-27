@@ -221,7 +221,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @method void unorderedlistWithTitle(string $title)
  * @method void unorderedlistWithLabelTextOrId(string $labelTextOrId)
  * @method void intoElement($element)
- * @method void inElement($element)
+ * @method void fromElement($element)
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
