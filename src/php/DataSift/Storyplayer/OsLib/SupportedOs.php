@@ -90,9 +90,8 @@ interface SupportedOs
 	/**
 	 * @param HostDetails $hostDetails
 	 * @param string $command
-	 * @param array $params
 	 *
 	 * @return DataSift\Storyplayer\CommandLib\CommandResult
 	 */
-	public function runCommand($hostDetails, $command, $params = array());
+	public function runCommand($hostDetails, $command);
 }
