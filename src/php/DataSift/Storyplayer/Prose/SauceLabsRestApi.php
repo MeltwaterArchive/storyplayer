@@ -67,11 +67,11 @@ class SauceLabsRestApi extends Prose
 		parent::__construct($st, $params);
 
 		// get the SauceLabs auth details
-		// they are part of the browserDetails available from $st
-		$browserDetails = $st->getBrowserDetails();
+		// they are part of the test device details available from $st
+		$deviceDetails = $st->getDeviceDetails();
 
 		// remember the auth details
-		$this->sauceLabsUsername  = $browserDetails->saucelabs->username;
-		$this->sauceLabsAccessKey = $browserDetails->saucelabs->accesskey;
+		$this->sauceLabsUsername  = $deviceDetails->saucelabs->username;
+		$this->sauceLabsAccessKey = $deviceDetails->saucelabs->accesskey;
 	}
 }
