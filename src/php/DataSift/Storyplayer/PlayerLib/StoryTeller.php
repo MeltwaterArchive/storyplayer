@@ -46,7 +46,6 @@ namespace DataSift\Storyplayer\PlayerLib;
 use DataSift\Storyplayer\Cli\DefaultStaticConfig;
 use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
-use DataSift\Storyplayer\Cli\StaticConfigManager;
 use DataSift\Storyplayer\Output;
 use DataSift\Storyplayer\Phases\Phase;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
@@ -423,7 +422,7 @@ class StoryTeller
 
 	/**
 	 *
-	 * @return BaseObject
+	 * @return DefaultStaticConfig
 	 */
 	public function getStaticConfig()
 	{
@@ -432,7 +431,7 @@ class StoryTeller
 
 	/**
 	 *
-	 * @param BaseObject $staticConfig
+	 * @param DefaultStaticConfig $staticConfig
 	 */
 	public function setStaticConfig(DefaultStaticConfig $staticConfig)
 	{
@@ -455,6 +454,9 @@ class StoryTeller
 		return $this->storyContext->env;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getEnvironmentName()
 	{
 		return $this->storyContext->envName;
@@ -603,6 +605,9 @@ class StoryTeller
 	    return $this;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDeviceName()
 	{
 		return $this->storyContext->deviceName;
