@@ -97,6 +97,7 @@ class PostTestInspectionPhase extends StoryPhase
 			// if we get here, the post-test inspection did not fail
 			// ... but should it have?
 			if ($storyResult->getStoryShouldFail()) {
+				$storyResult->setStoryHasFailed();
 				$phaseResult->setPlayingFailed(
 					PhaseResult::SUCCESS,
 					"post-test inspection succeeded when it was expected to fail"
@@ -141,6 +142,7 @@ class PostTestInspectionPhase extends StoryPhase
 
 		// this is treated as a hard fail
 		catch (E5xx_NotImplemented $e) {
+			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
 				PhaseResult::INCOMPLETE,
 				"unable to complete post-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
@@ -148,6 +150,7 @@ class PostTestInspectionPhase extends StoryPhase
 		}
 		// this only happens when something has gone very badly wrong
 		catch (Exception $e) {
+			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
 				PhaseResult::INCOMPLETE,
 				"unable to complete post-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
