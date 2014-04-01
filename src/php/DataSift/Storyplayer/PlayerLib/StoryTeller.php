@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Cli\DefaultStaticConfig;
 use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Output;
