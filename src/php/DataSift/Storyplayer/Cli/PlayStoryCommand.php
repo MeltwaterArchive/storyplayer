@@ -133,11 +133,8 @@ class PlayStoryCommand extends CliCommand
     public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
     {
         // shorthand
-        $envList              = $injectables->envList;
         $runtimeConfig        = $injectables->runtimeConfig;
         $runtimeConfigManager = $injectables->runtimeConfigManager;
-        $staticConfig         = $injectables->staticConfig;
-        $staticConfigManager  = $injectables->staticConfigManager;
         $output               = $injectables->output;
 
         // save the output for use in other methods
@@ -230,6 +227,10 @@ class PlayStoryCommand extends CliCommand
         // all done
         return 0;
 
+        /*
+         * this is legacy code that we're in the process of removing
+         * from the code base
+
         // we're going to use this to play our setup and teardown phases
         $phasesPlayer = new PhasesPlayer();
 
@@ -321,7 +322,9 @@ class PlayStoryCommand extends CliCommand
 
             default:
                 // unsupported!
+
         }
+        */
     }
 
     // ==================================================================
@@ -387,9 +390,6 @@ class PlayStoryCommand extends CliCommand
     protected function initDevice(CliEngine $engine, Injectables $injectables)
     {
         // shorthand
-        $envList              = $injectables->envList;
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
         $staticConfig         = $injectables->staticConfig;
         $staticConfigManager  = $injectables->staticConfigManager;
 
@@ -437,8 +437,6 @@ class PlayStoryCommand extends CliCommand
     {
         // shorthand
         $envList              = $injectables->envList;
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
         $staticConfig         = $injectables->staticConfig;
         $staticConfigManager  = $injectables->staticConfigManager;
 
@@ -513,7 +511,7 @@ class PlayStoryCommand extends CliCommand
         }
     }
 
-    protected function initReporting(CliEngine $engine)
+    protected function initReporting(CliEngine $engine, Injectables $injectables)
     {
         // are there any reporting modules to be loaded?
         if (!isset($engine->options->reports)) {
