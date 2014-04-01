@@ -17,7 +17,6 @@ class ConfigUserLoader implements UserGenerator
     {
         // shorthand
         $context       = $st->getStoryContext();
-        $story         = $st->getStory();
         $runtimeConfig = $st->getRuntimeConfig();
 
         // what environment are we working in?

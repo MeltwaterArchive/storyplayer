@@ -53,8 +53,6 @@ use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryContext;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\StoryLib\StoryLoader;
-use DataSift\Storyplayer\StoryListLib\StoryListLoader;
 use DataSift\Storyplayer\OutputLib\DevModeConsolePlugin;
 
 /**
@@ -128,7 +126,8 @@ class PlayStoryCommand extends CliCommand
      *
      * @param  CliEngine $engine
      * @param  array     $params
-     * @return integer|null
+     * @param  Injectables $injectables
+     * @return integer
      */
     public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
     {
@@ -390,6 +389,7 @@ class PlayStoryCommand extends CliCommand
     protected function initDevice(CliEngine $engine, Injectables $injectables)
     {
         // shorthand
+        $output               = $this->output;
         $staticConfig         = $injectables->staticConfig;
         $staticConfigManager  = $injectables->staticConfigManager;
 
@@ -436,6 +436,7 @@ class PlayStoryCommand extends CliCommand
     protected function initEnvironment(CliEngine $engine, Injectables $injectables)
     {
         // shorthand
+        $output               = $this->output;
         $envList              = $injectables->envList;
         $staticConfig         = $injectables->staticConfig;
         $staticConfigManager  = $injectables->staticConfigManager;
@@ -546,11 +547,11 @@ class PlayStoryCommand extends CliCommand
             // what do we have?
             switch ($paramSuffix) {
                 case 'php':
-                    $this->storyList[] = new StoryPlayer($cliParam, $injectables);
+                    $this->storyList[] = new StoryPlayer($cliParam);
                     break;
 
                 case 'json':
-                    $this->storyList[] = new StoryListPlayer($cliParam, $injectables);
+                    $this->storyList[] = new StoryListPlayer($cliParam);
                     break;
 
                 default:

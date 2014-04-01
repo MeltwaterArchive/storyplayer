@@ -58,7 +58,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 interface DeviceAdapter
 {
 	/**
-	 * @return void
+	 * @param \DataSift\Stone\ObjectLib\BaseObject $browserDetails
+ 	 * @return void
 	 */
 	public function init($browserDetails);
 

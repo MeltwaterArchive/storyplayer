@@ -60,7 +60,7 @@ class StoryPlayer
 	 *
 	 * @var string
 	 */
-	protected $storyFile;
+	protected $storyFilename;
 
 	public function __construct($storyFilename)
 	{

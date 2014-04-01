@@ -227,7 +227,7 @@ class StoryContext extends BaseObject
 		}
 	}
 
-	public function initUser(StoryTeller $st, Story $story)
+	public function initUser(StoryTeller $st)
 	{
 		// do we have a cached user?
 
@@ -243,7 +243,7 @@ class StoryContext extends BaseObject
 		$generator = new ConfigUserLoader(new $className());
 
 		// get a user from the generator
-		$this->user = $generator->getUser($st, $story);
+		$this->user = $generator->getUser($st);
 
 		// all done
 	}
