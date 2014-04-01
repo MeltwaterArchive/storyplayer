@@ -43,10 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
-
 /**
- * a container for common services and data, to avoid making them global
+ * support for tracking the chosen device
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,13 +53,18 @@ use Phix_Project\Injectables as BaseInjectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+trait DeviceNameSupport
 {
-	use DeviceListSupport;
-	use DeviceNameSupport;
-	use EnvironmentListSupport;
-	use EnvironmentNameSupport;
-	use OutputSupport;
-	use RuntimeConfigSupport;
-	use StaticConfigSupport;
+	public $deviceName;
+
+	/**
+	 *
+	 * @param  string $deviceName
+	 * @return void
+	 */
+	public function initDeviceName($deviceName)
+	{
+		// remember the device name
+		$this->deviceName = $deviceName;
+	}
 }
