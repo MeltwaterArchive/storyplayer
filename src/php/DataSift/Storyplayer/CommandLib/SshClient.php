@@ -250,7 +250,9 @@ class SshClient
 		$output     = null;
 		$returnCode = null;
 		$log->addStep("run command via SSH: {$fullCommand}", function() use($fullCommand, &$output, &$returnCode) {
-			$output = system($fullCommand, $returnCode);
+			$lines = array();
+			exec($fullCommand, $lines, $returnCode);
+			$output = implode(PHP_EOL, $lines);
 		});
 
 		// all done
