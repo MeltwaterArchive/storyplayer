@@ -4,11 +4,11 @@ namespace DataSift\Storyplayer\UserLib;
 
 use DataSift\Stone\PasswordLib\BasicGenerator;
 use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class GenericUserGenerator implements UserGenerator
 {
-	public function getUser($config, $runtimeConfig, StoryContext $context, Story $story)
+	public function getUser(StoryTeller $st)
 	{
 		// create a container for the data
 		$user = new User();
@@ -25,12 +25,12 @@ class GenericUserGenerator implements UserGenerator
 		return $user;
 	}
 
-    public function storeUser($user, $staticConfig, $runtimeConfig)
+    public function storeUser(StoryTeller $st, $user)
     {
         // no action required
     }
 
-    public function emptyCache($staticConfig, $runtimeConfig, StoryContext $context)
+    public function emptyCache(StoryTeller $st)
     {
         // can't do anything
     }

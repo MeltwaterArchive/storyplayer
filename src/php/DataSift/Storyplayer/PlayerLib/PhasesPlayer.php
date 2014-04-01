@@ -89,8 +89,7 @@ class PhasesPlayer
 
 		// we are going to need something to help us load each of our
 		// phases
-		$phaseLoader = new PhaseLoader();
-		$phaseLoader->setNamespaces($st);
+		$phaseLoader = $st->getPhaseLoader();
 
 		// pre-load all of the phases, before we execute them
 		// this will trigger any PHP syntax errors now rather than

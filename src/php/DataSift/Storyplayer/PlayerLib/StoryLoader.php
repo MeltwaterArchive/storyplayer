@@ -34,21 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/StoryLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\StoryLib;
+namespace DataSift\Storyplayer\PlayerLib;
+
+use DataSift\Storyplayer\StoryLib\Story;
 
 /**
  * Helper for loading a single story, and verifying that the story was
  * properly created after being loaded
  *
  * @category  Libraries
- * @package   Storyplayer/StoryLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License

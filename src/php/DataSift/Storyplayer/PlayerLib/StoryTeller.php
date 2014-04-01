@@ -149,11 +149,17 @@ class StoryTeller
 	private $pageContext = null;
 	private $checkpoint = null;
 
-	private $proseLoader = null;
-	private $configLoader = null;
+	/**
+	 *
+	 * @var PhaseLoader
+	 */
+	private $phaseLoader = null;
 
-	// support for the loaded static config
-	private $staticConfig = null;
+	/**
+	 *
+	 * @var ProseLoader
+	 */
+	private $proseLoader = null;
 
 	// support for the current runtime config
 	private $runtimeConfig = null;
@@ -197,8 +203,8 @@ class StoryTeller
 		// create our Prose Loader
 		$this->setProseLoader();
 
-		// our static config
-		$this->setStaticConfig($injectables->staticConfig);
+		// create our Phases loader
+		$this->setPhaseLoader();
 
         // our runtime config
         $this->setRuntimeConfig($injectables->runtimeConfig);
@@ -279,7 +285,8 @@ class StoryTeller
 	 *
 	 * @return Story
 	 */
-	public function getStory() {
+	public function getStory()
+	{
 	    return $this->story;
 	}
 
@@ -314,7 +321,8 @@ class StoryTeller
 	 *
 	 * @return StoryContext
 	 */
-	public function getStoryContext() {
+	public function getStoryContext()
+	{
 	    return $this->storyContext;
 	}
 
@@ -324,12 +332,18 @@ class StoryTeller
 	 * @param StoryContext $storyContext
 	 * @return StoryTeller
 	 */
-	public function setStoryContext(StoryContext $storyContext) {
+	public function setStoryContext(StoryContext $storyContext)
+	{
+		// remember the story context
 	    $this->storyContext = $storyContext;
 
 	    // we need to update our ProseLoader, as the list of namespaces
 	    // to search for Prose classes may have changed
 	    $this->proseLoader->setNamespaces($this);
+
+	    // we need to update our PhasesLoader, as the list of namespaces
+	    // to search for Phase classes may have changed
+	    $this->phaseLoader->setNamespaces($this);
 
 	    // all done
 	    return $this;
@@ -403,6 +417,20 @@ class StoryTeller
 
 	/**
 	 *
+	 * @return PhaseLoader
+	 */
+	public function getPhaseLoader()
+	{
+		return $this->phaseLoader;
+	}
+
+	public function setPhaseLoader()
+	{
+		$this->phaseLoader = new PhaseLoader();
+	}
+
+	/**
+	 *
 	 * @return Output
 	 */
 	public function getOutput()
@@ -418,24 +446,6 @@ class StoryTeller
 	public function setOutput(Output $output)
 	{
 		$this->output = $output;
-	}
-
-	/**
-	 *
-	 * @return DefaultStaticConfig
-	 */
-	public function getStaticConfig()
-	{
-		return $this->staticConfig;
-	}
-
-	/**
-	 *
-	 * @param DefaultStaticConfig $staticConfig
-	 */
-	public function setStaticConfig(DefaultStaticConfig $staticConfig)
-	{
-		$this->staticConfig = $staticConfig;
 	}
 
 	// ====================================================================
@@ -488,18 +498,6 @@ class StoryTeller
 	public function getUser()
 	{
 		return $this->storyContext->user;
-	}
-
-	public function getUrl()
-	{
-		return $this->storyContext->env->url;
-	}
-
-	public function setUrl($url)
-	{
-		$this->storyContext->env->url = $url;
-
-		return $this;
 	}
 
 	public function getDefines()

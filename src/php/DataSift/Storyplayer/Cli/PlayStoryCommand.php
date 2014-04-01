@@ -81,6 +81,16 @@ class PlayStoryCommand extends CliCommand
     // we track this for convenience
     protected $output;
 
+    // our list of stories to execute
+    protected $storyList;
+
+    /**
+     * the environment that we have loaded
+     *
+     * @var string
+     */
+    protected $envName;
+
     public function __construct($additionalContext)
     {
         // define the command
@@ -108,6 +118,9 @@ class PlayStoryCommand extends CliCommand
             new DeviceSwitch($additionalContext->deviceList),
             new PersistProcessesSwitch(),
             new PlatformSwitch(),
+            new LogJsonSwitch(),
+            new LogJUnitSwitch(),
+            new LogTapSwitch(),
         ));
     }
 
@@ -128,71 +141,65 @@ class PlayStoryCommand extends CliCommand
         $output               = $injectables->output;
 
         // save the output for use in other methods
-        $this->output = $output;
+        $this->output = $injectables->output;
 
-        // switch output plugins first, before we do anything else at all
-        if (isset($engine->options->dev) && $engine->options->dev) {
-            // switch our main output to 'dev mode'
-            $output->usePlugin('console', new DevModeConsolePlugin());
-
-            // dev mode means 'show me everything'
-            $engine->options->verbosity = 2;
-        }
-
-        // which environment are we using?
-        //
-        // special case - only one environment defined, so always use that
-        if (count($envList) == 1) {
-            // we will use the first (and only) environment in the list
-            $envName = $envList[0];
-        }
-        else if (!isset($engine->options->environment)) {
-            // this switch is optional ... *if* there is only one environment
-            // in the list
-            $msg = "there is more than one test environment defined" . PHP_EOL . PHP_EOL
-                   . "use 'storyplayer list-environments' to see the list" . PHP_EOL
-                   . "use '-e <environment>' to select one" . PHP_EOL;
-            $output->logCliError($msg);
-            return 1;
-        }
-        else {
-            // use the environment that the user has provided
-            $envName = $engine->options->environment;
-        }
-
-        // are we persisting processes?
-        if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
-            $this->persistProcesses = true;
-        }
-
-        // do we have a story, or list of stories?
+        // before we go any further: make sure the user has given us
+        // a vaguely valid command-line
         if (!isset($params[0])) {
             $msg = "you must specify which story to play" . PHP_EOL;
             $output->logCliError($msg);
             return 1;
         }
 
-        // setup logging
+        // the order we do things:
         //
-        // by default, we go with what is in the config, and use the
-        // command-line switch(es) to override it
-        $loggingConfig = $staticConfig->logger;
-        if (isset($engine->options->logLevels)) {
-            $loggingConfig->levels = $engine->options->logLevels;
-        }
+        // 1. build up the config we're going to use
+        //    a. storyplayer.json (already done)
+        //    b. per-environment config file
+        //    c. per-device config file
+        //
+        // 2. override from the command-line
+        //    a. -D switches
+        //    b. persistent processes
+        //
+        // 3. build up the list of stories to run
+        //
+        // 4. setup the output channels
+        //    a. the console (i.e. --dev mode)
+        //    b. report-to-file plugins
 
-        // allow the command-line to override the config
-        $verbosity = $engine->options->verbosity;
-        $output->setVerbosity($engine->options->verbosity);
-        if ($verbosity > 0) {
-            $loggingConfig->levels->LOG_DEBUG = true;
-        }
-        if ($verbosity > 1 ) {
-            $loggingConfig->levels->LOG_TRACE = true;
-        }
+        // load the environment
+        $this->initEnvironment($engine, $injectables);
 
-        // we're ready to switch logging on now
-        Log::init("storyplayer", $loggingConfig);
+        // load our test device config
+        $this->initDevice($engine, $injectables);
+
+        // initialise process persistence
+        $this->initProcessPersistence($engine, $injectables);
+
+        // merge in defines from config files and the command-line
+        $this->initDefines($engine, $injectables);
+
+        // build our list of stories to run
+        $this->initStoryList($engine, $injectables, $params);
+
+        // setup the console
+        $this->initConsole($engine, $injectables);
+
+        // setup reporting modules
+        $this->initReporting($engine, $injectables);
+
+        // create a new StoryTeller object
+        $st = new StoryTeller($injectables);
+
+        // remember our $st object, as we'll need it for our
+        // shutdown function
+        $this->st = $st;
+
+        // install signal handling, now that $this->st is defined
+        //
+        // we wouldn't want signal handling called out of order :)
+        $this->initSignalHandling();
 
         // and we're ready to tell the world that we're here
         $output->startStoryplayer(
@@ -202,101 +209,26 @@ class PlayStoryCommand extends CliCommand
             $engine->getAppLicense()
         );
 
-        // setup signal handling
-        pcntl_signal(SIGTERM, array($this, 'sigtermHandler'));
-        pcntl_signal(SIGINT , array($this, 'sigtermHandler'));
-
-        // let's go and get our environment
-        try
-        {
-            // load our environment-specific config
-            //
-            // this will be merged in with the default config
-            $staticConfigManager->loadAdditionalConfig($staticConfig, $envName);
-        }
-        catch (E5xx_ConfigFileNotFound $e) {
-            // do we already have this device?
-            if (!isset($staticConfig->environments->$envName)) {
-                // no we don't ... report an error
-                $msg = "no config file '{$envName}.json' found" . PHP_EOL;
-                $output->logCliError($msg);
-                exit(1);
-            }
-        }
-        catch (E5xx_InvalidConfigFile $e) {
-            $msg = "unable to load config file '{$envName}.json'" . PHP_EOL . PHP_EOL
-                   . $e->getMessage();
-            $output->logCliError($msg);
-            exit(1);
-        }
-
-        // do we have a defaults environment section?
-        if (!isset($staticConfig->environments->defaults)) {
-            // create an empty one to keep PlayerLib happy
-            $staticConfig->environments->defaults = new stdClass;
-        }
-
-        // do we need to load device-specific config?
+        // $this->storyList contains one or more things to play
         //
-        // we do this AFTER loading environments, because that's the order
-        // we've told users it will happen in
-        if (isset($engine->options->device)) {
-            $deviceName = $engine->options->device;
-        }
-        else {
-            $deviceName = null;
-        }
-
-        if ($deviceName)
+        // let's play each of them in order
+        foreach ($this->storyList as $player)
         {
-            try {
-                // load our device-specific config
-                //
-                // this will be merged in with the default config
-                $staticConfigManager->loadAdditionalConfig($staticConfig, $deviceName);
-            }
-            catch (E5xx_ConfigFileNotFound $e) {
-                // do we already have this device?
-                if (!isset($staticConfig->devices->$deviceName)) {
-                    // no we don't ... report an error
-                    $msg = "no config file '{$deviceName}.json' found" . PHP_EOL;
-                    $output->logCliError($msg);
-                    exit(1);
-                }
-            }
-            catch (E5xx_InvalidConfigFile $e) {
-                $msg = "unable to load config file '{$deviceName}.json'" . PHP_EOL . PHP_EOL
-                       . $e->getMessage();
-                $output->logCliError($msg);
-                exit(1);
-            }
+            // create the supporting context for this test run
+            $context = new StoryContext($injectables);
+
+            // track the context
+            $st->setStoryContext($context);
+
+            // play the story(ies)
+            $player->play($st, $context);
         }
 
-        // do we have any defines from the command-line to merge in?
-        //
-        // this must be done AFTER all config files have been loaded!
-        if (isset($engine->options->defines)) {
-            // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
-        }
+        // write out any changed runtime config to disk
+        $runtimeConfigManager->saveRuntimeConfig($runtimeConfig);
 
-        // are we loading a story, or a list of stories?
-        $arg2parts  = explode('.', $params[0]);
-        $arg2suffix = end($arg2parts);
-
-        // create a new StoryTeller object
-        $teller = new StoryTeller($injectables);
-
-        // remember our $st object, as we'll need it for our
-        // shutdown function
-        $this->st = $teller;
-
-        // create something to play this story
-        $storyPlayer = new StoryPlayer();
-
-        // create the supporting context for this test run
-        $context = new StoryContext($staticConfig, $runtimeConfig, $envName, $deviceName);
-        $teller->setStoryContext($context);
+        // all done
+        return 0;
 
         // we're going to use this to play our setup and teardown phases
         $phasesPlayer = new PhasesPlayer();
@@ -390,28 +322,252 @@ class PlayStoryCommand extends CliCommand
             default:
                 // unsupported!
         }
-
-        // write out any changed runtime config to disk
-        $runtimeConfigManager->saveRuntimeConfig($runtimeConfig);
-
-        // all done
-        return 0;
     }
 
-    protected function summariseStoryList($storyResults)
+    // ==================================================================
+    //
+    // the individual initX() methods
+    //
+    // ------------------------------------------------------------------
+
+    protected function initConsole(CliEngine $engine, Injectables $injectables)
     {
-        // we need to make a pronouncement about the whole list of stories
+        // shorthand
+        $staticConfig = $injectables->staticConfig;
 
-        echo "\n";
-        echo "============================================================\n";
-        echo "FINAL RESULTS\n";
-        echo "\n";
+        // save the output for use in other methods
+        $this->output = $injectables->output;
 
-        foreach ($storyResults as $result)
-        {
-            echo StoryPlayer::$outcomeToText[$result->storyResult] . " :: " . $result->story->getName() . "\n";
+        // switch output plugins first, before we do anything else at all
+        if (isset($engine->options->dev) && $engine->options->dev) {
+            // switch our main output to 'dev mode'
+            $this->output->usePlugin('console', new DevModeConsolePlugin());
+
+            // dev mode means 'show me everything'
+            $engine->options->verbosity = 2;
+        }
+
+        // setup logging
+        //
+        // by default, we go with what is in the config, and use the
+        // command-line switch(es) to override it
+        $loggingConfig = $staticConfig->logger;
+        if (isset($engine->options->logLevels)) {
+            $loggingConfig->levels = $engine->options->logLevels;
+        }
+
+        // allow the command-line to override the config
+        $verbosity = $engine->options->verbosity;
+        $this->output->setVerbosity($engine->options->verbosity);
+        if ($verbosity > 0) {
+            $loggingConfig->levels->LOG_DEBUG = true;
+        }
+        if ($verbosity > 1 ) {
+            $loggingConfig->levels->LOG_TRACE = true;
+        }
+
+        // we're ready to switch logging on now
+        Log::init("storyplayer", $loggingConfig);
+    }
+
+    protected function initDefines(CliEngine $engine, Injectables $injectables)
+    {
+        // shorthand
+        $staticConfig = $injectables->staticConfig;
+
+        // do we have any defines from the command-line to merge in?
+        //
+        // this must be done AFTER all config files have been loaded!
+        if (isset($engine->options->defines)) {
+            // merge into the default + what was loaded from config files
+            $staticConfig->defines->mergeFrom($engine->options->defines);
         }
     }
+
+    protected function initDevice(CliEngine $engine, Injectables $injectables)
+    {
+        // shorthand
+        $envList              = $injectables->envList;
+        $runtimeConfig        = $injectables->runtimeConfig;
+        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $staticConfig         = $injectables->staticConfig;
+        $staticConfigManager  = $injectables->staticConfigManager;
+
+        // do we need to load device-specific config?
+        //
+        // we do this AFTER loading environments, because that's the order
+        // we've told users it will happen in
+        if (isset($engine->options->device)) {
+            $deviceName = $engine->options->device;
+        }
+        else {
+            $deviceName = null;
+        }
+
+        if ($deviceName)
+        {
+            try {
+                // load our device-specific config
+                //
+                // this will be merged in with the default config
+                $staticConfigManager->loadAdditionalConfig($staticConfig, $deviceName);
+            }
+            catch (E5xx_ConfigFileNotFound $e) {
+                // do we already have this device?
+                if (!isset($staticConfig->devices->$deviceName)) {
+                    // no we don't ... report an error
+                    $msg = "no config file '{$deviceName}.json' found" . PHP_EOL;
+                    $output->logCliError($msg);
+                    exit(1);
+                }
+            }
+            catch (E5xx_InvalidConfigFile $e) {
+                $msg = "unable to load config file '{$deviceName}.json'" . PHP_EOL . PHP_EOL
+                       . $e->getMessage();
+                $output->logCliError($msg);
+                exit(1);
+            }
+
+            // remember what our chosen device is
+            $injectables->initDeviceName($deviceName);
+        }
+    }
+
+    protected function initEnvironment(CliEngine $engine, Injectables $injectables)
+    {
+        // shorthand
+        $envList              = $injectables->envList;
+        $runtimeConfig        = $injectables->runtimeConfig;
+        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $staticConfig         = $injectables->staticConfig;
+        $staticConfigManager  = $injectables->staticConfigManager;
+
+        // which environment are we using?
+        //
+        // special case - only one environment defined, so always use that
+        if (count($envList) == 1) {
+            // we will use the first (and only) environment in the list
+            $envName = $envList[0];
+        }
+        else if (!isset($engine->options->environment)) {
+            // this switch is optional ... *if* there is only one environment
+            // in the list
+            $msg = "there is more than one test environment defined" . PHP_EOL . PHP_EOL
+                   . "use 'storyplayer list-environments' to see the list" . PHP_EOL
+                   . "use '-e <environment>' to select one" . PHP_EOL;
+            $output->logCliError($msg);
+            return 1;
+        }
+        else {
+            // use the environment that the user has provided
+            $envName = $engine->options->environment;
+        }
+
+        // let's go and get our environment
+        try
+        {
+            // load our environment-specific config
+            //
+            // this will be merged in with the default config
+            $staticConfigManager->loadAdditionalConfig($staticConfig, $envName);
+        }
+        catch (E5xx_ConfigFileNotFound $e) {
+            // do we already have this device?
+            if (!isset($staticConfig->environments->$envName)) {
+                // no we don't ... report an error
+                $msg = "no config file '{$envName}.json' found" . PHP_EOL;
+                $output->logCliError($msg);
+                exit(1);
+            }
+        }
+        catch (E5xx_InvalidConfigFile $e) {
+            $msg = "unable to load config file '{$envName}.json'" . PHP_EOL . PHP_EOL
+                   . $e->getMessage();
+            $output->logCliError($msg);
+            exit(1);
+        }
+
+        // do we have a defaults environment section?
+        if (!isset($staticConfig->environments->defaults)) {
+            // create an empty one to keep PlayerLib happy
+            $staticConfig->environments->defaults = new stdClass;
+        }
+
+        // remember our chosen environment name
+        $injectables->initEnvironmentName($envName);
+
+        // at this point, $staticConfig contains:
+        //
+        // 1. storyplayer.json[.dist]
+        // 2. $this->envName.json
+    }
+
+    protected function initProcessPersistence(CliEngine $engine, Injectables $injectables)
+    {
+        // by default, no persistence
+        $this->persistProcesses = false;
+
+        // are we persisting processes?
+        if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
+            $this->persistProcesses = true;
+        }
+    }
+
+    protected function initReporting(CliEngine $engine)
+    {
+        // are there any reporting modules to be loaded?
+        if (!isset($engine->options->reports)) {
+            // no
+            return;
+        }
+    }
+
+    protected function initSignalHandling()
+    {
+        // setup signal handling
+        pcntl_signal(SIGTERM, array($this, 'sigtermHandler'));
+        pcntl_signal(SIGINT , array($this, 'sigtermHandler'));
+    }
+
+    protected function initStoryList(CliEngine $engine, Injectables $injectables, $cliParams)
+    {
+        // our list of stories to play
+        $this->storyList = [];
+
+        foreach ($cliParams as $cliParam) {
+            // does the file exist?
+            if (!is_file($cliParam)) {
+                $this->output->logCliError("no such file: '{$cliParam}'");
+                exit(1);
+            }
+
+            // are we loading a story, or a list of stories?
+            $paramParts  = explode('.', $cliParams[0]);
+            $paramSuffix = end($paramParts);
+
+            // what do we have?
+            switch ($paramSuffix) {
+                case 'php':
+                    $this->storyList[] = new StoryPlayer($cliParam, $injectables);
+                    break;
+
+                case 'json':
+                    $this->storyList[] = new StoryListPlayer($cliParam, $injectables);
+                    break;
+
+                default:
+                    $this->output->logCliError("unsupported story file '{$cliParam}'");
+                    exit(1);
+                    // not supported
+            }
+        }
+    }
+
+    // ==================================================================
+    //
+    // SIGNAL handling
+    //
+    // ------------------------------------------------------------------
 
     public function sigtermHandler($signo)
     {
@@ -428,4 +584,29 @@ class PlayStoryCommand extends CliCommand
         // force a clean shutdown
         exit(1);
     }
+
+    // ==================================================================
+    //
+    // legacy code goes here
+    //
+    // everything below here is old code that needs stripping out
+    // before we release v1.6
+    //
+    // ------------------------------------------------------------------
+
+    protected function summariseStoryList($storyResults)
+    {
+        // we need to make a pronouncement about the whole list of stories
+
+        echo "\n";
+        echo "============================================================\n";
+        echo "FINAL RESULTS\n";
+        echo "\n";
+
+        foreach ($storyResults as $result)
+        {
+            echo StoryPlayer::$outcomeToText[$result->storyResult] . " :: " . $result->story->getName() . "\n";
+        }
+    }
+
 }

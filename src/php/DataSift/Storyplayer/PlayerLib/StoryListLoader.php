@@ -34,32 +34,89 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/StoryListLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\StoryListLib;
+namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use stdClass;
 
 /**
- * Exception thrown when we attempt to load a file that is missing, or
- * contains an incorrectly-declared list of stories
+ * Helper for loading a list of stories to run, and verifying that
+ * it is a list we are happy with
  *
  * @category  Libraries
- * @package   Storyplayer/StoryListLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_InvalidStoryListFile extends Exxx_Exception
+class StoryListLoader
 {
-    public function __construct($msg)
-    {
-        parent::__construct(400, $msg, $msg);
-    }
+	/**
+	 * singleton - do not instantiate
+	 * @codeCoverageIgnore
+	 */
+	protected function __construct()
+	{
+		// do nothing
+	}
+
+	/**
+	 * load a story, throwing exceptions if problems are detected
+	 *
+	 * @param  string $filename
+	 *         path to the PHP file containing the story
+	 * @return Story
+	 *         the story object
+	 */
+	static public function loadList($filename)
+	{
+		if (!file_exists($filename)) {
+			throw new E5xx_InvalidStoryListFile("Cannot find file '{$filename}' to load");
+		}
+
+		// load the contents
+		$contents = file_get_contents($filename);
+
+		// does it decode?
+		$storyList = json_decode($contents);
+		if (!$storyList) {
+			throw new E4xx_InvalidStoryListFile("Story list '{$filename}' does not contain valid JSON");
+		}
+
+		// does it have the elements we require?
+		if (!isset($storyList->stories)) {
+			throw new E4xx_InvalidStoryListFile("Story list '{$filename}' does not contain a 'stories' element");
+		}
+		if (!is_array($storyList->stories)) {
+			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' must be an array");
+		}
+		if (count($storyList->stories) == 0) {
+			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' cannot be an empty array");
+		}
+
+		// do all of the stories in the list exist?
+		foreach ($storyList->stories as $storyFile) {
+			if (!file_exists($storyFile)) {
+				throw new E4xx_InvalidStoryListFile("Cannot find the story file '{$storyFile}' on disk");
+			}
+		}
+
+		// inject defaults for optional fields
+		if (!isset($storyList->options)) {
+			$storyList->options = new stdClass();
+		}
+		if (!isset($storyList->options->reuseTestEnvironment)) {
+			$storyList->options->reuseTestEnvironment = false;
+		}
+
+		// all done
+		return $storyList;
+	}
 }

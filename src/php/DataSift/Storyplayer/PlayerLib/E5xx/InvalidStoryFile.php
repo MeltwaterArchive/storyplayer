@@ -43,8 +43,11 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+
 /**
- * the main class for animating a single story
+ * Exception thrown when we attempt to load a file that is missing, or
+ * contains an incorrectly-declared story
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -53,66 +56,10 @@ namespace DataSift\Storyplayer\PlayerLib;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryPlayer
+class E5xx_InvalidStoryFile extends Exxx_Exception
 {
-	/**
-	 * path to the story that we are going to play
-	 *
-	 * @var string
-	 */
-	protected $storyFile;
-
-	public function __construct($storyFilename)
-	{
-		$this->storyFilename = $storyFilename;
-	}
-
-	public function play(StoryTeller $st)
-	{
-		// shorthand
-		$output = $st->getOutput();
-
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new PhasesPlayer();
-
-        // load our story
-        $story = StoryLoader::loadStory($this->storyFilename);
-        $st->setStory($story);
-
-        // initialise the user
-        $context = $st->getStoryContext();
-        $context->initUser($st, $story);
-
-        // run the startup phase
-        $phasesPlayer->playPhases($st, 'startup');
-
-		// set default callbacks up
-		$story->setDefaultCallbacks();
-
-		// tell the outside world what we're doing
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getEnvironmentName(),
-			$st->getDeviceName()
-		);
-
-		// run the phases in the 'story' section
-		$phasesPlayer = new PhasesPlayer();
-		$phaseResults = $phasesPlayer->playPhases($st, 'story');
-
-		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($phaseResults);
-
-		// announce the results
-		$output->endStory($storyResult);
-
-		// run the shutdown phase
-        $phasesPlayer->playPhases($st, 'shutdown');
-
-		// all done
-		return $storyResult;
-	}
+    public function __construct($msg)
+    {
+        parent::__construct(500, $msg, $msg);
+    }
 }

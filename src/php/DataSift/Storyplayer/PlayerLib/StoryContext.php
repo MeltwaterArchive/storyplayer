@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Stone\ObjectLib\BaseObject;
@@ -77,17 +78,33 @@ class StoryContext extends BaseObject
 	 * the details of the environment, taken directly from the app's JSON
 	 * config file
 	 *
-	 * @var DataSift\Stone\ObjectLib\BaseObject
+	 * @var \DataSift\Stone\ObjectLib\BaseObject
 	 */
 	public $env;
+
+	/**
+	 *
+	 * @var string
+	 */
 	public $envName;
 
+	/**
+	 *
+	 * @var array
+	 */
 	public $defines;
 
+	/**
+	 *
+	 * @var \DataSift\Stone\ObjectLib\BaseObject
+	 */
 	public $device;
-	public $deviceName;
 
-	public $phases;
+	/**
+	 *
+	 * @var string
+	 */
+	public $deviceName;
 
 	/**
 	 * persistent config (users, vms, etc) that gets cached to disk
@@ -97,24 +114,38 @@ class StoryContext extends BaseObject
 	 */
 	public $runtime;
 
-	public function __construct($staticConfig, $runtimeConfig, $envName, $deviceName)
+	// ==================================================================
+	//
+	// initialise all the things
+	//
+	// ------------------------------------------------------------------
+
+	/**
+	 * build the config for this story run, from the config we've loaded
+	 *
+	 * we rebuild this for each story to ensure that each story runs
+	 * with an identical config
+	 *
+	 * @param Injectables $injectables
+	 */
+	public function __construct(Injectables $injectables)
 	{
-		$this->user    = new BaseObject;
+		$this->user = new BaseObject;
 
 		// if there are any 'defines', we need those
-		$this->initDefines($staticConfig);
+		$this->initDefines($injectables->staticConfig);
 
 		// build up the environment of app settings
-		$this->initEnvironment($staticConfig, $envName);
+		$this->initEnvironment($injectables->staticConfig, $injectables->envName);
 
 		// which device are we using for testing?
-		$this->initDevice($staticConfig, $deviceName);
+		$this->initDevice($injectables->staticConfig, $injectables->deviceName);
 
 		// we need to know where to look for Prose classes
-		$this->initProse($staticConfig);
+		$this->initProse($injectables->staticConfig);
 
 		// we need to know which Phases to run, and where to find them
-		$this->initPhases($staticConfig);
+		$this->initPhases($injectables->staticConfig);
 	}
 
 	public function initDefines($staticConfig)
@@ -145,7 +176,7 @@ class StoryContext extends BaseObject
 		$this->env->mergeFrom($staticConfig->environments->defaults);
 		try {
 			$this->env->mergeFrom($staticConfig->environments->$envName);
-		} catch (E5xx_NoSuchProperty $e){
+		} catch (E5xx_NoSuchProperty $e) {
 			echo "*** warning: using empty config instead of '{$envName}'";
 		}
 
@@ -196,7 +227,7 @@ class StoryContext extends BaseObject
 		}
 	}
 
-	public function initUser($staticConfig, $runtimeConfig, Story $story)
+	public function initUser(StoryTeller $st, Story $story)
 	{
 		// do we have a cached user?
 
@@ -212,7 +243,7 @@ class StoryContext extends BaseObject
 		$generator = new ConfigUserLoader(new $className());
 
 		// get a user from the generator
-		$this->user = $generator->getUser($staticConfig, $runtimeConfig, $this, $story);
+		$this->user = $generator->getUser($st, $story);
 
 		// all done
 	}

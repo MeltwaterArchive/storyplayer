@@ -3,7 +3,7 @@
 namespace DataSift\Storyplayer\UserLib;
 
 use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class ConfigUserLoader implements UserGenerator
 {
@@ -14,8 +14,13 @@ class ConfigUserLoader implements UserGenerator
         $this->generator = $generator;
     }
 
-    public function getUser($staticConfig, $runtimeConfig, StoryContext $context, Story $story)
+    public function getUser(StoryTeller $st)
     {
+        // shorthand
+        $context       = $st->getStoryContext();
+        $story         = $st->getStory();
+        $runtimeConfig = $st->getRuntimeConfig();
+
         // what environment are we working in?
         $envName = $context->envName;
 
@@ -34,18 +39,18 @@ class ConfigUserLoader implements UserGenerator
         if (!isset($runtimeConfig->users)) {
             $runtimeConfig->users = (object)array();
         }
-        $runtimeConfig->users->$envName = $this->generator->getUser($staticConfig, $runtimeConfig, $context, $story);
+        $runtimeConfig->users->$envName = $this->generator->getUser($st);
 
         // all done
         return $runtimeConfig->users->$envName;
     }
 
-    public function storeUser($user, $staticConfig, $runtimeConfig)
+    public function storeUser(StoryTeller $st, $user)
     {
         // no action required
     }
 
-    public function emptyCache($staticConfig, $runtimeConfig, StoryContext $context)
+    public function emptyCache(StoryTeller $st)
     {
         // can't do anything
     }
