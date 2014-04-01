@@ -89,9 +89,13 @@ class TestSetupPhase extends StoryPhase
 			foreach ($callbacks as $callback) {
 				call_user_func($callback, $st);
 			}
+
+			// if we get here, then all is well
+			$phaseResult->setContinuePlaying();
 		}
 		catch (Exception $e)
 		{
+			// something went wrong ... the test cannot continue
 			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
 				PhaseResult::FAILED,
@@ -100,7 +104,6 @@ class TestSetupPhase extends StoryPhase
 		}
 
 		// all done
-		$phaseResult->setContinuePlaying();
 		return $phaseResult;
 	}
 }
