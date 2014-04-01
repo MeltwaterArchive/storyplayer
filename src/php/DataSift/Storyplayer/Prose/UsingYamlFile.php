@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\DataLib\DataPrinter;
+use Symfony\Component\Yaml\Dumper;
 
 /**
  * Support for working with YAML files
@@ -80,11 +81,17 @@ class UsingYamlFile extends Prose
 		$logParams = $printer->convertToString($params);
 		$log = $st->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
 
+		// create an instance of the Symfony YAML writer
+		$writer = new Dumper();
+
 		// create the YAML data
-		$yamlData = yaml_emit($params);
+		$yamlData = $writer->dump($params, 2);
 		if (!is_string($yamlData) || strlen($yamlData) < 6) {
 			throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
 		}
+
+		// prepend the YAML marker
+		$yamlData = '---' . PHP_EOL . $yamlData;
 
 		// write the file
 		//

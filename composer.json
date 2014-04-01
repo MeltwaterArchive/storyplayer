@@ -28,7 +28,8 @@
 		"datasift/webdriver": ">=1.5.0",
 		"aws/aws-sdk-php": "2.*",
 		"datasift/netifaces": "*",
-		"phix/injectables": "*"
+		"phix/injectables": "*",
+		"symfony/yaml": "2.*"
 	},
 	"require-dev": {
 		"stuart/phingtasks": "1.0.0"
