@@ -140,6 +140,7 @@ class PhasesPlayer
 				else {
 					$phaseResult = new PhaseResult;
 					$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
+					$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
 				}
 
 				// close off any open log actions

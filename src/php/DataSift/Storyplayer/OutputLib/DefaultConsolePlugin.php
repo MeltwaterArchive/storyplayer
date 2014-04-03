@@ -326,7 +326,7 @@ EOS;
 		// we have to show this now, and save it for final output later
 		echo "s";
 
-		$this->phaseErrors[$phaseName] = $msg;
+		// $this->phaseErrors[$phaseName] = $msg;
 	}
 
 	/**
