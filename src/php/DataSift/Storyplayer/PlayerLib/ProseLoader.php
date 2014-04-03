@@ -57,9 +57,12 @@ use DataSift\Storyplayer\Prose\Prose;
  */
 class ProseLoader
 {
-	private $namespaces = array();
+	private $namespaces = array(
+		"Prose",
+		"DataSift\\StoryPlayer\\Prose"
+	);
 
-	public function setNamespaces(StoryTeller $st)
+	public function setNamespaces($namespaces = array())
 	{
 		// a list of the namespaces we're going to search for this class
 		//
@@ -67,17 +70,9 @@ class ProseLoader
 		// users don't want to uniquely namespace their Prose classes
 		$this->namespaces = array ("Prose");
 
-		// does the user have any namespaces of their own that they
-		// want to search?
-		$context = $st->getStoryContext();
-
-		if (isset($context->prose, $context->prose->namespaces) && is_array($context->prose->namespaces)) {
-
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			foreach ($context->prose->namespaces as $namespace) {
-				$this->namespaces[] = $namespace;
-			}
+		// append the namespaces we've been asked to search
+		foreach ($namespaces as $namespace) {
+			$this->namespaces[] = $namespace;
 		}
 
 		// we search our own namespace last, as it allows the user to

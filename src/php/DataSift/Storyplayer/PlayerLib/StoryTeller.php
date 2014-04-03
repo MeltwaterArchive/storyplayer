@@ -200,10 +200,10 @@ class StoryTeller
 		$this->setCheckpoint(new StoryCheckpoint($this));
 
 		// create our Prose Loader
-		$this->setProseLoader();
+		$this->setProseLoader($injectables->proseLoader);
 
-		// create our Phases loader
-		$this->setPhaseLoader();
+		// create our Phase Loader
+		$this->setPhaseLoader($injectables->phaseLoader);
 
         // our runtime config
         $this->setRuntimeConfig($injectables->runtimeConfig);
@@ -336,14 +336,6 @@ class StoryTeller
 		// remember the story context
 	    $this->storyContext = $storyContext;
 
-	    // we need to update our ProseLoader, as the list of namespaces
-	    // to search for Prose classes may have changed
-	    $this->proseLoader->setNamespaces($this);
-
-	    // we need to update our PhasesLoader, as the list of namespaces
-	    // to search for Phase classes may have changed
-	    $this->phaseLoader->setNamespaces($this);
-
 	    // all done
 	    return $this;
 	}
@@ -409,9 +401,9 @@ class StoryTeller
 	/**
 	 * @return void
 	 */
-	public function setProseLoader()
+	public function setProseLoader($proseLoader)
 	{
-		$this->proseLoader = new ProseLoader();
+		$this->proseLoader = $proseLoader;
 	}
 
 	/**
@@ -423,9 +415,9 @@ class StoryTeller
 		return $this->phaseLoader;
 	}
 
-	public function setPhaseLoader()
+	public function setPhaseLoader($phaseLoader)
 	{
-		$this->phaseLoader = new PhaseLoader();
+		$this->phaseLoader = $phaseLoader;
 	}
 
 	/**

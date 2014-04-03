@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
-use Phix_Project\ValidationLib4\File_MustBeValidPath;
+use Phix_Project\ValidationLib4\File_MustBePathWithValidParent;
 /**
  * Tell Storyplayer to output 'tap13' format
  *
@@ -80,7 +80,7 @@ class LogTapSwitch extends CliSwitch
 
 		// what is our parameter?
 		$this->setRequiredArg('<file>', "the file to write the report to");
-		$this->setArgValidator(new File_MustBeValidPath());
+		$this->setArgValidator(new File_MustBePathWithValidParent());
 
 		// all done
 	}
@@ -99,7 +99,7 @@ class LogTapSwitch extends CliSwitch
 		if (!isset($engine->options->reports)) {
 			$engine->options->reports = [];
 		}
-		$engine->options->reports['LogTap'] = $params[0];
+		$engine->options->reports['Tap'] = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

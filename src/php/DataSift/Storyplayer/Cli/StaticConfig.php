@@ -45,10 +45,23 @@ namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ConfigLib\LoadedConfig;
 use DataSift\Stone\ObjectLib\BaseObject;
+use Datasift\Os;
+use Datasift\IfconfigParser;
+use Datasift\netifaces;
+use Datasift\netifaces\NetifacesException;
 
 /**
- * Storyplayer's default config - the config that is active before we
- * load any config files
+ * The config we use when we run stories
+ *
+ * 1: the default config is defined in here
+ * 2: we merge in config from config files
+ * 3: we override config with command-line params
+ *
+ * The StaticConfigManager class is where you'll find all of the logic
+ * for loading and merging data.
+ *
+ * ALL of the public properties on this object are data bags of one kind
+ * or another.
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,9 +70,30 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultStaticConfig extends LoadedConfig
+class StaticConfig extends LoadedConfig
 {
+    public $environments;
+    public $defines;
+    public $devices;
+    public $device;
+    public $deviceName;
+    public $env;
+    public $envName;
+    public $logger;
+    public $phases;
+    public $prose;
+    public $reports;
+
     public function __construct()
+    {
+        $this->initDefaultConfig();
+    }
+
+    /**
+     *
+     * @return void
+     */
+    public function initDefaultConfig()
     {
         // defaults for LogLib
         $this->logger = new BaseObject();
@@ -1593,5 +1627,128 @@ class DefaultStaticConfig extends LoadedConfig
         $this->devices->sl_android_tablet_4_0_landscape->desiredCapabilities['device-orientation'] = "landscape";
 
         // all done
+    }
+
+    public function initDevice($deviceName)
+    {
+        // does the device exist?
+        if (!isset($this->device->$deviceName)) {
+            throw new E4xx_NoSuchDevice($deviceName);
+        }
+
+        // copy over the device that we want
+        $this->device = $this->devices->$deviceName;
+
+        // remember the device name
+        $this->deviceName = $deviceName;
+    }
+
+    public function initEnvironment($envName)
+    {
+        // make sure we start with a fresh environment
+        $this->env = new BaseObject;
+
+        // we need to work out which environment we are running against,
+        // as all other decisions are affected by this
+        $this->env->mergeFrom($this->environments->defaults);
+        try {
+            $this->env->mergeFrom($this->environments->$envName);
+        } catch (E5xx_NoSuchProperty $e) {
+            echo "*** warning: using empty config instead of '{$envName}'";
+        }
+
+        // we need to remember the name of the environment too!
+        $this->envName = $envName;
+
+        // we need to provide information about the machine that we
+        // are running on
+        $this->env->host = new BaseObject;
+        list($this->env->host->networkInterface, $this->env->host->ipAddress) = $this->getHostIpAddress();
+    }
+
+    public function initPhases()
+    {
+        // make sure that phases.namespaces is correctly defined
+        if (isset($this->phases->namespaces)) {
+            if (!is_array($this->phases->namespaces)) {
+                throw new E5xx_InvalidConfig("the 'phases.namespaces' section of the config must either be an array, or it must be left out");
+            }
+        }
+    }
+
+    public function initProse()
+    {
+        // make sure that prose.namespaces is correctly defined
+        if (isset($this->prose, $this->prose->namespaces)) {
+            if (!is_array($this->prose->namespaces)) {
+                throw new E5xx_InvalidConfig("the 'prose.namespaces' section of the config must either be an array, or it must be left out");
+            }
+        }
+    }
+
+    public function initReports()
+    {
+        // where are we looking?
+        if (isset($this->reports, $this->reports->namespaces)) {
+            if (!is_array($this->reports->namespaces)) {
+                throw new E5xx_InvalidConfig("the 'reports.namespaces' section of the config must either be an array, or it must be left out");
+            }
+        }
+    }
+
+    protected function getHostIpAddress()
+    {
+        // step 1 - how many adapters do we have on this box?
+        // @todo Maybe we want to move this somewhere more central later?
+        $os = Os::getOs();
+        $parser = IfconfigParser::fromDistributions($os->getPossibleClassNames());
+        $netifaces = new netifaces($os, $parser);
+
+        $adapters = $netifaces->listAdapters();
+        if (empty($adapters)) {
+            throw new Exception("unable to parse host machine network adapters list");
+        }
+
+        // step 2 - find an adapter that is most likely to have the IP address
+        // that we want
+        //
+        // note: am not sure that the search list for OSX interfaces is
+        // reliable :(
+
+        try {
+            $searchList = array("br0", "p2p1", "eth0", "en2", "en0", "en1", "wlan0");
+            foreach ($searchList as $adapterToTest) {
+                // skip over any adapters that don't exist on this machine
+                if (!in_array($adapterToTest, $adapters)) {
+                    continue;
+                }
+
+                // we think the adapter is present
+                //
+                // does it have an IP address?
+                try {
+                    $ipAddress = $netifaces->getIpAddress($adapterToTest);
+                } catch(NetifacesException $e){
+                    // We couldn't get an IP address
+                    $ipAddress = null;
+                }
+
+                // did we get back a valid IP address?
+                $parts = explode('.', $ipAddress);
+                if (count($parts) == 4) {
+                    // success!
+                    return array($adapterToTest, $ipAddress);
+                }
+            }
+
+            // if we get here, we could not determine the IP address of our
+            // host :(
+            //
+            // this sucks
+            throw new NetifacesException("Unable to determine IP address");
+
+        } catch (NetifacesException $e){
+            throw new Exception("could not determine IP address of host machine");
+        }
     }
 }

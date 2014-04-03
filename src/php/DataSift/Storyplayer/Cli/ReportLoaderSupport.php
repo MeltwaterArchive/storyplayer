@@ -34,91 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Storyplayer\PlayerLib\ReportLoader;
 
 /**
- * Helper class to load Phase classes and create objects from them
+ * support for our ReportLoader service
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PhaseLoader
+trait ReportLoaderSupport
 {
-	private $namespaces = array(
-		"Phases",
-		"DataSift\\Storyplayer\\Phases"
-	);
+	public $reportLoader;
 
-	public function setNamespaces($namespaces = array())
+	/**
+	 *
+	 * @return void
+	 */
+	public function initReportLoaderSupport()
 	{
-		// a list of the namespaces we're going to search for this class
-		//
-		// we always search the generic 'Phases' namespace first, in case
-		// users don't want to uniquely namespace their Phase classes
-		$this->namespaces = array ("Phases");
+		// we will use this to load different reports
+		$this->reportLoader = new ReportLoader();
 
-		// add in any additional namespaces we've been asked to search
-		foreach ($namespaces as $namespace) {
-			$this->namespaces[] = $namespace;
+		// does the user have any namespaces of their own that they
+		// want to search?
+		if (isset($this->staticConfig->reports, $this->staticConfig->reports->namespaces) && is_array($this->staticConfig->reports->namespaces)) {
+			// yes, the user does have some namespaces
+			// copy them across into our list
+			$this->reportLoader->setNamespaces($this->staticConfig->reports->namespaces);
 		}
 
-		// we search our own namespace last, as it allows the user to
-		// replace our Phases with their own if they prefer
-		$this->namespaces[] = "DataSift\\Storyplayer\\Phases";
-	}
-
-	public function determinePhaseClassFor($phaseName)
-	{
-		$className = ucfirst($phaseName) . 'Phase';
-
-		// all done
-		return $className;
-	}
-
-	public function loadPhase(StoryTeller $st, $phaseName, $constructorArgs = null)
-	{
-		// can we find the class?
-		foreach ($this->namespaces as $namespace) {
-			// what is the full name of the class (inc namespace) to
-			// search for?
-			$className           = $this->determinePhaseClassFor($phaseName);
-			$namespacedClassName = $namespace . "\\" . $className;
-
-			// is there such a class?
-			if (class_exists($namespacedClassName)) {
-				// yes there is!!
-				//
-				// create an instance of the class
-				$return = new $namespacedClassName(
-					$st,
-					$constructorArgs
-				);
-
-				// make sure our new object is an instance of 'Phase'
-				if (!$return instanceof Phase) {
-					throw new E5xx_NotAPhaseClass($namespacedClassName);
-				}
-
-				// return our newly-minted object
-				return $return;
-			}
-		}
-
-		// if we get there, then we cannot find a suitable class in
-		// any of the namespaces that we know about
-		return null;
 	}
 }

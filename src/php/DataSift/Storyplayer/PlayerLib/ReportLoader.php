@@ -43,10 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Storyplayer\Reports\Report;
 
 /**
- * Helper class to load Phase classes and create objects from them
+ * Helper class to load OutputPlugin classes and create objects from them
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,20 +55,20 @@ use DataSift\Storyplayer\Phases\Phase;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PhaseLoader
+class ReportLoader
 {
 	private $namespaces = array(
-		"Phases",
-		"DataSift\\Storyplayer\\Phases"
+		"Reports",
+		"DataSift\\Storyplayer\\Reports"
 	);
 
 	public function setNamespaces($namespaces = array())
 	{
 		// a list of the namespaces we're going to search for this class
 		//
-		// we always search the generic 'Phases' namespace first, in case
-		// users don't want to uniquely namespace their Phase classes
-		$this->namespaces = array ("Phases");
+		// we always search the generic 'Reports' namespace first, in case
+		// users don't want to uniquely namespace their Report classes
+		$this->namespaces = array ("Reports");
 
 		// add in any additional namespaces we've been asked to search
 		foreach ($namespaces as $namespace) {
@@ -76,25 +76,25 @@ class PhaseLoader
 		}
 
 		// we search our own namespace last, as it allows the user to
-		// replace our Phases with their own if they prefer
-		$this->namespaces[] = "DataSift\\Storyplayer\\Phases";
+		// replace our Reports with their own if they prefer
+		$this->namespaces[] = "DataSift\\Storyplayer\\Reports";
 	}
 
-	public function determinePhaseClassFor($phaseName)
+	public function determineReportClassFor($reportName)
 	{
-		$className = ucfirst($phaseName) . 'Phase';
+		$className = ucfirst($reportName) . 'Report';
 
 		// all done
 		return $className;
 	}
 
-	public function loadPhase(StoryTeller $st, $phaseName, $constructorArgs = null)
+	public function loadReport($reportName, $constructorArgs = null)
 	{
 		// can we find the class?
 		foreach ($this->namespaces as $namespace) {
 			// what is the full name of the class (inc namespace) to
 			// search for?
-			$className           = $this->determinePhaseClassFor($phaseName);
+			$className           = $this->determineReportClassFor($reportName);
 			$namespacedClassName = $namespace . "\\" . $className;
 
 			// is there such a class?
@@ -107,9 +107,9 @@ class PhaseLoader
 					$constructorArgs
 				);
 
-				// make sure our new object is an instance of 'Phase'
-				if (!$return instanceof Phase) {
-					throw new E5xx_NotAPhaseClass($namespacedClassName);
+				// make sure our new object is an instance of 'Report'
+				if (!$return instanceof Report) {
+					throw new E5xx_NotAReportClass($namespacedClassName);
 				}
 
 				// return our newly-minted object
@@ -119,6 +119,6 @@ class PhaseLoader
 
 		// if we get there, then we cannot find a suitable class in
 		// any of the namespaces that we know about
-		return null;
+		throw new E4xx_NoSuchReport($reportName);
 	}
 }

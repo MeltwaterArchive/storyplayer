@@ -62,6 +62,9 @@ class Injectables extends BaseInjectables
 	use EnvironmentListSupport;
 	use EnvironmentNameSupport;
 	use OutputSupport;
+	use PhaseLoaderSupport;
+	use ProseLoaderSupport;
+	use ReportLoaderSupport;
 	use RuntimeConfigSupport;
 	use StaticConfigSupport;
 }

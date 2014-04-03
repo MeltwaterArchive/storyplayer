@@ -179,11 +179,23 @@ class PlayStoryCommand extends CliCommand
         // build our list of stories to run
         $this->initStoryList($engine, $injectables, $params);
 
+        // setup our Prose loader
+        $this->initProseLoader($injectables);
+
+        // setup our Phases loader
+        $this->initPhaseLoader($injectables);
+
+        // setup our Reports loader
+        $this->initReportLoader($injectables);
+
         // setup the console
         $this->initConsole($engine, $injectables);
 
         // setup reporting modules
         $this->initReporting($engine, $injectables);
+
+        // at this point, all of the services / data held in $injectables
+        // has been initialised and is ready for use
 
         // create a new StoryTeller object
         $st = new StoryTeller($injectables);
@@ -512,6 +524,21 @@ class PlayStoryCommand extends CliCommand
         }
     }
 
+    protected function initPhaseLoader(Injectables $injectables)
+    {
+        $injectables->initPhaseLoaderSupport();
+    }
+
+    protected function initProseLoader(Injectables $injectables)
+    {
+        $injectables->initProseLoaderSupport();
+    }
+
+    protected function initReportLoader(Injectables $injectables)
+    {
+        $injectables->initReportLoaderSupport();
+    }
+
     protected function initReporting(CliEngine $engine, Injectables $injectables)
     {
         // are there any reporting modules to be loaded?
@@ -519,6 +546,21 @@ class PlayStoryCommand extends CliCommand
             // no
             return;
         }
+
+        // setup the reports that have been requested
+        foreach ($engine->options->reports as $reportName => $reportFilename)
+        {
+            try {
+                $report = $injectables->reportLoader->loadReport($reportName);
+            }
+            catch (E4xx_NoSuchReport $e) {
+                $injectables->output->logCliError("no such report '{$reportName}'");
+                exit(1);
+            }
+            $injectables->output->usePlugin($reportName, $report, [ 'filename' => $reportFilename]);
+        }
+
+        // all done
     }
 
     protected function initSignalHandling()

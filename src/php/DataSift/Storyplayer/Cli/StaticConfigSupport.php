@@ -69,7 +69,7 @@ trait StaticConfigSupport
 
 		// create our default config - the config that we'll use
 		// unless the config file on disk overrides it
-		$this->staticConfig = new DefaultStaticConfig();
+		$this->staticConfig = new StaticConfig();
 
 		// try to load our main config file
 		$this->staticConfigManager->loadConfig($this->staticConfig);

@@ -34,91 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/CliLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\CliLib;
 
-use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Helper class to load Phase classes and create objects from them
+ * Exception thrown when we attempt to build the config for a test device
+ * that does not exist
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/CliLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PhaseLoader
+class E4xx_NoSuchDevice extends Exxx_Exception
 {
-	private $namespaces = array(
-		"Phases",
-		"DataSift\\Storyplayer\\Phases"
-	);
-
-	public function setNamespaces($namespaces = array())
-	{
-		// a list of the namespaces we're going to search for this class
-		//
-		// we always search the generic 'Phases' namespace first, in case
-		// users don't want to uniquely namespace their Phase classes
-		$this->namespaces = array ("Phases");
-
-		// add in any additional namespaces we've been asked to search
-		foreach ($namespaces as $namespace) {
-			$this->namespaces[] = $namespace;
-		}
-
-		// we search our own namespace last, as it allows the user to
-		// replace our Phases with their own if they prefer
-		$this->namespaces[] = "DataSift\\Storyplayer\\Phases";
-	}
-
-	public function determinePhaseClassFor($phaseName)
-	{
-		$className = ucfirst($phaseName) . 'Phase';
-
-		// all done
-		return $className;
-	}
-
-	public function loadPhase(StoryTeller $st, $phaseName, $constructorArgs = null)
-	{
-		// can we find the class?
-		foreach ($this->namespaces as $namespace) {
-			// what is the full name of the class (inc namespace) to
-			// search for?
-			$className           = $this->determinePhaseClassFor($phaseName);
-			$namespacedClassName = $namespace . "\\" . $className;
-
-			// is there such a class?
-			if (class_exists($namespacedClassName)) {
-				// yes there is!!
-				//
-				// create an instance of the class
-				$return = new $namespacedClassName(
-					$st,
-					$constructorArgs
-				);
-
-				// make sure our new object is an instance of 'Phase'
-				if (!$return instanceof Phase) {
-					throw new E5xx_NotAPhaseClass($namespacedClassName);
-				}
-
-				// return our newly-minted object
-				return $return;
-			}
-		}
-
-		// if we get there, then we cannot find a suitable class in
-		// any of the namespaces that we know about
-		return null;
-	}
+    public function __construct($deviceName)
+    {
+    	$msg = "Unknown device '{$deviceName}'; we have no config for it";
+        parent::__construct(400, $msg, $msg);
+    }
 }

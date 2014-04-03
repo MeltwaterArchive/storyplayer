@@ -34,91 +34,157 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/OutputLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\OutputLib;
 
-use DataSift\Storyplayer\Phases\Phase;
+use DataSift\StoryPlayer\PlayerLib\StoryResult;
 
 /**
- * Helper class to load Phase classes and create objects from them
+ * the plugin for TAP13
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/OutputLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PhaseLoader
+class TapPlugin extends OutputPlugin
 {
-	private $namespaces = array(
-		"Phases",
-		"DataSift\\Storyplayer\\Phases"
-	);
-
-	public function setNamespaces($namespaces = array())
+	/**
+	 * @param string $version
+	 * @param string $url
+	 * @param string $copyright
+	 * @param string $license
+	 * @return void
+	 */
+	public function startStoryplayer($version, $url, $copyright, $license)
 	{
-		// a list of the namespaces we're going to search for this class
-		//
-		// we always search the generic 'Phases' namespace first, in case
-		// users don't want to uniquely namespace their Phase classes
-		$this->namespaces = array ("Phases");
 
-		// add in any additional namespaces we've been asked to search
-		foreach ($namespaces as $namespace) {
-			$this->namespaces[] = $namespace;
-		}
-
-		// we search our own namespace last, as it allows the user to
-		// replace our Phases with their own if they prefer
-		$this->namespaces[] = "DataSift\\Storyplayer\\Phases";
 	}
 
-	public function determinePhaseClassFor($phaseName)
+	/**
+	 * @return void
+	 */
+	public function endStoryplayer()
 	{
-		$className = ucfirst($phaseName) . 'Phase';
 
-		// all done
-		return $className;
 	}
 
-	public function loadPhase(StoryTeller $st, $phaseName, $constructorArgs = null)
+	/**
+	 * @param string $storyName
+	 * @param string $storyCategory
+	 * @param string $storyGroup
+	 * @param string $envName
+	 * @param string $deviceName
+	 * @return void
+	 */
+	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
-		// can we find the class?
-		foreach ($this->namespaces as $namespace) {
-			// what is the full name of the class (inc namespace) to
-			// search for?
-			$className           = $this->determinePhaseClassFor($phaseName);
-			$namespacedClassName = $namespace . "\\" . $className;
 
-			// is there such a class?
-			if (class_exists($namespacedClassName)) {
-				// yes there is!!
-				//
-				// create an instance of the class
-				$return = new $namespacedClassName(
-					$st,
-					$constructorArgs
-				);
+	}
 
-				// make sure our new object is an instance of 'Phase'
-				if (!$return instanceof Phase) {
-					throw new E5xx_NotAPhaseClass($namespacedClassName);
-				}
+	/**
+	 * @return void
+	 */
+	public function endStory(StoryResult $storyResult)
+	{
 
-				// return our newly-minted object
-				return $return;
-			}
-		}
+	}
 
-		// if we get there, then we cannot find a suitable class in
-		// any of the namespaces that we know about
-		return null;
+	/**
+	 * @param string $phaseName
+	 * @param integer $phaseType
+	 * @return void
+	 */
+	public function startPhase($phaseName, $phaseType)
+	{
+
+	}
+
+	/**
+	 * @param string $phaseName
+	 * @param integer $phaseType
+	 * @return void
+	 */
+	public function endPhase($phaseName, $phaseType)
+	{
+
+	}
+
+	/**
+	 * @param integer $level
+	 * @param string $msg
+	 * @return void
+	 */
+	public function logPhaseActivity($level, $msg)
+	{
+
+	}
+
+	/**
+	 * @param string $phaseName
+	 * @param string $msg
+	 * @return void
+	 */
+	public function logPhaseError($phaseName, $msg)
+	{
+
+	}
+
+	/**
+	 * @param string $phaseName
+	 * @param string $msg
+	 * @return void
+	 */
+	public function logPhaseSkipped($phaseName, $msg)
+	{
+
+	}
+
+	/**
+	 * @param string $msg
+	 *
+	 * @return void
+	 */
+	public function logCliWarning($msg)
+	{
+
+	}
+
+	/**
+	 * @param string $msg
+	 *
+	 * @return void
+	 */
+	public function logCliError($msg)
+	{
+
+	}
+
+	/**
+	 * @param string $msg
+	 *
+	 * @return void
+	 */
+	public function logCliInfo($msg)
+	{
+
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return void
+	 */
+	public function logVardump($name, $var)
+	{
+
 	}
 }
