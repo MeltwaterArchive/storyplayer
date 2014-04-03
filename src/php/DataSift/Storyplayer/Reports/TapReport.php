@@ -57,6 +57,15 @@ use DataSift\StoryPlayer\PlayerLib\StoryResult;
  */
 class TapReport implements Report
 {
+	protected $filename;
+	protected $testCount = 0;
+	protected $tests = [];
+
+	public function __construct($params)
+	{
+		$this->filename = $params['filename'];
+	}
+
 	/**
 	 * @param string $version
 	 * @param string $url
@@ -74,7 +83,45 @@ class TapReport implements Report
 	 */
 	public function endStoryplayer()
 	{
+		// right, now we need to report on what we've seen
+		$fp = fopen($this->filename, "w");
+		if (!$fp) {
+			throw new E5xx_CannotCreateReportFile($this->filename);
+		}
 
+		// write out the header
+		fwrite($fp, "TAP version 13" . PHP_EOL);
+		fwrite($fp, "1.." . $this->testCount . PHP_EOL);
+
+		// write out each test in turn
+		$storyCounter = 1;
+		foreach ($this->tests as $storyResult) {
+			switch ($storyResult->storyResult) {
+				case StoryResult::PASS:
+					$this->writeOkay($fp, $storyCounter, $storyResult, 'Pass');
+					break;
+
+				case StoryResult::FAIL:
+					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Fail');
+					break;
+
+				case StoryResult::INCOMPLETE:
+					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Incomplete');
+					break;
+
+				case StoryResult::BLACKLISTED:
+					$this->writeOkay($fp, $storyCounter, $storyResult, 'Blacklisted');
+					break;
+
+				case StoryResult::ERROR:
+				default:
+					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Error');
+					break;
+			}
+		}
+
+		// all done
+		fclose($fp);
 	}
 
 	/**
@@ -87,7 +134,8 @@ class TapReport implements Report
 	 */
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
-
+		// keep track of how many tests we have seen
+		$this->testCount++;
 	}
 
 	/**
@@ -95,7 +143,7 @@ class TapReport implements Report
 	 */
 	public function endStory(StoryResult $storyResult)
 	{
-
+		$this->tests[] = $storyResult;
 	}
 
 	/**
@@ -186,5 +234,15 @@ class TapReport implements Report
 	public function logVardump($name, $var)
 	{
 
+	}
+
+	protected function writeOkay($fp, $storyCounter, $storyResult, $reason)
+	{
+		fwrite($fp, 'ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
+	}
+
+	protected function writeNotOkay($fp, $storyCounter, $storyResult, $reason)
+	{
+		fwrite($fp, 'not ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
 	}
 }

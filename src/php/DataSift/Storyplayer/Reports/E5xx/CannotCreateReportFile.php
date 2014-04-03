@@ -34,157 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Reports
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\OutputLib;
+namespace DataSift\Storyplayer\Reports;
 
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * the plugin for TAP13
+ * Exception thrown when we cannot create the file for a report
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Reports
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TapPlugin extends OutputPlugin
+class E5xx_CannotCreateReportFile extends Exxx_Exception
 {
-	/**
-	 * @param string $version
-	 * @param string $url
-	 * @param string $copyright
-	 * @param string $license
-	 * @return void
-	 */
-	public function startStoryplayer($version, $url, $copyright, $license)
-	{
-
-	}
-
-	/**
-	 * @return void
-	 */
-	public function endStoryplayer()
-	{
-
-	}
-
-	/**
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
-	 * @return void
-	 */
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
-	{
-
-	}
-
-	/**
-	 * @return void
-	 */
-	public function endStory(StoryResult $storyResult)
-	{
-
-	}
-
-	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
-	 * @return void
-	 */
-	public function startPhase($phaseName, $phaseType)
-	{
-
-	}
-
-	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
-	 * @return void
-	 */
-	public function endPhase($phaseName, $phaseType)
-	{
-
-	}
-
-	/**
-	 * @param integer $level
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseActivity($level, $msg)
-	{
-
-	}
-
-	/**
-	 * @param string $phaseName
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseError($phaseName, $msg)
-	{
-
-	}
-
-	/**
-	 * @param string $phaseName
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseSkipped($phaseName, $msg)
-	{
-
-	}
-
-	/**
-	 * @param string $msg
-	 *
-	 * @return void
-	 */
-	public function logCliWarning($msg)
-	{
-
-	}
-
-	/**
-	 * @param string $msg
-	 *
-	 * @return void
-	 */
-	public function logCliError($msg)
-	{
-
-	}
-
-	/**
-	 * @param string $msg
-	 *
-	 * @return void
-	 */
-	public function logCliInfo($msg)
-	{
-
-	}
-
-	/**
-	 * @param string $name
-	 *
-	 * @return void
-	 */
-	public function logVardump($name, $var)
-	{
-
-	}
+    public function __construct($filename)
+    {
+    	$msg = "cannot create report file '{$filename}'; permissions or path problem?";
+        parent::__construct(500, $msg, $msg);
+    }
 }

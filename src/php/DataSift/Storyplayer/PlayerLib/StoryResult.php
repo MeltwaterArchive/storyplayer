@@ -64,7 +64,7 @@ class StoryResult
 
 	const PASS        = 1;
 	const FAIL        = 2;
-	const UNKNOWN     = 3;
+	const ERROR       = 3;
 	const INCOMPLETE  = 4;
 	const BLACKLISTED = 5;
 

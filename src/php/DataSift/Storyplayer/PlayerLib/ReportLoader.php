@@ -103,7 +103,6 @@ class ReportLoader
 				//
 				// create an instance of the class
 				$return = new $namespacedClassName(
-					$st,
 					$constructorArgs
 				);
 

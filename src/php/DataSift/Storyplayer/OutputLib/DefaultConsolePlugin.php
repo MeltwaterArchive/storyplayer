@@ -81,10 +81,10 @@ class DefaultConsolePlugin implements OutputPlugin
 				1 => PHP_EOL . PHP_EOL . "Result: FAIL",
 				2 => PHP_EOL . PHP_EOL . "Result: FAIL"
 			),
-			StoryResult::UNKNOWN => array (
-				0 => '[UNKNOWN]',
-				1 => PHP_EOL . PHP_EOL . "Result: UNKNOWN",
-				2 => PHP_EOL . PHP_EOL . "Result: UNKNOWN"
+			StoryResult::ERROR => array (
+				0 => '[ERROR]',
+				1 => PHP_EOL . PHP_EOL . "Result: ERROR",
+				2 => PHP_EOL . PHP_EOL . "Result: ERROR"
 			),
 			StoryResult::INCOMPLETE => array (
 				0 => '[INCOMPLETE]',

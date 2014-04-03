@@ -82,6 +82,10 @@ class PlayStoryCommand extends CliCommand
     // our list of stories to execute
     protected $storyList;
 
+    // our injected data / services
+    // needed for when user presses CTRL+C
+    protected $injectables;
+
     /**
      * the environment that we have loaded
      *
@@ -212,7 +216,7 @@ class PlayStoryCommand extends CliCommand
         // install signal handling, now that $this->st is defined
         //
         // we wouldn't want signal handling called out of order :)
-        $this->initSignalHandling();
+        $this->initSignalHandling($injectables);
 
         // and we're ready to tell the world that we're here
         $output->startStoryplayer(
@@ -239,6 +243,9 @@ class PlayStoryCommand extends CliCommand
 
         // write out any changed runtime config to disk
         $runtimeConfigManager->saveRuntimeConfig($runtimeConfig);
+
+        // tell the output plugins that we're all done
+        $output->endStoryplayer();
 
         // all done
         return 0;
@@ -565,20 +572,23 @@ class PlayStoryCommand extends CliCommand
         foreach ($engine->options->reports as $reportName => $reportFilename)
         {
             try {
-                $report = $injectables->reportLoader->loadReport($reportName);
+                $report = $injectables->reportLoader->loadReport($reportName, [ 'filename' => $reportFilename]);
             }
             catch (E4xx_NoSuchReport $e) {
                 $injectables->output->logCliError("no such report '{$reportName}'");
                 exit(1);
             }
-            $injectables->output->usePlugin($reportName, $report, [ 'filename' => $reportFilename]);
+            $injectables->output->usePlugin($reportName, $report);
         }
 
         // all done
     }
 
-    protected function initSignalHandling()
+    protected function initSignalHandling($injectables)
     {
+        // we need to remember the injectables, for when we handle CTRL+C
+        $this->injectables = $injectables;
+
         // setup signal handling
         pcntl_signal(SIGTERM, array($this, 'sigtermHandler'));
         pcntl_signal(SIGINT , array($this, 'sigtermHandler'));
@@ -634,7 +644,11 @@ class PlayStoryCommand extends CliCommand
 
         // cleanup
         $phasesPlayer = new PhasesPlayer();
-        $phasesPlayer->playPhases($this->st, 'shutdown');
+        $phasesPlayer->playPhases(
+            $this->st,
+            $this->injectables,
+            $this->injectables->staticConfig->phases->shutdown
+        );
 
         // force a clean shutdown
         exit(1);
