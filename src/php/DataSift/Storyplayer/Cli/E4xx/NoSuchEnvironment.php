@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/CliLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\CliLib;
+namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
@@ -50,7 +50,7 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * that does not exist
  *
  * @category  Libraries
- * @package   Storyplayer/CliLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License

@@ -58,9 +58,7 @@ use Phix_Project\Injectables as BaseInjectables;
 class Injectables extends BaseInjectables
 {
 	use DeviceListSupport;
-	use DeviceNameSupport;
 	use EnvironmentListSupport;
-	use EnvironmentNameSupport;
 	use OutputSupport;
 	use PhaseLoaderSupport;
 	use ProseLoaderSupport;

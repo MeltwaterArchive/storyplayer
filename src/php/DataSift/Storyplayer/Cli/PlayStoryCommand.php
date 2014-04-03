@@ -160,7 +160,12 @@ class PlayStoryCommand extends CliCommand
         //
         // 3. build up the list of stories to run
         //
-        // 4. setup the output channels
+        // 4. setup any remaining services
+        //    a. phase loading
+        //    b. prose loading
+        //    c. report loader
+        //
+        // 5. setup the output channels
         //    a. the console (i.e. --dev mode)
         //    b. report-to-file plugins
 
@@ -229,7 +234,7 @@ class PlayStoryCommand extends CliCommand
             $st->setStoryContext($context);
 
             // play the story(ies)
-            $player->play($st, $context);
+            $player->play($st, $injectables);
         }
 
         // write out any changed runtime config to disk
@@ -423,6 +428,9 @@ class PlayStoryCommand extends CliCommand
                 //
                 // this will be merged in with the default config
                 $staticConfigManager->loadAdditionalConfig($staticConfig, $deviceName);
+
+                // remember what our chosen device is
+                $staticConfig->initDevice($deviceName);
             }
             catch (E5xx_ConfigFileNotFound $e) {
                 // do we already have this device?
@@ -439,9 +447,11 @@ class PlayStoryCommand extends CliCommand
                 $output->logCliError($msg);
                 exit(1);
             }
-
-            // remember what our chosen device is
-            $injectables->initDeviceName($deviceName);
+            catch (E4xx_NoSuchDevice $e) {
+                $msg = $e->getMessage();
+                $otput->logCliError($msg);
+                exit(1);
+            }
         }
     }
 
@@ -481,6 +491,15 @@ class PlayStoryCommand extends CliCommand
             //
             // this will be merged in with the default config
             $staticConfigManager->loadAdditionalConfig($staticConfig, $envName);
+
+            // do we have a defaults environment section?
+            if (!isset($staticConfig->environments->defaults)) {
+                // create an empty one to keep PlayerLib happy
+                $staticConfig->environments->defaults = new stdClass;
+            }
+
+            // remember our chosen environment name
+            $staticConfig->initEnvironment($envName);
         }
         catch (E5xx_ConfigFileNotFound $e) {
             // do we already have this device?
@@ -497,15 +516,10 @@ class PlayStoryCommand extends CliCommand
             $output->logCliError($msg);
             exit(1);
         }
-
-        // do we have a defaults environment section?
-        if (!isset($staticConfig->environments->defaults)) {
-            // create an empty one to keep PlayerLib happy
-            $staticConfig->environments->defaults = new stdClass;
+        catch (E4xx_NoSuchEnvironment $e) {
+            $output->logCliError($e->getMessage());
+            exit(1);
         }
-
-        // remember our chosen environment name
-        $injectables->initEnvironmentName($envName);
 
         // at this point, $staticConfig contains:
         //

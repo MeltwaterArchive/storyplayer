@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Cli\Injectables;
+
 /**
  * the main class for animating a single story
  *
@@ -67,7 +69,7 @@ class StoryPlayer
 		$this->storyFilename = $storyFilename;
 	}
 
-	public function play(StoryTeller $st)
+	public function play(StoryTeller $st, Injectables $injectables)
 	{
 		// shorthand
 		$output = $st->getOutput();
@@ -84,7 +86,11 @@ class StoryPlayer
         $context->initUser($st, $story);
 
         // run the startup phase
-        $phasesPlayer->playPhases($st, 'startup');
+        $phasesPlayer->playPhases(
+        	$st,
+        	$injectables,
+        	$injectables->staticConfig->phases->startup
+        );
 
 		// set default callbacks up
 		$story->setDefaultCallbacks();
@@ -100,7 +106,11 @@ class StoryPlayer
 
 		// run the phases in the 'story' section
 		$phasesPlayer = new PhasesPlayer();
-		$phaseResults = $phasesPlayer->playPhases($st, 'story');
+		$phaseResults = $phasesPlayer->playPhases(
+			$st,
+			$injectables,
+			$injectables->staticConfig->phases->story
+		);
 
 		// make sense of what happened
 		$storyResult = $st->getStoryResult();
@@ -110,7 +120,11 @@ class StoryPlayer
 		$output->endStory($storyResult);
 
 		// run the shutdown phase
-        $phasesPlayer->playPhases($st, 'shutdown');
+        $phasesPlayer->playPhases(
+			$st,
+			$injectables,
+			$injectables->staticConfig->phases->shutdown
+        );
 
 		// all done
 		return $storyResult;

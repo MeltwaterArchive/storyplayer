@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
+use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\Phases\PhaseResult;
 
 /**
@@ -72,11 +73,10 @@ class PhasesPlayer
 	/**
 	 * @param string $phaseType
 	 */
-	public function playPhases(StoryTeller $st, $phaseType)
+	public function playPhases(StoryTeller $st, Injectables $injectables, $phases)
 	{
 		// shorthand
 		$output  = $st->getOutput();
-		$context = $st->getStoryContext();
 
 		// keep track of our results
 		$phaseResults = new PhaseResults;
@@ -89,15 +89,15 @@ class PhasesPlayer
 
 		// we are going to need something to help us load each of our
 		// phases
-		$phaseLoader = $st->getPhaseLoader();
+		$phaseLoader = $injectables->phaseLoader;
 
 		// pre-load all of the phases, before we execute them
 		// this will trigger any PHP syntax errors now rather than
 		// when we're part-way through executing our code
-		$phases = [];
-		foreach ($context->phases->$phaseType as $phaseName => $isActive) {
+		$phasesToPlay = [];
+		foreach ($phases as $phaseName => $isActive) {
 			$phase = $phaseLoader->loadPhase($st, $phaseName);
-			$phases[$phaseName] = [
+			$phasesToPlay[$phaseName] = [
 				'phase' => $phase,
 				'isActive' => $isActive
 			];
@@ -107,7 +107,7 @@ class PhasesPlayer
 		//
 		// 1. all listed phases have been executed, or
 		// 2. one of the phases says that the story has failed
-		foreach ($phases as $phaseName => $phaseData)
+		foreach ($phasesToPlay as $phaseName => $phaseData)
 		{
 			// shorthand
 			$phase    = $phaseData['phase'];

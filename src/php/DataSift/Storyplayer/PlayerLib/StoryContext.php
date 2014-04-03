@@ -91,14 +91,15 @@ class StoryContext extends BaseObject
 
 	public function initUser(StoryTeller $st)
 	{
-		// do we have a cached user?
+		// shorthand
+		$env = $st->getEnvironment();
 
 		// our default provider of users
 		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
 
 		// do we have a specific generator to load?
-		if (isset($this->env->users, $this->env->users->generator)) {
-			$className = $this->env->users->generator;
+		if (isset($env->users, $env->users->generator)) {
+			$className = $env->users->generator;
 		}
 
 		// create the generator

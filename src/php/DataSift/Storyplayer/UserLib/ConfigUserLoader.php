@@ -16,14 +16,12 @@ class ConfigUserLoader implements UserGenerator
     public function getUser(StoryTeller $st)
     {
         // shorthand
-        $context       = $st->getStoryContext();
         $runtimeConfig = $st->getRuntimeConfig();
 
         // what environment are we working in?
-        $envName = $context->envName;
+        $envName = $st->getEnvironmentName();
 
-        // do we have a cached user from telleroftales, or a previous
-        // storyplayer?
+        // do we have a cached user from a previous storyplayer?
         if (isset($runtimeConfig->users, $runtimeConfig->users->$envName))
         {
             $user = new User();

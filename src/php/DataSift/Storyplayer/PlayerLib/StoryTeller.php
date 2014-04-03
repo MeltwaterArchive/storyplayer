@@ -183,7 +183,12 @@ class StoryTeller
 	private $currentPhase = null;
 
 	// test device support
+	private $deviceName = null;
 	private $deviceAdapter = null;
+
+	// the environment we are testing
+	private $env = null;
+	private $envName = null;
 
 	public function __construct(Injectables $injectables)
 	{
@@ -204,6 +209,15 @@ class StoryTeller
 
 		// create our Phase Loader
 		$this->setPhaseLoader($injectables->phaseLoader);
+
+		// remember the environment we are testing against
+		$this->setEnvironment($injectables->staticConfig->envName, $injectables->staticConfig->env);
+
+		// remember the device we are testing with
+		$this->setDevice($injectables->staticConfig->deviceName, $injectables->staticConfig->device);
+
+		// remember the defines from config file & command line
+		$this->setDefines($injectables->staticConfig->defines);
 
         // our runtime config
         $this->setRuntimeConfig($injectables->runtimeConfig);
@@ -447,12 +461,12 @@ class StoryTeller
 
 	public function getAdminUser()
 	{
-		return $this->storyContext->env->adminUser;
+		return $this->env->adminUser;
 	}
 
 	public function getEnvironment()
 	{
-		return $this->storyContext->env;
+		return $this->env;
 	}
 
 	/**
@@ -460,7 +474,13 @@ class StoryTeller
 	 */
 	public function getEnvironmentName()
 	{
-		return $this->storyContext->envName;
+		return $this->envName;
+	}
+
+	public function setEnvironment($envName, $env)
+	{
+		$this->envName = $envName;
+		$this->env     = $env;
 	}
 
 	public function getRuntimeConfig()
@@ -493,7 +513,12 @@ class StoryTeller
 
 	public function getDefines()
 	{
-		return $this->storyContext->defines;
+		return $this->defines;
+	}
+
+	public function setDefines($defines)
+	{
+		$this->defines = $defines;
 	}
 
 	public function getParams()
@@ -572,7 +597,7 @@ class StoryTeller
 
 	public function getDeviceDetails()
 	{
-		return $this->storyContext->device;
+		return $this->device;
 	}
 
 	public function getDeviceAdapter()
@@ -599,7 +624,7 @@ class StoryTeller
 	 */
 	public function getDeviceName()
 	{
-		return $this->storyContext->deviceName;
+		return $this->deviceName;
 	}
 
 	public function getRunningDevice()
@@ -615,6 +640,12 @@ class StoryTeller
 		}
 
 		return $this->deviceAdapter->getDevice();
+	}
+
+	public function setDevice($deviceName, $device)
+	{
+		$this->deviceName = $deviceName;
+		$this->device     = $device;
 	}
 
 	public function startDevice()
