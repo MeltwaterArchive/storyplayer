@@ -232,6 +232,10 @@ EOS;
 			$stackTrace = $e->getTrace();
 			foreach ($stackTrace as $stackEntry)
 			{
+				if (!isset($stackEntry['file'])) {
+					continue;
+				}
+
 				// do we have any code for this?
 				$code = $story->getStoryCodeFor($stackEntry['file'], $stackEntry['line']);
 				if (!$code) {
