@@ -67,6 +67,17 @@ class DefaultConsole implements Console
 	protected $phaseMessages = array();
 	protected $verbosityLevel = 0;
 	protected $resultStrings = array();
+	protected $logLevelStrings = [
+        Log::LOG_EMERGENCY => "EMERGENCY ",
+        Log::LOG_ALERT     => "ALERT     ",
+        Log::LOG_CRITICAL  => "CRITICAL  ",
+        Log::LOG_ERROR     => "ERROR     ",
+        Log::LOG_WARNING   => "WARNING   ",
+        Log::LOG_NOTICE    => "NOTICE    ",
+        Log::LOG_INFO      => "INFO      ",
+        Log::LOG_DEBUG     => "DEBUG     ",
+        Log::LOG_TRACE     => "TRACE     ",
+	];
 
 	public function __construct()
 	{
@@ -270,6 +281,7 @@ EOS;
 
 			foreach ($this->phaseMessages[$phaseName] as $msg) {
 				echo "[" . date("Y-m-d H:i:s", $msg['ts']) . "] "
+				     . $this->logLevelStrings[$msg['level']]
                      . $msg['text'] . PHP_EOL;
 			}
 		}
