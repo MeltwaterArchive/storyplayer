@@ -183,7 +183,9 @@ EOS;
 	{
 		// var_dump($storyResult);
 
-		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel] . PHP_EOL;
+		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel]
+		     . ' (' . round($storyResult->durationTime, 2) . ' secs)'
+		     . PHP_EOL;
 
 		if (count($this->phaseErrors) > 0) {
 			foreach ($this->phaseErrors as $phaseName => $msg)
