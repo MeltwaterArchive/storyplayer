@@ -124,12 +124,12 @@ class TestSetupPhase extends StoryPhase
 		catch (Exception $e)
 		{
 			// something went wrong ... the test cannot continue
-			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
 				PhaseResult::ERROR,
 				$e->getMessage(),
 				$e
 			);
+			$storyResult->setStoryHasFailed($phaseResult);
 		}
 
 		// all done
