@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\StoryLib;
 
+use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\StoryTemplate;
 use DataSift\Stone\LogLib\Log;
@@ -237,6 +238,14 @@ class Story
 	 * stories that simply aren't safe to run absolutely everywhere
 	 */
 	protected $whitelistedEnvironments = array();
+
+	/**
+	 * the raw parser tree of this story, and of any templates that we
+	 * use
+	 *
+	 * @var array
+	 */
+	protected $parserTrees = array();
 
 	// ====================================================================
 	//
@@ -1144,5 +1153,41 @@ class Story
 	public function __toString()
 	{
 		return $this->getCategory() . ' :: ' . $this->getGroup() . ' :: ' . $this->getName();
+	}
+
+	// ==================================================================
+	//
+	// Debugging / error reporting assistance
+	//
+	// ------------------------------------------------------------------
+
+	public function buildParseTrees($storyFilename)
+	{
+		// we need a little bit of help here
+		$parser = new \PhpParser\Parser(new \PhpParser\Lexer);
+
+		// parse our own source code
+		//
+		// we're going to use this parser data at a later point when
+		// showing what has gone wrong and why
+		try {
+			$this->parserTrees[$storyFilename] = $parser->parse(file_get_contents($storyFilename));
+		}
+		catch (Exception $e) {
+			// something went wrong parsing the story
+			// nothing we can do about that
+		}
+
+		// now, we need to parse all of the templates that we use
+		foreach ($this->storyTemplates as $storyTemplate) {
+			try {
+				$templateFilename = $storyTemplate->getSourceFilename();
+				$this->parserTrees[$templateFilename] = $parser->parse(file_get_contents($templateFilename));
+			}
+			catch (Exception $e) {
+				// something went wrong parsing the template
+				// nothing we can do about that
+			}
+		}
 	}
 }

@@ -42,6 +42,7 @@
  */
 namespace DataSift\Storyplayer\PlayerLib;
 
+use ReflectionObject;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
@@ -216,4 +217,9 @@ class StoryTemplate
 		return array($this, 'testEnvironmentTeardown');
 	}
 
+    public function getSourceFilename()
+    {
+        $refObj = new ReflectionObject($this);
+    	return $refObj->getFileName();
+    }
 }

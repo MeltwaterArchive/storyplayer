@@ -30,7 +30,8 @@
 		"aws/aws-sdk-php": "2.*",
 		"datasift/netifaces": "*",
 		"phix/injectables": "*",
-		"symfony/yaml": "2.*"
+		"symfony/yaml": "2.*",
+		"nikic/php-parser": "1.0.0-beta1"
 	},
 	"require-dev": {
 		"stuart/phingtasks": "1.0.0"
