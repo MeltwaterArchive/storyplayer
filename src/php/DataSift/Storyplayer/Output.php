@@ -45,7 +45,8 @@ namespace DataSift\Storyplayer;
 
 use DataSift\Storyplayer\PlayerLib\StoryResult;
 use DataSift\Storyplayer\OutputLib\OutputPlugin;
-use DataSift\Storyplayer\OutputLib\DefaultConsolePlugin;
+use DataSift\Storyplayer\Console\DefaultConsole;
+use DataSift\Storyplayer\Console\Console;
 
 /**
  * all output goes through here
@@ -64,7 +65,7 @@ class Output implements OutputPlugin
 	public function __construct()
 	{
 		// we need a default output for the console
-		$this->plugins['console'] = new DefaultConsolePlugin();
+		$this->plugins['console'] = new DefaultConsole();
 	}
 
 	/**

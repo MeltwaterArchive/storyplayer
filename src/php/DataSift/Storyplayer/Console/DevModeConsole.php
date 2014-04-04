@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Console
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\OutputLib;
+namespace DataSift\Storyplayer\Console;
 
 use DataSift\Stone\LogLib\Log;
 use DataSift\StoryPlayer\Phases\Phase;
@@ -51,13 +51,13 @@ use DataSift\StoryPlayer\PlayerLib\StoryResult;
  * the console plugin loaded when DevMode is active
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Console
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DevModeConsolePlugin implements OutputPlugin
+class DevModeConsole implements Console
 {
 	protected $verbosityLevel = 0;
 	protected $resultStrings  = array();
@@ -75,10 +75,10 @@ class DevModeConsolePlugin implements OutputPlugin
 				1 => PHP_EOL . "Result: FAIL",
 				2 => PHP_EOL . "Result: FAIL"
 			),
-			StoryResult::UNKNOWN => array (
-				0 => PHP_EOL . "Result: UNKNOWN",
-				1 => PHP_EOL . "Result: UNKNOWN",
-				2 => PHP_EOL . "Result: UNKNOWN"
+			StoryResult::ERROR => array (
+				0 => PHP_EOL . "Result: ERROR",
+				1 => PHP_EOL . "Result: ERROR",
+				2 => PHP_EOL . "Result: ERROR"
 			),
 			StoryResult::INCOMPLETE => array (
 				0 => PHP_EOL . "Result: INCOMPLETE",

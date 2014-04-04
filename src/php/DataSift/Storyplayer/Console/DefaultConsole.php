@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Console
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\OutputLib;
+namespace DataSift\Storyplayer\Console;
 
 use DataSift\StoryPlayer\Phases\Phase;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
@@ -50,13 +50,13 @@ use DataSift\StoryPlayer\PlayerLib\StoryResult;
  * the console plugin we use unless the user specifies something else
  *
  * @category  Libraries
- * @package   Storyplayer/OutputLib
+ * @package   Storyplayer/Console
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultConsolePlugin implements OutputPlugin
+class DefaultConsole implements Console
 {
 	protected $currentPhase;
 	protected $phaseNumber = 0;

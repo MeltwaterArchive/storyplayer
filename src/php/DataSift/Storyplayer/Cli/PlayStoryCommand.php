@@ -53,7 +53,7 @@ use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryContext;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\OutputLib\DevModeConsolePlugin;
+use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
  * A command to play a story, or a list of stories
@@ -367,7 +367,7 @@ class PlayStoryCommand extends CliCommand
         // switch output plugins first, before we do anything else at all
         if (isset($engine->options->dev) && $engine->options->dev) {
             // switch our main output to 'dev mode'
-            $this->output->usePlugin('console', new DevModeConsolePlugin());
+            $this->output->usePlugin('console', new DevModeConsole());
 
             // dev mode means 'show me everything'
             $engine->options->verbosity = 2;
