@@ -1632,7 +1632,7 @@ class StaticConfig extends LoadedConfig
     public function initDevice($deviceName)
     {
         // does the device exist?
-        if (!isset($this->device->$deviceName)) {
+        if (!isset($this->devices->$deviceName)) {
             throw new E4xx_NoSuchDevice($deviceName);
         }
 

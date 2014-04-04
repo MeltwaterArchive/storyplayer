@@ -435,9 +435,6 @@ class PlayStoryCommand extends CliCommand
                 //
                 // this will be merged in with the default config
                 $staticConfigManager->loadAdditionalConfig($staticConfig, $deviceName);
-
-                // remember what our chosen device is
-                $staticConfig->initDevice($deviceName);
             }
             catch (E5xx_ConfigFileNotFound $e) {
                 // do we already have this device?
@@ -447,6 +444,9 @@ class PlayStoryCommand extends CliCommand
                     $output->logCliError($msg);
                     exit(1);
                 }
+
+                // remember what our chosen device is
+                $staticConfig->initDevice($deviceName);
             }
             catch (E5xx_InvalidConfigFile $e) {
                 $msg = "unable to load config file '{$deviceName}.json'" . PHP_EOL . PHP_EOL

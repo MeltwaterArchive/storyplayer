@@ -24,6 +24,7 @@
 	"require": {
 		"phix/autoloader": "4.*",
 		"phix/cliengine": "@dev",
+		"phix/validationlib": ">=4.2.0",
 		"datasift/stone": ">=1.5.0",
 		"datasift/webdriver": ">=1.5.0",
 		"aws/aws-sdk-php": "2.*",
