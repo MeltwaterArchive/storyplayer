@@ -173,6 +173,9 @@ EOS;
 Environment: {$envName}
      Device: {$deviceName}
 
+-------------------------------------------------------------
+
+
 EOS;
 		}
 		else {
@@ -247,11 +250,29 @@ EOS;
 				//
 				// we don't want to show duplicate entries, so we use the
 				// filename@line as a key in the array
-				$codePoints[$stackEntry['file'] . '@' . $stackEntry['line']] = [
-					'file' => $stackEntry['file'],
-					'line' => $stackEntry['line'],
-					'code' => CodeFormatter::formatCode($code)
-				];
+				$key = $stackEntry['file'] . '@' . $stackEntry['line'];
+				if (count($codePoints) > 0 && end($codePoints)['key'] == $key) {
+					$codePoint = end($codePoints);
+					if ($stackEntry['function'] == '__call') {
+						$codePoint['args'] += $stackEntry['args'][1];
+					}
+					else {
+						$codePoint['args'] += $stackEntry['args'];
+					}
+					$codePoints[count($codePoints) - 1] = $codePoint;
+				}
+				else {
+					$codePoint = $stackEntry;
+					$codePoint['code'] = CodeFormatter::formatCode($code);
+					$codePoint['key']  = $key;
+
+					// deal with magic
+					if ($codePoint['function'] == '__call') {
+						$codePoint['args'] = $codePoint['args'][1];
+					}
+
+					$codePoints[] = $codePoint;
+				}
 			}
 
 			$trace = $e->getTraceAsString();
@@ -260,7 +281,7 @@ EOS;
 		// let's tell the user what we found
 		echo <<<EOS
 
-========================================
+=============================================================
 DETAILED ERROR REPORT
 ----------------------------------------
 
@@ -270,17 +291,41 @@ EOS;
 		echo "The story failed in the " . $phaseName . " phase." . PHP_EOL;
 		if (count($codePoints) > 0) {
 			echo PHP_EOL . "-----" . PHP_EOL
-			     . "The story was executing this code when it failed:"
-			     . PHP_EOL . PHP_EOL;
+			     . "The story was executing this Prose code when it failed:"
+			     . PHP_EOL;
 
+			$codePoints = array_reverse($codePoints);
 			foreach ($codePoints as $codePoint) {
-				echo ' - ' . $codePoint['file'] . '@' . $codePoint['line']. ':' . PHP_EOL . PHP_EOL
-				     . CodeFormatter::indentBySpaces($codePoint['code'], 4) . PHP_EOL;
+				echo PHP_EOL . str_repeat(' ', 4) . $codePoint['file'] . '@' . $codePoint['line'] . ':' . PHP_EOL . PHP_EOL;
+				echo CodeFormatter::indentBySpaces($codePoint['code'], 8) . PHP_EOL;
+
+				if (isset($codePoint['args']) && count($codePoint['args'])) {
+					echo PHP_EOL . '        Arguments:' . PHP_EOL;
+					foreach ($codePoint['args'] as $key => $arg) {
+						ob_start();
+						var_dump($arg);
+						$printableArg = ob_get_contents();
+						ob_end_clean();
+
+						// how many lines do we have?
+						$lines = explode(PHP_EOL, $printableArg);
+						$maxLength = 100;
+						if (count($lines) > $maxLength) {
+							$printableArg = '';
+							for ($i = 0; $i < $maxLength; $i++) {
+								$printableArg .= $lines[$i] . PHP_EOL;
+							}
+							$printableArg .= '...' . PHP_EOL;
+						}
+
+						echo PHP_EOL . CodeFormatter::indentBySpaces($printableArg, 12);
+					}
+				}
 			}
 		}
 		if (isset($this->phaseMessages[$phaseName])) {
 			echo PHP_EOL . "-----" . PHP_EOL
-			     . "Here is all the detailed output from the {$phaseName} phase:"
+			     . "This is the detailed output from the {$phaseName} phase:"
 			     . PHP_EOL . PHP_EOL;
 
 			foreach ($this->phaseMessages[$phaseName] as $msg) {
@@ -292,7 +337,7 @@ EOS;
 
 		if ($trace) {
 			echo PHP_EOL . "-----" . PHP_EOL
-			     . "We have the following stack trace for this failure:"
+			     . "This is the stack trace for this failure:"
 			     . PHP_EOL . PHP_EOL
 			     . CodeFormatter::indentBySpaces($trace, 4) . PHP_EOL;
 		}
@@ -302,7 +347,7 @@ EOS;
 
 ----------------------------------------
 END OF ERROR REPORT
-========================================
+=============================================================
 
 EOS;
 	}

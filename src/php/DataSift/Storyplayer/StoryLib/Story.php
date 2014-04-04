@@ -1209,21 +1209,93 @@ class Story
 		//
 		// find the line that the caller is looking for
 		//
-		// if there isn't an exact match, we're going to return the
-		// code for the first line after the one that the caller is
-		// asking for
-		//
-		// this is better (we hope) than returning nothing at all
-		foreach ($this->parserTrees[$filename] as $stmt) {
+		// the line that we are looking for may well be inside one of
+		// the top-level statements, so we may need to recurse in order
+		// to find it
+		return $this->searchCodeStatementsFor($this->parserTrees[$filename], $lineToFind);
+	}
+
+	protected function searchCodeStatementsFor($stmts, $lineToFind)
+	{
+		// remember the last thing we saw, as it may contain what
+		// we are looking for
+		$lastStmt = null;
+
+		foreach($stmts as $stmt) {
 			// where are we?
 			$currentLine = $stmt->getLine();
-			if ($currentLine >= $lineToFind) {
+			// var_dump($currentLine, $stmt->getType());
+
+			// are we there yet?
+			if ($currentLine < $lineToFind) {
+				// still looking
+				$lastStmt = $stmt;
+				continue;
+			}
+			else if ($currentLine == $lineToFind) {
+				// an exact match!!
 				return $stmt;
+			}
+			else {
+				// we have overshot!
+				//
+				// this is where we have to start working quite hard!
+				return $this->searchCodeStatementFor($lastStmt, $lineToFind);
 			}
 		}
 
-		// if we get here, the file doesn't contain the line number
-		// at all
-		return null;
+		// if we get here, then the line we are looking for is buried
+		// inside the last statement we saw
+		return $this->searchCodeStatementFor($lastStmt, $lineToFind);
+	}
+
+	protected function searchCodeStatementFor($stmt, $lineToFind)
+	{
+		// what are we looking at?
+		$nodeType = $stmt->getType();
+
+		switch ($nodeType)
+		{
+			case 'Arg':
+				// this is an argument to an expression
+				//
+				// its value may be a closure
+				return $this->searchCodeStatementFor($stmt->value, $lineToFind);
+
+			case 'Expr_Closure':
+				// this is a closure
+				//
+				// the line we are looking for may be inside
+				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+
+			case 'Expr_MethodCall':
+				// this is a method call
+				//
+				// one of the arguments to the method call may
+				// be a closure
+				return $this->searchCodeStatementsFor($stmt->args, $lineToFind);
+
+			case 'Stmt_Class':
+				// this is a PHP class
+				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+
+			case 'Stmt_ClassMethod':
+				// this is a method defined in a PHP class
+				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+
+			case 'Stmt_Namespace':
+				// this is a file containing code
+				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+
+			default:
+				// var_dump($nodeType);
+				// var_dump($stmt->getSubNodeNames());
+				// exit(0);
+
+				// if we get here, these statements don't contain the line number
+				// at all
+				return null;
+		}
+
 	}
 }
