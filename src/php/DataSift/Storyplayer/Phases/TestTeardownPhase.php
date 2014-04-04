@@ -44,6 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
+use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
+use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
 
 /**
  * the TestTeardown phase
@@ -68,7 +71,7 @@ class TestTeardownPhase extends StoryPhase
 		$phaseResult = new PhaseResult;
 
 		// do we have anything to do?
-		if (!$story->hasTestTeardown())
+		if (!$story->hasTestTeardown($this->getPhaseName()))
 		{
 			$phaseResult->setContinuePlaying(
 				PhaseResult::HASNOACTIONS,
@@ -89,12 +92,43 @@ class TestTeardownPhase extends StoryPhase
 			// all is good
 			$phaseResult->setContinuePlaying();
 		}
+		catch (E5xx_ActionFailed $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				PhaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				PhaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_NotImplemented $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				PhaseResult::INCOMPLETE,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
+		}
 		catch (Exception $e)
 		{
 			// we still want to continue at this stage
 			$phaseResult->setContinuePlaying(
-				PhaseResult::FAILED,
-				"unable to perform test teardown; " . (string)$e . "\n" . $e->getTraceAsString()
+				PhaseResult::ERROR,
+				$e->getMessage(),
+				$e
 			);
 		}
 

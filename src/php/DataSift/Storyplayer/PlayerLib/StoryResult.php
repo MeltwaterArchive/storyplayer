@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\PlayerLib;
 
 use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\Phases\PhaseResult;
 
 /**
  * a record of what happened with a story
@@ -57,13 +58,46 @@ use DataSift\Storyplayer\StoryLib\Story;
  */
 class StoryResult
 {
+	/**
+	 *
+	 * @var Story
+	 */
 	public $story           = null;
-	public $phases          = array();
+
+	/**
+	 *
+	 * @var PhaseResult
+	 */
+	public $failedPhase     = null;
+
+	/**
+	 * is this a story where a failure is the expected outcome?
+	 * @var boolean
+	 */
 	public $storyShouldFail = false;
+
+	/**
+	 * did the story pass, fail, or otherwise go horribly wrong?
+	 * @var integer
+	 */
 	public $storyResult     = 1;
 
+	/**
+	 * when did we start playing this story?
+	 * @var float
+	 */
 	public $startTime       = null;
+
+	/**
+	 * when did we finish playing this story?
+	 * @var float
+	 */
 	public $endTime         = null;
+
+	/**
+	 * how long did the story take to play?
+	 * @var float
+	 */
 	public $durationTime    = null;
 
 	const PASS        = 1;
@@ -95,24 +129,34 @@ class StoryResult
 	public function setStoryHasSucceeded()
 	{
 		$this->storyResult = self::PASS;
+		$this->failedPhase = null;
 	}
 
 	public function setStoryHasBeenBlacklisted()
 	{
 		$this->storyResult = self::BLACKLISTED;
+		$this->failedPhase = null;
 	}
 
-	public function setStoryIsIncomplete()
+	public function setStoryIsIncomplete(PhaseResult $phaseResult)
 	{
-		$this->storyResult = self::SKIPPED;
+		$this->storyResult = self::INCOMPLETE;
+		$this->failedPhase = $phaseResult;
 	}
 
-	public function setStoryHasFailed()
+	public function setStoryHasFailed(PhaseResult $phaseResult)
 	{
 		$this->storyResult = self::FAIL;
+		$this->failedPhase = $phaseResult;
 	}
 
-	public function calculateStoryResult(PhaseResults $phaseResults)
+	public function setStoryHasError(PhaseResult $phaseResult)
+	{
+		$this->storyResult = self::ERROR;
+		$this->failedPhase = $phaseResult;
+	}
+
+	public function calculateStoryResult()
 	{
 		$this->setEndTime();
 	}

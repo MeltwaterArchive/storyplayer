@@ -1164,35 +1164,40 @@ class Story
 
 	public function buildParseTrees($storyFilename)
 	{
-		// we need a little bit of help here
-		$parser = new \PhpParser\Parser(new \PhpParser\Lexer);
-
 		// parse our own source code
 		//
 		// we're going to use this parser data at a later point when
 		// showing what has gone wrong and why
-		try {
-			$this->parserTrees[$storyFilename] = $parser->parse(file_get_contents($storyFilename));
-		}
-		catch (Exception $e) {
-			// something went wrong parsing the story
-			// nothing we can do about that
-		}
+		$this->buildParseTreeForFile($storyFilename);
 
 		// now, we need to parse all of the templates that we use
 		foreach ($this->storyTemplates as $storyTemplate) {
-			try {
-				$templateFilename = $storyTemplate->getSourceFilename();
-				$this->parserTrees[$templateFilename] = $parser->parse(file_get_contents($templateFilename));
-			}
-			catch (Exception $e) {
-				// something went wrong parsing the template
-				// nothing we can do about that
-			}
+			$templateFilename = $storyTemplate->getSourceFilename();
+			$this->buildParseTreeForFile($templateFilename);
 		}
 	}
 
-	public function getStoryCode($filename, $lineToFind)
+	public function buildParseTreeForFile($filename)
+	{
+		// special case - do we already have this file parsed?
+		if (isset($this->parserTrees[$filename])) {
+			// yes - nothing to do
+			return;
+		}
+
+		// we need a little bit of help here
+		$parser = new \PhpParser\Parser(new \PhpParser\Lexer);
+
+		try {
+			$this->parserTrees[$filename] = $parser->parse(file_get_contents($filename));
+		}
+		catch (Exception $e) {
+			// something went wrong parsing the template
+			// nothing we can do about that
+		}
+	}
+
+	public function getStoryCodeFor($filename, $lineToFind)
 	{
 		// do we have a parser tree for this file?
 		if (!isset($this->parserTrees[$filename])) {

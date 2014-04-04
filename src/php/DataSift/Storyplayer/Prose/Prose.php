@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use ReflectionObject;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
@@ -74,6 +75,17 @@ class Prose
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
 		$this->args = $args;
+
+		// add ourselves to the list of parsed code, for better error
+		// handling
+		//
+		// because $st is used as a generic module loader throughout
+		// the codebase, it is possible for a Prose module to be run
+		// before we know what story we are executing
+		$story = $st->getStory();
+		if ($story) {
+			$story->buildParseTreeForFile($this->getSourceFilename());
+		}
 
 		// setup the page context
 		$this->initPageContext();
@@ -163,4 +175,12 @@ class Prose
 
 		return (double)$final;
 	}
+
+    public function getSourceFilename()
+    {
+        $refObj = new ReflectionObject($this);
+    	return $refObj->getFileName();
+    }
+
+
 }

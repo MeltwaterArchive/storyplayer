@@ -44,6 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
+use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
+use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
 
 /**
  * the TestEnvironmentTeardown phase
@@ -68,7 +71,7 @@ class TestEnvironmentTeardownPhase extends StoryPhase
 		$phaseResult = new PhaseResult;
 
 		// do we have anything to do?
-		if (!$story->hasTestEnvironmentTeardown())
+		if (!$story->hasTestEnvironmentTeardown($this->getPhaseName()))
 		{
 			$phaseResult->setContinuePlaying(
 				PhaseResult::HASNOACTIONS,
@@ -89,13 +92,45 @@ class TestEnvironmentTeardownPhase extends StoryPhase
 			// all is good
 			$phaseResult->setContinuePlaying();
 		}
-		catch (Exception $e) {
+		catch (E5xx_ActionFailed $e) {
 			// we always continue at this point, even though the phase
 			// itself failed
 			$phaseResult->setContinuePlaying(
 				PhaseResult::FAILED,
-				"unable to complete test environment teardown; " . (string)$e . "\n" . $e->getTraceAsString()
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				PhaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_NotImplemented $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				PhaseResult::INCOMPLETE,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
+		}
+		catch (Exception $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				PhaseResult::ERROR,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasError($phaseResult);
 		}
 
 		// close off any open log actions

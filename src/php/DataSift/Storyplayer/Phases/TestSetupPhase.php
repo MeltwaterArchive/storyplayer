@@ -44,6 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
+use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
+use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
 
 /**
  * the TestSetup phase
@@ -66,7 +69,7 @@ class TestSetupPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our return value
-		$phaseResult = new PhaseResult();
+		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		// do we have anything to do?
 		if (!$story->hasTestSetup())
@@ -93,13 +96,39 @@ class TestSetupPhase extends StoryPhase
 			// if we get here, then all is well
 			$phaseResult->setContinuePlaying();
 		}
+		catch (E5xx_ActionFailed $e) {
+			$phaseResult->setPlayingFailed(
+				PhaseResult::FAILED,
+				$e->getMessage,
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			$phaseResult->setPlayingFailed(
+				PhaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		// if any of the tests are incomplete, deal with that too
+		catch (E5xx_NotImplemented $e) {
+			$phaseResult->setPlayingFailed(
+				PhaseResult::INCOMPLETE,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
+		}
 		catch (Exception $e)
 		{
 			// something went wrong ... the test cannot continue
 			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
-				PhaseResult::FAILED,
-				"unable to perform test setup; " . (string)$e . "\n" . $e->getTraceAsString()
+				PhaseResult::ERROR,
+				$e->getMessage(),
+				$e
 			);
 		}
 

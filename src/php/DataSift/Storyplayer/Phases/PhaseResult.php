@@ -68,10 +68,12 @@ use DataSift\StoryPlayer\PlayerLib\PhasesPlayer;
 
 class PhaseResult
 {
+	protected $phaseName;
 	protected $message;
 	protected $nextAction;
 	protected $pairedPhases = array();
 	protected $result;
+	protected $exception;
 
 	const MIN_RESULT = 1;
 	const MAX_RESULT = 5;
@@ -81,9 +83,20 @@ class PhaseResult
 	const SUCCEEDED    = 1;
 	const FAILED       = 2;
 	const INCOMPLETE   = 3;
-	const HASNOACTIONS = 4;
-	const SKIPPED      = 5;
-	const BLACKLISTED  = 6;
+	const ERROR        = 4;
+	const HASNOACTIONS = 5;
+	const SKIPPED      = 6;
+	const BLACKLISTED  = 7;
+
+	public function __construct($phaseName)
+	{
+		$this->phaseName = $phaseName;
+	}
+
+	public function getPhaseName()
+	{
+		return $this->phaseName;
+	}
 
 	public function hasMessage()
 	{
@@ -97,6 +110,11 @@ class PhaseResult
 	public function getMessage()
 	{
 		return $this->message;
+	}
+
+	public function getException()
+	{
+		return $this->exception;
 	}
 
 	public function getPhaseResult()
@@ -175,24 +193,26 @@ class PhaseResult
 	/**
 	 * @param string $msg
 	 */
-	public function setContinuePlaying($result = 1, $msg = null)
+	public function setContinuePlaying($result = 1, $msg = null, $e = null)
 	{
 		$this->nextAction = PhasesPlayer::NEXT_CONTINUE;
 		$this->result     = $result;
 		$this->message    = $msg;
+		$this->exception  = $e;
 	}
 
 	/**
 	 * @param string $msg
 	 */
-	public function setPlayingFailed($result, $msg)
+	public function setPlayingFailed($result, $msg, $e)
 	{
 		$this->nextAction = PhasesPlayer::NEXT_FAIL;
 		$this->result     = $result;
 		$this->message    = $msg;
+		$this->exception  = $e;
 	}
 
-	public function setSkipPhases($result, $msg)
+	public function setSkipPlaying($result, $msg)
 	{
 		$this->nextAction = PhasesPlayer::NEXT_SKIP;
 		$this->result     = $result;

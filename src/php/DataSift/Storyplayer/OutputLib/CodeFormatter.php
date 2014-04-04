@@ -88,4 +88,17 @@ class CodeFormatter
 		// all done
 		return $return;
 	}
+
+	static public function indentBySpaces($codeToPrint, $indentAmount)
+	{
+		// the string to indent with
+		$spaces = str_repeat(' ', $indentAmount);
+
+		// do the indentation
+		$return = preg_replace('|^(.*)|m', $spaces . '\\1', $codeToPrint);
+
+		// all done
+		return $return;
+
+	}
 }

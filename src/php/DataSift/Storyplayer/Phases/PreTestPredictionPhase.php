@@ -69,7 +69,7 @@ class PreTestPredictionPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our return value
-		$phaseResult = new PhaseResult;
+		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		try {
 			// do we have anything to do?
@@ -101,32 +101,38 @@ class PreTestPredictionPhase extends StoryPhase
 		// in any of the expects() calls in the preflight checks fails,
 		// an E5xx_ActionFailed will be thrown
 		catch (E5xx_ActionFailed $e) {
-			$storyResult->setStoryShouldFail();
 			$phaseResult->setContinuePlaying(
 				PhaseResult::FAILED,
-				"pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString()
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryShouldFail();
 		}
 		catch (E5xx_ExpectFailed $e) {
-			$storyResult->setStoryShouldFail();
 			$phaseResult->setContinuePlaying(
 				PhaseResult::FAILED,
-				"pre-test prediction failed; " . (string)$e . "\n" . $e->getTraceAsString()
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryShouldFail();
 		}
 		// if any of the tests are incomplete, deal with that too
 		catch (E5xx_NotImplemented $e) {
 			$phaseResult->setPlayingFailed(
 				PhaseResult::INCOMPLETE,
-				"unable to perform pre-test prediction; " . (string)$e . "\n" . $e->getTraceAsString()
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
 		}
 		// deal with the things that go wrong
 		catch (Exception $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::FAILED,
-				"unable to perform pre-test prediction; " . (string)$e . "\n" . $e->getTraceAsString()
+				PhaseResult::ERROR,
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryHasError($phaseResult);
 		}
 
 		// close off any open log actions

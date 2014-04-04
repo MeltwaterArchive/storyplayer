@@ -43,8 +43,12 @@
 
 namespace DataSift\Storyplayer\Console;
 
+use DataSift\StoryPlayer\OutputLib\CodeFormatter;
 use DataSift\StoryPlayer\Phases\Phase;
+use DataSift\StoryPlayer\Phases\PhaseResult;
 use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\StoryPlayer\StoryLib\Story;
+use DataSift\Stone\LogLib\Log;
 
 /**
  * the console plugin we use unless the user specifies something else
@@ -60,12 +64,8 @@ class DefaultConsole implements Console
 {
 	protected $currentPhase;
 	protected $phaseNumber = 0;
-	protected $phaseErrors = array();
-
 	protected $phaseMessages = array();
-
 	protected $verbosityLevel = 0;
-
 	protected $resultStrings = array();
 
 	public function __construct()
@@ -187,43 +187,108 @@ EOS;
 		     . ' (' . round($storyResult->durationTime, 2) . ' secs)'
 		     . PHP_EOL;
 
-		if (count($this->phaseErrors) > 0) {
-			foreach ($this->phaseErrors as $phaseName => $msg)
-			{
-				// what activity was the phase doing?
-				$this->showActivityForPhase($phaseName);
+		// do we need to say anything more?
+		switch ($storyResult->storyResult)
+		{
+			case StoryResult::PASS:
+			case StoryResult::BLACKLISTED:
+				// no, we're happy enough
+				return;
 
-				// what was the final error message?
-				echo $msg . PHP_EOL;
-			}
-
-			// finish with a blank line so that any subsequent story is
-			// easier to see
-			echo PHP_EOL;
+			default:
+				// everything else is an error of some kind
+				$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
+				break;
 		}
 	}
 
 	/**
-	 * @param string $phaseName
+	 * @param PhaseResult $phaseResult
 	 */
-	protected function showActivityForPhase($phaseName)
+	protected function showActivityForPhase(Story $story, PhaseResult $phaseResult)
 	{
-		if (!isset($this->phaseMessages[$phaseName]) || !count($this->phaseMessages[$phaseName])) {
-			// we have nothing to show
-			return;
+		// what is the phase that we are dealing with?
+		$phaseName = $phaseResult->getPhaseName();
+
+		// our final messages to show the user
+		$codePoints = [];
+		$trace = null;
+
+		// does the phase have an exception?
+		$e = $phaseResult->getException();
+		if ($e)
+		{
+			$stackTrace = $e->getTrace();
+			foreach ($stackTrace as $stackEntry)
+			{
+				// do we have any code for this?
+				$code = $story->getStoryCodeFor($stackEntry['file'], $stackEntry['line']);
+				if (!$code) {
+					continue;
+				}
+
+				// because we chain multiple method calls on a single line,
+				// a PHP stack entry can contain duplicate entries
+				//
+				// we don't want to show duplicate entries, so we use the
+				// filename@line as a key in the array
+				$codePoints[$stackEntry['file'] . '@' . $stackEntry['line']] = [
+					'file' => $stackEntry['file'],
+					'line' => $stackEntry['line'],
+					'code' => CodeFormatter::formatCode($code)
+				];
+			}
+
+			$trace = $e->getTraceAsString();
 		}
 
-		// tell the world
-		echo PHP_EOL . "The story failed in the {$phaseName} phase:" . PHP_EOL . PHP_EOL;
+		// let's tell the user what we found
+		echo <<<EOS
 
-		// show the activity of the phase
-		foreach ($this->phaseMessages[$phaseName] as $msg) {
-			echo "[" . date("Y-m-d H:i:s", $msg['ts']) . "] "
-			     . $msg['text'] . PHP_EOL;
+========================================
+DETAILED ERROR REPORT
+----------------------------------------
+
+
+EOS;
+
+		echo "The story failed in the " . $phaseName . " phase." . PHP_EOL;
+		if (count($codePoints) > 0) {
+			echo PHP_EOL . "-----" . PHP_EOL
+			     . "The story was executing this code when it failed:"
+			     . PHP_EOL . PHP_EOL;
+
+			foreach ($codePoints as $codePoint) {
+				echo ' - ' . $codePoint['file'] . '@' . $codePoint['line']. ':' . PHP_EOL . PHP_EOL
+				     . CodeFormatter::indentBySpaces($codePoint['code'], 4) . PHP_EOL;
+			}
+		}
+		if (isset($this->phaseMessages[$phaseName])) {
+			echo PHP_EOL . "-----" . PHP_EOL
+			     . "Here is all the detailed output from the {$phaseName} phase:"
+			     . PHP_EOL . PHP_EOL;
+
+			foreach ($this->phaseMessages[$phaseName] as $msg) {
+				echo "[" . date("Y-m-d H:i:s", $msg['ts']) . "] "
+                     . $msg['text'] . PHP_EOL;
+			}
 		}
 
-		// leave a blank line afterwards
-		echo PHP_EOL;
+		if ($trace) {
+			echo PHP_EOL . "-----" . PHP_EOL
+			     . "We have the following stack trace for this failure:"
+			     . PHP_EOL . PHP_EOL
+			     . CodeFormatter::indentBySpaces($trace, 4) . PHP_EOL;
+		}
+
+		// all done
+		echo <<< EOS
+
+----------------------------------------
+END OF ERROR REPORT
+========================================
+
+EOS;
 	}
 
 	/**
@@ -313,7 +378,11 @@ EOS;
 		// we have to show this now, and save it for final output later
 		echo "e";
 
-		$this->phaseErrors[$phaseName] = $msg;
+		$this->phaseMessages[$this->currentPhase][] = [
+			'ts'    => time(),
+			'level' => Log::LOG_CRITICAL,
+			'text'  => $msg
+		];
 	}
 
 	/**
@@ -328,7 +397,7 @@ EOS;
 		// we have to show this now, and save it for final output later
 		echo "s";
 
-		// $this->phaseErrors[$phaseName] = $msg;
+		// $this->phaseMessages[$phaseName] = $msg;
 	}
 
 	/**

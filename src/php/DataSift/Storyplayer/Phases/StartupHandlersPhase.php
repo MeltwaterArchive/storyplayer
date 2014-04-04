@@ -67,7 +67,7 @@ class StartupHandlersPhase extends InternalPostPhase
 		$st      = $this->st;
 
 		// our result object
-		$phaseResult = new PhaseResult();
+		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		// we're going to use a helper to do the work
 		//

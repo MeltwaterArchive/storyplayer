@@ -44,6 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
+use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
+use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
 
 /**
  * the PreTestInspectionSetup phase
@@ -66,7 +69,7 @@ class PreTestInspectionPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our result
-		$phaseResult = new PhaseResult;
+		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		// do we have anything to do?
 		if (!$story->hasPreTestInspection())
@@ -94,12 +97,38 @@ class PreTestInspectionPhase extends StoryPhase
 			// if we get here, the pre-test inspection was successful
 			$phaseResult->setContinuePlaying();
 		}
-		catch (Exception $e) {
-			$storyResult->setStoryHasFailed();
+		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(
 				PhaseResult::FAILED,
-				"unable to perform pre-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryHasError($phaseResult);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			$msg = "pre-test inspection failed; " . (string)$e;
+			$phaseResult->setPlayingFailed(
+				PhaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasError($phaseResult);
+		}
+		catch (E5xx_NotImplemented $e) {
+			$phaseResult->setPlayingFailed(
+				PhaseResult::INCOMPLETE,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
+		}
+		catch (Exception $e) {
+			$phaseResult->setPlayingFailed(
+				PhaseResult::ERROR,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasError($phaseResult);
 		}
 
 		// close off any open log actions

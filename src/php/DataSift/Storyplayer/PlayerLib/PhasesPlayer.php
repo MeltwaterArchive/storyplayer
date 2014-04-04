@@ -138,7 +138,7 @@ class PhasesPlayer
 					$phaseResult = $phase->doPhase();
 				}
 				else {
-					$phaseResult = new PhaseResult;
+					$phaseResult = new PhaseResult($phase->getPhaseName());
 					$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
 					$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
 				}
@@ -182,7 +182,7 @@ class PhasesPlayer
 
 					case self::NEXT_FAIL:
 						$phaseResults->setPhasesHaveFailed();
-						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED . PHP_EOL . $phaseResult->getMessage());
+						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED . ': ' . $phaseResult->getMessage());
 
 						// tell the output plugins that this phase is over
 						$phase->announcePhaseEnd();
@@ -200,11 +200,11 @@ class PhasesPlayer
 			// done sufficient error handling of its own!!
 			catch (Exception $e) {
 				// tell our output plugins what happened
-				$output->logPhaseError($phaseName, "uncaught exception: " . (string)$e->getMessage() . PHP_EOL . $e->getTraceAsString());
+				$output->logPhaseError($phaseName, "uncaught exception: " . (string)$e->getMessage());
 
 				// we need to create a dummy phase result for this
 				$phaseResult = new PhaseResult;
-				$phaseResult->setPlayingFailed(PhaseResult::FAILED, self::MSG_PHASE_FAILED);
+				$phaseResult->setPlayingFailed(PhaseResult::FAILED, self::MSG_PHASE_FAILED, $e);
 				// $phaseResults->addPhaseResult($phaseName, $phaseResult);
 
 				// this is a fatal exception

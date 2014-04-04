@@ -69,7 +69,7 @@ class PostTestInspectionPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our results object
-		$phaseResult = new PhaseResult;
+		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		try {
 			// do we have anything to do?
@@ -97,64 +97,70 @@ class PostTestInspectionPhase extends StoryPhase
 			// if we get here, the post-test inspection did not fail
 			// ... but should it have?
 			if ($storyResult->getStoryShouldFail()) {
-				$storyResult->setStoryHasFailed();
 				$phaseResult->setPlayingFailed(
 					PhaseResult::SUCCESS,
-					"post-test inspection succeeded when it was expected to fail"
+					"post-test inspection succeeded when it was expected to fail",
+					null
 				);
+				$storyResult->setStoryHasFailed($phaseResult);
 			}
 			else {
 				$phaseResult->setContinuePlaying();
 			}
 		}
 		catch (E5xx_ActionFailed $e) {
-			$msg = "post-test inspection failed; " . (string)$e . "\n" . $e->getTraceAsString();
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
 					PhaseResult::SUCCESS,
-					$msg
+					$e->getMessage(),
+					$e
 				);
 			}
 			else {
-				$storyResult->setStoryHasFailed();
 				$phaseResult->setPlayingFailed(
 					PhaseResult::FAILED,
-					$msg
+					$e->getMessage(),
+					$e
 				);
+				$storyResult->setStoryHasFailed($phaseResult);
 			}
 		}
 		catch (E5xx_ExpectFailed $e) {
-			$msg = "post-test inspection failed; " . (string)$e . "\n" . $e->getTraceAsString();
+			$msg = "post-test inspection failed; " . (string)$e;
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
 					PhaseResult::SUCCESS,
-					$msg
+					$e->getMessage(),
+					$e
 				);
 			}
 			else {
-				$storyResult->setStoryHasFailed();
 				$phaseResult->setPlayingFailed(
 					PhaseResult::FAILED,
-					$msg
+					$e->getMessage(),
+					$e
 				);
+				$storyResult->setStoryHasFailed($phaseResult);
 			}
 		}
 
 		// this is treated as a hard fail
 		catch (E5xx_NotImplemented $e) {
-			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
 				PhaseResult::INCOMPLETE,
-				"unable to complete post-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
 		}
 		// this only happens when something has gone very badly wrong
 		catch (Exception $e) {
-			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
-				PhaseResult::INCOMPLETE,
-				"unable to complete post-test inspection; " . (string)$e . "\n" . $e->getTraceAsString()
+				PhaseResult::ERROR,
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryHasError($phaseResult);
 		}
 
 		// close off any open log actions

@@ -69,7 +69,7 @@ class ActionPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// keep track of what happens with the action
-		$phaseResult = new PhaseResult;
+		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		// do we have anything to do?
 		if (!$story->hasActions())
@@ -92,11 +92,12 @@ class ActionPhase extends StoryPhase
 
 			// if we get here, all is well
 			if ($storyResult->getStoryShouldFail()) {
-				$storyResult->setStoryHasFailed();
 				$phaseResult->setPlayingFailed(
 					PhaseResult::COMPLETED,
-					"action completed successfully; was expected to fail"
+					"action completed successfully; was expected to fail",
+					null
 				);
+				$storyResult->setStoryHasFailed($phaseResult);
 			}
 			else {
 				$phaseResult->setContinuePlaying();
@@ -105,54 +106,58 @@ class ActionPhase extends StoryPhase
 
 		// if the set of actions fails, it will throw this exception
 		catch (E5xx_ActionFailed $e) {
-			$msg = "action failed; " . (string)$e . PHP_EOL . $e->getTraceAsString();
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
 					PhaseResult::FAILED,
-					$msg
+					$e->getMessage(),
+					$e
 				);
 			}
 			else {
-				$storyResult->setStoryHasFailed();
 				$phaseResult->setPlayingFailed(
 					PhaseResult::FAILED,
-					$msg
+					$msg,
+					$e
 				);
+				$storyResult->setStoryHasFailed($phaseResult);
 			}
 		}
 		catch (E5xx_ExpectFailed $e) {
-			$msg = "action failed; " . (string)$e . PHP_EOL . $e->getTraceAsString();
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
 					PhaseResult::FAILED,
-					$msg
+					$e->getMessage(),
+					$e
 				);
 			}
 			else {
-				$storyResult->setStoryHasFailed();
 				$phaseResult->setPlayingFailed(
 					PhaseResult::FAILED,
-					$msg
+					$e->getMessage(),
+					$e
 				);
+				$storyResult->setStoryHasFailed($phaseResult);
 			}
 		}
 
 		// we treat this as a hard failure
 		catch (E5xx_NotImplemented $e) {
-			$storyResult->setStoryIsIncomplete();
 			$phaseResult->setPlayingFailed(
 				PhaseResult::INCOMPLETE,
-				"unable to complete actions; " . (string)$e . "\n" . $e->getTraceAsString()
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
 		}
 
 		// if this happens, something has gone badly wrong
 		catch (Exception $e) {
-			$storyResult->setStoryHasFailed();
 			$phaseResult->setPlayingFailed(
-				PhaseResult::INCOMPLETE,
-				"unable to complete actions; " . (string)$e . "\n" . $e->getTraceAsString()
+				PhaseResult::ERROR,
+				$e->getMessage(),
+				$e
 			);
+			$storyResult->setStoryHasError($phaseResult);
 		}
 
 		// close off any open log actions

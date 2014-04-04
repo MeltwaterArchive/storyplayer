@@ -44,6 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
+use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
+use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
 
 /**
  * the TestEnvironmentSetup phase
@@ -65,7 +68,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our return value
-		$phaseResult = new PhaseResult();
+		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		// shorthand
 		$story = $st->getStory();
@@ -92,19 +95,46 @@ class TestEnvironmentSetupPhase extends StoryPhase
 			foreach ($callbacks as $callback){
 				call_user_func($callback, $st);
 			}
+
+			$phaseResult->setContinuePlaying();
+			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
+		}
+		catch (E5xx_ActionFailed $e) {
+			$phaseResult->setPlayingFailed(
+				PhaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			$phaseResult->setPlayingFailed(
+				PhaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		// if any of the tests are incomplete, deal with that too
+		catch (E5xx_NotImplemented $e) {
+			$phaseResult->setPlayingFailed(
+				PhaseResult::INCOMPLETE,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
 		}
 		catch (Exception $e) {
-			$msg = "unable to perform test environment setup; " . (string)$e . "\n" . $e->getTraceAsString();
-			$storyResult->setStoryHasFailed();
-			$phaseResult->setPlayingFailed(PhaseResult::FAILED, $msg);
+			$phaseResult->setPlayingFailed(
+				PhaseResult::ERROR,
+				$e->getMessage(),
+				$e
+			);
 			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
-			return $phaseResult;
+			$storyResult->setStoryHasFailed($phaseResult);
 		}
 
 		// all done
-		$phaseResult->setContinuePlaying();
-		$phaseResult->addPairedPhase('TestEnvironmentTeardown');
-
 		return $phaseResult;
 	}
 }
