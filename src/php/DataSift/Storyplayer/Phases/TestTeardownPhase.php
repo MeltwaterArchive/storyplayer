@@ -68,10 +68,10 @@ class TestTeardownPhase extends StoryPhase
 		$story = $st->getStory();
 
 		// our result
-		$phaseResult = new PhaseResult;
+		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		// do we have anything to do?
-		if (!$story->hasTestTeardown($this->getPhaseName()))
+		if (!$story->hasTestTeardown())
 		{
 			$phaseResult->setContinuePlaying(
 				PhaseResult::HASNOACTIONS,
