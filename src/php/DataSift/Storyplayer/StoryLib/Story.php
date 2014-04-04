@@ -47,6 +47,7 @@ use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\StoryTemplate;
 use DataSift\Stone\LogLib\Log;
+use DataSift\StoryPlayer\OutputLib\CodeFormatter;
 
 /**
  * Object that represents a single story
@@ -1189,5 +1190,35 @@ class Story
 				// nothing we can do about that
 			}
 		}
+	}
+
+	public function getStoryCode($filename, $lineToFind)
+	{
+		// do we have a parser tree for this file?
+		if (!isset($this->parserTrees[$filename])) {
+			// nope
+			return null;
+		}
+
+		// we have the parsed code
+		//
+		// find the line that the caller is looking for
+		//
+		// if there isn't an exact match, we're going to return the
+		// code for the first line after the one that the caller is
+		// asking for
+		//
+		// this is better (we hope) than returning nothing at all
+		foreach ($this->parserTrees[$filename] as $stmt) {
+			// where are we?
+			$currentLine = $stmt->getLine();
+			if ($currentLine >= $lineToFind) {
+				return $stmt;
+			}
+		}
+
+		// if we get here, the file doesn't contain the line number
+		// at all
+		return null;
 	}
 }
