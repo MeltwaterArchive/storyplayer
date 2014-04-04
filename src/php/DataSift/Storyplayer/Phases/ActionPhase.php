@@ -116,7 +116,7 @@ class ActionPhase extends StoryPhase
 			else {
 				$phaseResult->setPlayingFailed(
 					PhaseResult::FAILED,
-					$msg,
+					$e->getMessage(),
 					$e
 				);
 				$storyResult->setStoryHasFailed($phaseResult);
