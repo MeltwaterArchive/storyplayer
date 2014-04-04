@@ -62,6 +62,10 @@ class StoryResult
 	public $storyShouldFail = false;
 	public $storyResult     = 1;
 
+	public $startTime       = null;
+	public $endTime         = null;
+	public $durationTime    = null;
+
 	const PASS        = 1;
 	const FAIL        = 2;
 	const ERROR       = 3;
@@ -72,6 +76,10 @@ class StoryResult
 	{
 		// remember the story we are reporting on
 		$this->story = $story;
+
+		// remember when we were created - we're going to treat that
+		// as the start time for this story!
+		$this->startTime = microtime(true);
 	}
 
 	public function getStoryShouldFail()
@@ -106,5 +114,12 @@ class StoryResult
 
 	public function calculateStoryResult(PhaseResults $phaseResults)
 	{
+		$this->setEndTime();
+	}
+
+	protected function setEndTime()
+	{
+		$this->endTime = microtime(true);
+		$this->durationTime = $this->endTime - $this->startTime;
 	}
 }
