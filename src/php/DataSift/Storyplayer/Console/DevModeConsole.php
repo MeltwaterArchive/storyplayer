@@ -171,6 +171,7 @@ Final Result
 EOS;
 
 		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel] . PHP_EOL;
+		echo 'Duration: ' . round($storyResult->durationTime, 2) . ' secs' . PHP_EOL;
 	}
 
 	/**
