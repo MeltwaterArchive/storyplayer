@@ -68,23 +68,29 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 	 */
 	public function start(StoryTeller $st)
 	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('enhancedReplies');
+		try {
+			$httpProxy = new BrowserMobProxyClient();
+			$httpProxy->enableFeature('enhancedReplies');
 
-		$this->proxySession = $httpProxy->createProxy();
+			$this->proxySession = $httpProxy->createProxy();
 
-		// start recording
-		$this->proxySession->startHAR();
+			// start recording
+			$this->proxySession->startHAR();
 
-		// create the browser session
-		$webDriver = new WebDriverClient();
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			array(
-				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			) + $this->browserDetails->desiredCapabilities
+			// create the browser session
+			$webDriver = new WebDriverClient();
+			$this->browserSession = $webDriver->newSession(
+				$this->browserDetails->browser,
+				array(
+					'proxy' => $this->proxySession->getWebDriverProxyConfig()
+				) + $this->browserDetails->desiredCapabilities
 
-		);
+			);
+		}
+		catch (Exception $e) {
+			// something went wrong
+			throw new E5xx_CannotStartDevice();
+		}
 	}
 
 	/**
