@@ -452,6 +452,7 @@ class Story
 	public function setParams($defaults)
 	{
 		$this->params = $defaults;
+		return $this;
 	}
 
 	public function getParams()
