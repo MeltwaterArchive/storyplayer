@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ConfigLib\LoadedConfig;
+use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Datasift\Os;
 use Datasift\IfconfigParser;
