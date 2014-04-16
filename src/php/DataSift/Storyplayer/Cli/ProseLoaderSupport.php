@@ -63,17 +63,17 @@ trait ProseLoaderSupport
 	 *
 	 * @return void
 	 */
-	public function initProseLoaderSupport()
+	public function initProseLoaderSupport(Injectables $injectables)
 	{
 		// $st will use this to load modules
 		$this->proseLoader = new ProseLoader();
 
 		// does the user have any namespaces of their own that they
 		// want to search?
-		if (isset($this->staticConfig->prose, $this->staticConfig->prose->namespaces) && is_array($this->staticConfig->prose->namespaces)) {
+		if (isset($injectables->staticConfig->prose, $injectables->staticConfig->prose->namespaces) && is_array($injectables->staticConfig->prose->namespaces)) {
 			// yes, the user does have some namespaces
 			// copy them across into our list
-			$this->proseLoader->setNamespaces($this->staticConfig->prose->namespaces);
+			$this->proseLoader->setNamespaces($injectables->staticConfig->prose->namespaces);
 		}
 
 	}
