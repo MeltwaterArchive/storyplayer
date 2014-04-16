@@ -72,6 +72,11 @@ interface OutputPlugin
 	public function endStoryplayer();
 
 	/**
+	 * @param int $level
+	 */
+	public function setVerbosity($verbosityLevel);
+
+	/**
 	 * @param string $storyName
 	 * @param string $storyCategory
 	 * @param string $storyGroup
