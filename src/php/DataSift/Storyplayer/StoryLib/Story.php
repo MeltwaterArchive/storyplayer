@@ -248,6 +248,13 @@ class Story
 	 */
 	protected $parserTrees = array();
 
+	/**
+	 * the file that contains the story
+	 *
+	 * @var string
+	 */
+	protected $sourceFile = '';
+
 	// ====================================================================
 	//
 	// Metadata about the story itself
@@ -500,6 +507,17 @@ class Story
 
 		// all done
 		return $return;
+	}
+
+	public function determineStoryFilename()
+	{
+		$trace = debug_backtrace();
+		$this->storyFilename = $trace[1]['file'];
+	}
+
+	public function getStoryFilename()
+	{
+		return $this->storyFilename;
 	}
 
 	// ====================================================================
