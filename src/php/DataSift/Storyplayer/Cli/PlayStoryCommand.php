@@ -553,12 +553,12 @@ class PlayStoryCommand extends CliCommand
 
     protected function initProseLoader(Injectables $injectables)
     {
-        $injectables->initProseLoaderSupport();
+        $injectables->initProseLoaderSupport($injectables);
     }
 
     protected function initReportLoader(Injectables $injectables)
     {
-        $injectables->initReportLoaderSupport();
+        $injectables->initReportLoaderSupport($injectables);
     }
 
     protected function initReporting(CliEngine $engine, Injectables $injectables)

@@ -63,17 +63,17 @@ trait ReportLoaderSupport
 	 *
 	 * @return void
 	 */
-	public function initReportLoaderSupport()
+	public function initReportLoaderSupport(Injectables $injectables)
 	{
 		// we will use this to load different reports
 		$this->reportLoader = new ReportLoader();
 
 		// does the user have any namespaces of their own that they
 		// want to search?
-		if (isset($this->staticConfig->reports, $this->staticConfig->reports->namespaces) && is_array($this->staticConfig->reports->namespaces)) {
+		if (isset($injectables->staticConfig->reports, $injectables->staticConfig->reports->namespaces) && is_array($injectables->staticConfig->reports->namespaces)) {
 			// yes, the user does have some namespaces
 			// copy them across into our list
-			$this->reportLoader->setNamespaces($this->staticConfig->reports->namespaces);
+			$this->reportLoader->setNamespaces($injectables->staticConfig->reports->namespaces);
 		}
 
 	}
