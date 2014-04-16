@@ -98,7 +98,7 @@ class LogJUnitSwitch extends CliSwitch
 		if (!isset($engine->options->reports)) {
 			$engine->options->reports = [];
 		}
-		$engine->options->reports['LogJUnit'] = $params[0];
+		$engine->options->reports['JUnit'] = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);
