@@ -222,7 +222,7 @@ class PhasesPlayer
 		return $phaseResults;
 	}
 
-	public function playPairedPhases(StoryTeller $st, $phaseType)
+	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases)
 	{
 		// special case
 		//
@@ -234,12 +234,10 @@ class PhasesPlayer
 
 		// shorthand
 		$output  = $st->getOutput();
-		$context = $st->getStoryContext();
 
 		// we are going to need something to help us load each of our
 		// phases
-		$phaseLoader = new PhaseLoader();
-		$phaseLoader->setNamespaces($st);
+		$phaseLoader = $injectables->phaseLoader;
 
 		// ----------------------------------------------------------------
 		// CLEANUP TIME
@@ -258,10 +256,10 @@ class PhasesPlayer
 			// by default, we assume that it is
 			$isActive = true;
 
-			// check our story context to see if it has a different
+			// check the phases list to see if it has a different
 			// opinion
-			if (isset($context->phases->$phaseType->$phaseName)) {
-				$isActive = $context->phases->$phaseType->$phaseName;
+			if (isset($phases->$phaseName)) {
+				$isActive = $phases->$phaseName;
 			}
 
 			// load the phase
@@ -272,9 +270,12 @@ class PhasesPlayer
 
 			// run the phase if we're allowed to
 			if ($isActive) {
-				$phase->doPhase();
+				$st->setCurrentPhase($phase);
+				$phaseResult = $phase->doPhase();
 			}
 			else {
+				$phaseResult = new PhaseResult($phase->getPhaseName());
+				$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
 				$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
 			}
 
@@ -290,6 +291,16 @@ class PhasesPlayer
 
 			// tell the world that the phase is over
 			$phase->announcePhaseEnd();
+
+			// remember the result of this phase
+			$phaseResults->addResult($phase, $phaseResult);
+
+			// we *always* continue, even if the phase failed
 		}
+
+		// reset our list of paired phases, in case we get reused
+		$this->pairedPhases = [];
+
+		// all done
 	}
 }
