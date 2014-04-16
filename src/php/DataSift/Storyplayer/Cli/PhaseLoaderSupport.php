@@ -63,17 +63,17 @@ trait PhaseLoaderSupport
 	 *
 	 * @return void
 	 */
-	public function initPhaseLoaderSupport()
+	public function initPhaseLoaderSupport(Injectables $injectables)
 	{
 		// $st will use this to load modules
 		$this->phaseLoader = new PhaseLoader();
 
 		// does the user have any namespaces of their own that they
 		// want to search?
-		if (isset($this->staticConfig->phases, $this->staticConfig->phases->namespaces) && is_array($this->staticConfig->phases->namespaces)) {
+		if (isset($injectables->staticConfig->phases, $injectables->staticConfig->phases->namespaces) && is_array($injectables->staticConfig->phases->namespaces)) {
 			// yes, the user does have some namespaces
 			// copy them across into our list
-			$this->phaseLoader->setNamespaces($this->staticConfig->phases->namespaces);
+			$this->phaseLoader->setNamespaces($injectables->staticConfig->phases->namespaces);
 		}
 
 	}

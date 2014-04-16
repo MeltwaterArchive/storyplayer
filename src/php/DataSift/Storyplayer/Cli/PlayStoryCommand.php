@@ -547,7 +547,7 @@ class PlayStoryCommand extends CliCommand
 
     protected function initPhaseLoader(Injectables $injectables)
     {
-        $injectables->initPhaseLoaderSupport();
+        $injectables->initPhaseLoaderSupport($injectables);
     }
 
     protected function initProseLoader(Injectables $injectables)
