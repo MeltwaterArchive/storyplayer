@@ -59,7 +59,7 @@ use DataSift\Stone\ConfigLib\LoadedConfig;
 class StaticConfigManager extends ConfigManagerBase
 {
 	/**
-	 * @param DefaultStaticConfig $config
+	 * @param StaticConfig $config
 	 * @return void
 	 */
 	public function loadConfig($config)
