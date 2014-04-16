@@ -183,12 +183,16 @@ class StoryTeller
 	private $currentPhase = null;
 
 	// test device support
+	private $device = null;
 	private $deviceName = null;
 	private $deviceAdapter = null;
 
 	// the environment we are testing
 	private $env = null;
 	private $envName = null;
+
+	// story / template params
+	private $defines = [];
 
 	public function __construct(Injectables $injectables)
 	{
@@ -511,11 +515,19 @@ class StoryTeller
 		return $this->storyContext->user;
 	}
 
+	/**
+	 *
+	 * @return array
+	 */
 	public function getDefines()
 	{
 		return $this->defines;
 	}
 
+	/**
+	 *
+	 * @param array $defines
+	 */
 	public function setDefines($defines)
 	{
 		$this->defines = $defines;
