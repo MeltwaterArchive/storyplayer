@@ -197,12 +197,12 @@ EOS;
 	{
 		// var_dump($storyResult);
 
-		echo $this->resultStrings[$storyResult->storyResult][$this->verbosityLevel]
+		echo $this->resultStrings[$storyResult->resultCode][$this->verbosityLevel]
 		     . ' (' . round($storyResult->durationTime, 2) . ' secs)'
 		     . PHP_EOL;
 
 		// do we need to say anything more?
-		switch ($storyResult->storyResult)
+		switch ($storyResult->resultCode)
 		{
 			case StoryResult::PASS:
 			case StoryResult::BLACKLISTED:
@@ -211,6 +211,11 @@ EOS;
 
 			default:
 				// everything else is an error of some kind
+
+				// sanity check: we should always have a failedPhase
+				if (!$storyResult->failedPhase instanceof PhaseResult) {
+					throw new E5xx_MissingFailedPhase();
+				}
 				$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
 				break;
 		}

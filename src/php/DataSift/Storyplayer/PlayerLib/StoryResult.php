@@ -80,7 +80,7 @@ class StoryResult
 	 * did the story pass, fail, or otherwise go horribly wrong?
 	 * @var integer
 	 */
-	public $storyResult     = 1;
+	public $resultCode     = 1;
 
 	/**
 	 * when did we start playing this story?
@@ -128,31 +128,31 @@ class StoryResult
 
 	public function setStoryHasSucceeded()
 	{
-		$this->storyResult = self::PASS;
+		$this->resultCode  = self::PASS;
 		$this->failedPhase = null;
 	}
 
 	public function setStoryHasBeenBlacklisted()
 	{
-		$this->storyResult = self::BLACKLISTED;
+		$this->resultCode  = self::BLACKLISTED;
 		$this->failedPhase = null;
 	}
 
 	public function setStoryIsIncomplete(PhaseResult $phaseResult)
 	{
-		$this->storyResult = self::INCOMPLETE;
+		$this->resultCode  = self::INCOMPLETE;
 		$this->failedPhase = $phaseResult;
 	}
 
 	public function setStoryHasFailed(PhaseResult $phaseResult)
 	{
-		$this->storyResult = self::FAIL;
+		$this->resultCode  = self::FAIL;
 		$this->failedPhase = $phaseResult;
 	}
 
 	public function setStoryHasError(PhaseResult $phaseResult)
 	{
-		$this->storyResult = self::ERROR;
+		$this->resultCode  = self::ERROR;
 		$this->failedPhase = $phaseResult;
 	}
 

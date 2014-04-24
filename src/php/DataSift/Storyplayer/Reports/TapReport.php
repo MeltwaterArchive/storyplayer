@@ -97,7 +97,7 @@ class TapReport implements Report
 		// write out each test in turn
 		$storyCounter = 1;
 		foreach ($this->tests as $storyResult) {
-			switch ($storyResult->storyResult) {
+			switch ($storyResult->resultCode) {
 				case StoryResult::PASS:
 					$this->writeOkay($fp, $storyCounter, $storyResult, 'Pass');
 					break;
