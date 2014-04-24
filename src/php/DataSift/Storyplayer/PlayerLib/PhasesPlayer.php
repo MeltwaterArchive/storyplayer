@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
 use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Phases\Phase;
 use DataSift\Storyplayer\Phases\PhaseResult;
 
 /**
@@ -125,7 +126,7 @@ class PhasesPlayer
 
 			try {
 				// play the phase
-				$phaseResult = $this->playPhase($st, $injectables, $phaseName, $isActive);
+				$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive);
 
 				// remember the result of this phase
 				$phaseResults->addResult($phase, $phaseResult);
@@ -136,7 +137,7 @@ class PhasesPlayer
 				{
 					case self::NEXT_SKIP:
 						// why?
-						if ($phaseResult->phaseIsBlacklisted()) {
+						if ($phaseResult->getPhaseIsBlacklisted()) {
 							$phaseResults->setPhasesAreBlacklisted();
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED);
 						}
@@ -217,6 +218,10 @@ class PhasesPlayer
 		//
 		// this is (essentially) a slimmed down version of playPhases()
 
+		// we are going to need something to help us load each of our
+		// phases
+		$phaseLoader = $injectables->phaseLoader;
+
 		foreach ($this->pairedPhases as $phaseName)
 		{
 			// is the phase active?
@@ -230,8 +235,11 @@ class PhasesPlayer
 				$isActive = $phases->$phaseName;
 			}
 
+			// load the phase
+			$phase = $phaseLoader->loadPhase($st, $phaseName);
+
 			// play the phase
-			$phaseResult = $this->playPhase($st, $injectables, $phaseName, $isActive);
+			$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive);
 
 			// remember the result of this phase
 			$phaseResults->addResult($phase, $phaseResult);
@@ -249,21 +257,14 @@ class PhasesPlayer
 	 *
 	 * @param  StoryTeller $st
 	 * @param  Injectables $injectables
-	 * @param  string      $phaseName
+	 * @param  Phase       $phase
 	 * @param  boolean     $isActive
 	 * @return PhaseResult
 	 */
-	protected function playPhase(StoryTeller $st, Injectables $injectables, $phaseName, $isActive)
+	protected function playPhase(StoryTeller $st, Injectables $injectables, Phase $phase, $isActive)
 	{
 		// shorthand
 		$output  = $st->getOutput();
-
-		// we are going to need something to help us load each of our
-		// phases
-		$phaseLoader = $injectables->phaseLoader;
-
-		// load the phase
-		$phase = $phaseLoader->loadPhase($st, $phaseName);
 
 		// tell the world that we're running this phase
 		$phase->announcePhaseStart();
@@ -274,7 +275,8 @@ class PhasesPlayer
 			$phaseResult = $phase->doPhase();
 		}
 		else {
-			$phaseResult = new PhaseResult($phase->getPhaseName());
+			$phaseName = $phase->getPhaseName();
+			$phaseResult = new PhaseResult($phaseName);
 			$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
 			$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
 		}
