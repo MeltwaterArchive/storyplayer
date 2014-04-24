@@ -100,7 +100,7 @@ class StaticConfigManager extends ConfigManagerBase
 
 	/**
 	 *
-	 * @param  stdClass $config
+	 * @param  \stdClass $config
 	 * @param  string   $configName
 	 * @return void
 	 */
