@@ -105,7 +105,6 @@ class StoryPlayer
 		);
 
 		// run the phases in the 'story' section
-		$phasesPlayer = new PhasesPlayer();
 		$phaseResults = $phasesPlayer->playPhases(
 			$st,
 			$injectables,
