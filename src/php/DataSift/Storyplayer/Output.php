@@ -46,7 +46,6 @@ namespace DataSift\Storyplayer;
 use DataSift\Storyplayer\PlayerLib\StoryResult;
 use DataSift\Storyplayer\OutputLib\OutputPlugin;
 use DataSift\Storyplayer\Console\DefaultConsole;
-use DataSift\Storyplayer\Console\Console;
 
 /**
  * all output goes through here

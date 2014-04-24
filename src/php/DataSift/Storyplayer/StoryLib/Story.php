@@ -47,7 +47,6 @@ use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\StoryTemplate;
 use DataSift\Stone\LogLib\Log;
-use DataSift\StoryPlayer\OutputLib\CodeFormatter;
 
 /**
  * Object that represents a single story

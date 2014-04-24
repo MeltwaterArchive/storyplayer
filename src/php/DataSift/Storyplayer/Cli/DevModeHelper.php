@@ -55,6 +55,10 @@ namespace DataSift\Storyplayer\Cli;
  */
 class DevModeHelper
 {
+    /**
+     *
+     * @var array
+     */
     static protected $supportedValues = array(
         'on' => true,
         'off' => false,

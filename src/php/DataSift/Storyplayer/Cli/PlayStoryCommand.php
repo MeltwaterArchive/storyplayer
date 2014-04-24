@@ -357,6 +357,12 @@ class PlayStoryCommand extends CliCommand
     //
     // ------------------------------------------------------------------
 
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initConsole(CliEngine $engine, Injectables $injectables)
     {
         // shorthand
@@ -397,6 +403,12 @@ class PlayStoryCommand extends CliCommand
         Log::init("storyplayer", $loggingConfig);
     }
 
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initDefines(CliEngine $engine, Injectables $injectables)
     {
         // shorthand
@@ -411,6 +423,12 @@ class PlayStoryCommand extends CliCommand
         }
     }
 
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initDevice(CliEngine $engine, Injectables $injectables)
     {
         // shorthand
@@ -463,6 +481,12 @@ class PlayStoryCommand extends CliCommand
         }
     }
 
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initEnvironment(CliEngine $engine, Injectables $injectables)
     {
         // shorthand
@@ -535,6 +559,12 @@ class PlayStoryCommand extends CliCommand
         // 2. $this->envName.json
     }
 
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initProcessPersistence(CliEngine $engine, Injectables $injectables)
     {
         // by default, no persistence
@@ -546,21 +576,42 @@ class PlayStoryCommand extends CliCommand
         }
     }
 
+    /**
+     *
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initPhaseLoader(Injectables $injectables)
     {
         $injectables->initPhaseLoaderSupport($injectables);
     }
 
+    /**
+     *
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initProseLoader(Injectables $injectables)
     {
         $injectables->initProseLoaderSupport($injectables);
     }
 
+    /**
+     *
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initReportLoader(Injectables $injectables)
     {
         $injectables->initReportLoaderSupport($injectables);
     }
 
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
     protected function initReporting(CliEngine $engine, Injectables $injectables)
     {
         // are there any reporting modules to be loaded?
@@ -585,7 +636,12 @@ class PlayStoryCommand extends CliCommand
         // all done
     }
 
-    protected function initSignalHandling($injectables)
+    /**
+     *
+     * @param  Injectables $injectables
+     * @return void
+     */
+    protected function initSignalHandling(Injectables $injectables)
     {
         // we need to remember the injectables, for when we handle CTRL+C
         $this->injectables = $injectables;
@@ -595,6 +651,13 @@ class PlayStoryCommand extends CliCommand
         pcntl_signal(SIGINT , array($this, 'sigtermHandler'));
     }
 
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @param  array       $cliParams
+     * @return void
+     */
     protected function initStoryList(CliEngine $engine, Injectables $injectables, $cliParams)
     {
         // our list of stories to play
@@ -635,6 +698,11 @@ class PlayStoryCommand extends CliCommand
     //
     // ------------------------------------------------------------------
 
+    /**
+     *
+     * @param  integer $signo
+     * @return void
+     */
     public function sigtermHandler($signo)
     {
         echo "\n";

@@ -71,7 +71,9 @@ class PhasesPlayer
 	protected $pairedPhases = [];
 
 	/**
-	 * @param string $phaseType
+	 * @param StoryTeller $st
+	 * @param Injectables $injectables
+	 * @param array $phases
 	 */
 	public function playPhases(StoryTeller $st, Injectables $injectables, $phases)
 	{
@@ -122,41 +124,8 @@ class PhasesPlayer
 			}
 
 			try {
-				// announce the phase
-				//
-				// we want the announcement to always happen, even if
-				// the phase is subsequently skipped
-				$phase->announcePhaseStart();
-
-				// execute the phase
-				//
-				// the phase is responsible for all exception handling,
-				// as different exceptions can mean different things depending
-				// on which phase we are running
-				if ($isActive) {
-					$st->setCurrentPhase($phase);
-					$phaseResult = $phase->doPhase();
-				}
-				else {
-					$phaseResult = new PhaseResult($phase->getPhaseName());
-					$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
-					$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
-				}
-
-				// close off any open log actions
-				$st->closeAllOpenActions();
-
-				// add any paired phases to our teardown list
-				if ($phaseResult->hasPairedPhases()) {
-					$this->pairedPhases += $phaseResult->getPairedPhases();
-				}
-
-				// stop any running test devices
-				$st->stopDevice();
-
-				// close off any log actions left open by stopping the
-				// test device
-				$st->closeAllOpenActions();
+				// play the phase
+				$phaseResult = $this->playPhase($st, $injectables, $phaseName, $isActive);
 
 				// remember the result of this phase
 				$phaseResults->addResult($phase, $phaseResult);
@@ -222,7 +191,13 @@ class PhasesPlayer
 		return $phaseResults;
 	}
 
-	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases)
+	/**
+	 * @param StoryTeller $st
+	 * @param Injectables $injectables
+	 * @param array $phases
+	 * @param PhaseResults $phaseResults
+	 */
+	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, PhaseResults $phaseResults)
 	{
 		// special case
 		//
@@ -231,13 +206,6 @@ class PhasesPlayer
 			// nope - so let's bail now
 			return;
 		}
-
-		// shorthand
-		$output  = $st->getOutput();
-
-		// we are going to need something to help us load each of our
-		// phases
-		$phaseLoader = $injectables->phaseLoader;
 
 		// ----------------------------------------------------------------
 		// CLEANUP TIME
@@ -262,35 +230,8 @@ class PhasesPlayer
 				$isActive = $phases->$phaseName;
 			}
 
-			// load the phase
-			$phase = $phaseLoader->loadPhase($st, $phaseName);
-
-			// tell the world that we're running this phase
-			$phase->announcePhaseStart();
-
-			// run the phase if we're allowed to
-			if ($isActive) {
-				$st->setCurrentPhase($phase);
-				$phaseResult = $phase->doPhase();
-			}
-			else {
-				$phaseResult = new PhaseResult($phase->getPhaseName());
-				$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
-				$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
-			}
-
-			// close off any open log actions
-			$st->closeAllOpenActions();
-
-			// stop any running test devices
-			$st->stopDevice();
-
-			// close off any log actions left open by closing down
-			// the test device
-			$st->closeAllOpenActions();
-
-			// tell the world that the phase is over
-			$phase->announcePhaseEnd();
+			// play the phase
+			$phaseResult = $this->playPhase($st, $injectables, $phaseName, $isActive);
 
 			// remember the result of this phase
 			$phaseResults->addResult($phase, $phaseResult);
@@ -302,5 +243,56 @@ class PhasesPlayer
 		$this->pairedPhases = [];
 
 		// all done
+	}
+
+	/**
+	 *
+	 * @param  StoryTeller $st
+	 * @param  Injectables $injectables
+	 * @param  string      $phaseName
+	 * @param  boolean     $isActive
+	 * @return PhaseResult
+	 */
+	protected function playPhase(StoryTeller $st, Injectables $injectables, $phaseName, $isActive)
+	{
+		// shorthand
+		$output  = $st->getOutput();
+
+		// we are going to need something to help us load each of our
+		// phases
+		$phaseLoader = $injectables->phaseLoader;
+
+		// load the phase
+		$phase = $phaseLoader->loadPhase($st, $phaseName);
+
+		// tell the world that we're running this phase
+		$phase->announcePhaseStart();
+
+		// run the phase if we're allowed to
+		if ($isActive) {
+			$st->setCurrentPhase($phase);
+			$phaseResult = $phase->doPhase();
+		}
+		else {
+			$phaseResult = new PhaseResult($phase->getPhaseName());
+			$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
+			$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
+		}
+
+		// close off any open log actions
+		$st->closeAllOpenActions();
+
+		// stop any running test devices
+		$st->stopDevice();
+
+		// close off any log actions left open by closing down
+		// the test device
+		$st->closeAllOpenActions();
+
+		// tell the world that the phase is over
+		$phase->announcePhaseEnd();
+
+		// all done
+		return $phaseResult;
 	}
 }

@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Phases;
 
+use Exception;
 use DataSift\StoryPlayer\PlayerLib\PhasesPlayer;
 
 /**
@@ -191,7 +192,9 @@ class PhaseResult
 	}
 
 	/**
+	 * @param integer $result
 	 * @param string $msg
+	 * @param Exception $e
 	 */
 	public function setContinuePlaying($result = 1, $msg = null, $e = null)
 	{
@@ -202,7 +205,9 @@ class PhaseResult
 	}
 
 	/**
+	 * @param integer $result
 	 * @param string $msg
+	 * @param Exception $e
 	 */
 	public function setPlayingFailed($result, $msg, $e)
 	{
@@ -212,6 +217,10 @@ class PhaseResult
 		$this->exception  = $e;
 	}
 
+	/**
+	 * @param integer $result
+	 * @param string $msg
+	 */
 	public function setSkipPlaying($result, $msg)
 	{
 		$this->nextAction = PhasesPlayer::NEXT_SKIP;

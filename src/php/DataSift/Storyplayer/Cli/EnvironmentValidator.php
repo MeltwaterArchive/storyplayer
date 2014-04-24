@@ -50,12 +50,18 @@ class EnvironmentValidator implements Validator
 {
     const MSG_NOTVALIDENVIRONMENT = "Unknown environment '%value%'";
 
+    /**
+     * @var array
+     */
     protected $envList;
+
+    /**
+     * @var string
+     */
     protected $defaultValue;
 
     /**
-     *
-     * @param stdClass $envList
+     * @param array $envList
      * @param string $defaultValue
      */
     public function __construct($envList, $defaultValue)

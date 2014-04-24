@@ -61,6 +61,7 @@ use Phix_Project\CliEngine\CliSwitch;
 class EnvironmentSwitch extends CliSwitch
 {
 	/**
+	 * @param array $envList
 	 * @param string $defaultEnvName
 	 */
 	public function __construct($envList, $defaultEnvName)

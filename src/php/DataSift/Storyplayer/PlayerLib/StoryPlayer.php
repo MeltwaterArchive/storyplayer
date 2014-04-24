@@ -117,7 +117,8 @@ class StoryPlayer
 		$phaseResults = $phasesPlayer->playPairedPhases(
 			$st,
 			$injectables,
-			$injectables->staticConfig->phases->story
+			$injectables->staticConfig->phases->story,
+			$phaseResults
 		);
 
 		// make sense of what happened

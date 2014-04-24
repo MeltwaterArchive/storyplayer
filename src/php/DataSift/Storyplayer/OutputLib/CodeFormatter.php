@@ -80,6 +80,11 @@ class CodeFormatter
 		return $codeToPrint;
 	}
 
+	/**
+	 *
+	 * @param  string $codeToPrint
+	 * @return string
+	 */
 	static public function stripComments($codeToPrint)
 	{
 		// now, strip out any comment lines
@@ -89,6 +94,12 @@ class CodeFormatter
 		return $return;
 	}
 
+	/**
+	 *
+	 * @param  string  $codeToPrint
+	 * @param  integer $indentAmount
+	 * @return string
+	 */
 	static public function indentBySpaces($codeToPrint, $indentAmount)
 	{
 		// the string to indent with

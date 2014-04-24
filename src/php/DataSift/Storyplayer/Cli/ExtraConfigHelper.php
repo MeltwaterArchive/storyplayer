@@ -58,6 +58,14 @@ use DataSift\Stone\ConfigLib\LoadedConfig;
  */
 class ExtraConfigHelper
 {
+	/**
+	 *
+	 * @param  StaticConfig        $staticConfig
+	 * @param  string              $parent
+	 * @param  array               $listToFilter
+	 * @param  StaticConfigManager $staticConfigManager
+	 * @return array
+	 */
 	static public function validateList($staticConfig, $parent, $listToFilter, $staticConfigManager)
 	{
 		// the list we will return

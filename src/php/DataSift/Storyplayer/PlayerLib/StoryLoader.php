@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use Exception;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
