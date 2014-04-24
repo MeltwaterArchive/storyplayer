@@ -243,11 +243,27 @@ class TapReport implements Report
 
 	}
 
+	/**
+	 *
+	 * @param  resource $fp
+	 * @param  integer $storyCounter
+	 * @param  StoryResult $storyResult
+	 * @param  string $reason
+	 * @return void
+	 */
 	protected function writeOkay($fp, $storyCounter, $storyResult, $reason)
 	{
 		fwrite($fp, 'ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
 	}
 
+	/**
+	 *
+	 * @param  resource $fp
+	 * @param  integer $storyCounter
+	 * @param  StoryResult $storyResult
+	 * @param  string $reason
+	 * @return void
+	 */
 	protected function writeNotOkay($fp, $storyCounter, $storyResult, $reason)
 	{
 		fwrite($fp, 'not ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
