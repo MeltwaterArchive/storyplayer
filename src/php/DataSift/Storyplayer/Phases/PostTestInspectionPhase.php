@@ -99,8 +99,7 @@ class PostTestInspectionPhase extends StoryPhase
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setPlayingFailed(
 					PhaseResult::SUCCESS,
-					"post-test inspection succeeded when it was expected to fail",
-					null
+					"post-test inspection succeeded when it was expected to fail"
 				);
 				$storyResult->setStoryHasFailed($phaseResult);
 			}

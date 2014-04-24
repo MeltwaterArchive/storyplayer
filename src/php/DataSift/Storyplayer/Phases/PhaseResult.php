@@ -209,7 +209,7 @@ class PhaseResult
 	 * @param string $msg
 	 * @param Exception $e
 	 */
-	public function setPlayingFailed($result, $msg, $e)
+	public function setPlayingFailed($result, $msg, $e = null)
 	{
 		$this->nextAction = PhasesPlayer::NEXT_FAIL;
 		$this->result     = $result;

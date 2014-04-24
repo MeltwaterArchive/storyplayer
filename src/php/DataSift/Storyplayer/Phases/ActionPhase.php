@@ -94,8 +94,7 @@ class ActionPhase extends StoryPhase
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setPlayingFailed(
 					PhaseResult::COMPLETED,
-					"action completed successfully; was expected to fail",
-					null
+					"action completed successfully; was expected to fail"
 				);
 				$storyResult->setStoryHasFailed($phaseResult);
 			}
