@@ -59,7 +59,7 @@ class ProseLoader
 {
 	private $namespaces = array(
 		"Prose",
-		"DataSift\\StoryPlayer\\Prose"
+		"DataSift\\Storyplayer\\Prose"
 	);
 
 	public function setNamespaces($namespaces = array())
