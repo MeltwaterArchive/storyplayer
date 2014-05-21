@@ -43,11 +43,11 @@
 
 namespace DataSift\Storyplayer\Console;
 
-use DataSift\StoryPlayer\OutputLib\CodeFormatter;
-use DataSift\StoryPlayer\Phases\Phase;
-use DataSift\StoryPlayer\Phases\PhaseResult;
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
-use DataSift\StoryPlayer\StoryLib\Story;
+use DataSift\Storyplayer\OutputLib\CodeFormatter;
+use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Storyplayer\Phases\PhaseResult;
+use DataSift\Storyplayer\PlayerLib\StoryResult;
+use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Stone\LogLib\Log;
 
 /**
