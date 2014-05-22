@@ -61,49 +61,45 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingSupervisor extends HostBase
 {
-	public function startProgram($programName)
-	{
-		// shorthand
-		$st = $this->st;
+    public function startProgram($programName)
+    {
+        // shorthand
+        $st = $this->st;
 
-		// what are we doing?
-		$log = $st->startAction("start program '{$programName}' on host '{$this->hostDetails->name}'");
+        // what are we doing?
+        $log = $st->startAction("start program '{$programName}' on host '{$this->hostDetails->name}'");
 
-		// start the program
-		$result = $st->usingHost($this->hostDetails->name)->runCommand("sudo supervisorctl start '{$programName}'");
+        // start the program
+        $result = $st->usingHost($this->hostDetails->name)->runCommand("sudo supervisorctl start '{$programName}'");
 
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-			$log->endAction($msg);
-			return false;
-		}
+        // did the command succeed?
+        if ($result->didCommandFail()) {
+            throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
+        }
 
-		// all done
-		$log->endAction();
-		return true;
-	}
+        // all done
+        $log->endAction();
+        return true;
+    }
 
-	public function stopProgram($programName)
-	{
-		// shorthand
-		$st = $this->st;
+    public function stopProgram($programName)
+    {
+        // shorthand
+        $st = $this->st;
 
-		// what are we doing?
-		$log = $st->startAction("stop program '{$programName}' on host '{$this->hostDetails->name}'");
+        // what are we doing?
+        $log = $st->startAction("stop program '{$programName}' on host '{$this->hostDetails->name}'");
 
-		// stop the program
-		$result = $st->usingHost($this->hostDetails->name)->runCommand("sudo supervisorctl stop '{$programName}'");
+        // stop the program
+        $result = $st->usingHost($this->hostDetails->name)->runCommand("sudo supervisorctl stop '{$programName}'");
 
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-			$log->endAction($msg);
-			return false;
-		}
+        // did the command succeed?
+        if ($result->didCommandFail()) {
+            throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
+        }
 
-		// all done
-		$log->endAction();
-		return true;
-	}
+        // all done
+        $log->endAction();
+        return true;
+    }
 }
