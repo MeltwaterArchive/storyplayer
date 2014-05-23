@@ -55,28 +55,7 @@ namespace DataSift\Storyplayer\Prose;
  */
 class UsingFile extends Prose
 {
-
-    /**
-     * recursively finds all the files in the given directory and its children
-     * @param $dir - directory to search
-     * @return array - list of paths of all the files that are found
-     */
-    public function findFiles($dir)
-    {
-        $ffs  = scandir($dir);
-        $list = array();
-        foreach ($ffs as $ff) {
-            if ($ff != '.' && $ff != '..') {
-                $list[] = $dir . '/' . $ff;
-                if (is_dir($dir . '/' . $ff)) {
-                    $list = array_merge($list, findFiles($dir . '/' . $ff));
-                }
-            }
-        }
-        return $list;
-    }
-
-    public function removeFile($filename)
+	public function removeFile($filename)
 	{
 		// shorthand
 		$st = $this->st;
