@@ -178,13 +178,13 @@ class ExpectsHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$boxName}'");
+		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$this->hostDetails->name}'");
 
 		// make sure we have valid host details
 		$this->requireValidHostDetails(__METHOD__);
 
 		// is the process running?
-		$isRunning = $st->fromHost($this->hostDetails->name)->getProcessIsRunning($boxName, $processName);
+		$isRunning = $st->fromHost($this->hostDetails->name)->getProcessIsRunning($processName);
 
 		if ($isRunning) {
 			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");
