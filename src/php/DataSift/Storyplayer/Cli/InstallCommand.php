@@ -45,6 +45,8 @@ namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 use DataSift\Stone\DownloadLib\FileDownloader;
 use DataSift\WebDriver\WebDriverConfiguration;
 use Exception;
@@ -81,7 +83,28 @@ class InstallCommand extends CliCommand
 	 * @param  mixed     $additionalContext
 	 * @return void
 	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
+	{
+        // we need to wrap our code to catch old-style PHP errors
+        $legacyHandler = new Legacy_ErrorHandler();
+        try {
+            $returnCode = $legacyHandler->run([$this, 'processInsideLegacyHandler'], [$engine, $params, $injectables]);
+            return $returnCode;
+        }
+        catch (Exception $e) {
+            $injectables->output->logCliError($e->getMessage());
+            exit(1);
+        }
+	}
+
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return void
+	 */
+	public function processInsideLegacyHandler(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// tell the user what is happening
 		echo "Additional files will be added to the vendor/ folder\n";
