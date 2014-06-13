@@ -43,9 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Exception;
 use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\LogLib\Log;
@@ -135,6 +138,120 @@ class PlayStoryCommand extends CliCommand
      * @return integer
      */
     public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
+    {
+        // we need to wrap our code to catch old-style PHP errors
+        $legacyHandler = new Legacy_ErrorHandler();
+        try {
+            $returnCode = $legacyHandler->run([$this, 'processInsideLegacyHandler'], [$engine, $params, $injectables]);
+            return $returnCode;
+        }
+        catch (Exception $e) {
+            $injectables->output->logCliError($e->getMessage());
+            $injectables->output->logCliError($e->getTraceAsString());
+            exit(1);
+        }
+
+        /*
+         * this is legacy code that we're in the process of removing
+         * from the code base
+
+        // we're going to use this to play our setup and teardown phases
+        $phasesPlayer = new PhasesPlayer();
+
+        switch($arg2suffix)
+        {
+            case "php":
+                // we are running an individual story
+
+                // load our story
+                $story = StoryLoader::loadStory($params[0]);
+                $teller->setStory($story);
+
+                // make sure we've loaded the user
+                $context->initUser($staticConfig, $runtimeConfig, $story);
+
+                // make the story happen
+                $phasesPlayer->playPhases($teller, 'startup');
+                $storyPlayer->playStory($teller);
+                $phasesPlayer->playPhases($teller, 'shutdown');
+
+                // all done
+                break;
+
+            case "json":
+                // we are running a list of stories
+
+                // load the list of stories
+                $storyList = StoryListLoader::loadList($params[0]);
+
+                // keep track of the results
+                $results = array();
+
+                // we need to remember the staticConfig, as we are
+                // probably about to override it
+                $origStaticConfig = clone $staticConfig;
+
+                // run through our list of stories
+                foreach ($storyList->stories as $storyFile)
+                {
+                    // load our story
+                    $story = StoryLoader::loadStory($storyFile);
+                    $teller->setStory($story);
+
+                    // make sure we've loaded the user
+                    $context->initUser($staticConfig, $runtimeConfig, $story);
+
+                    // special case - reusable environments
+                    if ($storyList->options->reuseTestEnvironment) {
+                        // story #1 - keep the test environment around
+                        if ($storyFile == $storyList->stories[0]) {
+                            // we do not override the user's preference for
+                            // the TestEnvironmentStartup
+
+                            // do not shutdown the TestEnvironment;
+                            // we want to re-use it in the other stories
+                            $staticConfig->phases->story->TestEnvironmentTeardown = false;
+                        }
+                        else if ($storyFile == end($storyList->stories)) {
+                            // do nothing - we do not want to override
+                            // the user's config file settings here
+                        }
+                        else {
+                            // we are running a story in the middle of the list
+                            //
+                            // do not re-create the test environment
+                            // do not destroy it afterwards
+                            $staticConfig->phases->story->TestEnvironmentSetup = false;
+                            $staticConfig->phases->story->TestEnvironmentTeardown = false;
+                        }
+                    }
+
+                    // make the story happen
+                    $phasesPlayer->playPhases($teller, 'startup');
+                    $results[] = $storyPlayer->playStory($teller);
+                    $phasesPlayer->playPhases($teller, 'shutdown');
+
+                    // special case - reusable environments
+                    if ($storyList->options->reuseTestEnvironment) {
+                        // restore the original config
+                        $staticConfig = clone $origStaticConfig;
+                    }
+                }
+
+                // report on the final results
+                $this->summariseStoryList($results);
+
+                // all done
+                break;
+
+            default:
+                // unsupported!
+
+        }
+        */
+    }
+
+    public function processInsideLegacyHandler(CliEngine $engine, $params = array(), $injectables = null)
     {
         // shorthand
         $runtimeConfig        = $injectables->runtimeConfig;
@@ -250,105 +367,6 @@ class PlayStoryCommand extends CliCommand
 
         // all done
         return 0;
-
-        /*
-         * this is legacy code that we're in the process of removing
-         * from the code base
-
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new PhasesPlayer();
-
-        switch($arg2suffix)
-        {
-            case "php":
-                // we are running an individual story
-
-                // load our story
-                $story = StoryLoader::loadStory($params[0]);
-                $teller->setStory($story);
-
-                // make sure we've loaded the user
-                $context->initUser($staticConfig, $runtimeConfig, $story);
-
-                // make the story happen
-                $phasesPlayer->playPhases($teller, 'startup');
-                $storyPlayer->playStory($teller);
-                $phasesPlayer->playPhases($teller, 'shutdown');
-
-                // all done
-                break;
-
-            case "json":
-                // we are running a list of stories
-
-                // load the list of stories
-                $storyList = StoryListLoader::loadList($params[0]);
-
-                // keep track of the results
-                $results = array();
-
-                // we need to remember the staticConfig, as we are
-                // probably about to override it
-                $origStaticConfig = clone $staticConfig;
-
-                // run through our list of stories
-                foreach ($storyList->stories as $storyFile)
-                {
-                    // load our story
-                    $story = StoryLoader::loadStory($storyFile);
-                    $teller->setStory($story);
-
-                    // make sure we've loaded the user
-                    $context->initUser($staticConfig, $runtimeConfig, $story);
-
-                    // special case - reusable environments
-                    if ($storyList->options->reuseTestEnvironment) {
-                        // story #1 - keep the test environment around
-                        if ($storyFile == $storyList->stories[0]) {
-                            // we do not override the user's preference for
-                            // the TestEnvironmentStartup
-
-                            // do not shutdown the TestEnvironment;
-                            // we want to re-use it in the other stories
-                            $staticConfig->phases->story->TestEnvironmentTeardown = false;
-                        }
-                        else if ($storyFile == end($storyList->stories)) {
-                            // do nothing - we do not want to override
-                            // the user's config file settings here
-                        }
-                        else {
-                            // we are running a story in the middle of the list
-                            //
-                            // do not re-create the test environment
-                            // do not destroy it afterwards
-                            $staticConfig->phases->story->TestEnvironmentSetup = false;
-                            $staticConfig->phases->story->TestEnvironmentTeardown = false;
-                        }
-                    }
-
-                    // make the story happen
-                    $phasesPlayer->playPhases($teller, 'startup');
-                    $results[] = $storyPlayer->playStory($teller);
-                    $phasesPlayer->playPhases($teller, 'shutdown');
-
-                    // special case - reusable environments
-                    if ($storyList->options->reuseTestEnvironment) {
-                        // restore the original config
-                        $staticConfig = clone $origStaticConfig;
-                    }
-                }
-
-                // report on the final results
-                $this->summariseStoryList($results);
-
-                // all done
-                break;
-
-            default:
-                // unsupported!
-
-        }
-        */
     }
 
     // ==================================================================
