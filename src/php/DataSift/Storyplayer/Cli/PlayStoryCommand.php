@@ -541,15 +541,6 @@ class PlayStoryCommand extends CliCommand
             //
             // this will be merged in with the default config
             $staticConfigManager->loadAdditionalConfig($staticConfig, $envName);
-
-            // do we have a defaults environment section?
-            if (!isset($staticConfig->environments->defaults)) {
-                // create an empty one to keep PlayerLib happy
-                $staticConfig->environments->defaults = new stdClass;
-            }
-
-            // remember our chosen environment name
-            $staticConfig->initEnvironment($envName);
         }
         catch (E5xx_ConfigFileNotFound $e) {
             // do we already have this device?
@@ -570,6 +561,15 @@ class PlayStoryCommand extends CliCommand
             $output->logCliError($e->getMessage());
             exit(1);
         }
+
+        // do we have a defaults environment section?
+        if (!isset($staticConfig->environments->defaults)) {
+            // create an empty one to keep PlayerLib happy
+            $staticConfig->environments->defaults = new stdClass;
+        }
+
+        // remember our chosen environment name
+        $staticConfig->initEnvironment($envName);
 
         // at this point, $staticConfig contains:
         //
