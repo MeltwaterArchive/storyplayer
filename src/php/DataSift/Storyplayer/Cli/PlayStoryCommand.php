@@ -57,6 +57,7 @@ use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryContext;
 use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
 use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
@@ -699,7 +700,7 @@ class PlayStoryCommand extends CliCommand
                     break;
 
                 case 'json':
-                    $this->storyList[] = new StoryListPlayer($cliParam);
+                    $this->storyList[] = new TalePlayer($cliParam);
                     break;
 
                 default:

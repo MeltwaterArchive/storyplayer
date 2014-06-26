@@ -1,0 +1,7 @@
+{
+	"stories": [
+		"stories/web-browser/CanOpenWebBrowserStory.php",
+		"stories/web-browser/CanResizeTheBrowserStory.php",
+		"stories/web-browser/CanRetrieveFormFieldByItsLabelStory.php"
+	]
+}

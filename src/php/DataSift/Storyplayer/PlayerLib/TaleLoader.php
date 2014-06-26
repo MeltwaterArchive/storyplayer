@@ -56,7 +56,7 @@ use stdClass;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryListLoader
+class TaleLoader
 {
 	/**
 	 * singleton - do not instantiate
@@ -75,7 +75,7 @@ class StoryListLoader
 	 * @return Story
 	 *         the story object
 	 */
-	static public function loadList($filename)
+	static public function loadTale($filename)
 	{
 		if (!file_exists($filename)) {
 			throw new E5xx_InvalidStoryListFile("Cannot find file '{$filename}' to load");
@@ -85,38 +85,43 @@ class StoryListLoader
 		$contents = file_get_contents($filename);
 
 		// does it decode?
-		$storyList = json_decode($contents);
-		if (!$storyList) {
+		$tale = json_decode($contents);
+		if (!$tale) {
 			throw new E4xx_InvalidStoryListFile("Story list '{$filename}' does not contain valid JSON");
 		}
 
 		// does it have the elements we require?
-		if (!isset($storyList->stories)) {
+		if (!isset($tale->stories)) {
 			throw new E4xx_InvalidStoryListFile("Story list '{$filename}' does not contain a 'stories' element");
 		}
-		if (!is_array($storyList->stories)) {
+		if (!is_array($tale->stories)) {
 			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' must be an array");
 		}
-		if (count($storyList->stories) == 0) {
+		if (count($tale->stories) == 0) {
 			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' cannot be an empty array");
 		}
 
 		// do all of the stories in the list exist?
-		foreach ($storyList->stories as $storyFile) {
+		foreach ($tale->stories as $index => $storyFile) {
 			if (!file_exists($storyFile)) {
-				throw new E4xx_InvalidStoryListFile("Cannot find the story file '{$storyFile}' on disk");
+				if (!file_exists($filename . DIR_SEPARATOR . $storyFile)) {
+					throw new E4xx_InvalidStoryListFile("Cannot find the story file '{$storyFile}' on disk");
+				}
+				else {
+					$tale->stories[$index] = $filename . DIR_SEPARATOR . $storyFile;
+				}
 			}
 		}
 
 		// inject defaults for optional fields
-		if (!isset($storyList->options)) {
-			$storyList->options = new stdClass();
+		if (!isset($tale->options)) {
+			$tale->options = new stdClass();
 		}
-		if (!isset($storyList->options->reuseTestEnvironment)) {
-			$storyList->options->reuseTestEnvironment = false;
+		if (!isset($tale->options->reuseTestEnvironment)) {
+			$tale->options->reuseTestEnvironment = false;
 		}
 
 		// all done
-		return $storyList;
+		return $tale;
 	}
 }
