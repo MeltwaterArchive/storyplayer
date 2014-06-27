@@ -43,8 +43,13 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
 /**
- * support for working with the list of known environments
+ * Tell Storyplayer which test environment to test against; for when there
+ * is more than one test environment defined
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -53,21 +58,61 @@ namespace DataSift\Storyplayer\Cli;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait EnvironmentListSupport
+class TargetEnvironmentSwitch extends CliSwitch
 {
-	public $envList;
+	/**
+	 * @param array $envList
+	 * @param string $defaultEnvName
+	 */
+	public function __construct($envList, $defaultEnvName)
+	{
+		// define our name, and our description
+		$this->setName('target');
+		$this->setShortDescription('set the environment to test against');
+		$this->setLongDesc(
+			"If you have multiple test environments listed in your configuration files, "
+			. "you can use this switch to choose which test environment to run the test(s) "
+			. "against. If you omit this switch, Storyplayer will default to using your "
+			. "computer's hostname as the value for <environment>."
+			. PHP_EOL
+			. PHP_EOL
+			. "If you only have one test environment listed, then this switch has no "
+			. "effect when used, and Storyplayer will always use the test environment "
+			. "from your configuration file."
+			. PHP_EOL
+			. PHP_EOL
+			. "See http://datasift.github.io/storyplayer/ "
+			. "for how to configure and use multiple test environments."
+		);
+
+		// what are the short switches?
+		$this->addShortSwitch('t');
+
+		// what are the long switches?
+		$this->addLongSwitch('target');
+
+		// what is the required argument?
+		$this->setRequiredArg('<environment>', "the environment to test against; one of: " . implode(", ", $envList));
+		$this->setArgValidator(new EnvironmentValidator($envList, $defaultEnvName));
+		$this->setArgHasDefaultValueOf($defaultEnvName);
+
+		// all done
+	}
 
 	/**
 	 *
-	 * @param  stdClass $environments
-	 * @return stdClass
+	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
+	 * @param  array     $params
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
 	 */
-	public function initEnvironmentListSupport($environments)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// take a copy of the list of environments
-		$this->envList = $environments;
+		// remember the setting
+		$engine->options->targetEnvironment = $params[0];
 
-		// all done
-		return $this->envList;
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }

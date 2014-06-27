@@ -100,6 +100,18 @@ class StaticConfig extends LoadedConfig
         $this->logger = new BaseObject();
         $this->logger->writer = "StdErrWriter";
 
+        // the default list of places to search for config files
+        $this->configs = new BaseObject();
+        $this->configs->devices = [
+            getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/devices',
+        ];
+        $this->configs->runsOn = [
+            getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/runs-on',
+        ];
+        $this->configs->targetEnvironments = [
+            getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/target-environments'
+        ];
+
         $this->environments = new BaseObject();
         $this->environments->defaults = new BaseObject();
 

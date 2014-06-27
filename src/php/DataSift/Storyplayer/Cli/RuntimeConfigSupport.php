@@ -62,13 +62,13 @@ trait RuntimeConfigSupport
 	 *
 	 * @return RuntimeConfigManager
 	 */
-	public function initRuntimeConfigSupport()
+	public function initRuntimeConfigSupport(Injectables $injectables)
 	{
 		// create the runtime config's manager
 		$this->runtimeConfigManager = new RuntimeConfigManager();
 
 		// create the folder where we will store the persistent config
-		$this->runtimeConfigManager->makeConfigDir();
+		$this->runtimeConfigManager->makeConfigDir($injectables);
 
 		// load any config from the last time Storyplayer ran
 		$this->runtimeConfig = $this->runtimeConfigManager->loadRuntimeConfig();

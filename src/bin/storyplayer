@@ -180,68 +180,38 @@ function main($argv)
 	$output = $injectables->initOutputSupport();
 
 	try {
-		// load our main config
-		$staticConfigManager = $injectables->initStaticConfigSupport();
-		$staticConfig        = $injectables->staticConfig;
-	}
-	catch (E5xx_ConfigFileNotFound $e)
-	{
-		// this isn't fatal, but we need to tell the user, just in case
-		$output->cliLogWarning("storyplayer.json / storyplayer.json.dist not found");
-	}
-	catch (Exception $e)
-	{
-		// these are fatal ... there is a config file, but something
-		// went wrong with loading it
-		$output->cliLogError($e->getMessage());
-		exit(1);
-	}
+		// find our default config file
+		$injectables->initDefaultConfigFilenameSupport();
 
-	try {
+		// load our main config
+		$staticConfigManager = $injectables->initStaticConfigSupport($injectables, $injectables->defaultConfigFilename);
+		$staticConfig        = $injectables->staticConfig;
+
 		// create our runtime config folder, and load any pre-existing
 		// runtime config
-		$runtimeConfigManager = $injectables->initRuntimeConfigSupport();
+		$runtimeConfigManager = $injectables->initRuntimeConfigSupport($injectables);
 		$runtimeConfig        = $injectables->runtimeConfig;
 
-		// get a list of the additional config files to load
-		// this is a list of the available test environments,
-		// or of additional devices
-		$additionalConfigFiles = $staticConfigManager->getListOfAdditionalConfigFiles();
-
-		// a list of sections that can have their own config file
-		$additionalConfigSections = array(
-			'devices'      => array(),
-			'environments' => array()
-		);
-
-		// let's see if we have any additional config to offer
-		foreach ($additionalConfigSections as $sectionName => $dummy) {
-
-			// assume that all config files have this section in them
-			// (we will vet this list in a moment)
-			$additionalConfigSections[$sectionName] = $additionalConfigFiles;
-
-			// add into the list any sections in the default config file
-			foreach ($staticConfig->$sectionName as $key => $dummy) {
-				if ($key !== 'defaults') {
-					$additionalConfigSections[$sectionName][] = $key;
-				}
-			}
-			sort($additionalConfigSections[$sectionName]);
-			$additionalConfigSections[$sectionName] = array_unique($additionalConfigSections[$sectionName]);
-			$additionalConfigSections[$sectionName] = ExtraConfigHelper::validateList($staticConfig, $sectionName, $additionalConfigSections[$sectionName], $staticConfigManager);
+		// a list of the additional files that we will only merge
+		// on-demand
+		$additionalConfigs = [];
+		foreach ($staticConfig->configs as $name => $dirs)
+		{
+			$additionalConfigs[$name] = $staticConfigManager->loadConfigFilesFrom($dirs);
 		}
+
+		// put all of that into something we can give to the CliEngine
+		$injectables->initDeviceListSupport($staticConfig->devices, $additionalConfigs['devices']);
+		$injectables->initRunsOnEnvironmentListSupport($staticConfig->environments, $additionalConfigs['runsOn']);
+		$injectables->initTargetEnvironmentListSupport($staticConfig->environments, array_merge($additionalConfigs['runsOn'], $additionalConfigs['targetEnvironments']));
 	}
 	catch (Exception $e)
 	{
-		// all errors here are fatal
-		$output->cliLogError($e->getMessage());
+		// if this happens, we need a full stack trace to understand
+		// why this has happened, because it should not!
+		$output->logCliErrorWithException($e->getMessage(), $e);
 		exit(1);
 	}
-
-	// put all of that into something we can give to the CliEngine
-	$injectables->initDeviceListSupport($additionalConfigSections['devices']);
-	$injectables->initEnvironmentListSupport($additionalConfigSections['environments']);
 
 	// ====================================================================
 	//

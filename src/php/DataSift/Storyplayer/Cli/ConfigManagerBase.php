@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
+use DataSift\Stone\ConfigLib\ConfigHelper;
 
 /**
  * helper base class for loading and saving our config files
@@ -57,23 +57,16 @@ use DataSift\Stone\ConfigLib\JsonConfigLoader;
  */
 class ConfigManagerBase
 {
+	const APP_NAME = 'storyplayer';
+
 	/**
-	 *
-	 * @var DataSift\Stone\ConfigLib\JsonConfigLoader
+	 * @var DataSift\Stone\ConfigLib\ConfigHelper
 	 */
-	protected $configLoader;
+	protected $configHelper;
 
 	public function __construct()
 	{
 		// create our config loader
-		$this->configLoader = new JsonConfigLoader(
-			"storyplayer",
-			getcwd(),
-			array (
-				"etc",
-				"src/tests/stories/etc",
-				"src/main/etc"
-			)
-		);
+		$this->configHelper = new ConfigHelper();
 	}
 }

@@ -111,16 +111,15 @@ class PlayStoryCommand extends CliCommand
             "[<story.php|list.json>]" => "run a story, or a list of stories"
         ));
 
-        // for convenience, the current computer's hostname will be the
-        // default environment
-        $defaultEnvName = EnvironmentHelper::getDefaultEnvironmentName($additionalContext->envList);
-
         // the switches that this command supports
         $this->setSwitches(array(
             new LogLevelSwitch(),
             new ColorSwitch(),
             new DevModeSwitch(),
-            new EnvironmentSwitch($additionalContext->envList, $defaultEnvName),
+            new RunsOnEnvironmentSwitch(
+                $additionalContext->runsOnEnvList,
+                $additionalContext->defaultRunsOnEnvName
+            ),
             new DefineSwitch(),
             new DeviceSwitch($additionalContext->deviceList),
             new PersistProcessesSwitch(),
@@ -128,6 +127,10 @@ class PlayStoryCommand extends CliCommand
             new LogJsonSwitch(),
             new LogJUnitSwitch(),
             new LogTapSwitch(),
+            new TargetEnvironmentSwitch(
+                $additionalContext->targetEnvList,
+                $additionalContext->defaultTargetEnvName
+            )
         ));
     }
 

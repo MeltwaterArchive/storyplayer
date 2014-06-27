@@ -62,10 +62,20 @@ trait DeviceListSupport
 	 * @param  stdClass $devices
 	 * @return stdClass
 	 */
-	public function initDeviceListSupport($devices)
+	public function initDeviceListSupport($devices, $additionalConfigs)
 	{
-		// take a copy of the list of devices
-		$this->deviceList = $devices;
+		// start with a list of all the devices that are hard-coded
+		// into Storyplayer
+		$this->deviceList = [];
+		foreach ($devices as $deviceName => $device) {
+			$this->deviceList[] = $deviceName;
+		}
+
+		// now add in all the devices that we have discovered in
+		// the config files
+		foreach ($additionalConfigs as $filename => $config) {
+			$this->deviceList[] = basename($filename, '.json');
+		}
 
 		// all done
 		return $this->deviceList;

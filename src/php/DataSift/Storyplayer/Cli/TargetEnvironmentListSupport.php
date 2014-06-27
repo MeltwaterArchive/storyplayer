@@ -43,10 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
-
 /**
- * a container for common services and data, to avoid making them global
+ * support for working with the list of target environments
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,16 +53,45 @@ use Phix_Project\Injectables as BaseInjectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+trait TargetEnvironmentListSupport
 {
-	use DefaultConfigFilenameSupport;
-	use DeviceListSupport;
-	use RunsOnEnvironmentListSupport;
-	use TargetEnvironmentListSupport;
-	use OutputSupport;
-	use PhaseLoaderSupport;
-	use ProseLoaderSupport;
-	use ReportLoaderSupport;
-	use RuntimeConfigSupport;
-	use StaticConfigSupport;
+	public $defaultTargetEnvName;
+	public $targetEnvList;
+
+	/**
+	 *
+	 * @param  stdClass $environments
+	 * @return stdClass
+	 */
+	public function initTargetEnvironmentListSupport($environments, $additionalConfigs)
+	{
+		$this->targetEnvList = [];
+
+		foreach ($environments as $envName => $environment)
+		{
+			$this->targetEnvList[$envName] = $envName;
+		}
+
+		foreach ($additionalConfigs as $config) {
+			if (isset($config->environments)) {
+				foreach ($config->environments as $envName => $envConfig) {
+					$this->targetEnvList[$envName] = $envName;
+				}
+			}
+		}
+
+		// hide the 'defaults' section
+		if (isset($this->targetEnvList['defaults'])) {
+			unset($this->targetEnvList['defaults']);
+		}
+
+		// sort the list
+		sort($this->targetEnvList);
+
+		// set our default environment to target
+		$this->defaultTargetEnvName = EnvironmentHelper::getDefaultEnvironmentName($this->targetEnvList);
+
+		// all done
+		return $this->targetEnvList;
+	}
 }

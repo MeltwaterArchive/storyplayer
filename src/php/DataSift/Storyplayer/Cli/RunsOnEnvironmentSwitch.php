@@ -43,10 +43,13 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * a container for common services and data, to avoid making them global
+ * Tell Storyplayer which test environment to test against; for when there
+ * is more than one test environment defined
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,16 +58,61 @@ use Phix_Project\Injectables as BaseInjectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+class RunsOnEnvironmentSwitch extends CliSwitch
 {
-	use DefaultConfigFilenameSupport;
-	use DeviceListSupport;
-	use RunsOnEnvironmentListSupport;
-	use TargetEnvironmentListSupport;
-	use OutputSupport;
-	use PhaseLoaderSupport;
-	use ProseLoaderSupport;
-	use ReportLoaderSupport;
-	use RuntimeConfigSupport;
-	use StaticConfigSupport;
+	/**
+	 * @param array $envList
+	 * @param string $defaultEnvName
+	 */
+	public function __construct($envList, $defaultEnvName)
+	{
+		// define our name, and our description
+		$this->setName('runsOn');
+		$this->setShortDescription('the environment you are running Storyplayer on');
+		$this->setLongDesc(
+			"After Storyplayer has loaded the storyplayer.json[.dist] config file, it will "
+			. "load any config it can find for <environment>. You can use this to have different "
+			. "config files for different runtime environments. This is very handy when "
+			. "a test repository is shared with several different people, who run the tests "
+			. "on different operating systems."
+			. PHP_EOL
+			. PHP_EOL
+			. "If you omit this switch, Storyplayer will default to using your "
+			. "computer's hostname as the value for <environment>."
+			. PHP_EOL
+			. PHP_EOL
+			. "See http://datasift.github.io/storyplayer/ "
+			. "for how to configure and use multiple runtime environments."
+		);
+
+		// what are the short switches?
+		$this->addShortSwitch('e');
+
+		// what are the long switches?
+		$this->addLongSwitch('runs-on');
+
+		// what is the required argument?
+		$this->setRequiredArg('<environment>', "the environment that Storyplayer is running on; one of: " . implode(", ", $envList));
+		$this->setArgValidator(new EnvironmentValidator($envList, $defaultEnvName));
+		$this->setArgHasDefaultValueOf($defaultEnvName);
+
+		// all done
+	}
+
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
+	 * @param  array     $params
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
+	 */
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->runsOnEnvironment = $params[0];
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }

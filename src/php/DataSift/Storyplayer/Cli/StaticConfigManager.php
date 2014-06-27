@@ -43,8 +43,9 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\LoadedConfig;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * helper class for loading our static config files
@@ -58,72 +59,83 @@ use DataSift\Stone\ConfigLib\LoadedConfig;
  */
 class StaticConfigManager extends ConfigManagerBase
 {
+	const USER_DOTFILE = 'storyplayer.json';
+
 	/**
+	 * load the default config file
+	 *
 	 * @param StaticConfig $config
 	 * @return void
 	 */
-	public function loadConfig($config)
+	public function loadDefaultConfig($config, $defaultConfigFilename)
 	{
-		// load the main config file
+		// load the default config file
+		$this->configHelper->loadConfigFile($config, $defaultConfigFilename);
+	}
+
+	/**
+	 * [loadUserConfig description]
+	 * @param  [type] $config  [description]
+	 * @param  [type] $appName [description]
+	 * @return [type]          [description]
+	 */
+	public function loadUserConfig($config)
+	{
 		try {
 			// We start with an empty config
-			$userConfig = new LoadedConfig;
-			// Then load our user config into it
-			$this->configLoader->loadUserConfig($userConfig);
-
-			// Then try and load our default configs
-			$newConfig = $this->configLoader->loadDefaultConfig();
-
-			// Merge our user config into the default config
-			$newConfig->mergeFrom($userConfig);
-
-		// We couldn't find our default config files
-		} catch (E5xx_ConfigFileNotFound $e){
-			// Did we load a user config though? Get the public class
-			// vars and count them. If there's > 0, we have some config
-			$availableKeys = get_object_vars($userConfig);
-			// Otherwise, just rethrow the exception
-			if (!count($availableKeys)){
-				throw $e;
-			}
-
-			// Move user config to $newConfig for merging into the
-			// current config
-			$newConfig = $userConfig;
+			$this->configHelper->loadDotFileConfig($config, self::APP_NAME, self::USER_DOTFILE);
 		}
-
-		// merge the new config with the existing
-		$config->mergeFrom($newConfig);
-
+		catch (E5xx_ConfigFileNotFound $e) {
+			// we don't care - user configs are optional
+		}
 		// all done
 	}
 
-	/**
-	 *
-	 * @param  \stdClass $config
-	 * @param  string   $configName
-	 * @return void
-	 */
-	public function loadAdditionalConfig($config, $configName)
+	public function loadAdditionalConfig($config, $filename)
 	{
-		return $this->configLoader->loadAdditionalConfig($config, $configName);
-	}
-
-	/**
-	 *
-	 * @return stdClass
-	 */
-	public function loadRuntimeConfig()
-	{
-		return $this->configLoader->loadRuntimeConfig();
+		$this->configHelper->loadConfigFile($config, $filename);
 	}
 
 	/**
 	 *
 	 * @return array<string>
 	 */
-	public function getListOfAdditionalConfigFiles()
+	public function getListOfConfigFiles($dirs)
 	{
-		return $this->configLoader->getListOfAdditionalConfigFiles();
+		// do we have a credible search list?
+		if (!is_array($dirs)) {
+			// fraid not
+			return [];
+		}
+
+		$return = [];
+		foreach ($dirs as $dirToSearch)
+		{
+			$files = $this->configHelper->getListOfConfigFilesIn($dirToSearch, 'json');
+			$return = array_merge($return, $files);
+		}
+
+		// all done
+		return $return;
+	}
+
+	public function loadConfigFilesFrom($dirs)
+	{
+		// our list of loaded config files
+		$return = [];
+
+		// the files to load
+		$filenames = $this->getListOfConfigFiles($dirs);
+
+		// load the files
+		foreach ($filenames as $filename)
+		{
+			$config = new BaseObject();
+			$this->configHelper->loadConfigFile($config, $filename);
+			$return[$filename] = $config;
+		}
+
+		// all done
+		return $return;
 	}
 }

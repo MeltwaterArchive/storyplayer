@@ -43,6 +43,9 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+
 /**
  * support for working with static config
  *
@@ -62,17 +65,53 @@ trait StaticConfigSupport
 	 *
 	 * @return StaticConfigManager
 	 */
-	public function initStaticConfigSupport()
+	public function initStaticConfigSupport(Injectables $injectables, $defaultConfigFilename)
 	{
-		// create an object to manage the static config
-		$this->staticConfigManager = new StaticConfigManager;
+		// shorthand
+		$output = $injectables->output;
 
 		// create our default config - the config that we'll use
 		// unless the config file on disk overrides it
 		$this->staticConfig = new StaticConfig();
 
-		// try to load our main config file
-		$this->staticConfigManager->loadConfig($this->staticConfig);
+		// create an object to manage the static config
+		$this->staticConfigManager = new StaticConfigManager;
+
+		try {
+			// try to load our main config file
+			$this->staticConfigManager->loadDefaultConfig($this->staticConfig, $defaultConfigFilename);
+		}
+		catch (E5xx_ConfigFileNotFound $e) {
+			// there is no default config file
+			//
+			// it isn't fatal, but we do want to tell people about it
+			$output->logCliWarning("default config file '$defaultConfigFilename' not found");
+		}
+		catch (E5xx_InvalidConfigFile $e) {
+			// we either can't read the config file, or it contains
+			// invalid JSON
+			//
+			// that is fatal
+			$output->logCliError("unable to read or prase default config file '$defaultConfigFilename'");
+			exit(1);
+		}
+
+		try {
+			// now we try and override with the user's dotfile
+			$this->staticConfigManager->loadUserConfig($this->staticConfig);
+		}
+		catch (E5xx_ConfigFileNotFound $e) {
+			// the user has no dotfile
+			// we don't care
+		}
+		catch (E5xx_InvalidConfigFile $e) {
+			// we either can't read the config file, or it contains
+			// invalid JSON
+			//
+			// that is fatal
+			$output->logClieError("unable to read or parse your dotfile");
+			exit(1);
+		}
 
 		// all done
 		return $this->staticConfigManager;

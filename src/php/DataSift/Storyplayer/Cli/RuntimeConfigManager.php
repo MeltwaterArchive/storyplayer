@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
 
 /**
  * Helper class for making sure the user has somewhere to save the
@@ -81,7 +81,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 *
 	 * @return void
 	 */
-	public function makeConfigDir()
+	public function makeConfigDir(Injectables $injectables)
 	{
 		// what is the path to the config directory?
 		$configDir = $this->getConfigDir();
@@ -93,7 +93,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 			if (!$success)
 			{
 				// cannot create it - bail out now
-				Log::write(Log::LOG_ERROR, "Unable to create config directory '{$configDir}'");
+				$injectables->output->logCliError("unable to create config directory '{$configDir}'");
 				exit(1);
 			}
 		}
@@ -105,7 +105,12 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 */
 	public function loadRuntimeConfig()
 	{
-		return $this->configLoader->loadRuntimeConfig();
+		try {
+			return $this->configHelper->loadRuntimeConfig(self::APP_NAME, 'runtime.json');
+		}
+		catch (E4xx_ConfigFileNotFound $e) {
+			// we don't care - it is optional
+		}
 	}
 
 	/**
@@ -115,6 +120,6 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 */
 	public function saveRuntimeConfig($config)
 	{
-		return $this->configLoader->saveRuntimeConfig($config);
+		return $this->configLoader->saveRuntimeConfig($config, self::APP_NAME, 'runtime.json');
 	}
 }

@@ -43,13 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliResult;
-use Phix_Project\CliEngine\CliSwitch;
-
 /**
- * Tell Storyplayer which test environment to test against; for when there
- * is more than one test environment defined
+ * determine our default config file
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -58,61 +53,32 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class EnvironmentSwitch extends CliSwitch
+trait DefaultConfigFilenameSupport
 {
-	/**
-	 * @param array $envList
-	 * @param string $defaultEnvName
-	 */
-	public function __construct($envList, $defaultEnvName)
+	public $defaultConfigFilename;
+
+	public function initDefaultConfigFilenameSupport()
 	{
-		// define our name, and our description
-		$this->setName('environment');
-		$this->setShortDescription('set the environment to test against');
-		$this->setLongDesc(
-			"If you have multiple test environments listed in your configuration files, "
-			. "you can use this switch to choose which test environment to run the test(s) "
-			. "against. If you omit this switch, Storyplayer will default to using your "
-			. "computer's hostname as the value for <environment>."
-			. PHP_EOL
-			. PHP_EOL
-			. "If you only have one test environment listed, then this switch has no "
-			. "effect when used, and Storyplayer will always use the test environment "
-			. "from your configuration file."
-			. PHP_EOL
-			. PHP_EOL
-			. "See http://datasift.github.io/storyplayer/ "
-			. "for how to configure and use multiple test environments."
-		);
+		// what are the candidates?
+		$searchList = [
+			"storyplayer.json",
+			"storyplayer.json.dist"
+		];
 
-		// what are the short switches?
-		$this->addShortSwitch('e');
+		// do we have them?
+		foreach ($searchList as $filename) {
+			if (is_file($filename)) {
+				// YES!!
+				$this->defaultConfigFilename = $filename;
+				return;
+			}
+		}
 
-		// what are the long switches?
-		$this->addLongSwitch('environment');
-
-		// what is the required argument?
-		$this->setRequiredArg('<environment>', "the environment to test against; one of: " . implode(", ", $envList));
-		$this->setArgValidator(new EnvironmentValidator($envList, $defaultEnvName));
-		$this->setArgHasDefaultValueOf($defaultEnvName);
-
-		// all done
-	}
-
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->environment = $params[0];
-
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
+		// we have nothing
+		//
+		// the best we can do is return our preferred file, and let
+		// the wider app decide what to do about the fact that it is
+		// missing
+		$this->defaultConfigFilename = end($searchList);
 	}
 }
