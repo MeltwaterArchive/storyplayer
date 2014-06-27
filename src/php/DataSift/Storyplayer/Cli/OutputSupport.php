@@ -66,5 +66,7 @@ trait OutputSupport
 	public function initOutputSupport()
 	{
 		$this->output = new Output();
+
+		return $this->output;
 	}
 }
