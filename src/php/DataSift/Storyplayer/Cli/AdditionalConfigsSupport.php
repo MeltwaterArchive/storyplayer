@@ -43,10 +43,9 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
-
 /**
- * a container for common services and data, to avoid making them global
+ * support for remembering the additional config files that are available
+ * if the user selects them
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,17 +54,12 @@ use Phix_Project\Injectables as BaseInjectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+trait AdditionalConfigsSupport
 {
-	use AdditionalConfigsSupport;
-	use DefaultConfigFilenameSupport;
-	use DeviceListSupport;
-	use OutputSupport;
-	use PhaseLoaderSupport;
-	use ProseLoaderSupport;
-	use ReportLoaderSupport;
-	use RunsOnEnvironmentListSupport;
-	use RuntimeConfigSupport;
-	use StaticConfigSupport;
-	use TargetEnvironmentListSupport;
+	public $additionalConfigs;
+
+	public function initAdditionalConfigsSupport($additionalConfigs)
+	{
+		$this->additionalConfigs = $additionalConfigs;
+	}
 }

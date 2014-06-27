@@ -199,6 +199,7 @@ function main($argv)
 		{
 			$additionalConfigs[$name] = $staticConfigManager->loadConfigFilesFrom($dirs);
 		}
+		$injectables->initAdditionalConfigsSupport($additionalConfigs);
 
 		// put all of that into something we can give to the CliEngine
 		$injectables->initDeviceListSupport($staticConfig->devices, $additionalConfigs['devices']);
