@@ -151,7 +151,9 @@ class PlayStoryCommand extends CliCommand
         }
         catch (Exception $e) {
             $injectables->output->logCliError($e->getMessage());
-            $injectables->output->logCliError($e->getTraceAsString());
+            if (isset($engine->options->dev) && $engine->options->dev) {
+                $injectables->output->logCliError("Stack trace is:\n\n" . $e->getTraceAsString());
+            }
             exit(1);
         }
 
