@@ -250,6 +250,22 @@ class Output implements OutputPlugin
 	}
 
 	/**
+	 * called when the outer CLI shell encounters a fatal error
+	 *
+	 * @param  string $msg
+	 *         the error message to show the user
+	 *
+	 * @return void
+	 */
+	public function logCliErrorWithException($msg, $e)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->logCliErrorWithException($msg, $e);
+		}
+	}
+
+	/**
 	 * called when the outer CLI shell needs to publish a warning
 	 *
 	 * @param  string $msg

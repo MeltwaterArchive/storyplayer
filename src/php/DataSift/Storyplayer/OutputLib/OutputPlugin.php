@@ -142,6 +142,14 @@ interface OutputPlugin
 	public function logCliError($msg);
 
 	/**
+	 *
+	 * @param  string $msg
+	 * @param  Exception $e
+	 * @return void
+	 */
+	public function logCliErrorWithException($msg, $e);
+
+	/**
 	 * @param string $msg
 	 *
 	 * @return void

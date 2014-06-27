@@ -259,6 +259,19 @@ EOS;
 	}
 
 	/**
+	 *
+	 * @param  string $msg
+	 * @param  Exception $e
+	 * @return void
+	 */
+	public function logCliErrorWithException($msg, $e)
+	{
+		echo "*** error: $msg" . PHP_EOL . PHP_EOL
+		     . "This was caused by an unexpected exception " . get_class($e) . PHP_EOL . PHP_EOL
+		     . $e->getTraceAsString();
+	}
+
+	/**
 	 * called when the outer CLI shell needs to publish a warning
 	 *
 	 * @param  string $msg
