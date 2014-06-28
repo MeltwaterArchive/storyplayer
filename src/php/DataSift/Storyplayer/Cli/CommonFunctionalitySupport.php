@@ -72,8 +72,9 @@ trait CommonFunctionalitySupport
 		$this->commonFunctionality = [
 			new Common_ColorSupport,
 			new Common_ConsoleSupport,
-			new Common_DeviceSupport,
+			new Common_LocalEnvironmentSupport,
 			new Common_DefinesSupport,
+			new Common_DeviceSupport,
 		];
 
 		// let each object register any switches that they need
