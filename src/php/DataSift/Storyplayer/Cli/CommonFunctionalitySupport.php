@@ -66,8 +66,12 @@ trait CommonFunctionalitySupport
 		//
 		// the order here determines the order that we process things in
 		// after parsing the command line
+		//
+		// it is perfectly safe for anything in this list to rely on anything
+		// that comes before it in the list
 		$this->commonFunctionality = [
 			new Common_ColorSupport,
+			new Common_ConsoleSupport,
 			new Common_DeviceSupport
 		];
 
