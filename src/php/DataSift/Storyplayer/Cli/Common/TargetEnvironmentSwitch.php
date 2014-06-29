@@ -110,7 +110,7 @@ class Common_TargetEnvironmentSwitch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->targetEnvName = $params[0];
+		$engine->options->targetEnvironmentName = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

@@ -66,7 +66,7 @@ trait Injectables_DefaultLocalEnvironmentName
 		];
 
 		// do any of these environments exist?
-		foreach ($searchList as $localEnvName) {
+		foreach ($searchList as $envName) {
 			if (isset($injectables->knownLocalEnvironments->$envName)) {
 				$this->defaultLocalEnvironmentName = $envName;
 				// all done

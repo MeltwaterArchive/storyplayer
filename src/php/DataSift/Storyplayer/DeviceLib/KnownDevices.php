@@ -57,8 +57,6 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class KnownDevices extends BaseObject
 {
-    public $devices;
-
     public function __construct()
     {
         $this->initDefaultConfig();

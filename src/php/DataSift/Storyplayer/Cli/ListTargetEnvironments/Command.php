@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Michael Heap <michael.heap@datasift.com>
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -45,10 +45,10 @@ namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * Command to list the current default environment, suitable for use
- * inside shell scripts
+ * A command to list the supported test environments
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,38 +57,40 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ShowDefaultEnvironment_Command extends CliCommand
+class ListTargetEnvironments_Command extends CliCommand
 {
-	protected $defaultEnvName;
+	protected $envList;
 
 	public function __construct($envList)
 	{
 		// define the command
-		$this->setName('show-default-environment');
-		$this->setShortDescription('display default environment');
+		$this->setName('list-target-environments');
+		$this->setShortDescription('list the available target environments');
 		$this->setLongDescription(
-			"Use this command to see what environment Storyplayer will use "
-			."by default if you omit the -e switch"
+			"Use this command to get a list of all of the test environments"
+			. " that are defined in the config files."
 			.PHP_EOL
 		);
 
-        // for convenience, the current computer's hostname will be the
-        // default environment
-        $defaultEnvName = EnvironmentHelper::getDefaultEnvironmentName($envList);
-
-		// remember the default environment name
-		$this->defaultEnvName = $defaultEnvName;
+		// remember the environments list
+		$this->envList = $envList;
 	}
 
 	/**
 	 *
 	 * @param  CliEngine $engine
 	 * @param  array     $params
-	 * @return Phix_Project\CliEngine\CliResult
+	 * @param  mixed     $additionalContext
+	 * @return CliResult
 	 */
-	public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
-		// output the default environment name
-		echo $this->defaultEnvName . PHP_EOL;
+		// list the environments (if any) in a machine-friendly way
+		foreach ($this->envList as $envName) {
+			echo "{$envName}\n";
+		}
+
+		// all done
+		return new CliResult(0);
 	}
 }

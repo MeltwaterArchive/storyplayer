@@ -43,12 +43,11 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\CliEngine\CliResult;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * A command to list the supported test environments
+ * Exception thrown when we attempt to build the config for an environment
+ * that does not exist
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,40 +56,12 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ListEnvironments_Command extends CliCommand
+class E4xx_NoSuchTargetEnvironment extends Exxx_Exception
 {
-	protected $envList;
-
-	public function __construct($envList)
-	{
-		// define the command
-		$this->setName('list-environments');
-		$this->setShortDescription('list the available test environments');
-		$this->setLongDescription(
-			"Use this command to get a list of all of the test environments"
-			. " that are defined in the config files."
-			.PHP_EOL
-		);
-
-		// remember the environments list
-		$this->envList = $envList;
-	}
-
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return CliResult
-	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
-	{
-		// list the environments (if any) in a machine-friendly way
-		foreach ($this->envList as $envName) {
-			echo "{$envName}\n";
-		}
-
-		// all done
-		return new CliResult(0);
-	}
+    public function __construct($envName)
+    {
+    	$msg = "Unknown target environment '{$envName}'; we have no config for it" . PHP_EOL . PHP_EOL
+    	     . "Use 'storyplayer list-target-environments' to see the list of known targets";
+        parent::__construct(400, $msg, $msg);
+    }
 }

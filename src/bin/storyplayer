@@ -28,13 +28,14 @@ use DataSift\Storyplayer\Cli\ExtraConfigHelper;
 use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\Cli\Install_Command;
 use DataSift\Storyplayer\Cli\KillProcesses_Command;
-use DataSift\Storyplayer\Cli\ListEnvironments_Command;
 use DataSift\Storyplayer\Cli\ListHostsTable_Command;
+use DataSift\Storyplayer\Cli\ListLocalEnvironments_Command;
 use DataSift\Storyplayer\Cli\ListProcesses_Command;
+use DataSift\Storyplayer\Cli\ListTargetEnvironments_Command;
 use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
-use DataSift\Storyplayer\Cli\ShowDefaultEnvironment_Command;
 use DataSift\Storyplayer\Cli\ShowLocalEnvironment_Command;
+use DataSift\Storyplayer\Cli\ShowTargetEnvironment_Command;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
@@ -252,13 +253,14 @@ function main($argv)
 	//        and the user does not have to type it on the command line
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new CreateStory_Command);
-	//$engine->addCommand(new ListEnvironments_Command($injectables->envList));
 	$engine->addCommand(new Install_Command);
 	$engine->addCommand(new KillProcesses_Command);
 	$engine->addCommand(new ListHostsTable_Command);
+	$engine->addCommand(new ListLocalEnvironments_Command($injectables->knownLocalEnvironmentsList));
 	$engine->addCommand(new ListProcesses_Command);
-	//$engine->addCommand(new ShowDefaultEnvironment_Command($injectables->envList));
-	//$engine->addCommand(new ShowLocalEnvironment_Command($injectables));
+	$engine->addCommand(new ListTargetEnvironments_Command($injectables->knownTargetEnvironmentsList));
+	$engine->addCommand(new ShowLocalEnvironment_Command);
+	$engine->addCommand(new ShowTargetEnvironment_Command);
 
 	// all set - let's go
 	try {

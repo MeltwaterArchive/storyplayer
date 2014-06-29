@@ -58,10 +58,11 @@ trait Injectables_ActiveLocalEnvironmentSupport
 	public $activeLocalEnvironment;
 	public $activeLocalEnvironmentName;
 
-	public function initLocalEnvironment($envName, $injectables)
+	public function initActiveLocalEnvironment($envName, $injectables)
 	{
         // does the local environment exist?
         if (!isset($injectables->knownLocalEnvironments->$envName)) {
+            var_dump($injectables->knownLocalEnvironments);
             throw new E4xx_NoSuchLocalEnvironment($envName);
         }
 

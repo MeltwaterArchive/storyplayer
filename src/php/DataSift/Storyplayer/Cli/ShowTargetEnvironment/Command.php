@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -43,11 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use DataSift\Stone\ConfigLib\LoadedConfig;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
 
 /**
- * helper to filter a list of available additional config
+ * Command to list the current default environment, suitable for use
+ * inside shell scripts
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,51 +57,31 @@ use DataSift\Stone\ConfigLib\LoadedConfig;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExtraConfigHelper
+class ShowTargetEnvironment_Command extends CliCommand
 {
+	public function __construct()
+	{
+		// define the command
+		$this->setName('show-target-environment');
+		$this->setShortDescription('display the default target environment');
+		$this->setLongDescription(
+			"Use this command to see what Storyplayer will use as the default "
+			."target environment to test against."
+			.PHP_EOL.PHP_EOL
+			."This command mostly exists to assist tab-completion scripts for UNIX shells."
+		);
+	}
+
 	/**
 	 *
-	 * @param  StaticConfig        $staticConfig
-	 * @param  string              $parent
-	 * @param  array               $listToFilter
-	 * @param  StaticConfigManager $staticConfigManager
-	 * @return array
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return Phix_Project\CliEngine\CliResult
 	 */
-	static public function validateList($staticConfig, $parent, $listToFilter, $staticConfigManager)
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
-		// the list we will return
-		$return = array();
-
-		foreach ($listToFilter as $key) {
-			// is this in the config that we've already loaded?
-			if (isset($staticConfig->$parent, $staticConfig->$parent->$key)) {
-				$return[] = $key;
-				continue;
-			}
-
-			// if we get here, then the extra config is in an additional
-			// config file on disk
-
-			// our dummy config
-			$config = new LoadedConfig();
-
-			// can we load the file?
-			try {
-				$staticConfigManager->loadAdditionalConfig($config, $key);
-			}
-			catch (Exception $e) {
-				// didn't load - skip it
-				continue;
-			}
-
-			// does this additional config file contain the piece of
-			// config that we're expecting?
-			if (isset($config->$parent, $config->$parent->$key)) {
-				$return[] = $key;
-			}
-		}
-
-		// all done
-		return $return;
+		// output the default environment name
+		echo $additionalContext->defaultTargetEnvironmentName . PHP_EOL;
 	}
 }

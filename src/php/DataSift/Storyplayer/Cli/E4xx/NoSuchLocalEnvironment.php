@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Michael Heap <michael.heap@datasift.com>
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -43,12 +43,11 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Command to list the current default environment, suitable for use
- * inside shell scripts
+ * Exception thrown when we attempt to build the config for an environment
+ * that does not exist
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,31 +56,12 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ShowLocalEnvironment_Command extends CliCommand
+class E4xx_NoSuchLocalEnvironment extends Exxx_Exception
 {
-	public function __construct()
-	{
-		// define the command
-		$this->setName('show-local-environment');
-		$this->setShortDescription('display environment name for my computer');
-		$this->setLongDescription(
-			"Use this command to see what Storyplayer thinks the environment "
-			."name is for the computer it is running on"
-			.PHP_EOL.PHP_EOL
-			."This command mostly exists to assist tab-completion scripts for UNIX shells."
-		);
-	}
-
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return Phix_Project\CliEngine\CliResult
-	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
-	{
-		// output the default environment name
-		echo $additionalContext->defaultLocalEnvironmentName . PHP_EOL;
-	}
+    public function __construct($envName)
+    {
+    	$msg = "Unknown local environment '{$envName}'; we have no config for it" . PHP_EOL . PHP_EOL
+    	     . "Use 'storyplayer list-local-environments' to see the list of supported environments";
+        parent::__construct(400, $msg, $msg);
+    }
 }

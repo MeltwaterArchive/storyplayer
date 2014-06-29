@@ -84,6 +84,9 @@ class Common_TargetEnvironmentSupport implements Common_Functionality
 
     public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
-    	$injectable->initActiveTargetEnvironment($engine->options->targetEnvironment);
+    	$injectables->initActiveTargetEnvironment(
+            $engine->options->targetEnvironmentName,
+            $injectables
+        );
     }
 }

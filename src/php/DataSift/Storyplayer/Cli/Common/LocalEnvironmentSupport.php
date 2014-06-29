@@ -95,7 +95,10 @@ class Common_LocalEnvironmentSupport implements Common_Functionality
             return;
         }
 
-        $injectables->initActiveLocalEnvironmentSupport($engine->options->localEnvironmentName);
+        $injectables->initActiveLocalEnvironment(
+            $engine->options->localEnvironmentName,
+            $injectables
+        );
 
         // all done
     }

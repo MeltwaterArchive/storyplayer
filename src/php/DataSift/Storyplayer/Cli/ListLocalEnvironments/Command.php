@@ -43,11 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * Exception thrown when we attempt to build the config for an environment
- * that does not exist
+ * A command to list the supported local environments
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,11 +57,40 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_NoSuchEnvironment extends Exxx_Exception
+class ListLocalEnvironments_Command extends CliCommand
 {
-    public function __construct($envName)
-    {
-    	$msg = "Unknown environment '{$envName}'; we have no config for it";
-        parent::__construct(400, $msg, $msg);
-    }
+	protected $envList;
+
+	public function __construct($envList)
+	{
+		// define the command
+		$this->setName('list-local-environments');
+		$this->setShortDescription('list the available local environments');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the local environments"
+			. " that are defined in the config files."
+			.PHP_EOL
+		);
+
+		// remember the environments list
+		$this->envList = $envList;
+	}
+
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return CliResult
+	 */
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// list the environments (if any) in a machine-friendly way
+		foreach ($this->envList as $envName) {
+			echo "{$envName}\n";
+		}
+
+		// all done
+		return new CliResult(0);
+	}
 }

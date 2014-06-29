@@ -58,7 +58,7 @@ trait Injectables_ActiveTargetEnvironmentSupport
 	public $activeTargetEnvironment;
 	public $activeTargetEnvironmentName;
 
-	public function initTargetEnvironment($envName, $injectables)
+	public function initActiveTargetEnvironment($envName, $injectables)
 	{
         // does the target environment exist?
         if (!isset($injectables->knownTargetEnvironments->$envName)) {
