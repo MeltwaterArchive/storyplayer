@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use DataSift\Storyplayer\DeviceLib\KnownDevices;
+
 /**
  * support for working with the list of known devices
  *
@@ -53,31 +55,35 @@ namespace DataSift\Storyplayer\Cli;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_DeviceListSupport
+trait Injectables_KnownDevicesSupport
 {
-	public $deviceList;
+	public $knownDevices;
+	public $knownDevicesList = array();
 
 	/**
-	 *
 	 * @param  stdClass $devices
 	 * @return stdClass
 	 */
-	public function initDeviceListSupport($devices, $additionalConfigs)
+	public function initKnownDevicesSupport($additionalDevices)
 	{
 		// start with a list of all the devices that are hard-coded
 		// into Storyplayer
-		$this->deviceList = [];
-		foreach ($devices as $deviceName => $device) {
-			$this->deviceList[] = $deviceName;
+		$this->knownDevices = new KnownDevices;
+		foreach ($this->knownDevices as $deviceName => $device) {
+			$this->knownDevicesList[$deviceName] = $deviceName;
 		}
 
 		// now add in all the devices that we have discovered in
 		// the config files
-		foreach ($additionalConfigs as $filename => $config) {
-			$this->deviceList[] = basename($filename, '.json');
+		foreach ($additionalDevices as $filename => $config) {
+			$deviceName = basename($filename, 'json');
+			$this->knownDevicesList[$deviceName] = $deviceName;
+			$this->knownDevices->$deviceName = $config;
 		}
 
+		// now put the list of devices into a sensible order
+		ksort($this->knownDevicesList);
+
 		// all done
-		return $this->deviceList;
 	}
 }

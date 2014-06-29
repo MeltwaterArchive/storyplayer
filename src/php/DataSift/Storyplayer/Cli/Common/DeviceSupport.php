@@ -72,62 +72,26 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  */
 class Common_DeviceSupport implements Common_Functionality
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
+    public function addSwitches(CliCommand $command, $injectables)
     {
         $command->addSwitches([
-            new Common_DeviceSwitch($additionalContext->deviceList)
+            new Common_DeviceSwitch($injectables->knownDevicesList)
         ]);
     }
 
     public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
         // shorthand
-        $output               = $injectables->output;
-        $staticConfig         = $injectables->staticConfig;
-        $staticConfigManager  = $injectables->staticConfigManager;
+        $output       = $injectables->output;
+        $staticConfig = $injectables->staticConfig;
 
-        // do we need to load device-specific config?
-        //
-        // we do this AFTER loading environments, because that's the order
-        // we've told users it will happen in
-        if (isset($engine->options->device)) {
-            $deviceName = $engine->options->device;
-        }
-        else {
-            $deviceName = null;
+        // do we have a device to load?
+        if (!isset($engine->options->device)) {
+            // nothing to do
+            return;
         }
 
-        if ($deviceName)
-        {
-            try {
-                // load our device-specific config
-                //
-                // this will be merged in with the default config
-                $staticConfigManager->loadAdditionalConfig($staticConfig, $deviceName);
-            }
-            catch (E5xx_ConfigFileNotFound $e) {
-                // do we already have this device?
-                if (!isset($staticConfig->devices->$deviceName)) {
-                    // no we don't ... report an error
-                    $msg = "no config file '{$deviceName}.json' found" . PHP_EOL;
-                    $output->logCliError($msg);
-                    exit(1);
-                }
-
-                // remember what our chosen device is
-                $staticConfig->initDevice($deviceName);
-            }
-            catch (E5xx_InvalidConfigFile $e) {
-                $msg = "unable to load config file '{$deviceName}.json'" . PHP_EOL . PHP_EOL
-                       . $e->getMessage();
-                $output->logCliError($msg);
-                exit(1);
-            }
-            catch (E4xx_NoSuchDevice $e) {
-                $msg = $e->getMessage();
-                $output->logCliError($msg);
-                exit(1);
-            }
-        }
+        $deviceName = $engine->options->device;
+        $injectables->initActiveDevice($deviceName, $injectables);
     }
 }

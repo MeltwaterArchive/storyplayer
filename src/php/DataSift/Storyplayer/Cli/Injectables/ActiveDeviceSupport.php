@@ -43,10 +43,10 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
+use DataSift\Storyplayer\DeviceLib\KnownDevices;
 
 /**
- * a container for common services and data, to avoid making them global
+ * support for the device that the user chooses
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,18 +55,29 @@ use Phix_Project\Injectables as BaseInjectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+trait Injectables_ActiveDeviceSupport
 {
-	use Injectables_ActiveDeviceSupport;
-	use Injectables_AdditionalConfigsSupport;
-	use Injectables_DefaultConfigFilenameSupport;
-	use Injectables_KnownDevicesSupport;
-//	use Injectables_LocalEnvironmentListSupport;
-	use Injectables_OutputSupport;
-	use Injectables_PhaseLoaderSupport;
-	use Injectables_ProseLoaderSupport;
-	use Injectables_ReportLoaderSupport;
-	use Injectables_RuntimeConfigSupport;
-	use Injectables_StaticConfigSupport;
-	use Injectables_TargetEnvironmentListSupport;
+	public $activeDevice;
+	public $activeDeviceName;
+
+	/**
+	 * @param  string $deviceName
+	 *         the name of the device to make active
+	 * @param  Injectables $injectables
+	 *         our DI container, which contains the list of known devices
+	 * @return void
+	 */
+	public function initActiveDevice($deviceName, $injectables)
+	{
+        // does the device exist?
+        if (!isset($injectables->knownDevices->$deviceName)) {
+            throw new E4xx_NoSuchDevice($deviceName);
+        }
+
+        // copy over the device that we want
+        $this->activeDevice = $injectables->knownDevices->$deviceName;
+
+        // remember the device name
+        $this->activeDeviceName = $deviceName;
+	}
 }

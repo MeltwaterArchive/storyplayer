@@ -71,7 +71,7 @@ use Datasift\netifaces\NetifacesException;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StaticConfig extends LoadedConfig
+class StaticConfig extends BaseObject
 {
     public $environments;
     public $defines;

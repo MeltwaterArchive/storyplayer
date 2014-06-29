@@ -202,15 +202,15 @@ function main($argv)
 		$injectables->initAdditionalConfigsSupport($additionalConfigs);
 
 		// put all of that into something we can give to the CliEngine
-		$injectables->initDeviceListSupport($staticConfig->devices, $additionalConfigs['devices']);
-		$injectables->initLocalEnvironmentListSupport(
-			$staticConfig->environments,
-			$additionalConfigs['localEnvironments']
-		);
-		$injectables->initTargetEnvironmentListSupport(
-			$staticConfig->environments,
-			array_merge($additionalConfigs['localEnvironments'], $additionalConfigs['targetEnvironments'])
-		);
+		$injectables->initKnownDevicesSupport($additionalConfigs['devices']);
+		// $injectables->initLocalEnvironmentListSupport(
+		// 	$staticConfig->environments,
+		// 	$additionalConfigs['localEnvironments']
+		// );
+		// $injectables->initTargetEnvironmentListSupport(
+		// 	$staticConfig->environments,
+		// 	$additionalConfigs['targetEnvironments']
+		// );
 	}
 	catch (Exception $e)
 	{
@@ -256,13 +256,13 @@ function main($argv)
 	//        and the user does not have to type it on the command line
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new CreateStory_Command);
-	$engine->addCommand(new ListEnvironments_Command($injectables->envList));
+	//$engine->addCommand(new ListEnvironments_Command($injectables->envList));
 	$engine->addCommand(new Install_Command);
 	$engine->addCommand(new KillProcesses_Command);
 	$engine->addCommand(new ListHostsTable_Command);
 	$engine->addCommand(new ListProcesses_Command);
-	$engine->addCommand(new ShowDefaultEnvironment_Command($injectables->envList));
-	$engine->addCommand(new ShowLocalEnvironment_Command($injectables));
+	//$engine->addCommand(new ShowDefaultEnvironment_Command($injectables->envList));
+	//$engine->addCommand(new ShowLocalEnvironment_Command($injectables));
 
 	// all set - let's go
 	try {
