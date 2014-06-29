@@ -43,25 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * Common support for the -D switch
+ * A command to list the processes we have previously started
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -70,26 +57,54 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DefinesSupport implements Common_Functionality
+class ListProcesses_Command extends CliCommand
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DefineSwitch
-        ]);
-    }
+	public function __construct()
+	{
+		// define the command
+		$this->setName('list-processes');
+		$this->setShortDescription('list any background processes that are currently running');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the processes that Storyplayer "
+			."has started in the background."
+			.PHP_EOL .PHP_EOL
+			."This can help you to identify processes that have been left running after "
+			."a test has completed."
+			.PHP_EOL .PHP_EOL
+			."You can use the 'kill-processes' command to stop these processes."
+			.PHP_EOL
+		);
+	}
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $staticConfig = $injectables->staticConfig;
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return CliResult
+	 */
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// shorthand
+		$runtimeConfig = $additionalContext->runtimeConfig;
 
-        // do we have any defines from the command-line to merge in?
-        //
-        // this must be done AFTER all config files have been loaded!
-        if (isset($engine->options->defines)) {
-            // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
-        }
-    }
+		// are there any processes in the table?
+		if (!isset($runtimeConfig->processes)) {
+			// we're done
+			return new CliResult(0);
+		}
+
+		// let's walk through the table
+		foreach ($runtimeConfig->processes as $details) {
+			if (isset($details->screenName)) {
+				echo "{$details->pid}:{$details->processName}:{$details->screenName}\n";
+			}
+			else {
+				echo "{$details->pid}:{$details->processName}\n";
+			}
+		}
+
+		// all done
+		return new CliResult(0);
+	}
 }

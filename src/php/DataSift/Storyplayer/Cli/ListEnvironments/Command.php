@@ -43,25 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * Common support for the -D switch
+ * A command to list the supported test environments
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -70,26 +57,40 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DefinesSupport implements Common_Functionality
+class ListEnvironments_Command extends CliCommand
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DefineSwitch
-        ]);
-    }
+	protected $envList;
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $staticConfig = $injectables->staticConfig;
+	public function __construct($envList)
+	{
+		// define the command
+		$this->setName('list-environments');
+		$this->setShortDescription('list the available test environments');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the test environments"
+			. " that are defined in the config files."
+			.PHP_EOL
+		);
 
-        // do we have any defines from the command-line to merge in?
-        //
-        // this must be done AFTER all config files have been loaded!
-        if (isset($engine->options->defines)) {
-            // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
-        }
-    }
+		// remember the environments list
+		$this->envList = $envList;
+	}
+
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return CliResult
+	 */
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// list the environments (if any) in a machine-friendly way
+		foreach ($this->envList as $envName) {
+			echo "{$envName}\n";
+		}
+
+		// all done
+		return new CliResult(0);
+	}
 }

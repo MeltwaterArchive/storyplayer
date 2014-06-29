@@ -43,25 +43,11 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * Common support for the -D switch
+ * support for working with static config
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -70,26 +56,64 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DefinesSupport implements Common_Functionality
+trait Injectables_StaticConfigSupport
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DefineSwitch
-        ]);
-    }
+	public $staticConfigManager;
+	public $staticConfig;
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $staticConfig = $injectables->staticConfig;
+	/**
+	 *
+	 * @return StaticConfigManager
+	 */
+	public function initStaticConfigSupport(Injectables $injectables, $defaultConfigFilename)
+	{
+		// shorthand
+		$output = $injectables->output;
 
-        // do we have any defines from the command-line to merge in?
-        //
-        // this must be done AFTER all config files have been loaded!
-        if (isset($engine->options->defines)) {
-            // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
-        }
-    }
+		// create our default config - the config that we'll use
+		// unless the config file on disk overrides it
+		$this->staticConfig = new StaticConfig();
+
+		// create an object to manage the static config
+		$this->staticConfigManager = new StaticConfigManager;
+
+		try {
+			// try to load our main config file
+			$this->staticConfigManager->loadDefaultConfig($this->staticConfig, $defaultConfigFilename);
+		}
+		catch (E5xx_ConfigFileNotFound $e) {
+			// there is no default config file
+			//
+			// it isn't fatal, but we do want to tell people about it
+			$output->logCliWarning("default config file '$defaultConfigFilename' not found");
+		}
+		catch (E5xx_InvalidConfigFile $e) {
+			// we either can't read the config file, or it contains
+			// invalid JSON
+			//
+			// that is fatal
+			$output->logCliError("unable to read or prase default config file '$defaultConfigFilename'");
+			exit(1);
+		}
+
+		try {
+			// now we try and override with the user's dotfile
+			$this->staticConfigManager->loadUserConfig($this->staticConfig);
+		}
+		catch (E5xx_ConfigFileNotFound $e) {
+			// the user has no dotfile
+			// we don't care
+		}
+		catch (E5xx_InvalidConfigFile $e) {
+			// we either can't read the config file, or it contains
+			// invalid JSON
+			//
+			// that is fatal
+			$output->logClieError("unable to read or parse your dotfile");
+			exit(1);
+		}
+
+		// all done
+		return $this->staticConfigManager;
+	}
 }

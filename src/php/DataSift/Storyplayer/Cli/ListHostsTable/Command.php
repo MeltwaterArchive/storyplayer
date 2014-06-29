@@ -43,25 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use Phix_Project\CliEngine\CliResult;
 
 /**
- * Common support for the -D switch
+ * A command to list the
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -70,26 +57,55 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DefinesSupport implements Common_Functionality
+class ListHostsTable_Command extends CliCommand
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DefineSwitch
-        ]);
-    }
+	public function __construct()
+	{
+		// define the command
+		$this->setName('list-hoststable');
+		$this->setShortDescription('list the current contents of the hoststable');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the machines (physical or VM)"
+			. " that are currently listed in Storyplayer's hoststable."
+			.PHP_EOL .PHP_EOL
+			."This can help you to identify VMs that have been left running after "
+			."a test has completed."
+			.PHP_EOL
+		);
+		$this->setSwitches(array(
+			new ListHostsTable_HostTypeSwitch("list only hosts of a given type", "a comma-separated list of the types of hosts to include in the output")
+		));
+	}
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $staticConfig = $injectables->staticConfig;
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return CliResult
+	 */
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// shorthand
+		$runtimeConfig = $additionalContext->runtimeConfig;
 
-        // do we have any defines from the command-line to merge in?
-        //
-        // this must be done AFTER all config files have been loaded!
-        if (isset($engine->options->defines)) {
-            // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
-        }
-    }
+		// are there any hosts in the table?
+		if (!isset($runtimeConfig->hosts)) {
+			// we're done
+			return new CliResult(0);
+		}
+
+		// let's walk through the table
+		foreach ($runtimeConfig->hosts as $hostName => $details) {
+			// is this in the list we are filtering against?
+			if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
+				continue;
+			}
+
+			echo "{$details->name}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
+		}
+
+		// all done
+		return new CliResult(0);
+	}
 }

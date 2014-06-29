@@ -43,25 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Common support for the -D switch
+ * Tell Storyplayer which host type to use
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -70,26 +57,44 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DefinesSupport implements Common_Functionality
+class ListHostsTable_HostTypeSwitch extends CliSwitch
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DefineSwitch
-        ]);
-    }
+	/**
+	 * @param string $shortDesc
+	 * @param string $argDesc
+	 */
+	public function __construct($shortDesc, $argDesc)
+	{
+		// define our name, and our description
+		$this->setName('hosttype');
+		$this->setShortDescription($shortDesc);
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $staticConfig = $injectables->staticConfig;
+		// what are the short switches?
+		$this->addShortSwitch('T');
 
-        // do we have any defines from the command-line to merge in?
-        //
-        // this must be done AFTER all config files have been loaded!
-        if (isset($engine->options->defines)) {
-            // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
-        }
-    }
+		// what are the long switches?
+		$this->addLongSwitch('hosttype');
+
+		// what is the required argument?
+		$this->setRequiredArg('<hosttype>', $argDesc);
+		$this->setArgHasDefaultValueOf("EC2,OpenStack,PhysicalHost,ProxmoxContainer,ProxmoxVM,StatesmanVM,VagrantVM");
+		// all done
+	}
+
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
+	 * @param  array     $params
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
+	 */
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->hosttype = explode(',', strtolower($params[0]));
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }

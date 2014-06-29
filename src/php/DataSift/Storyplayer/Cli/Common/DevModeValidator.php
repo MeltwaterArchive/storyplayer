@@ -43,53 +43,32 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
 
-/**
- * Common support for the -D switch
- *
- * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class Common_DefinesSupport implements Common_Functionality
+class Common_DevModeValidator implements Validator
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DefineSwitch
-        ]);
-    }
+    const MSG_UNKNOWNOPTION = "Unknown dev mode option '%value%'";
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    /**
+     *
+     * @param  mixed $value
+     * @param  ValidationResult $result
+     * @return ValidationResult
+     */
+    public function validate($value, ValidationResult $result = null)
     {
-        // shorthand
-        $staticConfig = $injectables->staticConfig;
-
-        // do we have any defines from the command-line to merge in?
-        //
-        // this must be done AFTER all config files have been loaded!
-        if (isset($engine->options->defines)) {
-            // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
+        if ($result === null) {
+            $result = new ValidationResult($value);
         }
+
+        // the $value must be one that we support
+        $value = strtolower($value);
+        if (Common_DevModeHelper::stringToValue($value) === null) {
+            $result->addError(static::MSG_UNKNOWNOPTION);
+            return $result;
+        }
+
+        return $result;
     }
 }

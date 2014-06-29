@@ -75,7 +75,7 @@ class Common_ConsoleSupport implements Common_Functionality
     public function addSwitches(CliCommand $command, $additionalContext)
     {
         $command->addSwitches([
-            new DevModeSwitch
+            new Common_DevModeSwitch
         ]);
     }
 

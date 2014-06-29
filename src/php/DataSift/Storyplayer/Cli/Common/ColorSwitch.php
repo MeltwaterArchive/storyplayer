@@ -43,25 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Common support for the -D switch
+ * Tell Storyplayer when to use color output
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -70,26 +57,49 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DefinesSupport implements Common_Functionality
+class Common_ColorSwitch extends CliSwitch
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DefineSwitch
-        ]);
-    }
+	public function __construct()
+	{
+		// define our name, and our description
+		$this->setName('color');
+		$this->setShortDescription('set when to use color in the output');
+		$this->setLongDesc(
+			"Storyplayer can use color to make it easier to understand the output at a glance. "
+			. "By default, Storyplayer will use color when stdout / stderr are connected to a terminal. "
+			. "You can use this switch to override the default behaviour (for example, when piping the "
+			. "output into less(1)."
+			. PHP_EOL . PHP_EOL
+			. "The default behaviour relies on PHP's posix_isatty() function. This should be built into "
+			. "your copy of PHP, but your operating system may require you to install an additional "
+			. "package to get it (grrr)."
+		);
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $staticConfig = $injectables->staticConfig;
+		// what are the long switches?
+		$this->addLongSwitch('color');
 
-        // do we have any defines from the command-line to merge in?
-        //
-        // this must be done AFTER all config files have been loaded!
-        if (isset($engine->options->defines)) {
-            // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
-        }
-    }
+		// what is the required argument?
+		$this->setRequiredArg('<when>', "when to use colour; possible values are 'none', 'always' and 'auto'");
+		$this->setArgValidator(new Common_ColorValidator());
+		$this->setArgHasDefaultValueOf('auto');
+
+		// all done
+	}
+
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
+	 * @param  array     $params
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
+	 */
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->color = $params[0];
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }

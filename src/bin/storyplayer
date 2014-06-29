@@ -22,19 +22,19 @@ use Phix_Project\CliEngine\Switches\VerboseLongSwitch;
 use Phix_Project\CliEngine\Switches\VersionSwitch;
 use Phix_Project\CliEngine\Commands\HelpCommand;
 
-use DataSift\Storyplayer\Cli\CreateStoryCommand;
+use DataSift\Storyplayer\Cli\CreateStory_Command;
 use DataSift\Storyplayer\Cli\DeviceListHelper;
 use DataSift\Storyplayer\Cli\ExtraConfigHelper;
 use DataSift\Storyplayer\Cli\Injectables;
-use DataSift\Storyplayer\Cli\InstallCommand;
-use DataSift\Storyplayer\Cli\KillProcessesCommand;
-use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
-use DataSift\Storyplayer\Cli\ListHostsTableCommand;
-use DataSift\Storyplayer\Cli\ListProcessesCommand;
+use DataSift\Storyplayer\Cli\Install_Command;
+use DataSift\Storyplayer\Cli\KillProcesses_Command;
+use DataSift\Storyplayer\Cli\ListEnvironments_Command;
+use DataSift\Storyplayer\Cli\ListHostsTable_Command;
+use DataSift\Storyplayer\Cli\ListProcesses_Command;
 use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
-use DataSift\Storyplayer\Cli\ShowDefaultEnvironmentCommand;
-use DataSift\Storyplayer\Cli\ShowLocalEnvironmentCommand;
+use DataSift\Storyplayer\Cli\ShowDefaultEnvironment_Command;
+use DataSift\Storyplayer\Cli\ShowLocalEnvironment_Command;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
@@ -255,14 +255,14 @@ function main($argv)
 	// note - if we add no additional commands, the default command is implied
 	//        and the user does not have to type it on the command line
 	$engine->addCommand(new HelpCommand);
-	$engine->addCommand(new CreateStoryCommand);
-	$engine->addCommand(new ListEnvironmentsCommand($injectables->envList));
-	$engine->addCommand(new InstallCommand);
-	$engine->addCommand(new KillProcessesCommand);
-	$engine->addCommand(new ListHostsTableCommand);
-	$engine->addCommand(new ListProcessesCommand);
-	$engine->addCommand(new ShowDefaultEnvironmentCommand($injectables->envList));
-	$engine->addCommand(new ShowLocalEnvironmentCommand($injectables));
+	$engine->addCommand(new CreateStory_Command);
+	$engine->addCommand(new ListEnvironments_Command($injectables->envList));
+	$engine->addCommand(new Install_Command);
+	$engine->addCommand(new KillProcesses_Command);
+	$engine->addCommand(new ListHostsTable_Command);
+	$engine->addCommand(new ListProcesses_Command);
+	$engine->addCommand(new ShowDefaultEnvironment_Command($injectables->envList));
+	$engine->addCommand(new ShowLocalEnvironment_Command($injectables));
 
 	// all set - let's go
 	try {

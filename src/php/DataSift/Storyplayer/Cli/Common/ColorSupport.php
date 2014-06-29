@@ -75,7 +75,7 @@ class Common_ColorSupport implements Common_Functionality
     public function addSwitches(CliCommand $command, $additionalContext)
     {
         $command->addSwitches([
-            new ColorSwitch
+            new Common_ColorSwitch
         ]);
     }
 

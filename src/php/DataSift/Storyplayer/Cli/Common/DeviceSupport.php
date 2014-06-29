@@ -75,7 +75,7 @@ class Common_DeviceSupport implements Common_Functionality
     public function addSwitches(CliCommand $command, $additionalContext)
     {
         $command->addSwitches([
-            new DeviceSwitch($additionalContext->deviceList)
+            new Common_DeviceSwitch($additionalContext->deviceList)
         ]);
     }
 

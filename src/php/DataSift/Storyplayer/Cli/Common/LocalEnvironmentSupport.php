@@ -75,7 +75,7 @@ class Common_LocalEnvironmentSupport implements Common_Functionality
     public function addSwitches(CliCommand $command, $injectables)
     {
         $command->addSwitches([
-            new LocalEnvironmentSwitch(
+            new Common_LocalEnvironmentSwitch(
                 $injectables->localEnvList,
                 $injectables->defaultLocalEnvName
             ),
