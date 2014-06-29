@@ -59,6 +59,7 @@ use DataSift\Storyplayer\PlayerLib\StoryPlayer;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\TalePlayer;
 use DataSift\Storyplayer\Console\DevModeConsole;
+use DataSift\Storyplayer\HelperLib\JsonFileLoader;
 
 /**
  * Common support for per-local-environment configs
@@ -76,8 +77,8 @@ class Common_LocalEnvironmentSupport implements Common_Functionality
     {
         $command->addSwitches([
             new Common_LocalEnvironmentSwitch(
-                $injectables->localEnvList,
-                $injectables->defaultLocalEnvName
+                $injectables->knownLocalEnvironmentsList,
+                $injectables->defaultLocalEnvironmentName
             ),
         ]);
     }
@@ -86,42 +87,16 @@ class Common_LocalEnvironmentSupport implements Common_Functionality
     {
         // shorthand
         $output            = $injectables->output;
-        $localEnvName      = $engine->options->localEnvName;
-        $targetEnvName     = $engine->options->targetEnvName;
-        $additionalConfigs = $injectables->additionalConfigs;
         $staticConfig      = $injectables->staticConfig;
 
-        // at this point, we have:
-        //
-        // $staticConfig,  which contains zero or more environments
-        // $runsOnEnvList, which contains zero or more environments
-        // $targetEnvList, which contains zero or more environments
-        //
-        // we need to make sure that the config for our runsOn environment
-        // and our target environment are merged into $staticConfig
-
-        try {
-            $staticConfig->mergeEnvFromList($localEnvName, $additionalConfigs['localEnvironments']);
-        }
-        catch (E4xx_NoSuchEnvironment $e) {
-            // do nothing for now
+        // do we need to load anything?
+        if (!isset($engine->options->localEnvironmentName) || !$engine->options->localEnvironmentName) {
+            // nothing to do
+            return;
         }
 
-        try {
-            $staticConfig->mergeEnvFromList($targetEnvName, $additionalConfigs['targetEnvironments']);
-        }
-        catch (E4xx_NoSuchEnvironment $e) {
-            $msg = "unknown target environment '{$targetEnvName}'" . PHP_EOL;
-            $output->logCliError($msg);
-            exit(1);
-        }
+        $injectables->initActiveLocalEnvironmentSupport($engine->options->localEnvironmentName);
 
-        // do we have a defaults environment section?
-        if (!isset($staticConfig->environments->defaults)) {
-            // create an empty one to keep PlayerLib happy
-            $staticConfig->environments->defaults = new stdClass;
-        }
-
-        // remember our chosen environments
-        $staticConfig->initEnvironment($injectables, $runsOnEnvName, $targetEnvName);    }
+        // all done
+    }
 }

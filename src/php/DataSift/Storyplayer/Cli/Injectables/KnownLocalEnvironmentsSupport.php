@@ -43,52 +43,43 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\ValidationLib4\Validator;
-use Phix_Project\ValidationLib4\ValidationResult;
+use DataSift\Storyplayer\LocalEnvironmentLib\KnownLocalEnvironments;
 
-class EnvironmentValidator implements Validator
+/**
+ * support for working with the list of known local environments
+ *
+ * @category  Libraries
+ * @package   Storyplayer/Cli
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+trait Injectables_KnownLocalEnvironmentsSupport
 {
-    const MSG_NOTVALIDENVIRONMENT = "Unknown environment '%value%'";
+	public $knownLocalEnvironments;
+	public $knownLocalEnvironmentsList = array();
 
-    /**
-     * @var array
-     */
-    protected $envList;
+	public function initKnownLocalEnvironmentsSupport($additionalEnvs)
+	{
+		// start with the list of local environments that are hard-coded
+		// into Storyplayer
+		$this->knownLocalEnvironments = new KnownLocalEnvironments;
+		foreach ($this->knownLocalEnvironments as $name => $config) {
+			$this->knownLocalEnvironmentsList[$name] = $name;
+		}
 
-    /**
-     * @var string
-     */
-    protected $defaultValue;
+		// now add in all the local environments that we have discovered
+		// in the config files
+		foreach ($additionalEnvs as $filename => $config) {
+			$envName = basename($filename, 'json');
+			$this->knownLocalEnvironmentsList[$envName] = $envName;
+			$this->knownLocalEnvironments->$envName = $config;
+		}
 
-    /**
-     * @param array $envList
-     * @param string $defaultValue
-     */
-    public function __construct($envList, $defaultValue)
-    {
-        $this->envList = $envList;
-        $this->defaultValue = $defaultValue;
-    }
+		// now put the list of local environments into a sensible order
+		ksort($this->knownLocalEnvironmentsList);
 
-    /**
-     *
-     * @param  mixed $value
-     * @param  ValidationResult $result
-     * @return ValidationResult
-     */
-    public function validate($value, ValidationResult $result = null)
-    {
-        if ($result === null) {
-            $result = new ValidationResult($value);
-        }
-
-        // the $value must be a valid environment name, but it's ok if it doesn't
-        // exist if it's the default env as we might not have created it yet
-        if (!in_array($value, $this->envList) && $value !== $this->defaultValue) {
-            $result->addError(static::MSG_NOTVALIDENVIRONMENT);
-            return $result;
-        }
-
-        return $result;
-    }
+		// all done
+	}
 }

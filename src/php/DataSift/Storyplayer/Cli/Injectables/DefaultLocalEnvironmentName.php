@@ -44,7 +44,7 @@
 namespace DataSift\Storyplayer\Cli;
 
 /**
- * support for working with the list of target environments
+ * determine our default local environment to load additional config for
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -53,45 +53,28 @@ namespace DataSift\Storyplayer\Cli;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_TargetEnvironmentListSupport
+trait Injectables_DefaultLocalEnvironmentName
 {
-	public $defaultTargetEnvName;
-	public $targetEnvList;
+	public $defaultLocalEnvironmentName;
 
-	/**
-	 *
-	 * @param  stdClass $environments
-	 * @return stdClass
-	 */
-	public function initTargetEnvironmentListSupport($environments, $additionalConfigs)
+	public function initDefaultLocalEnvironmentName($injectables)
 	{
-		$this->targetEnvList = [];
+		// what are the candidates?
+		$searchList = [
+			HostnameHelper::getHostname(),
+			"localhost"
+		];
 
-		foreach ($environments as $envName => $environment)
-		{
-			$this->targetEnvList[$envName] = $envName;
-		}
-
-		foreach ($additionalConfigs as $config) {
-			if (isset($config->environments)) {
-				foreach ($config->environments as $envName => $envConfig) {
-					$this->targetEnvList[$envName] = $envName;
-				}
+		// do any of these environments exist?
+		foreach ($searchList as $localEnvName) {
+			if (isset($injectables->knownLocalEnvironments->$envName)) {
+				$this->defaultLocalEnvironmentName = $envName;
+				// all done
+				return;
 			}
 		}
 
-		// hide the 'defaults' section
-		if (isset($this->targetEnvList['defaults'])) {
-			unset($this->targetEnvList['defaults']);
-		}
-
-		// sort the list
-		sort($this->targetEnvList);
-
-		// set our default environment to target
-		$this->defaultTargetEnvName = EnvironmentHelper::getDefaultEnvironmentName($this->targetEnvList);
-
-		// all done
-		return $this->targetEnvList;
+		// if we get here, then none of the environments exist
+		$this->defaultLocalEnvironmentName = end($searchList);
 	}
 }

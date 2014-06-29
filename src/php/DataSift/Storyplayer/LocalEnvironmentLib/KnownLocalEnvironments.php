@@ -34,65 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/TargetEnvironmentLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\LocalEnvironmentLib;
+
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * A command to play a story, or a list of stories
+ * Our list of known local environments
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/TargetEnvironmentLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class EnvironmentHelper
+class KnownLocalEnvironments extends BaseObject
 {
-    /**
-     *
-     * @param  stdClass $envList
-     * @return string
-     */
-    static public function getDefaultEnvironmentName($envList)
+    public function __construct()
     {
-        // what is the name of the environment for the computer that
-        // we are running on?
-        $defaultEnvName = self::getLocalEnvironmentName();
-
-        // is there more than one test environment?
-        if (count($envList) == 1) {
-            $defaultEnvName = $envList[0];
-        }
-
-        // all done
-        return $defaultEnvName;
+        $this->initDefaultConfig();
     }
 
     /**
-     *
-     * @return string
+     * @return void
      */
-    static public function getLocalEnvironmentName()
+    public function initDefaultConfig()
     {
-        // for convenience, the current computer's hostname will be the
-        // default environment
-        $defaultEnvName = getHostname();
-
-        // we get different results on different operating systems
-        // make sure the hostname is not the FQDN
-        $dotPos = strpos($defaultEnvName, '.');
-        if ($dotPos) {
-            $defaultEnvName = substr($defaultEnvName, 0, $dotPos);
-        }
+        // defaults for the local computer
+        $this->localhost = new BaseObject;
 
         // all done
-        return $defaultEnvName;
     }
 }

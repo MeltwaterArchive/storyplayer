@@ -77,7 +77,8 @@ class Common_LocalEnvironmentSwitch extends CliSwitch
 			. PHP_EOL
 			. PHP_EOL
 			. "If you omit this switch, Storyplayer will default to using your "
-			. "computer's hostname as the value for <environment>."
+			. "computer's hostname as the value for <environment>, or 'localhost' "
+			. "if there's no config file for this computer."
 			. PHP_EOL
 			. PHP_EOL
 			. "See http://datasift.github.io/storyplayer/ "
@@ -92,7 +93,7 @@ class Common_LocalEnvironmentSwitch extends CliSwitch
 
 		// what is the required argument?
 		$this->setRequiredArg('<environment>', "the environment that Storyplayer is running on; one of: " . implode(", ", $envList));
-		$this->setArgValidator(new EnvironmentValidator($envList, $defaultEnvName));
+		$this->setArgValidator(new Common_LocalEnvironmentValidator($envList, $defaultEnvName));
 		$this->setArgHasDefaultValueOf($defaultEnvName);
 
 		// all done
@@ -109,7 +110,7 @@ class Common_LocalEnvironmentSwitch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->localEnvName = $params[0];
+		$engine->options->localEnvironmentName = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

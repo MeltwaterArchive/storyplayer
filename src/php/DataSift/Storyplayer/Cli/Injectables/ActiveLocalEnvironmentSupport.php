@@ -43,11 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-
 /**
- * support for functionality that all commands are expected to support
+ * support for the local environment that the user chooses
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,40 +53,23 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+trait Injectables_ActiveLocalEnvironmentSupport
 {
-	public $commonFunctionality = [];
+	public $activeLocalEnvironment;
+	public $activeLocalEnvironmentName;
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
+	public function initLocalEnvironment($envName, $injectables)
 	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_LocalEnvironmentSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TargetEnvironmentSupport,
-			new Common_ColorSupport,
-			new Common_ConsoleSupport,
-		];
+        // does the local environment exist?
+        if (!isset($injectables->knownLocalEnvironments->$envName)) {
+            throw new E4xx_NoSuchLocalEnvironment($envName);
+        }
 
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
+        // build the environment that we want
+        $this->activeLocalEnvironment = clone $injectables->staticConfig;
+        $this->activeLocalEnvironment->mergeFrom($injectables->knownLocalEnvironments->$envName);
 
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
+        // remember the environment name, just in case
+        $this->activeLocalEnvironmentName = $envName;
 	}
 }
