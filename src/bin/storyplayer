@@ -31,7 +31,7 @@ use DataSift\Storyplayer\Cli\KillProcessesCommand;
 use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
 use DataSift\Storyplayer\Cli\ListHostsTableCommand;
 use DataSift\Storyplayer\Cli\ListProcessesCommand;
-use DataSift\Storyplayer\Cli\PlayStoryCommand;
+use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\ShowDefaultEnvironmentCommand;
 use DataSift\Storyplayer\Cli\ShowLocalEnvironmentCommand;
@@ -203,8 +203,14 @@ function main($argv)
 
 		// put all of that into something we can give to the CliEngine
 		$injectables->initDeviceListSupport($staticConfig->devices, $additionalConfigs['devices']);
-		$injectables->initRunsOnEnvironmentListSupport($staticConfig->environments, $additionalConfigs['runsOn']);
-		$injectables->initTargetEnvironmentListSupport($staticConfig->environments, array_merge($additionalConfigs['runsOn'], $additionalConfigs['targetEnvironments']));
+		$injectables->initLocalEnvironmentListSupport(
+			$staticConfig->environments,
+			$additionalConfigs['localEnvironments']
+		);
+		$injectables->initTargetEnvironmentListSupport(
+			$staticConfig->environments,
+			array_merge($additionalConfigs['localEnvironments'], $additionalConfigs['targetEnvironments'])
+		);
 	}
 	catch (Exception $e)
 	{
@@ -242,7 +248,7 @@ function main($argv)
 
 	// what is our default command?
 	// this is normally some sort of help command
-	$engine->setDefaultCommand(new PlayStoryCommand($injectables));
+	$engine->setDefaultCommand(new PlayStory_Command($injectables));
 
 	// add any additional commands
 	// note - we do not have to add the default command a 2nd time

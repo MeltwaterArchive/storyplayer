@@ -46,10 +46,9 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
-use Phix_Project\ValidationLib4\File_MustBeValidPath;
-
+use Phix_Project\ValidationLib4\File_MustBeFileOrHaveValidParent;
 /**
- * Tell Storyplayer to output in JSON format
+ * Tell Storyplayer to output 'tap13' format
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -58,31 +57,30 @@ use Phix_Project\ValidationLib4\File_MustBeValidPath;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class LogJsonSwitch extends CliSwitch
+class PlayStory_LogTapSwitch extends CliSwitch
 {
 	public function __construct()
 	{
 		// define our name, and our description
-		$this->setName('json');
-		$this->setShortDescription('output a test report in JSON format');
+		$this->setName('tap');
+		$this->setShortDescription('output a test report in TAP13 format');
 		$this->setLongDesc(
-			"Use this switch to generate a test report file in JSON format."
+			"Use this switch to generate a test report file in TAP13 format."
 			. PHP_EOL . PHP_EOL
-			. "JSON - the JavaScript Object Notation - is a very well-supported format"
-			. " for exchanging data between computer programs and services. We've added"
-			. " JSON as a reporting option in case you want to write your own software"
-			. " to parse the results and act on them."
+			. "The Test Anything Protocol is a simple text-based interface between"
+			. " testing modules and a test harness.  TAP started life as part of the"
+			. " test harness for Perl and today is supported by a variety of testing"
+			. " tools."
 			. PHP_EOL . PHP_EOL
-			. "We're not aware of any spec for JSON-format test reports, so we've implemented"
-			. " the same format that PHPUnit generates. See http://phpunit.de/manual/current/en/logging.html#logging.json."
+			. "See http://podwiki.hexten.net/TAP/TAP13.html?page=TAP13 for the spec."
 		);
 
 		// what are the long switches?
-		$this->addLongSwitch('log-json');
+		$this->addLongSwitch('log-tap');
 
 		// what is our parameter?
 		$this->setRequiredArg('<file>', "the file to write the report to");
-		$this->setArgValidator(new File_MustBeValidPath());
+		$this->setArgValidator(new File_MustBeFileOrHaveValidParent());
 
 		// all done
 	}
@@ -101,7 +99,7 @@ class LogJsonSwitch extends CliSwitch
 		if (!isset($engine->options->reports)) {
 			$engine->options->reports = [];
 		}
-		$engine->options->reports['LogJson'] = $params[0];
+		$engine->options->reports['Tap'] = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

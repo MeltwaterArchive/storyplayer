@@ -58,7 +58,7 @@ use Phix_Project\ValidationLib4\File_MustBeValidPath;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class LogJUnitSwitch extends CliSwitch
+class PlayStory_LogJUnitSwitch extends CliSwitch
 {
 	public function __construct()
 	{
