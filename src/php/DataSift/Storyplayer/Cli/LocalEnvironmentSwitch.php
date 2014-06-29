@@ -48,8 +48,7 @@ use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Tell Storyplayer which test environment to test against; for when there
- * is more than one test environment defined
+ * Tell Storyplayer which environment it is running on
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -58,7 +57,7 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class RunsOnEnvironmentSwitch extends CliSwitch
+class LocalEnvironmentSwitch extends CliSwitch
 {
 	/**
 	 * @param array $envList
@@ -67,8 +66,8 @@ class RunsOnEnvironmentSwitch extends CliSwitch
 	public function __construct($envList, $defaultEnvName)
 	{
 		// define our name, and our description
-		$this->setName('runsOn');
-		$this->setShortDescription('the environment you are running Storyplayer on');
+		$this->setName('local');
+		$this->setShortDescription('set the environment you are running Storyplayer on');
 		$this->setLongDesc(
 			"After Storyplayer has loaded the storyplayer.json[.dist] config file, it will "
 			. "load any config it can find for <environment>. You can use this to have different "
@@ -89,7 +88,7 @@ class RunsOnEnvironmentSwitch extends CliSwitch
 		$this->addShortSwitch('e');
 
 		// what are the long switches?
-		$this->addLongSwitch('runs-on');
+		$this->addLongSwitch('local');
 
 		// what is the required argument?
 		$this->setRequiredArg('<environment>', "the environment that Storyplayer is running on; one of: " . implode(", ", $envList));
@@ -110,7 +109,7 @@ class RunsOnEnvironmentSwitch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->runsOnEnvironment = $params[0];
+		$engine->options->localEnvName = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);
