@@ -43,11 +43,15 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
+use DataSift\Stone\ObjectLib\BaseObject;
+use Datasift\Os;
+use Datasift\IfconfigParser;
+use Datasift\netifaces;
+use Datasift\netifaces\NetifacesException;
 
 /**
- * support for functionality that all commands are expected to support
+ * Helper to find our hostname
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,40 +60,20 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+class HostnameHelper
 {
-	public $commonFunctionality = [];
+    static public function getHostname()
+    {
+        $hostname = getHostname();
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
-	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_ColorSupport,
-			//new Common_ExtraConfigSupport,
-			new Common_ConsoleSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TargetEnvironmentSupport,
-		];
+        // we get different results on different operating systems
+        // make sure the hostname is not the FQDN
+        $dotPos = strpos($hostname, '.');
+        if ($dotPos) {
+            $hostname = substr($hostname, 0, $dotPos);
+        }
 
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
-
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
-	}
+        // all done
+        return $hostname;
+    }
 }

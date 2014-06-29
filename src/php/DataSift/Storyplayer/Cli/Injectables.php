@@ -58,8 +58,10 @@ use Phix_Project\Injectables as BaseInjectables;
 class Injectables extends BaseInjectables
 {
 	use Injectables_ActiveDeviceSupport;
+	use Injectables_ActiveTargetEnvironmentSupport;
 	use Injectables_AdditionalConfigsSupport;
 	use Injectables_DefaultConfigFilenameSupport;
+	use Injectables_DefaultTargetEnvironmentName;
 	use Injectables_KnownDevicesSupport;
 //	use Injectables_LocalEnvironmentListSupport;
 	use Injectables_OutputSupport;
@@ -68,5 +70,5 @@ class Injectables extends BaseInjectables
 	use Injectables_ReportLoaderSupport;
 	use Injectables_RuntimeConfigSupport;
 	use Injectables_StaticConfigSupport;
-	use Injectables_TargetEnvironmentListSupport;
+	use Injectables_KnownTargetEnvironmentsSupport;
 }

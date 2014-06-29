@@ -44,10 +44,12 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * support for functionality that all commands are expected to support
+ * Tell Storyplayer which test environment to test against; for when there
+ * is more than one test environment defined
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,40 +58,61 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+class Common_TargetEnvironmentSwitch extends CliSwitch
 {
-	public $commonFunctionality = [];
-
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
+	/**
+	 * @param array $envList
+	 * @param string $defaultEnvName
+	 */
+	public function __construct($envList, $defaultEnvName)
 	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_ColorSupport,
-			//new Common_ExtraConfigSupport,
-			new Common_ConsoleSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TargetEnvironmentSupport,
-		];
+		// define our name, and our description
+		$this->setName('target');
+		$this->setShortDescription('set the environment to test against');
+		$this->setLongDesc(
+			"If you have multiple test environments listed in your configuration files, "
+			. "you can use this switch to choose which test environment to run the test(s) "
+			. "against. If you omit this switch, Storyplayer will default to using your "
+			. "computer's hostname as the value for <environment>."
+			. PHP_EOL
+			. PHP_EOL
+			. "If you only have one test environment listed, then this switch has no "
+			. "effect when used, and Storyplayer will always use the test environment "
+			. "from your configuration file."
+			. PHP_EOL
+			. PHP_EOL
+			. "See http://datasift.github.io/storyplayer/ "
+			. "for how to configure and use multiple test environments."
+		);
 
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
+		// what are the short switches?
+		$this->addShortSwitch('t');
+
+		// what are the long switches?
+		$this->addLongSwitch('target');
+
+		// what is the required argument?
+		$this->setRequiredArg('<environment>', "the environment to test against; one of: " . implode(", ", $envList));
+		$this->setArgValidator(new Common_TargetEnvironmentValidator($envList, $defaultEnvName));
+		$this->setArgHasDefaultValueOf($defaultEnvName);
+
+		// all done
 	}
 
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
+	 * @param  array     $params
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
+	 */
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
+		// remember the setting
+		$engine->options->targetEnvName = $params[0];
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }

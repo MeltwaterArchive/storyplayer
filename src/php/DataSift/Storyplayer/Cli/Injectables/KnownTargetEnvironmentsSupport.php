@@ -43,11 +43,10 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use DataSift\Storyplayer\TargetEnvironmentLib\KnownTargetEnvironments;
 
 /**
- * support for functionality that all commands are expected to support
+ * support for working with the list of known target environments
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,40 +55,31 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+trait Injectables_KnownTargetEnvironmentsSupport
 {
-	public $commonFunctionality = [];
+	public $knownTargetEnvironments;
+	public $knownTargetEnvironmentsList = array();
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
+	public function initKnownTargetEnvironmentsSupport($additionalTargets)
 	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_ColorSupport,
-			//new Common_ExtraConfigSupport,
-			new Common_ConsoleSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TargetEnvironmentSupport,
-		];
-
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
+		// start with the list of target environments that are hard-coded
+		// into Storyplayer
+		$this->knownTargetEnvironments = new KnownTargetEnvironments;
+		foreach ($this->knownTargetEnvironments as $name => $config) {
+			$this->knownTargetEnvironmentsList[$name] = $name;
 		}
-	}
 
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
+		// now add in all the target environments that we have discovered
+		// in the config files
+		foreach ($additionalTargets as $filename => $config) {
+			$targetName = basename($filename, 'json');
+			$this->knownTargetEnvironmentsList[$targetName] = $targetName;
+			$this->knownTargetEnvironments->$targetName = $config;
 		}
+
+		// now put the list of targets into a sensible order
+		ksort($this->knownTargetEnvironmentsList);
+
+		// all done
 	}
 }

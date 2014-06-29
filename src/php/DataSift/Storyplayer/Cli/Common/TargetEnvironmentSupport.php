@@ -43,11 +43,25 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Exception;
+use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Stone\LogLib\Log;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryContext;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * support for functionality that all commands are expected to support
+ * Common support for selecting the target environment to test against
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,40 +70,20 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+class Common_TargetEnvironmentSupport implements Common_Functionality
 {
-	public $commonFunctionality = [];
+    public function addSwitches(CliCommand $command, $injectables)
+    {
+        $command->addSwitches([
+            new Common_TargetEnvironmentSwitch(
+            	$injectables->knownTargetEnvironmentsList,
+            	$injectables->defaultTargetEnvironmentName
+            )
+        ]);
+    }
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
-	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_ColorSupport,
-			//new Common_ExtraConfigSupport,
-			new Common_ConsoleSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TargetEnvironmentSupport,
-		];
-
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
-
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
-	}
+    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    {
+    	$injectable->initActiveTargetEnvironment($engine->options->targetEnvironment);
+    }
 }

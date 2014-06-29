@@ -203,13 +203,12 @@ function main($argv)
 
 		// put all of that into something we can give to the CliEngine
 		$injectables->initKnownDevicesSupport($additionalConfigs['devices']);
+		$injectables->initKnownTargetEnvironmentsSupport($additionalConfigs['targetEnvironments']);
+		$injectables->initDefaultTargetEnvironmentName($injectables);
+
 		// $injectables->initLocalEnvironmentListSupport(
 		// 	$staticConfig->environments,
 		// 	$additionalConfigs['localEnvironments']
-		// );
-		// $injectables->initTargetEnvironmentListSupport(
-		// 	$staticConfig->environments,
-		// 	$additionalConfigs['targetEnvironments']
 		// );
 	}
 	catch (Exception $e)
