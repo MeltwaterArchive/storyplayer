@@ -72,7 +72,7 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  */
 class Common_LocalEnvironmentSupport implements Common_Functionality
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
+    public function addSwitches(CliCommand $command, $injectables)
     {
         $command->addSwitches([
             new LocalEnvironmentSwitch(
