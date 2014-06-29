@@ -85,9 +85,6 @@ class Common_ConsoleSupport implements Common_Functionality
         $staticConfig = $injectables->staticConfig;
         $output       = $injectables->output;
 
-        // save the output for use in other methods
-        $command->output = $injectables->output;
-
         // switch output plugins first, before we do anything else at all
         if (isset($engine->options->dev) && $engine->options->dev) {
             // switch our main output to 'dev mode'
