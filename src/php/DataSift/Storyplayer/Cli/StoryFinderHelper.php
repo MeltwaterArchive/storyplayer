@@ -43,11 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RecursiveRegexIterator;
 
 /**
- * support for working with static config
+ * helper to find all stories in a folder tree
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,64 +57,24 @@ use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_StaticConfigSupport
+
+class StoryFinderHelper
 {
-	public $staticConfigManager;
-	public $staticConfig;
+    /**
+     * find all stories in a folder tree
+     *
+     * @return array
+     */
+    static public function getListOfStories($directory)
+    {
+        // use the SPL to do the heavy lifting
+        $dirIter = new RecursiveDirectoryIterator($directory);
+        $recIter = new RecursiveIteratorIterator($dirIter);
+        $stories = new RegexIterator($recIter, '/^.+Story\.php$/i', RecursiveRegexIterator::GET_MATCH);
 
-	/**
-	 *
-	 * @return StaticConfigManager
-	 */
-	public function initStaticConfigSupport(Injectables $injectables, $defaultConfigFilename)
-	{
-		// shorthand
-		$output = $injectables->output;
+        // let's get the list into some semblance of order
+        sort($stories);
 
-		// create our default config - the config that we'll use
-		// unless the config file on disk overrides it
-		$this->staticConfig = new StaticConfig();
-
-		// create an object to manage the static config
-		$this->staticConfigManager = new StaticConfigManager;
-
-		try {
-			// try to load our main config file
-			$this->staticConfigManager->loadDefaultConfig($this->staticConfig, $defaultConfigFilename);
-		}
-		catch (E5xx_ConfigFileNotFound $e) {
-			// there is no default config file
-			//
-			// it isn't fatal, but we do want to tell people about it
-			$output->logCliWarning("default config file '$defaultConfigFilename' not found");
-		}
-		catch (E5xx_InvalidConfigFile $e) {
-			// we either can't read the config file, or it contains
-			// invalid JSON
-			//
-			// that is fatal
-			$output->logCliError("unable to read or prase default config file '$defaultConfigFilename'");
-			exit(1);
-		}
-
-		try {
-			// now we try and override with the user's dotfile
-			$this->staticConfigManager->loadUserConfig($this->staticConfig);
-		}
-		catch (E5xx_ConfigFileNotFound $e) {
-			// the user has no dotfile
-			// we don't care
-		}
-		catch (E5xx_InvalidConfigFile $e) {
-			// we either can't read the config file, or it contains
-			// invalid JSON
-			//
-			// that is fatal
-			$output->logClieError("unable to read or parse your dotfile");
-			exit(1);
-		}
-
-		// all done
-		return $this->staticConfigManager;
-	}
-}
+        // all done
+        return $stories;
+    }

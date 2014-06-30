@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Prose;
 use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * Get information from the environment defined in the config file(s)
+ * Get information from the environment defined for the test environment
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -55,7 +55,7 @@ use DataSift\Stone\DataLib\DataPrinter;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromEnvironment extends Prose
+class FromTargetEnvironment extends Prose
 {
 	public function getAppSetting($app, $setting)
 	{
@@ -66,7 +66,7 @@ class FromEnvironment extends Prose
 		$log = $st->startAction("get $setting for '{$app}'");
 
 		// get the details
-		$env = $st->getEnvironment();
+		$env = $st->getTargetEnvironment();
 		if (!isset($env->$app, $env->$app->$setting)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -90,7 +90,7 @@ class FromEnvironment extends Prose
 		$log = $st->startAction("get all settings for '{$app}'");
 
 		// get the details
-		$env = $st->getEnvironment();
+		$env = $st->getTargetEnvironment();
 		if (!isset($env->$app)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -103,73 +103,5 @@ class FromEnvironment extends Prose
 
 		// all done
 		return $value;
-	}
-
-	public function getGraphiteUrl()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get base url for graphite");
-
-		// get the details
-		$env = $st->getEnvironment();
-		$graphiteUrl = $env->graphite->url;
-
-		// all done
-		$log->endAction("graphite url is '{$graphiteUrl}");
-		return $graphiteUrl;
-	}
-
-	public function getHostAddress()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get IP address of Storyteller's host");
-
-		// get the details
-		$env = $st->getEnvironment();
-		$ipAddress = $env->host->ipAddress;
-
-		// all done
-		$log->endAction("'{$ipAddress}'");
-		return $ipAddress;
-	}
-
-	public function getHostHostname()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get the hostname of Storyteller's host");
-
-		// get the details
-		$env = $st->getEnvironment();
-		$hostname = $env->host->name;
-
-		// all done
-		$log->endAction("'{$hostname}'");
-		return $hostname;
-	}
-
-	public function getStatsdHost()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get host details for statsd");
-
-		// get the details
-		$env = $st->getEnvironment();
-		$statsdHost = $env->statsd->host;
-
-		// all done
-		$log->endAction("statsd host is '{$statsdHost}");
-		return $statsdHost;
 	}
 }

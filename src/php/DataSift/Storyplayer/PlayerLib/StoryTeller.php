@@ -86,7 +86,6 @@ use DataSift\Storyplayer\DeviceLib;
  * @method DataSift\Storyplayer\Prose\FromCurl fromCurl()
  * @method DataSift\Storyplayer\Prose\FromEc2 fromEc2()
  * @method DataSift\Storyplayer\Prose\FromEc2Instance fromEc2Instance(string $hostname)
- * @method DataSift\Storyplayer\Prose\FromEnvironment fromEnvironment()
  * @method DataSift\Storyplayer\Prose\FromFacebook fromFacebook()
  * @method DataSift\Storyplayer\Prose\FromFile fromFile()
  * @method DataSift\Storyplayer\Prose\FromForm fromForm(string $formId)
@@ -95,10 +94,12 @@ use DataSift\Storyplayer\DeviceLib;
  * @method DataSift\Storyplayer\Prose\FromHostsTable fromHostsTable()
  * @method DataSift\Storyplayer\Prose\FromHttp fromHttp()
  * @method DataSift\Storyplayer\Prose\FromIframe fromIframe(string $id)
+ * @method DataSift\Storyplayer\Prose\FromLocalEnvironment fromLocalEnvironment()
  * @method DataSift\Storyplayer\Prose\FromProcessesTable fromProcessesTable()
  * @method DataSift\Storyplayer\Prose\FromRuntimeTable fromRuntimeTable(string $tableName)
  * @method DataSift\Storyplayer\Prose\FromSauceLabs fromSauceLabs()
  * @method DataSift\Storyplayer\Prose\FromShell fromShell()
+ * @method DataSift\Storyplayer\Prose\FromTargetEnvironment fromTargetEnvironment()
  * @method DataSift\Storyplayer\Prose\FromUuid fromUuid()
  * @method DataSift\Storyplayer\Prose\UsingBrowser usingBrowser()
  * @method DataSift\Storyplayer\Prose\UsingCheckpoint usingCheckpoint()
@@ -187,9 +188,13 @@ class StoryTeller
 	private $deviceName = null;
 	private $deviceAdapter = null;
 
+	// the environment we are running in
+	private $localEnv = null;
+	private $localEnvName = null;
+
 	// the environment we are testing
-	private $env = null;
-	private $envName = null;
+	private $targetEnv = null;
+	private $targetEnvName = null;
 
 	// story / template params
 	private $defines = [];
@@ -215,10 +220,10 @@ class StoryTeller
 		$this->setPhaseLoader($injectables->phaseLoader);
 
 		// remember the environment we are testing against
-		$this->setEnvironment($injectables->staticConfig->envName, $injectables->staticConfig->env);
+		// $this->setEnvironment($injectables->staticConfig->envName, $injectables->staticConfig->env);
 
 		// remember the device we are testing with
-		$this->setDevice($injectables->staticConfig->deviceName, $injectables->staticConfig->device);
+		$this->setDevice($injectables->activeDeviceName, $injectables->activeDevice);
 
 		// remember the defines from config file & command line
 		$this->setDefines($injectables->staticConfig->defines);
@@ -463,28 +468,35 @@ class StoryTeller
 	//
 	// --------------------------------------------------------------------
 
-	public function getAdminUser()
+	public function getLoadedConfig()
 	{
-		return $this->env->adminUser;
+		// get our config
+		$return = clone $this->staticConfig;
+
+		// now, apply all of the defines that we know about
+		// TBD
+
+		// all done
+		return $return;
 	}
 
-	public function getEnvironment()
+	public function getTargetEnvironment()
 	{
-		return $this->env;
+		return $this->targetEnv;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getEnvironmentName()
+	public function getTargetEnvironmentName()
 	{
-		return $this->envName;
+		return $this->targetEnvName;
 	}
 
-	public function setEnvironment($envName, $env)
+	public function setTargetEnvironment($envName, $env)
 	{
-		$this->envName = $envName;
-		$this->env     = $env;
+		$this->targetEnvName = $envName;
+		$this->targetEnv     = $env;
 	}
 
 	public function getRuntimeConfig()

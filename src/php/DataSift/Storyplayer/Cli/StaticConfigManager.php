@@ -132,7 +132,7 @@ class StaticConfigManager extends ConfigManagerBase
 		{
 			$config = new BaseObject();
 			$this->configHelper->loadConfigFile($config, $filename);
-			$return[$filename] = $config;
+			$return[basename($filename, '.json')] = $config;
 		}
 
 		// all done

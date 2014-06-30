@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/HelperLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -43,35 +43,27 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
+use Exception;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 
 /**
- * a container for common services and data, to avoid making them global
+ * Helper to attempt loading JSON files safely
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/HelperLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+class JsonFileLoader
 {
-	use Injectables_ActiveConfigSupport;
-	use Injectables_ActiveDeviceSupport;
-	use Injectables_ActiveLocalEnvironmentSupport;
-	use Injectables_ActiveTargetEnvironmentSupport;
-	use Injectables_AdditionalConfigsSupport;
-	use Injectables_DefaultConfigFilenameSupport;
-	use Injectables_DefaultLocalEnvironmentName;
-	use Injectables_DefaultTargetEnvironmentName;
-	use Injectables_KnownDevicesSupport;
-	use Injectables_KnownLocalEnvironmentsSupport;
-	use Injectables_KnownTargetEnvironmentsSupport;
-	use Injectables_OutputSupport;
-	use Injectables_PhaseLoaderSupport;
-	use Injectables_ProseLoaderSupport;
-	use Injectables_ReportLoaderSupport;
-	use Injectables_RuntimeConfigSupport;
-	use Injectables_StaticConfigManagerSupport;
+    static public function loadFile($filename)
+    {
+        // does the file exist?
+        if (!file_exists($filename)) {
+            throw new E4xx_NoSuchFile($filename);
+        }
+    }
 }

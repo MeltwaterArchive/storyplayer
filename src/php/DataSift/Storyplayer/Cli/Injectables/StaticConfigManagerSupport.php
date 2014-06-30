@@ -43,10 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
-
 /**
- * a container for common services and data, to avoid making them global
+ * support for Storyplayer's static config file manager
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,23 +53,16 @@ use Phix_Project\Injectables as BaseInjectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+trait Injectables_StaticConfigManagerSupport
 {
-	use Injectables_ActiveConfigSupport;
-	use Injectables_ActiveDeviceSupport;
-	use Injectables_ActiveLocalEnvironmentSupport;
-	use Injectables_ActiveTargetEnvironmentSupport;
-	use Injectables_AdditionalConfigsSupport;
-	use Injectables_DefaultConfigFilenameSupport;
-	use Injectables_DefaultLocalEnvironmentName;
-	use Injectables_DefaultTargetEnvironmentName;
-	use Injectables_KnownDevicesSupport;
-	use Injectables_KnownLocalEnvironmentsSupport;
-	use Injectables_KnownTargetEnvironmentsSupport;
-	use Injectables_OutputSupport;
-	use Injectables_PhaseLoaderSupport;
-	use Injectables_ProseLoaderSupport;
-	use Injectables_ReportLoaderSupport;
-	use Injectables_RuntimeConfigSupport;
-	use Injectables_StaticConfigManagerSupport;
+	public $staticConfigManager;
+
+	public function initStaticConfigManagerSupport(Injectables $injectables)
+	{
+		// create an object to manage the static config
+		$this->staticConfigManager = new StaticConfigManager;
+
+		// all done
+		return $this->staticConfigManager;
+	}
 }

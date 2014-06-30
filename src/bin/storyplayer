@@ -185,8 +185,8 @@ function main($argv)
 		$injectables->initDefaultConfigFilenameSupport();
 
 		// load our main config
-		$staticConfigManager = $injectables->initStaticConfigSupport($injectables, $injectables->defaultConfigFilename);
-		$staticConfig        = $injectables->staticConfig;
+		$staticConfigManager = $injectables->initStaticConfigManagerSupport();
+		$staticConfig        = $injectables->initActiveConfigSupport($injectables, $injectables->defaultConfigFilename);
 
 		// create our runtime config folder, and load any pre-existing
 		// runtime config

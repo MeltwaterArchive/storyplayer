@@ -34,44 +34,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Prose;
 
-use Phix_Project\Injectables as BaseInjectables;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * a container for common services and data, to avoid making them global
+ * Get information about the machine that Storyplayer is running on
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+class FromLocalhost extends Prose
 {
-	use Injectables_ActiveConfigSupport;
-	use Injectables_ActiveDeviceSupport;
-	use Injectables_ActiveLocalEnvironmentSupport;
-	use Injectables_ActiveTargetEnvironmentSupport;
-	use Injectables_AdditionalConfigsSupport;
-	use Injectables_DefaultConfigFilenameSupport;
-	use Injectables_DefaultLocalEnvironmentName;
-	use Injectables_DefaultTargetEnvironmentName;
-	use Injectables_KnownDevicesSupport;
-	use Injectables_KnownLocalEnvironmentsSupport;
-	use Injectables_KnownTargetEnvironmentsSupport;
-	use Injectables_OutputSupport;
-	use Injectables_PhaseLoaderSupport;
-	use Injectables_ProseLoaderSupport;
-	use Injectables_ReportLoaderSupport;
-	use Injectables_RuntimeConfigSupport;
-	use Injectables_StaticConfigManagerSupport;
+	public function getMyIpAddress()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get IP address of Storyteller's host from local environment");
+
+		// get the details
+		$env = $st->getLocalEnvironment();
+		$ipAddress = $env->host->ipAddress;
+
+		// all done
+		$log->endAction("'{$ipAddress}'");
+		return $ipAddress;
+	}
+
+	public function getMyHostname()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get the hostname of Storyteller's host from local environment");
+
+		// get the details
+		$env = $st->getLocalEnvironment();
+		$hostname = $env->host->name;
+
+		// all done
+		$log->endAction("'{$hostname}'");
+		return $hostname;
+	}
 }

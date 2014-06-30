@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/HelperLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -43,38 +43,22 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * the main class for animating a tale (a set of stories)
+ * Exception thrown when we attempt to load a file that is missing
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/HelperLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TalePlayer
+class E4xx_NoSuchFile extends Exxx_Exception
 {
-	/**
-	 * path to the tale that we are going to play
-	 *
-	 * @var string
-	 */
-	protected $taleFilename;
-
-	public function __construct($taleFilename)
-	{
-		$this->taleFilename = $taleFilename;
-	}
-
-	public function play(StoryTeller $st, Injectables $injectables)
-	{
-		// shorthand
-		$output = $st->getOutput();
-
-		// load our list of stories
-		$tale = TaleLoader::loadTale($this->taleFilename);
-	}
+    public function __construct($msg)
+    {
+        parent::__construct(400, $msg, $msg);
+    }
 }

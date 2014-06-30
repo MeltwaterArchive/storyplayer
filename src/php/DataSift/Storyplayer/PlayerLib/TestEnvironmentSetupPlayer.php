@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 use DataSift\Storyplayer\Cli\Injectables;
 
 /**
- * the main class for animating a single story
+ * a way to create test environments outside stories
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,7 +55,7 @@ use DataSift\Storyplayer\Cli\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryPlayer
+class TestEnvironmentSetupPlayer extends StoryPlayer
 {
 	/**
 	 * path to the story that we are going to play
@@ -64,35 +64,9 @@ class StoryPlayer
 	 */
 	protected $storyFilename;
 
-	/**
-	 * a list of the phases we need to run to get everything ready to
-	 * run the actual story
-	 *
-	 * @var array
-	 */
-	protected $startupPhases;
-
-	/**
-	 * a list of the phases that make up the story
-	 *
-	 * @var array
-	 */
-	protected $storyPhases;
-
-	/**
-	 * a list of the phases that we need to run once the story has
-	 * finished
-	 *
-	 * @var array
-	 */
-	protected $shutdownPhases;
-
-	public function __construct($storyFilename, $startupPhases, $storyPhases, $shutdownPhases)
+	public function __construct($storyFilename)
 	{
-		$this->storyFilename  = $storyFilename;
-		$this->startupPhases  = $startupPhases;
-		$this->storyPhases    = $storyPhases;
-		$this->shutdownPhases = $shutdownPhases;
+		$this->storyFilename = $storyFilename;
 	}
 
 	public function play(StoryTeller $st, Injectables $injectables)

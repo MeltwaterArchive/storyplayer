@@ -34,68 +34,112 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\PlayerLib;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliResult;
-use Phix_Project\CliEngine\CliSwitch;
+use DataSift\Storyplayer\Cli\Injectables;
 
 /**
- * Tell Storyplayer not to kill any background processes we have started
+ * tells the user about our story
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PersistProcessesSwitch extends CliSwitch
+class AnnounceStoryPlayer
 {
-	public function __construct()
+	/**
+	 * the story that we are going to play
+	 *
+	 * @var Story
+	 */
+	protected $story;
+
+	public function __construct(Story $story)
 	{
-		// define our name, and our description
-		$this->setName('persistprocess');
-		$this->setShortDescription('do not auto-kill background processes on exit');
-		$this->setLongDesc(
-			"Storyplayer's usingShell() module allows you to start background processes as "
-			."part of your test.  When your story finishes, Storyplayer normally terminates "
-			."any background processes that your story hasn't already terminated."
-			. PHP_EOL . PHP_EOL
-			."When developing or debugging a story, it can be useful for these background processes "
-			."to continue running after the story has finished."
-			. PHP_EOL . PHP_EOL
-			."Use this switch to avoid auto-killing any background processes when a story "
-			."finishes running"
-		);
-
-		// what are the long switches?
-		$this->addLongSwitch('persist-processes');
-
-		// all done
+		$this->story = $story;
 	}
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	public function play(StoryTeller $st, Injectables $injectables)
 	{
-		// remember the setting
-		$engine->options->persistProcesses = true;
+		// shorthand
+		$output = $st->getOutput();
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
+        // tell $st which story we are playing
+        $st->setStory($story);
+
+        // initialise the user
+        $context = $st->getStoryContext();
+        $context->initUser($st);
+
+        // play the phases
+        $this->playPhases($st, $injectables, $story, $context);
+
+		// make sense of what happened
+		$storyResult = $st->getStoryResult();
+		$storyResult->calculateStoryResult($phaseResults);
+
+		// announce the results
+		$output->endStory($storyResult);
+
+		// all done
+		return $storyResult;
+	}
+
+    protected function playPhases(StoryTeller $st, Injectables $injectables, Story $story)
+    {
+        // we're going to use this to play our setup and teardown phases
+        $phasesPlayer = new PhasesPlayer();
+
+        // run the startup phase
+        $phasesPlayer->playPhases(
+        	$st,
+        	$injectables,
+        	$injectables->staticConfig->phases->startup
+        );
+
+		// set default callbacks up
+		$story->setDefaultCallbacks();
+
+		// tell the outside world what we're doing
+		$output->startStory(
+			$story->getName(),
+			$story->getCategory(),
+			$story->getGroup(),
+			$st->getEnvironmentName(),
+			$st->getDeviceName()
+		);
+
+		// run the phases in the 'story' section
+		$phaseResults = $phasesPlayer->playPhases(
+			$st,
+			$injectables,
+			$injectables->staticConfig->phases->story
+		);
+
+		// play the 'paired' phases too, in case they haven't yet
+		// executed correctly
+		$phasesPlayer->playPairedPhases(
+			$st,
+			$injectables,
+			$injectables->staticConfig->phases->story,
+			$phaseResults
+		);
+
+		// run the shutdown phase
+        $phasesPlayer->playPhases(
+			$st,
+			$injectables,
+			$injectables->staticConfig->phases->shutdown
+        );
 	}
 }

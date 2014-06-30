@@ -43,10 +43,11 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 
 /**
- * a container for common services and data, to avoid making them global
+ * support for working with Storyplayer's config file
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,23 +56,59 @@ use Phix_Project\Injectables as BaseInjectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+trait Injectables_ActiveConfigSupport
 {
-	use Injectables_ActiveConfigSupport;
-	use Injectables_ActiveDeviceSupport;
-	use Injectables_ActiveLocalEnvironmentSupport;
-	use Injectables_ActiveTargetEnvironmentSupport;
-	use Injectables_AdditionalConfigsSupport;
-	use Injectables_DefaultConfigFilenameSupport;
-	use Injectables_DefaultLocalEnvironmentName;
-	use Injectables_DefaultTargetEnvironmentName;
-	use Injectables_KnownDevicesSupport;
-	use Injectables_KnownLocalEnvironmentsSupport;
-	use Injectables_KnownTargetEnvironmentsSupport;
-	use Injectables_OutputSupport;
-	use Injectables_PhaseLoaderSupport;
-	use Injectables_ProseLoaderSupport;
-	use Injectables_ReportLoaderSupport;
-	use Injectables_RuntimeConfigSupport;
-	use Injectables_StaticConfigManagerSupport;
+	public $activeConfig;
+
+	public function initActiveConfigSupport(Injectables $injectables, $defaultConfigFilename)
+	{
+		// shorthand
+		$output = $injectables->output;
+
+		// create our default config - the config that we'll use
+		// unless the config file on disk overrides it
+		$this->activeConfig = new StaticConfig();
+
+		try {
+			// try to load our main config file
+			$injectables->staticConfigManager->loadDefaultConfig(
+				$this->activeConfig,
+				$defaultConfigFilename
+			);
+		}
+		catch (E5xx_ConfigFileNotFound $e) {
+			// there is no default config file
+			//
+			// it isn't fatal, but we do want to tell people about it
+			$output->logCliWarning("default config file '$defaultConfigFilename' not found");
+		}
+		catch (E5xx_InvalidConfigFile $e) {
+			// we either can't read the config file, or it contains
+			// invalid JSON
+			//
+			// that is fatal
+			$output->logCliError("unable to read or prase default config file '$defaultConfigFilename'");
+			exit(1);
+		}
+
+		try {
+			// now we try and override with the user's dotfile
+			$injectables->staticConfigManager->loadUserConfig($this->activeConfig);
+		}
+		catch (E5xx_ConfigFileNotFound $e) {
+			// the user has no dotfile
+			// we don't care
+		}
+		catch (E5xx_InvalidConfigFile $e) {
+			// we either can't read the config file, or it contains
+			// invalid JSON
+			//
+			// that is fatal
+			$output->logClieError("unable to read or parse your dotfile");
+			exit(1);
+		}
+
+		// all done
+		return $this->activeConfig;
+	}
 }

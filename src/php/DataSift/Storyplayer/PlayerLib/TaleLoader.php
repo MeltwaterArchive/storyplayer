@@ -101,16 +101,16 @@ class TaleLoader
 			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' cannot be an empty array");
 		}
 
+		// our base directory to search from
+		$storiesBasedir = dirname($filename);
+
 		// do all of the stories in the list exist?
 		foreach ($tale->stories as $index => $storyFile) {
-			if (!file_exists($storyFile)) {
-				if (!file_exists($filename . DIR_SEPARATOR . $storyFile)) {
-					throw new E4xx_InvalidStoryListFile("Cannot find the story file '{$storyFile}' on disk");
-				}
-				else {
-					$tale->stories[$index] = $filename . DIR_SEPARATOR . $storyFile;
-				}
+ 			$realStoryFile = $storiesBasedir . DIRECTORY_SEPARATOR . $storyFile;
+			if (file_exists($realStoryFile)) {
+				throw new E4xx_InvalidStoryListFile("Cannot find the story file '{$realStoryFile}' on disk");
 			}
+			$tale->stories[$index] = $realStoryFile;
 		}
 
 		// inject defaults for optional fields

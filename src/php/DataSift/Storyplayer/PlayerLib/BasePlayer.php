@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 use DataSift\Storyplayer\Cli\Injectables;
 
 /**
- * the main class for animating a single story
+ * our main base class for actually playing things
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,112 +55,35 @@ use DataSift\Storyplayer\Cli\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryPlayer
+abstract class BasePlayer
 {
-	/**
-	 * path to the story that we are going to play
-	 *
-	 * @var string
-	 */
-	protected $storyFilename;
+	abstract public function play(StoryTeller $st, Injectables $injectables);
 
-	/**
-	 * a list of the phases we need to run to get everything ready to
-	 * run the actual story
-	 *
-	 * @var array
-	 */
-	protected $startupPhases;
-
-	/**
-	 * a list of the phases that make up the story
-	 *
-	 * @var array
-	 */
-	protected $storyPhases;
-
-	/**
-	 * a list of the phases that we need to run once the story has
-	 * finished
-	 *
-	 * @var array
-	 */
-	protected $shutdownPhases;
-
-	public function __construct($storyFilename, $startupPhases, $storyPhases, $shutdownPhases)
-	{
-		$this->storyFilename  = $storyFilename;
-		$this->startupPhases  = $startupPhases;
-		$this->storyPhases    = $storyPhases;
-		$this->shutdownPhases = $shutdownPhases;
-	}
-
-	public function play(StoryTeller $st, Injectables $injectables)
-	{
-		// shorthand
-		$output = $st->getOutput();
-
-        // we're going to use this to play our setup and teardown phases
+    protected function playPhases(StoryTeller $st, Injectables $injectables, $phases)
+    {
+        // we need something to play our phases
         $phasesPlayer = new PhasesPlayer();
 
-        // load our story
-        $story = StoryLoader::loadStory($this->storyFilename);
-        $st->setStory($story);
-
-        // initialise the user
-        $context = $st->getStoryContext();
-        $context->initUser($st);
-
-        // run the startup phase
-        $phasesPlayer->playPhases(
+        // run the phases
+        $phaseResults = $phasesPlayer->playPhases(
         	$st,
         	$injectables,
-        	$injectables->staticConfig->phases->startup
+        	$phases
         );
 
-		// set default callbacks up
-		$story->setDefaultCallbacks();
+        // all done
+        return $phaseResults;
+	}
 
-		// tell the outside world what we're doing
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getEnvironmentName(),
-			$st->getDeviceName()
-		);
-
-		// run the phases in the 'story' section
-		$phaseResults = $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story
-		);
-
+	protected function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, $phaseResults)
+	{
 		// play the 'paired' phases too, in case they haven't yet
 		// executed correctly
 		$phasesPlayer->playPairedPhases(
 			$st,
 			$injectables,
-			$injectables->staticConfig->phases->story,
+			$phases,
 			$phaseResults
 		);
-
-		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($phaseResults);
-
-		// announce the results
-		$output->endStory($storyResult);
-
-		// run the shutdown phase
-        $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->shutdown
-        );
-
-		// all done
-		return $storyResult;
 	}
 }

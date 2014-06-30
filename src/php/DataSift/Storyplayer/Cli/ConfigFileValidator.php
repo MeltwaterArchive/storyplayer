@@ -43,35 +43,37 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\Injectables as BaseInjectables;
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
 
-/**
- * a container for common services and data, to avoid making them global
- *
- * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class Injectables extends BaseInjectables
+class ConfigFileValidator implements Validator
 {
-	use Injectables_ActiveConfigSupport;
-	use Injectables_ActiveDeviceSupport;
-	use Injectables_ActiveLocalEnvironmentSupport;
-	use Injectables_ActiveTargetEnvironmentSupport;
-	use Injectables_AdditionalConfigsSupport;
-	use Injectables_DefaultConfigFilenameSupport;
-	use Injectables_DefaultLocalEnvironmentName;
-	use Injectables_DefaultTargetEnvironmentName;
-	use Injectables_KnownDevicesSupport;
-	use Injectables_KnownLocalEnvironmentsSupport;
-	use Injectables_KnownTargetEnvironmentsSupport;
-	use Injectables_OutputSupport;
-	use Injectables_PhaseLoaderSupport;
-	use Injectables_ProseLoaderSupport;
-	use Injectables_ReportLoaderSupport;
-	use Injectables_RuntimeConfigSupport;
-	use Injectables_StaticConfigManagerSupport;
+    const MSG_NOSUCHFILE     = "Config file '%value' not found";
+    const MSG_NOTVALIDCONFIG = "Config file '%value%' isn't valid JSON";
+
+    /**
+     *
+     * @param  mixed $value
+     * @param  ValidationResult $result
+     * @return ValidationResult
+     */
+    public function validate($value, ValidationResult $result = null)
+    {
+        if ($result === null) {
+            $result = new ValidationResult($value);
+        }
+
+        if (!is_file($value)) {
+            $result->addError(static::MSG_NOSUCHFILE);
+            return $result;
+        }
+
+        $rawJson = file_get_contents($value);
+        if (!@json_decode($rawJson)) {
+            $result->addError(static::MSG_NOTVALIDCONFIG);
+            return $result;
+        }
+
+        return $result;
+    }
 }
