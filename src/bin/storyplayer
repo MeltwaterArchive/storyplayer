@@ -31,11 +31,11 @@ use DataSift\Storyplayer\Cli\KillProcesses_Command;
 use DataSift\Storyplayer\Cli\ListHostsTable_Command;
 use DataSift\Storyplayer\Cli\ListLocalEnvironments_Command;
 use DataSift\Storyplayer\Cli\ListProcesses_Command;
-use DataSift\Storyplayer\Cli\ListTargetEnvironments_Command;
+use DataSift\Storyplayer\Cli\ListTestEnvironments_Command;
 use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\ShowLocalEnvironment_Command;
-use DataSift\Storyplayer\Cli\ShowTargetEnvironment_Command;
+use DataSift\Storyplayer\Cli\ShowTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
@@ -206,8 +206,8 @@ function main($argv)
 		$injectables->initKnownDevicesSupport($additionalConfigs['devices']);
 		$injectables->initKnownLocalEnvironmentsSupport($additionalConfigs['localEnvironments']);
 		$injectables->initDefaultLocalEnvironmentName($injectables);
-		$injectables->initKnownTargetEnvironmentsSupport($additionalConfigs['targetEnvironments']);
-		$injectables->initDefaultTargetEnvironmentName($injectables);
+		$injectables->initKnownTestEnvironmentsSupport($additionalConfigs['testEnvironments']);
+		$injectables->initDefaultTestEnvironmentName($injectables);
 	}
 	catch (Exception $e)
 	{
@@ -258,9 +258,9 @@ function main($argv)
 	$engine->addCommand(new ListHostsTable_Command);
 	$engine->addCommand(new ListLocalEnvironments_Command($injectables->knownLocalEnvironmentsList));
 	$engine->addCommand(new ListProcesses_Command);
-	$engine->addCommand(new ListTargetEnvironments_Command($injectables->knownTargetEnvironmentsList));
+	$engine->addCommand(new ListTestEnvironments_Command($injectables->knownTestEnvironmentsList));
 	$engine->addCommand(new ShowLocalEnvironment_Command);
-	$engine->addCommand(new ShowTargetEnvironment_Command);
+	$engine->addCommand(new ShowTestEnvironment_Command);
 
 	// all set - let's go
 	try {

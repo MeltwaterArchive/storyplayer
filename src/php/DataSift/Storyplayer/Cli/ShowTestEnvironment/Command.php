@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -43,8 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+
 /**
- * determine our default target environment to test against
+ * Command to list the current default environment, suitable for use
+ * inside shell scripts
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -53,28 +57,31 @@ namespace DataSift\Storyplayer\Cli;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_DefaultTargetEnvironmentName
+class ShowTestEnvironment_Command extends CliCommand
 {
-	public $defaultTargetEnvironmentName;
-
-	public function initDefaultTargetEnvironmentName($injectables)
+	public function __construct()
 	{
-		// what are the candidates?
-		$searchList = [
-			HostnameHelper::getHostname(),
-			"localhost"
-		];
+		// define the command
+		$this->setName('show-test-environment');
+		$this->setShortDescription('display the default test environment');
+		$this->setLongDescription(
+			"Use this command to see what Storyplayer will use as the default "
+			."environment to test against."
+			.PHP_EOL.PHP_EOL
+			."This command mostly exists to assist tab-completion scripts for UNIX shells."
+		);
+	}
 
-		// do any of these environments exist?
-		foreach ($searchList as $targetEnvName) {
-			if (isset($injectables->knownTargetEnvironments->$targetEnvName)) {
-				$this->defaultTargetEnvironmentName = $targetEnvName;
-				// all done
-				return;
-			}
-		}
-
-		// if we get here, then none of the environments exist
-		$this->defaultTargetEnvironmentName = end($searchList);
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return Phix_Project\CliEngine\CliResult
+	 */
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// output the default environment name
+		echo $additionalContext->defaultTestEnvironmentName . PHP_EOL;
 	}
 }

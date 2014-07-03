@@ -46,9 +46,9 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\ValidationLib4\Validator;
 use Phix_Project\ValidationLib4\ValidationResult;
 
-class Common_TargetEnvironmentValidator implements Validator
+class Common_TestEnvironmentValidator implements Validator
 {
-    const MSG_NOTVALIDENVIRONMENT = "Unknown target environment '%value%'";
+    const MSG_NOTVALIDENVIRONMENT = "Unknown test environment '%value%'";
 
     /**
      * @var array

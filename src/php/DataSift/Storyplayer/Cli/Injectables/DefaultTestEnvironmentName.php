@@ -43,12 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\CliEngine\CliResult;
-
 /**
- * A command to list the supported test environments
+ * determine our default target environment to test against
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,40 +53,28 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ListTargetEnvironments_Command extends CliCommand
+trait Injectables_DefaultTestEnvironmentName
 {
-	protected $envList;
+	public $defaultTestEnvironmentName;
 
-	public function __construct($envList)
+	public function initDefaultTestEnvironmentName($injectables)
 	{
-		// define the command
-		$this->setName('list-target-environments');
-		$this->setShortDescription('list the available target environments');
-		$this->setLongDescription(
-			"Use this command to get a list of all of the test environments"
-			. " that are defined in the config files."
-			.PHP_EOL
-		);
+		// what are the candidates?
+		$searchList = [
+			HostnameHelper::getHostname(),
+			"localhost"
+		];
 
-		// remember the environments list
-		$this->envList = $envList;
-	}
-
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return CliResult
-	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
-	{
-		// list the environments (if any) in a machine-friendly way
-		foreach ($this->envList as $envName) {
-			echo "{$envName}\n";
+		// do any of these environments exist?
+		foreach ($searchList as $testEnvName) {
+			if (isset($injectables->knownTestEnvironments->$testEnvName)) {
+				$this->defaultTestEnvironmentName = $testEnvName;
+				// all done
+				return;
+			}
 		}
 
-		// all done
-		return new CliResult(0);
+		// if we get here, then none of the environments exist
+		$this->defaultTestEnvironmentName = end($searchList);
 	}
 }

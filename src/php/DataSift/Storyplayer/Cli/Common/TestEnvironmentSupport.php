@@ -43,10 +43,25 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\TargetEnvironmentLib\KnownTargetEnvironments;
+use Exception;
+use stdClass;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Stone\LogLib\Log;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryContext;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * support for working with the list of known target environments
+ * Common support for selecting the target environment to test against
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,31 +70,23 @@ use DataSift\Storyplayer\TargetEnvironmentLib\KnownTargetEnvironments;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_KnownTargetEnvironmentsSupport
+class Common_TestEnvironmentSupport implements Common_Functionality
 {
-	public $knownTargetEnvironments;
-	public $knownTargetEnvironmentsList = array();
+    public function addSwitches(CliCommand $command, $injectables)
+    {
+        $command->addSwitches([
+            new Common_TestEnvironmentSwitch(
+            	$injectables->knownTestEnvironmentsList,
+            	$injectables->defaultTestEnvironmentName
+            )
+        ]);
+    }
 
-	public function initKnownTargetEnvironmentsSupport($additionalTargets)
-	{
-		// start with the list of target environments that are hard-coded
-		// into Storyplayer
-		$this->knownTargetEnvironments = new KnownTargetEnvironments;
-		foreach ($this->knownTargetEnvironments as $name => $config) {
-			$this->knownTargetEnvironmentsList[$name] = $name;
-		}
-
-		// now add in all the target environments that we have discovered
-		// in the config files
-		foreach ($additionalTargets as $filename => $config) {
-			$targetName = basename($filename, 'json');
-			$this->knownTargetEnvironmentsList[$targetName] = $targetName;
-			$this->knownTargetEnvironments->$targetName = $config;
-		}
-
-		// now put the list of targets into a sensible order
-		ksort($this->knownTargetEnvironmentsList);
-
-		// all done
-	}
+    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    {
+    	$injectables->initActiveTestEnvironment(
+            $engine->options->testEnvironmentName,
+            $injectables
+        );
+    }
 }

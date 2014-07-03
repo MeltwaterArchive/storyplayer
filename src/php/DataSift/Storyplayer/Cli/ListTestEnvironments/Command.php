@@ -43,8 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliResult;
+
 /**
- * support for the target environment that the user chooses
+ * A command to list the supported test environments
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -53,22 +57,40 @@ namespace DataSift\Storyplayer\Cli;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_ActiveTargetEnvironmentSupport
+class ListTestEnvironments_Command extends CliCommand
 {
-	public $activeTargetEnvironment;
-	public $activeTargetEnvironmentName;
+	protected $envList;
 
-	public function initActiveTargetEnvironment($envName, $injectables)
+	public function __construct($envList)
 	{
-        // does the target environment exist?
-        if (!isset($injectables->knownTargetEnvironments->$envName)) {
-            throw new E4xx_NoSuchTargetEnvironment($envName);
-        }
+		// define the command
+		$this->setName('list-test-environments');
+		$this->setShortDescription('list the available test environments');
+		$this->setLongDescription(
+			"Use this command to get a list of all of the test environments"
+			. " that are defined in the config files."
+			.PHP_EOL
+		);
 
-        // copy over the environment that we want
-        $this->activeTargetEnvironment = $injectables->knownTargetEnvironments->$envName;
+		// remember the environments list
+		$this->envList = $envList;
+	}
 
-        // remember the environment name
-        $this->activeTargetEnvironmentName = $envName;
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  array     $params
+	 * @param  mixed     $additionalContext
+	 * @return CliResult
+	 */
+	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	{
+		// list the environments (if any) in a machine-friendly way
+		foreach ($this->envList as $envName) {
+			echo "{$envName}\n";
+		}
+
+		// all done
+		return new CliResult(0);
 	}
 }

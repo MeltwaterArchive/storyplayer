@@ -73,7 +73,7 @@ trait CommonFunctionalitySupport
 			new Common_LocalEnvironmentSupport,
 			new Common_DefinesSupport,
 			new Common_DeviceSupport,
-			new Common_TargetEnvironmentSupport,
+			new Common_TestEnvironmentSupport,
 			new Common_ColorSupport,
 			new Common_ConsoleSupport,
 		];

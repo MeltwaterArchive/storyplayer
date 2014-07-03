@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
- * @author    Michael Heap <michael.heap@datasift.com>
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -44,11 +44,12 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Command to list the current default environment, suitable for use
- * inside shell scripts
+ * Tell Storyplayer which test environment to test against; for when there
+ * is more than one test environment defined
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,31 +58,67 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ShowTargetEnvironment_Command extends CliCommand
+class Common_TestEnvironmentSwitch extends CliSwitch
 {
-	public function __construct()
+	/**
+	 * @param array $envList
+	 * @param string $defaultEnvName
+	 */
+	public function __construct($envList, $defaultEnvName)
 	{
-		// define the command
-		$this->setName('show-target-environment');
-		$this->setShortDescription('display the default target environment');
-		$this->setLongDescription(
-			"Use this command to see what Storyplayer will use as the default "
-			."target environment to test against."
-			.PHP_EOL.PHP_EOL
-			."This command mostly exists to assist tab-completion scripts for UNIX shells."
+		// define our name, and our description
+		$this->setName('target');
+		$this->setShortDescription('set the environment to test against');
+		$this->setLongDesc(
+			"If you have multiple test environments listed in your configuration files, "
+			. "you can use this switch to choose which test environment to run the test(s) "
+			. "against. If you omit this switch, Storyplayer will default to using your "
+			. "computer's hostname as the value for <environment>."
+			. PHP_EOL
+			. PHP_EOL
+			. "If you only have one test environment listed, then this switch has no "
+			. "effect when used, and Storyplayer will always use the test environment "
+			. "from your configuration file."
+			. PHP_EOL
+			. PHP_EOL
+			. "See http://datasift.github.io/storyplayer/ "
+			. "for how to configure and use multiple test environments."
 		);
+
+		// what are the short switches?
+		$this->addShortSwitch('t');
+
+		// what are the long switches?
+		$this->addLongSwitch('target');
+		$this->addLongSwitch('test-environment');
+
+		// what is the required argument?
+		$requiredArgMsg = "the environment to test against; one of:" . PHP_EOL . PHP_EOL;
+		foreach($envList as $envName) {
+			$requiredArgMsg .= "* $envName" . PHP_EOL;
+		}
+		$requiredArgMsg .= PHP_EOL. ' ';
+		$this->setRequiredArg('<environment>', $requiredArgMsg);
+		$this->setArgValidator(new Common_TestEnvironmentValidator($envList, $defaultEnvName));
+		$this->setArgHasDefaultValueOf($defaultEnvName);
+
+		// all done
 	}
 
 	/**
 	 *
 	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
 	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return Phix_Project\CliEngine\CliResult
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
 	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// output the default environment name
-		echo $additionalContext->defaultTargetEnvironmentName . PHP_EOL;
+		// remember the setting
+		$engine->options->testEnvironmentName = $params[0];
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }

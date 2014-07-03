@@ -60,14 +60,14 @@ class Injectables extends BaseInjectables
 	use Injectables_ActiveConfigSupport;
 	use Injectables_ActiveDeviceSupport;
 	use Injectables_ActiveLocalEnvironmentSupport;
-	use Injectables_ActiveTargetEnvironmentSupport;
+	use Injectables_ActiveTestEnvironmentSupport;
 	use Injectables_AdditionalConfigsSupport;
 	use Injectables_DefaultConfigFilenameSupport;
 	use Injectables_DefaultLocalEnvironmentName;
-	use Injectables_DefaultTargetEnvironmentName;
+	use Injectables_DefaultTestEnvironmentName;
 	use Injectables_KnownDevicesSupport;
 	use Injectables_KnownLocalEnvironmentsSupport;
-	use Injectables_KnownTargetEnvironmentsSupport;
+	use Injectables_KnownTestEnvironmentsSupport;
 	use Injectables_OutputSupport;
 	use Injectables_PhaseLoaderSupport;
 	use Injectables_ProseLoaderSupport;

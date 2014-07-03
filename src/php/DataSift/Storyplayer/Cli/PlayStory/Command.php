@@ -116,16 +116,10 @@ class PlayStory_Command extends CliCommand
 
         // the switches that this command supports
         $this->setSwitches(array(
-            new LogLevelSwitch(),
             new PlayStory_PersistProcessesSwitch(),
-            new PlatformSwitch(),
             new PlayStory_LogJsonSwitch(),
             new PlayStory_LogJUnitSwitch(),
             new PlayStory_LogTapSwitch(),
-            // new PlayStory_TargetEnvironmentSwitch(
-            //     $injectables->targetEnvList,
-            //     $injectables->defaultTargetEnvName
-            // )
         ));
 
         // add in the common features
