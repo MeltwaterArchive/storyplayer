@@ -48,8 +48,7 @@ use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Tell Storyplayer which test environment to test against; for when there
- * is more than one test environment defined
+ * Tell Storyplayer which environment it is running on
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -58,7 +57,7 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_TestEnvironmentSwitch extends CliSwitch
+class Common_LocalEnvironmentConfigSwitch extends CliSwitch
 {
 	/**
 	 * @param array $envList
@@ -67,39 +66,34 @@ class Common_TestEnvironmentSwitch extends CliSwitch
 	public function __construct($envList, $defaultEnvName)
 	{
 		// define our name, and our description
-		$this->setName('target');
-		$this->setShortDescription('set the environment to test against');
+		$this->setName('local');
+		$this->setShortDescription('set the environment you are running Storyplayer on');
 		$this->setLongDesc(
-			"If you have multiple test environments listed in your configuration files, "
-			. "you can use this switch to choose which test environment to run the test(s) "
-			. "against. If you omit this switch, Storyplayer will default to using your "
-			. "computer's hostname as the value for <environment>."
+			"After Storyplayer has loaded the storyplayer.json[.dist] config file, it will "
+			. "load any config it can find for <environment>. You can use this to have different "
+			. "config files for different runtime environments. This is very handy when "
+			. "a test repository is shared with several different people, who run the tests "
+			. "on different operating systems."
 			. PHP_EOL
 			. PHP_EOL
-			. "If you only have one test environment listed, then this switch has no "
-			. "effect when used, and Storyplayer will always use the test environment "
-			. "from your configuration file."
+			. "If you omit this switch, Storyplayer will default to using your "
+			. "computer's hostname as the value for <environment>, or 'localhost' "
+			. "if there's no config file for this computer."
 			. PHP_EOL
 			. PHP_EOL
 			. "See http://datasift.github.io/storyplayer/ "
-			. "for how to configure and use multiple test environments."
+			. "for how to configure and use multiple runtime environments."
 		);
 
 		// what are the short switches?
-		$this->addShortSwitch('t');
+		$this->addShortSwitch('e');
 
 		// what are the long switches?
-		$this->addLongSwitch('target');
-		$this->addLongSwitch('test-environment');
+		$this->addLongSwitch('local');
 
 		// what is the required argument?
-		$requiredArgMsg = "the environment to test against; one of:" . PHP_EOL . PHP_EOL;
-		foreach($envList as $envName) {
-			$requiredArgMsg .= "* $envName" . PHP_EOL;
-		}
-		$requiredArgMsg .= PHP_EOL. ' ';
-		$this->setRequiredArg('<environment>', $requiredArgMsg);
-		$this->setArgValidator(new Common_TestEnvironmentValidator($envList, $defaultEnvName));
+		$this->setRequiredArg('<environment>', "the environment that Storyplayer is running on; one of: " . implode(", ", $envList));
+		$this->setArgValidator(new Common_LocalEnvironmentConfigValidator($envList, $defaultEnvName));
 		$this->setArgHasDefaultValueOf($defaultEnvName);
 
 		// all done
@@ -116,7 +110,7 @@ class Common_TestEnvironmentSwitch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->testEnvironmentName = $params[0];
+		$engine->options->localEnvironmentName = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

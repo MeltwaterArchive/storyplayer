@@ -43,25 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Common support for the console
+ * support for working with Storyplayer's config file
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -70,49 +57,42 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_ConsoleSupport implements Common_Functionality
+trait Injectables_StoryplayerConfigSupport
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DevModeSwitch
-        ]);
-    }
+	public $storyplayerConfig;
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $activeConfig = $injectables->activeConfig;
-        $output       = $injectables->output;
+	public function initStoryplayerConfigSupport(Injectables $injectables, $configFilename)
+	{
+		// shorthand
+		$output = $injectables->output;
 
-        // switch output plugins first, before we do anything else at all
-        if (isset($engine->options->dev) && $engine->options->dev) {
-            // switch our main output to 'dev mode'
-            $output->usePlugin('console', new DevModeConsole());
+		// we start with an empty object
+		$config = new BaseObject;
 
-            // dev mode means 'show me everything'
-            $engine->options->verbosity = 2;
-        }
+		try {
+			// try to load our main config file
+			$injectables->staticConfigManager->loadDefaultConfig(
+				$config,
+				$configFilename
+			);
+		}
+		catch (E5xx_ConfigFileNotFound $e) {
+			// there is no default config file
+			//
+			// it isn't fatal, but we do want to tell people about it
+			$output->logCliWarning("storyplayer config file '$configFilename' not found");
+		}
+		catch (E5xx_InvalidConfigFile $e) {
+			// we either can't read the config file, or it contains
+			// invalid JSON
+			//
+			// that is fatal
+			$output->logCliError("unable to read or prase storyplayer config file '$configFilename'");
+			exit(1);
+		}
 
-        // setup logging
-        //
-        // by default, we go with what is in the config, and use the
-        // command-line switch(es) to override it
-        $loggingConfig = $activeConfig->storyplayer->logger;
-        if (isset($engine->options->logLevels)) {
-            $loggingConfig->levels = $engine->options->logLevels;
-        }
-
-        // allow the command-line to override the config
-        $verbosity = $engine->options->verbosity;
-        $output->setVerbosity($engine->options->verbosity);
-        if ($verbosity > 0) {
-            $loggingConfig->levels->LOG_DEBUG = true;
-        }
-        if ($verbosity > 1 ) {
-            $loggingConfig->levels->LOG_TRACE = true;
-        }
-
-        // we're ready to switch logging on now
-        Log::init("storyplayer", $loggingConfig);    }
+		// all done
+		$this->storyplayerConfig = json_encode($config);
+		return $this->storyplayerConfig;
+	}
 }

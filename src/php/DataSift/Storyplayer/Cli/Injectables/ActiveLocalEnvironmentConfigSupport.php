@@ -43,26 +43,10 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
-use DataSift\Storyplayer\HelperLib\JsonFileLoader;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Common support for per-local-environment configs
+ * support for the local environment that the user chooses
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -71,35 +55,24 @@ use DataSift\Storyplayer\HelperLib\JsonFileLoader;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_LocalEnvironmentSupport implements Common_Functionality
+trait Injectables_ActiveLocalEnvironmentConfigSupport
 {
-    public function addSwitches(CliCommand $command, $injectables)
-    {
-        $command->addSwitches([
-            new Common_LocalEnvironmentSwitch(
-                $injectables->knownLocalEnvironmentsList,
-                $injectables->defaultLocalEnvironmentName
-            ),
-        ]);
-    }
+	public $activeLocalEnvironmentName;
+    public $activeLocalEnvironmentConfig;
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $output            = $injectables->output;
-        $staticConfig      = $injectables->staticConfig;
-
-        // do we need to load anything?
-        if (!isset($engine->options->localEnvironmentName) || !$engine->options->localEnvironmentName) {
-            // nothing to do
-            return;
+	public function initActiveLocalEnvironmentConfigSupport($envName, $injectables)
+	{
+        // does the local environment exist?
+        if (!isset($injectables->knownLocalEnvironments->$envName)) {
+            throw new E4xx_NoSuchLocalEnvironment($envName);
         }
 
-        $injectables->initActiveLocalEnvironment(
-            $engine->options->localEnvironmentName,
-            $injectables
-        );
+        // build the environment that we want
+        $this->activeLocalEnvironmentConfig = $injectables->knownLocalEnvironments->$envName;
+
+        // remember the environment name, just in case
+        $this->activeLocalEnvironmentName = $envName;
 
         // all done
-    }
+	}
 }

@@ -43,11 +43,11 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Twig_Environment;
+use Twig_Loader_String;
 
 /**
- * support for functionality that all commands are expected to support
+ * support for rendering templates of any kind
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,43 +56,25 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+trait Injectables_TemplateEngineSupport
 {
-	public $commonFunctionality = [];
+	/**
+	 * an engine any part of Storyplayer can use to expand templates,
+	 * such as config files
+	 *
+	 * @var \Twig_Environment
+	 */
+	public $tempateEngine;
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
+	/**
+	 *
+	 * @return void
+	 */
+	public function initTemplateEngineSupport()
 	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_LocalEnvironmentConfigSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TestEnvironmentConfigSupport,
-			new Common_ActiveConfigSupport,
-			new Common_ColorSupport,
-			new Common_ConsoleSupport,
-			new Common_PhaseLoaderSupport,
-			new Common_ProseLoaderSupport,
-		];
-
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
-
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
+        // we're going to expose this environment through Twig, to give
+        // us template support
+        $loader = new Twig_Loader_String();
+        $this->templateEngine   = new Twig_Environment($loader);
 	}
 }

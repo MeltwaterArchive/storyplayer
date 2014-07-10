@@ -44,7 +44,7 @@
 namespace DataSift\Storyplayer\Cli;
 
 /**
- * support for the test environment that the user chooses
+ * determine our storyplayer config file
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -53,22 +53,32 @@ namespace DataSift\Storyplayer\Cli;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_ActiveTestEnvironmentSupport
+trait Injectables_StoryplayerConfigFilenameSupport
 {
-	public $activeTestEnvironment;
-	public $activeTestEnvironmentName;
+	public $storyplayerConfigFilename;
 
-	public function initActiveTestEnvironment($envName, $injectables)
+	public function initStoryplayerConfigFilenameSupport()
 	{
-        // does the test environment exist?
-        if (!isset($injectables->knownTestEnvironments->$envName)) {
-            throw new E4xx_NoSuchTestEnvironment($envName);
-        }
+		// what are the candidates?
+		$searchList = [
+			"storyplayer.json",
+			"storyplayer.json.dist"
+		];
 
-        // copy over the environment that we want
-        $this->activeTestEnvironment = $injectables->knownTestEnvironments->$envName;
+		// do we have them?
+		foreach ($searchList as $filename) {
+			if (is_file($filename)) {
+				// YES!!
+				$this->storyplayerConfigFilename = $filename;
+				return;
+			}
+		}
 
-        // remember the environment name
-        $this->activeTestEnvironmentName = $envName;
+		// we have nothing
+		//
+		// the best we can do is return our preferred file, and let
+		// the wider app decide what to do about the fact that it is
+		// missing
+		$this->storyplayerConfigFilename = end($searchList);
 	}
 }

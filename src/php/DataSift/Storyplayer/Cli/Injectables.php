@@ -59,10 +59,10 @@ class Injectables extends BaseInjectables
 {
 	use Injectables_ActiveConfigSupport;
 	use Injectables_ActiveDeviceSupport;
-	use Injectables_ActiveLocalEnvironmentSupport;
-	use Injectables_ActiveTestEnvironmentSupport;
+	use Injectables_ActiveLocalEnvironmentConfigSupport;
+	use Injectables_ActiveTestEnvironmentConfigSupport;
 	use Injectables_AdditionalConfigsSupport;
-	use Injectables_DefaultConfigFilenameSupport;
+	use Injectables_DefaultConfigSupport;
 	use Injectables_DefaultLocalEnvironmentName;
 	use Injectables_DefaultTestEnvironmentName;
 	use Injectables_KnownDevicesSupport;
@@ -74,4 +74,7 @@ class Injectables extends BaseInjectables
 	use Injectables_ReportLoaderSupport;
 	use Injectables_RuntimeConfigSupport;
 	use Injectables_StaticConfigManagerSupport;
+	use Injectables_StoryplayerConfigFilenameSupport;
+	use Injectables_StoryplayerConfigSupport;
+	use Injectables_TemplateEngineSupport;
 }

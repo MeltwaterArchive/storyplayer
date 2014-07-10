@@ -43,52 +43,56 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\ValidationLib4\Validator;
-use Phix_Project\ValidationLib4\ValidationResult;
+use Exception;
+use stdClass;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Stone\LogLib\Log;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryContext;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\Console\DevModeConsole;
+use DataSift\Storyplayer\HelperLib\JsonFileLoader;
 
-class Common_TestEnvironmentValidator implements Validator
+/**
+ * Common support for per-local-environment configs
+ *
+ * @category  Libraries
+ * @package   Storyplayer/Cli
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+class Common_ActiveConfigSupport implements Common_Functionality
 {
-    const MSG_NOTVALIDENVIRONMENT = "Unknown test environment '%value%'";
-
-    /**
-     * @var array
-     */
-    protected $envList;
-
-    /**
-     * @var string
-     */
-    protected $defaultValue;
-
-    /**
-     * @param array $envList
-     * @param string $defaultValue
-     */
-    public function __construct($envList, $defaultValue)
+    public function addSwitches(CliCommand $command, $injectables)
     {
-        $this->envList = $envList;
-        $this->defaultValue = $defaultValue;
+        // no-op
     }
 
-    /**
-     *
-     * @param  mixed $value
-     * @param  ValidationResult $result
-     * @return ValidationResult
-     */
-    public function validate($value, ValidationResult $result = null)
+    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
-        if ($result === null) {
-            $result = new ValidationResult($value);
-        }
+        // at this point, we are assuming that the following is all true:
+        //
+        // a) storyplayer.json[.dist] has been loaded
+        //    >> $injectables->defaultConfig (object)
+        // b) .storyplayer/local-environments/<env>.json has been loaded
+        //    >> $injectables->activeLocalEnvironmentConfig (string)
+        // c) .storyplayer/test-environments/<env>.json has been loaded
+        //    >> $injectables->activeTestEnvironmentConfig (string)
+        //
+        // we now want to create $injectables->activeConfig
 
-        // the $value must be a valid environment name, but it's ok if it doesn't
-        // exist if it's the default env as we might not have created it yet
-        if (!in_array($value, $this->envList) && $value !== $this->defaultValue) {
-            $result->addError(static::MSG_NOTVALIDENVIRONMENT);
-            return $result;
-        }
+        $injectables->initActiveConfigSupport($injectables);
 
-        return $result;
+        // all done
     }
 }

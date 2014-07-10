@@ -43,10 +43,25 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ObjectLib\BaseObject;
+use Exception;
+use stdClass;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Stone\LogLib\Log;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryContext;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * support for the local environment that the user chooses
+ * Common support for selecting the target environment to test against
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,21 +70,23 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_ActiveLocalEnvironmentSupport
+class Common_TestEnvironmentConfigSupport implements Common_Functionality
 {
-	public $activeLocalEnvironmentName;
+    public function addSwitches(CliCommand $command, $injectables)
+    {
+        $command->addSwitches([
+            new Common_TestEnvironmentConfigSwitch(
+            	$injectables->knownTestEnvironmentsList,
+            	$injectables->defaultTestEnvironmentName
+            )
+        ]);
+    }
 
-	public function initActiveLocalEnvironment($envName, $injectables)
-	{
-        // does the local environment exist?
-        if (!isset($injectables->knownLocalEnvironments->$envName)) {
-            throw new E4xx_NoSuchLocalEnvironment($envName);
-        }
-
-        // build the environment that we want
-        $this->activeConfig->mergeFrom($injectables->knownLocalEnvironments->$envName);
-
-        // remember the environment name, just in case
-        $this->activeLocalEnvironmentName = $envName;
-	}
+    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    {
+    	$injectables->initActiveTestEnvironmentConfigSupport(
+            $engine->options->testEnvironmentName,
+            $injectables
+        );
+    }
 }

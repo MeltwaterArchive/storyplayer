@@ -387,9 +387,9 @@ class PlayStory_Command extends CliCommand
         $return = [
             new StoryPlayer(
                 $storyFile,
-                $injectables->activeConfig->phases->startup,
-                $injectables->activeConfig->phases->story,
-                $injectables->activeConfig->phases->shutdown
+                $injectables->activeConfig->storyplayer->phases->startup,
+                $injectables->activeConfig->storyplayer->phases->story,
+                $injectables->activeConfig->storyplayer->phases->shutdown
             )
         ];
 

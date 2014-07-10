@@ -223,7 +223,7 @@ class StoryTeller
 		$this->setDevice($injectables->activeDeviceName, $injectables->activeDevice);
 
 		// remember the defines from config file & command line
-		$this->setDefines($injectables->activeConfig->defines);
+		$this->setDefines($injectables->activeConfig->storyplayer->defines);
 
 		// the config that we have loaded
 		$this->setConfig($injectables->activeConfig);

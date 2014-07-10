@@ -43,25 +43,10 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Common support for selecting the target environment to test against
+ * support for the test environment that the user chooses
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -70,23 +55,23 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_TestEnvironmentSupport implements Common_Functionality
+trait Injectables_ActiveTestEnvironmentConfigSupport
 {
-    public function addSwitches(CliCommand $command, $injectables)
-    {
-        $command->addSwitches([
-            new Common_TestEnvironmentSwitch(
-            	$injectables->knownTestEnvironmentsList,
-            	$injectables->defaultTestEnvironmentName
-            )
-        ]);
-    }
+	public $activeTestEnvironmentName;
+    public $activeTestEnvironmentConfig;
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-    	$injectables->initActiveTestEnvironment(
-            $engine->options->testEnvironmentName,
-            $injectables
-        );
-    }
+	public function initActiveTestEnvironmentConfigSupport($envName, $injectables)
+	{
+        // does the test environment exist?
+        if (!isset($injectables->knownTestEnvironments->$envName)) {
+            throw new E4xx_NoSuchTestEnvironment($envName);
+        }
+
+        // we need to store the test environment's config as a string,
+        // as it will need expanding as we provision the test environment
+        $this->activeTestEnvironmentConfig = json_encode($injectables->knownTestEnvironments->$envName);
+
+        // remember the environment name
+        $this->activeTestEnvironmentName = $envName;
+	}
 }

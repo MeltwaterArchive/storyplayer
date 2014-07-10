@@ -180,13 +180,19 @@ function main($argv)
 	// activate support for printing to the user
 	$output = $injectables->initOutputSupport();
 
-	try {
-		// find our default config file
-		$injectables->initDefaultConfigFilenameSupport();
+	// activate support for rendering templates of any kind
+	$injectables->initTemplateEngineSupport();
 
-		// load our main config
+	// create our built-in default config
+	$defaultConfig = $injectables->initDefaultConfigSupport();
+
+	try {
+		// find our storyplayer config file
+		$injectables->initStoryplayerConfigFilenameSupport();
+
+		// load our storyplayer config
 		$staticConfigManager = $injectables->initStaticConfigManagerSupport();
-		$staticConfig        = $injectables->initActiveConfigSupport($injectables, $injectables->defaultConfigFilename);
+		$injectables->initStoryplayerConfigSupport($injectables, $injectables->storyplayerConfigFilename);
 
 		// create our runtime config folder, and load any pre-existing
 		// runtime config
@@ -196,7 +202,7 @@ function main($argv)
 		// a list of the additional files that we will only merge
 		// on-demand
 		$additionalConfigs = [];
-		foreach ($staticConfig->configs as $name => $dirs)
+		foreach ($defaultConfig->configs as $name => $dirs)
 		{
 			$additionalConfigs[$name] = $staticConfigManager->loadConfigFilesFrom($dirs);
 		}

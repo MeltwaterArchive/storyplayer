@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\ValidationLib4\Validator;
 use Phix_Project\ValidationLib4\ValidationResult;
 
-class Common_LocalEnvironmentValidator implements Validator
+class Common_LocalEnvironmentConfigValidator implements Validator
 {
     const MSG_NOTVALIDENVIRONMENT = "Unknown local environment '%value%'";
 

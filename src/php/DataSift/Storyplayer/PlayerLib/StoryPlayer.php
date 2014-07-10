@@ -115,7 +115,7 @@ class StoryPlayer
         $phasesPlayer->playPhases(
         	$st,
         	$injectables,
-        	$injectables->activeConfig->phases->startup
+        	$this->startupPhases
         );
 
 		// set default callbacks up
@@ -134,7 +134,7 @@ class StoryPlayer
 		$phaseResults = $phasesPlayer->playPhases(
 			$st,
 			$injectables,
-			$injectables->activeConfig->phases->story
+			$this->storyPhases
 		);
 
 		// play the 'paired' phases too, in case they haven't yet
@@ -142,7 +142,7 @@ class StoryPlayer
 		$phasesPlayer->playPairedPhases(
 			$st,
 			$injectables,
-			$injectables->activeConfig->phases->story,
+			$this->storyPhases,
 			$phaseResults
 		);
 
@@ -157,7 +157,7 @@ class StoryPlayer
         $phasesPlayer->playPhases(
 			$st,
 			$injectables,
-			$injectables->activeConfig->phases->shutdown
+			$this->shutdownPhases
         );
 
 		// all done
