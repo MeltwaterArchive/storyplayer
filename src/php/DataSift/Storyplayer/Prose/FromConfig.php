@@ -67,7 +67,7 @@ class FromConfig extends Prose
 		$log = $st->startAction("get $setting for '{$app}' from the loaded config");
 
 		// get the details
-		$config = $st->getLocalEnvironment();
+		$config = $st->getConfig();
 		if (!isset($config->appSettings, $config->appSettings->$app, $config->appSettings->$app->$setting)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -91,7 +91,7 @@ class FromConfig extends Prose
 		$log = $st->startAction("get all settings for '{$app}' from the loaded config");
 
 		// get the details
-		$config = $st->getLoadedConfig();
+		$config = $st->getConfig();
 		if (!isset($config->appSettings, $config->appSettings->$app)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -115,7 +115,7 @@ class FromConfig extends Prose
 		$log = $st->startAction("get $setting for '{$module}' from the loaded config");
 
 		// get the details
-		$config = $st->getLoadedConfig();
+		$config = $st->getConfig();
 		if (!isset($config->modules, $config->modules->$module, $config->modules->$module->$setting)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -139,7 +139,7 @@ class FromConfig extends Prose
 		$log = $st->startAction("get all settings for '{$module}' from the loaded config");
 
 		// get the details
-		$config = $st->getLoadedConfig();
+		$config = $st->getConfig();
 		if (!isset($config->modules, $config->modules->$module)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}

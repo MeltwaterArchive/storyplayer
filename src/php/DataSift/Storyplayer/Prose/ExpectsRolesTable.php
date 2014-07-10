@@ -34,80 +34,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
-
-use DataSift\Storyplayer\Cli\Injectables;
-use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\UserLib\ConfigUserLoader;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-use Exception;
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * a sanitised & dynamically enhanced version of the config that has been
- * loaded for this test run
+ *
+ * test the state of the internal roles table
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryContext extends BaseObject
+class ExpectsRolesTable extends Prose
 {
-	/**
-	 * the details about the user that has been chosen
-	 *
-	 * @var DataSift\StoryPlayer\UserLib\User
-	 */
-	public $user;
 
-	// ==================================================================
-	//
-	// initialise all the things
-	//
-	// ------------------------------------------------------------------
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "roles";
 
-	/**
-	 * build the config for this story run, from the config we've loaded
-	 *
-	 * we rebuild this for each story to ensure that each story runs
-	 * with an identical config
-	 *
-	 * @param Injectables $injectables
-	 */
-	public function __construct(Injectables $injectables)
-	{
-		$this->user = new BaseObject;
-	}
+    /**
+     * hasEntryForRole
+     *
+     * @param string $roleName
+     *        The role we're looking for
+     *
+     * @return void
+     */
+    public function hasEntryForRole($roleName)
+    {
+        $this->st->expectsRuntimeTable($this->entryKey)->hasEntry($roleName);
+    }
 
-	public function initUser(StoryTeller $st)
-	{
-		// shorthand
-		$config = $st->getConfig();
-
-		// our default provider of users
-		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
-
-		// do we have a specific generator to load?
-		if (isset($config->users, $config->users->generator)) {
-			$className = $config->users->generator;
-		}
-
-		// create the generator
-		$generator = new ConfigUserLoader(new $className());
-
-		// get a user from the generator
-		$this->user = $generator->getUser($st);
-
-		// all done
-	}
+    /**
+     * hasNoEntryForRole
+     *
+     * @param string $roleName
+     *        The role we're looking for
+     *
+     * @return void
+     */
+    public function hasNoEntryForRole($roleName)
+    {
+        $this->st->expectsRuntimeTable($this->entryKey)->hasNoEntry($roleName);
+    }
 }

@@ -34,80 +34,79 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\Cli\Injectables;
-use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\UserLib\ConfigUserLoader;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-use Exception;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * a sanitised & dynamically enhanced version of the config that has been
- * loaded for this test run
+ * Get information from the environment defined for the test environment
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryContext extends BaseObject
+class FromTestEnvironment extends Prose
 {
-	/**
-	 * the details about the user that has been chosen
-	 *
-	 * @var DataSift\StoryPlayer\UserLib\User
-	 */
-	public $user;
-
-	// ==================================================================
-	//
-	// initialise all the things
-	//
-	// ------------------------------------------------------------------
-
-	/**
-	 * build the config for this story run, from the config we've loaded
-	 *
-	 * we rebuild this for each story to ensure that each story runs
-	 * with an identical config
-	 *
-	 * @param Injectables $injectables
-	 */
-	public function __construct(Injectables $injectables)
+	public function __construct(StoryTeller $st, $roleName)
 	{
-		$this->user = new BaseObject;
+
 	}
 
-	public function initUser(StoryTeller $st)
+	public function getAppSetting($app, $setting)
 	{
 		// shorthand
-		$config = $st->getConfig();
+		$st = $this->st;
 
-		// our default provider of users
-		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
+		// what are we doing?
+		$log = $st->startAction("get $setting for '{$app}'");
 
-		// do we have a specific generator to load?
-		if (isset($config->users, $config->users->generator)) {
-			$className = $config->users->generator;
+		// get the details
+		$env = $st->getTestEnvironment();
+		if (!isset($env->$app, $env->$app->$setting)) {
+			throw new E5xx_ActionFailed(__METHOD__);
 		}
+		$value = $env->$app->$setting;
 
-		// create the generator
-		$generator = new ConfigUserLoader(new $className());
-
-		// get a user from the generator
-		$this->user = $generator->getUser($st);
+		// log the settings
+		$printer  = new DataPrinter();
+		$logValue = $printer->convertToString($value);
+		$log->endAction("$setting for '{$app}' is '{$logValue}'");
 
 		// all done
+		return $value;
+	}
+
+	public function getAppSettings($app)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get all settings for '{$app}'");
+
+		// get the details
+		$env = $st->getTestEnvironment();
+		if (!isset($env->$app)) {
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+		$value = $env->$app;
+
+		// log the settings
+		$printer  = new DataPrinter();
+		$logValue = $printer->convertToString($value);
+		$log->endAction("settings for '{$app}' are '{$logValue}'");
+
+		// all done
+		return $value;
 	}
 }

@@ -34,80 +34,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\Cli\Injectables;
-use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\UserLib\ConfigUserLoader;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
 use Exception;
+use stdClass;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Stone\LogLib\Log;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryContext;
+use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * a sanitised & dynamically enhanced version of the config that has been
- * loaded for this test run
+ * Common support for loading Prose modules
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryContext extends BaseObject
+class Common_ProseLoaderSupport implements Common_Functionality
 {
-	/**
-	 * the details about the user that has been chosen
-	 *
-	 * @var DataSift\StoryPlayer\UserLib\User
-	 */
-	public $user;
+    public function addSwitches(CliCommand $command, $injectables)
+    {
+    	// no-op
+    }
 
-	// ==================================================================
-	//
-	// initialise all the things
-	//
-	// ------------------------------------------------------------------
-
-	/**
-	 * build the config for this story run, from the config we've loaded
-	 *
-	 * we rebuild this for each story to ensure that each story runs
-	 * with an identical config
-	 *
-	 * @param Injectables $injectables
-	 */
-	public function __construct(Injectables $injectables)
-	{
-		$this->user = new BaseObject;
-	}
-
-	public function initUser(StoryTeller $st)
-	{
-		// shorthand
-		$config = $st->getConfig();
-
-		// our default provider of users
-		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
-
-		// do we have a specific generator to load?
-		if (isset($config->users, $config->users->generator)) {
-			$className = $config->users->generator;
-		}
-
-		// create the generator
-		$generator = new ConfigUserLoader(new $className());
-
-		// get a user from the generator
-		$this->user = $generator->getUser($st);
-
-		// all done
-	}
+    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    {
+    	$injectables->initProseLoaderSupport($injectables);
+    }
 }

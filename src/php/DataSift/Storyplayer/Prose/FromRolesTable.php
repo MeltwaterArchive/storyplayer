@@ -43,10 +43,8 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\DataLib\DataPrinter;
-
 /**
- * Get information from the environment defined for the test environment
+ * retrieve data from the internal hosts table
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -55,53 +53,37 @@ use DataSift\Stone\DataLib\DataPrinter;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromTargetEnvironment extends Prose
+class FromRolesTable extends Prose
 {
-	public function getAppSetting($app, $setting)
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "roles";
 
-		// what are we doing?
-		$log = $st->startAction("get $setting for '{$app}'");
 
-		// get the details
-		$env = $st->getTargetEnvironment();
-		if (!isset($env->$app, $env->$app->$setting)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $env->$app->$setting;
+    /**
+     * getRolesTable
+     *
+     * @return object The roles table
+     */
+    public function getRolesTable()
+    {
+        return $this->st->fromRuntimeTable($this->entryKey)->getTable();
+    }
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("$setting for '{$app}' is '{$logValue}'");
-
-		// all done
-		return $value;
-	}
-
-	public function getAppSettings($app)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get all settings for '{$app}'");
-
-		// get the details
-		$env = $st->getTargetEnvironment();
-		if (!isset($env->$app)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $env->$app;
-
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("settings for '{$app}' are '{$logValue}'");
-
-		// all done
-		return $value;
-	}
+    /**
+     * getDetailsForRole
+     *
+     * @param string $roleName
+     *        The role we're looking for
+     *
+     * @return object Details about $hostName
+     */
+    public function getDetailsForRole($roleName)
+    {
+        return $this->st->fromRuntimeTable($this->entryKey)->getDetails($roleName);
+    }
 }

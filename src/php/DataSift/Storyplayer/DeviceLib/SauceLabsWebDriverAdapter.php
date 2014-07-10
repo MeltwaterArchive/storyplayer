@@ -87,7 +87,7 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 		// due to encoding errors at SauceLabs, we can't use '>' as a
 		// delimiter in the story's name
 		$story = $st->getStory();
-		$desiredCapabilities['name'] = $st->getEnvironmentName() . ' / ' . $st->getCurrentPhase() . ': ' . $st->getCurrentPhaseName() . ' / '. $story->getName();
+		$desiredCapabilities['name'] = $st->getTestEnvironmentName() . ' / ' . $st->getCurrentPhase() . ': ' . $st->getCurrentPhaseName() . ' / '. $story->getName();
 
 		// create the browser session
 		$webDriver = new WebDriverClient($url);

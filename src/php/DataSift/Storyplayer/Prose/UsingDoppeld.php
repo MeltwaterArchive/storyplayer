@@ -59,22 +59,15 @@ class UsingDoppeld extends Prose
 	{
 		// shorthand
 		$st  = $this->st;
-		$env = $st->getEnvironment();
 
 		// what are we doing?
 		$log = $st->startAction("start doppeld with test scenario '{$testCaseName}' ({$testCase})");
 
-		// make sure this environment is configured for doppeld
-		if (!isset($env->doppeld)) {
-			throw new E5xx_ActionFailed(__METHOD__, "environment has no configuration for doppeld");
-		}
-		if (!isset($env->doppeld->dir)) {
-			throw new E5xx_ActionFailed(__METHOD__, "doppeld configuration has no 'dir' setting");
-		}
-		$doppelDir = $env->doppeld->dir;
+		// get the settings for doppeld
+		$appSettings = $st->fromConfig()->getAppSettings('doppeld');
 
 		// build up the command to run
-		$command = "cd '{$doppelDir}' && node ./server.js {$testCase}";
+		$command = "cd '{$appSettings->doppelDir}' && node ./server.js {$testCase}";
 
 		// run the command
 		$log->addStep("start doppeld with command '{$command}'", function() use($st, $command, $testCaseName) {

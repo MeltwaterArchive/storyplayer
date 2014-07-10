@@ -19,26 +19,26 @@ class ConfigUserLoader implements UserGenerator
         $runtimeConfig = $st->getRuntimeConfig();
 
         // what environment are we working in?
-        $envName = $st->getEnvironmentName();
+        $testEnvName = $st->getTestEnvironmentName();
 
         // do we have a cached user from a previous storyplayer?
-        if (isset($runtimeConfig->users, $runtimeConfig->users->$envName))
+        if (isset($runtimeConfig->users, $runtimeConfig->users->$testEnvName))
         {
             $user = new User();
-            $user->mergeFrom($runtimeConfig->users->$envName);
-            $runtimeConfig->users->$envName = $user;
+            $user->mergeFrom($runtimeConfig->users->$testEnvName);
+            $runtimeConfig->users->$testEnvName = $user;
 
             return $user;
         }
 
         // if we get here, then there's no previous user to reuse
         if (!isset($runtimeConfig->users)) {
-            $runtimeConfig->users = (object)array();
+            $runtimeConfig->users = new stdClass();
         }
-        $runtimeConfig->users->$envName = $this->generator->getUser($st);
+        $runtimeConfig->users->$testEnvName = $this->generator->getUser($st);
 
         // all done
-        return $runtimeConfig->users->$envName;
+        return $runtimeConfig->users->$testEnvName;
     }
 
     public function storeUser(StoryTeller $st, $user)

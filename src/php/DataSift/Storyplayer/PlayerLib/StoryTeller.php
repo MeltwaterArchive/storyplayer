@@ -189,9 +189,8 @@ class StoryTeller
 	private $deviceName = null;
 	private $deviceAdapter = null;
 
-	// the environment we are running in
-	private $localEnv = null;
-	private $localEnvName = null;
+	// the config that Storyplayer is running with
+	private $config = null;
 
 	// the environment we are testing
 	private $testEnv = null;
@@ -220,18 +219,21 @@ class StoryTeller
 		// create our Phase Loader
 		$this->setPhaseLoader($injectables->phaseLoader);
 
-		// remember the environment we are testing against
-		// $this->setEnvironment($injectables->staticConfig->envName, $injectables->staticConfig->env);
-
 		// remember the device we are testing with
 		$this->setDevice($injectables->activeDeviceName, $injectables->activeDevice);
 
 		// remember the defines from config file & command line
-		$this->setDefines($injectables->staticConfig->defines);
+		$this->setDefines($injectables->activeConfig->defines);
+
+		// the config that we have loaded
+		$this->setConfig($injectables->activeConfig);
 
         // our runtime config
         $this->setRuntimeConfig($injectables->runtimeConfig);
         $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
+
+        // our test environment
+        $this->setTestEnvironment($injectables->activeTestEnvironmentName, $injectables->activeTestEnvironment);
 	}
 
 	// ==================================================================
@@ -469,16 +471,21 @@ class StoryTeller
 	//
 	// --------------------------------------------------------------------
 
-	public function getLoadedConfig()
+	public function getConfig()
 	{
 		// get our config
-		$return = clone $this->staticConfig;
+		$return = clone $this->config;
 
 		// now, apply all of the defines that we know about
 		// TBD
 
 		// all done
 		return $return;
+	}
+
+	public function setConfig($config)
+	{
+		$this->config = $config;
 	}
 
 	public function getTestEnvironment()

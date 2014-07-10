@@ -71,13 +71,14 @@ class HostBase extends Prose
 		}
 
 		// shorthand
-		$name = $args[0];
+		$name = $st->getTestEnvironmentName() . '::' . $args[0];
 
 		// do we know anything about this host?
 		$hostsTable = $st->fromHostsTable()->getHostsTable();
 		if (!isset($hostsTable->$name)) {
 			$this->hostDetails = new BaseObject();
-			$this->hostDetails->name = $name;
+			$this->hostDetails->name = $args[0];
+			$this->hostDetails->nameInHostsTable = $name;
 			$this->hostDetails->invalidHost = true;
 		}
 		else {

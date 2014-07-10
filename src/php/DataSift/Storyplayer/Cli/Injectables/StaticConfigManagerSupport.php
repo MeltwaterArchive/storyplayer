@@ -57,7 +57,7 @@ trait Injectables_StaticConfigManagerSupport
 {
 	public $staticConfigManager;
 
-	public function initStaticConfigManagerSupport(Injectables $injectables)
+	public function initStaticConfigManagerSupport()
 	{
 		// create an object to manage the static config
 		$this->staticConfigManager = new StaticConfigManager;

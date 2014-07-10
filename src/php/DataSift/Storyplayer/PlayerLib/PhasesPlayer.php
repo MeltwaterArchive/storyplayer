@@ -173,7 +173,7 @@ class PhasesPlayer
 				$output->logPhaseError($phaseName, "uncaught exception: " . (string)$e->getMessage());
 
 				// we need to create a dummy phase result for this
-				$phaseResult = new PhaseResult;
+				$phaseResult = new PhaseResult($phaseName);
 				$phaseResult->setPlayingFailed(PhaseResult::FAILED, self::MSG_PHASE_FAILED, $e);
 				// $phaseResults->addPhaseResult($phaseName, $phaseResult);
 
@@ -184,7 +184,7 @@ class PhasesPlayer
 				$phase->announcePhaseEnd();
 
 				// run no more phases
-				break 2;
+				return $phaseResults;
 			}
 		}
 

@@ -143,6 +143,7 @@ class PlayStory_Command extends CliCommand
         }
         catch (Exception $e) {
             $injectables->output->logCliError($e->getMessage());
+            $engine->options->dev = true;
             if (isset($engine->options->dev) && $engine->options->dev) {
                 $injectables->output->logCliError("Stack trace is:\n\n" . $e->getTraceAsString());
             }
@@ -194,12 +195,6 @@ class PlayStory_Command extends CliCommand
 
         // build our list of stories to run
         $this->initStoryList($engine, $injectables, $params);
-
-        // setup our Prose loader
-        $this->initProseLoader($injectables);
-
-        // setup our Phases loader
-        $this->initPhaseLoader($injectables);
 
         // setup our Reports loader
         $this->initReportLoader($injectables);
@@ -286,26 +281,6 @@ class PlayStory_Command extends CliCommand
      * @param  Injectables $injectables
      * @return void
      */
-    protected function initPhaseLoader(Injectables $injectables)
-    {
-        $injectables->initPhaseLoaderSupport($injectables);
-    }
-
-    /**
-     *
-     * @param  Injectables $injectables
-     * @return void
-     */
-    protected function initProseLoader(Injectables $injectables)
-    {
-        $injectables->initProseLoaderSupport($injectables);
-    }
-
-    /**
-     *
-     * @param  Injectables $injectables
-     * @return void
-     */
     protected function initReportLoader(Injectables $injectables)
     {
         $injectables->initReportLoaderSupport($injectables);
@@ -363,7 +338,7 @@ class PlayStory_Command extends CliCommand
      * @param  array       $cliParams
      * @return void
      */
-    protected function initStoryList(CliEngine $engine, Injectables $injectables, $cliParams)
+    protected function initStoryList(CliEngine $cliEngine, Injectables $injectables, $cliParams)
     {
         // our list of stories to play
         $this->storyList = [];
@@ -412,9 +387,9 @@ class PlayStory_Command extends CliCommand
         $return = [
             new StoryPlayer(
                 $storyFile,
-                $injectables->staticConfig->phases->startup,
-                $injectables->staticConfig->phases->story,
-                $injectables->staticConfig->phases->shutdown
+                $injectables->activeConfig->phases->startup,
+                $injectables->activeConfig->phases->story,
+                $injectables->activeConfig->phases->shutdown
             )
         ];
 
@@ -440,29 +415,29 @@ class PlayStory_Command extends CliCommand
 
         // support for reusing test environments
         if ($tale->options->reuseTestEnvironment) {
-            $injectables->staticConfig->phases->story->testEnvironmentSetup = false;
-            $injectables->staticConfig->phases->story->testEnvironmentTeardown = false;
+            $injectables->activeConfig->phases->story->testEnvironmentSetup = false;
+            $injectables->activeConfig->phases->story->testEnvironmentTeardown = false;
         }
         else {
             // we are not reusing test environments, so ALWAYS create
             // and destroy
-            $injectables->staticConfig->phases->story->testEnvironmentSetup = true;
-            $injectables->staticConfig->phases->story->testEnvironmentTeardown = true;
+            $injectables->activeConfig->phases->story->testEnvironmentSetup = true;
+            $injectables->activeConfig->phases->story->testEnvironmentTeardown = true;
         }
         // our first story ALWAYS needs to create the test environment
-        $firstStoryPhases = clone $injectables->staticConfig->phases->story;
+        $firstStoryPhases = clone $injectables->activeConfig->phases->story;
         $firstStoryPhases->testEnvironmentSetup = true;
 
         // our last story ALWAYS needs to destroy the test environment
-        $lastStoryPhases  = clone $injectables->staticConfig->phases->story;
+        $lastStoryPhases  = clone $injectables->activeConfig->phases->story;
         $lastStoryPhases->testEnvironmentTeardown = true;
 
         foreach ($tale->stories as $storyFile) {
             $return[] = new StoryPlayer(
                 $storyFile,
-                $injectables->staticConfig->phases->startup,
-                $injectables->staticConfig->phases->story,
-                $injectables->staticConfig->phases->shutdown
+                $injectables->activeConfig->phases->startup,
+                $injectables->activeConfig->phases->story,
+                $injectables->activeConfig->phases->shutdown
             );
         }
 

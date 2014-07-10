@@ -100,7 +100,7 @@ class TestEnvironmentSetupPlayer extends StoryPlayer
 			$story->getName(),
 			$story->getCategory(),
 			$story->getGroup(),
-			$st->getEnvironmentName(),
+			$st->getTestEnvironmentName(),
 			$st->getDeviceName()
 		);
 

@@ -120,6 +120,6 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 */
 	public function saveRuntimeConfig($config)
 	{
-		return $this->configLoader->saveRuntimeConfig($config, self::APP_NAME, 'runtime.json');
+		return $this->configHelper->saveRuntimeConfig($config, self::APP_NAME, 'runtime.json');
 	}
 }

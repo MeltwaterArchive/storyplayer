@@ -76,6 +76,8 @@ trait CommonFunctionalitySupport
 			new Common_TestEnvironmentSupport,
 			new Common_ColorSupport,
 			new Common_ConsoleSupport,
+			new Common_PhaseLoaderSupport,
+			new Common_ProseLoaderSupport,
 		];
 
 		// let each object register any switches that they need

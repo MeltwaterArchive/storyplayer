@@ -56,12 +56,12 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_NoSuchTargetEnvironment extends Exxx_Exception
+class E4xx_NoSuchTestEnvironment extends Exxx_Exception
 {
     public function __construct($envName)
     {
-    	$msg = "Unknown target environment '{$envName}'; we have no config for it" . PHP_EOL . PHP_EOL
-    	     . "Use 'storyplayer list-target-environments' to see the list of known targets";
+    	$msg = "Unknown test environment '{$envName}'; we have no config for it" . PHP_EOL . PHP_EOL
+    	     . "Use 'storyplayer list-test-environments' to see the list of known test environments";
         parent::__construct(400, $msg, $msg);
     }
 }

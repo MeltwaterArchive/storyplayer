@@ -115,7 +115,7 @@ class AnnounceStoryPlayer
 			$story->getName(),
 			$story->getCategory(),
 			$story->getGroup(),
-			$st->getEnvironmentName(),
+			$st->getTestEnvironmentName(),
 			$st->getDeviceName()
 		);
 

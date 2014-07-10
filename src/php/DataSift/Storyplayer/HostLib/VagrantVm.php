@@ -99,15 +99,15 @@ class VagrantVm implements SupportedHost
 		}
 
 		// make sure the folder exists
-		$env = $st->getEnvironment();
-		if (!isset($env->vagrant)) {
-			throw new E5xx_ActionFailed(__METHOD__, "'vagrant' section missing in configuration for current environment");
+		$config = $st->getConfig();
+		if (!isset($config->vagrant)) {
+			throw new E5xx_ActionFailed(__METHOD__, "'vagrant' section missing in your storyplayer.json config file");
 		}
-		if (!isset($env->vagrant->dir)) {
-			throw new E5xx_ActionFailed(__METHOD__, "'dir' setting missing from 'vagrant' section of environment config");
+		if (!isset($config->vagrant->dir)) {
+			throw new E5xx_ActionFailed(__METHOD__, "'dir' setting missing from 'vagrant' section of your storyplayer.json config file");
 		}
 
-		$pathToHomeFolder = $env->vagrant->dir . '/' . $vmDetails->homeFolder;
+		$pathToHomeFolder = $config->vagrant->dir . '/' . $vmDetails->homeFolder;
 		if (!is_dir($pathToHomeFolder)) {
 			throw new E5xx_ActionFailed(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
 		}

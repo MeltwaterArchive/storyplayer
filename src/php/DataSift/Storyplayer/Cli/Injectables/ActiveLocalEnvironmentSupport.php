@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use DataSift\Stone\ObjectLib\BaseObject;
+
 /**
  * support for the local environment that the user chooses
  *
@@ -55,20 +57,17 @@ namespace DataSift\Storyplayer\Cli;
  */
 trait Injectables_ActiveLocalEnvironmentSupport
 {
-	public $activeLocalEnvironment;
 	public $activeLocalEnvironmentName;
 
 	public function initActiveLocalEnvironment($envName, $injectables)
 	{
         // does the local environment exist?
         if (!isset($injectables->knownLocalEnvironments->$envName)) {
-            var_dump($injectables->knownLocalEnvironments);
             throw new E4xx_NoSuchLocalEnvironment($envName);
         }
 
         // build the environment that we want
-        $this->activeLocalEnvironment = clone $injectables->staticConfig;
-        $this->activeLocalEnvironment->mergeFrom($injectables->knownLocalEnvironments->$envName);
+        $this->activeConfig->mergeFrom($injectables->knownLocalEnvironments->$envName);
 
         // remember the environment name, just in case
         $this->activeLocalEnvironmentName = $envName;

@@ -88,7 +88,7 @@ class Common_ConsoleSupport implements Common_Functionality
         // switch output plugins first, before we do anything else at all
         if (isset($engine->options->dev) && $engine->options->dev) {
             // switch our main output to 'dev mode'
-            $this->output->usePlugin('console', new DevModeConsole());
+            $output->usePlugin('console', new DevModeConsole());
 
             // dev mode means 'show me everything'
             $engine->options->verbosity = 2;

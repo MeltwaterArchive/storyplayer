@@ -59,23 +59,23 @@ class CheckBlacklistedPhase extends InternalPrePhase
 	public function doPhase()
 	{
 		// shorthand
-		$st      = $this->st;
-		$story   = $st->getStory();
-		$env     = $st->getEnvironment();
-		$envName = $st->getEnvironmentName();
+		$st          = $this->st;
+		$story       = $st->getStory();
+		$testEnv     = $st->getTestEnvironment();
+		$testEnvName = $st->getTestEnvironmentName();
 
 		// our result object
 		$phaseResult = new PhaseResult($this->getPhaseName());
 
 		// is this story allowed to run on the current environment?
 		$blacklistedEnvironment = false;
-		if (isset($env->mustBeWhitelisted) && $env->mustBeWhitelisted) {
+		if (isset($testEnv->settings, $testEnv->settings->mustBeWhitelisted) && $testEnv->settings->mustBeWhitelisted) {
 			// by default, stories are not allowed to run on this environment
 			$blacklistedEnvironment = true;
 
 			// is this story allowed to run?
 			$whitelistedEnvironments = $story->getWhitelistedEnvironments();
-			if (isset($whitelistedEnvironments[$envName]) && $whitelistedEnvironments[$envName]) {
+			if (isset($whitelistedEnvironments[$testEnvName]) && $whitelistedEnvironments[$testEnvName]) {
 				$blacklistedEnvironment = false;
 			}
 		}
@@ -85,7 +85,7 @@ class CheckBlacklistedPhase extends InternalPrePhase
 			// no, we are not
 			$phaseResult->setSkipPlaying(
 				PhaseResult::BLACKLISTED,
-				"Cannot run story against the environment '{$envName}'"
+				"Cannot run story against the environment '{$testEnvName}'"
 			);
 			return $phaseResult;
 		}
