@@ -82,7 +82,7 @@ class Common_ConsoleSupport implements Common_Functionality
     public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
         // shorthand
-        $staticConfig = $injectables->staticConfig;
+        $staticConfig = $injectables->activeConfig;
         $output       = $injectables->output;
 
         // switch output plugins first, before we do anything else at all

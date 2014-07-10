@@ -70,7 +70,7 @@ use Datasift\netifaces\NetifacesException;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StaticConfig extends BaseObject
+class DefaultConfig extends BaseObject
 {
     public $appSettings;
     public $defines;
@@ -98,8 +98,8 @@ class StaticConfig extends BaseObject
         $this->configs->localEnvironments = [
             getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/local-environments',
         ];
-        $this->configs->targetEnvironments = [
-            getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/target-environments'
+        $this->configs->testEnvironments = [
+            getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/test-environments'
         ];
 
         // defaults for LogLib
@@ -143,7 +143,7 @@ class StaticConfig extends BaseObject
         $this->defines = new BaseObject();
     }
 
-    public function initPhases()
+    public function checkPhases()
     {
         // make sure that phases.namespaces is correctly defined
         if (isset($this->phases->namespaces)) {
@@ -153,7 +153,7 @@ class StaticConfig extends BaseObject
         }
     }
 
-    public function initProse()
+    public function checkProse()
     {
         // make sure that prose.namespaces is correctly defined
         if (isset($this->prose, $this->prose->namespaces)) {
@@ -163,7 +163,7 @@ class StaticConfig extends BaseObject
         }
     }
 
-    public function initReports()
+    public function checkReports()
     {
         // where are we looking?
         if (isset($this->reports, $this->reports->namespaces)) {

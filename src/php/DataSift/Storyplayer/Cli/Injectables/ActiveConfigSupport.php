@@ -67,7 +67,7 @@ trait Injectables_ActiveConfigSupport
 
 		// create our default config - the config that we'll use
 		// unless the config file on disk overrides it
-		$this->activeConfig = new StaticConfig();
+		$this->activeConfig = new DefaultConfig();
 
 		try {
 			// try to load our main config file
