@@ -47,6 +47,7 @@ use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Output;
 use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Storyplayer\Prose\E4xx_ObsoleteProse;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
@@ -99,7 +100,7 @@ use DataSift\Storyplayer\DeviceLib;
  * @method DataSift\Storyplayer\Prose\FromRuntimeTable fromRuntimeTable(string $tableName)
  * @method DataSift\Storyplayer\Prose\FromSauceLabs fromSauceLabs()
  * @method DataSift\Storyplayer\Prose\FromShell fromShell()
- * @method DataSift\Storyplayer\Prose\FromTargetEnvironment fromTargetEnvironment()
+ * @method DataSift\Storyplayer\Prose\FromTestEnvironment fromTestEnvironment()
  * @method DataSift\Storyplayer\Prose\FromUuid fromUuid()
  * @method DataSift\Storyplayer\Prose\UsingBrowser usingBrowser()
  * @method DataSift\Storyplayer\Prose\UsingCheckpoint usingCheckpoint()
@@ -193,8 +194,8 @@ class StoryTeller
 	private $localEnvName = null;
 
 	// the environment we are testing
-	private $targetEnv = null;
-	private $targetEnvName = null;
+	private $testEnv = null;
+	private $testEnvName = null;
 
 	// story / template params
 	private $defines = [];
@@ -480,23 +481,23 @@ class StoryTeller
 		return $return;
 	}
 
-	public function getTargetEnvironment()
+	public function getTestEnvironment()
 	{
-		return $this->targetEnv;
+		return $this->testEnv;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getTargetEnvironmentName()
+	public function getTestEnvironmentName()
 	{
-		return $this->targetEnvName;
+		return $this->testEnvName;
 	}
 
-	public function setTargetEnvironment($envName, $env)
+	public function setTestEnvironment($envName, $env)
 	{
-		$this->targetEnvName = $envName;
-		$this->targetEnv     = $env;
+		$this->testEnvName = $envName;
+		$this->testEnv     = $env;
 	}
 
 	public function getRuntimeConfig()
@@ -751,5 +752,19 @@ class StoryTeller
 
 		// all done
 		$log->endAction();
+	}
+
+	// ==================================================================
+	//
+	// Features from v1 that we no longer support
+	//
+	// ------------------------------------------------------------------
+
+	public function getEnvironment()
+	{
+		throw new E4xx_ObsoleteProse(
+			'$st->getEnvironment()',
+			'either $st->getConfig() or $st->fromTestEnvironment()'
+		);
 	}
 }
