@@ -2,6 +2,7 @@
 
 namespace DataSift\Storyplayer\UserLib;
 
+use stdClass;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class ConfigUserLoader implements UserGenerator

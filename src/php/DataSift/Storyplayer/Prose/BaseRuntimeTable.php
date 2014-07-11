@@ -91,20 +91,10 @@ class BaseRuntimeTable extends Prose
 
         // get the runtime config
         $runtimeConfig = $st->getRuntimeConfig();
+        $runtimeConfigManager = $st->getRuntimeConfigManager();
 
-        // make sure the storyplayer section exists
-        if (!isset($runtimeConfig->storyplayer)){
-            $runtimeConfig->storyplayer = new BaseObject;
-        }
-
-        // and that the tables section exists
-        if (!isset($runtimeConfig->storyplayer->tables)){
-            $runtimeConfig->storyplayer->tables = new BaseObject;
-        }
-
-        return $runtimeConfig->storyplayer->tables;
+        return $runtimeConfigManager->getAllTables($runtimeConfig);
     }
-
 }
 
 

@@ -59,8 +59,8 @@ class FromRuntimeTable extends BaseRuntimeTable
      *
      * @return object The table from the config
      */
-    public function getTable(){
-
+    public function getTable()
+    {
         // shorthand
         $st = $this->st;
 
@@ -81,6 +81,34 @@ class FromRuntimeTable extends BaseRuntimeTable
         // all done
         $log->endAction();
         return $tables->$tableName;
+    }
+
+    public function getGroupFromTable($group)
+    {
+        // shorthand
+        $st = $this->st;
+
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = $st->startAction("get '{$tableName}->{$group}' table group from runtime config");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure we have a table
+        if (!isset($tables->$tableName)){
+            $tables->$tableName = new BaseObject();
+        }
+        // make sure we have a group
+        if (!isset($tables->$tableName->$group)) {
+            $tables->$tableName->$group = new BaseObject;
+        }
+
+        // all done
+        $log->endAction();
+        return $tables->$tableName->$group;
     }
 
     /**
@@ -125,6 +153,55 @@ class FromRuntimeTable extends BaseRuntimeTable
         $log->endAction();
         return $tables->$tableName->$key;
     }
+
+
+    /**
+     * Get details for a specific key from a group
+     *
+     * @param string $key
+     *        The key to look for inside the tableName table
+     *
+     * @return stdClass The details stored under $key
+     */
+    public function getDetailsFromGroup($group, $key)
+    {
+        // shorthand
+        $st = $this->st;
+
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = $st->startAction("get details for '{$group}->{$key}' from {$tableName} table");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure we have a table
+        if (!isset($tables->$tableName)) {
+            $msg = "Table is empty / does not exist";
+            $log->endAction($msg);
+
+            return null;
+        }
+
+        // make sure we have the group
+        if (!isset($tables->$tableName->$group)) {
+            $msg = "Table has no group '{$group}'";
+            $log->endAction($msg);
+
+            return null;
+        }
+
+        // do we have the entry we're looking for?
+        if (!isset($tables->$tableName->$group->$key)) {
+            $msg = "Table does not contain an entry for '{$group}->{$key}'";
+            $log->endAction($msg);
+            return null;
+        }
+
+        // all done
+        $log->endAction();
+        return $tables->$tableName->$group->$key;
+    }
 }
-
-

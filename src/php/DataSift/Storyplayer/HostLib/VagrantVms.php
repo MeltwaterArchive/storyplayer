@@ -50,7 +50,7 @@ use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * the things you can do / learn about Vagrant virtual machine
+ * the things you can do / learn about a group of Vagrant virtual machines
  *
  * @category  Libraries
  * @package   Storyplayer/HostLib
@@ -59,7 +59,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class VagrantVm implements SupportedHost
+class VagrantVms implements SupportedHost
 {
 	/**
 	 *
@@ -83,46 +83,54 @@ class VagrantVm implements SupportedHost
 	 * @param  array $provisioningVars
 	 * @return void
 	 */
-	public function createHost($vmDetails, $provisioningVars = array())
+	public function createHost($envDetails, $provisioningVars = array())
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction('provision new VM');
+		$log = $st->startAction('create new VM');
 
 		// make sure we like the provided details
-		foreach(array('name', 'osName', 'homeFolder') as $param) {
-			if (!isset($vmDetails->$param)) {
-				throw new E5xx_ActionFailed(__METHOD__, "missing vmDetails['{$param}']");
+		if (!isset($envDetails->homeFolder)) {
+			throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->homeFolder");
+		}
+		if (!isset($envDetails->machines)) {
+			throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines");
+		}
+		if (empty($envDetails->machines)) {
+			throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
+		}
+		foreach($envDetails->machines as $name => $machine) {
+			// TODO: it would be great to autodetect this one day
+			if (!isset($machine->osName)) {
+				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$name']->osName");
 			}
 		}
 
 		// make sure the folder exists
-		$config = $st->getConfig();
-		if (!isset($config->storyplayer->modules->vagrant)) {
-			throw new E5xx_ActionFailed(__METHOD__, "'vagrant' section missing in your storyplayer.json config file");
-		}
-		if (!isset($config->storyplayer->modules->vagrant->dir)) {
-			throw new E5xx_ActionFailed(__METHOD__, "'dir' setting missing from 'vagrant' section of your storyplayer.json config file");
-		}
-
-		$pathToHomeFolder = $config->storyplayer->modules->vagrant->dir . '/' . $vmDetails->homeFolder;
+		$vagrantDir = $st->fromConfig()->getModuleSetting('vagrant', 'dir');
+		$pathToHomeFolder = $vagrantDir . '/' . $envDetails->homeFolder;
 		if (!is_dir($pathToHomeFolder)) {
 			throw new E5xx_ActionFailed(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
 		}
 
 		// remember where the Vagrantfile is
-		$vmDetails->dir = $pathToHomeFolder;
+		$envDetails->dir = $pathToHomeFolder;
 
 		// make sure the VM is stopped, if it is running
-		$log->addStep("stop vagrant VM in '{$pathToHomeFolder}' if already running", function() use($vmDetails) {
+		$log->addStep("stop vagrant VM in '{$pathToHomeFolder}' if already running", function() use($envDetails) {
 			$command = "vagrant destroy --force";
-			$this->runCommandAgainstHostManager($vmDetails, $command);
+			$this->runCommandAgainstHostManager($envDetails, $command);
 		});
 
 		// remove any existing hosts table entry
-		$st->usingHostsTable()->removeHost($vmDetails->name);
+		foreach ($envDetails->machines as $name => $machine) {
+			$st->usingHostsTable()->removeHost($name);
+
+			// remove any roles
+			$st->usingRolesTable()->removeHostFromAllRoles($name);
+		}
 
 		// let's start the VM
 		$command = "cd '{$pathToHomeFolder}' && vagrant up";
@@ -138,29 +146,56 @@ class VagrantVm implements SupportedHost
 		}
 
 		// yes it did!!
-		//
-		// now, we need its IP address
-		$ipAddress = $this->determineIpAddress($vmDetails);
 
-		// store the IP address for future use
-		$vmDetails->ipAddress = $ipAddress;
+		// store the details
+		foreach($envDetails->machines as $name => $machine)
+		{
+			// we want all the details from the config file
+			$vmDetails = clone $machine;
 
-		// mark the box as provisioned
-		// we will use this in stopBox() to avoid destroying VMs that failed
-		// to provision
-		$vmDetails->provisioned = true;
+			// this allows the story to perform actions against a single
+			// machine if required
+			$vmDetails->type        = 'VagrantVm';
 
-		// remember this vm, now that it is running
-		$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
+			// new in v2.x:
+			//
+			// when provisioning a folder of vagrant vms, we now use
+			// the same name for the VM that vagrant uses
+			$vmDetails->name        = $name;
 
-		// now, let's get this VM into our SSH known_hosts file, to avoid
-		// prompting people when we try and provision this VM
-		$log->addStep("get the VM into the SSH known_hosts file", function() use($st, $vmDetails) {
-			$st->usingHost($vmDetails->name)->runCommand("ls");
-		});
+			// remember where the machine lives
+			$vmDetails->dir         = $pathToHomeFolder;
+
+			// remember how to connect to the machine via the network
+			$vmDetails->ipAddress   = $this->determineIpAddress($vmDetails);
+
+			// we need to remember how to SSH into the box
+			$vmDetails->sshUsername = 'vagrant';
+			$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
+			$vmDetails->sshOptions  = array (
+				"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
+			);
+
+			// mark the box as provisioned
+			// we will use this in stopBox() to avoid destroying VMs that failed
+			// to provision
+			$vmDetails->provisioned = true;
+
+			// remember this vm, now that it is running
+			$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
+			foreach ($vmDetails->roles as $role) {
+				$st->usingRolesTable()->addHostToRole($vmDetails, $role);
+			}
+
+			// now, let's get this VM into our SSH known_hosts file, to avoid
+			// prompting people when we try and provision this VM
+			$log->addStep("get the VM into the SSH known_hosts file", function() use($st, $vmDetails) {
+				$st->usingHost($vmDetails->name)->runCommand("ls");
+			});
+		}
 
 		// all done
-		$log->endAction("VM successfully started; IP address is {$ipAddress}");
+		$log->endAction();
 	}
 
 	/**
@@ -170,43 +205,9 @@ class VagrantVm implements SupportedHost
 	 */
 	public function startHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("start VM");
-
-		// is the VM actually running?
-		if ($this->isRunning($vmDetails)) {
-			// yes it is ... nothing to do
-			//
-			// we've decided not to treat this as an error ... that might
-			// change in a future release
-			$log->endAction("VM is already running");
-			return;
-		}
-
-		// let's start the VM
-		$command = "cd '{$vmDetails->dir}' && vagrant up";
-		$retVal = 1;
-		passthru($command, $retVal);
-
-		// did it work?
-		if ($retVal !== 0) {
-			$log->endAction("VM failed to start or re-provision :(");
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-
-		// yes it did!!
-		//
-		// now, we need its IP address, which may have changed
-		$ipAddress = $this->determineIpAddress($vmDetails);
-
-		// store the IP address for future use
-		$vmDetails->ipAddress = $ipAddress;
-
-		// all done
-		$log->endAction("VM successfully started; IP address is {$ipAddress}");
+		// if you really want to do this from your story, use
+		// $st->usingVagrantVm()->startHost()
+		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
 	}
 
 	/**
@@ -216,33 +217,9 @@ class VagrantVm implements SupportedHost
 	 */
 	public function stopHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("stop VM");
-
-		// is the VM actually running?
-		if (!$this->isRunning($vmDetails)) {
-			// we've decided not to treat this as an error ... that might
-			// change in a future release
-			$log->endAction("VM was already stopped or destroyed");
-			return;
-		}
-
-		// yes it is ... shut it down
-		$command = "cd '{$vmDetails->dir}' && vagrant halt";
-		$retVal = 1;
-		passthru($command, $retVal);
-
-		// did it work?
-		if ($retVal !== 0) {
-			$log->endAction("VM failed to shutdown :(");
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-
-		// all done - success!
-		$log->endAction("VM successfully stopped");
+		// if you really want to do this from your story, use
+		// $st->usingVagrantVm()->stopHost()
+		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
 	}
 
 	/**
@@ -252,18 +229,9 @@ class VagrantVm implements SupportedHost
 	 */
 	public function restartHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("restart VM");
-
-		// stop and start
-		$this->stopHost($vmDetails);
-		$this->startHost($vmDetails);
-
-		// all done
-		$log->endAction("VM successfully restarted");
+		// if you really want to do this from your story, use
+		// $st->usingVagrantVm()->restartHost()
+		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
 	}
 
 	/**
@@ -273,33 +241,9 @@ class VagrantVm implements SupportedHost
 	 */
 	public function powerOffHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("power off VM");
-
-		// is the VM actually running?
-		if (!$this->isRunning($vmDetails)) {
-			// we've decided not to treat this as an error ... that might
-			// change in a future release
-			$log->endAction("VM was already stopped or destroyed");
-			return;
-		}
-
-		// yes it is ... shut it down
-		$command = "cd '{$vmDetails->dir}' && vagrant halt --force";
-		$retVal = 1;
-		passthru($command, $retVal);
-
-		// did it work?
-		if ($retVal !== 0) {
-			$log->endAction("VM failed to power off :(");
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-
-		// all done - success!
-		$log->endAction("VM successfully powered off");
+		// if you really want to do this from your story, use
+		// $st->usingVagrantVm()->powerOffHost()
+		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
 	}
 
 	/**

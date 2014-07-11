@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Stone\ObjectLib\BaseObject;
+
 /**
  * manipulate the internal roles table
  *
@@ -53,7 +55,7 @@ namespace DataSift\Storyplayer\Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingHostsTable extends Prose
+class UsingRolesTable extends Prose
 {
 	/**
 	 * entryKey
@@ -66,16 +68,39 @@ class UsingHostsTable extends Prose
 	/**
 	 * addHost
 	 *
+	 * @param string $hostDetails
+	 *        Details about the host to add to the role
 	 * @param string $roleName
 	 *        Role name to add
-	 * @param string $roleDetails
-	 *        Details about this role
 	 *
 	 * @return void
 	 */
-	public function addRole($roleName, $roleDetails)
+	public function addHostToRole($hostDetails, $roleName)
 	{
-		$this->st->usingRuntimeTable($this->entryKey)->addItem($roleName, $roleDetails);
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("add host '{$hostDetails->name}' to role '{$roleName}'");
+
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
+
+		// get the existing role details
+		$roleDetails = $st->fromRolesTable()->getDetailsForRole($roleName);
+		if (!$roleDetails) {
+			$roleDetails = new BaseObject;
+		}
+
+		// add this host to the role
+		$hostName = $hostDetails->name;
+		$roleDetails->$hostName = $hostDetails;
+
+		// save the updated role
+		$st->saveRuntimeConfig();
+
+		// all done
+		$log->endAction();
 	}
 
 	/**
@@ -86,8 +111,56 @@ class UsingHostsTable extends Prose
 	 *
 	 * @return void
 	 */
-	public function removeRole($roleName)
+	public function removeHostFromRole($hostName, $roleName)
 	{
-		$this->st->usingRuntimeTable($this->entryKey)->removeItem($roleName);
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("remove host '{$hostName}' from '{$roleName}'");
+
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
+
+		// get the existing role details
+		$roleDetails = $st->fromRolesTable()->getDetailsForRole($roleName);
+
+		// do we have this host in the role?
+		if (isset($roleDetails->$hostName)) {
+			unset($ruleDetails->$hostName);
+
+			// force a save to disk
+			$st->saveRuntimeConfig();
+		}
+
+		// all done
+		$log->endAction();
+	}
+
+	public function removeHostFromAllRoles($hostName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("remove host '{$hostName}' from all roles");
+
+		// get the roles table
+		$roles = $st->fromRolesTable()->getRolesTable();
+
+		// seek and destroy :)
+		foreach ($roles as $roleName => $hosts) {
+			foreach ($hosts as $hostDetails) {
+				if ($hostDetails->name = $hostName) {
+					unset ($roles->$roleName->$hostName);
+				}
+			}
+		}
+
+		// force a save, in case anything changed
+		$st->saveRuntimeConfig();
+
+		// all done
+		$log->endAction();
 	}
 }

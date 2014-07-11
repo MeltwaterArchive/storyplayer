@@ -92,15 +92,23 @@ trait Injectables_ActiveConfigSupport
 		));
 		$this->activeConfig->storyplayer->mergeFrom($config);
 
-		// we know what the test environment's config *file* contains
-		// (if anything), but we don't yet know any of the config that
-		// can be expanded
-		//
-		// but, for now, we can create the empty config structures that
-		// will get filled out when we execute the (internal)
-		// testEnvironmentConstruction phase
-		$this->activeConfig->hosts = new BaseObject;
-		$this->activeConfig->roles = new BaseObject;
+        // we need to link the hostsTable and rolesTable for this
+        // test environment into the activeConfig
+        $runtimeConfig        = $injectables->runtimeConfig;
+        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $testEnvName          = $injectables->activeTestEnvironmentName;
+
+		$hostsTable = $runtimeConfigManager->getTable($runtimeConfig, 'hosts');
+        if (!isset($hostsTable->$testEnvName)) {
+            $hostsTable->$testEnvName = new BaseObject;
+        }
+        $this->activeConfig->hosts = $hostsTable->$testEnvName;
+
+		$rolesTable = $runtimeConfigManager->getTable($runtimeConfig, 'roles');
+        if (!isset($rolesTable->$testEnvName)) {
+            $rolesTable->$testEnvName = new BaseObject;
+        }
+        $this->activeConfig->roles = $rolesTable->$testEnvName;
 
 		// all done
 		return $this->activeConfig;

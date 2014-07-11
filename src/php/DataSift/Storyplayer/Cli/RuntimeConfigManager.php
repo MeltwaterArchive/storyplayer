@@ -44,12 +44,10 @@
 namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper class for making sure the user has somewhere to save the
- * 'runtime config' (the persistent state) to
- *
- * This probably needs moving into Stone in the future
+ * Helper class for working with Storyplayer's persistent state
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -121,5 +119,50 @@ class RuntimeConfigManager extends ConfigManagerBase
 	public function saveRuntimeConfig($config)
 	{
 		return $this->configHelper->saveRuntimeConfig($config, self::APP_NAME, 'runtime.json');
+	}
+
+    /**
+     * getAllTables
+     *
+     * Return our tables config that we can use for
+     * in place editing
+     *
+     * @return BaseObject
+     */
+    public function getAllTables($runtimeConfig)
+    {
+        // make sure the storyplayer section exists
+        if (!isset($runtimeConfig->storyplayer)) {
+            $runtimeConfig->storyplayer = new BaseObject;
+        }
+
+        // and that the tables section exists
+        if (!isset($runtimeConfig->storyplayer->tables)) {
+            $runtimeConfig->storyplayer->tables = new BaseObject;
+        }
+
+        return $runtimeConfig->storyplayer->tables;
+	}
+
+	/**
+	 * return a single table from the persistent config
+	 *
+	 * if the table does not exist, this will create an empty table
+	 * before returning it to the caller
+	 *
+	 * @param  BaseObject $runtimeConfig
+	 *         our persistent config
+	 * @param  string $tableName
+	 *         the name of the table we want
+	 * @return BaseObject
+	 */
+	public function getTable($runtimeConfig, $tableName)
+	{
+		$tables = $this->getAllTables($runtimeConfig);
+		if (!isset($tables->$tableName)) {
+			$tables->$tableName = new BaseObject;
+		}
+
+		return $tables->$tableName;
 	}
 }

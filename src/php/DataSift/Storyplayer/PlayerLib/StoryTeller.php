@@ -53,6 +53,8 @@ use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\DeviceLib;
 
+use DataSift\Stone\ObjectLib\BaseObject;
+
 /**
  * our main facilitation class
  *
@@ -199,10 +201,16 @@ class StoryTeller
 	// story / template params
 	private $defines = [];
 
+	// our template engine, used to expand $testEnv
+	private $templateEngine = null;
+
 	public function __construct(Injectables $injectables)
 	{
 		// remember our output object
 		$this->setOutput($injectables->output);
+
+        // our template engine
+        $this->setTemplateEngine($injectables->templateEngine);
 
 		// set a default page context
 		$this->setPageContext(new PageContext);
@@ -233,7 +241,7 @@ class StoryTeller
         $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
 
         // our test environment
-        $this->setTestEnvironment($injectables->activeTestEnvironmentName, $injectables->activeTestEnvironment);
+        $this->setTestEnvironment($injectables->activeTestEnvironmentName, $injectables->activeTestEnvironmentConfig);
 	}
 
 	// ==================================================================
@@ -465,6 +473,16 @@ class StoryTeller
 		$this->output = $output;
 	}
 
+	public function getTemplateEngine()
+	{
+		return $this->templateEngine;
+	}
+
+	public function setTemplateEngine($templateEngine)
+	{
+		$this->templateEngine = $templateEngine;
+	}
+
 	// ====================================================================
 	//
 	// Helpers to get parts of the story's context go here
@@ -490,7 +508,25 @@ class StoryTeller
 
 	public function getTestEnvironment()
 	{
-		return $this->testEnv;
+		return $this->config;
+	}
+
+	public function getTestEnvironmentConfig()
+	{
+		// expand the config, filling in any template vars that we
+		// can
+		$config = json_decode($this->templateEngine->render(
+			$this->testEnvConfig,
+			(array)$this->config
+		));
+
+		// convert the config to our BaseObject, so that the caller can
+		// take advantage of what it adds
+		$return = new BaseObject;
+		$return->mergeFrom($config);
+
+		// all done
+		return $return;
 	}
 
 	/**
@@ -501,10 +537,10 @@ class StoryTeller
 		return $this->testEnvName;
 	}
 
-	public function setTestEnvironment($envName, $env)
+	public function setTestEnvironment($envName, $envConfig)
 	{
-		$this->testEnvName = $envName;
-		$this->testEnv     = $env;
+		$this->testEnvName   = $envName;
+		$this->testEnvConfig = $envConfig;
 	}
 
 	public function getRuntimeConfig()
@@ -772,6 +808,14 @@ class StoryTeller
 		throw new E4xx_ObsoleteProse(
 			'$st->getEnvironment()',
 			'either $st->getConfig() or $st->fromTestEnvironment()'
+		);
+	}
+
+	public function getEnvironmentName()
+	{
+		throw new E4xx_ObsoleteProse(
+			'$st->getEnvironmentName()',
+			'$st->fromTestEnvironment()->getName()'
 		);
 	}
 }

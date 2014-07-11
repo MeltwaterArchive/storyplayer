@@ -64,7 +64,7 @@ class FromConfig extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get $setting for '{$app}' from the loaded config");
+		$log = $st->startAction("get $setting for '{$app}' from the storyplayer config");
 
 		// get the details
 		$config = $st->getConfig();
@@ -88,7 +88,7 @@ class FromConfig extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get all settings for '{$app}' from the loaded config");
+		$log = $st->startAction("get all settings for '{$app}' from the storyplayer config");
 
 		// get the details
 		$config = $st->getConfig();
@@ -112,14 +112,20 @@ class FromConfig extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get $setting for '{$module}' from the loaded config");
+		$log = $st->startAction("get $setting for '{$module}' from the storyplayer config");
 
 		// get the details
 		$config = $st->getConfig();
-		if (!isset($config->modules, $config->modules->$module, $config->modules->$module->$setting)) {
-			throw new E5xx_ActionFailed(__METHOD__);
+		if (!isset($config->storyplayer->modules)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no 'modules' section in your storyplayer.json config");
 		}
-		$value = $config->modules->$module->$setting;
+		if (!isset($config->storyplayer->modules->$module)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no 'modules->$module' section in your storyplayer.json config");
+		}
+		if (!isset($config->storyplayer->modules->$module->$setting)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no 'modules->{$module}->{$setting}' setting in your storyplayer.json config");
+		}
+		$value = $config->storyplayer->modules->$module->$setting;
 
 		// log the settings
 		$printer  = new DataPrinter();
@@ -136,14 +142,17 @@ class FromConfig extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get all settings for '{$module}' from the loaded config");
+		$log = $st->startAction("get all settings for '{$module}' from the storyplayer config");
 
 		// get the details
 		$config = $st->getConfig();
-		if (!isset($config->modules, $config->modules->$module)) {
-			throw new E5xx_ActionFailed(__METHOD__);
+		if (!isset($config->storyplayer->modules)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no 'modules' section in your storyplayer.json config");
 		}
-		$value = $config->modules->$module;
+		if (!isset($config->storyplayer->modules->$module)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no 'modules->$module' section in your storyplayer.json config");
+		}
+		$value = $config->storyplayer->modules->$module;
 
 		// log the settings
 		$printer  = new DataPrinter();

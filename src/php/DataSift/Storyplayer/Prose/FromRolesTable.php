@@ -71,7 +71,21 @@ class FromRolesTable extends Prose
      */
     public function getRolesTable()
     {
-        return $this->st->fromRuntimeTable($this->entryKey)->getTable();
+        // shorthand
+        $st = $this->st;
+
+        // what are we doing?
+        $log = $st->startAction("get the roles table for the current test environment");
+
+        // which test environment are we working with?
+        $testEnvName = $st->getTestEnvironmentName();
+
+        // what is our roles table for this test environment?
+        $rolesTable = $this->st->fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+
+        // all done
+        $log->endAction();
+        return $rolesTable;
     }
 
     /**
@@ -84,6 +98,20 @@ class FromRolesTable extends Prose
      */
     public function getDetailsForRole($roleName)
     {
-        return $this->st->fromRuntimeTable($this->entryKey)->getDetails($roleName);
+        // shorthand
+        $st = $this->st;
+
+        // what are we doing?
+        $log = $st->startAction("get details for role '{$roleName}' for the current test environment");
+
+        // which test environment are we working with?
+        $testEnvName = $st->getTestEnvironmentName();
+
+        // get what we need
+        $roleDetails = $st->fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $roleName);
+
+        // all done
+        $log->endAction();
+        return $roleDetails;
     }
 }

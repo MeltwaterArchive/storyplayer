@@ -464,7 +464,7 @@ class PlayStory_Command extends CliCommand
         echo "\n";
 
         // cleanup
-        $phasesPlayer = new PhasesPlayer();
+        $phasesPlayer = new Phases_Player();
         $phasesPlayer->playPhases(
             $this->st,
             $this->injectables,

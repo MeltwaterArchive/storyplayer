@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
 use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
@@ -64,40 +65,30 @@ class TestEnvironmentConstructionPhase extends StoryPhase
 	public function doPhase()
 	{
 		// shorthand
-		$st          = $this->st;
-		$storyResult = $st->getStoryResult();
+		$st = $this->st;
 
 		// our return value
 		$phaseResult = $this->getNewPhaseResult();
 
-		// shorthand
-		$story = $st->getStory();
+		// find out what we need to be doing
+		$testEnvironmentConfig = (array)$st->getTestEnvironmentConfig();
 
-		// do we have anything to do?
-		if (!$story->hasTestEnvironmentConstruction())
-		{
+		// are there any machines to create?
+		if (empty($testEnvironmentConfig)) {
 			// nothing to do
-			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no test environment construction instructions"
-			);
-
-			// as far as the rest of the test is concerned, the setup was
-			// a success
+			$phaseResult->setContinuePlaying();
 			return $phaseResult;
 		}
 
-		// get the callbacks to call
-		$callbacks = $story->getTestEnvironmentSetup();
-
-		// make the call
+		// create the machines
 		try {
-			foreach ($callbacks as $callback){
-				call_user_func($callback, $st);
+			foreach ($testEnvironmentConfig as $host) {
+				$hostAdapter = HostLib::getHostAdapter($st, $host->type);
+				$hostAdapter->createHost($host->details);
 			}
 
 			$phaseResult->setContinuePlaying();
-			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
+			$phaseResult->addPairedPhase('TestEnvironmentDemolition');
 		}
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(
@@ -105,7 +96,6 @@ class TestEnvironmentConstructionPhase extends StoryPhase
 				$e->getMessage(),
 				$e
 			);
-			$storyResult->setStoryHasFailed($phaseResult);
 		}
 		catch (E5xx_ExpectFailed $e) {
 			$phaseResult->setPlayingFailed(
@@ -113,7 +103,6 @@ class TestEnvironmentConstructionPhase extends StoryPhase
 				$e->getMessage(),
 				$e
 			);
-			$storyResult->setStoryHasFailed($phaseResult);
 		}
 		// if any of the tests are incomplete, deal with that too
 		catch (E5xx_NotImplemented $e) {
@@ -122,7 +111,6 @@ class TestEnvironmentConstructionPhase extends StoryPhase
 				$e->getMessage(),
 				$e
 			);
-			$storyResult->setStoryIsIncomplete($phaseResult);
 		}
 		catch (Exception $e) {
 			$phaseResult->setPlayingFailed(
@@ -131,7 +119,12 @@ class TestEnvironmentConstructionPhase extends StoryPhase
 				$e
 			);
 			$phaseResult->addPairedPhase('TestEnvironmentDemolition');
-			$storyResult->setStoryHasFailed($phaseResult);
+		}
+
+		if (!$phaseResult->getPhaseSucceeded()) {
+			var_dump($phaseResult->getMessage());
+			var_dump($phaseResult->getException()->getTraceAsString());
+			exit(1);
 		}
 
 		// all done

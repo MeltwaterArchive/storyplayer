@@ -71,7 +71,7 @@ class HostBase extends Prose
 		}
 
 		// shorthand
-		$name = $st->getTestEnvironmentName() . '::' . $args[0];
+		$name = $args[0];
 
 		// do we know anything about this host?
 		$hostsTable = $st->fromHostsTable()->getHostsTable();
