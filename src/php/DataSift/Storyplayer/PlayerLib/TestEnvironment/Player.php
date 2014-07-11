@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 use DataSift\Storyplayer\Cli\Injectables;
 
 /**
- * a way to destroy test environments outside stories
+ * constructs / demolishes test environments around stories / tales
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,18 +55,18 @@ use DataSift\Storyplayer\Cli\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironmentTeardownPlayer extends Story_Player
+class TestEnvironment_Player extends BasePlayer
 {
-	/**
-	 * path to the story that we are going to play
-	 *
-	 * @var string
-	 */
-	protected $storyFilename;
+	protected $startupPhases;
+	protected $shutdownPhases;
+	protected $wrappedPlayer;
 
-	public function __construct($storyFilename)
+	public function __construct($wrappedPlayer, Injectables $injectables)
 	{
-		$this->storyFilename = $storyFilename;
+		$this->wrappedPlayer = $wrappedPlayer;
+
+		$this->startupPhases  = $injectables->activeConfig->storyplayer->phases->testEnvStartup;
+		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->testEnvShutdown;
 	}
 
 	public function play(StoryTeller $st, Injectables $injectables)
@@ -77,64 +77,25 @@ class TestEnvironmentTeardownPlayer extends Story_Player
         // we're going to use this to play our setup and teardown phases
         $phasesPlayer = new Phases_Player();
 
-        // load our story
-        $story = Story_Loader::loadStory($this->storyFilename);
-        $st->setStory($story);
-
-        // initialise the user
-        $context = $st->getStoryContext();
-        $context->initUser($st);
-
         // run the startup phase
         $phasesPlayer->playPhases(
         	$st,
         	$injectables,
-        	$injectables->staticConfig->phases->startup
+        	$this->startupPhases
         );
 
-		// set default callbacks up
-		$story->setDefaultCallbacks();
-
-		// tell the outside world what we're doing
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getEnvironmentName(),
-			$st->getDeviceName()
-		);
-
-		// run the phases in the 'story' section
-		$phaseResults = $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story
-		);
-
-		// play the 'paired' phases too, in case they haven't yet
-		// executed correctly
-		$phasesPlayer->playPairedPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story,
-			$phaseResults
-		);
-
-		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($phaseResults);
-
-		// announce the results
-		$output->endStory($storyResult);
+        // now we need to play whatever runs against this
+        // test environment
+        $return = $this->wrappedPlayer->play($st, $injectables);
 
 		// run the shutdown phase
         $phasesPlayer->playPhases(
 			$st,
 			$injectables,
-			$injectables->staticConfig->phases->shutdown
+			$this->shutdownPhases
         );
 
 		// all done
-		return $storyResult;
+		return $return;
 	}
 }

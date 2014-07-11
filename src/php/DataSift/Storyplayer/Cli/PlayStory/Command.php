@@ -58,6 +58,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\Story_Context;
 use DataSift\Storyplayer\PlayerLib\Story_Player;
 use DataSift\Storyplayer\PlayerLib\Tale_Player;
+use DataSift\Storyplayer\PlayerLib\TestEnvironment_Player;
 use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
@@ -385,7 +386,10 @@ class PlayStory_Command extends CliCommand
     {
         // these are the players we want to execute for the story
         $return = [
-            new Story_Player($storyFile, $injectables)
+            new TestEnvironment_Player(
+                new Story_Player($storyFile, $injectables),
+                $injectables
+            )
         ];
 
         // all done
