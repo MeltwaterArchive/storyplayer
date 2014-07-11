@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\PlayerLib\ReportLoader;
+use DataSift\Storyplayer\PlayerLib\Report_Loader;
 
 /**
  * support for our ReportLoader service
@@ -66,7 +66,7 @@ trait Injectables_ReportLoaderSupport
 	public function initReportLoaderSupport(Injectables $injectables)
 	{
 		// we will use this to load different reports
-		$this->reportLoader = new ReportLoader();
+		$this->reportLoader = new Report_Loader();
 
 		// does the user have any namespaces of their own that they
 		// want to search?

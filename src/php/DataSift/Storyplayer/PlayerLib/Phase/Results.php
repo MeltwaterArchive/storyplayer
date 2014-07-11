@@ -43,11 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\Phases\Phase;
 
 /**
- * Helper for loading a single story, and verifying that the story was
- * properly created after being loaded
+ * tracks the result from executing multiple phases
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -56,51 +55,49 @@ use DataSift\Storyplayer\StoryLib\Story;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryLoader
+
+class Phase_Results
 {
-	/**
-	 * singleton - do not instantiate
-	 * @codeCoverageIgnore
-	 */
-	protected function __construct()
+	const RESULT_COMPLETE    = 1;
+	const RESULT_FAILED      = 2;
+	const RESULT_BLACKLISTED = 3;
+	const RESULT_INCOMPLETE  = 4;
+
+	protected $phaseResults = [];
+
+	protected $finalResult = 1;
+
+	public function addResult(Phase $phase, Phase_Result $phaseResult)
 	{
-		// do nothing
+		$phaseName = $phase->getPhaseName();
+		$this->phaseResults[$phaseName] = [
+			'phase'  => $phase,
+			'result' => $phaseResult
+		];
 	}
 
-	/**
-	 * load a story, throwing exceptions if problems are detected
-	 *
-	 * @param  string $filename
-	 *         path to the PHP file containing the story
-	 * @return Story
-	 *         the story object
-	 */
-	static public function loadStory($filename)
+	public function getFinalResult()
 	{
-		if (!file_exists($filename)) {
-			throw new E5xx_InvalidStoryFile("Cannot find file '{$filename}' to load");
-		}
+		return $this->finalResult;
+	}
 
-		// load the story
-		include($filename);
+	public function setPhasesHaveSucceeded()
+	{
+		$this->finalResult = self::RESULT_COMPLETE;
+	}
 
-		// there should now be a $story in scope
-		if (!isset($story)) {
-			throw new E5xx_InvalidStoryFile("Story file '{$filename}' did not create the \$story variable");
-		}
+	public function setPhasesHaveFailed()
+	{
+		$this->finalResult = self::RESULT_FAILED;
+	}
 
-		// make sure we have the right story
-		if (!$story instanceof Story) {
-			throw new E5xx_InvalidStoryFile("Story file '{$filename}' did create a \$story variable, but it is of type '" . get_class($story) . "' instead of type 'DataSift\Storyplayer\StoryLib\Story'");
-		}
+	public function setPhasesAreBlacklisted()
+	{
+		$this->finalResult = self::RESULT_BLACKLISTED;
+	}
 
-		// now that the story is built, we want to parse the source code
-		//
-		// we're going to use the source code if we need to explain why
-		// a story failed or errored
-		$story->buildParseTrees(realpath($filename));
-
-		// all done
-		return $story;
+	public function setPhasesAreIncomplete()
+	{
+		$this->finalResult = self::RESULT_INCOMPLETE;
 	}
 }

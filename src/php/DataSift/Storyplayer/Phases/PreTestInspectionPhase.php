@@ -44,9 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
-use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
-use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 /**
  * the PreTestInspectionSetup phase
@@ -69,13 +69,13 @@ class PreTestInspectionPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our result
-		$phaseResult = new PhaseResult($this->getPhaseName());
+		$phaseResult = $this->getNewPhaseResult();
 
 		// do we have anything to do?
 		if (!$story->hasPreTestInspection())
 		{
 			$phaseResult->setContinuePlaying(
-				PhaseResult::HASNOACTIONS,
+				$phaseResult::HASNOACTIONS,
 				"story has no pre-test inspection instructions"
 			);
 			return $phaseResult;
@@ -99,7 +99,7 @@ class PreTestInspectionPhase extends StoryPhase
 		}
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::FAILED,
+				$phaseResult::FAILED,
 				$e->getMessage(),
 				$e
 			);
@@ -108,7 +108,7 @@ class PreTestInspectionPhase extends StoryPhase
 		catch (E5xx_ExpectFailed $e) {
 			$msg = "pre-test inspection failed; " . (string)$e;
 			$phaseResult->setPlayingFailed(
-				PhaseResult::FAILED,
+				$phaseResult::FAILED,
 				$e->getMessage(),
 				$e
 			);
@@ -116,7 +116,7 @@ class PreTestInspectionPhase extends StoryPhase
 		}
 		catch (E5xx_NotImplemented $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::INCOMPLETE,
+				$phaseResult::INCOMPLETE,
 				$e->getMessage(),
 				$e
 			);
@@ -124,7 +124,7 @@ class PreTestInspectionPhase extends StoryPhase
 		}
 		catch (Exception $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::ERROR,
+				$phaseResult::ERROR,
 				$e->getMessage(),
 				$e
 			);

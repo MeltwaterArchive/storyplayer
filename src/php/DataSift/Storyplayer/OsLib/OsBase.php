@@ -62,7 +62,7 @@ abstract class OsBase implements SupportedOs
 {
 	/**
 	 *
-	 * @var DataSift\StoryPlayer\PlayerLib\StoryTeller;
+	 * @var DataSift\Storyplayer\PlayerLib\StoryTeller;
 	 */
 	protected $st;
 	protected $sshClients;

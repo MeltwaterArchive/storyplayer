@@ -1034,7 +1034,7 @@ class Story
 	/**
 	 * pick one action at random, and return it to the caller
 	 *
-	 * @return callback(StoryContext)
+	 * @return callback(Story_Context)
 	 */
 	public function getOneAction()
 	{

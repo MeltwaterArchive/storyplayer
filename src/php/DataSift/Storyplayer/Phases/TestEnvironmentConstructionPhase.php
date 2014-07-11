@@ -34,71 +34,107 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
-use DataSift\StoryPlayer\Phases\Phase;
-use DataSift\StoryPlayer\Phases\PhaseResult;
+use Exception;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 /**
- * tracks the result from executing multiple phases
+ * the TestEnvironmentConstruction phase
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class PhaseResults
+class TestEnvironmentConstructionPhase extends StoryPhase
 {
-	const RESULT_COMPLETE    = 1;
-	const RESULT_FAILED      = 2;
-	const RESULT_BLACKLISTED = 3;
-	const RESULT_INCOMPLETE  = 4;
-
-	protected $phaseResults = [];
-
-	protected $finalResult = 1;
-
-	public function addResult(Phase $phase, PhaseResult $phaseResult)
+	public function doPhase()
 	{
-		$phaseName = $phase->getPhaseName();
-		$this->phaseResults[$phaseName] = [
-			'phase'  => $phase,
-			'result' => $phaseResult
-		];
-	}
+		// shorthand
+		$st          = $this->st;
+		$storyResult = $st->getStoryResult();
 
-	public function getFinalResult()
-	{
-		return $this->finalResult;
-	}
+		// our return value
+		$phaseResult = $this->getNewPhaseResult();
 
-	public function setPhasesHaveSucceeded()
-	{
-		$this->finalResult = self::RESULT_COMPLETE;
-	}
+		// shorthand
+		$story = $st->getStory();
 
-	public function setPhasesHaveFailed()
-	{
-		$this->finalResult = self::RESULT_FAILED;
-	}
+		// do we have anything to do?
+		if (!$story->hasTestEnvironmentConstruction())
+		{
+			// nothing to do
+			$phaseResult->setContinuePlaying(
+				$phaseResult::HASNOACTIONS,
+				"story has no test environment construction instructions"
+			);
 
-	public function setPhasesAreBlacklisted()
-	{
-		$this->finalResult = self::RESULT_BLACKLISTED;
-	}
+			// as far as the rest of the test is concerned, the setup was
+			// a success
+			return $phaseResult;
+		}
 
-	public function setPhasesAreIncomplete()
-	{
-		$this->finalResult = self::RESULT_INCOMPLETE;
+		// get the callbacks to call
+		$callbacks = $story->getTestEnvironmentSetup();
+
+		// make the call
+		try {
+			foreach ($callbacks as $callback){
+				call_user_func($callback, $st);
+			}
+
+			$phaseResult->setContinuePlaying();
+			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
+		}
+		catch (E5xx_ActionFailed $e) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		// if any of the tests are incomplete, deal with that too
+		catch (E5xx_NotImplemented $e) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::INCOMPLETE,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
+		}
+		catch (Exception $e) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::ERROR,
+				$e->getMessage(),
+				$e
+			);
+			$phaseResult->addPairedPhase('TestEnvironmentDemolition');
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+
+		// all done
+		return $phaseResult;
 	}
 }

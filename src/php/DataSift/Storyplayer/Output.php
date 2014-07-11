@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
-use DataSift\Storyplayer\PlayerLib\StoryResult;
+use DataSift\Storyplayer\PlayerLib\Story_Result;
 use DataSift\Storyplayer\OutputLib\OutputPlugin;
 use DataSift\Storyplayer\Console\DefaultConsole;
 
@@ -147,10 +147,10 @@ class Output implements OutputPlugin
 	/**
 	 * called when a story finishes
 	 *
-	 * @param StoryResult $storyResult
+	 * @param Story_Result $storyResult
 	 * @return void
 	 */
-	public function endStory(StoryResult $storyResult)
+	public function endStory(Story_Result $storyResult)
 	{
 		foreach ($this->plugins as $plugin)
 		{

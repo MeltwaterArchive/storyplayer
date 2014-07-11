@@ -59,7 +59,7 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 class E5xx_MissingFailedPhase extends Exxx_Exception
 {
 	public function __construct() {
-		$msg = "StoryResult->failedPhase cannot be null";
+		$msg = "Story_Result->failedPhase cannot be null";
 		parent::__construct(500, $msg, $msg);
 	}
 }

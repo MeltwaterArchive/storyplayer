@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\HostLib;
 
-use DataSift\StoryPlayer\CommandLib\CommandResult;
+use DataSift\Storyplayer\CommandLib\CommandResult;
 
 /**
  * the things you can do / learn about a supported (and possibly remote)

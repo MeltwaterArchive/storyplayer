@@ -53,11 +53,11 @@ use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\LogLib\Log;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\PhasesPlayer;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryPlayer;
+use DataSift\Storyplayer\PlayerLib\Phases_Player;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\PlayerLib\Story_Context;
+use DataSift\Storyplayer\PlayerLib\Story_Player;
+use DataSift\Storyplayer\PlayerLib\Tale_Player;
 use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
@@ -231,7 +231,7 @@ class PlayStory_Command extends CliCommand
         foreach ($this->storyList as $player)
         {
             // create the supporting context for this test run
-            $context = new StoryContext($injectables);
+            $context = new Story_Context($injectables);
 
             // track the context
             $st->setStoryContext($context);
@@ -385,12 +385,7 @@ class PlayStory_Command extends CliCommand
     {
         // these are the players we want to execute for the story
         $return = [
-            new StoryPlayer(
-                $storyFile,
-                $injectables->activeConfig->storyplayer->phases->startup,
-                $injectables->activeConfig->storyplayer->phases->story,
-                $injectables->activeConfig->storyplayer->phases->shutdown
-            )
+            new Story_Player($storyFile, $injectables)
         ];
 
         // all done
@@ -411,7 +406,7 @@ class PlayStory_Command extends CliCommand
         //
         // this gives us a stdClass of the tale file, with defaults
         // added to the options section if required
-        $tale = TaleLoader::loadTale($taleFile);
+        $tale = Tale_Loader::loadTale($taleFile);
 
         // support for reusing test environments
         if ($tale->options->reuseTestEnvironment) {
@@ -433,12 +428,7 @@ class PlayStory_Command extends CliCommand
         $lastStoryPhases->testEnvironmentTeardown = true;
 
         foreach ($tale->stories as $storyFile) {
-            $return[] = new StoryPlayer(
-                $storyFile,
-                $injectables->activeConfig->phases->startup,
-                $injectables->activeConfig->phases->story,
-                $injectables->activeConfig->phases->shutdown
-            );
+            $return[] = new StoryPlayer($storyFile);
         }
 
         if ($tale->options->reuseTestEnvironment) {
@@ -501,7 +491,7 @@ class PlayStory_Command extends CliCommand
 
         foreach ($storyResults as $result)
         {
-            echo StoryPlayer::$outcomeToText[$result->resultCode] . " :: " . $result->story->getName() . "\n";
+            echo Story_Player::$outcomeToText[$result->resultCode] . " :: " . $result->story->getName() . "\n";
         }
     }
 

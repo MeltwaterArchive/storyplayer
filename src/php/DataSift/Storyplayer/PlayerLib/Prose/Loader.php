@@ -43,10 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Reports\Report;
+use DataSift\Storyplayer\Prose\Prose;
 
 /**
- * Helper class to load OutputPlugin classes and create objects from them
+ * Helper class to load Prose classes and create objects from them
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,46 +55,53 @@ use DataSift\Storyplayer\Reports\Report;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ReportLoader
+class Prose_Loader
 {
 	private $namespaces = array(
-		"Reports",
-		"DataSift\\Storyplayer\\Reports"
+		"Prose",
+		"DataSift\\Storyplayer\\Prose"
 	);
 
 	public function setNamespaces($namespaces = array())
 	{
 		// a list of the namespaces we're going to search for this class
 		//
-		// we always search the generic 'Reports' namespace first, in case
-		// users don't want to uniquely namespace their Report classes
-		$this->namespaces = array ("Reports");
+		// we always search the generic 'Prose' namespace first, in case
+		// users don't want to uniquely namespace their Prose classes
+		$this->namespaces = array ("Prose");
 
-		// add in any additional namespaces we've been asked to search
+		// append the namespaces we've been asked to search
 		foreach ($namespaces as $namespace) {
 			$this->namespaces[] = $namespace;
 		}
 
 		// we search our own namespace last, as it allows the user to
-		// replace our Reports with their own if they prefer
-		$this->namespaces[] = "DataSift\\Storyplayer\\Reports";
+		// replace our Prose with their own if they prefer
+		$this->namespaces[] = "DataSift\\Storyplayer\\Prose";
 	}
 
-	public function determineReportClassFor($reportName)
+	public function determineProseClassFor($methodName)
 	{
-		$className = ucfirst($reportName) . 'Report';
+		// this new, simplified naming scheme was introduced for
+		// Storyplayer 1.4
+		//
+		// it isn't considered a b/c break, because we didn't document
+		// how to create modules until v1.4 was released
+		$className = ucfirst($methodName);
 
 		// all done
 		return $className;
 	}
 
-	public function loadReport($reportName, $constructorArgs = null)
+	/**
+	 * @param string $className
+	 */
+	public function loadProse(StoryTeller $st, $className, $constructorArgs)
 	{
 		// can we find the class?
 		foreach ($this->namespaces as $namespace) {
 			// what is the full name of the class (inc namespace) to
 			// search for?
-			$className           = $this->determineReportClassFor($reportName);
 			$namespacedClassName = $namespace . "\\" . $className;
 
 			// is there such a class?
@@ -103,12 +110,12 @@ class ReportLoader
 				//
 				// create an instance of the class
 				$return = new $namespacedClassName(
-					$constructorArgs
-				);
+					$st,
+					$constructorArgs);
 
-				// make sure our new object is an instance of 'Report'
-				if (!$return instanceof Report) {
-					throw new E5xx_NotAReportClass($namespacedClassName);
+				// make sure our new object is an instance of 'Prose'
+				if (!$return instanceof Prose) {
+					throw new E5xx_NotAProseClass($namespacedClassName);
 				}
 
 				// return our newly-minted object
@@ -118,6 +125,22 @@ class ReportLoader
 
 		// if we get there, then we cannot find a suitable class in
 		// any of the namespaces that we know about
-		throw new E4xx_NoSuchReport($reportName);
+		return null;
+	}
+
+	/**
+	 * this needs moving into its own trait perhaps, or into a static
+	 * inside the Stone library
+	 *
+	 * @param  [type] $methodName [description]
+	 * @return [type]             [description]
+	 */
+	protected function convertMethodNameToWords($methodName)
+	{
+		// turn the method name into an array of words
+		$words = explode(' ', strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1 $2", $methodName)));
+
+		// all done
+		return $words;
 	}
 }

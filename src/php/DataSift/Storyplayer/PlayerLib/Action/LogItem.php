@@ -55,7 +55,7 @@ use DataSift\Stone\LogLib\Log;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ActionLogItem
+class Action_LogItem
 {
 	private $nestLevel;
 	private $user;
@@ -120,7 +120,7 @@ class ActionLogItem
 
 		if (!is_object($openItem) || $openItem->isComplete()) {
 			// we have no open actions - start a new one
-			$openItem = new ActionLogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
+			$openItem = new Action_LogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
 			$this->nestedActions[] = $openItem;
 		}
 		else {
@@ -236,7 +236,7 @@ class ActionLogItem
 	public function addStep($text, $callable)
 	{
 		// create a log item for this step
-		$action = new ActionLogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
+		$action = new Action_LogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
 		$action->startAction($this->user, $text);
 
 		// add it to our collection

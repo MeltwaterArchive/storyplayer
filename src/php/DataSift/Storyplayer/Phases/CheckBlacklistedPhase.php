@@ -65,7 +65,7 @@ class CheckBlacklistedPhase extends InternalPrePhase
 		$testEnvName = $st->getTestEnvironmentName();
 
 		// our result object
-		$phaseResult = new PhaseResult($this->getPhaseName());
+		$phaseResult = $this->getNewPhaseResult();
 
 		// is this story allowed to run on the current environment?
 		$blacklistedEnvironment = false;
@@ -84,7 +84,7 @@ class CheckBlacklistedPhase extends InternalPrePhase
 		if ($blacklistedEnvironment) {
 			// no, we are not
 			$phaseResult->setSkipPlaying(
-				PhaseResult::BLACKLISTED,
+				$phaseResult::BLACKLISTED,
 				"Cannot run story against the environment '{$testEnvName}'"
 			);
 			return $phaseResult;

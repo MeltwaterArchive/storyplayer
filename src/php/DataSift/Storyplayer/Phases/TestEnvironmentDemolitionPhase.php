@@ -34,107 +34,109 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
-use DataSift\Storyplayer\Cli\Injectables;
+use Exception;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 /**
- * a way to destroy test environments outside stories
+ * the TestEnvironmentDemolition phase
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironmentTeardownPlayer extends StoryPlayer
+
+class TestEnvironmentDemolitionPhase extends StoryPhase
 {
-	/**
-	 * path to the story that we are going to play
-	 *
-	 * @var string
-	 */
-	protected $storyFilename;
-
-	public function __construct($storyFilename)
-	{
-		$this->storyFilename = $storyFilename;
-	}
-
-	public function play(StoryTeller $st, Injectables $injectables)
+	public function doPhase()
 	{
 		// shorthand
-		$output = $st->getOutput();
+		$st    = $this->st;
+		$story = $st->getStory();
 
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new PhasesPlayer();
+		// our result object
+		$phaseResult = $this->getNewPhaseResult();
 
-        // load our story
-        $story = StoryLoader::loadStory($this->storyFilename);
-        $st->setStory($story);
+		// do we have anything to do?
+		if (!$story->hasTestEnvironmentDemolition())
+		{
+			$phaseResult->setContinuePlaying(
+				$phaseResult::HASNOACTIONS,
+				"story has no test environment demolition instructions"
+			);
+			return $phaseResult;
+		}
 
-        // initialise the user
-        $context = $st->getStoryContext();
-        $context->initUser($st);
+		// get the callback to call
+		$callbacks = $story->getTestEnvironmentDemolition();
 
-        // run the startup phase
-        $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$injectables->staticConfig->phases->startup
-        );
+		// make the call
+		try {
+			foreach ($callbacks as $callback){
+				call_user_func($callback, $st);
+			}
 
-		// set default callbacks up
-		$story->setDefaultCallbacks();
+			// all is good
+			$phaseResult->setContinuePlaying();
+		}
+		catch (E5xx_ActionFailed $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				$phaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				$phaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
+		}
+		catch (E5xx_NotImplemented $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				$phaseResult::INCOMPLETE,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryIsIncomplete($phaseResult);
+		}
+		catch (Exception $e) {
+			// we always continue at this point, even though the phase
+			// itself failed
+			$phaseResult->setContinuePlaying(
+				$phaseResult::ERROR,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryHasError($phaseResult);
+		}
 
-		// tell the outside world what we're doing
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getEnvironmentName(),
-			$st->getDeviceName()
-		);
-
-		// run the phases in the 'story' section
-		$phaseResults = $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story
-		);
-
-		// play the 'paired' phases too, in case they haven't yet
-		// executed correctly
-		$phasesPlayer->playPairedPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story,
-			$phaseResults
-		);
-
-		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($phaseResults);
-
-		// announce the results
-		$output->endStory($storyResult);
-
-		// run the shutdown phase
-        $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->shutdown
-        );
+		// close off any open log actions
+		$st->closeAllOpenActions();
 
 		// all done
-		return $storyResult;
+		return $phaseResult;
 	}
 }

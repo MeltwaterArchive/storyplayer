@@ -43,11 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use stdClass;
+use DataSift\Storyplayer\Cli\Injectables;
 
 /**
- * Helper for loading a list of stories to run, and verifying that
- * it is a list we are happy with
+ * a way to destroy test environments outside stories
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -56,72 +55,86 @@ use stdClass;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TaleLoader
+class TestEnvironmentTeardownPlayer extends Story_Player
 {
 	/**
-	 * singleton - do not instantiate
-	 * @codeCoverageIgnore
+	 * path to the story that we are going to play
+	 *
+	 * @var string
 	 */
-	protected function __construct()
+	protected $storyFilename;
+
+	public function __construct($storyFilename)
 	{
-		// do nothing
+		$this->storyFilename = $storyFilename;
 	}
 
-	/**
-	 * load a story, throwing exceptions if problems are detected
-	 *
-	 * @param  string $filename
-	 *         path to the PHP file containing the story
-	 * @return Story
-	 *         the story object
-	 */
-	static public function loadTale($filename)
+	public function play(StoryTeller $st, Injectables $injectables)
 	{
-		if (!file_exists($filename)) {
-			throw new E5xx_InvalidStoryListFile("Cannot find file '{$filename}' to load");
-		}
+		// shorthand
+		$output = $st->getOutput();
 
-		// load the contents
-		$contents = file_get_contents($filename);
+        // we're going to use this to play our setup and teardown phases
+        $phasesPlayer = new Phases_Player();
 
-		// does it decode?
-		$tale = json_decode($contents);
-		if (!$tale) {
-			throw new E4xx_InvalidStoryListFile("Story list '{$filename}' does not contain valid JSON");
-		}
+        // load our story
+        $story = Story_Loader::loadStory($this->storyFilename);
+        $st->setStory($story);
 
-		// does it have the elements we require?
-		if (!isset($tale->stories)) {
-			throw new E4xx_InvalidStoryListFile("Story list '{$filename}' does not contain a 'stories' element");
-		}
-		if (!is_array($tale->stories)) {
-			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' must be an array");
-		}
-		if (count($tale->stories) == 0) {
-			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' cannot be an empty array");
-		}
+        // initialise the user
+        $context = $st->getStoryContext();
+        $context->initUser($st);
 
-		// our base directory to search from
-		$storiesBasedir = dirname($filename);
+        // run the startup phase
+        $phasesPlayer->playPhases(
+        	$st,
+        	$injectables,
+        	$injectables->staticConfig->phases->startup
+        );
 
-		// do all of the stories in the list exist?
-		foreach ($tale->stories as $index => $storyFile) {
- 			$realStoryFile = $storiesBasedir . DIRECTORY_SEPARATOR . $storyFile;
-			if (file_exists($realStoryFile)) {
-				throw new E4xx_InvalidStoryListFile("Cannot find the story file '{$realStoryFile}' on disk");
-			}
-			$tale->stories[$index] = $realStoryFile;
-		}
+		// set default callbacks up
+		$story->setDefaultCallbacks();
 
-		// inject defaults for optional fields
-		if (!isset($tale->options)) {
-			$tale->options = new stdClass();
-		}
-		if (!isset($tale->options->reuseTestEnvironment)) {
-			$tale->options->reuseTestEnvironment = false;
-		}
+		// tell the outside world what we're doing
+		$output->startStory(
+			$story->getName(),
+			$story->getCategory(),
+			$story->getGroup(),
+			$st->getEnvironmentName(),
+			$st->getDeviceName()
+		);
+
+		// run the phases in the 'story' section
+		$phaseResults = $phasesPlayer->playPhases(
+			$st,
+			$injectables,
+			$injectables->staticConfig->phases->story
+		);
+
+		// play the 'paired' phases too, in case they haven't yet
+		// executed correctly
+		$phasesPlayer->playPairedPhases(
+			$st,
+			$injectables,
+			$injectables->staticConfig->phases->story,
+			$phaseResults
+		);
+
+		// make sense of what happened
+		$storyResult = $st->getStoryResult();
+		$storyResult->calculateStoryResult($phaseResults);
+
+		// announce the results
+		$output->endStory($storyResult);
+
+		// run the shutdown phase
+        $phasesPlayer->playPhases(
+			$st,
+			$injectables,
+			$injectables->staticConfig->phases->shutdown
+        );
 
 		// all done
-		return $tale;
+		return $storyResult;
 	}
 }

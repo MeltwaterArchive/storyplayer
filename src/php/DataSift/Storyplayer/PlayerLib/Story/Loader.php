@@ -44,10 +44,10 @@
 namespace DataSift\Storyplayer\PlayerLib;
 
 use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\Phases\PhaseResult;
 
 /**
- * a record of what happened with a story
+ * Helper for loading a single story, and verifying that the story was
+ * properly created after being loaded
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -56,114 +56,51 @@ use DataSift\Storyplayer\Phases\PhaseResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryResult
+class Story_Loader
 {
 	/**
+	 * singleton - do not instantiate
+	 * @codeCoverageIgnore
+	 */
+	protected function __construct()
+	{
+		// do nothing
+	}
+
+	/**
+	 * load a story, throwing exceptions if problems are detected
 	 *
-	 * @var Story
+	 * @param  string $filename
+	 *         path to the PHP file containing the story
+	 * @return Story
+	 *         the story object
 	 */
-	public $story           = null;
-
-	/**
-	 *
-	 * @var PhaseResult
-	 */
-	public $failedPhase     = null;
-
-	/**
-	 * is this a story where a failure is the expected outcome?
-	 * @var boolean
-	 */
-	public $storyShouldFail = false;
-
-	/**
-	 * did the story pass, fail, or otherwise go horribly wrong?
-	 * @var integer
-	 */
-	public $resultCode     = 1;
-
-	/**
-	 * when did we start playing this story?
-	 * @var float
-	 */
-	public $startTime       = null;
-
-	/**
-	 * when did we finish playing this story?
-	 * @var float
-	 */
-	public $endTime         = null;
-
-	/**
-	 * how long did the story take to play?
-	 * @var float
-	 */
-	public $durationTime    = null;
-
-	const PASS        = 1;
-	const FAIL        = 2;
-	const ERROR       = 3;
-	const INCOMPLETE  = 4;
-	const BLACKLISTED = 5;
-
-	public function __construct(Story $story)
+	static public function loadStory($filename)
 	{
-		// remember the story we are reporting on
-		$this->story = $story;
+		if (!file_exists($filename)) {
+			throw new E5xx_InvalidStoryFile("Cannot find file '{$filename}' to load");
+		}
 
-		// remember when we were created - we're going to treat that
-		// as the start time for this story!
-		$this->startTime = microtime(true);
-	}
+		// load the story
+		include($filename);
 
-	public function getStoryShouldFail()
-	{
-		return $this->storyShouldFail;
-	}
+		// there should now be a $story in scope
+		if (!isset($story)) {
+			throw new E5xx_InvalidStoryFile("Story file '{$filename}' did not create the \$story variable");
+		}
 
-	public function setStoryShouldFail()
-	{
-		$this->storyShouldFail = true;
-	}
+		// make sure we have the right story
+		if (!$story instanceof Story) {
+			throw new E5xx_InvalidStoryFile("Story file '{$filename}' did create a \$story variable, but it is of type '" . get_class($story) . "' instead of type 'DataSift\Storyplayer\StoryLib\Story'");
+		}
 
-	public function setStoryHasSucceeded()
-	{
-		$this->resultCode  = self::PASS;
-		$this->failedPhase = null;
-	}
+		// now that the story is built, we want to parse the source code
+		//
+		// we're going to use the source code if we need to explain why
+		// a story failed or errored
+		$story->buildParseTrees(realpath($filename));
 
-	public function setStoryHasBeenBlacklisted()
-	{
-		$this->resultCode  = self::BLACKLISTED;
-		$this->failedPhase = null;
-	}
-
-	public function setStoryIsIncomplete(PhaseResult $phaseResult)
-	{
-		$this->resultCode  = self::INCOMPLETE;
-		$this->failedPhase = $phaseResult;
-	}
-
-	public function setStoryHasFailed(PhaseResult $phaseResult)
-	{
-		$this->resultCode  = self::FAIL;
-		$this->failedPhase = $phaseResult;
-	}
-
-	public function setStoryHasError(PhaseResult $phaseResult)
-	{
-		$this->resultCode  = self::ERROR;
-		$this->failedPhase = $phaseResult;
-	}
-
-	public function calculateStoryResult()
-	{
-		$this->setEndTime();
-	}
-
-	protected function setEndTime()
-	{
-		$this->endTime = microtime(true);
-		$this->durationTime = $this->endTime - $this->startTime;
+		// all done
+		return $story;
 	}
 }

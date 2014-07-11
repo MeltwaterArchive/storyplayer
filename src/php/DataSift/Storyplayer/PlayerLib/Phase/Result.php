@@ -41,10 +41,9 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Phases;
+namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
-use DataSift\StoryPlayer\PlayerLib\PhasesPlayer;
 
 /**
  * tracks the result from a single phase
@@ -67,7 +66,7 @@ use DataSift\StoryPlayer\PlayerLib\PhasesPlayer;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class PhaseResult
+class Phase_Result
 {
 	protected $phaseName;
 	protected $message;
@@ -198,7 +197,7 @@ class PhaseResult
 	 */
 	public function setContinuePlaying($result = 1, $msg = null, $e = null)
 	{
-		$this->nextAction = PhasesPlayer::NEXT_CONTINUE;
+		$this->nextAction = Phases_Player::NEXT_CONTINUE;
 		$this->result     = $result;
 		$this->message    = $msg;
 		$this->exception  = $e;
@@ -211,7 +210,7 @@ class PhaseResult
 	 */
 	public function setPlayingFailed($result, $msg, $e = null)
 	{
-		$this->nextAction = PhasesPlayer::NEXT_FAIL;
+		$this->nextAction = Phases_Player::NEXT_FAIL;
 		$this->result     = $result;
 		$this->message    = $msg;
 		$this->exception  = $e;
@@ -223,7 +222,7 @@ class PhaseResult
 	 */
 	public function setSkipPlaying($result, $msg)
 	{
-		$this->nextAction = PhasesPlayer::NEXT_SKIP;
+		$this->nextAction = Phases_Player::NEXT_SKIP;
 		$this->result     = $result;
 		$this->message    = $msg;
 	}

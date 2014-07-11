@@ -132,6 +132,10 @@ class DefaultConfig extends BaseObject
         $phases->story->ApplyRoleChanges = true;
         $phases->shutdown = new BaseObject();
         $phases->shutdown->ShutdownHandlers = true;
+        $phases->testEnvStartup = new BaseObject;
+        $phases->testEnvStartup->TestEnvironmentConstruction = true;
+        $phases->testEnvShutdown = new BaseObject;
+        $phases->testEnvShutdown->TestEnvironmentDestruction = true;
 
         $this->phases = $phases;
 

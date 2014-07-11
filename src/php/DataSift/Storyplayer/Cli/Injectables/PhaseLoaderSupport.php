@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\PlayerLib\PhaseLoader;
+use DataSift\Storyplayer\PlayerLib\Phase_Loader;
 
 /**
  * support for our PhaseLoader service
@@ -66,7 +66,7 @@ trait Injectables_PhaseLoaderSupport
 	public function initPhaseLoaderSupport(Injectables $injectables)
 	{
 		// $st will use this to load modules
-		$this->phaseLoader = new PhaseLoader();
+		$this->phaseLoader = new Phase_Loader();
 
 		// does the user have any namespaces of their own that they
 		// want to search?

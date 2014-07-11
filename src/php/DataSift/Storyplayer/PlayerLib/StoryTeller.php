@@ -158,7 +158,7 @@ class StoryTeller
 
 	/**
 	 *
-	 * @var ProseLoader
+	 * @var Prose_Loader
 	 */
 	private $proseLoader = null;
 
@@ -174,7 +174,7 @@ class StoryTeller
 
 	/**
 	 *
-	 * @var Datasift\Storyplayer\PlayerLib\ActionLogItem
+	 * @var Datasift\Storyplayer\PlayerLib\Action_LogItem
 	 */
 	private $actionLogger;
 
@@ -208,10 +208,10 @@ class StoryTeller
 		$this->setPageContext(new PageContext);
 
 		// create the actionlog
-		$this->setActionLogger(new ActionLogger($injectables));
+		$this->setActionLogger(new Action_Logger($injectables));
 
 		// create an empty checkpoint
-		$this->setCheckpoint(new StoryCheckpoint($this));
+		$this->setCheckpoint(new Story_Checkpoint($this));
 
 		// create our Prose Loader
 		$this->setProseLoader($injectables->proseLoader);
@@ -254,10 +254,10 @@ class StoryTeller
 	/**
 	 *
 	 *
-	 * @param ActionLogger $actionLogger
+	 * @param Action_Logger $actionLogger
 	 * @return StoryTeller
 	 */
-	public function setActionLogger(ActionLogger $actionLogger) {
+	public function setActionLogger(Action_Logger $actionLogger) {
 	    $this->actionLogger = $actionLogger;
 
 	    return $this;
@@ -266,7 +266,7 @@ class StoryTeller
 	/**
 	 *
 	 *
-	 * @return StoryCheckpoint
+	 * @return Story_Checkpoint
 	 */
 	public function getCheckpoint() {
 	    return $this->checkpoint;
@@ -275,10 +275,10 @@ class StoryTeller
 	/**
 	 *
 	 *
-	 * @param StoryCheckpoint $checkpoint
+	 * @param Story_Checkpoint $checkpoint
 	 * @return StoryTeller
 	 */
-	public function setCheckpoint(StoryCheckpoint $checkpoint) {
+	public function setCheckpoint(Story_Checkpoint $checkpoint) {
 	    $this->checkpoint = $checkpoint;
 
 	    return $this;
@@ -318,7 +318,7 @@ class StoryTeller
 	/**
 	 * track the story that we are testing
 	 *
-	 * NOTE: setting the story also creates a new StoryResult object
+	 * NOTE: setting the story also creates a new Story_Result object
 	 *       so that we can track how the story is getting on
 	 *
 	 * @param Story $story
@@ -335,7 +335,7 @@ class StoryTeller
 	    $this->story = $story;
 
 	    // we need to track the result of the story too
-	    $this->storyResult = new StoryResult($story);
+	    $this->storyResult = new Story_Result($story);
 
 	    // all done
 	    return $this;
@@ -344,7 +344,7 @@ class StoryTeller
 	/**
 	 *
 	 *
-	 * @return StoryContext
+	 * @return Story_Context
 	 */
 	public function getStoryContext()
 	{
@@ -354,10 +354,10 @@ class StoryTeller
 	/**
 	 *
 	 *
-	 * @param StoryContext $storyContext
+	 * @param Story_Context $storyContext
 	 * @return StoryTeller
 	 */
-	public function setStoryContext(StoryContext $storyContext)
+	public function setStoryContext(Story_Context $storyContext)
 	{
 		// remember the story context
 	    $this->storyContext = $storyContext;
@@ -368,7 +368,7 @@ class StoryTeller
 
 	/**
 	 *
-	 * @return StoryResult
+	 * @return Story_Result
 	 */
 	public function getStoryResult()
 	{

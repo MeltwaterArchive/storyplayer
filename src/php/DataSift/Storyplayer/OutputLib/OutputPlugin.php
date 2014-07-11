@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\OutputLib;
 
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\Storyplayer\PlayerLib\Story_Result;
 
 /**
  * the API for output plugins
@@ -90,7 +90,7 @@ interface OutputPlugin
 	/**
 	 * @return void
 	 */
-	public function endStory(StoryResult $storyResult);
+	public function endStory(Story_Result $storyResult);
 
 	/**
 	 * @param string $phaseName

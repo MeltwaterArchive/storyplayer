@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Reports;
 
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\Storyplayer\PlayerLib\Story_Result;
 
 /**
  * the plugin for JUnit-style reporting
@@ -97,23 +97,23 @@ class JUnitReport implements Report
 		// write out each test in turn
 		foreach ($this->tests as $storyResult) {
 			switch ($storyResult->resultCode) {
-				case StoryResult::PASS:
+				case $storyResult::PASS:
 					$this->writeOkay($fp, $storyResult, 'Pass');
 					break;
 
-				case StoryResult::FAIL:
+				case $storyResult::FAIL:
 					$this->writeNotOkay($fp, $storyResult, 'Fail');
 					break;
 
-				case StoryResult::INCOMPLETE:
+				case $storyResult::INCOMPLETE:
 					$this->writeNotOkay($fp, $storyResult, 'Incomplete');
 					break;
 
-				case StoryResult::BLACKLISTED:
+				case $storyResult::BLACKLISTED:
 					$this->writeOkay($fp, $storyResult, 'Blacklisted');
 					break;
 
-				case StoryResult::ERROR:
+				case $storyResult::ERROR:
 				default:
 					$this->writeNotOkay($fp, $storyResult, 'Error');
 					break;
@@ -147,7 +147,7 @@ class JUnitReport implements Report
 	/**
 	 * @return void
 	 */
-	public function endStory(StoryResult $storyResult)
+	public function endStory(Story_Result $storyResult)
 	{
 		$this->tests[] = $storyResult;
 	}

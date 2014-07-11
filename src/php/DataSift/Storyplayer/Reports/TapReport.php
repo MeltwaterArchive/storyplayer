@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Reports;
 
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\Storyplayer\PlayerLib\Story_Result;
 
 /**
  * the plugin for TAP13
@@ -98,23 +98,23 @@ class TapReport implements Report
 		$storyCounter = 1;
 		foreach ($this->tests as $storyResult) {
 			switch ($storyResult->resultCode) {
-				case StoryResult::PASS:
+				case $storyResult::PASS:
 					$this->writeOkay($fp, $storyCounter, $storyResult, 'Pass');
 					break;
 
-				case StoryResult::FAIL:
+				case $storyResult::FAIL:
 					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Fail');
 					break;
 
-				case StoryResult::INCOMPLETE:
+				case $storyResult::INCOMPLETE:
 					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Incomplete');
 					break;
 
-				case StoryResult::BLACKLISTED:
+				case $storyResult::BLACKLISTED:
 					$this->writeOkay($fp, $storyCounter, $storyResult, 'Blacklisted');
 					break;
 
-				case StoryResult::ERROR:
+				case $storyResult::ERROR:
 				default:
 					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Error');
 					break;
@@ -148,7 +148,7 @@ class TapReport implements Report
 	/**
 	 * @return void
 	 */
-	public function endStory(StoryResult $storyResult)
+	public function endStory(Story_Result $storyResult)
 	{
 		$this->tests[] = $storyResult;
 	}
@@ -247,11 +247,11 @@ class TapReport implements Report
 	 *
 	 * @param  resource $fp
 	 * @param  integer $storyCounter
-	 * @param  StoryResult $storyResult
+	 * @param  Story_Result $storyResult
 	 * @param  string $reason
 	 * @return void
 	 */
-	protected function writeOkay($fp, $storyCounter, $storyResult, $reason)
+	protected function writeOkay($fp, $storyCounter, Story_Result $storyResult, $reason)
 	{
 		fwrite($fp, 'ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
 	}
@@ -260,11 +260,11 @@ class TapReport implements Report
 	 *
 	 * @param  resource $fp
 	 * @param  integer $storyCounter
-	 * @param  StoryResult $storyResult
+	 * @param  Story_Result $storyResult
 	 * @param  string $reason
 	 * @return void
 	 */
-	protected function writeNotOkay($fp, $storyCounter, $storyResult, $reason)
+	protected function writeNotOkay($fp, $storyCounter, Story_Result $storyResult, $reason)
 	{
 		fwrite($fp, 'not ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
 	}

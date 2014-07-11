@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Exception thrown when the ProseLoader loads a class, but it isn't
+ * Exception thrown when the Prose_Loader loads a class, but it isn't
  * a child of the 'Prose' class
  *
  * @category  Libraries
@@ -62,7 +62,7 @@ class E5xx_NotAProseClass extends Exxx_Exception
 	 * @param string $className
 	 */
 	public function __construct($className) {
-		$msg = "Class '{$className}' does not inherit from DataSift\\StoryPlayer\\Prose\\Prose";
+		$msg = "Class '{$className}' does not inherit from DataSift\\Storyplayer\\Prose\\Prose";
 		parent::__construct(500, $msg, $msg);
 	}
 }

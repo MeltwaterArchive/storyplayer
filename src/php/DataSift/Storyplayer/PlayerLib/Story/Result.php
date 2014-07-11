@@ -43,10 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * tells the user about our story
+ * a record of what happened with a story
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,91 +55,114 @@ use DataSift\Storyplayer\Cli\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class AnnounceStoryPlayer
+class Story_Result
 {
 	/**
-	 * the story that we are going to play
 	 *
 	 * @var Story
 	 */
-	protected $story;
+	public $story           = null;
+
+	/**
+	 *
+	 * @var PhaseResult
+	 */
+	public $failedPhase     = null;
+
+	/**
+	 * is this a story where a failure is the expected outcome?
+	 * @var boolean
+	 */
+	public $storyShouldFail = false;
+
+	/**
+	 * did the story pass, fail, or otherwise go horribly wrong?
+	 * @var integer
+	 */
+	public $resultCode     = 1;
+
+	/**
+	 * when did we start playing this story?
+	 * @var float
+	 */
+	public $startTime       = null;
+
+	/**
+	 * when did we finish playing this story?
+	 * @var float
+	 */
+	public $endTime         = null;
+
+	/**
+	 * how long did the story take to play?
+	 * @var float
+	 */
+	public $durationTime    = null;
+
+	const PASS        = 1;
+	const FAIL        = 2;
+	const ERROR       = 3;
+	const INCOMPLETE  = 4;
+	const BLACKLISTED = 5;
 
 	public function __construct(Story $story)
 	{
+		// remember the story we are reporting on
 		$this->story = $story;
+
+		// remember when we were created - we're going to treat that
+		// as the start time for this story!
+		$this->startTime = microtime(true);
 	}
 
-	public function play(StoryTeller $st, Injectables $injectables)
+	public function getStoryShouldFail()
 	{
-		// shorthand
-		$output = $st->getOutput();
-
-        // tell $st which story we are playing
-        $st->setStory($story);
-
-        // initialise the user
-        $context = $st->getStoryContext();
-        $context->initUser($st);
-
-        // play the phases
-        $this->playPhases($st, $injectables, $story, $context);
-
-		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($phaseResults);
-
-		// announce the results
-		$output->endStory($storyResult);
-
-		// all done
-		return $storyResult;
+		return $this->storyShouldFail;
 	}
 
-    protected function playPhases(StoryTeller $st, Injectables $injectables, Story $story)
-    {
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new PhasesPlayer();
+	public function setStoryShouldFail()
+	{
+		$this->storyShouldFail = true;
+	}
 
-        // run the startup phase
-        $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$injectables->staticConfig->phases->startup
-        );
+	public function setStoryHasSucceeded()
+	{
+		$this->resultCode  = self::PASS;
+		$this->failedPhase = null;
+	}
 
-		// set default callbacks up
-		$story->setDefaultCallbacks();
+	public function setStoryHasBeenBlacklisted()
+	{
+		$this->resultCode  = self::BLACKLISTED;
+		$this->failedPhase = null;
+	}
 
-		// tell the outside world what we're doing
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getTestEnvironmentName(),
-			$st->getDeviceName()
-		);
+	public function setStoryIsIncomplete(Phase_Result $phaseResult)
+	{
+		$this->resultCode  = self::INCOMPLETE;
+		$this->failedPhase = $phaseResult;
+	}
 
-		// run the phases in the 'story' section
-		$phaseResults = $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story
-		);
+	public function setStoryHasFailed(Phase_Result $phaseResult)
+	{
+		$this->resultCode  = self::FAIL;
+		$this->failedPhase = $phaseResult;
+	}
 
-		// play the 'paired' phases too, in case they haven't yet
-		// executed correctly
-		$phasesPlayer->playPairedPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story,
-			$phaseResults
-		);
+	public function setStoryHasError(Phase_Result $phaseResult)
+	{
+		$this->resultCode  = self::ERROR;
+		$this->failedPhase = $phaseResult;
+	}
 
-		// run the shutdown phase
-        $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->shutdown
-        );
+	public function calculateStoryResult()
+	{
+		$this->setEndTime();
+	}
+
+	protected function setEndTime()
+	{
+		$this->endTime = microtime(true);
+		$this->durationTime = $this->endTime - $this->startTime;
 	}
 }

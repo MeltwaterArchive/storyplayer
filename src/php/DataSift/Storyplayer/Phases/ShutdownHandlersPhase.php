@@ -67,7 +67,7 @@ class ShutdownHandlersPhase extends InternalPostPhase
 		$st      = $this->st;
 
 		// our result object
-		$phaseResult = new PhaseResult($this->getPhaseName());
+		$phaseResult = $this->getNewPhaseResult();
 
 		// we're going to use a helper to do the work
 		//

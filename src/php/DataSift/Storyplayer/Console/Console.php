@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Console;
 
-use DataSift\StoryPlayer\OutputLib\OutputPlugin;
+use DataSift\Storyplayer\OutputLib\OutputPlugin;
 
 /**
  * the API for console plugins

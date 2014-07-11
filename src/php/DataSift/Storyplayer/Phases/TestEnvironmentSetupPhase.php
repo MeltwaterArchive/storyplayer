@@ -44,9 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
-use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
-use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 /**
  * the TestEnvironmentSetup phase
@@ -68,7 +68,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// our return value
-		$phaseResult = new PhaseResult($this->getPhaseName());
+		$phaseResult = $this->getNewPhaseResult();
 
 		// shorthand
 		$story = $st->getStory();
@@ -78,7 +78,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		{
 			// nothing to do
 			$phaseResult->setContinuePlaying(
-				PhaseResult::HASNOACTIONS,
+				$phaseResult::HASNOACTIONS,
 				"story has no test environment setup instructions"
 			);
 
@@ -101,7 +101,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		}
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::FAILED,
+				$phaseResult::FAILED,
 				$e->getMessage(),
 				$e
 			);
@@ -109,7 +109,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		}
 		catch (E5xx_ExpectFailed $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::FAILED,
+				$phaseResult::FAILED,
 				$e->getMessage(),
 				$e
 			);
@@ -118,7 +118,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		// if any of the tests are incomplete, deal with that too
 		catch (E5xx_NotImplemented $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::INCOMPLETE,
+				$phaseResult::INCOMPLETE,
 				$e->getMessage(),
 				$e
 			);
@@ -126,7 +126,7 @@ class TestEnvironmentSetupPhase extends StoryPhase
 		}
 		catch (Exception $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::ERROR,
+				$phaseResult::ERROR,
 				$e->getMessage(),
 				$e
 			);

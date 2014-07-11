@@ -43,16 +43,11 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Cli\Injectables;
-use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\UserLib\ConfigUserLoader;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-use Exception;
+use stdClass;
 
 /**
- * a sanitised & dynamically enhanced version of the config that has been
- * loaded for this test run
+ * Helper for loading a list of stories to run, and verifying that
+ * it is a list we are happy with
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -61,53 +56,72 @@ use Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryContext extends BaseObject
+class Tale_Loader
 {
 	/**
-	 * the details about the user that has been chosen
-	 *
-	 * @var DataSift\StoryPlayer\UserLib\User
+	 * singleton - do not instantiate
+	 * @codeCoverageIgnore
 	 */
-	public $user;
-
-	// ==================================================================
-	//
-	// initialise all the things
-	//
-	// ------------------------------------------------------------------
-
-	/**
-	 * build the config for this story run, from the config we've loaded
-	 *
-	 * we rebuild this for each story to ensure that each story runs
-	 * with an identical config
-	 *
-	 * @param Injectables $injectables
-	 */
-	public function __construct(Injectables $injectables)
+	protected function __construct()
 	{
-		$this->user = new BaseObject;
+		// do nothing
 	}
 
-	public function initUser(StoryTeller $st)
+	/**
+	 * load a story, throwing exceptions if problems are detected
+	 *
+	 * @param  string $filename
+	 *         path to the PHP file containing the story
+	 * @return Story
+	 *         the story object
+	 */
+	static public function loadTale($filename)
 	{
-		// shorthand
-		$config = $st->getConfig();
-
-		// our default provider of users
-		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
-
-		// do we have a specific generator to load?
-		if (isset($config->users, $config->users->generator)) {
-			$className = $config->users->generator;
+		if (!file_exists($filename)) {
+			throw new E5xx_InvalidStoryListFile("Cannot find file '{$filename}' to load");
 		}
 
-		// create the generator
-		$generator = new ConfigUserLoader(new $className());
+		// load the contents
+		$contents = file_get_contents($filename);
 
-		// get a user from the generator
-		$this->user = $generator->getUser($st);
+		// does it decode?
+		$tale = json_decode($contents);
+		if (!$tale) {
+			throw new E4xx_InvalidStoryListFile("Story list '{$filename}' does not contain valid JSON");
+		}
+
+		// does it have the elements we require?
+		if (!isset($tale->stories)) {
+			throw new E4xx_InvalidStoryListFile("Story list '{$filename}' does not contain a 'stories' element");
+		}
+		if (!is_array($tale->stories)) {
+			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' must be an array");
+		}
+		if (count($tale->stories) == 0) {
+			throw new E4xx_InvalidStoryListFile("The 'stories' element in the story list '{$filename}' cannot be an empty array");
+		}
+
+		// our base directory to search from
+		$storiesBasedir = dirname($filename);
+
+		// do all of the stories in the list exist?
+		foreach ($tale->stories as $index => $storyFile) {
+ 			$realStoryFile = $storiesBasedir . DIRECTORY_SEPARATOR . $storyFile;
+			if (file_exists($realStoryFile)) {
+				throw new E4xx_InvalidStoryListFile("Cannot find the story file '{$realStoryFile}' on disk");
+			}
+			$tale->stories[$index] = $realStoryFile;
+		}
+
+		// inject defaults for optional fields
+		if (!isset($tale->options)) {
+			$tale->options = new stdClass();
+		}
+		if (!isset($tale->options->reuseTestEnvironment)) {
+			$tale->options->reuseTestEnvironment = false;
+		}
 
 		// all done
+		return $tale;
 	}
 }

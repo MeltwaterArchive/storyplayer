@@ -43,8 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Phases\Phase;
+
 /**
- * The top level of the logging tree
+ * Helper class to load Phase classes and create objects from them
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -53,56 +55,70 @@ namespace DataSift\Storyplayer\PlayerLib;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ActionLogger
+class Phase_Loader
 {
-	protected $actions = array();
-	protected $injectables;
+	private $namespaces = array(
+		"Phases",
+		"DataSift\\Storyplayer\\Phases"
+	);
 
-	/**
-	 * @param \DataSift\Storyplayer\Cli\Injectables $injectables
-	 */
-	public function __construct($injectables)
+	public function setNamespaces($namespaces = array())
 	{
-		$this->injectables = $injectables;
+		// a list of the namespaces we're going to search for this class
+		//
+		// we always search the generic 'Phases' namespace first, in case
+		// users don't want to uniquely namespace their Phase classes
+		$this->namespaces = array ("Phases");
+
+		// add in any additional namespaces we've been asked to search
+		foreach ($namespaces as $namespace) {
+			$this->namespaces[] = $namespace;
+		}
+
+		// we search our own namespace last, as it allows the user to
+		// replace our Phases with their own if they prefer
+		$this->namespaces[] = "DataSift\\Storyplayer\\Phases";
 	}
 
-	public function startAction($user, $text)
+	public function determinePhaseClassFor($phaseName)
 	{
-		// is this our first action?
-		if (count($this->actions) == 0)
-		{
-			$openItem = new ActionLogItem($this->injectables, 1);
-			$this->actions[] = $openItem;
-		}
-		else {
-			// do we have any open actions to nest inside?
-			$endItem  = end($this->actions);
-			if ($endItem->isOpen()) {
-				// this is a new nested item
-				$openItem = $endItem->newNestedAction();
-			}
-			else {
-				$openItem = new ActionLogItem($this->injectables, 1);
-				$this->actions[] = $openItem;
-			}
-		}
+		$className = ucfirst($phaseName) . 'Phase';
 
-		return $openItem->startAction($user, $text);
+		// all done
+		return $className;
 	}
 
-	public function closeAllOpenActions()
+	public function loadPhase(StoryTeller $st, $phaseName, $constructorArgs = null)
 	{
-		// do we have any empty log items?
-		if (count($this->actions) == 0)
-		{
-			return;
+		// can we find the class?
+		foreach ($this->namespaces as $namespace) {
+			// what is the full name of the class (inc namespace) to
+			// search for?
+			$className           = $this->determinePhaseClassFor($phaseName);
+			$namespacedClassName = $namespace . "\\" . $className;
+
+			// is there such a class?
+			if (class_exists($namespacedClassName)) {
+				// yes there is!!
+				//
+				// create an instance of the class
+				$return = new $namespacedClassName(
+					$st,
+					$constructorArgs
+				);
+
+				// make sure our new object is an instance of 'Phase'
+				if (!$return instanceof Phase) {
+					throw new E5xx_NotAPhaseClass($namespacedClassName);
+				}
+
+				// return our newly-minted object
+				return $return;
+			}
 		}
 
-		$endItem = end($this->actions);
-		if ($endItem->isOpen()) {
-			$endItem->closeAllOpenActions();
-		}
-
-		$endItem->endAction();
+		// if we get there, then we cannot find a suitable class in
+		// any of the namespaces that we know about
+		return null;
 	}
 }

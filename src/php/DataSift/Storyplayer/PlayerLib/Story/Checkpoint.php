@@ -55,7 +55,7 @@ use DataSift\Stone\DataLib\DataPrinter;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryCheckpoint
+class Story_Checkpoint
 {
 	/**
 	 * the StoryTeller object

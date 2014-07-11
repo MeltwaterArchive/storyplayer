@@ -43,7 +43,8 @@
 
 namespace DataSift\Storyplayer\Phases;
 
-use DataSift\StoryPlayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\Phase_Result;
 
 /**
  * base class for all phases
@@ -109,6 +110,11 @@ abstract class Phase
 		}
 
 		return $phaseName;
+	}
+
+	public function getNewPhaseResult()
+	{
+		return new Phase_Result($this->getPhaseName());
 	}
 
 	public function doPerPhaseSetup()

@@ -65,13 +65,13 @@ class ApplyRoleChangesPhase extends InternalPostPhase
 		$story = $st->getStory();
 
 		// our results object
-		$phaseResult = new PhaseResult($this->getPhaseName());
+		$phaseResult = $this->getNewPhaseResult();
 
 		// are there any role changes to apply?
 		if (!$story->hasRoleChanges()) {
 			// nothing to see ... move along, move along
 			$phaseResult->setContinuePlaying(
-				PhaseResult::HASNOACTIONS,
+				$phaseResult::HASNOACTIONS,
 				"story has no role changes to apply"
 			);
 			return $phaseResult;
@@ -91,7 +91,7 @@ class ApplyRoleChangesPhase extends InternalPostPhase
 		catch (Exception $e) {
 			// we treat any failures here as a total failure
 			$phaseResult->setPlayingFailed(
-				PhaseResult::FAILED,
+				$phaseResult::FAILED,
 				$e->getMessage(),
 				$e
 			);

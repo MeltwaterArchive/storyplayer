@@ -44,9 +44,18 @@
 namespace DataSift\Storyplayer\PlayerLib;
 
 use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\UserLib\ConfigUserLoader;
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
+use Exception;
 
 /**
- * the main class for animating a single story
+ * a sanitised & dynamically enhanced version of the config that has been
+ * loaded for this test run
+ *
+ * I expect to delete this completely from Storyplayer before v2.0.0
+ * is released
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,112 +64,53 @@ use DataSift\Storyplayer\Cli\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryPlayer
+class Story_Context extends BaseObject
 {
 	/**
-	 * path to the story that we are going to play
+	 * the details about the user that has been chosen
 	 *
-	 * @var string
+	 * @var DataSift\Storyplayer\UserLib\User
 	 */
-	protected $storyFilename;
+	public $user;
+
+	// ==================================================================
+	//
+	// initialise all the things
+	//
+	// ------------------------------------------------------------------
 
 	/**
-	 * a list of the phases we need to run to get everything ready to
-	 * run the actual story
+	 * build the config for this story run, from the config we've loaded
 	 *
-	 * @var array
-	 */
-	protected $startupPhases;
-
-	/**
-	 * a list of the phases that make up the story
+	 * we rebuild this for each story to ensure that each story runs
+	 * with an identical config
 	 *
-	 * @var array
+	 * @param Injectables $injectables
 	 */
-	protected $storyPhases;
-
-	/**
-	 * a list of the phases that we need to run once the story has
-	 * finished
-	 *
-	 * @var array
-	 */
-	protected $shutdownPhases;
-
-	public function __construct($storyFilename, $startupPhases, $storyPhases, $shutdownPhases)
+	public function __construct(Injectables $injectables)
 	{
-		$this->storyFilename  = $storyFilename;
-		$this->startupPhases  = $startupPhases;
-		$this->storyPhases    = $storyPhases;
-		$this->shutdownPhases = $shutdownPhases;
+		$this->user = new BaseObject;
 	}
 
-	public function play(StoryTeller $st, Injectables $injectables)
+	public function initUser(StoryTeller $st)
 	{
 		// shorthand
-		$output = $st->getOutput();
+		$config = $st->getConfig();
 
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new PhasesPlayer();
+		// our default provider of users
+		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
 
-        // load our story
-        $story = StoryLoader::loadStory($this->storyFilename);
-        $st->setStory($story);
+		// do we have a specific generator to load?
+		if (isset($config->users, $config->users->generator)) {
+			$className = $config->users->generator;
+		}
 
-        // initialise the user
-        $context = $st->getStoryContext();
-        $context->initUser($st);
+		// create the generator
+		$generator = new ConfigUserLoader(new $className());
 
-        // run the startup phase
-        $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$this->startupPhases
-        );
-
-		// set default callbacks up
-		$story->setDefaultCallbacks();
-
-		// tell the outside world what we're doing
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getTestEnvironmentName(),
-			$st->getDeviceName()
-		);
-
-		// run the phases in the 'story' section
-		$phaseResults = $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->storyPhases
-		);
-
-		// play the 'paired' phases too, in case they haven't yet
-		// executed correctly
-		$phasesPlayer->playPairedPhases(
-			$st,
-			$injectables,
-			$this->storyPhases,
-			$phaseResults
-		);
-
-		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($phaseResults);
-
-		// announce the results
-		$output->endStory($storyResult);
-
-		// run the shutdown phase
-        $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->shutdownPhases
-        );
+		// get a user from the generator
+		$this->user = $generator->getUser($st);
 
 		// all done
-		return $storyResult;
 	}
 }

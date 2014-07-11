@@ -46,7 +46,6 @@ namespace DataSift\Storyplayer\PlayerLib;
 use Exception;
 use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\Phases\Phase;
-use DataSift\Storyplayer\Phases\PhaseResult;
 
 /**
  * runs a set of phases, and returns the result
@@ -58,7 +57,7 @@ use DataSift\Storyplayer\Phases\PhaseResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PhasesPlayer
+class Phases_Player
 {
 	const NEXT_CONTINUE = 1;
 	const NEXT_SKIP     = 2;
@@ -82,7 +81,7 @@ class PhasesPlayer
 		$output  = $st->getOutput();
 
 		// keep track of our results
-		$phaseResults = new PhaseResults;
+		$phaseResults = new Phase_Results;
 
 		// keep track of any paired phases
 		//
@@ -173,8 +172,8 @@ class PhasesPlayer
 				$output->logPhaseError($phaseName, "uncaught exception: " . (string)$e->getMessage());
 
 				// we need to create a dummy phase result for this
-				$phaseResult = new PhaseResult($phaseName);
-				$phaseResult->setPlayingFailed(PhaseResult::FAILED, self::MSG_PHASE_FAILED, $e);
+				$phaseResult = new Phase_Result($phaseName);
+				$phaseResult->setPlayingFailed($phaseResult::FAILED, self::MSG_PHASE_FAILED, $e);
 				// $phaseResults->addPhaseResult($phaseName, $phaseResult);
 
 				// this is a fatal exception
@@ -196,9 +195,9 @@ class PhasesPlayer
 	 * @param StoryTeller $st
 	 * @param Injectables $injectables
 	 * @param array $phases
-	 * @param PhaseResults $phaseResults
+	 * @param Phase_Results $phaseResults
 	 */
-	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, PhaseResults $phaseResults)
+	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, Phase_Results $phaseResults)
 	{
 		// special case
 		//
@@ -276,8 +275,8 @@ class PhasesPlayer
 		}
 		else {
 			$phaseName = $phase->getPhaseName();
-			$phaseResult = new PhaseResult($phaseName);
-			$phaseResult->setContinuePlaying(PhaseResult::SKIPPED);
+			$phaseResult = new Phase_Result($phaseName);
+			$phaseResult->setContinuePlaying($phaseResult::SKIPPED);
 			$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);
 		}
 

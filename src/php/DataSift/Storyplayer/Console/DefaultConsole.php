@@ -45,8 +45,8 @@ namespace DataSift\Storyplayer\Console;
 
 use DataSift\Storyplayer\OutputLib\CodeFormatter;
 use DataSift\Storyplayer\Phases\Phase;
-use DataSift\Storyplayer\Phases\PhaseResult;
-use DataSift\Storyplayer\PlayerLib\StoryResult;
+use DataSift\Storyplayer\PlayerLib\Phase_Result;
+use DataSift\Storyplayer\PlayerLib\Story_Result;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Stone\LogLib\Log;
 
@@ -82,27 +82,27 @@ class DefaultConsole implements Console
 	public function __construct()
 	{
 		$this->resultStrings = array (
-			StoryResult::PASS => array (
+			Story_Result::PASS => array (
 				0 => '[PASS]',
 				1 => PHP_EOL . PHP_EOL . "Result: PASS",
 				2 => PHP_EOL . PHP_EOL . "Result: PASS"
 			),
-			StoryResult::FAIL => array (
+			Story_Result::FAIL => array (
 				0 => '[FAIL]',
 				1 => PHP_EOL . PHP_EOL . "Result: FAIL",
 				2 => PHP_EOL . PHP_EOL . "Result: FAIL"
 			),
-			StoryResult::ERROR => array (
+			Story_Result::ERROR => array (
 				0 => '[ERROR]',
 				1 => PHP_EOL . PHP_EOL . "Result: ERROR",
 				2 => PHP_EOL . PHP_EOL . "Result: ERROR"
 			),
-			StoryResult::INCOMPLETE => array (
+			Story_Result::INCOMPLETE => array (
 				0 => '[INCOMPLETE]',
 				1 => PHP_EOL . PHP_EOL . "Result: INCOMPLETE",
 				2 => PHP_EOL . PHP_EOL . "Result: INCOMPLETE"
 			),
-			StoryResult::BLACKLISTED => array (
+			Story_Result::BLACKLISTED => array (
 				0 => '[BLACKLISTED]',
 				1 => PHP_EOL . PHP_EOL . "Result: BLACKLISTED",
 				2 => PHP_EOL . PHP_EOL . "Result: BLACKLISTED"
@@ -190,10 +190,10 @@ EOS;
 	/**
 	 * called when a story finishes
 	 *
-	 * @param StoryResult $storyResult
+	 * @param Story_Result $storyResult
 	 * @return void
 	 */
-	public function endStory(StoryResult $storyResult)
+	public function endStory(Story_Result $storyResult)
 	{
 		// var_dump($storyResult);
 
@@ -204,8 +204,8 @@ EOS;
 		// do we need to say anything more?
 		switch ($storyResult->resultCode)
 		{
-			case StoryResult::PASS:
-			case StoryResult::BLACKLISTED:
+			case Story_Result::PASS:
+			case Story_Result::BLACKLISTED:
 				// no, we're happy enough
 				return;
 
@@ -213,7 +213,7 @@ EOS;
 				// everything else is an error of some kind
 
 				// sanity check: we should always have a failedPhase
-				if (!$storyResult->failedPhase instanceof PhaseResult) {
+				if (!$storyResult->failedPhase instanceof Phase_Result) {
 					throw new E5xx_MissingFailedPhase();
 				}
 				$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
@@ -222,9 +222,9 @@ EOS;
 	}
 
 	/**
-	 * @param PhaseResult $phaseResult
+	 * @param Phase_Result $phaseResult
 	 */
-	protected function showActivityForPhase(Story $story, PhaseResult $phaseResult)
+	protected function showActivityForPhase(Story $story, Phase_Result $phaseResult)
 	{
 		// what is the phase that we are dealing with?
 		$phaseName = $phaseResult->getPhaseName();

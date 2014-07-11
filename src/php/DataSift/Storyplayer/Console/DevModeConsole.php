@@ -44,8 +44,8 @@
 namespace DataSift\Storyplayer\Console;
 
 use DataSift\Stone\LogLib\Log;
-use DataSift\StoryPlayer\Phases\Phase;
-use DataSift\StoryPlayer\PlayerLib\StoryResult;
+use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Storyplayer\PlayerLib\Story_Result;
 
 /**
  * the console plugin loaded when DevMode is active
@@ -65,27 +65,27 @@ class DevModeConsole implements Console
 	public function __construct()
 	{
 		$this->resultStrings = array (
-			StoryResult::PASS => array (
+			Story_Result::PASS => array (
 				0 => PHP_EOL . "Result: PASS",
 				1 => PHP_EOL . "Result: PASS",
 				2 => PHP_EOL . "Result: PASS"
 			),
-			StoryResult::FAIL => array (
+			Story_Result::FAIL => array (
 				0 => PHP_EOL . "Result: FAIL",
 				1 => PHP_EOL . "Result: FAIL",
 				2 => PHP_EOL . "Result: FAIL"
 			),
-			StoryResult::ERROR => array (
+			Story_Result::ERROR => array (
 				0 => PHP_EOL . "Result: ERROR",
 				1 => PHP_EOL . "Result: ERROR",
 				2 => PHP_EOL . "Result: ERROR"
 			),
-			StoryResult::INCOMPLETE => array (
+			Story_Result::INCOMPLETE => array (
 				0 => PHP_EOL . "Result: INCOMPLETE",
 				1 => PHP_EOL . "Result: INCOMPLETE",
 				2 => PHP_EOL . "Result: INCOMPLETE"
 			),
-			StoryResult::BLACKLISTED => array (
+			Story_Result::BLACKLISTED => array (
 				0 => PHP_EOL . "Result: BLACKLISTED",
 				1 => PHP_EOL . "Result: BLACKLISTED",
 				2 => PHP_EOL . "Result: BLACKLISTED"
@@ -158,10 +158,10 @@ EOS;
 	/**
 	 * called when a story finishes
 	 *
-	 * @param StoryResult $storyResult
+	 * @param Story_Result $storyResult
 	 * @return void
 	 */
-	public function endStory(StoryResult $storyResult)
+	public function endStory(Story_Result $storyResult)
 	{
 		echo <<<EOS
 

@@ -44,9 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use DataSift\StoryPlayer\Prose\E5xx_ActionFailed;
-use DataSift\StoryPlayer\Prose\E5xx_ExpectFailed;
-use DataSift\StoryPlayer\Prose\E5xx_NotImplemented;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 /**
  * the Action phase
@@ -69,13 +69,13 @@ class ActionPhase extends StoryPhase
 		$storyResult = $st->getStoryResult();
 
 		// keep track of what happens with the action
-		$phaseResult = new PhaseResult($this->getPhaseName());
+		$phaseResult = $this->getNewPhaseResult();
 
 		// do we have anything to do?
 		if (!$story->hasActions())
 		{
 			$phaseResult->setContinuePlaying(
-				PhaseResult::HASNOACTIONS,
+				$phaseResult::HASNOACTIONS,
 				"story has no action instructions"
 			);
 			return $phaseResult;
@@ -93,7 +93,7 @@ class ActionPhase extends StoryPhase
 			// if we get here, all is well
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setPlayingFailed(
-					PhaseResult::COMPLETED,
+					$phaseResult::COMPLETED,
 					"action completed successfully; was expected to fail"
 				);
 				$storyResult->setStoryHasFailed($phaseResult);
@@ -107,14 +107,14 @@ class ActionPhase extends StoryPhase
 		catch (E5xx_ActionFailed $e) {
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
-					PhaseResult::FAILED,
+					$phaseResult::FAILED,
 					$e->getMessage(),
 					$e
 				);
 			}
 			else {
 				$phaseResult->setPlayingFailed(
-					PhaseResult::FAILED,
+					$phaseResult::FAILED,
 					$e->getMessage(),
 					$e
 				);
@@ -124,14 +124,14 @@ class ActionPhase extends StoryPhase
 		catch (E5xx_ExpectFailed $e) {
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
-					PhaseResult::FAILED,
+					$phaseResult::FAILED,
 					$e->getMessage(),
 					$e
 				);
 			}
 			else {
 				$phaseResult->setPlayingFailed(
-					PhaseResult::FAILED,
+					$phaseResult::FAILED,
 					$e->getMessage(),
 					$e
 				);
@@ -142,7 +142,7 @@ class ActionPhase extends StoryPhase
 		// we treat this as a hard failure
 		catch (E5xx_NotImplemented $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::INCOMPLETE,
+				$phaseResult::INCOMPLETE,
 				$e->getMessage(),
 				$e
 			);
@@ -152,7 +152,7 @@ class ActionPhase extends StoryPhase
 		// if this happens, something has gone badly wrong
 		catch (Exception $e) {
 			$phaseResult->setPlayingFailed(
-				PhaseResult::ERROR,
+				$phaseResult::ERROR,
 				$e->getMessage(),
 				$e
 			);

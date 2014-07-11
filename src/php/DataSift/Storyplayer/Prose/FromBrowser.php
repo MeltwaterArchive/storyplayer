@@ -45,7 +45,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\ActionLogItem;
+use DataSift\Storyplayer\PlayerLib\Action_LogItem;
 
 /**
  * Get information from the browser
@@ -86,7 +86,7 @@ class FromBrowser extends Prose
 	 * @param string $successMsg
 	 * @param string $failureMsg
 	 */
-	protected function returnFirstVisibleElement(ActionLogItem $log, $elements, $method, $successMsg, $failureMsg)
+	protected function returnFirstVisibleElement(Action_LogItem $log, $elements, $method, $successMsg, $failureMsg)
 	{
 		// if the page contains multiple matches, return the first one
 		// that the user can see

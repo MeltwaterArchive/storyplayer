@@ -43,10 +43,10 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Reports\Report;
 
 /**
- * a way to create test environments outside stories
+ * Helper class to load OutputPlugin classes and create objects from them
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,86 +55,69 @@ use DataSift\Storyplayer\Cli\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironmentSetupPlayer extends StoryPlayer
+class Report_Loader
 {
-	/**
-	 * path to the story that we are going to play
-	 *
-	 * @var string
-	 */
-	protected $storyFilename;
+	private $namespaces = array(
+		"Reports",
+		"DataSift\\Storyplayer\\Reports"
+	);
 
-	public function __construct($storyFilename)
+	public function setNamespaces($namespaces = array())
 	{
-		$this->storyFilename = $storyFilename;
+		// a list of the namespaces we're going to search for this class
+		//
+		// we always search the generic 'Reports' namespace first, in case
+		// users don't want to uniquely namespace their Report classes
+		$this->namespaces = array ("Reports");
+
+		// add in any additional namespaces we've been asked to search
+		foreach ($namespaces as $namespace) {
+			$this->namespaces[] = $namespace;
+		}
+
+		// we search our own namespace last, as it allows the user to
+		// replace our Reports with their own if they prefer
+		$this->namespaces[] = "DataSift\\Storyplayer\\Reports";
 	}
 
-	public function play(StoryTeller $st, Injectables $injectables)
+	public function determineReportClassFor($reportName)
 	{
-		// shorthand
-		$output = $st->getOutput();
-
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new PhasesPlayer();
-
-        // load our story
-        $story = StoryLoader::loadStory($this->storyFilename);
-        $st->setStory($story);
-
-        // initialise the user
-        $context = $st->getStoryContext();
-        $context->initUser($st);
-
-        // run the startup phase
-        $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$injectables->staticConfig->phases->startup
-        );
-
-		// set default callbacks up
-		$story->setDefaultCallbacks();
-
-		// tell the outside world what we're doing
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getTestEnvironmentName(),
-			$st->getDeviceName()
-		);
-
-		// run the phases in the 'story' section
-		$phaseResults = $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story
-		);
-
-		// play the 'paired' phases too, in case they haven't yet
-		// executed correctly
-		$phasesPlayer->playPairedPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->story,
-			$phaseResults
-		);
-
-		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($phaseResults);
-
-		// announce the results
-		$output->endStory($storyResult);
-
-		// run the shutdown phase
-        $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$injectables->staticConfig->phases->shutdown
-        );
+		$className = ucfirst($reportName) . 'Report';
 
 		// all done
-		return $storyResult;
+		return $className;
+	}
+
+	public function loadReport($reportName, $constructorArgs = null)
+	{
+		// can we find the class?
+		foreach ($this->namespaces as $namespace) {
+			// what is the full name of the class (inc namespace) to
+			// search for?
+			$className           = $this->determineReportClassFor($reportName);
+			$namespacedClassName = $namespace . "\\" . $className;
+
+			// is there such a class?
+			if (class_exists($namespacedClassName)) {
+				// yes there is!!
+				//
+				// create an instance of the class
+				$return = new $namespacedClassName(
+					$constructorArgs
+				);
+
+				// make sure our new object is an instance of 'Report'
+				if (!$return instanceof Report) {
+					throw new E5xx_NotAReportClass($namespacedClassName);
+				}
+
+				// return our newly-minted object
+				return $return;
+			}
+		}
+
+		// if we get there, then we cannot find a suitable class in
+		// any of the namespaces that we know about
+		throw new E4xx_NoSuchReport($reportName);
 	}
 }

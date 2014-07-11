@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\PlayerLib\ProseLoader;
+use DataSift\Storyplayer\PlayerLib\Prose_Loader;
 
 /**
  * support for our ProseLoader service
@@ -66,7 +66,7 @@ trait Injectables_ProseLoaderSupport
 	public function initProseLoaderSupport(Injectables $injectables)
 	{
 		// $st will use this to load modules
-		$this->proseLoader = new ProseLoader();
+		$this->proseLoader = new Prose_Loader();
 
 		// does the user have any namespaces of their own that they
 		// want to search?
