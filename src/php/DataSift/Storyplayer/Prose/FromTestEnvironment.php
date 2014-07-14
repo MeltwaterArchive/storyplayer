@@ -57,11 +57,6 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class FromTestEnvironment extends Prose
 {
-	public function __construct(StoryTeller $st, $roleName)
-	{
-
-	}
-
 	public function getSetting($setting)
 	{
 		// shorthand
