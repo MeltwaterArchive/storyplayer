@@ -196,6 +196,14 @@ class UsingRuntimeTable extends BaseRuntimeTable
         // add the entry
         $tables->$tableName->$group->$key = $value;
 
+        // make sure that the table's group is always available for
+        // template expansion
+        //
+        // NOTE: any code that adds groups to tables by hand does NOT
+        //       get this guarantee
+        $activeConfig = $st->getTestEnvironment();
+        $activeConfig->$tableName = $tables->$tableName->$group;
+
         // save the updated runtime config
         $log->addStep("saving runtime config to disk", function() use ($st){
             $st->saveRuntimeConfig();
