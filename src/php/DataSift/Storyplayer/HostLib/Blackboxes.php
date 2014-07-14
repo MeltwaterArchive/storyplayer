@@ -149,8 +149,6 @@ class Blackboxes implements SupportedHost
 
 		// all done
 		$log->endAction(count($envDetails->machines) . ' machine(s) registered');
-
-		var_dump($st->fromRuntimeTable('blah')->getAllTables());
 	}
 
 	/**
