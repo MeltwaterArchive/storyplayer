@@ -197,7 +197,7 @@ EOS;
 	{
 		// var_dump($storyResult);
 
-		echo $this->resultStrings[$storyResult->resultCode][$this->verbosityLevel]
+		echo ' ' . $this->resultStrings[$storyResult->resultCode][$this->verbosityLevel]
 		     . ' (' . round($storyResult->durationTime, 2) . ' secs)'
 		     . PHP_EOL;
 
@@ -532,5 +532,69 @@ EOS;
 	public function logVardump($name, $var)
 	{
 		// this is a no-op for us
+	}
+
+	/**
+	 * called when we start to create a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function startTestEnvironmentCreation($testEnvName)
+	{
+		if ($this->verbosityLevel > 0) {
+			echo <<<EOS
+=============================================================
+
+Creating Test Environment: {$testEnvName}
+
+EOS;
+		}
+		else {
+			echo "Creating test environment {$testEnvName}: ";
+		}
+	}
+
+	/**
+	 * called when we have finished making the test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function endTestEnvironmentCreation($testEnvName)
+	{
+		echo PHP_EOL;
+	}
+
+	/**
+	 * called when we start to destroy a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function startTestEnvironmentDestruction($testEnvName)
+	{
+		if ($this->verbosityLevel > 0) {
+			echo <<<EOS
+=============================================================
+
+Destroying Test Environment: {$testEnvName}
+
+EOS;
+		}
+		else {
+			// do nothing
+		}
+	}
+
+	/**
+	 * called when we have finished destroying a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function endTestEnvironmentDestruction($testEnvName)
+	{
+		echo $PHP_EOL;
 	}
 }

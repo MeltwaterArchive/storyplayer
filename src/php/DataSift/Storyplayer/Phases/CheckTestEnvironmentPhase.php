@@ -34,78 +34,70 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
-
-use DataSift\Storyplayer\Cli\Injectables;
+namespace DataSift\Storyplayer\Phases;
 
 /**
- * constructs / demolishes test environments around stories / tales
+ * make sure we like this test environment before proceeding
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironment_Player extends BasePlayer
+
+class CheckTestEnvironmentPhase extends InternalPrePhase
 {
-	protected $startupPhases;
-	protected $shutdownPhases;
-	protected $wrappedPlayer;
-
-	public function __construct($wrappedPlayer, Injectables $injectables)
-	{
-		$this->wrappedPlayer = $wrappedPlayer;
-
-		$this->startupPhases  = $injectables->activeConfig->storyplayer->phases->testEnvStartup;
-		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->testEnvShutdown;
-	}
-
-	public function play(StoryTeller $st, Injectables $injectables)
+	public function doPhase()
 	{
 		// shorthand
-		$output = $st->getOutput();
+		$st          = $this->st;
+		$story       = $st->getStory();
+		$storyResult = $st->getStoryResult();
+		$testEnv     = $st->getTestEnvironment();
+		$testEnvName = $st->getTestEnvironmentName();
 
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new Phases_Player();
+		// our result object
+		$phaseResult = $this->getNewPhaseResult();
 
-        // announce what we're doing
-        $output->startTestEnvironmentCreation($injectables->activeTestEnvironmentName);
+		// does the story care about which roles the test environment
+		// defines?
+		$requiredRoles = $story->getRequiredTestEnvironmentRoles();
+		if (empty($requiredRoles)) {
+			$phaseResult->setContinuePlaying();
+			return $phaseResult;
+		}
 
-        // run the startup phase
-        $phaseResults = $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$this->startupPhases
-        );
-        $output->endTestEnvironmentCreation($injectables->activeTestEnvironmentName);
+		// does this environment define the roles that the story
+		// requires?
+		$missingRoles = [];
+		foreach ($requiredRoles as $requiredRole) {
+			$roleDetails = $st->fromRolesTable()->getDetailsForRole($requiredRole);
+			if (empty($roleDetails)) {
+				$missingRoles[] = $requiredRole;
+			}
+		}
 
-        // what happened?
-        if ($phaseResults->getFinalResult() !== $phaseResults::RESULT_COMPLETE) {
-        	$output->logCliError("failed to create test environment - cannot continue");
-        	exit(1);
-        }
+		if (!empty($missingRoles)) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::ERROR,
+				"Test environment '{$testEnvName}' does not provide these role(s): " . implode(', ', $missingRoles)
+			);
+			$storyResult->setStoryHasFailed($phaseResult);
 
-        // now we need to play whatever runs against this
-        // test environment
-        $return = $this->wrappedPlayer->play($st, $injectables);
+			return $phaseResult;
+		}
 
-		// run the shutdown phase
-        $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->shutdownPhases
-        );
-
-		// all done
-		return $return;
+		// if we get here, all is well
+		$phaseResult->setContinuePlaying();
+		return $phaseResult;
 	}
 }

@@ -76,7 +76,7 @@ class Phase_Result
 	protected $exception;
 
 	const MIN_RESULT = 1;
-	const MAX_RESULT = 5;
+	const MAX_RESULT = 7;
 
 	const COMPLETED    = 1;
 	// success is an alias for completed!

@@ -121,6 +121,7 @@ class DefaultConfig extends BaseObject
         $phases->startup->StartupHandlers = true;
         $phases->story = new BaseObject();
         $phases->story->CheckBlacklisted = true;
+        $phases->story->CheckTestEnvironment = true;
         $phases->story->TestEnvironmentSetup = true;
         $phases->story->TestSetup = true;
         $phases->story->PreTestPrediction = true;

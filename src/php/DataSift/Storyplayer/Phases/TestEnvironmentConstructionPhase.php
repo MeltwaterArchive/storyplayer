@@ -60,7 +60,7 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class TestEnvironmentConstructionPhase extends StoryPhase
+class TestEnvironmentConstructionPhase extends InfrastructurePhase
 {
 	public function doPhase()
 	{
@@ -119,12 +119,6 @@ class TestEnvironmentConstructionPhase extends StoryPhase
 				$e
 			);
 			$phaseResult->addPairedPhase('TestEnvironmentDemolition');
-		}
-
-		if (!$phaseResult->getPhaseSucceeded()) {
-			var_dump($phaseResult->getMessage());
-			var_dump($phaseResult->getException()->getTraceAsString());
-			exit(1);
 		}
 
 		// all done

@@ -183,8 +183,15 @@ EOS;
 	 */
 	public function startPhase($phaseName, $phaseType)
 	{
-		// we only announce story phases
-		if ($phaseType != Phase::STORY_PHASE) {
+		// our whitelist of phases that we want to announce
+		static $announcedPhases = [
+			Phase::STORY_PHASE => true,
+			Phase::STORY_SUPPORT_PHASE => true,
+			Phase::INFRASTRUCTURE_PHASE => true
+		];
+
+		// we only announced the whitelisted types
+		if (!isset($announcedPhases[$phaseType]) || !$announcedPhases[$phaseType]) {
 			return;
 		}
 
@@ -324,5 +331,59 @@ EOS;
 
 		// send the output to the default logger
 		Log::write(Log::LOG_DEBUG, $name . ' => ' . $output);
+	}
+
+	/**
+	 * called when we start to create a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function startTestEnvironmentCreation($testEnvName)
+	{
+		echo <<<EOS
+=============================================================
+
+Creating Test Environment: {$testEnvName}
+
+EOS;
+	}
+
+	/**
+	 * called when we have finished making the test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function endTestEnvironmentCreation($testEnvName)
+	{
+		// no-op
+	}
+
+	/**
+	 * called when we start to destroy a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function startTestEnvironmentDestruction($testEnvName)
+	{
+		echo <<<EOS
+=============================================================
+
+Destroying Test Environment: {$testEnvName}
+
+EOS;
+	}
+
+	/**
+	 * called when we have finished destroying a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function endTestEnvironmentDestruction($testEnvName)
+	{
+		// no-op
 	}
 }

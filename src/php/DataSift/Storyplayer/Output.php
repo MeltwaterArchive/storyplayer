@@ -315,4 +315,60 @@ class Output implements OutputPlugin
 			$plugin->logVardump($name, $var);
 		}
 	}
+
+	/**
+	 * called when we start to create a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function startTestEnvironmentCreation($testEnvName)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->startTestEnvironmentCreation($testEnvName);
+		}
+	}
+
+	/**
+	 * called when we have finished making the test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function endTestEnvironmentCreation($testEnvName)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->endTestEnvironmentCreation($testEnvName);
+		}
+	}
+
+	/**
+	 * called when we start to destroy a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function startTestEnvironmentDestruction($testEnvName)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->startTestEnvironmentDestruction($testEnvName);
+		}
+	}
+
+	/**
+	 * called when we have finished destroying a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function endTestEnvironmentDestruction($testEnvName)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->endTestEnvironmentDestruction($testEnvName);
+		}
+	}
 }

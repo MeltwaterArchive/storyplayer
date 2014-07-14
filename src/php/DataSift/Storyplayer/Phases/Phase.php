@@ -59,9 +59,11 @@ use DataSift\Storyplayer\PlayerLib\Phase_Result;
 
 abstract class Phase
 {
-	const INTERNALPRE_PHASE  = 1;
-	const STORY_PHASE        = 2;
-	const INTERNALPOST_PHASE = 3;
+	const INTERNALPRE_PHASE    = 1;
+	const STORY_PHASE          = 2;
+	const STORY_SUPPORT_PHASE  = 3;
+	const INTERNALPOST_PHASE   = 4;
+	const INFRASTRUCTURE_PHASE = 5;
 
 	protected $st;
 

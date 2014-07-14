@@ -254,6 +254,14 @@ class Story
 	 */
 	protected $sourceFile = '';
 
+	/**
+	 * a list of the roles that the test environment must have defined,
+	 * otherwise we cannot run
+	 *
+	 * @var array
+	 */
+	protected $requiredTestEnvRoles = array();
+
 	// ====================================================================
 	//
 	// Metadata about the story itself
@@ -651,6 +659,16 @@ class Story
 	public function getWhitelistedEnvironments()
 	{
 		return $this->whitelistedEnvironments;
+	}
+
+	public function requiresTestEnvironmentWithRoles($roles)
+	{
+		$this->requiredTestEnvRoles = $roles;
+	}
+
+	public function getRequiredTestEnvironmentRoles()
+	{
+		return $this->requiredTestEnvRoles;
 	}
 
 	// ====================================================================

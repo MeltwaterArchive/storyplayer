@@ -162,4 +162,36 @@ interface OutputPlugin
 	 * @return void
 	 */
 	public function logVardump($name, $var);
+
+	/**
+	 * called when we start to create a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function startTestEnvironmentCreation($testEnvName);
+
+	/**
+	 * called when we have finished making the test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function endTestEnvironmentCreation($testEnvName);
+
+	/**
+	 * called when we start to destroy a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function startTestEnvironmentDestruction($testEnvName);
+
+	/**
+	 * called when we have finished destroying a test environment
+	 *
+	 * @param  string $testEnvName
+	 * @return void
+	 */
+	public function endTestEnvironmentDestruction($testEnvName);
 }

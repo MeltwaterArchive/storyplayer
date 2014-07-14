@@ -34,78 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
-
-use DataSift\Storyplayer\Cli\Injectables;
+namespace DataSift\Storyplayer\Phases;
 
 /**
- * constructs / demolishes test environments around stories / tales
+ * base class for all infrastructure phases
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironment_Player extends BasePlayer
+
+abstract class InfrastructurePhase extends Phase
 {
-	protected $startupPhases;
-	protected $shutdownPhases;
-	protected $wrappedPlayer;
-
-	public function __construct($wrappedPlayer, Injectables $injectables)
+	public function getPhaseType()
 	{
-		$this->wrappedPlayer = $wrappedPlayer;
-
-		$this->startupPhases  = $injectables->activeConfig->storyplayer->phases->testEnvStartup;
-		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->testEnvShutdown;
-	}
-
-	public function play(StoryTeller $st, Injectables $injectables)
-	{
-		// shorthand
-		$output = $st->getOutput();
-
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new Phases_Player();
-
-        // announce what we're doing
-        $output->startTestEnvironmentCreation($injectables->activeTestEnvironmentName);
-
-        // run the startup phase
-        $phaseResults = $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$this->startupPhases
-        );
-        $output->endTestEnvironmentCreation($injectables->activeTestEnvironmentName);
-
-        // what happened?
-        if ($phaseResults->getFinalResult() !== $phaseResults::RESULT_COMPLETE) {
-        	$output->logCliError("failed to create test environment - cannot continue");
-        	exit(1);
-        }
-
-        // now we need to play whatever runs against this
-        // test environment
-        $return = $this->wrappedPlayer->play($st, $injectables);
-
-		// run the shutdown phase
-        $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->shutdownPhases
-        );
-
-		// all done
-		return $return;
+		return self::INFRASTRUCTURE_PHASE;
 	}
 }
