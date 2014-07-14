@@ -83,21 +83,23 @@ class UsingRolesTable extends Prose
 		// what are we doing?
 		$log = $st->startAction("add host '{$hostDetails->name}' to role '{$roleName}'");
 
-		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
-
 		// get the existing role details
-		$roleDetails = $st->fromRolesTable()->getDetailsForRole($roleName);
-		if (!$roleDetails) {
-			$roleDetails = new BaseObject;
+		$roleDetails =& $st->fromRolesTable()->getDetailsForRole($roleName);
+
+		// is the host already in there?
+		$foundHost = false;
+		foreach ($roleDetails as $roleDetail) {
+			if ($roleDetail->name == $hostDetails->name) {
+				$foundHost = true;
+			}
 		}
-
-		// add this host to the role
-		$hostName = $hostDetails->name;
-		$roleDetails->$hostName = $hostDetails;
-
-		// save the updated role
-		$st->saveRuntimeConfig();
+		if (!$foundHost) {
+			// no, so add it to the end
+			$roleDetails[] = $hostDetails;
+			var_dump($roleDetails);
+			var_dump($st->getRuntimeConfig());
+			$st->saveRuntimeConfig();
+		}
 
 		// all done
 		$log->endAction();

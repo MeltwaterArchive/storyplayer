@@ -62,49 +62,23 @@ class FromTestEnvironment extends Prose
 
 	}
 
-	public function getAppSetting($app, $setting)
+	public function getSetting($setting)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get $setting for '{$app}'");
+		$log = $st->startAction("get $setting from test environment");
 
 		// get the details
-		$env = $st->getTestEnvironment();
-		if (!isset($env->$app, $env->$app->$setting)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $env->$app->$setting;
+		$testEnv        = $st->getTestEnvironment();
+		$templateEngine = $st->getTemplateEngine();
+		$value          = $templateEngine->render('{{ ' . $setting . '}}', (array)$testEnv);
 
 		// log the settings
 		$printer  = new DataPrinter();
 		$logValue = $printer->convertToString($value);
-		$log->endAction("$setting for '{$app}' is '{$logValue}'");
-
-		// all done
-		return $value;
-	}
-
-	public function getAppSettings($app)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get all settings for '{$app}'");
-
-		// get the details
-		$env = $st->getTestEnvironment();
-		if (!isset($env->$app)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $env->$app;
-
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("settings for '{$app}' are '{$logValue}'");
+		$log->endAction($logValue);
 
 		// all done
 		return $value;

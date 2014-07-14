@@ -158,11 +158,17 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 */
 	public function getTable($runtimeConfig, $tableName)
 	{
+		// normalise!
+		$tableName = ucfirst($tableName);
+
+		// find it
 		$tables = $this->getAllTables($runtimeConfig);
 		if (!isset($tables->$tableName)) {
+			// make sure the caller gets a table
 			$tables->$tableName = new BaseObject;
 		}
 
+		// all done
 		return $tables->$tableName;
 	}
 }

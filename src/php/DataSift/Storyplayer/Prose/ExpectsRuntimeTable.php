@@ -77,7 +77,7 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
 
         // make sure we have a hosts table
         if (!isset($tables->$tableName)) {
-            $msg = "Table is empty / does not exist";
+            $msg = "table is empty / does not exist";
             $log->endAction($msg);
 
             throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table existed", "{$parent} table does not exist");
@@ -85,7 +85,7 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
 
         // make sure we don't have a duplicate entry
         if (!isset($tables->$tableName->$key)) {
-            $msg = "Table does not contain an entry for '{$key}'";
+            $msg = "table does not contain an entry for '{$key}'";
             $log->endAction($msg);
 
             throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
@@ -118,14 +118,14 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
 
         // make sure we have a hosts table
         if (!isset($tables->$tableName)) {
-            $msg = "Table is empty / does not exist";
+            $msg = "table is empty / does not exist";
             $log->endAction($msg);
             return;
         }
 
         // make sure we don't have a duplicate entry
         if (isset($tables->$tableName->$key)) {
-            $msg = "Table already contains an entry for '{$key}'";
+            $msg = "table already contains an entry for '{$key}'";
             $log->endAction($msg);
 
             throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");

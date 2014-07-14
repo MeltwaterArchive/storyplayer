@@ -108,7 +108,7 @@ trait Injectables_ActiveConfigSupport
         if (!isset($rolesTable->$testEnvName)) {
             $rolesTable->$testEnvName = new BaseObject;
         }
-        $this->activeConfig->roles = $rolesTable->$testEnvName;
+        $this->activeConfig->holes = $rolesTable->$testEnvName;
 
 		// all done
 		return $this->activeConfig;

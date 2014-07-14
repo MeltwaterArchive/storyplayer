@@ -136,7 +136,7 @@ class FromRuntimeTable extends BaseRuntimeTable
 
         // make sure we have a hosts table
         if (!isset($tables->$tableName)) {
-            $msg = "Table is empty / does not exist";
+            $msg = "table is empty / does not exist";
             $log->endAction($msg);
 
             return null;
@@ -144,7 +144,7 @@ class FromRuntimeTable extends BaseRuntimeTable
 
         // do we have the entry we're looking for?
         if (!isset($tables->$tableName->$key)) {
-            $msg = "Table does not contain an entry for '{$key}'";
+            $msg = "table does not contain an entry for '{$key}'";
             $log->endAction($msg);
             return null;
         }
@@ -179,7 +179,7 @@ class FromRuntimeTable extends BaseRuntimeTable
 
         // make sure we have a table
         if (!isset($tables->$tableName)) {
-            $msg = "Table is empty / does not exist";
+            $msg = "table is empty / does not exist";
             $log->endAction($msg);
 
             return null;
@@ -187,7 +187,7 @@ class FromRuntimeTable extends BaseRuntimeTable
 
         // make sure we have the group
         if (!isset($tables->$tableName->$group)) {
-            $msg = "Table has no group '{$group}'";
+            $msg = "table has no group '{$group}'";
             $log->endAction($msg);
 
             return null;
@@ -195,7 +195,7 @@ class FromRuntimeTable extends BaseRuntimeTable
 
         // do we have the entry we're looking for?
         if (!isset($tables->$tableName->$group->$key)) {
-            $msg = "Table does not contain an entry for '{$group}->{$key}'";
+            $msg = "table does not contain an entry for '{$group}->{$key}'";
             $log->endAction($msg);
             return null;
         }
