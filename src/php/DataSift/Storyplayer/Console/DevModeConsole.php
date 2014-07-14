@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Console;
 
 use DataSift\Stone\LogLib\Log;
 use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Storyplayer\PlayerLib\Phase_Result;
 use DataSift\Storyplayer\PlayerLib\Story_Result;
 
 /**
@@ -57,7 +58,7 @@ use DataSift\Storyplayer\PlayerLib\Story_Result;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DevModeConsole implements Console
+class DevModeConsole extends Console
 {
 	protected $verbosityLevel = 0;
 	protected $resultStrings  = array();
@@ -172,6 +173,25 @@ EOS;
 
 		echo $this->resultStrings[$storyResult->resultCode][$this->verbosityLevel] . PHP_EOL;
 		echo 'Duration: ' . round($storyResult->durationTime, 2) . ' secs' . PHP_EOL;
+
+		// do we need to say anything more?
+		switch ($storyResult->resultCode)
+		{
+			case Story_Result::PASS:
+			case Story_Result::BLACKLISTED:
+				// no, we're happy enough
+				return;
+
+			default:
+				// everything else is an error of some kind
+
+				// sanity check: we should always have a failedPhase
+				if (!$storyResult->failedPhase instanceof Phase_Result) {
+					throw new E5xx_MissingFailedPhase();
+				}
+				$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
+				break;
+		}
 	}
 
 	/**
