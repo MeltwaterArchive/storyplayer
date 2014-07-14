@@ -159,7 +159,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 	public function getTable($runtimeConfig, $tableName)
 	{
 		// normalise!
-		$tableName = ucfirst($tableName);
+		$tableName = lcfirst($tableName);
 
 		// find it
 		$tables = $this->getAllTables($runtimeConfig);
