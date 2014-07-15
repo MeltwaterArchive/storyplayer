@@ -79,7 +79,7 @@ class VagrantVms implements SupportedHost
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $envDetails
 	 * @param  array $provisioningVars
 	 * @return void
 	 */
@@ -203,10 +203,10 @@ class VagrantVms implements SupportedHost
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $envDetails
 	 * @return void
 	 */
-	public function startHost($vmDetails)
+	public function startHost($envDetails)
 	{
 		// if you really want to do this from your story, use
 		// $st->usingVagrantVm()->startHost()
@@ -215,10 +215,10 @@ class VagrantVms implements SupportedHost
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $envDetails
 	 * @return void
 	 */
-	public function stopHost($vmDetails)
+	public function stopHost($envDetails)
 	{
 		// if you really want to do this from your story, use
 		// $st->usingVagrantVm()->stopHost()
@@ -227,10 +227,10 @@ class VagrantVms implements SupportedHost
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $envDetails
 	 * @return void
 	 */
-	public function restartHost($vmDetails)
+	public function restartHost($envDetails)
 	{
 		// if you really want to do this from your story, use
 		// $st->usingVagrantVm()->restartHost()
@@ -239,10 +239,10 @@ class VagrantVms implements SupportedHost
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $envDetails
 	 * @return void
 	 */
-	public function powerOffHost($vmDetails)
+	public function powerOffHost($envDetails)
 	{
 		// if you really want to do this from your story, use
 		// $st->usingVagrantVm()->powerOffHost()
@@ -251,7 +251,7 @@ class VagrantVms implements SupportedHost
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $envDetails
 	 * @return void
 	 */
 	public function destroyHost($envDetails)
@@ -284,43 +284,93 @@ class VagrantVms implements SupportedHost
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $envDetails
 	 * @param  string $command
 	 * @return CommandResult
 	 */
-	public function runCommandAgainstHostManager($vmDetails, $command)
+	public function runCommandAgainstHostManager($envDetails, $command)
 	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("run vagrant command '{$command}'");
+
+		// build the command
+		$fullCommand = "cd '{$envDetails->dir}' && $command 2>&1";
+
+		// run the command
+		$returnCode = 0;
+		$output = system($fullCommand, $returnCode);
+
+		// build the result
+		$result = new CommandResult($returnCode, $output);
+
+		// all done
+		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
+		return $result;
 	}
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
-	 * @param string $command
+	 * @param  stdClass $vmDetails
+	 * @param  string $command
 	 * @return CommandResult
 	 */
 	public function runCommandViaHostManager($vmDetails, $command)
 	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("run vagrant command '{$command}'");
+
+		// build the command
+		$fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
+
+		// run the command
+		$returnCode = 0;
+		$output = system($fullCommand, $returnCode);
+
+		// build the result
+		$result = new CommandResult($returnCode, $output);
+
+		// all done
+		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
+		return $result;
 	}
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $envDetails
 	 * @return boolean
 	 */
-	public function isRunning($vmDetails)
+	public function isRunning($envDetails)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
 	}
 
 	/**
 	 *
-	 * @param  VagrantVmDetails $vmDetails
+	 * @param  stdClass $vmDetails
 	 * @return string
 	 */
 	public function determineIpAddress($vmDetails)
 	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->name}'");
+
+		// create an adapter to talk to the host operating system
+		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+
+		// get the IP address
+		$ipAddress = $host->determineIpAddress($vmDetails, $this);
+
+		// all done
+		$log->endAction("IP address is '{$ipAddress}'");
+		return $ipAddress;
 	}
 }

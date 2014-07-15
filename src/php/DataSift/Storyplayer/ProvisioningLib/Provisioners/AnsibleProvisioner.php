@@ -65,6 +65,38 @@ class AnsibleProvisioner extends Provisioner
 		$this->st = $st;
 	}
 
+	public function buildDefinitionFor($env)
+	{
+		// our return value
+		$provDef = new ProvisioningDefinition;
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("build Ansible provisioning definition");
+
+		// add in each machine in the environment
+		foreach ($env->details->machines as $name => $machine) {
+			$st->usingProvisioningDefinition($provDef)->addHost($name);
+
+			foreach ($machine->roles as $role) {
+				$st->usingProvisioningDefinition($provDef)->addRole($role)->toHost($name);
+			}
+
+			if (isset($machine->params)) {
+				$params = [];
+				foreach ($machine->params as $paramName => $paramValue) {
+					$params[$paramName]  = $st->fromTestEnvironment()->getSetting('hosts.' . $name . '.params.'.$paramName);
+				}
+				$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($name);
+			}
+		}
+
+		// all done
+		return $provDef;
+	}
+
 	public function provisionHosts(ProvisioningDefinition $hosts)
 	{
 		// shorthand
@@ -74,7 +106,7 @@ class AnsibleProvisioner extends Provisioner
 		$log = $st->startAction("use Ansible to provision host(s)");
 
 		// get our ansible configuration
-		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
+		$ansibleSettings = $st->fromTestEnvironment()->getSetting('storyplayer.modules.ansible');
 
 		// our reverse list of roles => hosts
 		$rolesToHosts = array();
@@ -252,7 +284,7 @@ class AnsibleProvisioner extends Provisioner
 		$log = $st->startAction("determine host_vars filename for '{$hostName}'");
 
 		// get our ansible settings
-		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
+		$ansibleSettings = $st->fromTestEnvironment()->getSetting('storyplayer.modules.ansible');
 
 		// get our inventory folder
 		$invFolder = $this->getInventoryFolder($ansibleSettings, $inventoryFolder);

@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Stone\DataLib\DataPrinter;
+use DataSift\Stone\DataLib\DotNotationConvertor;
 
 /**
  * Get information from the environment defined for the test environment
@@ -77,5 +78,26 @@ class FromTestEnvironment extends Prose
 
 		// all done
 		return $value;
+	}
+
+	public function getAllSettings()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get all settings from the test environment");
+
+		// get the details
+		$testEnv = $st->getTestEnvironment();
+
+		var_dump($testEnv);
+
+		// convert into dot notation
+		$convertor = new DotNotationConvertor();
+		$return    = $convertor->convertToArray($testEnv);
+
+		// all done
+		return $return;
 	}
 }

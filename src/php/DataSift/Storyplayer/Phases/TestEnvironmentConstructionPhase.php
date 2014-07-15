@@ -48,6 +48,7 @@ use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
 use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
+use DataSift\Storyplayer\ProvisioningLib;
 
 /**
  * the TestEnvironmentConstruction phase
@@ -80,11 +81,25 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 			return $phaseResult;
 		}
 
-		// create the machines
+		// create the environments
 		try {
-			foreach ($testEnvironmentConfig as $host) {
-				$hostAdapter = HostLib::getHostAdapter($st, $host->type);
-				$hostAdapter->createHost($host->details);
+			foreach ($testEnvironmentConfig as $env) {
+				// create the machine(s) in this environment, including:
+				//
+				// * building any virtual machines
+				// * registering in the Hosts table
+				// * registering in the Roles table
+				$hostAdapter = HostLib::getHostAdapter($st, $env->type);
+				$hostAdapter->createHost($env->details);
+
+				// provision software onto the machines we've just
+				// created
+				if (isset($env->provisioning)) {
+					$provAdapter = ProvisioningLib::getProvisioner($st, $env->provisioning->engine);
+					$provDef = $provAdapter->buildDefinitionFor($env);
+
+					$provAdapter->provisionHosts($provDef);
+				}
 			}
 
 			$phaseResult->setContinuePlaying();
