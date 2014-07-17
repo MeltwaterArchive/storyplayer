@@ -52,7 +52,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * config files of their own
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironmentLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License

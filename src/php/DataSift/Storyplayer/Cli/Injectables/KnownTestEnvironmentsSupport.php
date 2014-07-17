@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\TestEnvironmentLib\KnownTestEnvironments;
-
 /**
  * support for working with the list of known test environments
  *

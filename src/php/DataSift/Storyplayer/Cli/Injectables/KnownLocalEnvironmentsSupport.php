@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\LocalEnvironmentLib\KnownLocalEnvironments;
-
 /**
  * support for working with the list of known local environments
  *

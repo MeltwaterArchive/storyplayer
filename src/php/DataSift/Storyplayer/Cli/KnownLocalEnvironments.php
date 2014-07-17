@@ -34,28 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironmentLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\TestEnvironmentLib;
+namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Our list of known test environments
+ * Our list of known local environments
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironmentLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class KnownTestEnvironments extends BaseObject
+class KnownLocalEnvironments extends BaseObject
 {
     public function __construct()
     {

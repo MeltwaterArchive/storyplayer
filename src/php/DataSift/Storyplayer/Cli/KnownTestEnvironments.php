@@ -34,28 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/LocalEnvironmentLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\LocalEnvironmentLib;
+namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Our list of known local environments
+ * Our list of known test environments
  *
  * @category  Libraries
- * @package   Storyplayer/LocalEnvironmentLib
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class KnownLocalEnvironments extends BaseObject
+class KnownTestEnvironments extends BaseObject
 {
     public function __construct()
     {
@@ -69,6 +69,11 @@ class KnownLocalEnvironments extends BaseObject
     {
         // defaults for the local computer
         $this->localhost = new BaseObject;
+        $this->localhost->type = "Blackboxes";
+        $this->localhost->details = new BaseObject;
+        $this->localhost->details->machines = new BaseObject;
+        $this->localhost->details->machines->localhost = new BaseObject;
+        $this->localhost->details->machines->roles = [ '*' ];
 
         // all done
     }
