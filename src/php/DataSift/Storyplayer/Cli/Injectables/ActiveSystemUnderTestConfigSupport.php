@@ -82,7 +82,7 @@ trait Injectables_ActiveSystemUnderTestConfigSupport
         foreach ($activeSut as $sutDetails) {
             foreach ($activeTestEnv as $envDetails) {
                 foreach ($envDetails->details->machines as $machine) {
-                    if (in_array($sutDetails->role, $machine->roles)) {
+                    if (in_array($sutDetails->role, $machine->roles) || in_array('*', $machine->roles)) {
                         if (!isset($machine->params)) {
                             $machine->params = new BaseObject;
                         }
