@@ -214,6 +214,8 @@ function main($argv)
 		$injectables->initDefaultLocalEnvironmentName($injectables);
 		$injectables->initKnownTestEnvironmentsSupport($additionalConfigs['testEnvironments']);
 		$injectables->initDefaultTestEnvironmentName($injectables);
+		$injectables->initKnownSystemsUnderTestSupport($additionalConfigs['systemsUnderTest']);
+		$injectables->initDefaultSystemUnderTestName($injectables);
 	}
 	catch (Exception $e)
 	{

@@ -43,11 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-
 /**
- * support for functionality that all commands are expected to support
+ * determine our default system-under-test to test against
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,44 +53,24 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+trait Injectables_DefaultSystemUnderTestName
 {
-	public $commonFunctionality = [];
+	public $defaultSystemUnderTestName;
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
+	public function initDefaultSystemUnderTestName($injectables)
 	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_LocalEnvironmentConfigSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TestEnvironmentConfigSupport,
-			new Common_SystemUnderTestConfigSupport,
-			new Common_ActiveConfigSupport,
-			new Common_ColorSupport,
-			new Common_ConsoleSupport,
-			new Common_PhaseLoaderSupport,
-			new Common_ProseLoaderSupport,
-		];
-
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
+		// special case - if there's only one defined, use that
+		if (count($injectables->knownSystemsUnderTestList) == 1) {
+			reset($injectables->knownSystemsUnderTestList);
+			$this->defaultSystemUnderTestName = current($injectables->knownSystemsUnderTestList);
+			return;
 		}
-	}
 
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
+		// special case - is there one in the storyplayer.json[.dist]
+		// config that we've already loaded?
+		// TBD
+
+		// if we get here, then we do not know what the default should be
+		$this->defaultSystemUnderTestName = null;
 	}
 }

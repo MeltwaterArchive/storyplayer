@@ -43,57 +43,51 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
 
-/**
- * support for functionality that all commands are expected to support
- *
- * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-trait CommonFunctionalitySupport
+class Common_SystemUnderTestConfigValidator implements Validator
 {
-	public $commonFunctionality = [];
+    const MSG_NOTVALIDSUT = "Unknown system-under-test '%value%'";
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
-	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_LocalEnvironmentConfigSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TestEnvironmentConfigSupport,
-			new Common_SystemUnderTestConfigSupport,
-			new Common_ActiveConfigSupport,
-			new Common_ColorSupport,
-			new Common_ConsoleSupport,
-			new Common_PhaseLoaderSupport,
-			new Common_ProseLoaderSupport,
-		];
+    /**
+     * @var array
+     */
+    protected $sutList;
 
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
+    /**
+     * @var string
+     */
+    protected $defaultValue;
 
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
-	}
+    /**
+     * @param array $sutList
+     * @param string $defaultValue
+     */
+    public function __construct($sutList, $defaultValue)
+    {
+        $this->sutList = $sutList;
+        $this->defaultValue = $defaultValue;
+    }
+
+    /**
+     *
+     * @param  mixed $value
+     * @param  ValidationResult $result
+     * @return ValidationResult
+     */
+    public function validate($value, ValidationResult $result = null)
+    {
+        if ($result === null) {
+            $result = new ValidationResult($value);
+        }
+
+        // the $value must be a valid system-under-test name
+        if (!in_array($value, $this->sutList) && $value !== $this->defaultValue) {
+            $result->addError(static::MSG_NOTVALIDSUT);
+            return $result;
+        }
+
+        return $result;
+    }
 }

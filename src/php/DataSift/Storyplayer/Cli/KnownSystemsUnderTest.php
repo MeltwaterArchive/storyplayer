@@ -43,57 +43,36 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * support for functionality that all commands are expected to support
+ * Our list of known systems-under-test
+ *
+ * This list is only used when the user hasn't created any system-under-test
+ * config files of their own
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/TestEnvironmentLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+class KnownSystemsUnderTest extends BaseObject
 {
-	public $commonFunctionality = [];
+    public function __construct()
+    {
+        $this->initDefaultConfig();
+    }
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
-	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_LocalEnvironmentConfigSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TestEnvironmentConfigSupport,
-			new Common_SystemUnderTestConfigSupport,
-			new Common_ActiveConfigSupport,
-			new Common_ColorSupport,
-			new Common_ConsoleSupport,
-			new Common_PhaseLoaderSupport,
-			new Common_ProseLoaderSupport,
-		];
+    /**
+     * @return void
+     */
+    public function initDefaultConfig()
+    {
+        // defaults for the local computer
+        $this->localhost = new BaseObject;
 
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
-
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
-	}
+        // all done
+    }
 }

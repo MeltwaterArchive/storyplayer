@@ -43,11 +43,10 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * support for functionality that all commands are expected to support
+ * support for the system-under-test that the user chooses
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,44 +55,48 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+trait Injectables_ActiveSystemUnderTestConfigSupport
 {
-	public $commonFunctionality = [];
+	public $activeSystemUnderTestName;
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext)
+	public function initActiveSystemUnderTestConfigSupport($sutName, $injectables)
 	{
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		$this->commonFunctionality = [
-			new Common_LocalEnvironmentConfigSupport,
-			new Common_DefinesSupport,
-			new Common_DeviceSupport,
-			new Common_TestEnvironmentConfigSupport,
-			new Common_SystemUnderTestConfigSupport,
-			new Common_ActiveConfigSupport,
-			new Common_ColorSupport,
-			new Common_ConsoleSupport,
-			new Common_PhaseLoaderSupport,
-			new Common_ProseLoaderSupport,
-		];
+        // does the system-under-test exist?
+        if (!isset($injectables->knownSystemsUnderTest->$sutName)) {
+            throw new E4xx_NoSuchSystemUnderTest($sutName);
+        }
 
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
+        // shorthand
+        $activeSut     = $injectables->knownSystemsUnderTest->$sutName;
+        $activeTestEnv = new BaseObject;
+        $activeTestEnv->mergeFrom(json_decode($injectables->activeTestEnvironmentConfig));
 
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
+        // we need to merge the config for this system-under-test into
+        // our active test environment config
+        //
+        // we're going to add the params section from our system-under-test
+        // to each host in the active test environment that can host
+        // the system-under-test
+        //
+        // we use the 'roles' data to match the two up
+        foreach ($activeSut as $sutDetails) {
+            foreach ($activeTestEnv as $envDetails) {
+                foreach ($envDetails->details->machines as $machine) {
+                    if (in_array($sutDetails->role, $machine->roles)) {
+                        if (!isset($machine->params)) {
+                            $machine->params = new BaseObject;
+                        }
+                        $machine->params->mergeFrom($sutDetails->params);
+                    }
+                }
+            }
+        }
+
+        // we need to store the test environment's config as a string,
+        // as it will need expanding as we provision the test environment
+        $injectables->activeTestEnvironmentConfig = json_encode($activeTestEnv);
+
+        // remember the system-under-test
+        $this->activeSystemUnderTestName = $sutName;
 	}
 }
