@@ -7,6 +7,30 @@ next: '<a href="copyright.html">Next: Legal Stuff</a>'
 
 # ChangeLog
 
+## v1.5.4
+
+Released 25th July 2014.
+
+### New
+
+* --persist-device switch
+* $st->expectsSupervisor()->processIsRunning()
+* $st->fromSupervisor()->getProcessIsRunning()
+* $st->usingSupervisor()->startProcess()
+* $st->usingSupervisor()->stopProcess()
+
+### Fixed
+
+* $st->expectsHost()->processIsRunning() works again
+
+## v1.5.3
+
+Released 3rd April 2014
+
+### Fixed
+
+* Internal SSH client now displays multi-line output
+
 ## v1.5.2
 
 Released 14th March 2014.

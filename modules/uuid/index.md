@@ -1,7 +1,7 @@
 ---
 layout: modules-uuid
 title: The UUID Module
-prev: '<a href="../../modules/shell/usingShell.html">Prev: usingShell()</a>'
+prev: '<a href="../../modules/supervisor/usingSupervisor.html">Prev: usingSupervisor()</a>'
 next: '<a href="../../modules/uuid/fromUuid.html">Next: fromUuid()</a>'
 ---
 

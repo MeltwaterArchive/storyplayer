@@ -2,7 +2,7 @@
 layout: modules-shell
 title: usingShell()
 prev: '<a href="../../modules/shell/expectsShell.html">Prev: expectsShell()</a>'
-next: '<a href="../../modules/uuid/index.html">Next: The UUID Module</a>'
+next: '<a href="../../modules/supervisor/index.html">Next: The Supervisor Module</a>'
 ---
 
 # usingShell()
