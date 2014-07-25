@@ -649,7 +649,7 @@ class StoryTeller
 
 	public function startAction($text)
 	{
-		return $this->actionLogger->startAction($this->getUser(), $text);
+		return $this->actionLogger->startAction($text);
 	}
 
 	public function closeAllOpenActions()

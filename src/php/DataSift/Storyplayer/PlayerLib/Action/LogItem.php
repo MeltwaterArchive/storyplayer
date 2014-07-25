@@ -58,7 +58,6 @@ use DataSift\Stone\LogLib\Log;
 class Action_LogItem
 {
 	private $nestLevel;
-	private $user;
 	private $text;
 	private $startTime;
 	private $endTime;
@@ -79,16 +78,14 @@ class Action_LogItem
 		$this->output      = $injectables->output;
 	}
 
-	public function startAction($user, $text)
+	public function startAction($text)
 	{
 		// when did this happen?
 		$this->startTime = microtime(true);
 
 		// what is about to happen?
 		$this->text = $text;
-
-		// who are we pretending to be?
-		$this->user = clone $user;
+		//echo '#' . $this->nestLevel . ' -> ' . $text . PHP_EOL;
 
 		// set the log level
 		$this->setLogLevel($text);
@@ -237,12 +234,12 @@ class Action_LogItem
 	{
 		// create a log item for this step
 		$action = new Action_LogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
-		$action->startAction($this->user, $text);
+		$action->startAction($text);
 
-		// add it to our collection
+		// add the action to our collection
 		$this->nestedActions[] = $action;
 
-		// call the user's callback
+		// call the callback
 		$return = $callable($action);
 
 		// was there a return value?
