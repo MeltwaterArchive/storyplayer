@@ -56,41 +56,25 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+class DefaultCommonFunctionality
 {
-	public $commonFunctionality = [];
+	public $classes = [
+		"Common_LocalEnvironmentConfigSupport" => "Common_LocalEnvironmentConfigSupport",
+		"Common_DefinesSupport"                => "Common_DefinesSupport",
+		"Common_DeviceSupport"                 => "Common_DeviceSupport",
+		"Common_TestEnvironmentConfigSupport"  => "Common_TestEnvironmentConfigSupport",
+		"Common_SystemUnderTestConfigSupport"  => "Common_SystemUnderTestConfigSupport",
+		"Common_ActiveConfigSupport"           => "Common_ActiveConfigSupport",
+		"Common_ColorSupport"                  => "Common_ColorSupport",
+		"Common_ConsoleSupport"                => "Common_ConsoleSupport",
+		"Common_PhaseLoaderSupport"            => "Common_PhaseLoaderSupport",
+		"Common_ProseLoaderSupport"            => "Common_ProseLoaderSupport",
+	];
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext, $options = null)
+	public function disableFunctionality($functionality)
 	{
-		// make sure we have a list functionality to enable
-		if (!$options) {
-			$options = new DefaultCommonFunctionality;
-		}
-
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		foreach ($options->classes as $className) {
-			$fullClassname = "DataSift\\Storyplayer\\Cli\\" . $className;
-			$this->commonFunctionality[] = new $fullClassname;
-		}
-
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
-
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
+		if (isset($this->classes[$functionality])) {
+			unset($this->classes[$functionality]);
 		}
 	}
 }

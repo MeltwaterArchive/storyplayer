@@ -43,11 +43,11 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * support for functionality that all commands are expected to support
+ * Exception thrown when we cannot find the system-under-test that we
+ * are looking for
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,41 +56,12 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+class E4xx_NoSuchSystemUnderTest extends Exxx_Exception
 {
-	public $commonFunctionality = [];
-
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext, $options = null)
-	{
-		// make sure we have a list functionality to enable
-		if (!$options) {
-			$options = new DefaultCommonFunctionality;
-		}
-
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		foreach ($options->classes as $className) {
-			$fullClassname = "DataSift\\Storyplayer\\Cli\\" . $className;
-			$this->commonFunctionality[] = new $fullClassname;
-		}
-
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
-
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
-	}
+    public function __construct($sutName)
+    {
+    	$msg = "Unknown system under test '{$sutName}'; we have no config for it" . PHP_EOL . PHP_EOL
+    	     . "Use 'storyplayer list-systems-under-test' to see the list of known systems under test";
+        parent::__construct(400, $msg, $msg);
+    }
 }

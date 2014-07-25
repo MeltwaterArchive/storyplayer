@@ -153,6 +153,11 @@ class StoryTeller
 	private $checkpoint = null;
 
 	/**
+	 * the script that is being played
+	 */
+	private $scriptFilename = null;
+
+	/**
 	 *
 	 * @var PhaseLoader
 	 */
@@ -347,6 +352,16 @@ class StoryTeller
 
 	    // all done
 	    return $this;
+	}
+
+	public function getScriptFilename()
+	{
+		return $this->scriptFilename;
+	}
+
+	public function setScriptFilename($filename)
+	{
+		$this->scriptFilename = $filename;
 	}
 
 	/**
@@ -737,7 +752,7 @@ class StoryTeller
 		$this->setDeviceAdapter($adapter);
 
 		// do we have a deviceSetup() phase?
-		if ($this->story->hasDeviceSetup()) {
+		if (isset($this->story) && $this->story->hasDeviceSetup()) {
 			// get the callbacks to call
 			$callbacks = $this->story->getDeviceSetup();
 
@@ -773,7 +788,7 @@ class StoryTeller
 		//
 		// we need to run this BEFORE we stop the device, otherwise
 		// the deviceTeardown() phase has no device to work with
-		if ($this->story->hasDeviceTeardown()) {
+		if (isset($this->story) && $this->story->hasDeviceTeardown()) {
 			// get the callbacks to call
 			$callbacks = $this->story->getDeviceTeardown();
 

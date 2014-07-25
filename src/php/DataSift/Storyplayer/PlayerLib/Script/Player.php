@@ -34,63 +34,108 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\PlayerLib;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use DataSift\Storyplayer\Cli\Injectables;
 
 /**
- * support for functionality that all commands are expected to support
+ * the main class for animating a single story
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+class Script_Player
 {
-	public $commonFunctionality = [];
+	/**
+	 * path to the script that we are going to run
+	 *
+	 * @var string
+	 */
+	protected $scriptFilename;
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext, $options = null)
+	/**
+	 * a list of the phases we need to run to get everything ready to
+	 * run the script
+	 *
+	 * @var array
+	 */
+	protected $startupPhases;
+
+	/**
+	 * a list of the phases that make up the script
+	 *
+	 * @var array
+	 */
+	protected $scriptPhases;
+
+	/**
+	 * a list of the phases that we need to run once the script has
+	 * finished
+	 *
+	 * @var array
+	 */
+	protected $shutdownPhases;
+
+	public function __construct($scriptFilename, Injectables $injectables)
 	{
-		// make sure we have a list functionality to enable
-		if (!$options) {
-			$options = new DefaultCommonFunctionality;
-		}
-
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		foreach ($options->classes as $className) {
-			$fullClassname = "DataSift\\Storyplayer\\Cli\\" . $className;
-			$this->commonFunctionality[] = new $fullClassname;
-		}
-
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
+		$this->scriptFilename = $scriptFilename;
+		$this->startupPhases  = [];
+		$this->scriptPhases   = $injectables->activeConfig->storyplayer->phases->script;
+		$this->shutdownPhases = [];
 	}
 
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
+	public function play(StoryTeller $st, Injectables $injectables)
 	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
-		}
+		// shorthand
+		$output = $st->getOutput();
+
+        // we're going to use this to play our setup and teardown phases
+        $phasesPlayer = new Phases_Player();
+
+        // tell $st what we are going to run
+        $st->setScriptFilename($this->scriptFilename);
+
+        // run the startup phase
+        $phasesPlayer->playPhases(
+        	$st,
+        	$injectables,
+        	$this->startupPhases
+        );
+
+		// run the phases in the 'story' section
+		$phaseResults = $phasesPlayer->playPhases(
+			$st,
+			$injectables,
+			$this->scriptPhases
+		);
+
+		// play the 'paired' phases too, in case they haven't yet
+		// executed correctly
+		$phasesPlayer->playPairedPhases(
+			$st,
+			$injectables,
+			$this->scriptPhases,
+			$phaseResults
+		);
+
+		// run the shutdown phase
+        $phasesPlayer->playPhases(
+			$st,
+			$injectables,
+			$this->shutdownPhases
+        );
+
+		// all done
 	}
 }

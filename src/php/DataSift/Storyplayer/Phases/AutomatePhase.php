@@ -34,63 +34,88 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Phases;
 
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Exception;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
+use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 /**
- * support for functionality that all commands are expected to support
+ * the Automate phase, for scripts
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+
+class AutomatePhase extends StoryPhase
 {
-	public $commonFunctionality = [];
-
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext, $options = null)
+	public function doPhase()
 	{
-		// make sure we have a list functionality to enable
-		if (!$options) {
-			$options = new DefaultCommonFunctionality;
+		// shorthand
+		$st          = $this->st;
+
+		// keep track of what happens with the action
+		$phaseResult = $this->getNewPhaseResult();
+
+		// run ONE of the actions, picked at random
+		try {
+			// run the script
+			include $st->getScriptFilename();
+
+			// if we get here, all is well
+			$phaseResult->setContinuePlaying();
 		}
 
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		foreach ($options->classes as $className) {
-			$fullClassname = "DataSift\\Storyplayer\\Cli\\" . $className;
-			$this->commonFunctionality[] = new $fullClassname;
+		// if the set of actions fails, it will throw this exception
+		catch (E5xx_ActionFailed $e) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+		}
+		catch (E5xx_ExpectFailed $e) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
 		}
 
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
+		// we treat this as a hard failure
+		catch (E5xx_NotImplemented $e) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::INCOMPLETE,
+				$e->getMessage(),
+				$e
+			);
 		}
-	}
 
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
+		// if this happens, something has gone badly wrong
+		catch (Exception $e) {
+			$phaseResult->setPlayingFailed(
+				$phaseResult::ERROR,
+				$e->getMessage(),
+				$e
+			);
 		}
+
+		// close off any open log actions
+		$st->closeAllOpenActions();
+
+		// all done
+		return $phaseResult;
 	}
 }
