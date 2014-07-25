@@ -44,13 +44,9 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\CurlBase;
 
 /**
- * get information from a HTTP server, without using a web browser to
- * get it.
- *
- * great for testing APIs
+ * Base class for all curl prose
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -59,20 +55,81 @@ use DataSift\Storyplayer\Prose\CurlBase;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromCurl extends CurlBase
+class CurlBase extends Prose
 {
 	/**
-	 * get 
+	 * @var array The default curl opts
+	 */
+	protected $defaultOptions = array(
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_HEADER => 0
+	);
+
+	/**
+	 * Execute the a curl request
 	 * 
-	 * @param mixed $url URL to request
-	 * @param array $params GET params to add to the URL
+	 * @param string $url URL to request
+	 * @param string $verb The Http verb
+	 * @param array $params  params to add to the URL
 	 * @param array $headers HTTP headers to use
 	 * @param array $options Curl opts array
 	 * 
 	 * @return object|string Response sent by the server. If it's JSON, we'll decode it
 	 */
-	public function get($url, $params = array(), $headers = array(), $options = array())
+	protected function doRequest($url, $verb, $params = array(), $headers = array(), $options = array())
 	{
-		return $this->doRequest($url, 'GET', $params, $headers, $options);
+		// shorthand
+		$st = $this->st;
+
+		$verb = strtoupper($verb);
+
+		// create a new cURL resource
+		$ch = curl_init();
+
+		// handle the verb correctly
+		switch ($verb) {
+			case 'GET':
+				$url = $url . '?' . http_build_query($params);
+				break;
+			case 'POST':
+			case 'PUT':
+			case 'DELETE':
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $verb);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+				break;
+		}
+
+		// what are we doing?
+		$log = $st->startAction("HTTP ${verb} '${url}'");
+
+		// set URL and other appropriate options
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt_array($ch, $options + $this->defaultOptions);
+
+		// set headers
+		if (!empty($headers)) {
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		}
+
+		// grab URL and pass it to the browser
+		$response = curl_exec($ch);
+		$error = curl_error($ch);
+
+		// close cURL resource, and free up system resources
+		curl_close($ch);
+
+		if ($error){
+			throw new E5xx_ActionFailed(__CLASS__.': '.$error);
+		}
+
+		// Try and decode it
+		$decoded = json_decode($response);
+
+		if ($decoded){
+			$response = $decoded;
+		}
+
+		// all done
+		return $response;
 	}
 }
