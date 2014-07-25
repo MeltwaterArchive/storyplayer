@@ -447,6 +447,60 @@ class FromBrowser extends Prose
 		throw new E5xx_ActionFailed(__METHOD__);
 	}
 
+	public function getTable($xpath)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get HTML table using xpath");
+
+		// can we find the table?
+		try {
+			$tableElement = $st->fromBrowser()->getElementByXpath([$xpath]);
+		}
+		catch (Exception $e) {
+			// no such table
+			$log->endAction("no matching table");
+
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		// at this point, it looks like we'll have something to return
+		$return = [];
+
+		// extract the headings
+		$headings = [];
+		$thElements = $tableElement->getElements('xpath', 'descendant::thead/tr/th');
+		foreach ($thElements as $thElement) {
+			$headings[] = $thElement->text();
+		}
+
+		// extract the contents
+		$row = 0;
+		$trElements = $tableElement->getElements('xpath', 'descendant::tbody/tr');
+		foreach ($trElements as $trElement) {
+			$column = 0;
+			$tdElements = $trElement->getElements('xpath', "descendant::td");
+
+			foreach ($tdElements as $tdElement) {
+				if (isset($headings[$column])) {
+					$return[$row][$headings[$column]] = $tdElement->text();
+				}
+				else {
+					$return[$row][] = $tdElement->text();
+				}
+				$column++;
+			}
+
+			$row++;
+		}
+
+		// all done
+		$log->endAction("found table with $column columns and $row rows");
+		return $return;
+	}
+
 	public function getElementsByClass($class, $tags = '*')
 	{
 		// shorthand
