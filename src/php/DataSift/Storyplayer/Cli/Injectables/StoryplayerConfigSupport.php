@@ -43,8 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E4xx_InvalidConfigFile;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
@@ -76,13 +76,13 @@ trait Injectables_StoryplayerConfigSupport
 				$configFilename
 			);
 		}
-		catch (E5xx_ConfigFileNotFound $e) {
+		catch (E4xx_ConfigFileNotFound $e) {
 			// there is no default config file
 			//
 			// it isn't fatal, but we do want to tell people about it
 			$output->logCliWarning("storyplayer config file '$configFilename' not found");
 		}
-		catch (E5xx_InvalidConfigFile $e) {
+		catch (E4xx_InvalidConfigFile $e) {
 			// we either can't read the config file, or it contains
 			// invalid JSON
 			//
