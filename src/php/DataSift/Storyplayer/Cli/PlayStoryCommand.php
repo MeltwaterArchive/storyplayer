@@ -82,6 +82,12 @@ class PlayStoryCommand extends CliCommand
      */
     protected $persistProcesses = false;
 
+    /**
+     * should we keep the test device open between phases?
+     * @var boolean
+     */
+    protected $persistDevice = false;
+
     public function __construct($additionalContext)
     {
         // define the command
@@ -105,6 +111,7 @@ class PlayStoryCommand extends CliCommand
             new EnvironmentSwitch($additionalContext->envList, $defaultEnvName),
             new DefineSwitch(),
             new DeviceSwitch($additionalContext->deviceList),
+            new PersistDeviceSwitch(),
             new PersistProcessesSwitch(),
             new PlatformSwitch(),
         ));
@@ -142,6 +149,11 @@ class PlayStoryCommand extends CliCommand
         // are we persisting processes?
         if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
             $this->persistProcesses = true;
+        }
+
+        // are we persisting the test device?
+        if (isset($engine->options->persistDevice) && $engine->options->persistDevice) {
+            $this->persistDevice = true;
         }
 
         // do we have a story, or list of stories?
@@ -282,11 +294,23 @@ class PlayStoryCommand extends CliCommand
                 $player = new StoryPlayer();
                 $teller->setStory($story);
 
+                // tell StoryPlayer if we're persisting devices or not
+                if ($this->persistDevice) {
+                    $player->setPersistDevice();
+                }
+
                 // make sure we've loaded the user
                 $context->initUser($staticConfig, $runtimeConfig, $story);
 
                 // make the story happen
                 $result = $player->play($teller, $staticConfig);
+
+                // make sure we stop the test device
+                //
+                // we can't rely on perPhaseTeardown() stopping the
+                // device any longer, because of the --persist-device
+                // switch
+                $teller->stopDevice();
 
                 // all done
                 break;
@@ -309,6 +333,11 @@ class PlayStoryCommand extends CliCommand
                     // create something to play this story
                     $player = new StoryPlayer();
                     $teller->setStory($story);
+
+                    // tell StoryPlayer if we're persisting devices or not
+                    if ($this->persistDevice) {
+                        $player->setPersistDevice();
+                    }
 
                     // make sure we've loaded the user
                     $context->initUser($staticConfig, $runtimeConfig, $story);
@@ -344,6 +373,13 @@ class PlayStoryCommand extends CliCommand
 
                     // make the story happen
                     $results[] = $player->play($teller, $staticConfig);
+
+                    // make sure we stop the test device
+                    //
+                    // we can't rely on perPhaseTeardown() stopping the
+                    // device any longer, because of the --persist-device
+                    // switch
+                    $teller->stopDevice();
 
                     // special case - reusable environments
                     if ($storyList->options->reuseTestEnvironment) {

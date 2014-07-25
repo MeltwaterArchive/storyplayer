@@ -152,6 +152,21 @@ class StoryPlayer
 		8 => self::TEARDOWN_FAIL
 	);
 
+	/**
+	 * are we persisting the test device between phases?
+	 *
+	 * @var boolean
+	 */
+	protected $persistDevice = false;
+
+	/**
+	 * we want to keep the test device open between phases
+	 */
+	public function setPersistDevice()
+	{
+		$this->persistDevice = true;
+	}
+
 	public function play(StoryTeller $st, stdClass $staticConfig)
 	{
 		// shorthand
@@ -619,7 +634,9 @@ class StoryPlayer
 		}
 
 		// stop the test device, if it is still running
-		$st->stopDevice();
+		if (!$this->persistDevice) {
+			$st->stopDevice();
+		}
 
 		// all done
 	}
