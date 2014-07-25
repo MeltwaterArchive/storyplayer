@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -43,62 +43,55 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Storyplayer\HostLib;
+use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use Symfony\Component\Yaml\Dumper;
 
 /**
- * Support for working with YAML files
+ *
+ * test the state of a program running under supervisor
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingYamlFile extends Prose
+class ExpectsSupervisor extends HostBase
 {
-	public function __construct(StoryTeller $st, $args)
-	{
-		// call our parent constructor
-		parent::__construct($st, $args);
-
-		// $args[0] will be our filename
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name of the file to work with");
-		}
-	}
-
-	public function writeDataToFile($params)
+	public function programIsRunning($programName)
 	{
 		// shorthand
 		$st = $this->st;
-		$filename = $this->args[0];
 
 		// what are we doing?
-		$printer = new DataPrinter();
-		$logParams = $printer->convertToString($params);
-		$log = $st->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
+		$log = $st->startAction("make sure program '{$programName}' is running on host '{$this->hostDetails->name}'");
 
-		// create an instance of the Symfony YAML writer
-		$writer = new Dumper();
-
-		// create the YAML data
-		$yamlData = $writer->dump($params, 2);
-		if (!is_string($yamlData) || strlen($yamlData) < 6) {
-			throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
+		// is it running?
+		$running = $st->fromSupervisor($this->hostDetails->name)->getProgramIsRunning($programName);
+		if (!$running) {
+			$log->endAction();
+			throw new E5xx_ExpectFailed(__METHOD__, 'program is running', 'program is not running');
 		}
 
-		// prepend the YAML marker
-		$yamlData = '---' . PHP_EOL . $yamlData;
+		// all done
+		$log->endAction();
+	}
 
-		// write the file
-		//
-		// the loose FALSE test here is exactly what we want, because we want to catch
-		// both the situation when the write fails, and when there's zero bytes written
-		if (!file_put_contents($filename, $yamlData)) {
-			throw new E5xx_ActionFailed(__METHOD__, "unable to write file '{$filename}'");
+	public function programIsNotRunning()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure program '{$programName}' is not running on host '{$this->hostDetails->name}'");
+
+		// is it running?
+		$running = $st->fromSupervisor($this->hostDetails->name)->getProgramIsRunning($programName);
+		if ($running) {
+			$log->endAction();
+			throw new E5xx_ExpectFailed(__METHOD__, 'program is not running', 'program is running');
 		}
 
 		// all done

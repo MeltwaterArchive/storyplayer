@@ -9,3 +9,5 @@ nbproject
 review
 sauce_connect.log*
 vendor
+.idea
+*.iml

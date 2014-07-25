@@ -34,74 +34,61 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use Symfony\Component\Yaml\Dumper;
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeString;
 
 /**
- * Support for working with YAML files
+ * Tell Storyplayer not to kill any background processes we have started
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingYamlFile extends Prose
+class PersistDeviceSwitch extends CliSwitch
 {
-	public function __construct(StoryTeller $st, $args)
+	public function __construct()
 	{
-		// call our parent constructor
-		parent::__construct($st, $args);
+		// define our name, and our description
+		$this->setName('persistdevice');
+		$this->setShortDescription('do not auto-kill the test device between phases');
+		$this->setLongDesc(
+			"Use this switch if you want the test device (such as a web browser) to remain open "
+			."between your test phases."
+			. PHP_EOL . PHP_EOL
+			."Be aware that if the test device times out and shuts itself down during one of "
+			."your phases, your test *is* going to fail, because Storyplayer has no way to "
+			."detect that your test device has gone away by itself."
+		);
 
-		// $args[0] will be our filename
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name of the file to work with");
-		}
-	}
-
-	public function writeDataToFile($params)
-	{
-		// shorthand
-		$st = $this->st;
-		$filename = $this->args[0];
-
-		// what are we doing?
-		$printer = new DataPrinter();
-		$logParams = $printer->convertToString($params);
-		$log = $st->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
-
-		// create an instance of the Symfony YAML writer
-		$writer = new Dumper();
-
-		// create the YAML data
-		$yamlData = $writer->dump($params, 2);
-		if (!is_string($yamlData) || strlen($yamlData) < 6) {
-			throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
-		}
-
-		// prepend the YAML marker
-		$yamlData = '---' . PHP_EOL . $yamlData;
-
-		// write the file
-		//
-		// the loose FALSE test here is exactly what we want, because we want to catch
-		// both the situation when the write fails, and when there's zero bytes written
-		if (!file_put_contents($filename, $yamlData)) {
-			throw new E5xx_ActionFailed(__METHOD__, "unable to write file '{$filename}'");
-		}
+		// what are the long switches?
+		$this->addLongSwitch('persist-device');
 
 		// all done
-		$log->endAction();
+	}
+
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->persistDevice = true;
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }
