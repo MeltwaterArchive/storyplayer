@@ -44,7 +44,7 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliSwitch;
 use Phix_Project\CliEngine\CliResult;
 
 /**
@@ -57,7 +57,7 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ListLocalEnvironments_Command extends CliCommand
+class ListLocalEnvironments_Switch extends CliSwitch
 {
 	protected $envList;
 
@@ -69,8 +69,11 @@ class ListLocalEnvironments_Command extends CliCommand
 		$this->setLongDescription(
 			"Use this command to get a list of all of the local environments"
 			. " that are defined in the config files."
-			.PHP_EOL
 		);
+
+		$this->addShortSwitch('E');
+		$this->addLongSwitch('list-local');
+		$this->setSwitchActsAsCommand();
 
 		// remember the environments list
 		$this->envList = $envList;
@@ -83,7 +86,7 @@ class ListLocalEnvironments_Command extends CliCommand
 	 * @param  mixed     $additionalContext
 	 * @return CliResult
 	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false, $additionalContext = null)
 	{
 		// list the environments (if any) in a machine-friendly way
 		foreach ($this->envList as $envName) {
@@ -91,6 +94,6 @@ class ListLocalEnvironments_Command extends CliCommand
 		}
 
 		// all done
-		return new CliResult(0);
+		return new CliResult(CliResult::PROCESS_COMPLETE);
 	}
 }
