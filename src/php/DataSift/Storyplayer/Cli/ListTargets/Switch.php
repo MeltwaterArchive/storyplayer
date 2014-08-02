@@ -69,7 +69,6 @@ class ListTargets_Switch extends CliSwitch
 		$this->setLongDesc(
 			"Use this switch to get a list of all of the test environments"
 			. " that are defined in the config files."
-			.PHP_EOL
 		);
 
 		// what are the short switches?

@@ -71,8 +71,7 @@ class ListProcesses_Switch extends CliSwitch
 			."This can help you to identify processes that have been left running after "
 			."a test has completed."
 			.PHP_EOL .PHP_EOL
-			."You can use the 'kill-processes' command to stop these processes."
-			.PHP_EOL
+			."You can use the '--kill-processes' switch to stop these processes."
 		);
 
 		// what are the long switches?
