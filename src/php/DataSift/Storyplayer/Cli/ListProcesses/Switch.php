@@ -44,11 +44,11 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliSwitch;
 use Phix_Project\CliEngine\CliResult;
 
 /**
- * A command to list the processes we have previously started
+ * A switch to list the processes we have previously started
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,14 +57,14 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ListProcesses_Command extends CliCommand
+class ListProcesses_Switch extends CliSwitch
 {
 	public function __construct()
 	{
 		// define the command
 		$this->setName('list-processes');
 		$this->setShortDescription('list any background processes that are currently running');
-		$this->setLongDescription(
+		$this->setLongDesc(
 			"Use this command to get a list of all of the processes that Storyplayer "
 			."has started in the background."
 			.PHP_EOL .PHP_EOL
@@ -74,6 +74,12 @@ class ListProcesses_Command extends CliCommand
 			."You can use the 'kill-processes' command to stop these processes."
 			.PHP_EOL
 		);
+
+		// what are the long switches?
+		$this->addLongSwitch('list-processes');
+
+		// we are actually a command, pretending to be a switch
+		$this->setSwitchActsAsCommand();
 	}
 
 	/**
@@ -83,7 +89,7 @@ class ListProcesses_Command extends CliCommand
 	 * @param  mixed     $additionalContext
 	 * @return CliResult
 	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false, $additionalContext = null)
 	{
 		// shorthand
 		$runtimeConfig = $additionalContext->runtimeConfig;
@@ -105,6 +111,6 @@ class ListProcesses_Command extends CliCommand
 		}
 
 		// all done
-		return new CliResult(0);
+		return new CliResult(CliResult::PROCESS_COMPLETE);
 	}
 }
