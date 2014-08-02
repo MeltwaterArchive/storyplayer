@@ -195,6 +195,7 @@ class StoryTeller
 	private $device = null;
 	private $deviceName = null;
 	private $deviceAdapter = null;
+	private $persistDevice = false;
 
 	// the config that Storyplayer is running with
 	private $config = null;
@@ -677,6 +678,16 @@ class StoryTeller
 	// Device support
 	//
 	// ------------------------------------------------------------------
+
+	public function getPersistDevice()
+	{
+		return $this->persistDevice;
+	}
+
+	public function setPersistDevice()
+	{
+		$this->persistDevice = true;
+	}
 
 	public function getDeviceDetails()
 	{

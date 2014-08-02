@@ -107,6 +107,12 @@ class Story_Player
         $story = Story_Loader::loadStory($this->storyFilename);
         $st->setStory($story);
 
+        // does our story want to keep the test device open between
+        // phases?
+        if ($story->getPersistDevice()) {
+        	$st->setPersistDevice();
+        }
+
         // initialise the user
         $context = $st->getStoryContext();
         $context->initUser($st);

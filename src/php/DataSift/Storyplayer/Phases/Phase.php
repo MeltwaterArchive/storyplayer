@@ -161,7 +161,9 @@ abstract class Phase
 		}
 
 		// stop the test device, if it is still running
-		$st->stopDevice();
+		if (!$st->getPersistDevice()) {
+			$st->stopDevice();
+		}
 
 		// all done
 	}

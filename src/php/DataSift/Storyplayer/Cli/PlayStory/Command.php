@@ -74,6 +74,14 @@ use DataSift\Storyplayer\Console\DevModeConsole;
 class PlayStory_Command extends CliCommand
 {
     /**
+     * should we let the test device (ie the web browser) survive between
+     * phases?
+     *
+     * @var boolean
+     */
+    protected $persistDevice = false;
+
+    /**
      * should we let background processes survive when we shutdown?
      * @var boolean
      */
@@ -117,6 +125,7 @@ class PlayStory_Command extends CliCommand
 
         // the switches that this command supports
         $this->setSwitches(array(
+            new PlayStory_PersistDeviceSwitch(),
             new PlayStory_PersistProcessesSwitch(),
             new PlayStory_LogJsonSwitch(),
             new PlayStory_LogJUnitSwitch(),
@@ -191,6 +200,9 @@ class PlayStory_Command extends CliCommand
         // save the output for use in other methods
         $this->output = $output;
 
+        // initialise device persistence
+        $this->initDevicePersistence($engine, $injectables);
+
         // initialise process persistence
         $this->initProcessPersistence($engine, $injectables);
 
@@ -212,6 +224,11 @@ class PlayStory_Command extends CliCommand
         // remember our $st object, as we'll need it for our
         // shutdown function
         $this->st = $st;
+
+        // are we persisting the test device?
+        if ($this->persistDevice) {
+            $st->setPersistDevice();
+        }
 
         // install signal handling, now that $this->st is defined
         //
@@ -239,6 +256,13 @@ class PlayStory_Command extends CliCommand
 
             // play the story(ies)
             $player->play($st, $injectables);
+
+            // make sure the test device has been stopped
+            // (it may have been persisted by the story)
+            //
+            // we do not allow the test device to persist between
+            // stories
+            $st->stopDevice();
         }
 
         // write out any changed runtime config to disk
@@ -259,6 +283,23 @@ class PlayStory_Command extends CliCommand
     // CommonFunctionalitySupport trait have been initialised
     //
     // ------------------------------------------------------------------
+
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
+    protected function initDevicePersistence(CliEngine $engine, Injectables $injectables)
+    {
+        // by default, no persistence
+        $this->persistDevice = false;
+
+        // are we persisting the device?
+        if (isset($engine->options->persistDevice) && $engine->options->persistDevice) {
+            $this->persistDevice = true;
+        }
+    }
 
     /**
      *

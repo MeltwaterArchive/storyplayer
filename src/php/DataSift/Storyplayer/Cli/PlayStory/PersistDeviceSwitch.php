@@ -61,7 +61,7 @@ use Phix_Project\ValidationLib4\Type_MustBeString;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PersistDeviceSwitch extends CliSwitch
+class PlayStory_PersistDeviceSwitch extends CliSwitch
 {
 	public function __construct()
 	{
