@@ -31,7 +31,7 @@ use DataSift\Storyplayer\Cli\Install_Command;
 use DataSift\Storyplayer\Cli\KillProcesses_Command;
 use DataSift\Storyplayer\Cli\ListHostsTable_Command;
 use DataSift\Storyplayer\Cli\ListLocalEnvironments_Command;
-use DataSift\Storyplayer\Cli\ListProcesses_Command;
+use DataSift\Storyplayer\Cli\ListProcesses_Switch;
 use DataSift\Storyplayer\Cli\ListTargets_Switch;
 use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
@@ -245,8 +245,9 @@ function main($argv)
 	// add the switches that come before any of the commands
 	// if we have any
 	//
-	// add switches in the order of presidence
+	// add switches in the order of precedence
 	$engine->addEngineSwitch(new VersionSwitch);
+	$engine->addEngineSwitch(new ListProcesses_Switch);
 	$engine->addEngineSwitch(new ListTargets_Switch($injectables->knownTestEnvironmentsList));
 	$engine->addEngineSwitch(new LongHelpSwitch);
 	$engine->addEngineSwitch(new ShortHelpSwitch);
@@ -268,7 +269,6 @@ function main($argv)
 	$engine->addCommand(new KillProcesses_Command);
 	$engine->addCommand(new ListHostsTable_Command);
 	$engine->addCommand(new ListLocalEnvironments_Command($injectables->knownLocalEnvironmentsList));
-	$engine->addCommand(new ListProcesses_Command);
 	$engine->addCommand(new ShowLocalEnvironment_Command);
 	$engine->addCommand(new ShowTestEnvironment_Command);
 
