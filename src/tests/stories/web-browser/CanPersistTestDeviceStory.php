@@ -13,7 +13,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->called('Can persist the test device');
 
 // keep the test device open
-//$story->setPersistDevice();
+$story->setPersistDevice();
 
 // ========================================================================
 //
