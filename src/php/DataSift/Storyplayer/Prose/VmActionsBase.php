@@ -45,7 +45,6 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\HostLib;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * base class & API for different types of virtual hosting

@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  * do things with Hornet. Hornet is DataSift's evil load-test tool.
  *
@@ -66,10 +64,8 @@ class UsingHornet extends Prose
 		$log = $st->startAction("start hornet-drone '{$clientName}' with params '(" . implode(', ', $clientParams) . ")");
 
 		// build the command to run
-		$env = $st->getEnvironment();
-		$pathToHornet = $env->hornet->path;
-
-		$command = $pathToHornet . '/hornet-drone ' . implode(' ', $clientParams);
+		$appSettings = $st->fromConfig()->getAppSettings('hornet');
+		$command = $appSettings->path . '/hornet-drone ' . implode(' ', $clientParams);
 
 		// run the command in a screen session
 		$st->usingShell()->startInScreen($clientName, $command);

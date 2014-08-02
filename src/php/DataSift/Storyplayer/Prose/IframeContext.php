@@ -42,7 +42,7 @@
  */
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\StoryLib\StoryContext;
+use DataSift\Storyplayer\StoryLib\Story_Context;
 
 /**
  * this (when we finish it) will be used to tell Selenium to operate against
@@ -58,7 +58,7 @@ use DataSift\Storyplayer\StoryLib\StoryContext;
 class IframeContext extends PageContext
 {
 	public function __construct($iframeId) {
-		$this->pageContextAction = function(StoryContext $context) use($iframeId) {
+		$this->pageContextAction = function(Story_Context $context) use($iframeId) {
 			$browser = $context->browserSession;
 
 			$browser->frame(array('id' => $iframeId));

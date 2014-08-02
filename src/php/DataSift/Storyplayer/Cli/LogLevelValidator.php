@@ -45,13 +45,18 @@ namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\ValidationLib4\Validator;
 use Phix_Project\ValidationLib4\ValidationResult;
-
 use DataSift\Stone\LogLib\Log;
 
 class LogLevelValidator implements Validator
 {
     const MSG_UNKNOWNLOGLEVEL = "Unknown log level '%value%'";
 
+    /**
+     *
+     * @param  mixed $value
+     * @param  ValidationResult $result
+     * @return ValidationResult
+     */
     public function validate($value, ValidationResult $result = null)
     {
         if ($result === null) {

@@ -70,8 +70,12 @@ class BaseRuntimeTable extends Prose
             throw new E4xx_MissingArgument(__METHOD__, "You must provide a table name to ".get_class($this)."::__construct");
         }
 
-        // Let's ucfirst the table name for consistancy
-        $args[0] = ucfirst($args[0]);
+        // normalise
+        //
+        // in Storyplayer v1.x, we used ucfirst(), but on reflection,
+        // I strongly prefer lcfirst() now that we've introduced support
+        // for retrieving data via the template engine
+        $args[0] = lcfirst($args[0]);
 
         return parent::__construct($st, $args);
     }
@@ -91,20 +95,10 @@ class BaseRuntimeTable extends Prose
 
         // get the runtime config
         $runtimeConfig = $st->getRuntimeConfig();
+        $runtimeConfigManager = $st->getRuntimeConfigManager();
 
-        // make sure the storyplayer section exists
-        if (!isset($runtimeConfig->storyplayer)){
-            $runtimeConfig->storyplayer = new BaseObject;
-        }
-
-        // and that the tables section exists
-        if (!isset($runtimeConfig->storyplayer->tables)){
-            $runtimeConfig->storyplayer->tables = new BaseObject;
-        }
-
-        return $runtimeConfig->storyplayer->tables;
+        return $runtimeConfigManager->getAllTables($runtimeConfig);
     }
-
 }
 
 

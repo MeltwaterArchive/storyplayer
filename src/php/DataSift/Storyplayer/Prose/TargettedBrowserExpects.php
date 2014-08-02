@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
@@ -63,8 +64,12 @@ class TargettedBrowserExpects
 	protected $searchTerm;
 	protected $element;
 	protected $elementType;
+	protected $elementDesc;
 
-	public function __construct(StoryTeller $st, callable $searchFunction, $searchTerm, $elemendDesc)
+	/**
+	 * @param string $elementDesc
+	 */
+	public function __construct(StoryTeller $st, callable $searchFunction, $searchTerm, $elementDesc)
 	{
 		$this->st             = $st;
 		$this->searchFunction = $searchFunction;

@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  * manipulate the internal hosts table
  *
@@ -75,7 +73,20 @@ class UsingHostsTable extends Prose
 	 */
 	public function addHost($hostName, $hostDetails)
 	{
-		$this->st->usingRuntimeTable($this->entryKey)->addItem($hostName, $hostDetails);
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("add host '{$hostName}' to current test environment");
+
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
+
+		// add it
+		$st->usingRuntimeTable($this->entryKey)->addItemToGroup($testEnvName, $hostName, $hostDetails);
+
+		// all done
+		$log->endAction();
 	}
 
 	/**
@@ -87,6 +98,19 @@ class UsingHostsTable extends Prose
 	 */
 	public function removeHost($hostName)
 	{
-		$this->st->usingRuntimeTable($this->entryKey)->removeItem($hostName);
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("remove host '{$hostName}' from current test environment");
+
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
+
+		// remove it
+		$st->usingRuntimeTable($this->entryKey)->removeItemFromGroup($testEnvName, $hostName);
+
+		// all done
+		$log->endAction();
 	}
 }

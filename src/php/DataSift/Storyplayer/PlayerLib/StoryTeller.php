@@ -43,24 +43,95 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use Exception;
-
+use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Cli\RuntimeConfigManager;
+use DataSift\Storyplayer\Output;
+use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Storyplayer\Prose\E4xx_ObsoleteProse;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\DeviceLib;
 
-use DataSift\Stone\HttpLib\HttpAddress;
-use DataSift\Stone\Log\LogLib;
 use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\PathLib\PathTo;
-use DataSift\Stone\ProcessLib\SubProcess;
 
 /**
  * our main facilitation class
  *
  * all actions and tests inside a story are executed through an instance
  * of this class, making this class the StoryTeller :)
+ *
+ * @method DataSift\Storyplayer\Prose\AssertsArray assertsArray(array $expected)
+ * @method DataSift\Storyplayer\Prose\AssertsBoolean assertsBoolean(boolean $expected)
+ * @method DataSift\Storyplayer\Prose\AssertsDouble assertsDouble(float $expected)
+ * @method DataSift\Storyplayer\Prose\AssertsInteger assertsInteger(integer $expected)
+ * @method DataSift\Storyplayer\Prose\AssertsObject assertsObject(object $expected)
+ * @method DataSift\Storyplayer\Prose\AssertsString assertsString(string $expected)
+ * @method DataSift\Storyplayer\Prose\ChangesUser changesUser()
+ * @method DataSift\Storyplayer\Prose\ExpectsBrowser expectsBrowser()
+ * @method DataSift\Storyplayer\Prose\ExpectsEc2Image expectsEc2Image(string $amiId)
+ * @method DataSift\Storyplayer\Prose\ExpectsFailure expectsFailure()
+ * @method DataSift\Storyplayer\Prose\ExpectsForm expectsForm(string $formId)
+ * @method DataSift\Storyplayer\Prose\ExpectsGraphite expectsGraphite()
+ * @method DataSift\Storyplayer\Prose\ExpectsHost expectsHost($hostDetails)
+ * @method DataSift\Storyplayer\Prose\ExpectsHostsTable expectsHostsTable()
+ * @method DataSift\Storyplayer\Prose\ExpectsHttpResponse expectsHttpResponse(HttpClientResponse $response)
+ * @method DataSift\Storyplayer\Prose\ExpectsIframe expectsIframe(string $id)
+ * @method DataSift\Storyplayer\Prose\ExpectsProcessesTable expectsProcessesTable()
+ * @method DataSift\Storyplayer\Prose\ExpectsRuntimeTable expectsRuntimeTable(string $tableName)
+ * @method DataSift\Storyplayer\Prose\ExpectsShell expectsShell()
+ * @method DataSift\Storyplayer\Prose\ExpectsUser expectsUser()
+ * @method DataSift\Storyplayer\Prose\ExpectsUuid expectsUuid()
+ * @method DataSift\Storyplayer\Prose\ExpectsZmq expectsZmq()
+ * @method DataSift\Storyplayer\Prose\FromAws fromAws()
+ * @method DataSift\Storyplayer\Prose\FromBrowser fromBrowser()
+ * @method DataSift\Storyplayer\Prose\FromCheckpoint fromCheckpoint()
+ * @method DataSift\Storyplayer\Prose\FromCurl fromCurl()
+ * @method DataSift\Storyplayer\Prose\FromEc2 fromEc2()
+ * @method DataSift\Storyplayer\Prose\FromEc2Instance fromEc2Instance(string $hostname)
+ * @method DataSift\Storyplayer\Prose\FromFacebook fromFacebook()
+ * @method DataSift\Storyplayer\Prose\FromFile fromFile()
+ * @method DataSift\Storyplayer\Prose\FromForm fromForm(string $formId)
+ * @method DataSift\Storyplayer\Prose\FromGraphite fromGraphite()
+ * @method DataSift\Storyplayer\Prose\FromHost fromHost(string $hostname)
+ * @method DataSift\Storyplayer\Prose\FromHostsTable fromHostsTable()
+ * @method DataSift\Storyplayer\Prose\FromHttp fromHttp()
+ * @method DataSift\Storyplayer\Prose\FromIframe fromIframe(string $id)
+ * @method DataSift\Storyplayer\Prose\FromLocalEnvironment fromLocalEnvironment()
+ * @method DataSift\Storyplayer\Prose\FromProcessesTable fromProcessesTable()
+ * @method DataSift\Storyplayer\Prose\FromRuntimeTable fromRuntimeTable(string $tableName)
+ * @method DataSift\Storyplayer\Prose\FromSauceLabs fromSauceLabs()
+ * @method DataSift\Storyplayer\Prose\FromShell fromShell()
+ * @method DataSift\Storyplayer\Prose\FromTestEnvironment fromTestEnvironment()
+ * @method DataSift\Storyplayer\Prose\FromUuid fromUuid()
+ * @method DataSift\Storyplayer\Prose\UsingBrowser usingBrowser()
+ * @method DataSift\Storyplayer\Prose\UsingCheckpoint usingCheckpoint()
+ * @method DataSift\Storyplayer\Prose\UsingDoppeld usingDoppeld()
+ * @method DataSift\Storyplayer\Prose\UsingEc2 usingEc2()
+ * @method DataSift\Storyplayer\Prose\UsingEc2Instance usingEc2Instance(string $hostname)
+ * @method DataSift\Storyplayer\Prose\UsingFacebookGraphApi usingFacebookGraphApi()
+ * @method DataSift\Storyplayer\Prose\UsingFile usingFile()
+ * @method DataSift\Storyplayer\Prose\UsingForm usingForm(string $formId)
+ * @method DataSift\Storyplayer\Prose\UsingHornet usingHornet()
+ * @method DataSift\Storyplayer\Prose\UsingHost usingHost(string $hostname)
+ * @method DataSift\Storyplayer\Prose\UsingHostsTable usingHostsTable()
+ * @method DataSift\Storyplayer\Prose\UsingHttp usingHttp()
+ * @method DataSift\Storyplayer\Prose\UsingIframe usingIframe(string $id)
+ * @method DataSift\Storyplayer\Prose\UsingLog usingLog()
+ * @method DataSift\Storyplayer\Prose\UsingProcessesTable usingProcessesTable()
+ * @method DataSift\Storyplayer\Prose\UsingProvisioning usingProvisioning()
+ * @method DataSift\Storyplayer\Prose\UsingProvisioningDefinition usingProvisioningDefinition(ProvisioningDefinition $definition)
+ * @method DataSift\Storyplayer\Prose\UsingProvisioningEngine usingProvisioningEngine(string $engine)
+ * @method DataSift\Storyplayer\Prose\UsingReporting usingReporting()
+ * @method DataSift\Storyplayer\Prose\UsingRuntimeTable usingRuntimeTable(string $tableName)
+ * @method DataSift\Storyplayer\Prose\UsingSauceLabs usingSauceLabs()
+ * @method DataSift\Storyplayer\Prose\UsingSavageD usingSavageD()
+ * @method DataSift\Storyplayer\Prose\UsingShell usingShell()
+ * @method DataSift\Storyplayer\Prose\UsingTimer usingTimer()
+ * @method DataSift\Storyplayer\Prose\UsingVagrant usingVagrant()
+ * @method DataSift\Storyplayer\Prose\UsingYamlFile usingYamlFile(string $filename)
+ * @method DataSift\Storyplayer\Prose\UsingZmq usingZmq()
+ * @method DataSift\Storyplayer\Prose\UsingZookeeper usingZookeeper(string $hostname)
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -81,41 +152,101 @@ class StoryTeller
 	private $pageContext = null;
 	private $checkpoint = null;
 
+	/**
+	 * the script that is being played
+	 */
+	private $scriptFilename = null;
+
+	/**
+	 *
+	 * @var PhaseLoader
+	 */
+	private $phaseLoader = null;
+
+	/**
+	 *
+	 * @var Prose_Loader
+	 */
 	private $proseLoader = null;
-	private $configLoader = null;
 
 	// support for the current runtime config
 	private $runtimeConfig = null;
 	private $runtimeConfigManager = null;
 
+	// our output
+	private $output = null;
+
+	// the ongoing result of this story
+	private $storyResult = null;
+
 	/**
-	 * [$actionLogger description]
-	 * @var Datasift\Storyplayer\PlayerLib\ActionLogItem
+	 *
+	 * @var Datasift\Storyplayer\PlayerLib\Action_LogItem
 	 */
 	private $actionLogger;
 
 	/**
 	 * which of the steps is currently being executed?
-	 * @var [type]
+	 * @var DataSift\Storyplayer\Phases\Phase
 	 */
 	private $currentPhase = null;
 
 	// test device support
+	private $device = null;
+	private $deviceName = null;
 	private $deviceAdapter = null;
 
-	public function __construct()
+	// the config that Storyplayer is running with
+	private $config = null;
+
+	// the environment we are testing
+	private $testEnv = null;
+	private $testEnvName = null;
+
+	// story / template params
+	private $defines = [];
+
+	// our template engine, used to expand $testEnv
+	private $templateEngine = null;
+
+	public function __construct(Injectables $injectables)
 	{
+		// remember our output object
+		$this->setOutput($injectables->output);
+
+        // our template engine
+        $this->setTemplateEngine($injectables->templateEngine);
+
 		// set a default page context
 		$this->setPageContext(new PageContext);
 
 		// create the actionlog
-		$this->setActionLogger(new ActionLogger());
+		$this->setActionLogger(new Action_Logger($injectables));
 
-		// create an empty context
-		$this->setCheckpoint(new StoryCheckpoint($this));
+		// create an empty checkpoint
+		$this->setCheckpoint(new Story_Checkpoint($this));
 
 		// create our Prose Loader
-		$this->setProseLoader();
+		$this->setProseLoader($injectables->proseLoader);
+
+		// create our Phase Loader
+		$this->setPhaseLoader($injectables->phaseLoader);
+
+		// remember the device we are testing with
+		$this->setDevice($injectables->activeDeviceName, $injectables->activeDevice);
+
+		// remember the defines from config file & command line
+		$this->setDefines($injectables->activeConfig->storyplayer->defines);
+
+		// the config that we have loaded
+		$this->setConfig($injectables->activeConfig);
+
+        // our runtime config
+        $this->setRuntimeConfig($injectables->runtimeConfig);
+        $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
+
+        // our test environment
+        $this->setTestEnvironment($injectables->activeTestEnvironmentName, $injectables->activeTestEnvironmentConfig);
 	}
 
 	// ==================================================================
@@ -125,58 +256,61 @@ class StoryTeller
 	// ------------------------------------------------------------------
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return ActionLogger
 	 */
 	public function getActionLogger() {
 	    return $this->actionLogger;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $newactionLogger [description]
+	 *
+	 * @param Action_Logger $actionLogger
+	 * @return StoryTeller
 	 */
-	public function setActionLogger(ActionLogger $actionLogger) {
+	public function setActionLogger(Action_Logger $actionLogger) {
 	    $this->actionLogger = $actionLogger;
 
 	    return $this;
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return Story_Checkpoint
 	 */
 	public function getCheckpoint() {
 	    return $this->checkpoint;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $newcheckpoint [description]
+	 *
+	 * @param Story_Checkpoint $checkpoint
+	 * @return StoryTeller
 	 */
-	public function setCheckpoint(StoryCheckpoint $checkpoint) {
+	public function setCheckpoint(Story_Checkpoint $checkpoint) {
 	    $this->checkpoint = $checkpoint;
 
 	    return $this;
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return PageContext
 	 */
 	public function getPageContext() {
 	    return $this->pageContext;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $newPageContext [description]
+	 *
+	 * @param PageContext $pageContext
+	 * @return StoryTeller
 	 */
 	public function setPageContext(PageContext $pageContext) {
 	    $this->pageContext = $pageContext;
@@ -185,88 +319,183 @@ class StoryTeller
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return Story
 	 */
-	public function getStory() {
+	public function getStory()
+	{
 	    return $this->story;
 	}
 
 	/**
-	 * [Description]
+	 * track the story that we are testing
 	 *
-	 * @param [type] $newstory [description]
+	 * NOTE: setting the story also creates a new Story_Result object
+	 *       so that we can track how the story is getting on
+	 *
+	 * @param Story $story
+	 * @return StoryTeller
 	 */
-	public function setStory($story) {
+	public function setStory(Story $story)
+	{
+		// are we already tracking this story?
+		if ($this->story == $story) {
+			return;
+		}
+
+		// we're now tracking this story
 	    $this->story = $story;
 
+	    // we need to track the result of the story too
+	    $this->storyResult = new Story_Result($story);
+
+	    // all done
 	    return $this;
 	}
 
+	public function getScriptFilename()
+	{
+		return $this->scriptFilename;
+	}
+
+	public function setScriptFilename($filename)
+	{
+		$this->scriptFilename = $filename;
+	}
+
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 *
+	 * @return Story_Context
 	 */
-	public function getStoryContext() {
+	public function getStoryContext()
+	{
 	    return $this->storyContext;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $newstoryContext [description]
+	 *
+	 * @param Story_Context $storyContext
+	 * @return StoryTeller
 	 */
-	public function setStoryContext(StoryContext $storyContext) {
+	public function setStoryContext(Story_Context $storyContext)
+	{
+		// remember the story context
 	    $this->storyContext = $storyContext;
-
-	    // we need to update our ProseLoader, as the list of namespaces
-	    // to search for Prose classes may have changed
-	    $this->proseLoader->setNamespaces($this);
 
 	    // all done
 	    return $this;
 	}
 
 	/**
-	 * [description here]
 	 *
-	 * @return [type] [description]
+	 * @return Story_Result
+	 */
+	public function getStoryResult()
+	{
+		return $this->storyResult;
+	}
+
+	/**
+	 *
+	 *
+	 * @return RuntimeConfigManager
 	 */
 	public function getRuntimeConfigManager() {
 	    return $this->runtimeConfigManager;
 	}
 
 	/**
-	 * [Description]
 	 *
-	 * @param [type] $runtimeConfigManager [description]
+	 *
+	 * @param RuntimeConfigManager $runtimeConfigManager
+	 * @return StoryTeller
 	 */
-	public function setRuntimeConfigManager($runtimeConfigManager) {
+	public function setRuntimeConfigManager(RuntimeConfigManager $runtimeConfigManager) {
 	    $this->runtimeConfigManager = $runtimeConfigManager;
 
 	    return $this;
 	}
 
+	/**
+	 *
+	 * @return Phase
+	 */
 	public function getCurrentPhase()
 	{
 		return $this->currentPhase;
 	}
 
+	/**
+	 *
+	 * @return string
+	 */
 	public function getCurrentPhaseName()
 	{
-		return Storyplayer::$phaseToText[$this->currentPhase];
+		return $this->currentPhase->getPhaseName();
 	}
 
-	public function setCurrentPhase($newPhase)
+	/**
+	 *
+	 * @param Phase $newPhase
+	 * @return void
+	 */
+	public function setCurrentPhase(Phase $newPhase)
 	{
 		$this->currentPhase = $newPhase;
 	}
 
-	public function setProseLoader()
+	/**
+	 * @return void
+	 */
+	public function setProseLoader($proseLoader)
 	{
-		$this->proseLoader = new ProseLoader();
+		$this->proseLoader = $proseLoader;
+	}
+
+	/**
+	 *
+	 * @return PhaseLoader
+	 */
+	public function getPhaseLoader()
+	{
+		return $this->phaseLoader;
+	}
+
+	public function setPhaseLoader($phaseLoader)
+	{
+		$this->phaseLoader = $phaseLoader;
+	}
+
+	/**
+	 *
+	 * @return Output
+	 */
+	public function getOutput()
+	{
+		return $this->output;
+	}
+
+	/**
+	 *
+	 * @param Output $output
+	 * @return void
+	 */
+	public function setOutput(Output $output)
+	{
+		$this->output = $output;
+	}
+
+	public function getTemplateEngine()
+	{
+		return $this->templateEngine;
+	}
+
+	public function setTemplateEngine($templateEngine)
+	{
+		$this->templateEngine = $templateEngine;
 	}
 
 	// ====================================================================
@@ -275,19 +504,58 @@ class StoryTeller
 	//
 	// --------------------------------------------------------------------
 
-	public function getAdminUser()
+	public function getConfig()
 	{
-		return $this->storyContext->env->adminUser;
+		// get our config
+		$return = clone $this->config;
+
+		// now, apply all of the defines that we know about
+		// TBD
+
+		// all done
+		return $return;
 	}
 
-	public function getEnvironment()
+	public function setConfig($config)
 	{
-		return $this->storyContext->env;
+		$this->config = $config;
 	}
 
-	public function getEnvironmentName()
+	public function getTestEnvironment()
 	{
-		return $this->storyContext->envName;
+		return $this->config;
+	}
+
+	public function getTestEnvironmentConfig()
+	{
+		// expand the config, filling in any template vars that we
+		// can
+		$config = json_decode($this->templateEngine->render(
+			$this->testEnvConfig,
+			(array)$this->config
+		));
+
+		// convert the config to our BaseObject, so that the caller can
+		// take advantage of what it adds
+		$return = new BaseObject;
+		$return->mergeFrom($config);
+
+		// all done
+		return $return;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTestEnvironmentName()
+	{
+		return $this->testEnvName;
+	}
+
+	public function setTestEnvironment($envName, $envConfig)
+	{
+		$this->testEnvName   = $envName;
+		$this->testEnvConfig = $envConfig;
 	}
 
 	public function getRuntimeConfig()
@@ -309,26 +577,31 @@ class StoryTeller
 		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig);
 	}
 
+	/**
+	 *
+	 * @return DataSift\Storyplayer\UserLib\User
+	 */
 	public function getUser()
 	{
 		return $this->storyContext->user;
 	}
 
-	public function getUrl()
-	{
-		return $this->storyContext->env->url;
-	}
-
-	public function setUrl($url)
-	{
-		$this->storyContext->env->url = $url;
-
-		return $this;
-	}
-
+	/**
+	 *
+	 * @return array
+	 */
 	public function getDefines()
 	{
-		return $this->storyContext->defines;
+		return $this->defines;
+	}
+
+	/**
+	 *
+	 * @param array $defines
+	 */
+	public function setDefines($defines)
+	{
+		$this->defines = $defines;
 	}
 
 	public function getParams()
@@ -359,6 +632,12 @@ class StoryTeller
 	//
 	// ------------------------------------------------------------------
 
+	/**
+	 *
+	 * @param  [type] $methodName [description]
+	 * @param  [type] $methodArgs [description]
+	 * @return [type]             [description]
+	 */
 	public function __call($methodName, $methodArgs)
 	{
 		// what class do we want?
@@ -385,7 +664,7 @@ class StoryTeller
 
 	public function startAction($text)
 	{
-		return $this->actionLogger->startAction($this->getUser(), $text);
+		return $this->actionLogger->startAction($text);
 	}
 
 	public function closeAllOpenActions()
@@ -401,7 +680,7 @@ class StoryTeller
 
 	public function getDeviceDetails()
 	{
-		return $this->storyContext->device;
+		return $this->device;
 	}
 
 	public function getDeviceAdapter()
@@ -413,6 +692,9 @@ class StoryTeller
 		return $this->deviceAdapter;
 	}
 
+	/**
+	 * @param DeviceLib\DeviceAdapter|null $adapter
+	 */
 	public function setDeviceAdapter($adapter)
 	{
 	    $this->deviceAdapter = $adapter;
@@ -420,9 +702,12 @@ class StoryTeller
 	    return $this;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDeviceName()
 	{
-		return $this->storyContext->deviceName;
+		return $this->deviceName;
 	}
 
 	public function getRunningDevice()
@@ -438,6 +723,12 @@ class StoryTeller
 		}
 
 		return $this->deviceAdapter->getDevice();
+	}
+
+	public function setDevice($deviceName, $device)
+	{
+		$this->deviceName = $deviceName;
+		$this->device     = $device;
 	}
 
 	public function startDevice()
@@ -461,7 +752,7 @@ class StoryTeller
 		$this->setDeviceAdapter($adapter);
 
 		// do we have a deviceSetup() phase?
-		if ($this->story->hasDeviceSetup()) {
+		if (isset($this->story) && $this->story->hasDeviceSetup()) {
 			// get the callbacks to call
 			$callbacks = $this->story->getDeviceSetup();
 
@@ -497,7 +788,7 @@ class StoryTeller
 		//
 		// we need to run this BEFORE we stop the device, otherwise
 		// the deviceTeardown() phase has no device to work with
-		if ($this->story->hasDeviceTeardown()) {
+		if (isset($this->story) && $this->story->hasDeviceTeardown()) {
 			// get the callbacks to call
 			$callbacks = $this->story->getDeviceTeardown();
 
@@ -519,5 +810,27 @@ class StoryTeller
 
 		// all done
 		$log->endAction();
+	}
+
+	// ==================================================================
+	//
+	// Features from v1 that we no longer support
+	//
+	// ------------------------------------------------------------------
+
+	public function getEnvironment()
+	{
+		throw new E4xx_ObsoleteProse(
+			'$st->getEnvironment()',
+			'either $st->getConfig() or $st->fromTestEnvironment()'
+		);
+	}
+
+	public function getEnvironmentName()
+	{
+		throw new E4xx_ObsoleteProse(
+			'$st->getEnvironmentName()',
+			'$st->fromTestEnvironment()->getName()'
+		);
 	}
 }

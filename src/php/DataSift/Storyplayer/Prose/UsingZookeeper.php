@@ -59,6 +59,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 class UsingZookeeper extends Prose
 {
 	protected $connect_timeout = 0.5;
+	protected $host;
+	protected $zk;
 
 	protected $default_acl = array( array(
 		"perms"  => Zookeeper::PERM_ALL,
@@ -166,6 +168,9 @@ class UsingZookeeper extends Prose
 		$log->endAction();
 	}
 
+	/**
+	 * @param string $key
+	 */
 	public function delete($key)
 	{
 		// shorthand
@@ -197,6 +202,9 @@ class UsingZookeeper extends Prose
 		$log->endAction();
 	}
 
+	/**
+	 * @param string $key
+	 */
 	public function deleteChildrenOf($key)
 	{
 		// shorthand

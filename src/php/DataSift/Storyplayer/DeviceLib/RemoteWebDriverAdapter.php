@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\DeviceLib;
 
-use Exception;
 use DataSift\BrowserMobProxy\BrowserMobProxyClient;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\WebDriver\WebDriverClient;
@@ -61,6 +60,11 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class RemoteWebDriverAdapter extends LocalWebDriverAdapter
 {
+	/**
+	 *
+	 * @param  StoryTeller $st
+	 * @return void
+	 */
 	public function start(StoryTeller $st)
 	{
 		$httpProxy = new BrowserMobProxyClient();

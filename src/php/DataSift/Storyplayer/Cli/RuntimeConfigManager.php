@@ -43,14 +43,11 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ConfigLib\JsonConfigLoader;
-use DataSift\Stone\LogLib\Log;
+use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Helper class for making sure the user has somewhere to save the
- * 'runtime config' (the persistent state) to
- *
- * This probably needs moving into Stone in the future
+ * Helper class for working with Storyplayer's persistent state
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -61,6 +58,10 @@ use DataSift\Stone\LogLib\Log;
  */
 class RuntimeConfigManager extends ConfigManagerBase
 {
+	/**
+	 *
+	 * @return string
+	 */
 	public function getConfigDir()
 	{
 		static $configDir = null;
@@ -74,7 +75,11 @@ class RuntimeConfigManager extends ConfigManagerBase
 		return $configDir;
 	}
 
-	public function makeConfigDir()
+	/**
+	 *
+	 * @return void
+	 */
+	public function makeConfigDir(Injectables $injectables)
 	{
 		// what is the path to the config directory?
 		$configDir = $this->getConfigDir();
@@ -86,19 +91,84 @@ class RuntimeConfigManager extends ConfigManagerBase
 			if (!$success)
 			{
 				// cannot create it - bail out now
-				Log::logError("Unable to create config directory '{$configDir}'");
+				$injectables->output->logCliError("unable to create config directory '{$configDir}'");
 				exit(1);
 			}
 		}
 	}
 
+	/**
+	 *
+	 * @return stdClass
+	 */
 	public function loadRuntimeConfig()
 	{
-		return $this->configLoader->loadRuntimeConfig();
+		try {
+			return $this->configHelper->loadRuntimeConfig(self::APP_NAME, 'runtime.json');
+		}
+		catch (E4xx_ConfigFileNotFound $e) {
+			// we don't care - it is optional
+		}
 	}
 
+	/**
+	 *
+	 * @param stdClass $config
+	 * @return void
+	 */
 	public function saveRuntimeConfig($config)
 	{
-		return $this->configLoader->saveRuntimeConfig($config);
+		return $this->configHelper->saveRuntimeConfig($config, self::APP_NAME, 'runtime.json');
+	}
+
+    /**
+     * getAllTables
+     *
+     * Return our tables config that we can use for
+     * in place editing
+     *
+     * @return BaseObject
+     */
+    public function getAllTables($runtimeConfig)
+    {
+        // make sure the storyplayer section exists
+        if (!isset($runtimeConfig->storyplayer)) {
+            $runtimeConfig->storyplayer = new BaseObject;
+        }
+
+        // and that the tables section exists
+        if (!isset($runtimeConfig->storyplayer->tables)) {
+            $runtimeConfig->storyplayer->tables = new BaseObject;
+        }
+
+        return $runtimeConfig->storyplayer->tables;
+	}
+
+	/**
+	 * return a single table from the persistent config
+	 *
+	 * if the table does not exist, this will create an empty table
+	 * before returning it to the caller
+	 *
+	 * @param  BaseObject $runtimeConfig
+	 *         our persistent config
+	 * @param  string $tableName
+	 *         the name of the table we want
+	 * @return BaseObject
+	 */
+	public function getTable($runtimeConfig, $tableName)
+	{
+		// normalise!
+		$tableName = lcfirst($tableName);
+
+		// find it
+		$tables = $this->getAllTables($runtimeConfig);
+		if (!isset($tables->$tableName)) {
+			// make sure the caller gets a table
+			$tables->$tableName = new BaseObject;
+		}
+
+		// all done
+		return $tables->$tableName;
 	}
 }

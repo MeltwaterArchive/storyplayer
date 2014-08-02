@@ -46,7 +46,6 @@ namespace DataSift\Storyplayer\StoryLib;
 
 use Exception;
 use PHPUnit_Framework_TestCase;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 // load our global functions, used for defining stories
 require APP_TOPDIR . "/DataSift/Storyplayer/functions.php";
@@ -92,7 +91,7 @@ class StoryLoaderTest extends PHPUnit_Framework_TestCase
 		// this should throw an exception
 		$caughtException = false;
 		try {
-			$obj = StoryLoader::loadStory($filename);
+			StoryLoader::loadStory($filename);
 		}
 		catch (Exception $e) {
 			$caughtException = $e;
@@ -101,9 +100,9 @@ class StoryLoaderTest extends PHPUnit_Framework_TestCase
 		// ----------------------------------------------------------------
 		// test the results
 
-		$this->assertTrue($e instanceof E5xx_InvalidStoryFile);
-		$this->assertEquals($expectedCode, $e->getCode());
-		$this->assertEquals($expectedMessage, $e->getMessage());
+		$this->assertTrue($caughtException instanceof E5xx_InvalidStoryFile);
+		$this->assertEquals($expectedCode, $caughtException->getCode());
+		$this->assertEquals($expectedMessage, $caughtException->getMessage());
 	}
 
 	/**
@@ -124,7 +123,7 @@ class StoryLoaderTest extends PHPUnit_Framework_TestCase
 		// this should throw an exception
 		$caughtException = false;
 		try {
-			$obj = StoryLoader::loadStory($filename);
+			StoryLoader::loadStory($filename);
 		}
 		catch (Exception $e) {
 			$caughtException = $e;
@@ -133,9 +132,9 @@ class StoryLoaderTest extends PHPUnit_Framework_TestCase
 		// ----------------------------------------------------------------
 		// test the results
 
-		$this->assertTrue($e instanceof E5xx_InvalidStoryFile);
-		$this->assertEquals($expectedCode, $e->getCode());
-		$this->assertEquals($expectedMessage, $e->getMessage());
+		$this->assertTrue($caughtException instanceof E5xx_InvalidStoryFile);
+		$this->assertEquals($expectedCode, $caughtException->getCode());
+		$this->assertEquals($expectedMessage, $caughtException->getMessage());
 	}
 
 	/**
@@ -156,7 +155,7 @@ class StoryLoaderTest extends PHPUnit_Framework_TestCase
 		// this should throw an exception
 		$caughtException = false;
 		try {
-			$obj = StoryLoader::loadStory($filename);
+			StoryLoader::loadStory($filename);
 		}
 		catch (Exception $e) {
 			$caughtException = $e;
@@ -165,8 +164,8 @@ class StoryLoaderTest extends PHPUnit_Framework_TestCase
 		// ----------------------------------------------------------------
 		// test the results
 
-		$this->assertTrue($e instanceof E5xx_InvalidStoryFile);
-		$this->assertEquals($expectedCode, $e->getCode());
-		$this->assertEquals($expectedMessage, $e->getMessage());
+		$this->assertTrue($caughtException instanceof E5xx_InvalidStoryFile);
+		$this->assertEquals($expectedCode, $caughtException->getCode());
+		$this->assertEquals($expectedMessage, $caughtException->getMessage());
 	}
 }

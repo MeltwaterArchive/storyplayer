@@ -63,14 +63,28 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class Ec2Vm implements SupportedHost
 {
+	/**
+	 *
+	 * @var StoryTeller
+	 */
 	protected $st;
 
+	/**
+	 *
+	 * @param StoryTeller $st
+	 */
 	public function __construct(StoryTeller $st)
 	{
 		// remember
 		$this->st = $st;
 	}
 
+	/**
+	 *
+	 * @param  Ev2VmDetails $vmDetails
+	 * @param  array        $provisioningVars
+	 * @return void
+	 */
 	public function createHost($vmDetails, $provisioningVars = array())
 	{
 		// shorthand
@@ -179,6 +193,11 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function startHost($vmDetails)
 	{
 		// shorthand
@@ -242,6 +261,11 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function stopHost($vmDetails)
 	{
 		// shorthand
@@ -295,6 +319,11 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully stopped");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function restartHost($vmDetails)
 	{
 		// shorthand
@@ -311,6 +340,11 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully restarted");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function powerOffHost($vmDetails)
 	{
 		// sadly, not supported by EC2
@@ -319,6 +353,11 @@ class Ec2Vm implements SupportedHost
 		return $this->stopHost($vmDetails);
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function destroyHost($vmDetails)
 	{
 		// shorthand
@@ -364,16 +403,33 @@ class Ec2Vm implements SupportedHost
 		$log->endAction();
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @param  string $command
+	 * @return void
+	 */
 	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @param  string $command
+	 * @return void
+	 */
 	public function runCommandViaHostManager($vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return boolean
+	 */
 	public function isRunning($vmDetails)
 	{
 		// shorthand
@@ -381,9 +437,6 @@ class Ec2Vm implements SupportedHost
 
 		// what are we doing?
 		$log = $st->startAction("determine status of EC2 VM '{$vmDetails->name}'");
-
-		// get our Ec2 client from the SDK
-		$client = $st->fromAws()->getEc2Client();
 
 		// get the instance data
 		$instance = $st->fromEc2()->getInstance($vmDetails->name);
@@ -402,6 +455,11 @@ class Ec2Vm implements SupportedHost
 		return true;
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return string
+	 */
 	public function determineIpAddress($vmDetails)
 	{
 		// shorthand

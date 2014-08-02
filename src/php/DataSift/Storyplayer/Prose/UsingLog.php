@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  *
  * write messages to the log
@@ -68,5 +66,17 @@ class UsingLog extends Prose
 
 		// all done
 		$log->endAction();
+	}
+
+	public function vardump($name, $var)
+	{
+		// shorthand
+		$st = $this->st;
+		$output = $st->getOutput();
+
+		// dump our variable
+		$output->logVardump($name, $var);
+
+		// all done
 	}
 }

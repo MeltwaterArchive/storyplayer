@@ -43,9 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use Exception;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  * get information about forms in the web browser
  *
@@ -58,6 +55,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class FromForm extends FromBrowser
 {
+	protected $formId;
+
 	protected function initActions()
 	{
 		// shorthand

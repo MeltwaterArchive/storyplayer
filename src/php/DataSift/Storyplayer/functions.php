@@ -55,6 +55,10 @@ function newStoryFor($category)
 	$story = new Story();
 	$story->setCategory($category);
 
+	// our output reports may need to know which file the story itself
+	// is defined in
+	$story->determineStoryFilename();
+
 	return $story;
 }
 

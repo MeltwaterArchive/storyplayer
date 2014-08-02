@@ -45,7 +45,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\ActionLogItem;
+use DataSift\Storyplayer\PlayerLib\Action_LogItem;
 
 /**
  * Get information from the browser
@@ -70,6 +70,9 @@ class FromBrowser extends Prose
 	//
 	// ------------------------------------------------------------------
 
+	/**
+	 * @param string $tags
+	 */
 	protected function convertTagsToString($tags)
 	{
 		if (is_string($tags)) {
@@ -79,7 +82,11 @@ class FromBrowser extends Prose
 		return implode('|', $tags);
 	}
 
-	protected function returnFirstVisibleElement(ActionLogItem $log, $elements, $method, $successMsg, $failureMsg)
+	/**
+	 * @param string $successMsg
+	 * @param string $failureMsg
+	 */
+	protected function returnFirstVisibleElement(Action_LogItem $log, $elements, $method, $successMsg, $failureMsg)
 	{
 		// if the page contains multiple matches, return the first one
 		// that the user can see
@@ -131,9 +138,6 @@ class FromBrowser extends Prose
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -215,7 +219,7 @@ class FromBrowser extends Prose
 
 		// can we find this puppy by its label?
 		try {
-			$return = $this->getElementByLabel($searchTerm, $tags);
+			$return = $this->getElementByLabel($searchTerm);
 			$log->endAction("found one by its label");
 			return $return;
 		}
@@ -252,9 +256,6 @@ class FromBrowser extends Prose
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -286,9 +287,6 @@ class FromBrowser extends Prose
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -322,9 +320,6 @@ class FromBrowser extends Prose
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -356,9 +351,6 @@ class FromBrowser extends Prose
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -400,9 +392,6 @@ class FromBrowser extends Prose
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -417,9 +406,6 @@ class FromBrowser extends Prose
 		// search using the xpath
 		$elements = $this->getElementsByXpath($xpathList);
 
-		// get the possibly matching elements
-		$elements = $this->getElementsByXpath($xpathList);
-
 		// find the first one that the user can see
 		return $this->returnFirstVisibleElement(
 			$log, $elements, __METHOD__, $successMsg, $failureMsg
@@ -432,26 +418,87 @@ class FromBrowser extends Prose
 		$st = $this->st;
 		$topElement = $this->getTopElement();
 
-		try{
-			foreach ($xpathList as $xpath) {
+		// what are we doing?
+		$log = $st->startAction("find element using xpath list");
+
+		// search the list
+		foreach ($xpathList as $xpath) {
+			try {
+				// does the xpath match?
 				$element = $log->addStep("find element using xpath '{$xpath}'", function() use($topElement, $xpath) {
 					return $topElement->getElement('xpath', $xpath);
 				});
 
-				// return the element
+				// if we get here, then we have found a match
+				$log->endAction("success!");
 				return $element;
 			}
-		}
-		catch (Exception $e) {
-			// log the result
-			$log->endAction("no matching elements");
-
-			// report the failure
-			throw new E5xx_ActionFailed(__METHOD__);
+			catch (Exception $e) {
+				// do nothing, so that we can move on to the next
+				// element in the list
+			}
 		}
 
 		// if we get here, we found a match
-		return $element;
+		// log the result
+		$log->endAction("no matching elements");
+
+		// report the failure
+		throw new E5xx_ActionFailed(__METHOD__);
+	}
+
+	public function getTable($xpath)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get HTML table using xpath");
+
+		// can we find the table?
+		try {
+			$tableElement = $st->fromBrowser()->getElementByXpath([$xpath]);
+		}
+		catch (Exception $e) {
+			// no such table
+			$log->endAction("no matching table");
+
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		// at this point, it looks like we'll have something to return
+		$return = [];
+
+		// extract the headings
+		$headings = [];
+		$thElements = $tableElement->getElements('xpath', 'descendant::thead/tr/th');
+		foreach ($thElements as $thElement) {
+			$headings[] = $thElement->text();
+		}
+
+		// extract the contents
+		$row = 0;
+		$trElements = $tableElement->getElements('xpath', 'descendant::tbody/tr');
+		foreach ($trElements as $trElement) {
+			$column = 0;
+			$tdElements = $trElement->getElements('xpath', "descendant::td");
+
+			foreach ($tdElements as $tdElement) {
+				if (isset($headings[$column])) {
+					$return[$row][$headings[$column]] = $tdElement->text();
+				}
+				else {
+					$return[$row][] = $tdElement->text();
+				}
+				$column++;
+			}
+
+			$row++;
+		}
+
+		// all done
+		$log->endAction("found table with $column columns and $row rows");
+		return $return;
 	}
 
 	public function getElementsByClass($class, $tags = '*')
@@ -462,9 +509,6 @@ class FromBrowser extends Prose
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("get '{$tag}' elements with CSS class '{$class}'");
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -496,9 +540,6 @@ class FromBrowser extends Prose
 		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("get '{$tag}' elements with id '{$id}'");
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -529,9 +570,6 @@ class FromBrowser extends Prose
 		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("get '{$tag}' elements with name '{$name}'");
 
-		// shorthand
-		$topElement = $this->getTopElement();
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -561,9 +599,6 @@ class FromBrowser extends Prose
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
 		$log = $st->startAction("get '{$tag}' elements with text '{$text}'");
-
-		// shorthand
-		$topElement = $this->getTopElement();
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -692,7 +727,7 @@ class FromBrowser extends Prose
 			$log = $st->startAction("retrieve the names of the $elementDesc '$elementName'");
 			if (!is_array($elements)) {
 				$log->endAction('1 element found');
-				return $element->attribute('name');
+				return $elements->attribute('name');
 			}
 
 			$return = array();
@@ -791,7 +826,7 @@ class FromBrowser extends Prose
 						$log->endAction("value is: " . $option->text());
 						return $option->text();
 					}
-					break;
+
 				case 'input':
 					$log->endAction("value is: " . $element->attribute("value"));
 					return $element->attribute("value");

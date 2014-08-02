@@ -77,7 +77,8 @@ class HostBase extends Prose
 		$hostsTable = $st->fromHostsTable()->getHostsTable();
 		if (!isset($hostsTable->$name)) {
 			$this->hostDetails = new BaseObject();
-			$this->hostDetails->name = $name;
+			$this->hostDetails->name = $args[0];
+			$this->hostDetails->nameInHostsTable = $name;
 			$this->hostDetails->invalidHost = true;
 		}
 		else {

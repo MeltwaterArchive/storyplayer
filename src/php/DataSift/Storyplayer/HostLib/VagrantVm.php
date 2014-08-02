@@ -61,14 +61,28 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class VagrantVm implements SupportedHost
 {
+	/**
+	 *
+	 * @var StoryTeller
+	 */
 	protected $st;
 
+	/**
+	 *
+	 * @param StoryTeller $st
+	 */
 	public function __construct(StoryTeller $st)
 	{
 		// remember
 		$this->st = $st;
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @param  array $provisioningVars
+	 * @return void
+	 */
 	public function createHost($vmDetails, $provisioningVars = array())
 	{
 		// shorthand
@@ -85,15 +99,15 @@ class VagrantVm implements SupportedHost
 		}
 
 		// make sure the folder exists
-		$env = $st->getEnvironment();
-		if (!isset($env->vagrant)) {
-			throw new E5xx_ActionFailed(__METHOD__, "'vagrant' section missing in configuration for current environment");
+		$config = $st->getConfig();
+		if (!isset($config->storyplayer->modules->vagrant)) {
+			throw new E5xx_ActionFailed(__METHOD__, "'vagrant' section missing in your storyplayer.json config file");
 		}
-		if (!isset($env->vagrant->dir)) {
-			throw new E5xx_ActionFailed(__METHOD__, "'dir' setting missing from 'vagrant' section of environment config");
+		if (!isset($config->storyplayer->modules->vagrant->dir)) {
+			throw new E5xx_ActionFailed(__METHOD__, "'dir' setting missing from 'vagrant' section of your storyplayer.json config file");
 		}
 
-		$pathToHomeFolder = $env->vagrant->dir . '/' . $vmDetails->homeFolder;
+		$pathToHomeFolder = $config->storyplayer->modules->vagrant->dir . '/' . $vmDetails->homeFolder;
 		if (!is_dir($pathToHomeFolder)) {
 			throw new E5xx_ActionFailed(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
 		}
@@ -149,11 +163,15 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
 	public function startHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("start VM");
@@ -191,11 +209,15 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
 	public function stopHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("stop VM");
@@ -223,6 +245,11 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully stopped");
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
 	public function restartHost($vmDetails)
 	{
 		// shorthand
@@ -239,11 +266,15 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully restarted");
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
 	public function powerOffHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("power off VM");
@@ -271,11 +302,15 @@ class VagrantVm implements SupportedHost
 		$log->endAction("VM successfully powered off");
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return void
+	 */
 	public function destroyHost($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
-		$vmName = $vmDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("destroy VM");
@@ -302,6 +337,12 @@ class VagrantVm implements SupportedHost
 		$log->endAction();
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @param  string $command
+	 * @return CommandResult
+	 */
 	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
 		// shorthand
@@ -311,7 +352,7 @@ class VagrantVm implements SupportedHost
 		$log = $st->startAction("run vagrant command '{$command}'");
 
 		// build the command
-		$fullCommand = "cd '{$vmDetails->dir}' && $command";
+		$fullCommand = "cd '{$vmDetails->dir}' && $command 2>&1";
 
 		// run the command
 		$returnCode = 0;
@@ -325,6 +366,12 @@ class VagrantVm implements SupportedHost
 		return $result;
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @param string $command
+	 * @return CommandResult
+	 */
 	public function runCommandViaHostManager($vmDetails, $command)
 	{
 		// shorthand
@@ -348,6 +395,11 @@ class VagrantVm implements SupportedHost
 		return $result;
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return boolean
+	 */
 	public function isRunning($vmDetails)
 	{
 		// shorthand
@@ -370,6 +422,11 @@ class VagrantVm implements SupportedHost
 		return true;
 	}
 
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return string
+	 */
 	public function determineIpAddress($vmDetails)
 	{
 		// shorthand

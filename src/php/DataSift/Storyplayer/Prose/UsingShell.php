@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\CommandLib\CommandResult;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**

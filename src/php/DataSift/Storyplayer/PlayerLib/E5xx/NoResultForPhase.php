@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Phases\Phase;
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
@@ -57,14 +58,14 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_NoResultForPhase extends Exxx_Exception
 {
-	public function __construct($phase)
+	public function __construct($phaseName)
 	{
-		if (isset(Storyplayer::$phasesToText[$phase])) {
-			$msg = "No result available for phase '{Storyplayer::$phasesToText[$phase]}'";
+		// do the right thing if we're given the object rather than
+		// its name
+		if ($phaseName instanceof Phase) {
+			$phaseName = $phaseName->getPhaseName();
 		}
-		else {
-			$msg = "No result available for unknown phase '{$phase}'";
-		}
+		$msg = "No result available for phase '$phaseName'";
 
 		parent::__construct(500, $msg, $msg);
 	}

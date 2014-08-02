@@ -72,7 +72,21 @@ class FromHostsTable extends Prose
 	 */
 	public function getHostsTable()
 	{
-		return $this->st->fromRuntimeTable($this->entryKey)->getTable();
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get the hosts table for the current test environment");
+
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
+
+		// get the table
+		$table = $st->fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+
+		// all done
+		$log->endAction();
+		return $table;
 	}
 
 	/**
@@ -84,6 +98,20 @@ class FromHostsTable extends Prose
 	 */
 	public function getDetailsForHost($hostName)
 	{
-		return $this->st->fromRuntimeTable($this->entryKey)->getDetails($hostName);
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get details for host '{$hostName}' from the current test environment");
+
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
+
+		// get the details
+		$hostDetails = $st->fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostName);
+
+		// all done
+		$log->endAction();
+		return $hostDetails;
 	}
 }

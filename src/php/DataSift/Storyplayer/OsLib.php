@@ -57,6 +57,9 @@ use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
  */
 class OsLib
 {
+	/**
+	 * @param PlayerLib\StoryTeller $st
+	 */
 	static public function getHostAdapter($st, $osName)
 	{
 		// what are we looking for?

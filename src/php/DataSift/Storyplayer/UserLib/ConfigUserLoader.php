@@ -3,10 +3,7 @@
 namespace DataSift\Storyplayer\UserLib;
 
 use stdClass;
-use DataSift\Stone\PasswordLib\BasicGenerator;
-use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\PlayerLib\StoryContext;
-use DataSift\Storyplayer\PlayerLib\StoryCheckpoint;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class ConfigUserLoader implements UserGenerator
 {
@@ -17,38 +14,40 @@ class ConfigUserLoader implements UserGenerator
         $this->generator = $generator;
     }
 
-    public function getUser($staticConfig, $runtimeConfig, StoryContext $context, Story $story)
+    public function getUser(StoryTeller $st)
     {
-        // what environment are we working in?
-        $envName = $context->envName;
+        // shorthand
+        $runtimeConfig = $st->getRuntimeConfig();
 
-        // do we have a cached user from telleroftales, or a previous
-        // storyplayer?
-        if (isset($runtimeConfig->users, $runtimeConfig->users->$envName))
+        // what environment are we working in?
+        $testEnvName = $st->getTestEnvironmentName();
+
+        // do we have a cached user from a previous storyplayer?
+        if (isset($runtimeConfig->users, $runtimeConfig->users->$testEnvName))
         {
             $user = new User();
-            $user->mergeFrom($runtimeConfig->users->$envName);
-            $runtimeConfig->users->$envName = $user;
+            $user->mergeFrom($runtimeConfig->users->$testEnvName);
+            $runtimeConfig->users->$testEnvName = $user;
 
             return $user;
         }
 
         // if we get here, then there's no previous user to reuse
         if (!isset($runtimeConfig->users)) {
-            $runtimeConfig->users = (object)array();
+            $runtimeConfig->users = new stdClass();
         }
-        $runtimeConfig->users->$envName = $this->generator->getUser($staticConfig, $runtimeConfig, $context, $story);
+        $runtimeConfig->users->$testEnvName = $this->generator->getUser($st);
 
         // all done
-        return $runtimeConfig->users->$envName;
+        return $runtimeConfig->users->$testEnvName;
     }
 
-    public function storeUser($user, $staticConfig, $runtimeConfig)
+    public function storeUser(StoryTeller $st, $user)
     {
         // no action required
     }
 
-    public function emptyCache($staticConfig, $runtimeConfig, StoryContext $context)
+    public function emptyCache(StoryTeller $st)
     {
         // can't do anything
     }

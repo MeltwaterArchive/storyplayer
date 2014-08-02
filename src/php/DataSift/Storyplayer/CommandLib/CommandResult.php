@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\CommandLib;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  * helper for tracking result of executing a command
  *
@@ -61,12 +59,20 @@ class CommandResult
 	public $returnCode;
 	public $output;
 
+	/**
+	 * @param integer|null $returnCode
+	 * @param string|null $output
+	 */
 	public function __construct($returnCode, $output)
 	{
 		$this->returnCode = $returnCode;
 		$this->output     = $output;
 	}
 
+	/**
+	 *
+	 * @return boolean
+	 */
 	public function didCommandFail()
 	{
 		if ($this->returnCode != 0) {
@@ -76,6 +82,10 @@ class CommandResult
 		return false;
 	}
 
+	/**
+	 *
+	 * @return boolean
+	 */
 	public function didCommandSucceed()
 	{
 		if ($this->returnCode == 0) {

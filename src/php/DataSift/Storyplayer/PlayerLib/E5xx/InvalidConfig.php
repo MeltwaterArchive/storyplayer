@@ -57,6 +57,9 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_InvalidConfig extends Exxx_Exception
 {
+	/**
+	 * @param string $err
+	 */
 	public function __construct($err) {
 		$msg = "Invalid config - $err";
 		parent::__construct(500, $msg, $msg);

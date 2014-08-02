@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
 
 /**
  * get information from a HTTP server, without using a web browser to
@@ -62,19 +61,20 @@ use DataSift\Stone\ExceptionsLib\E5xx_NotImplemented;
 class FromCurl extends Prose
 {
 	/**
-	 * get 
-	 * 
+	 * get
+	 *
 	 * @param mixed $url URL to request
 	 * @param array $params GET params to add to the URL
 	 * @param array $headers HTTP headers to use
-	 * 
+	 *
 	 * @return object|string Response sent by the server. If it's JSON, we'll decode it
 	 */
 	public function get($url, $params = array(), $headers = array())
 	{
 
 		if (count($headers)){
-			throw new E5xx_NotImplemented("FromCurl does not support headers yet");
+			// "FromCurl does not support headers yet"
+			throw new E5xx_NotImplemented(__METHOD__);
 		}
 
 		// shorthand
@@ -104,7 +104,7 @@ class FromCurl extends Prose
 		curl_close($ch);
 
 		if ($error){
-			throw new E5xx_ActionFailed(__CLASS__.': '.$error);
+			throw new E5xx_ActionFailed(__METHOD__.': '.$error);
 		}
 
 		// Try and decode it
@@ -115,6 +115,7 @@ class FromCurl extends Prose
 		}
 
 		// all done
+		$log->endAction();
 		return $response;
 	}
 }

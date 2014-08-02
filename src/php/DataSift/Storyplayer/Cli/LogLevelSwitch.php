@@ -43,12 +43,9 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use stdClass;
-
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
-
 use DataSift\Stone\LogLib\Log;
 
 /**
@@ -85,6 +82,14 @@ class LogLevelSwitch extends CliSwitch
 		// all done
 	}
 
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
+	 * @param  array     $params
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
+	 */
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting

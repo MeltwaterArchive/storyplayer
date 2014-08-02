@@ -59,6 +59,12 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 
 class Centos5 extends OsBase
 {
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  SupportedHost $host
+	 * @return string
+	 */
 	public function determineIpAddress($hostDetails, SupportedHost $host)
 	{
 		// shorthand
@@ -85,6 +91,12 @@ class Centos5 extends OsBase
 		throw new E5xx_ActionFailed(__METHOD__, $msg);
 	}
 
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $packageName
+	 * @return BaseObject
+	 */
 	public function getInstalledPackageDetails($hostDetails, $packageName)
 	{
 		// shorthand
@@ -122,6 +134,12 @@ class Centos5 extends OsBase
 		return $return;
 	}
 
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return boolean
+	 */
 	public function getProcessIsRunning($hostDetails, $processName)
 	{
 		// shorthand
@@ -146,6 +164,12 @@ class Centos5 extends OsBase
 		return true;
 	}
 
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return integer
+	 */
 	public function getPid($hostDetails, $processName)
 	{
 		// alias the storyteller object

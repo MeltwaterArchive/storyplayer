@@ -22,19 +22,21 @@ use Phix_Project\CliEngine\Switches\VerboseLongSwitch;
 use Phix_Project\CliEngine\Switches\VersionSwitch;
 use Phix_Project\CliEngine\Commands\HelpCommand;
 
-use DataSift\Storyplayer\Cli\CreateStoryCommand;
-use DataSift\Storyplayer\Cli\DefaultStaticConfig;
+use DataSift\Storyplayer\Cli\Automate_Command;
+use DataSift\Storyplayer\Cli\CreateStory_Command;
 use DataSift\Storyplayer\Cli\DeviceListHelper;
 use DataSift\Storyplayer\Cli\ExtraConfigHelper;
-use DataSift\Storyplayer\Cli\InstallCommand;
-use DataSift\Storyplayer\Cli\KillProcessesCommand;
-use DataSift\Storyplayer\Cli\ListEnvironmentsCommand;
-use DataSift\Storyplayer\Cli\ListHostsTableCommand;
-use DataSift\Storyplayer\Cli\ListProcessesCommand;
-use DataSift\Storyplayer\Cli\PlayStoryCommand;
+use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Cli\Install_Command;
+use DataSift\Storyplayer\Cli\KillProcesses_Command;
+use DataSift\Storyplayer\Cli\ListHostsTable_Command;
+use DataSift\Storyplayer\Cli\ListLocalEnvironments_Command;
+use DataSift\Storyplayer\Cli\ListProcesses_Command;
+use DataSift\Storyplayer\Cli\ListTestEnvironments_Command;
+use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
-use DataSift\Storyplayer\Cli\ShowDefaultEnvironmentCommand;
-use DataSift\Storyplayer\Cli\ShowLocalEnvironmentCommand;
+use DataSift\Storyplayer\Cli\ShowLocalEnvironment_Command;
+use DataSift\Storyplayer\Cli\ShowTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
@@ -108,8 +110,8 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 // do we have a composer autoloader?
 $composerAutoloader = false;
 $composerFiles = array (
+	getcwd() . '/vendor/autoload.php',
 	__DIR__ . '/../../vendor/autoload.php',
-	getcwd() . '/vendor/autoload.php'
 );
 foreach ($composerFiles as $composerFile) {
 	if (file_exists($composerFile) && can_load($composerFile)) {
@@ -173,80 +175,56 @@ function main($argv)
 	//
 	// --------------------------------------------------------------------
 
-	// create our initial default config
-	$staticConfig = new DefaultStaticConfig();
+	// create our DI container
+	$injectables = new Injectables();
+
+	// activate support for printing to the user
+	$output = $injectables->initOutputSupport();
+
+	// activate support for rendering templates of any kind
+	$injectables->initTemplateEngineSupport();
+
+	// create our built-in default config
+	$defaultConfig = $injectables->initDefaultConfigSupport();
 
 	try {
-		// load our main config
-		$staticConfigManager = new StaticConfigManager();
-		$staticConfigManager->loadConfig($staticConfig);
-	}
-	catch (E5xx_ConfigFileNotFound $e)
-	{
-		// this isn't fatal, but we need to tell the user, just in case
-		echo "*** warning: storyplayer.json / storyplayer.json.dist not found\n";
-	}
-	catch (Exception $e)
-	{
-		// these are fatal ... there is a config file, but something
-		// went wrong with loading it
-		echo "*** fatal error: {$e->getMessage()}\n";
-		exit(1);
-	}
+		// find our storyplayer config file
+		$injectables->initStoryplayerConfigFilenameSupport();
 
-	try {
-		// create our runtime config folder
-		$runtimeConfigManager = new RuntimeConfigManager();
-		$runtimeConfigManager->makeConfigDir();
+		// load our storyplayer config
+		$staticConfigManager = $injectables->initStaticConfigManagerSupport();
+		$injectables->initStoryplayerConfigSupport($injectables, $injectables->storyplayerConfigFilename);
 
-		// get a list of the additional config files to load
-		// this is a list of the available test environments,
-		// or of additional devices
-		$additionalConfigFiles = $staticConfigManager->getListOfAdditionalConfigFiles();
+		// create our runtime config folder, and load any pre-existing
+		// runtime config
+		$runtimeConfigManager = $injectables->initRuntimeConfigSupport($injectables);
+		$runtimeConfig        = $injectables->runtimeConfig;
 
-		// load the runtime config,:data that has been created by previous runs of storyplayer
-		$runtimeConfig = $runtimeConfigManager->loadRuntimeConfig();
-	}
-	catch (Exception $e)
-	{
-		// all errors here are fatal
-		echo "*** fatal error: {$e->getMessage()}\n";
-		exit(1);
-	}
-
-	// a list of sections that can have their own config file
-	$additionalConfigSections = array(
-		'devices'      => array(),
-		'environments' => array()
-	);
-
-	// let's see if we have any additional config to offer
-	foreach ($additionalConfigSections as $sectionName => $dummy) {
-
-		// assume that all config files have this section in them
-		// (we will vet this list in a moment)
-		$additionalConfigSections[$sectionName] = $additionalConfigFiles;
-
-		// add into the list any sections in the default config file
-		foreach ($staticConfig->$sectionName as $key => $dummy) {
-			if ($key !== 'defaults') {
-				$additionalConfigSections[$sectionName][] = $key;
-			}
+		// a list of the additional files that we will only merge
+		// on-demand
+		$additionalConfigs = [];
+		foreach ($defaultConfig->configs as $name => $dirs)
+		{
+			$additionalConfigs[$name] = $staticConfigManager->loadConfigFilesFrom($dirs);
 		}
-		sort($additionalConfigSections[$sectionName]);
-		$additionalConfigSections[$sectionName] = array_unique($additionalConfigSections[$sectionName]);
-		$additionalConfigSections[$sectionName] = ExtraConfigHelper::validateList($staticConfig, $sectionName, $additionalConfigSections[$sectionName], $staticConfigManager);
-	}
+		$injectables->initAdditionalConfigsSupport($additionalConfigs);
 
-	// put all of that into something we can give to the CliEngine
-	$additionalContext = (object) array (
-		'deviceList'		   => $additionalConfigSections['devices'],
-		'envList'			   => $additionalConfigSections['environments'],
-		'runtimeConfig'        => $runtimeConfig,
-		'runtimeConfigManager' => $runtimeConfigManager,
-		'staticConfig'         => $staticConfig,
-		'staticConfigManager'  => $staticConfigManager,
-	);
+		// put all of that into something we can give to the CliEngine
+		$injectables->initKnownDevicesSupport($additionalConfigs['devices']);
+		$injectables->initKnownLocalEnvironmentsSupport($additionalConfigs['localEnvironments']);
+		$injectables->initDefaultLocalEnvironmentName($injectables);
+		$injectables->initKnownTestEnvironmentsSupport($additionalConfigs['testEnvironments']);
+		$injectables->initDefaultTestEnvironmentName($injectables);
+		$injectables->initKnownSystemsUnderTestSupport($additionalConfigs['systemsUnderTest']);
+		$injectables->initDefaultSystemUnderTestName($injectables);
+	}
+	catch (Exception $e)
+	{
+		// if this happens, we need a full stack trace to understand
+		// why this has happened, because it should not!
+		$output->logCliErrorWithException($e->getMessage(), $e);
+		exit(1);
+	}
 
 	// ====================================================================
 	//
@@ -259,7 +237,7 @@ function main($argv)
 
 	// set the main metadata
 	$engine->setAppName('storyplayer');
-	$engine->setAppVersion('1.5.4');
+	$engine->setAppVersion('2.0.0-dev');
 	$engine->setAppUrl('https://datasift.github.io/storyplayer/');
 	$engine->setAppCopyright('Copyright (c) 2012-present MediaSift Ltd. All rights reserved.');
 	$engine->setAppLicense('Released under the BSD 3-Clause license');
@@ -276,25 +254,27 @@ function main($argv)
 
 	// what is our default command?
 	// this is normally some sort of help command
-	$engine->setDefaultCommand(new PlayStoryCommand($additionalContext));
+	$engine->setDefaultCommand(new PlayStory_Command($injectables));
 
 	// add any additional commands
 	// note - we do not have to add the default command a 2nd time
 	// note - if we add no additional commands, the default command is implied
 	//        and the user does not have to type it on the command line
+	$engine->addCommand(new Automate_Command($injectables));
 	$engine->addCommand(new HelpCommand);
-	$engine->addCommand(new CreateStoryCommand);
-	$engine->addCommand(new ListEnvironmentsCommand($additionalConfigSections['environments']));
-	$engine->addCommand(new InstallCommand);
-	$engine->addCommand(new KillProcessesCommand);
-	$engine->addCommand(new ListHostsTableCommand);
-	$engine->addCommand(new ListProcessesCommand);
-	$engine->addCommand(new ShowDefaultEnvironmentCommand($additionalContext));
-	$engine->addCommand(new ShowLocalEnvironmentCommand($additionalContext));
+	$engine->addCommand(new CreateStory_Command);
+	$engine->addCommand(new Install_Command);
+	$engine->addCommand(new KillProcesses_Command);
+	$engine->addCommand(new ListHostsTable_Command);
+	$engine->addCommand(new ListLocalEnvironments_Command($injectables->knownLocalEnvironmentsList));
+	$engine->addCommand(new ListProcesses_Command);
+	$engine->addCommand(new ListTestEnvironments_Command($injectables->knownTestEnvironmentsList));
+	$engine->addCommand(new ShowLocalEnvironment_Command);
+	$engine->addCommand(new ShowTestEnvironment_Command);
 
 	// all set - let's go
 	try {
-		return $engine->main($argv, $additionalContext);
+		return $engine->main($argv, $injectables);
 	}
 	catch (Exception $e)
 	{

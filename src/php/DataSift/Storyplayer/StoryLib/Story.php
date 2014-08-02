@@ -43,9 +43,9 @@
 
 namespace DataSift\Storyplayer\StoryLib;
 
+use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\StoryTemplate;
-
 use DataSift\Stone\LogLib\Log;
 
 /**
@@ -107,6 +107,12 @@ class Story
 	protected $testEnvironmentSetupCallback = array();
 
 	/**
+	 * the function that provides any (optional) environment teardown action
+	 * @var array
+	 */
+	protected $testEnvironmentTeardownCallback = array();
+
+	/**
 	 * the function that provides any story-specific setup work
 	 *
 	 * @var array
@@ -118,12 +124,6 @@ class Story
 	 * @var array
 	 */
 	protected $testTeardownCallback = array();
-
-	/**
-	 * the function that provides any (optional) environment teardown action
-	 * @var array
-	 */
-	protected $testEnvironmentTeardownCallback = array();
 
 	/**
 	 * the function that provides any story-specific setup work that
@@ -186,6 +186,14 @@ class Story
 	protected $preTestInspectionCallback = array();
 
 	/**
+	 * the callback used to see if the action *did* change the state of
+	 * the system under test
+	 *
+	 * @var array
+	 */
+	protected $postTestInspectionCallback = array();
+
+	/**
 	 * the actions that execute the story on behalf of the user
 	 *
 	 * this is an array of callbacks.  Each callback is a single set of
@@ -230,6 +238,29 @@ class Story
 	 * stories that simply aren't safe to run absolutely everywhere
 	 */
 	protected $whitelistedEnvironments = array();
+
+	/**
+	 * the raw parser tree of this story, and of any templates that we
+	 * use
+	 *
+	 * @var array
+	 */
+	protected $parserTrees = array();
+
+	/**
+	 * the file that contains the story
+	 *
+	 * @var string
+	 */
+	protected $sourceFile = '';
+
+	/**
+	 * a list of the roles that the test environment must have defined,
+	 * otherwise we cannot run
+	 *
+	 * @var array
+	 */
+	protected $requiredTestEnvRoles = array();
 
 	// ====================================================================
 	//
@@ -305,7 +336,7 @@ class Story
 	 * The 'group' is the specific group _inside_ the category that the
 	 * user story belongs to.  The groups are specific to the category.
 	 *
-	 * @param  string $category the category that this story belongs to
+	 * @param  string $newCategory the category that this story belongs to
 	 * @return Story  $this
 	 */
 	public function setCategory($newCategory)
@@ -363,7 +394,6 @@ class Story
 	 * The 'group' is the specific group _inside_ the category that the
 	 * user story belongs to.  The groups are specific to the category.
 	 *
-	 * @param  string $group the group that this story belongs to
 	 * @return Story  $this
 	 */
 	public function setGroup($newGroup)
@@ -421,7 +451,7 @@ class Story
 	 * The 'group' is the specific group _inside_ the category that the
 	 * user story belongs to.  The groups are specific to the category.
 	 *
-	 * @param  string $name the name of this story
+	 * @param  string $newName the name of this story
 	 * @return Story  $this
 	 */
 	public function setName($newName)
@@ -485,6 +515,17 @@ class Story
 
 		// all done
 		return $return;
+	}
+
+	public function determineStoryFilename()
+	{
+		$trace = debug_backtrace();
+		$this->storyFilename = $trace[1]['file'];
+	}
+
+	public function getStoryFilename()
+	{
+		return $this->storyFilename;
 	}
 
 	// ====================================================================
@@ -557,7 +598,7 @@ class Story
 	/**
 	 * set up any templated methods from a predefined class
 	 *
-	 * @return void
+	 * @return Story
 	 */
 	public function basedOn(StoryTemplate $tmpl)
 	{
@@ -621,6 +662,16 @@ class Story
 		return $this->whitelistedEnvironments;
 	}
 
+	public function requiresTestEnvironmentWithRoles($roles)
+	{
+		$this->requiredTestEnvRoles = $roles;
+	}
+
+	public function getRequiredTestEnvironmentRoles()
+	{
+		return $this->requiredTestEnvRoles;
+	}
+
 	// ====================================================================
 	//
 	// Information about how to setup and teardown the test environment
@@ -630,7 +681,7 @@ class Story
 	/**
 	 * get the callback for per-environment setup work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getTestEnvironmentSetup()
 	{
@@ -660,7 +711,7 @@ class Story
 	/**
 	 * get the callback for per-environment teardown work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getTestEnvironmentTeardown()
 	{
@@ -696,7 +747,7 @@ class Story
 	/**
 	 * get the callback for per-story setup work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getTestSetup()
 	{
@@ -726,7 +777,7 @@ class Story
 	/**
 	 * get the callback for post-story teardown work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getTestTeardown()
 	{
@@ -763,7 +814,7 @@ class Story
 	/**
 	 * get the callback for per-phase setup work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getPerPhaseSetup()
 	{
@@ -794,7 +845,7 @@ class Story
 	/**
 	 * get the callback for per-phase teardown work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getPerPhaseTeardown()
 	{
@@ -830,7 +881,7 @@ class Story
 	/**
 	 * get the callback for device setup work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getDeviceSetup()
 	{
@@ -855,7 +906,7 @@ class Story
 	/**
 	 * get the callback for device teardown work
 	 *
-	 * @return $callback
+	 * @return array
 	 */
 	public function getDeviceTeardown()
 	{
@@ -886,7 +937,7 @@ class Story
 	/**
 	 * get the hints callback
 	 *
-	 * @return callback
+	 * @return callable
 	 */
 	public function getHints()
 	{
@@ -922,7 +973,7 @@ class Story
 	/**
 	 * get the callback to use to perform the preflight checks
 	 *
-	 * @return callback
+	 * @return array
 	 */
 	public function getPreTestPrediction()
 	{
@@ -957,7 +1008,7 @@ class Story
 	/**
 	 * get the callback to use to perform the preflight checkpoint
 	 *
-	 * @return callback
+	 * @return array
 	 */
 	public function getPreTestInspection()
 	{
@@ -1002,7 +1053,7 @@ class Story
 	/**
 	 * pick one action at random, and return it to the caller
 	 *
-	 * @return callback(StoryContext)
+	 * @return callback(Story_Context)
 	 */
 	public function getOneAction()
 	{
@@ -1038,7 +1089,7 @@ class Story
 	/**
 	 * get the callback to use to work out the test results
 	 *
-	 * @return callback
+	 * @return array
 	 */
 	public function getPostTestInspection()
 	{
@@ -1139,5 +1190,148 @@ class Story
 	public function __toString()
 	{
 		return $this->getCategory() . ' :: ' . $this->getGroup() . ' :: ' . $this->getName();
+	}
+
+	// ==================================================================
+	//
+	// Debugging / error reporting assistance
+	//
+	// ------------------------------------------------------------------
+
+	public function buildParseTrees($storyFilename)
+	{
+		// parse our own source code
+		//
+		// we're going to use this parser data at a later point when
+		// showing what has gone wrong and why
+		$this->buildParseTreeForFile($storyFilename);
+
+		// now, we need to parse all of the templates that we use
+		foreach ($this->storyTemplates as $storyTemplate) {
+			$templateFilename = $storyTemplate->getSourceFilename();
+			$this->buildParseTreeForFile($templateFilename);
+		}
+	}
+
+	public function buildParseTreeForFile($filename)
+	{
+		// special case - do we already have this file parsed?
+		if (isset($this->parserTrees[$filename])) {
+			// yes - nothing to do
+			return;
+		}
+
+		// we need a little bit of help here
+		$parser = new \PhpParser\Parser(new \PhpParser\Lexer);
+
+		try {
+			$this->parserTrees[$filename] = $parser->parse(file_get_contents($filename));
+		}
+		catch (Exception $e) {
+			// something went wrong parsing the template
+			// nothing we can do about that
+		}
+	}
+
+	public function getStoryCodeFor($filename, $lineToFind)
+	{
+		// do we have a parser tree for this file?
+		if (!isset($this->parserTrees[$filename])) {
+			// nope
+			return null;
+		}
+
+		// we have the parsed code
+		//
+		// find the line that the caller is looking for
+		//
+		// the line that we are looking for may well be inside one of
+		// the top-level statements, so we may need to recurse in order
+		// to find it
+		return $this->searchCodeStatementsFor($this->parserTrees[$filename], $lineToFind);
+	}
+
+	protected function searchCodeStatementsFor($stmts, $lineToFind)
+	{
+		// remember the last thing we saw, as it may contain what
+		// we are looking for
+		$lastStmt = null;
+
+		foreach($stmts as $stmt) {
+			// where are we?
+			$currentLine = $stmt->getLine();
+			// var_dump($currentLine, $stmt->getType());
+
+			// are we there yet?
+			if ($currentLine < $lineToFind) {
+				// still looking
+				$lastStmt = $stmt;
+				continue;
+			}
+			else if ($currentLine == $lineToFind) {
+				// an exact match!!
+				return $stmt;
+			}
+			else {
+				// we have overshot!
+				//
+				// this is where we have to start working quite hard!
+				return $this->searchCodeStatementFor($lastStmt, $lineToFind);
+			}
+		}
+
+		// if we get here, then the line we are looking for is buried
+		// inside the last statement we saw
+		return $this->searchCodeStatementFor($lastStmt, $lineToFind);
+	}
+
+	protected function searchCodeStatementFor($stmt, $lineToFind)
+	{
+		// what are we looking at?
+		$nodeType = $stmt->getType();
+
+		switch ($nodeType)
+		{
+			case 'Arg':
+				// this is an argument to an expression
+				//
+				// its value may be a closure
+				return $this->searchCodeStatementFor($stmt->value, $lineToFind);
+
+			case 'Expr_Closure':
+				// this is a closure
+				//
+				// the line we are looking for may be inside
+				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+
+			case 'Expr_MethodCall':
+				// this is a method call
+				//
+				// one of the arguments to the method call may
+				// be a closure
+				return $this->searchCodeStatementsFor($stmt->args, $lineToFind);
+
+			case 'Stmt_Class':
+				// this is a PHP class
+				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+
+			case 'Stmt_ClassMethod':
+				// this is a method defined in a PHP class
+				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+
+			case 'Stmt_Namespace':
+				// this is a file containing code
+				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+
+			default:
+				// var_dump($nodeType);
+				// var_dump($stmt->getSubNodeNames());
+				// exit(0);
+
+				// if we get here, these statements don't contain the line number
+				// at all
+				return null;
+		}
+
 	}
 }

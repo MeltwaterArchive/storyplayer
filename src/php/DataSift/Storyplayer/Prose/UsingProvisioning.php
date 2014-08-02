@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * Support for creating a new provisioning definition
@@ -69,6 +68,6 @@ class UsingProvisioning extends Prose
 		// all done
 		$log->endAction();
 
-		return new ProvisioningDefinition($st);
+		return new ProvisioningDefinition();
 	}
 }

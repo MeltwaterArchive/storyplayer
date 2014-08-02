@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\ValidationLib;
 
 use ReflectionClass;
-
 use Phix_Project\ValidationLib4\Validator;
 use Phix_Project\ValidationLib4\ValidationResult;
 

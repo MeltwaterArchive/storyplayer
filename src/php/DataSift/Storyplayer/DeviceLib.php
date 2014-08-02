@@ -58,6 +58,9 @@ use DataSift\Storyplayer\DeviceLib\E5xx_BadDeviceAdapter;
  */
 class DeviceLib
 {
+	/**
+	 * @param \DataSift\Stone\ObjectLib\BaseObject $deviceDetails
+	 */
 	static public function getDeviceAdapter($deviceDetails)
 	{
 		// which namespace do our device adapters live in?

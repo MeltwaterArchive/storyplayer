@@ -58,6 +58,10 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_NoSuchDeviceAdapter extends Exxx_Exception
 {
+	/**
+	 *
+	 * @param string $provider
+	 */
 	public function __construct($provider) {
 		$msg = "Unknown device adapter '{$provider}'";
 		parent::__construct(400, $msg, $msg);

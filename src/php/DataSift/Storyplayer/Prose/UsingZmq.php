@@ -47,7 +47,6 @@ use ZMQ;
 use ZMQContext;
 use ZMQSocket;
 use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
  * do things with ZeroMQ

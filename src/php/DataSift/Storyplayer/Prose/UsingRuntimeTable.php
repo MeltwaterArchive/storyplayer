@@ -59,7 +59,6 @@ class UsingRuntimeTable extends BaseRuntimeTable
      *
      * Add an item to a module's runtime config table
      *
-     * @param string $tableName The parent key for a module
      * @param string $key The key to save data under
      * @param string $value The value to save
      *
@@ -95,7 +94,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tables->$tableName->$key = $value;
 
         // save the updated runtime config
-        $log->addStep("saving runtime-config to disk", function() use ($st){
+        $log->addStep("saving runtime config to disk", function() use ($st){
             $st->saveRuntimeConfig();
         });
 
@@ -108,7 +107,6 @@ class UsingRuntimeTable extends BaseRuntimeTable
      *
      * Removes an item from the runtimeConfig file
      *
-     * @param string $tableName The module's parent key
      * @param string $key The key that we want to remove
      *
      * @return void
@@ -129,14 +127,14 @@ class UsingRuntimeTable extends BaseRuntimeTable
 
         // make sure it exists
         if (!isset($tables->$tableName)) {
-            $msg = "Table is empty / does not exist. '{$key}' not removed";
+            $msg = "table is empty / does not exist. '{$key}' not removed";
             $log->endAction($msg);
             return;
         }
 
         // make sure we have an entry to remove
         if (!isset($tables->$tableName->$key)) {
-            $msg = "Table does not contain an entry for '{$key}'";
+            $msg = "table does not contain an entry for '{$key}'";
             $log->endAction($msg);
             return;
         }
@@ -146,7 +144,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
 
         // remove the table if it's empty
         if (!count(get_object_vars($tables->$tableName))) {
-            $log->addStep("Table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName){
+            $log->addStep("table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName){
                 unset($tables->$tableName);
             });
         }
@@ -158,6 +156,116 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $log->endAction();
 
     }
+
+
+    /**
+     * Add an item to a module's runtime config table
+     *
+     * @param string $key The key to save data under
+     * @param string $value The value to save
+     *
+     * @return void
+     */
+    public function addItemToGroup($group, $key, $value)
+    {
+        $st = $this->st;
+
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        $log = $st->startAction("add entry '{$group}->{$key}' to {$tableName} table");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure it exists
+        if (!isset($tables->$tableName)){
+            $tables->$tableName = new BaseObject();
+        }
+        if (!isset($tables->$tableName->$group)) {
+            $tables->$tableName->$group = new BaseObject;
+        }
+
+        // make sure we don't have a duplicate entry
+        if (isset($tables->$tableName->$group->$key)){
+            $msg = "table already contains an entry for '{$group}->{$key}'";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
+
+        // add the entry
+        $tables->$tableName->$group->$key = $value;
+
+        // make sure that the table's group is always available for
+        // template expansion
+        //
+        // NOTE: any code that adds groups to tables by hand does NOT
+        //       get this guarantee
+        $activeConfig = $st->getTestEnvironment();
+        $activeConfig->$tableName = $tables->$tableName->$group;
+
+        // save the updated runtime config
+        $log->addStep("saving runtime config to disk", function() use ($st){
+            $st->saveRuntimeConfig();
+        });
+
+        // all done
+        $log->endAction();
+    }
+
+    /**
+     * Removes an item from the runtimeConfig file
+     *
+     * @param string $key The key that we want to remove
+     *
+     * @return void
+     */
+    public function removeItemFromGroup($group, $key)
+    {
+        // shorthand
+        $st = $this->st;
+
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = $st->startAction("remove entry '{$group}->{$key}' from {$tableName} table");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure it exists
+        if (!isset($tables->$tableName)) {
+            $msg = "table is empty / does not exist. '{$group}->{$key}' not removed";
+            $log->endAction($msg);
+            return;
+        }
+        if (!isset($tables->$tableName->$group)) {
+            $msg = "table has no group '{$group}'. '{$group}->{$key}' not removed";
+            $log->endAction($msg);
+            return;
+        }
+        if (!isset($tables->$tableName->$group->$key)) {
+            $msg = "table does not contain an entry for '{$group}->{$key}'";
+            $log->endAction($msg);
+            return;
+        }
+
+        // remove the entry
+        unset($tables->$tableName->$group->$key);
+
+        // remove the table if it's empty
+        if (!count(get_object_vars($tables->$tableName->$group))) {
+            $log->addStep("table group '{$tableName}->{$group}' is empty, removing from runtime config", function() use ($tables, $tableName, $group){
+                unset($tables->$tableName->$group);
+            });
+        }
+
+        // save the changes
+        $st->saveRuntimeConfig();
+
+        // all done
+        $log->endAction();
+
+    }
 }
-
-

@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\HostLib;
 
+use DataSift\Storyplayer\CommandLib\CommandResult;
+
 /**
  * the things you can do / learn about a supported (and possibly remote)
  * host / virtual machine
@@ -56,14 +58,67 @@ namespace DataSift\Storyplayer\HostLib;
  */
 interface SupportedHost
 {
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return void
+	 */
 	public function createHost($hostDetails);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return void
+	 */
 	public function destroyHost($hostDetails);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return void
+	 */
 	public function startHost($hostDetails);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return void
+	 */
 	public function stopHost($hostDetails);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return void
+	 */
 	public function restartHost($hostDetails);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return void
+	 */
 	public function powerOffHost($hostDetails);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @param string $command
+	 *
+	 * @return CommandResult
+	 */
 	public function runCommandAgainstHostManager($hostDetails, $command);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @param string $command
+	 *
+	 * @return CommandResult
+	 */
 	public function runCommandViaHostManager($hostDetails, $command);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return boolean
+	 */
 	public function isRunning($hostDetails);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return string
+	 */
 	public function determineIpAddress($hostDetails);
 }

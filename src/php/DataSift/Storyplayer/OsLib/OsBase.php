@@ -60,6 +60,11 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 abstract class OsBase implements SupportedOs
 {
+	/**
+	 *
+	 * @var DataSift\Storyplayer\PlayerLib\StoryTeller;
+	 */
+	protected $st;
 	protected $sshClients;
 
 	public function __construct(StoryTeller $st)
@@ -68,20 +73,57 @@ abstract class OsBase implements SupportedOs
 		$this->st = $st;
 	}
 
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  SupportedHost $host
+	 * @return string
+	 */
 	abstract public function determineIpAddress($hostDetails, SupportedHost $host);
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $packageName
+	 * @return BaseObject
+	 */
 	abstract public function getInstalledPackageDetails($hostDetails, $packageName);
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return boolean
+	 */
 	abstract public function getProcessIsRunning($hostDetails, $processName);
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return integer
+	 */
 	abstract public function getPid($hostDetails, $processName);
 
-	public function runCommand($hostDetails, $command, $params = array())
+	/**
+	 * @param HostDetails $hostDetails
+	 * @param string $command
+	 *
+	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
+	 */
+	public function runCommand($hostDetails, $command)
 	{
 		// get an SSH client
 		$sshClient = $this->getSshClient($hostDetails);
 
 		// run the command
-		return $sshClient->runCommand($command, $params);
+		return $sshClient->runCommand($command);
 	}
 
+	/**
+	 * @param HostDetails $hostDetails
+	 * @return SshClient
+	 */
 	protected function getSshClient($hostDetails)
 	{
 		// shorthand

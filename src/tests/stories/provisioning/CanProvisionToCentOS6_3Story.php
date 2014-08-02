@@ -35,9 +35,6 @@ $story->setTestEnvironmentTeardown(function(StoryTeller $st) {
 
 // there is no story-specific setup / tear-down
 
-// story doesn't need the web browser for every phase
-$story->setDoesntUseTheWebBrowser();
-
 // ========================================================================
 //
 // PRE-TEST PREDICTION

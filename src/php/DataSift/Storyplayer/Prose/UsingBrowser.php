@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use Exception;
+
 /**
  * Do things using the web browser
  *

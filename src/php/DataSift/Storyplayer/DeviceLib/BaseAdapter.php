@@ -66,8 +66,17 @@ class BaseAdapter
 
 	protected $proxySession;
 
+	/**
+	 *
+	 * @var array
+	 */
 	protected $httpAuthDetails = array();
 
+	/**
+	 *
+	 * @param  stdClass $browserDetails
+	 * @return void
+	 */
 	public function init($browserDetails)
 	{
 		// remember the browser to use
@@ -86,7 +95,7 @@ class BaseAdapter
 
 	public function getProxy()
 	{
-		return $this->proxySession();
+		return $this->proxySession;
 	}
 
 	public function getDevice()
@@ -94,16 +103,31 @@ class BaseAdapter
 		return $this->browserSession;
 	}
 
+	/**
+	 *
+	 * @param  string $hostname
+	 * @param  string $url
+	 * @return
+	 */
 	public function applyHttpBasicAuthForHost($hostname, $url)
 	{
 		throw new E5xx_NoHttpBasicAuthSupport();
 	}
 
+	/**
+	 *
+	 * @param  string  $hostname
+	 * @return boolean
+	 */
 	public function hasHttpBasicAuthForHost($hostname)
 	{
 		return (isset($this->httpAuthDetails[$hostname]));
 	}
 
+	/**
+	 * @param string $hostname
+	 * @return array<string>|null
+	 */
 	public function getHttpBasicAuthForHost($hostname)
 	{
 		if (!isset($this->httpAuthDetails[$hostname])) {
@@ -113,6 +137,13 @@ class BaseAdapter
 		return $this->httpAuthDetails[$hostname];
 	}
 
+	/**
+	 *
+	 * @param string $hostname
+	 * @param string $username
+	 * @param string $password
+	 * @return void
+	 */
 	public function setHttpBasicAuthForHost($hostname, $username, $password)
 	{
 		$this->httpAuthDetails[$hostname] = array(

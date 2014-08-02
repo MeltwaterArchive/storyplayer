@@ -43,11 +43,13 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * Get information from the environment defined in the config file(s)
+ * Was available in v1.x. Replaced now with either:
+ *
+ * $st->fromConfig() or
+ * $st->fromTestEnvironment()
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -58,119 +60,11 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class FromEnvironment extends Prose
 {
-	public function getAppSetting($app, $setting)
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get $setting for '{$app}'");
-
-		// get the details
-		$env = $st->getEnvironment();
-		if (!isset($env->$app, $env->$app->$setting)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $env->$app->$setting;
-
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("$setting for '{$app}' is '{$logValue}'");
-
-		// all done
-		return $value;
-	}
-
-	public function getAppSettings($app)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get all settings for '{$app}'");
-
-		// get the details
-		$env = $st->getEnvironment();
-		if (!isset($env->$app)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $env->$app;
-
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("settings for '{$app}' are '{$logValue}'");
-
-		// all done
-		return $value;
-	}
-
-	public function getGraphiteUrl()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get base url for graphite");
-
-		// get the details
-		$env = $st->getEnvironment();
-		$graphiteUrl = $env->graphite->url;
-
-		// all done
-		$log->endAction("graphite url is '{$graphiteUrl}");
-		return $graphiteUrl;
-	}
-
-	public function getHostAddress()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get IP address of Storyteller's host");
-
-		// get the details
-		$env = $st->getEnvironment();
-		$ipAddress = $env->host->ipAddress;
-
-		// all done
-		$log->endAction("'{$ipAddress}'");
-		return $ipAddress;
-	}
-
-	public function getHostHostname()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get the hostname of Storyteller's host");
-
-		// get the details
-		$env = $st->getEnvironment();
-		$hostname = $env->host->name;
-
-		// all done
-		$log->endAction("'{$hostname}'");
-		return $hostname;
-	}
-
-	public function getStatsdHost()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get host details for statsd");
-
-		// get the details
-		$env = $st->getEnvironment();
-		$statsdHost = $env->statsd->host;
-
-		// all done
-		$log->endAction("statsd host is '{$statsdHost}");
-		return $statsdHost;
+		throw new E4xx_ObsoleteProse(
+			'$st->fromEnvironment()',
+			'either $st->fromConfig() or $st->fromTestEnvironment()'
+		);
 	}
 }

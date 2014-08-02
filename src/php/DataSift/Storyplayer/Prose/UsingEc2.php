@@ -45,7 +45,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\HostLib;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\HostLib\Ec2VmDetails;
 
 /**
  * do things with Amazon EC2
@@ -77,9 +77,9 @@ class UsingEc2 extends VmActionsBase
 		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
 
 		// put the details into an array
-		$vmDetails = new BaseObject();
+		$vmDetails = new Ec2VmDetails;
 		$vmDetails->name          = $vmName;
-		$vmDetails->environment   = $st->getEnvironmentName();
+		$vmDetails->environment   = $st->getTestEnvironmentName();
 		$vmDetails->osName        = $osName;
 		$vmDetails->amiId         = $amiId;
 		$vmDetails->type          = 'Ec2Vm';

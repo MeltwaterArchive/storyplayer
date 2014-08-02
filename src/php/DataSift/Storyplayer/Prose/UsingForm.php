@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Exception;
 
 /**
  * do things to forms in the web browser
@@ -120,17 +120,16 @@ class UsingForm extends UsingBrowser
 			switch ($tag) {
 				case 'input':
 				case 'textarea':
-					$this->type($fieldValue)->intoElement($element, $labelText);
+					$this->type($fieldValue)->intoElement($element);
 					break;
 
 				case 'select':
-					$this->select($fieldValue)->inElement($element, $labelText);
+					$this->select($fieldValue)->fromElement($element);
 					break;
 
 				case null:
 					$log->endAction("cannot find field labelled '{$labelText}'");
 					throw new E5xx_ActionFailed(__METHOD__);
-					break;
 
 				default:
 					$log->endAction("* field labelled '{$labelText}' has unsupported tag '{$tag}' *");
@@ -173,11 +172,11 @@ class UsingForm extends UsingBrowser
 			switch ($tag) {
 				case 'input':
 				case 'textarea':
-					$this->type($fieldValue)->intoElement($element, $labelText);
+					$this->type($fieldValue)->intoElement($element);
 					break;
 
 				case 'select':
-					$this->select($fieldValue)->inElement($element, $labelText);
+					$this->select($fieldValue)->fromElement($element);
 					break;
 
 				default:

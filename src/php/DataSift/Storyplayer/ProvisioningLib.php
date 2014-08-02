@@ -57,6 +57,9 @@ use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
  */
 class ProvisioningLib
 {
+	/**
+	 * @param PlayerLib\StoryTeller $st
+	 */
 	static public function getProvisioner($st, $type)
 	{
 		// what are we looking for?

@@ -62,10 +62,10 @@ class FromFacebook extends Prose
 	protected $developer_url = "https://developers.facebook.com/tools/explorer";
 
 	/**
-	 * getAccessToken 
-	 * 
+	 * getAccessToken
+	 *
 	 * @param array $options Options to use when getting token
-	 * 
+	 *
 	 * @return string Access token
 	 */
 	public function getAccessToken($options = array()){

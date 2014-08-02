@@ -43,9 +43,6 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use Exception;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 /**
  * test forms in the web browser
  *
@@ -58,6 +55,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class ExpectsForm extends ExpectsBrowser
 {
+	protected $formId;
+
 	protected function initActions()
 	{
 		// shorthand
