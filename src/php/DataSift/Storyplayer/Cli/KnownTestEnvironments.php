@@ -68,12 +68,16 @@ class KnownTestEnvironments extends BaseObject
     public function initDefaultConfig()
     {
         // defaults for the local computer
-        $this->localhost = new BaseObject;
-        $this->localhost->type = "Blackboxes";
-        $this->localhost->details = new BaseObject;
-        $this->localhost->details->machines = new BaseObject;
-        $this->localhost->details->machines->localhost = new BaseObject;
-        $this->localhost->details->machines->roles = [ '*' ];
+        $localhost = new BaseObject;
+        $localhost->roles = [ '*' ];
+
+        $env = new BaseObject;
+        $env->type = "Blackboxes";
+        $env->details = new BaseObject;
+        $env->details->machines = [ $localhost ];
+
+        // create the test environment
+        $this->localhost = [ $env ];
 
         // all done
     }
