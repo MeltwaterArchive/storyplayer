@@ -44,11 +44,11 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliSwitch;
 use Phix_Project\CliEngine\CliResult;
 
 /**
- * A command to kill any previously started background processes
+ * A switch to kill any previously started background processes
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,18 +57,22 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class KillProcesses_Command extends CliCommand
+class KillProcesses_Switch extends CliSwitch
 {
 	public function __construct()
 	{
 		// define the command
 		$this->setName('kill-processes');
 		$this->setShortDescription('kill any currently-running background processes');
-		$this->setLongDescription(
-			"Use this command to stop any background processes that Storyplayer "
+		$this->setLongDesc(
+			"Use this switch to stop any background processes that Storyplayer "
 			."has previously started in the background."
-			.PHP_EOL
+			.PHP_EOL .PHP_EOL
+			."You can use the '--list-processes' switch to list these processes before they are killed."
 		);
+		$this->addShortSwitch('k');
+		$this->addLongSwitch('kill-processes');
+		$this->setSwitchActsAsCommand();
 	}
 
 	/**
@@ -78,7 +82,7 @@ class KillProcesses_Command extends CliCommand
 	 * @param  mixed     $additionalContext
 	 * @return CliResult
 	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false, $additionalContext = null)
 	{
 		// shorthand
 		$runtimeConfig = $additionalContext->runtimeConfig;
@@ -95,7 +99,7 @@ class KillProcesses_Command extends CliCommand
 		}
 
 		// all done
-		return new CliResult(0);
+		return new CliResult(CliResult::PROCESS_COMPLETE);
 	}
 
 	/**

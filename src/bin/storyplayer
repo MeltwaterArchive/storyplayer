@@ -28,7 +28,7 @@ use DataSift\Storyplayer\Cli\DeviceListHelper;
 use DataSift\Storyplayer\Cli\ExtraConfigHelper;
 use DataSift\Storyplayer\Cli\Injectables;
 use DataSift\Storyplayer\Cli\Install_Command;
-use DataSift\Storyplayer\Cli\KillProcesses_Command;
+use DataSift\Storyplayer\Cli\KillProcesses_Switch;
 use DataSift\Storyplayer\Cli\ListHostsTable_Command;
 use DataSift\Storyplayer\Cli\ListLocalEnvironments_Command;
 use DataSift\Storyplayer\Cli\ListProcesses_Switch;
@@ -247,6 +247,7 @@ function main($argv)
 	//
 	// add switches in the order of precedence
 	$engine->addEngineSwitch(new VersionSwitch);
+	$engine->addEngineSwitch(new KillProcesses_Switch);
 	$engine->addEngineSwitch(new ListProcesses_Switch);
 	$engine->addEngineSwitch(new ListTargets_Switch($injectables->knownTestEnvironmentsList));
 	$engine->addEngineSwitch(new LongHelpSwitch);
@@ -266,7 +267,6 @@ function main($argv)
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new CreateStory_Command);
 	$engine->addCommand(new Install_Command);
-	$engine->addCommand(new KillProcesses_Command);
 	$engine->addCommand(new ListHostsTable_Command);
 	$engine->addCommand(new ListLocalEnvironments_Command($injectables->knownLocalEnvironmentsList));
 	$engine->addCommand(new ShowLocalEnvironment_Command);
