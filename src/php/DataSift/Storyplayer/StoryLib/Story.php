@@ -262,6 +262,13 @@ class Story
 	 */
 	protected $requiredTestEnvRoles = array();
 
+	/**
+	 * does the story want the test device kept open between phases?
+	 *
+	 * @var boolean
+	 */
+	protected $persistDevice = false;
+
 	// ====================================================================
 	//
 	// Metadata about the story itself
@@ -670,6 +677,34 @@ class Story
 	public function getRequiredTestEnvironmentRoles()
 	{
 		return $this->requiredTestEnvRoles;
+	}
+
+	// ==================================================================
+	//
+	// Device support
+	//
+	// ------------------------------------------------------------------
+
+	/**
+	 * does this story want to keep the web browser open between phases?
+	 *
+	 * @return boolean
+	 */
+	public function getPersistDevice()
+	{
+		return $this->persistDevice;
+	}
+
+	/**
+	 * tell Storyplayer to keep the web browser open between test phases
+	 *
+	 * by default, we close the browser after every phase, to make sure
+	 * that the next phase always starts with a browser in a known state
+	 */
+	public function setPersistDevice()
+	{
+		$this->persistDevice = true;
+		return $this;
 	}
 
 	// ====================================================================

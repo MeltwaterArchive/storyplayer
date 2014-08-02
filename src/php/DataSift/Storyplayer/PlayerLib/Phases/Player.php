@@ -284,7 +284,9 @@ class Phases_Player
 		$st->closeAllOpenActions();
 
 		// stop any running test devices
-		$st->stopDevice();
+		if (!$st->getPersistDevice()) {
+			$st->stopDevice();
+		}
 
 		// close off any log actions left open by closing down
 		// the test device
