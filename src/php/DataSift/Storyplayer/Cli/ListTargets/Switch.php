@@ -44,11 +44,11 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliSwitch;
 use Phix_Project\CliEngine\CliResult;
 
 /**
- * A command to list the supported test environments
+ * A switch to list the supported test environments
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,20 +57,29 @@ use Phix_Project\CliEngine\CliResult;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ListTestEnvironments_Command extends CliCommand
+class ListTargets_Switch extends CliSwitch
 {
 	protected $envList;
 
 	public function __construct($envList)
 	{
 		// define the command
-		$this->setName('list-test-environments');
+		$this->setName('list-targets');
 		$this->setShortDescription('list the available test environments');
-		$this->setLongDescription(
-			"Use this command to get a list of all of the test environments"
+		$this->setLongDesc(
+			"Use this switch to get a list of all of the test environments"
 			. " that are defined in the config files."
 			.PHP_EOL
 		);
+
+		// what are the short switches?
+		$this->addShortSwitch('T');
+
+		// what are the long switches?
+		$this->addLongSwitch('list-targets');
+
+		// we are actually a command, pretending to be a switch
+		$this->setSwitchActsAsCommand();
 
 		// remember the environments list
 		$this->envList = $envList;
@@ -83,7 +92,7 @@ class ListTestEnvironments_Command extends CliCommand
 	 * @param  mixed     $additionalContext
 	 * @return CliResult
 	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// list the environments (if any) in a machine-friendly way
 		foreach ($this->envList as $envName) {
@@ -91,6 +100,6 @@ class ListTestEnvironments_Command extends CliCommand
 		}
 
 		// all done
-		return new CliResult(0);
+		return new CliResult(CliResult::PROCESS_COMPLETE);
 	}
 }
