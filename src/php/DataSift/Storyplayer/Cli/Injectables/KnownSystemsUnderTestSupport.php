@@ -74,7 +74,7 @@ trait Injectables_KnownSystemsUnderTestSupport
 			$this->knownSystemsUnderTest = new KnownSystemsUnderTest;
 
 			foreach ($this->knownSystemsUnderTest as $name => $config) {
-				$this->knownTestEnvironmentsList[$name] = $name;
+				$this->knownSystemsUnderTestList[$name] = $name;
 			}
 
 			// all done
