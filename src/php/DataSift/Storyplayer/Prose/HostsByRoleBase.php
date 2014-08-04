@@ -43,11 +43,11 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\DataLib\DotNotationConvertor;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * Get information from the environment defined for the test environment
+ * base class for all 'Host' Prose modules
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -56,48 +56,38 @@ use DataSift\Stone\DataLib\DotNotationConvertor;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromTestEnvironment extends Prose
+class HostsByRoleBase extends Prose
 {
-	public function getSetting($setting)
+	protected $hostsDetails;
+	protected $roleName;
+
+	public function __construct(StoryTeller $st, $args = array())
 	{
+		// call the parent constructor
+		parent::__construct($st, $args);
+
+		// arg[0] is the name of the box
+		if (!isset($args[0])) {
+			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the role you've given to the machine");
+		}
+
 		// shorthand
-		$st = $this->st;
+		$this->roleName = $roleName = $args[0];
 
-		// what are we doing?
-		$log = $st->startAction("get $setting from test environment");
-
-		// get the details
-		$testEnv        = $st->getTestEnvironment();
-		$templateEngine = $st->getTemplateEngine();
-		$value          = json_decode($templateEngine->render('{{ ' . $setting . '|json_encode|raw }}', (array)$testEnv));
-
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction($logValue);
-
-		// all done
-		return $value;
+		// do we have this role?
+		$role = $st->fromRolesTable()->getDetailsForRole($roleName);
+		if (!is_array($role) || count($role) == 0) {
+			throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
+		}
+		$this->hostsDetails = $role;
 	}
 
-	public function getAllSettings()
+	protected function requireValidRoleDetails($caller)
 	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get all settings from the test environment");
-
-		// get the details
-		$testEnv = $st->getTestEnvironment();
-
-		// var_dump($testEnv);
-
-		// convert into dot notation
-		$convertor = new DotNotationConvertor();
-		$return    = $convertor->convertToArray($testEnv);
-
-		// all done
-		return $return;
+		// do we have valid host details?
+		if (isset($this->hostsDetails->invalidHost) && $this->hostsDetails->invalidHost) {
+			// no - throw an exception
+			throw new E5xx_ActionFailed($caller, "unknown host '{$this->hostDetails->name}'");
+		}
 	}
 }

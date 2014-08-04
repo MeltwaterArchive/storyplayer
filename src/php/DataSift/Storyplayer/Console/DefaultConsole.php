@@ -79,6 +79,12 @@ class DefaultConsole extends Console
         Log::LOG_TRACE     => "TRACE     ",
 	];
 
+	/**
+	 * a list of the results we have received from stories
+	 * @var array
+	 */
+	protected $storyResults = [];
+
 	public function __construct()
 	{
 		$this->resultStrings = array (
@@ -146,6 +152,29 @@ EOS;
 	public function endStoryplayer()
 	{
 
+		// this is our opportunity to tell the user how our story(ies)
+		// went in detail
+		foreach ($this->storyResults as $storyResult)
+		{
+			// do we need to say anything more?
+			switch ($storyResult->resultCode)
+			{
+				case Story_Result::PASS:
+				case Story_Result::BLACKLISTED:
+					// no, we're happy enough
+					break;
+
+				default:
+					// everything else is an error of some kind
+
+					// sanity check: we should always have a failedPhase
+					if (!$storyResult->failedPhase instanceof Phase_Result) {
+						throw new E5xx_MissingFailedPhase();
+					}
+					$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
+					break;
+			}
+		}
 	}
 
 	/**
@@ -201,24 +230,8 @@ EOS;
 		     . ' (' . round($storyResult->durationTime, 2) . ' secs)'
 		     . PHP_EOL;
 
-		// do we need to say anything more?
-		switch ($storyResult->resultCode)
-		{
-			case Story_Result::PASS:
-			case Story_Result::BLACKLISTED:
-				// no, we're happy enough
-				return;
-
-			default:
-				// everything else is an error of some kind
-
-				// sanity check: we should always have a failedPhase
-				if (!$storyResult->failedPhase instanceof Phase_Result) {
-					throw new E5xx_MissingFailedPhase();
-				}
-				$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
-				break;
-		}
+		// add this story result to our collection
+		$this->storyResults[] = $storyResult;
 	}
 
 	/**
@@ -447,7 +460,7 @@ Destroying Test Environment: {$testEnvName}
 EOS;
 		}
 		else {
-			// do nothing
+			echo "Destroying test environment {$testEnvName}: ";
 		}
 	}
 
@@ -459,6 +472,6 @@ EOS;
 	 */
 	public function endTestEnvironmentDestruction($testEnvName)
 	{
-		echo $PHP_EOL;
+		echo PHP_EOL;
 	}
 }

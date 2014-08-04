@@ -44,12 +44,13 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
 use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 /**
- * the TestEnvironmentDemolition phase
+ * the TestEnvironmentDestruction phase
  *
  * @category  Libraries
  * @package   Storyplayer/Phases
@@ -59,7 +60,7 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class TestEnvironmentDemolitionPhase extends StoryPhase
+class TestEnvironmentDestructionPhase extends InfrastructurePhase
 {
 	public function doPhase()
 	{
@@ -67,74 +68,62 @@ class TestEnvironmentDemolitionPhase extends StoryPhase
 		$st    = $this->st;
 		$story = $st->getStory();
 
-		// our result object
+		// our return value
 		$phaseResult = $this->getNewPhaseResult();
 
-		// do we have anything to do?
-		if (!$story->hasTestEnvironmentDemolition())
-		{
-			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no test environment demolition instructions"
-			);
+		// find out what we need to be doing
+		$testEnvironmentConfig = (array)$st->getTestEnvironmentConfig();
+
+		// are there any machines to destroy?
+		if (empty($testEnvironmentConfig)) {
+			// nothing to do
+			$phaseResult->setContinuePlaying();
 			return $phaseResult;
 		}
 
-		// get the callback to call
-		$callbacks = $story->getTestEnvironmentDemolition();
-
-		// make the call
+		// destroy the environments
 		try {
-			foreach ($callbacks as $callback){
-				call_user_func($callback, $st);
+			foreach ($testEnvironmentConfig as $env) {
+				// destroy the machine(s) in this environment, including:
+				//
+				// * destroying any virtual machines
+				// * de-registering in the Hosts table
+				// * de-registering in the Roles table
+				$hostAdapter = HostLib::getHostAdapter($st, $env->type);
+				$hostAdapter->destroyHost($env->details);
 			}
 
-			// all is good
 			$phaseResult->setContinuePlaying();
 		}
 		catch (E5xx_ActionFailed $e) {
-			// we always continue at this point, even though the phase
-			// itself failed
-			$phaseResult->setContinuePlaying(
+			$phaseResult->setPlayingFailed(
 				$phaseResult::FAILED,
 				$e->getMessage(),
 				$e
 			);
-			$storyResult->setStoryHasFailed($phaseResult);
 		}
 		catch (E5xx_ExpectFailed $e) {
-			// we always continue at this point, even though the phase
-			// itself failed
-			$phaseResult->setContinuePlaying(
+			$phaseResult->setPlayingFailed(
 				$phaseResult::FAILED,
 				$e->getMessage(),
 				$e
 			);
-			$storyResult->setStoryHasFailed($phaseResult);
 		}
+		// if anything is marked as incomplete, deal with that too
 		catch (E5xx_NotImplemented $e) {
-			// we always continue at this point, even though the phase
-			// itself failed
-			$phaseResult->setContinuePlaying(
+			$phaseResult->setPlayingFailed(
 				$phaseResult::INCOMPLETE,
 				$e->getMessage(),
 				$e
 			);
-			$storyResult->setStoryIsIncomplete($phaseResult);
 		}
 		catch (Exception $e) {
-			// we always continue at this point, even though the phase
-			// itself failed
-			$phaseResult->setContinuePlaying(
+			$phaseResult->setPlayingFailed(
 				$phaseResult::ERROR,
 				$e->getMessage(),
 				$e
 			);
-			$storyResult->setStoryHasError($phaseResult);
 		}
-
-		// close off any open log actions
-		$st->closeAllOpenActions();
 
 		// all done
 		return $phaseResult;

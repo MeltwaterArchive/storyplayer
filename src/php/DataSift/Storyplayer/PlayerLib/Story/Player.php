@@ -114,8 +114,8 @@ class Story_Player
         }
 
         // initialise the user
-        $context = $st->getStoryContext();
-        $context->initUser($st);
+        //$context = $st->getStoryContext();
+        //$context->initUser($st);
 
         // run the startup phase
         $phasesPlayer->playPhases(

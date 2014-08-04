@@ -139,7 +139,8 @@ class DefaultConfig extends BaseObject
         $phases->testEnvStartup = new BaseObject;
         $phases->testEnvStartup->TestEnvironmentConstruction = true;
         $phases->testEnvShutdown = new BaseObject;
-        //$phases->testEnvShutdown->TestEnvironmentDestruction = true;
+        $phases->testEnvShutdown->TestEnvironmentDestruction = true;
+
         $phases->script = new BaseObject;
         $phases->script->Automate = true;
 
