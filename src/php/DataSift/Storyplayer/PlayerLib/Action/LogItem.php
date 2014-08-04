@@ -257,6 +257,17 @@ class Action_LogItem
 		return $return;
 	}
 
+	public function captureOutput($text)
+	{
+		// trick the logger into indenting the output one more
+		$this->nestLevel++;
+
+		$this->writeToLog($text);
+
+		// restore our original output nesting level
+		$this->nestLevel--;
+	}
+
 	protected function getLogLevel()
 	{
 		if (isset($this->logLevel))

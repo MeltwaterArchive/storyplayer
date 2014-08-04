@@ -247,18 +247,13 @@ class SshClient
 					 . ' "' . str_replace('"', '\"', $command) . '"';
 
 		// run the command
-		$output     = null;
-		$returnCode = null;
-		$log->addStep("run command via SSH: {$fullCommand}", function() use($fullCommand, &$output, &$returnCode) {
-			$lines = array();
-			exec($fullCommand, $lines, $returnCode);
-			$output = implode(PHP_EOL, $lines);
+		$result = $log->addStep("run command via SSH: {$fullCommand}", function() use($st, $fullCommand) {
+			$commandRunner = new CommandRunner();
+			return $commandRunner->runSilently($st, $fullCommand);
 		});
 
 		// all done
-		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
-
-		$return = new CommandResult($returnCode, $output);
-		return $return;
+		$log->endAction("return code was '{$result->returnCode}'");
+		return $result;
 	}
 }
