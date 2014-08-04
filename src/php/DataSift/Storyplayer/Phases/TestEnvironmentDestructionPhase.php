@@ -60,7 +60,7 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class TestEnvironmentDestructionPhase extends StoryPhase
+class TestEnvironmentDestructionPhase extends InfrastructurePhase
 {
 	public function doPhase()
 	{
