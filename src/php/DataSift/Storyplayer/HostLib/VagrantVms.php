@@ -172,9 +172,12 @@ class VagrantVms implements SupportedHost
 			// we need to remember how to SSH into the box
 			$vmDetails->sshUsername = 'vagrant';
 			$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
-			$vmDetails->sshOptions  = array (
-				"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
-			);
+			$vmDetails->sshOptions  = [
+				"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'",
+				"-o StrictHostKeyChecking=no",
+				"-o UserKnownHostsFile=/dev/null",
+				"-o LogLevel=quiet",
+			];
 
 			// remember how to connect to the machine via the network
 			$vmDetails->ipAddress   = $this->determineIpAddress($vmDetails);

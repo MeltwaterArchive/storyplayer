@@ -81,9 +81,12 @@ class UsingVagrant extends VmActionsBase
 		$vmDetails->type        = 'VagrantVm';
 		$vmDetails->sshUsername = 'vagrant';
 		$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
-		$vmDetails->sshOptions  = array (
-			"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
-		);
+		$vmDetails->sshOptions  = [
+			"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'",
+			"-o StrictHostKeyChecking=no",
+			"-o UserKnownHostsFile=/dev/null",
+			"-o LogLevel=quiet",
+		];
 
 		// create our host adapter
 		$host = HostLib::getHostAdapter($st, $vmDetails->type);

@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\HostLib;
 
 use DataSift\Storyplayer\CommandLib\CommandResult;
+use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
@@ -125,14 +126,13 @@ class VagrantVm implements SupportedHost
 		$st->usingHostsTable()->removeHost($vmDetails->name);
 
 		// let's start the VM
-		$command = "cd '{$pathToHomeFolder}' && vagrant up";
-		$retVal = 1;
-		$log->addStep("create vagrant VM in '{$pathToHomeFolder}'", function() use($command, &$retVal) {
-			passthru($command, $retVal);
+		$command = "vagrant up";
+		$result = $log->addStep("create vagrant VM in '{$pathToHomeFolder}'", function() use($command, $vmDetails) {
+			return $this->runCommandAgainstHostManager($vmDetails, $command);
 		});
 
 		// did it work?
-		if ($retVal !== 0) {
+		if ($result->returnCode !== 0) {
 			$log->endAction("VM failed to start or provision :(");
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -187,12 +187,11 @@ class VagrantVm implements SupportedHost
 		}
 
 		// let's start the VM
-		$command = "cd '{$vmDetails->dir}' && vagrant up";
-		$retVal = 1;
-		passthru($command, $retVal);
+		$command = "vagrant up";
+		$result = $this->runCommandAgainstHostManager($vmDetails, $command);
 
 		// did it work?
-		if ($retVal !== 0) {
+		if ($result->returnCode != 0) {
 			$log->endAction("VM failed to start or re-provision :(");
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -231,12 +230,11 @@ class VagrantVm implements SupportedHost
 		}
 
 		// yes it is ... shut it down
-		$command = "cd '{$vmDetails->dir}' && vagrant halt";
-		$retVal = 1;
-		passthru($command, $retVal);
+		$command = "vagrant halt";
+		$result = $this->runCommandAgainstHostManager($vmDetails, $command);
 
 		// did it work?
-		if ($retVal !== 0) {
+		if ($result->returnCode != 0) {
 			$log->endAction("VM failed to shutdown :(");
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -288,12 +286,11 @@ class VagrantVm implements SupportedHost
 		}
 
 		// yes it is ... shut it down
-		$command = "cd '{$vmDetails->dir}' && vagrant halt --force";
-		$retVal = 1;
-		passthru($command, $retVal);
+		$command = "vagrant halt --force";
+		$result = $this->runCommandAgainstHostManager($vmDetails, $command);
 
 		// did it work?
-		if ($retVal !== 0) {
+		if ($result->returnCode != 0) {
 			$log->endAction("VM failed to power off :(");
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -318,13 +315,11 @@ class VagrantVm implements SupportedHost
 		// is the VM actually running?
 		if ($this->isRunning($vmDetails)) {
 			// yes it is ... shut it down
-
-			$command = "cd '{$vmDetails->dir}' && vagrant destroy --force";
-			$retVal = 1;
-			passthru($command, $retVal);
+			$command = "vagrant destroy --force";
+			$result = $this->runCommandAgainstHostManager($vmDetails, $command);
 
 			// did it work?
-			if ($retVal !== 0) {
+			if ($result->returnCode != 0) {
 				$log->endAction("VM failed to shutdown :(");
 				throw new E5xx_ActionFailed(__METHOD__);
 			}
@@ -355,14 +350,11 @@ class VagrantVm implements SupportedHost
 		$fullCommand = "cd '{$vmDetails->dir}' && $command 2>&1";
 
 		// run the command
-		$returnCode = 0;
-		$output = system($fullCommand, $returnCode);
-
-		// build the result
-		$result = new CommandResult($returnCode, $output);
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($st, $fullCommand);
 
 		// all done
-		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
+		$log->endAction("return code was '{$result->returnCode}'");
 		return $result;
 	}
 
@@ -384,14 +376,11 @@ class VagrantVm implements SupportedHost
 		$fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
 
 		// run the command
-		$returnCode = 0;
-		$output = system($fullCommand, $returnCode);
-
-		// build the result
-		$result = new CommandResult($returnCode, $output);
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($st, $fullCommand);
 
 		// all done
-		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
+		$log->endAction("return code was '{$returnCode}'");
 		return $result;
 	}
 
@@ -412,8 +401,10 @@ class VagrantVm implements SupportedHost
 		$command = "vagrant status | grep default | head -n 1 | awk '{print \$2'}";
 		$result  = $this->runCommandAgainstHostManager($vmDetails, $command);
 
-		if ($result->output != 'running') {
-			$log->endAction("VM is not running; state is '{$result->output}'");
+		$lines = explode("\n", $result->output);
+		$state = trim($lines[0]);
+		if ($state != 'running') {
+			$log->endAction("VM is not running; state is '{$state}'");
 			return false;
 		}
 

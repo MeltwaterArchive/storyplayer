@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\ProvisioningLib\Provisioners;
 
+use DataSift\Storyplayer\CommandLib\CommandResult;
+use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
@@ -183,7 +185,8 @@ class AnsibleProvisioner extends Provisioner
 		// if there's an ansible.cfg in the root of the playbook :(
 		$cwd = getcwd();
 		chdir($ansibleSettings->dir);
-		$result = $st->usingShell()->runCommand($command);
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($st, $command);
 		chdir($cwd);
 
 		// what happened?
