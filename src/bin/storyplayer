@@ -206,7 +206,7 @@ function main($argv)
 		$additionalConfigs = [];
 		foreach ($defaultConfig->configs as $name => $dirs)
 		{
-			$additionalConfigs[$name] = $staticConfigManager->loadConfigFilesFrom($dirs);
+			$additionalConfigs[$name] = $staticConfigManager->getListOfConfigFiles($dirs);
 		}
 		$injectables->initAdditionalConfigsSupport($additionalConfigs);
 

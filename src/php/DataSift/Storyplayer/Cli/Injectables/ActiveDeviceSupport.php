@@ -74,8 +74,13 @@ trait Injectables_ActiveDeviceSupport
             throw new E4xx_NoSuchDevice($deviceName);
         }
 
-        // copy over the device that we want
-        $this->activeDevice = $injectables->knownDevices->$deviceName;
+        // a helper to load the config
+        $staticConfigManager = $injectables->staticConfigManager;
+
+        // load the device that we want
+        $this->activeDevice = $staticConfigManager->loadConfigFile(
+        	$injectables->knownDevices->$deviceName
+        );
 
         // remember the device name
         $this->activeDeviceName = $deviceName;

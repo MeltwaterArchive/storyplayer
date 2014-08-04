@@ -67,8 +67,13 @@ trait Injectables_ActiveLocalEnvironmentConfigSupport
             throw new E4xx_NoSuchLocalEnvironment($envName);
         }
 
+        // a helper to load the config
+        $staticConfigManager = $injectables->staticConfigManager;
+
         // build the environment that we want
-        $this->activeLocalEnvironmentConfig = $injectables->knownLocalEnvironments->$envName;
+        $this->activeLocalEnvironmentConfig = $staticConfigManager->loadConfigFile(
+            $injectables->knownLocalEnvironments->$envName
+        );
 
         // remember the environment name, just in case
         $this->activeLocalEnvironmentName = $envName;

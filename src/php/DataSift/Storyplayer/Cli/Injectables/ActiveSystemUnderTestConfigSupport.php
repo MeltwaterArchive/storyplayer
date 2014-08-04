@@ -66,10 +66,13 @@ trait Injectables_ActiveSystemUnderTestConfigSupport
             throw new E4xx_NoSuchSystemUnderTest($sutName);
         }
 
-        // shorthand
-        $activeSut     = $injectables->knownSystemsUnderTest->$sutName;
-        $activeTestEnv = new BaseObject;
-        $activeTestEnv->mergeFrom(json_decode($injectables->activeTestEnvironmentConfig));
+        // a helper to load the config
+        $staticConfigManager = $injectables->staticConfigManager;
+
+        // load the config file for the system-under-test
+        $activeSut = $staticConfigManager->loadConfigFile(
+            $injectables->knownSystemsUnderTest->$sutName
+        );
 
         // we need to merge the config for this system-under-test into
         // our active test environment config
@@ -79,6 +82,10 @@ trait Injectables_ActiveSystemUnderTestConfigSupport
         // the system-under-test
         //
         // we use the 'roles' data to match the two up
+
+        $activeTestEnv = new BaseObject;
+        $activeTestEnv->mergeFrom(json_decode($injectables->activeTestEnvironmentConfig));
+
         foreach ($activeSut as $sutDetails) {
             foreach ($activeTestEnv as $envDetails) {
                 foreach ($envDetails->details->machines as $machine) {

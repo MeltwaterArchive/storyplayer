@@ -111,8 +111,11 @@ class StaticConfigManager extends ConfigManagerBase
 		$return = [];
 		foreach ($dirs as $dirToSearch)
 		{
+			// find JSON config files
 			$files = $this->configHelper->getListOfConfigFilesIn($dirToSearch, 'json');
-			$return = array_merge($return, $files);
+			foreach ($files as $filename) {
+				$return[basename($filename, '.json')] = $filename;
+			}
 		}
 
 		// all done
@@ -137,5 +140,13 @@ class StaticConfigManager extends ConfigManagerBase
 
 		// all done
 		return $return;
+	}
+
+	public function loadConfigFile($filename)
+	{
+		$config = new BaseObject();
+		$this->configHelper->loadConfigFile($config, $filename);
+
+		return $config;
 	}
 }
