@@ -106,11 +106,11 @@ class CommandRunner
 
 			// check all the streams for output
 			if ($line = fgets($pipes[1])) {
-				echo '.';
+				$log->captureOutput(rtrim($line));
 				$output = $output . $line;
 			}
 			if ($line = fgets($pipes[2])) {
-				echo '.';
+				$log->captureOutput(rtrim($line));
 				$output = $output . $line;
 			}
 		}
