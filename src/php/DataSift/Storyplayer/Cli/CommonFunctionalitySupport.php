@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Exception;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
 
@@ -87,10 +88,17 @@ trait CommonFunctionalitySupport
 
 	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
 	{
-		// let's process the results of the CLI parsing that has already
-		// happened
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->initFunctionality($engine, $command, $injectables);
+		try {
+			// let's process the results of the CLI parsing that has already
+			// happened
+			foreach ($this->commonFunctionality as $obj) {
+				$obj->initFunctionality($engine, $command, $injectables);
+			}
+		}
+		catch (Exception $e) {
+			// no matter what has gone wrong, we cannot continue
+			$injectables->output->logCliError($e->getMessage());
+			exit(1);
 		}
 	}
 }
