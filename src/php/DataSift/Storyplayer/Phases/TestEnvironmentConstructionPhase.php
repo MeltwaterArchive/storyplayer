@@ -103,7 +103,7 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 			}
 
 			$phaseResult->setContinuePlaying();
-			$phaseResult->addPairedPhase('TestEnvironmentDemolition');
+			$phaseResult->addPairedPhase('TestEnvironmentDestruction');
 		}
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(
@@ -119,7 +119,7 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 				$e
 			);
 		}
-		// if any of the tests are incomplete, deal with that too
+		// if anythin is marked as incomplete, deal with that too
 		catch (E5xx_NotImplemented $e) {
 			$phaseResult->setPlayingFailed(
 				$phaseResult::INCOMPLETE,
@@ -133,7 +133,7 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 				$e->getMessage(),
 				$e
 			);
-			$phaseResult->addPairedPhase('TestEnvironmentDemolition');
+			$phaseResult->addPairedPhase('TestEnvironmentDestruction');
 		}
 
 		// all done

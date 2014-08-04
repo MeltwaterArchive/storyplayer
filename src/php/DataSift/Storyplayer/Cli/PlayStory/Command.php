@@ -93,8 +93,8 @@ class PlayStory_Command extends CliCommand
     // we track this for convenience
     protected $output;
 
-    // our list of stories to execute
-    protected $storyList;
+    // our list of players to execute
+    protected $playerList;
 
     // our injected data / services
     // needed for when user presses CTRL+C
@@ -147,6 +147,8 @@ class PlayStory_Command extends CliCommand
     {
         // we need to wrap our code to catch old-style PHP errors
         $legacyHandler = new Legacy_ErrorHandler();
+
+        // run our code
         try {
             $returnCode = $legacyHandler->run([$this, 'processInsideLegacyHandler'], [$engine, $params, $injectables]);
             return $returnCode;
@@ -157,6 +159,13 @@ class PlayStory_Command extends CliCommand
             if (isset($engine->options->dev) && $engine->options->dev) {
                 $injectables->output->logCliError("Stack trace is:\n\n" . $e->getTraceAsString());
             }
+
+            // stop the browser if available
+            if (isset($this->st)) {
+                $this->st->stopDevice();
+            }
+
+            // tell the calling process that things did not end well
             exit(1);
         }
     }
@@ -206,11 +215,8 @@ class PlayStory_Command extends CliCommand
         // initialise process persistence
         $this->initProcessPersistence($engine, $injectables);
 
-        // build our list of stories to run
-        $this->initStoryList($engine, $injectables, $params);
-
-        // setup our Reports loader
-        $this->initReportLoader($injectables);
+        // build our list of players to run
+        $this->initPlayerList($engine, $injectables, $params);
 
         // setup reporting modules
         $this->initReporting($engine, $injectables);
@@ -243,25 +249,21 @@ class PlayStory_Command extends CliCommand
             $engine->getAppLicense()
         );
 
-        // $this->storyList contains one or more things to play
+        // $this->playerList contains one or more things to play
         //
         // let's play each of them in order
-        foreach ($this->storyList as $player)
+        foreach ($this->playerList as $player)
         {
-            // create the supporting context for this test run
-            $context = new Story_Context($injectables);
-
-            // track the context
-            $st->setStoryContext($context);
-
-            // play the story(ies)
+            // execute each player in turn
+            //
+            // they may also have their own list of nested players
             $player->play($st, $injectables);
 
             // make sure the test device has been stopped
             // (it may have been persisted by the story)
             //
             // we do not allow the test device to persist between
-            // stories
+            // top-level players
             $st->stopDevice();
         }
 
@@ -320,16 +322,6 @@ class PlayStory_Command extends CliCommand
 
     /**
      *
-     * @param  Injectables $injectables
-     * @return void
-     */
-    protected function initReportLoader(Injectables $injectables)
-    {
-        $injectables->initReportLoaderSupport($injectables);
-    }
-
-    /**
-     *
      * @param  CliEngine   $engine
      * @param  Injectables $injectables
      * @return void
@@ -343,6 +335,7 @@ class PlayStory_Command extends CliCommand
         }
 
         // setup the reports that have been requested
+        $injectables->initReportLoaderSupport($injectables);
         foreach ($engine->options->reports as $reportName => $reportFilename)
         {
             try {
@@ -380,15 +373,15 @@ class PlayStory_Command extends CliCommand
      * @param  array       $cliParams
      * @return void
      */
-    protected function initStoryList(CliEngine $cliEngine, Injectables $injectables, $cliParams)
+    protected function initPlayerList(CliEngine $cliEngine, Injectables $injectables, $cliParams)
     {
         // our list of stories to play
-        $this->storyList = [];
+        $this->playerList = [];
 
         foreach ($cliParams as $cliParam) {
             // figure out what to do?
             if (is_dir($cliParam)) {
-                $this->storyList = $this->storyList + $this->addStoriesFromFolder($cliEngine, $injectables, $cliParam);
+                $this->playerList = $this->playerList + $this->addStoriesFromFolder($cliEngine, $injectables, $cliParam);
             }
             else if (is_file($cliParam)) {
                 // are we loading a story, or a list of stories?
@@ -397,11 +390,11 @@ class PlayStory_Command extends CliCommand
 
                 switch ($paramSuffix) {
                     case 'php':
-                        $this->storyList = $this->storyList + $this->addStoryFromFile($cliEngine, $injectables, $cliParam);
+                        $this->playerList = $this->playerList + $this->addStoryFromFile($cliEngine, $injectables, $cliParam);
                         break;
 
                     case 'json':
-                        $this->storyList = $this->storyList + $this->addStoriesFromTale($cliEgine, $injectables, $cliParam);
+                        $this->playerList = $this->playerList + $this->addStoriesFromTale($cliEgine, $injectables, $cliParam);
                         break;
 
                     default:
@@ -427,10 +420,9 @@ class PlayStory_Command extends CliCommand
     {
         // these are the players we want to execute for the story
         $return = [
-            new TestEnvironment_Player(
+            new TestEnvironment_Player([
                 new Story_Player($storyFile, $injectables),
-                $injectables
-            )
+            ], $injectables)
         ];
 
         // all done

@@ -91,7 +91,7 @@ class FromTestEnvironment extends Prose
 		// get the details
 		$testEnv = $st->getTestEnvironment();
 
-		var_dump($testEnv);
+		// var_dump($testEnv);
 
 		// convert into dot notation
 		$convertor = new DotNotationConvertor();

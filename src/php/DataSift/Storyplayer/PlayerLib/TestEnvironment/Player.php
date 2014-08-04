@@ -57,22 +57,22 @@ use DataSift\Storyplayer\Cli\Injectables;
  */
 class TestEnvironment_Player extends BasePlayer
 {
-	protected $startupPhases;
-	protected $shutdownPhases;
-	protected $wrappedPlayer;
+    protected $startupPhases;
+    protected $shutdownPhases;
+    protected $wrappedPlayers;
 
-	public function __construct($wrappedPlayer, Injectables $injectables)
-	{
-		$this->wrappedPlayer = $wrappedPlayer;
+    public function __construct($wrappedPlayers, Injectables $injectables)
+    {
+        $this->wrappedPlayers = $wrappedPlayers;
 
-		$this->startupPhases  = $injectables->activeConfig->storyplayer->phases->testEnvStartup;
-		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->testEnvShutdown;
-	}
+        $this->startupPhases  = $injectables->activeConfig->storyplayer->phases->testEnvStartup;
+        $this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->testEnvShutdown;
+    }
 
-	public function play(StoryTeller $st, Injectables $injectables)
-	{
-		// shorthand
-		$output = $st->getOutput();
+    public function play(StoryTeller $st, Injectables $injectables)
+    {
+        // shorthand
+        $output = $st->getOutput();
 
         // we're going to use this to play our setup and teardown phases
         $phasesPlayer = new Phases_Player();
@@ -82,30 +82,40 @@ class TestEnvironment_Player extends BasePlayer
 
         // run the startup phase
         $phaseResults = $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$this->startupPhases
+            $st,
+            $injectables,
+            $this->startupPhases
         );
         $output->endTestEnvironmentCreation($injectables->activeTestEnvironmentName);
 
         // what happened?
         if ($phaseResults->getFinalResult() !== $phaseResults::RESULT_COMPLETE) {
-        	$output->logCliError("failed to create test environment - cannot continue");
-        	exit(1);
+            $output->logCliError("failed to create test environment - cannot continue");
+            exit(1);
         }
 
         // now we need to play whatever runs against this
         // test environment
-        $return = $this->wrappedPlayer->play($st, $injectables);
+        foreach ($this->wrappedPlayers as $wrappedPlayer)
+        {
+            // play the story
+            $wrappedPlayer->play($st, $injectables);
 
-		// run the shutdown phase
+            // make sure the test device has stopped after each story
+            $st->stopDevice();
+        }
+
+        // announce what we're doing
+        $output->startTestEnvironmentDestruction($injectables->activeTestEnvironmentName);
+
+        // run the shutdown phase
         $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->shutdownPhases
+            $st,
+            $injectables,
+            $this->shutdownPhases
         );
+        $output->endTestEnvironmentDestruction($injectables->activeTestEnvironmentName);
 
-		// all done
-		return $return;
-	}
+        // all done
+    }
 }

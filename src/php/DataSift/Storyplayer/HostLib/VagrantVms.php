@@ -268,7 +268,7 @@ class VagrantVms implements SupportedHost
 			$vmDetails = $st->fromHostsTable()->getDetailsForHost($name);
 			if ($vmDetails) {
 				// is the VM actually running?
-				if ($st->fromHost($vmDetails)->getHostIsRunning()) {
+				if ($st->fromHost($name)->getHostIsRunning()) {
 					// delete the VM from disk
 					//
 					// this will also deregister the host from the
