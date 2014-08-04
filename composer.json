@@ -31,7 +31,7 @@
 		"datasift/netifaces": "*",
 		"phix/injectables": "*",
 		"symfony/yaml": "2.*",
-		"nikic/php-parser": "1.0.*@dev",
+		"nikic/php-parser": "dev-master",
 		"twig/twig": "1.*"
 	},
 	"require-dev": {
