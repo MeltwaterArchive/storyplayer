@@ -96,8 +96,8 @@ class UsingRolesTable extends Prose
 		if (!$foundHost) {
 			// no, so add it to the end
 			$roleDetails[] = $hostDetails;
-			var_dump($roleDetails);
-			var_dump($st->getRuntimeConfig());
+			// var_dump($roleDetails);
+			// var_dump($st->getRuntimeConfig());
 			$st->saveRuntimeConfig();
 		}
 
