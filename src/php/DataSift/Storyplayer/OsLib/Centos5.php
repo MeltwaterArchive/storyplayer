@@ -79,7 +79,8 @@ class Centos5 extends OsBase
 			$result = $host->runCommandViaHostManager($hostDetails, $command);
 
 			if ($result->didCommandSucceed()) {
-				$ipAddress = trim($result->output);
+				$lines = explode("\n", $result->output);
+				$ipAddress = trim($lines[0]);
 				$log->endAction("IP address is '{$ipAddress}'");
 				return $ipAddress;
 			}

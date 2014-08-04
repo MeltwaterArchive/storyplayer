@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\HostLib;
 
+use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
@@ -136,14 +137,13 @@ class VagrantVms implements SupportedHost
 		}
 
 		// let's start the VM
-		$command = "cd '{$pathToHomeFolder}' && vagrant up";
-		$retVal = 1;
-		$log->addStep("create vagrant VM in '{$pathToHomeFolder}'", function() use($command, &$retVal) {
-			passthru($command, $retVal);
+		$command = "vagrant up";
+		$result = $log->addStep("create vagrant VM in '{$pathToHomeFolder}'", function() use($envDetails, $command) {
+			return $this->runCommandAgainstHostManager($envDetails, $command);
 		});
 
 		// did it work?
-		if ($retVal !== 0) {
+		if ($result->returnCode != 0) {
 			$log->endAction("VM failed to start or provision :(");
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -169,15 +169,15 @@ class VagrantVms implements SupportedHost
 			// remember where the machine lives
 			$vmDetails->dir         = $pathToHomeFolder;
 
-			// remember how to connect to the machine via the network
-			$vmDetails->ipAddress   = $this->determineIpAddress($vmDetails);
-
 			// we need to remember how to SSH into the box
 			$vmDetails->sshUsername = 'vagrant';
 			$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
 			$vmDetails->sshOptions  = array (
 				"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'"
 			);
+
+			// remember how to connect to the machine via the network
+			$vmDetails->ipAddress   = $this->determineIpAddress($vmDetails);
 
 			// mark the box as provisioned
 			// we will use this in stopBox() to avoid destroying VMs that failed
@@ -300,14 +300,11 @@ class VagrantVms implements SupportedHost
 		$fullCommand = "cd '{$envDetails->dir}' && $command 2>&1";
 
 		// run the command
-		$returnCode = 0;
-		$output = system($fullCommand, $returnCode);
-
-		// build the result
-		$result = new CommandResult($returnCode, $output);
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($st, $fullCommand);
 
 		// all done
-		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
+		$log->endAction("return code was '{$result->returnCode}'");
 		return $result;
 	}
 
@@ -329,14 +326,11 @@ class VagrantVms implements SupportedHost
 		$fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
 
 		// run the command
-		$returnCode = 0;
-		$output = system($fullCommand, $returnCode);
-
-		// build the result
-		$result = new CommandResult($returnCode, $output);
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($st, $fullCommand);
 
 		// all done
-		$log->endAction("return code was '{$returnCode}'; output was '{$output}'");
+		$log->endAction("return code was '{$result->returnCode}'");
 		return $result;
 	}
 
