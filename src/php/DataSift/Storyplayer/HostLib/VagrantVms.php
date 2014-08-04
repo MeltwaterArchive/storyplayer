@@ -136,6 +136,10 @@ class VagrantVms implements SupportedHost
 			$st->usingRolesTable()->removeHostFromAllRoles($name);
 		}
 
+		// work out which network interface to use
+		$bridgedIface = $this->determineBridgedInterface();
+		putenv('VAGRANT_BRIDGE_ADAPTER=' . $bridgedIface);
+
 		// let's start the VM
 		$command = "vagrant up";
 		$result = $log->addStep("create vagrant VM in '{$pathToHomeFolder}'", function() use($envDetails, $command) {
@@ -369,5 +373,40 @@ class VagrantVms implements SupportedHost
 		// all done
 		$log->endAction("IP address is '{$ipAddress}'");
 		return $ipAddress;
+	}
+
+	public function determineBridgedInterface()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("determine bridged network interface for Vagrant VM");
+
+		// VBoxManage can actually tell us what we need to know
+		$command = 'VBoxManage list bridgedifs';
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($st, $command);
+		if ($result->returnCode != 0) {
+			$log->endAction('unable to get list of bridgable network interfaces from VBoxManage :(');
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		// now we just need to make sense of it all
+		$lines = explode("\n", $result->output);
+		$iface = null;
+		$matches = [];
+		foreach($lines as $line) {
+			if (preg_match("|Name:[\s]+(.*)|", $line, $matches)) {
+				$iface = $matches[1];
+			}
+			else if ($iface && preg_match("|IPAddress:[\s]+(.*)|", $line, $matches)) {
+				// our network interface contains an IPAddress - it is likely
+				// to be one that works
+				if ($matches[1] != '0.0.0.0') {
+					return $iface;
+				}
+			}
+		}
 	}
 }
