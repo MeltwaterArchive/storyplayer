@@ -460,7 +460,7 @@ Destroying Test Environment: {$testEnvName}
 EOS;
 		}
 		else {
-			// do nothing
+			echo "Destroying test environment {$testEnvName}: ";
 		}
 	}
 
