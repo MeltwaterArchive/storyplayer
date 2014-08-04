@@ -71,9 +71,14 @@ trait Injectables_ActiveLocalEnvironmentConfigSupport
         $staticConfigManager = $injectables->staticConfigManager;
 
         // build the environment that we want
-        $this->activeLocalEnvironmentConfig = $staticConfigManager->loadConfigFile(
-            $injectables->knownLocalEnvironments->$envName
-        );
+        if (is_string($injectables->knownLocalEnvironments->$envName)) {
+            $this->activeLocalEnvironmentConfig = $staticConfigManager->loadConfigFile(
+                $injectables->knownLocalEnvironments->$envName
+            );
+        }
+        else {
+            $this->activeLocalEnvironmentConfig = $injectables->knownLocalEnvironments->$envName;
+        }
 
         // remember the environment name, just in case
         $this->activeLocalEnvironmentName = $envName;

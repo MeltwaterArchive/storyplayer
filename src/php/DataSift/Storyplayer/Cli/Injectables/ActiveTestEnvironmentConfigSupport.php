@@ -72,7 +72,12 @@ trait Injectables_ActiveTestEnvironmentConfigSupport
 
         // we need to store the test environment's config as a string,
         // as it will need expanding as we provision the test environment
-        $this->activeTestEnvironmentConfig = json_encode($staticConfigManager->loadConfigFile($injectables->knownTestEnvironments->$envName));
+        if (is_string($injectables->knownTestEnvironments->$envName)) {
+            $this->activeTestEnvironmentConfig = json_encode($staticConfigManager->loadConfigFile($injectables->knownTestEnvironments->$envName));
+        }
+        else {
+            $this->activeTestEnvironmentConfig = json_encode($injectables->knownTestEnvironments->$envName);
+        }
 
         // remember the environment name
         $this->activeTestEnvironmentName = $envName;

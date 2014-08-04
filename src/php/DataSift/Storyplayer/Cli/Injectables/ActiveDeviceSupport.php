@@ -78,9 +78,14 @@ trait Injectables_ActiveDeviceSupport
         $staticConfigManager = $injectables->staticConfigManager;
 
         // load the device that we want
-        $this->activeDevice = $staticConfigManager->loadConfigFile(
-        	$injectables->knownDevices->$deviceName
-        );
+        if (is_string($injectables->knownDevices->$deviceName)) {
+	        $this->activeDevice = $staticConfigManager->loadConfigFile(
+	        	$injectables->knownDevices->$deviceName
+	        );
+        }
+        else {
+        	$this->activeDevice = $injectables->knownDevices->$deviceName;
+        }
 
         // remember the device name
         $this->activeDeviceName = $deviceName;
