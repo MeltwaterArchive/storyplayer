@@ -83,7 +83,7 @@ class Common_SystemUnderTestConfigValidator implements Validator
         }
 
         // the $value must be a valid system-under-test name
-        if (!in_array($value, $this->sutList) && $value !== $this->defaultValue) {
+        if (!in_array($value, $this->sutList)) {
             $result->addError(static::MSG_NOTVALIDSUT);
             return $result;
         }

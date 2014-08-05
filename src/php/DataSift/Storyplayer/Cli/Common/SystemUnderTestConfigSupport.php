@@ -81,6 +81,10 @@ class Common_SystemUnderTestConfigSupport implements Common_Functionality
 
     public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
+        if (empty($engine->options->sutName)) {
+            throw new E4xx_NoSystemUnderTestSpecified();
+        }
+
     	$injectables->initActiveSystemUnderTestConfigSupport(
             $engine->options->sutName,
             $injectables

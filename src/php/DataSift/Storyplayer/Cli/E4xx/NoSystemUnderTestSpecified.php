@@ -46,8 +46,8 @@ namespace DataSift\Storyplayer\Cli;
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Exception thrown when we cannot find the system-under-test that we
- * are looking for
+ * Exception thrown when the user hasn't provided a system-under-test, but
+ * they needed to
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -56,12 +56,12 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_NoSuchSystemUnderTest extends Exxx_Exception
+class E4xx_NoSystemUnderTestSpecified extends Exxx_Exception
 {
     public function __construct($sutName)
     {
-    	$msg = "Unknown system under test '{$sutName}'; we have no config for it" . PHP_EOL . PHP_EOL
-    	     . "Use 'storyplayer --list-sut' to see the list of known systems under test";
+    	$msg = "You need to use -s to specify which system to test." . PHP_EOL . PHP_EOL
+    	     . "Use 'storyplayer --list-systems' to see the list of known systems under test.";
         parent::__construct(400, $msg, $msg);
     }
 }
