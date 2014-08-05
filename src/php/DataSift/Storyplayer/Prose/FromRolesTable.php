@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\Prose;
 
+use DataSift\Stone\ObjectLib\BaseObject;
+
 /**
  * retrieve data from the internal hosts table
  *
@@ -77,11 +79,8 @@ class FromRolesTable extends Prose
         // what are we doing?
         $log = $st->startAction("get the roles table for the current test environment");
 
-        // which test environment are we working with?
-        $testEnvName = $st->getTestEnvironmentName();
-
         // what is our roles table for this test environment?
-        $rolesTable = $st->fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+        $rolesTable = $st->fromRuntimeTableForTargetEnvironment($this->entryKey)->getTable();
 
         // all done
         $log->endAction();
@@ -94,9 +93,9 @@ class FromRolesTable extends Prose
      * @param string $roleName
      *        The role we're looking for
      *
-     * @return array Details about $roleName
+     * @return BaseObject Details about $roleName
      */
-    public function &getDetailsForRole($roleName)
+    public function getDetailsForRole($roleName)
     {
         // shorthand
         $st = $this->st;
@@ -105,15 +104,11 @@ class FromRolesTable extends Prose
         $log = $st->startAction("get details for role '{$roleName}' for the current test environment");
 
         // pull the table
-        $rolesTable = $st->fromRolesTable()->getRolesTable();
+        $rolesTable = $this->getRolesTable();
 
         if (!isset($rolesTable->$roleName)) {
-            // special case - we need roles to be arrays of hosts
-            //
-            // this makes it *much* easier for stories to interact with
-            // different test environments, where any role may be assigned
-            // to 1 or more machines
-            $rolesTable->$roleName = [];
+            // create an empty entry for this role
+            $rolesTable->$roleName = new BaseObject;
 
             // we've just created a new entry in the runtime config, so
             // we need to force a save to disk

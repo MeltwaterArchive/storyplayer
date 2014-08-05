@@ -68,7 +68,7 @@ class HostsByRoleBase extends Prose
 
 		// arg[0] is the name of the box
 		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the role you've given to the machine");
+			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
 		}
 
 		// shorthand
@@ -76,7 +76,7 @@ class HostsByRoleBase extends Prose
 
 		// do we have this role?
 		$role = $st->fromRolesTable()->getDetailsForRole($roleName);
-		if (!is_array($role) || count($role) == 0) {
+		if (!count(get_object_vars($role))) {
 			throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
 		}
 		$this->hostsDetails = $role;
@@ -85,9 +85,8 @@ class HostsByRoleBase extends Prose
 	protected function requireValidRoleDetails($caller)
 	{
 		// do we have valid host details?
-		if (isset($this->hostsDetails->invalidHost) && $this->hostsDetails->invalidHost) {
-			// no - throw an exception
-			throw new E5xx_ActionFailed($caller, "unknown host '{$this->hostDetails->name}'");
+		if (!count(get_object_vars($this->hostsDetails))) {
+			throw new E5xx_ActionFailed($caller, "no hosts left in role {$this->roleName}");
 		}
 	}
 }

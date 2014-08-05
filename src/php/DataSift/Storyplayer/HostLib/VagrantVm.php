@@ -125,6 +125,9 @@ class VagrantVm implements SupportedHost
 		// remove any existing hosts table entry
 		$st->usingHostsTable()->removeHost($vmDetails->name);
 
+		// remove any roles
+		$st->usingRolesTable()->removeHostFromAllRoles($vmDetails->name);
+
 		// let's start the VM
 		$command = "vagrant up";
 		$result = $log->addStep("create vagrant VM in '{$pathToHomeFolder}'", function() use($command, $vmDetails) {
@@ -327,6 +330,9 @@ class VagrantVm implements SupportedHost
 
 		// if we get here, we need to forget about this VM
 		$st->usingHostsTable()->removeHost($vmDetails->name);
+
+		// remove any roles
+		$st->usingRolesTable()->removeHostFromAllRoles($vmDetails->name);
 
 		// all done
 		$log->endAction();

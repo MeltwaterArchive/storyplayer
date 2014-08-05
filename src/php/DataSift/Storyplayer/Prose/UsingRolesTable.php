@@ -79,27 +79,13 @@ class UsingRolesTable extends Prose
 	{
 		// shorthand
 		$st = $this->st;
+		$hostName = $hostDetails->name;
 
 		// what are we doing?
 		$log = $st->startAction("add host '{$hostDetails->name}' to role '{$roleName}'");
 
-		// get the existing role details
-		$roleDetails =& $st->fromRolesTable()->getDetailsForRole($roleName);
-
-		// is the host already in there?
-		$foundHost = false;
-		foreach ($roleDetails as $roleDetail) {
-			if ($roleDetail->name == $hostDetails->name) {
-				$foundHost = true;
-			}
-		}
-		if (!$foundHost) {
-			// no, so add it to the end
-			$roleDetails[] = $hostDetails;
-			// var_dump($roleDetails);
-			// var_dump($st->getRuntimeConfig());
-			$st->saveRuntimeConfig();
-		}
+		// add it
+		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->addItemToGroup($roleName, $hostName, $hostDetails);
 
 		// all done
 		$log->endAction();
@@ -121,19 +107,8 @@ class UsingRolesTable extends Prose
 		// what are we doing?
 		$log = $st->startAction("remove host '{$hostName}' from '{$roleName}'");
 
-		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
-
-		// get the existing role details
-		$roleDetails = $st->fromRolesTable()->getDetailsForRole($roleName);
-
-		// do we have this host in the role?
-		if (isset($roleDetails->$hostName)) {
-			unset($ruleDetails->$hostName);
-
-			// force a save to disk
-			$st->saveRuntimeConfig();
-		}
+		// remove it
+		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromGroup($roleName, $hostName);
 
 		// all done
 		$log->endAction();
@@ -147,20 +122,8 @@ class UsingRolesTable extends Prose
 		// what are we doing?
 		$log = $st->startAction("remove host '{$hostName}' from all roles");
 
-		// get the roles table
-		$roles = $st->fromRolesTable()->getRolesTable();
-
-		// seek and destroy :)
-		foreach ($roles as $roleName => $hosts) {
-			foreach ($hosts as $hostDetails) {
-				if ($hostDetails->name = $hostName) {
-					unset ($roles->$roleName->$hostName);
-				}
-			}
-		}
-
-		// force a save, in case anything changed
-		$st->saveRuntimeConfig();
+		// remove it
+		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromAllGroups($hostName);
 
 		// all done
 		$log->endAction();
