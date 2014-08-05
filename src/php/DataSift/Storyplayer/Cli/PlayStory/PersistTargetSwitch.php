@@ -34,110 +34,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
+
+use stdClass;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+
+use Phix_Project\ValidationLib4\Type_MustBeString;
 
 /**
- * retrieve data from the internal hosts table
+ * Tell Storyplayer not to kill any test environment that we build
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromHostsTable extends Prose
+class PlayStory_PersistTargetSwitch extends CliSwitch
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "hosts";
-
-
-	/**
-	 * getHostsTable
-	 *
-	 *
-	 * @return object The hosts table
-	 */
-	public function getHostsTable()
+	public function __construct()
 	{
-		// shorthand
-		$st = $this->st;
+		// define our name, and our description
+		$this->setName('persisttarget');
+		$this->setShortDescription('do not destroy the test environment after the test');
+		$this->setLongDesc(
+			"Use this switch if you want the test environment to continue to exist "
+			."after Storyplayer has finished running."
+			. PHP_EOL . PHP_EOL
+			."Use the --reuse-target switch on subsequent runs to avoid rebuilding the "
+			."test environment."
+		);
 
-		// what are we doing?
-		$log = $st->startAction("get the hosts table for the current test environment");
-
-		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
-
-		// get the table
-		$table = $st->fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+		// what are the long switches?
+		$this->addLongSwitch('persist-target');
 
 		// all done
-		$log->endAction();
-		return $table;
 	}
 
-	/**
-	 * getDetailsForHost
-	 *
-	 * @param string $hostName The host we're looking for
-	 *
-	 * @return object Details about $hostName
-	 */
-	public function getDetailsForHost($hostName)
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// shorthand
-		$st = $this->st;
+		// remember the setting
+		$engine->options->persistTarget = true;
 
-		// what are we doing?
-		$log = $st->startAction("get details for host '{$hostName}' from the current test environment");
-
-		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
-
-		// get the details
-		$hostDetails = $st->fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostName);
-
-		// all done
-		$log->endAction();
-		return $hostDetails;
-	}
-
-	public function hasTestEnvironment()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("do we already have the test environment defined in the hosts table?");
-
-		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
-
-		// get the hosts table
-		$hostsTable = $st->fromRuntimeTable($this->entryKey)->getTable();
-		//var_dump($hostsTable);
-
-		// does the test environment exist?
-		if (isset($hostsTable->$testEnvName) && $hostsTable->$testEnvName->hasProperties()) {
-			$log->endAction("yes");
-			return true;
-		}
-
-		// no, it does not
-		$log->endAction("no");
-		return false;
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
 	}
 }

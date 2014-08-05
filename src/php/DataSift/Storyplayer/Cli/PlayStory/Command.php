@@ -87,6 +87,20 @@ class PlayStory_Command extends CliCommand
      */
     protected $persistProcesses = false;
 
+    /**
+     * should we skip the TestEnvironmentDestruction phase?
+     *
+     * @var boolean
+     */
+    protected $peristTarget = false;
+
+    /**
+     * should we skip the TestEnvironmentConstruction phase?
+     *
+     * @var boolean
+     */
+    protected $reuseTarget = false;
+
     // we need to track this for handling CTRL-C
     protected $st;
 
@@ -127,6 +141,8 @@ class PlayStory_Command extends CliCommand
         $this->setSwitches(array(
             new PlayStory_PersistDeviceSwitch(),
             new PlayStory_PersistProcessesSwitch(),
+            new PlayStory_PersistTargetSwitch(),
+            new PlayStory_ReuseTargetSwitch(),
             new PlayStory_LogJsonSwitch(),
             new PlayStory_LogJUnitSwitch(),
             new PlayStory_LogTapSwitch(),
@@ -215,6 +231,9 @@ class PlayStory_Command extends CliCommand
         // initialise process persistence
         $this->initProcessPersistence($engine, $injectables);
 
+        // initialise target persistence / reuse
+        $this->initTargetPersistence($engine, $injectables);
+
         // build our list of players to run
         $this->initPlayerList($engine, $injectables, $params);
 
@@ -234,6 +253,16 @@ class PlayStory_Command extends CliCommand
         // are we persisting the test device?
         if ($this->persistDevice) {
             $st->setPersistDevice();
+        }
+
+        // are we persisting the test environment?
+        if ($this->persistTarget) {
+            $st->setPersistTarget();
+        }
+
+        // are we reusing the test environment?
+        if ($this->reuseTarget) {
+            $st->setReuseTarget();
         }
 
         // install signal handling, now that $this->st is defined
@@ -475,6 +504,21 @@ class PlayStory_Command extends CliCommand
 
         // all done
         return $return;
+    }
+
+    protected function initTargetPersistence(CliEngine $engine, Injectables $injectables)
+    {
+        // by default, no persistence, no reuse
+        $this->persistTarget = false;
+        $this->reuseTarget   = false;
+
+        // are we persisting processes?
+        if (isset($engine->options->persistTarget) && $engine->options->persistTarget) {
+            $this->persistTarget = true;
+        }
+        if (isset($engine->options->reuseTarget) && $engine->options->reuseTarget) {
+            $this->reuseTarget = true;
+        }
     }
 
     // ==================================================================
