@@ -91,7 +91,9 @@ class AnsibleProvisioner extends Provisioner
 				foreach ($machine->params as $paramName => $paramValue) {
 					$params[$paramName]  = $st->fromTestEnvironment()->getSetting('hosts.' . $name . '.params.'.$paramName);
 				}
-				$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($name);
+				if (count($params)) {
+					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($name);
+				}
 			}
 		}
 
