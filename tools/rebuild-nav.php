@@ -7,9 +7,11 @@
 //
 // ------------------------------------------------------------------------
 
-define('MANUAL_VERSION', $args[1]);
-define('TOP_DIR', realpath(__DIR__ . '/../' . MANUAL_VERSION));
-define('NAVBAR_INCLUDE', TOP_DIR . '/nav.html');
+define('MANUAL_VERSION', $argv[1]);
+define('TOP_DIR', realpath(__DIR__ . '/..'));
+define('SOURCE_DIR', TOP_DIR . '/' . MANUAL_VERSION);
+define('NAVBAR_INCLUDE', TOP_DIR . '/_includes/' . MANUAL_VERSION . '/nav.html');
+define('SIDEBAR_DIR', TOP_DIR . '/_includes/' . MANUAL_VERSION . '/sidebar');
 
 // ========================================================================
 //
@@ -38,7 +40,7 @@ function buildNavBar($toc)
 	{
 		// are we looking at a simple link?
 		if (is_string($contents)) {
-			$navBarHtml .= '<li><a href="' . BASE_URL . $contents . '.html">' . htmlentities($sectionName) . "</a></li>\n";
+			$navBarHtml .= '<li><a href="' . BASE_URL . MANUAL_VERSION . '/' . $contents . '.html">' . htmlentities($sectionName) . "</a></li>\n";
 			continue;
 		}
 
@@ -56,7 +58,7 @@ function buildNavBar($toc)
 				$navBarHtml .= '<li class="divider"></li>' . "\n";
 			}
 			else {
-				$navBarHtml .= '<li><a href="' . BASE_URL . $url . '.html">' . htmlentities($name) . "</a></li>\n";
+				$navBarHtml .= '<li><a href="' . BASE_URL . MANUAL_VERSION . '/' . $url . '.html">' . htmlentities($name) . "</a></li>\n";
 			}
 		}
 
@@ -125,7 +127,7 @@ function buildSidebar($sidebar, $toc, $pages)
 		$page = $pages["indexed"][$filename];
 
 		// add the links into the sidebar
-		$sidebarHtml .= '<li><a href="' . BASE_URL . $filename . '.html">' . $page['title'] . "</a></li>\n";
+		$sidebarHtml .= '<li><a href="' . basename($page['name']) . '.html">' . $page['title'] . "</a></li>\n";
 		echo $page['title'] . "\n";
 
 		if (isset($page['h2']))
@@ -198,10 +200,10 @@ function dieMsg($msg)
 	exit(1);
 }
 
-function getToc($topDir)
+function getToc($contentDir)
 {
 	// where is the table of contents metadata?
-	$tocFilename = str_replace('//', '/', $topDir . "/toc.json");
+	$tocFilename = str_replace('//', '/', $contentDir . "/toc.json");
 
 	if (!file_exists($tocFilename))
 	{
@@ -277,10 +279,10 @@ function getPageInfo($filename)
 	$page = array();
 
 	// where is the source file?
-	$page['MdFilename'] = TOP_DIR . "/{$filename}.md";
+	$page['MdFilename'] = SOURCE_DIR . "/{$filename}.md";
 
 	// where is the HTML version?
-	$page['HtmlFilename'] = TOP_DIR . "/_site/{$filename}.html";
+	$page['HtmlFilename'] = TOP_DIR . "/_site/" . MANUAL_VERSION . "/{$filename}.html";
 
 	// does the HTML version exist?
 	if (!file_exists($page['HtmlFilename'])) {
@@ -406,8 +408,8 @@ function getBaseUrl($topDir)
 //
 // ------------------------------------------------------------------------
 
-define("BASE_URL", getBaseUrl(TOP_DIR . '/..'));
-$toc = getToc(TOP_DIR);
+define("BASE_URL", getBaseUrl(TOP_DIR));
+$toc = getToc(SOURCE_DIR);
 
 // build up data about all of our pages
 $pages = buildPageMap($toc);
@@ -416,7 +418,7 @@ $pages = buildPageMap($toc);
 $navBarHtml = buildNavBar($toc);
 
 // write the navbar our to disk
-file_put_contents(TOP_DIR . '/_includes/nav.html', $navBarHtml);
+file_put_contents(NAVBAR_INCLUDE, $navBarHtml);
 
 // extract our list of sections from the navbar
 // $sections = buildSectionsList($toc);
@@ -427,8 +429,11 @@ $sidebars = buildSidebarList($toc);
 // now, built each sidebar in turn
 foreach ($sidebars as $sidebarName => $sidebar) {
 	$sidebarHtml = buildSidebar($sidebar, $toc, $pages);
-	file_put_contents(TOP_DIR . "/_includes/sidebar/{$sidebarName}.html", $sidebarHtml);
+	file_put_contents(SIDEBAR_DIR . "/{$sidebarName}.html", $sidebarHtml);
 }
 
 // finally, we need to go through and sort out the next / prev links
 rebuildPrevNextLinks($toc, $pages);
+
+echo NAVBAR_INCLUDE . PHP_EOL;
+echo BASE_URL . PHP_EOL;
