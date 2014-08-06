@@ -670,6 +670,7 @@ class Story
 	public function requiresStoryplayerVersion($version)
 	{
 		$this->compatibleVersion = $version;
+		return $this;
 	}
 
 	// ====================================================================
