@@ -167,6 +167,7 @@ class Story_Player
         );
 
 		// all done
+		//var_dump($storyResult);
 		return $storyResult;
 	}
 }

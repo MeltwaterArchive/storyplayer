@@ -269,6 +269,16 @@ class Story
 	 */
 	protected $persistDevice = false;
 
+	/**
+	 * which version of Storyplayer is this test written for?
+	 *
+	 * you HAVE to set this in your story, otherwise we will skip your
+	 * story
+	 *
+	 * @var integer
+	 */
+	protected $compatibleVersion = 1;
+
 	// ====================================================================
 	//
 	// Metadata about the story itself
@@ -644,6 +654,22 @@ class Story
 	public function getStoryTemplates()
 	{
 		return $this->storyTemplates;
+	}
+
+	// ==================================================================
+	//
+	// Information about dependencies
+	//
+	// ------------------------------------------------------------------
+
+	public function getRequiredStoryplayerVersion()
+	{
+		return $this->compatibleVersion;
+	}
+
+	public function requiresStoryplayerVersion($version)
+	{
+		$this->compatibleVersion = $version;
 	}
 
 	// ====================================================================
