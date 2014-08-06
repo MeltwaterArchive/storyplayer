@@ -123,6 +123,10 @@ class Centos5 extends OsBase
 			$log->endAction("could not get details ... package not installed?");
 			return new BaseObject();
 		}
+		if (strtolower($parts[0]) == 'error:') {
+			$log->endAction("could not get details ... package not installed?");
+			return new BaseObject();
+		}
 
 		// we have some information to return
 		$return = new BaseObject();
