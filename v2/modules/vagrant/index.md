@@ -1,5 +1,5 @@
 ---
-layout: modules-vagrant
+layout: v2/modules-vagrant
 title: The Vagrant Module
 prev: '<a href="../../modules/uuid/expectsUuid.html">Prev: expectsUuid()</a>'
 next: '<a href="../../modules/vagrant/supported-guests.html">Next: Supported Guest Operating Systems</a>'

@@ -1,5 +1,5 @@
 ---
-layout: top-level
+layout: v2/top-level
 title: ChangeLog
 prev: '<a href="modules/zeromq/usingZmq.html">Prev: usingZmq()</a>'
 next: '<a href="copyright.html">Next: Legal Stuff</a>'

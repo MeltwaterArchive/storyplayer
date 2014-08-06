@@ -1,5 +1,5 @@
 ---
-layout: modules-supervisor
+layout: v2/modules-supervisor
 title: The Supervisor Module
 prev: '<a href="../../modules/shell/usingShell.html">Prev: usingShell()</a>'
 next: '<a href="../../modules/supervisor/fromSupervisor.html">Next: fromSupervisor()</a>'

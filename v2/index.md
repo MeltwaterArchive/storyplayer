@@ -1,5 +1,5 @@
 ---
-layout: top-level
+layout: v2/top-level
 title: Storyplayer
 prev: '&nbsp;'
 next: '<a href="installation.html">Next: Installing Storyplayer</a>'

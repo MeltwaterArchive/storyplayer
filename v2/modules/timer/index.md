@@ -1,5 +1,5 @@
 ---
-layout: modules-timer
+layout: v2/modules-timer
 title: The Timer Module
 prev: '<a href="../../modules/savaged/usingSavageD.html">Prev: usingSavageD()</a>'
 next: '<a href="../../modules/timer/usingTimer.html">Next: usingTimer()</a>'

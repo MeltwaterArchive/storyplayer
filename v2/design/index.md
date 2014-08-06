@@ -1,6 +1,6 @@
 ---
 title: Design
-layout: design
+layout: v2/design
 ---
 # Design
 

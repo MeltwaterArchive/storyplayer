@@ -1,5 +1,5 @@
 ---
-layout: modules-host
+layout: v2/modules-host
 title: The Host Module
 prev: '<a href="../../modules/graphite/expectsGraphite.html">Prev: expectsGraphite()</a>'
 next: '<a href="../../modules/host/supported-hosts.html">Next: Supported Hosts</a>'

@@ -1,5 +1,5 @@
 ---
-layout: modules-checkpoint
+layout: v2/modules-checkpoint
 title: The Checkpoint Module
 prev: '<a href="../../modules/browser/webdriver.html">Prev: The WebDriver Library</a>'
 next: '<a href="../../modules/checkpoint/fromCheckpoint.html">Next: fromCheckpoint()</a>'

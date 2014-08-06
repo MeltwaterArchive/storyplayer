@@ -1,5 +1,5 @@
 ---
-layout: devices
+layout: v2/devices
 title: How We Control Web Browsers
 prev: '<a href="../devices/index.html">Prev: Testing With Different Devices</a>'
 next: '<a href="../devices/localbrowsers.html">Next: Testing With Locally Running Web Browsers</a>'

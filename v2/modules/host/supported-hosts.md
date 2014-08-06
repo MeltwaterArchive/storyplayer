@@ -1,5 +1,5 @@
 ---
-layout: modules-host
+layout: v2/modules-host
 title: Supported Hosts
 prev: '<a href="../../modules/host/index.html">Prev: The Host Module</a>'
 next: '<a href="../../modules/host/fromHost.html">Next: fromHost()</a>'

@@ -1,5 +1,5 @@
 ---
-layout: modules-zeromq
+layout: v2/modules-zeromq
 title: usingZmq()
 prev: '<a href="../../modules/zeromq/expectsZmq.html">Prev: expectsZmq()</a>'
 next: '<a href="../../changelog.html">Next: ChangeLog</a>'

@@ -1,5 +1,5 @@
 ---
-layout: environments
+layout: v2/environments
 title: Testing On Your Machine
 prev: '<a href="../environments/index.html">Prev: Test Environments</a>'
 next: '<a href="../environments/local-vms.html">Next: Testing Against Local Virtual Machines</a>'

@@ -1,5 +1,5 @@
 ---
-layout: modules-vagrant
+layout: v2/modules-vagrant
 title: usingVagrant()
 prev: '<a href="../../modules/vagrant/supported-guests.html">Prev: Supported Guest Operating Systems</a>'
 next: '<a href="../../modules/vagrant/fromVagrant.html">Next: fromVagrant()</a>'

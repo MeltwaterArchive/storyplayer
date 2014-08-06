@@ -1,5 +1,5 @@
 ---
-layout: modules-file
+layout: v2/modules-file
 title: fromFile()
 prev: '<a href="../../modules/file/index.html">Prev: The File Module</a>'
 next: '<a href="../../modules/file/usingFile.html">Next: usingFile()</a>'

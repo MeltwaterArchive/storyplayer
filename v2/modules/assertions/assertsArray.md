@@ -1,5 +1,5 @@
 ---
-layout: modules-assertions
+layout: v2/modules-assertions
 title: Array Assertions
 prev: '<a href="../../modules/assertions/index.html">Prev: The Assertions Module</a>'
 next: '<a href="../../modules/assertions/assertsBoolean.html">Next: Boolean Assertions</a>'

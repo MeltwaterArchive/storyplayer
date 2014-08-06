@@ -1,5 +1,5 @@
 ---
-layout: modules-zeromq
+layout: v2/modules-zeromq
 title: The ZeroMQ Module
 prev: '<a href="../../modules/vagrant/expectsVagrant.html">Prev: expectsVagrant()</a>'
 next: '<a href="../../modules/zeromq/expectsZmq.html">Next: expectsZmq()</a>'

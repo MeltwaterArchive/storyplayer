@@ -1,5 +1,5 @@
 ---
-layout: modules-aws
+layout: v2/modules-aws
 title: The Amazon AWS Module
 prev: '<a href="../../modules/index.html">Prev: Storyplayer Modules</a>'
 next: '<a href="../../modules/aws/fromAws.html">Next: fromAws()</a>'

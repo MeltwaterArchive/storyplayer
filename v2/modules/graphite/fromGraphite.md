@@ -1,5 +1,5 @@
 ---
-layout: modules-graphite
+layout: v2/modules-graphite
 title: fromGraphite()
 prev: '<a href="../../modules/graphite/index.html">Prev: The Graphite Module</a>'
 next: '<a href="../../modules/graphite/expectsGraphite.html">Next: expectsGraphite()</a>'

@@ -1,5 +1,5 @@
 ---
-layout: prose
+layout: v2/prose
 title: Module Namespaces
 prev: '<a href="../prose/module-loading.html">Prev: Module Loading</a>'
 next: '<a href="../prose/creating-prose-modules.html">Next: Creating Your Own Prose Modules</a>'

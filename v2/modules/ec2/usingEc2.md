@@ -1,5 +1,5 @@
 ---
-layout: modules-ec2
+layout: v2/modules-ec2
 title: usingEc2()
 prev: '<a href="../../modules/ec2/expectsEc2Image.html">Prev: expectsEc2Image()</a>'
 next: '<a href="../../modules/ec2/usingEc2Instance.html">Next: usingEc2Instance()</a>'

@@ -1,5 +1,5 @@
 ---
-layout: top-level
+layout: v2/top-level
 title: Running Storyplayer
 prev: '<a href="installation.html">Prev: Installing Storyplayer</a>'
 next: '<a href="example-test-repo.html">Next: An Example Test Repository</a>'

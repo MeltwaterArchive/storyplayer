@@ -1,5 +1,5 @@
 ---
-layout: modules-hoststable
+layout: v2/modules-hoststable
 title: The HostsTable Module
 prev: '<a href="../../modules/host/usingHost.html">Prev: usingHost()</a>'
 next: '<a href="../../modules/hoststable/how-hosts-are-remembered.html">Next: How Hosts Are Remembered</a>'

@@ -1,5 +1,5 @@
 ---
-layout: modules-timer
+layout: v2/modules-timer
 title: usingTimer()
 prev: '<a href="../../modules/timer/index.html">Prev: The Timer Module</a>'
 next: '<a href="../../modules/shell/index.html">Next: The UNIX Shell Module</a>'

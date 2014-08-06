@@ -1,5 +1,5 @@
 ---
-layout: modules-vagrant
+layout: v2/modules-vagrant
 title: fromVagrant()
 prev: '<a href="../../modules/vagrant/usingVagrant.html">Prev: usingVagrant()</a>'
 next: '<a href="../../modules/vagrant/expectsVagrant.html">Next: expectsVagrant()</a>'

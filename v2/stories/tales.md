@@ -1,5 +1,5 @@
 ---
-layout: stories
+layout: v2/stories
 title: Tales
 prev: '<a href="../stories/test-users.html">Prev: Test Users</a>'
 next: '<a href="../prose/index.html">Next: Introducing Prose</a>'

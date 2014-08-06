@@ -1,5 +1,5 @@
 ---
-layout: modules-assertions
+layout: v2/modules-assertions
 title: Integer Assertions
 prev: '<a href="../../modules/assertions/assertsDouble.html">Prev: Double Assertions</a>'
 next: '<a href="../../modules/assertions/assertsObject.html">Next: Object Assertions</a>'

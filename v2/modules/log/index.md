@@ -1,5 +1,5 @@
 ---
-layout: modules-log
+layout: v2/modules-log
 title: The Log Module
 prev: '<a href="../../modules/http/usingHttp.html">Prev: usingHttp()</a>'
 next: '<a href="../../modules/log/usingLog.html">Next: usingLog()</a>'

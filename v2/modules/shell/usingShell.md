@@ -1,5 +1,5 @@
 ---
-layout: modules-shell
+layout: v2/modules-shell
 title: usingShell()
 prev: '<a href="../../modules/shell/expectsShell.html">Prev: expectsShell()</a>'
 next: '<a href="../../modules/supervisor/index.html">Next: The Supervisor Module</a>'

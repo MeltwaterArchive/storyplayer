@@ -1,5 +1,5 @@
 ---
-layout: modules-graphite
+layout: v2/modules-graphite
 title: The Graphite Module
 prev: '<a href="../../modules/form/usingForm.html">Prev: usingForm()</a>'
 next: '<a href="../../modules/graphite/fromGraphite.html">Next: fromGraphite()</a>'

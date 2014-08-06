@@ -1,5 +1,5 @@
 ---
-layout: modules-uuid
+layout: v2/modules-uuid
 title: fromUuid()
 prev: '<a href="../../modules/uuid/index.html">Prev: The UUID Module</a>'
 next: '<a href="../../modules/uuid/expectsUuid.html">Next: expectsUuid()</a>'

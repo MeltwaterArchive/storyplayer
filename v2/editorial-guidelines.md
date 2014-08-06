@@ -1,5 +1,5 @@
 ---
-layout: top-level
+layout: v2/top-level
 title: Editorial Guidelines
 prev: '<a href="copyright.html">Prev: Legal Stuff</a>'
 next: '<a href="index.html">Back to: Storyplayer</a>'

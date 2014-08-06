@@ -1,5 +1,5 @@
 ---
-layout: modules-host
+layout: v2/modules-host
 title: expectsHost()
 prev: '<a href="../../modules/host/fromHost.html">Prev: fromHost()</a>'
 next: '<a href="../../modules/host/usingHost.html">Next: usingHost()</a>'

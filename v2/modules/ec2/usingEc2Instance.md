@@ -1,5 +1,5 @@
 ---
-layout: modules-ec2
+layout: v2/modules-ec2
 title: usingEc2Instance()
 prev: '<a href="../../modules/ec2/usingEc2.html">Prev: usingEc2()</a>'
 next: '<a href="../../modules/assertions/index.html">Next: The Assertions Module</a>'

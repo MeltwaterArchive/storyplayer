@@ -1,5 +1,5 @@
 ---
-layout: modules-shell
+layout: v2/modules-shell
 title: expectsShell()
 prev: '<a href="../../modules/shell/fromShell.html">Prev: fromShell()</a>'
 next: '<a href="../../modules/shell/usingShell.html">Next: usingShell()</a>'

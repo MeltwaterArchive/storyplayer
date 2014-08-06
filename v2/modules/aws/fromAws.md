@@ -1,5 +1,5 @@
 ---
-layout: modules-aws
+layout: v2/modules-aws
 title: fromAws()
 prev: '<a href="../../modules/aws/index.html">Prev: The Amazon AWS Module</a>'
 next: '<a href="../../modules/ec2/index.html">Next: The Amazon EC2 Module</a>'

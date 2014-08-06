@@ -1,5 +1,5 @@
 ---
-layout: modules-environment
+layout: v2/modules-environment
 title: The Environment Module
 prev: '<a href="../../modules/checkpoint/usingCheckpoint.html">Prev: usingCheckpoint()</a>'
 next: '<a href="../../modules/environment/fromEnvironment.html">Next: fromEnvironment()</a>'

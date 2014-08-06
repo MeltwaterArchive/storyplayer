@@ -1,5 +1,5 @@
 ---
-layout: configuration
+layout: v2/configuration
 title: The Runtime Configuration
 prev: '<a href="../configuration/prose-namespaces.html">Prev: Prose Namespaces</a>'
 next: '<a href="../stories/index.html">Next: Introducing Stories</a>'

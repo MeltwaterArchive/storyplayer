@@ -1,5 +1,5 @@
 ---
-layout: modules-http
+layout: v2/modules-http
 title: usingHttp()
 prev: '<a href="../../modules/http/fromHttp.html">Prev: fromHttp()</a>'
 next: '<a href="../../modules/log/index.html">Next: The Log Module</a>'

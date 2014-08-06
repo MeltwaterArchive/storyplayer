@@ -1,5 +1,5 @@
 ---
-layout: modules-browser
+layout: v2/modules-browser
 title: Searching The DOM
 prev: '<a href="../../modules/browser/index.html">Prev: The Browser Module</a>'
 next: '<a href="../../modules/browser/search-targets.html">Next: Supported Search Targets</a>'

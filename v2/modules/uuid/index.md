@@ -1,5 +1,5 @@
 ---
-layout: modules-uuid
+layout: v2/modules-uuid
 title: The UUID Module
 prev: '<a href="../../modules/supervisor/usingSupervisor.html">Prev: usingSupervisor()</a>'
 next: '<a href="../../modules/uuid/fromUuid.html">Next: fromUuid()</a>'

@@ -1,5 +1,5 @@
 ---
-layout: modules-checkpoint
+layout: v2/modules-checkpoint
 title: usingCheckpoint()
 prev: '<a href="../../modules/checkpoint/fromCheckpoint.html">Prev: fromCheckpoint()</a>'
 next: '<a href="../../modules/environment/index.html">Next: The Environment Module</a>'

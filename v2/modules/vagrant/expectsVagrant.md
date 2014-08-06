@@ -1,5 +1,5 @@
 ---
-layout: modules-vagrant
+layout: v2/modules-vagrant
 title: expectsVagrant()
 prev: '<a href="../../modules/vagrant/fromVagrant.html">Prev: fromVagrant()</a>'
 next: '<a href="../../modules/zeromq/index.html">Next: The ZeroMQ Module</a>'

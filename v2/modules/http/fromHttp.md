@@ -1,5 +1,5 @@
 ---
-layout: modules-http
+layout: v2/modules-http
 title: fromHttp()
 prev: '<a href="../../modules/http/expectsHttpResponse.html">Prev: expectsHttpResponse()</a>'
 next: '<a href="../../modules/http/usingHttp.html">Next: usingHttp()</a>'

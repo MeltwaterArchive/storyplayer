@@ -1,5 +1,5 @@
 ---
-layout: prose
+layout: v2/prose
 title: The $st Object
 prev: '<a href="../prose/index.html">Prev: Introducing Prose</a>'
 next: '<a href="../prose/st-helper-methods.html">Next: $st Helper Methods</a>'

@@ -1,5 +1,5 @@
 ---
-layout: modules-supervisor
+layout: v2/modules-supervisor
 title: fromSupervisor()
 prev: '<a href="../../modules/supervisor/index.html">Prev: The Supervisor Module</a>'
 next: '<a href="../../modules/supervisor/expectsSupervisor.html">Next: expectsSupervisor()</a>'

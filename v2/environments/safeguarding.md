@@ -1,5 +1,5 @@
 ---
-layout: environments
+layout: v2/environments
 title: Safeguarding Environments
 prev: '<a href="../environments/vagrant.html">Prev: Creating Test Environments Using Vagrant</a>'
 next: '<a href="../devices/index.html">Next: Testing With Different Devices</a>'

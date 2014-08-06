@@ -1,5 +1,5 @@
 ---
-layout: devices
+layout: v2/devices
 title: Testing With Locally Running Web Browsers
 prev: '<a href="../devices/how-it-works.html">Prev: How We Control Web Browsers</a>'
 next: '<a href="../devices/saucelabs.html">Next: Testing Multiple Browsers Using SauceLabs</a>'

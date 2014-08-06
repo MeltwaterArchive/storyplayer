@@ -1,5 +1,5 @@
 ---
-layout: modules-browser
+layout: v2/modules-browser
 title: The Browser Module
 prev: '<a href="../../modules/assertions/assertsString.html">Prev: String Assertions</a>'
 next: '<a href="../../modules/browser/searching-the-dom.html">Next: Searching The DOM</a>'

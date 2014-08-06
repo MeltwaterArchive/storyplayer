@@ -1,5 +1,5 @@
 ---
-layout: modules-hoststable
+layout: v2/modules-hoststable
 title: fromHostsTable()
 prev: '<a href="../../modules/hoststable/how-hosts-are-remembered.html">Prev: How Hosts Are Remembered</a>'
 next: '<a href="../../modules/hoststable/expectsHostsTable.html">Next: expectsHostsTable()</a>'

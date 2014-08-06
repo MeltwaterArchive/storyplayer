@@ -1,5 +1,5 @@
 ---
-layout: modules
+layout: v2/modules
 title: Storyplayer Modules
 prev: '<a href="../devices/how-to-test.html">Prev: How To Test With Browsers And Devices</a>'
 next: '<a href="../modules/aws/index.html">Next: The Amazon AWS Module</a>'
