@@ -55,11 +55,11 @@ namespace DataSift\Storyplayer\Prose;
  */
 class DelayedHostsModuleIterator
 {
-	public function __construct($st, $hostDetails, $moduleName)
+	public function __construct($st, $hostsDetails, $moduleName)
 	{
 		$this->st = $st;
-		$this->hostDetails = $hostDetails;
-		$this->moduleName  = $moduleName;
+		$this->hostsDetails = $hostsDetails;
+		$this->moduleName   = $moduleName;
 	}
 
 	public function __call($methodName, $params)
@@ -68,10 +68,16 @@ class DelayedHostsModuleIterator
 		$st = $this->st;
 		$moduleName = $this->moduleName;
 
+		// our (potentially empty) return result
+		$return = [];
+
 		// make sure each host is up and running
 		foreach ($this->hostsDetails as $hostDetails) {
-			$module = $st->$moduleName($hostDetails);
-			call_user_method_array($methodName, $module, $params);
+			$module = $st->$moduleName($hostDetails->name);
+			$return[$hostDetails->name] = call_user_method_array($methodName, $module, $params);
 		}
+
+		// all done
+		return $return;
 	}
 }

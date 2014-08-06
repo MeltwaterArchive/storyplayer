@@ -113,7 +113,6 @@ class ExpectsHost extends HostBase
 
 		// is it installed?
 		$details = $st->fromHost($this->hostDetails->name)->getInstalledPackageDetails($packageName);
-
 		if (!isset($details->version)) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
