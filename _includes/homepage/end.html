@@ -1,73 +1,11 @@
             </div>
           </div>
         </div>
+
         <!-- main content -->
         <div class="col-sm-8 col-md-9">
-          <div class="maincontent">
-            <!-- top nextbar -->
-            <div class="nextbar nextbar-top">
-              <ul class="nav nav-pills">
-                <li class="prev">{{page.prev}}</li>
-                <li class="next">{{page.next}}</li>
-              </ul>
-            </div>
-
             <!-- main content goes here -->
             {{ content }}
-
-            <!-- twitter likes -->
-            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://datasift.github.io/storyplayer/" data-text="StoryPlayer: bring your stories to life through your tests" data-via="datasift" data-size="large">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-            <!-- facebook likes -->
-            <div class="facebook-likes hidden-xs">
-              <fb:like send="true" width="640" show_faces="false"></fb:like>
-            </div>
-
-            <div class="facebook-likes visible-xs">
-              <fb:like send="true" width="300" show_faces="false"></fb:like>
-            </div>
-
-            <!-- middle nextbar -->
-            <div class="nextbar nextbar-middle">
-              <ul class="nav nav-pills">
-                <li class="prev">{{page.prev}}</li>
-                <li class="next">{{page.next}}</li>
-              </ul>
-            </div>
-
-            <!-- facebook comments -->
-            <div class="visible-lg">
-              <div class="well">
-                <h2>Reader Comments And Feedback</h2>
-                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="830" mobile="false"></div>
-              </div>
-            </div>
-            <div class="visible-md">
-              <div class="well">
-                <h2>Reader Comments And Feedback</h2>
-                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="640" mobile="false"></div>
-              </div>
-            </div>
-            <div class="visible-sm">
-              <div class="well">
-                <h2>Reader Comments And Feedback</h2>
-                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="440" mobile="false"></div>
-              </div>
-            </div>
-            <div class="visible-xs">
-              <div class="100%">
-                <h2>Reader Comments And Feedback</h2>
-                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-num-posts="5" data-width="300"></div>
-              </div>
-            </div>
-
-            <div class="nextbar nextbar-bottom">
-              <ul class="nav nav-pills">
-                <li class="prev">{{page.prev}}</li>
-                <li class="next">{{page.next}}</li>
-              </ul>
-            </div>
           </div> <!-- close body (main content area) -->
         </div>
       </div> <!-- close fluid-row -->
