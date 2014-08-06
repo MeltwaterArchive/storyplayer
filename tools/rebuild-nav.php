@@ -7,7 +7,8 @@
 //
 // ------------------------------------------------------------------------
 
-define('TOP_DIR', realpath(__DIR__ . '/../'));
+define('MANUAL_VERSION', $args[1]);
+define('TOP_DIR', realpath(__DIR__ . '/../' . MANUAL_VERSION));
 define('NAVBAR_INCLUDE', TOP_DIR . '/nav.html');
 
 // ========================================================================
@@ -405,7 +406,7 @@ function getBaseUrl($topDir)
 //
 // ------------------------------------------------------------------------
 
-define("BASE_URL", getBaseUrl(TOP_DIR));
+define("BASE_URL", getBaseUrl(TOP_DIR . '/..'));
 $toc = getToc(TOP_DIR);
 
 // build up data about all of our pages
