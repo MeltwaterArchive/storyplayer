@@ -46,15 +46,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <div class="navbar-brand hidden-xs">
-            <a href="http://datasift.com" style="padding-top: 0; padding-bottom: 0">
-              <img src="http://datasift.com/images/logo.png" class="pull-left" style="padding-top: 0px; padding-right: 10px; vertical-align: middle">
-            </a>
-            <a href="http://datasift.github.io" class="brand navbar-link">
-              Open Source Projects
-            </a>
-          </div>
-          <div class="navbar-brand visible-xs">
+          <div class="navbar-brand">
             <a href="http://datasift.com" style="padding-top: 0; padding-bottom: 0">
               <img src="http://datasift.com/images/logo.png" class="pull-left" style="padding-top: 0px; padding-right: 10px; vertical-align: middle">
             </a>
@@ -64,6 +56,14 @@
         <nav class="collapse navbar-collapse" id="navbar-menu" role="navigation">
           <!-- wrap the main navbar in the collapsable container -->
           <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" role="button" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Storyplayer v2<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/storyplayer/v1/index.html">Manual for v1.x</a></li>
+                <li><a href="/storyplayer/v2/index.html">Manual for v2.x</a></li>
+                <li><a href="https://github.com/datasift/storyplayer/">GitHub</a></li>
+              </ul>
+            </li>
             {% include v2/nav.html %}
           </ul>
         </nav>
