@@ -53,7 +53,7 @@ use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\LogLib\Log;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\Phases_Player;
+use DataSift\Storyplayer\PlayerLib\PhaseGroup_Player;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\Script_Player;
 use DataSift\Storyplayer\Console\ScriptConsole;
@@ -401,7 +401,7 @@ class Automate_Command extends CliCommand
         echo "\n";
 
         // cleanup
-        $phasesPlayer = new Phases_Player();
+        $phasesPlayer = new PhaseGroup_Player();
         $phasesPlayer->playPhases(
             $this->st,
             $this->injectables,

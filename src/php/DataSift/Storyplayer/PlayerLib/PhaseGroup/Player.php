@@ -57,7 +57,7 @@ use DataSift\Storyplayer\Phases\Phase;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Phases_Player
+class PhaseGroup_Player
 {
 	const NEXT_CONTINUE = 1;
 	const NEXT_SKIP     = 2;

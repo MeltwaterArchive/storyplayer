@@ -101,7 +101,7 @@ class Story_Player
 		$output = $st->getOutput();
 
         // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new Phases_Player();
+        $phasesPlayer = new PhaseGroup_Player();
 
         // load our story
         $story = Story_Loader::loadStory($this->storyFilename);

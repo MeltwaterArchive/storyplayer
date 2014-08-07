@@ -62,7 +62,7 @@ abstract class BasePlayer
     protected function playPhases(StoryTeller $st, Injectables $injectables, $phases)
     {
         // we need something to play our phases
-        $phasesPlayer = new Phases_Player();
+        $phasesPlayer = new PhaseGroup_Player();
 
         // run the phases
         $phaseResults = $phasesPlayer->playPhases(

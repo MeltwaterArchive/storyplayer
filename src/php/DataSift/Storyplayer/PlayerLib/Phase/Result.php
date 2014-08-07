@@ -197,7 +197,7 @@ class Phase_Result
 	 */
 	public function setContinuePlaying($result = 1, $msg = null, $e = null)
 	{
-		$this->nextAction = Phases_Player::NEXT_CONTINUE;
+		$this->nextAction = PhaseGroup_Player::NEXT_CONTINUE;
 		$this->result     = $result;
 		$this->message    = $msg;
 		$this->exception  = $e;
@@ -210,7 +210,7 @@ class Phase_Result
 	 */
 	public function setPlayingFailed($result, $msg, $e = null)
 	{
-		$this->nextAction = Phases_Player::NEXT_FAIL;
+		$this->nextAction = PhaseGroup_Player::NEXT_FAIL;
 		$this->result     = $result;
 		$this->message    = $msg;
 		$this->exception  = $e;
@@ -222,7 +222,7 @@ class Phase_Result
 	 */
 	public function setSkipPlaying($result, $msg)
 	{
-		$this->nextAction = Phases_Player::NEXT_SKIP;
+		$this->nextAction = PhaseGroup_Player::NEXT_SKIP;
 		$this->result     = $result;
 		$this->message    = $msg;
 	}

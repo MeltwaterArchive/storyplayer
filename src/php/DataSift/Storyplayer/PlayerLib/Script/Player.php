@@ -101,7 +101,7 @@ class Script_Player
 		$output = $st->getOutput();
 
         // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new Phases_Player();
+        $phasesPlayer = new PhaseGroup_Player();
 
         // tell $st what we are going to run
         $st->setScriptFilename($this->scriptFilename);

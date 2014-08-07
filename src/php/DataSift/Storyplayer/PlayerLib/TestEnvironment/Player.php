@@ -75,7 +75,7 @@ class TestEnvironment_Player extends BasePlayer
         $output = $st->getOutput();
 
         // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new Phases_Player();
+        $phasesPlayer = new PhaseGroup_Player();
 
         // announce what we're doing
         $output->startTestEnvironmentCreation($injectables->activeTestEnvironmentName);
