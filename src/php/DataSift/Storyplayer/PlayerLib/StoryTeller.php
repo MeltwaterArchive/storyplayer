@@ -535,7 +535,7 @@ class StoryTeller
 		// can
 		$config = json_decode($this->templateEngine->render(
 			$this->testEnvConfig,
-			(array)$this->config
+			json_decode(json_encode($this->config), true)
 		));
 
 		// convert the config to our BaseObject, so that the caller can
