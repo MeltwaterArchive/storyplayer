@@ -99,7 +99,7 @@ class TestSetupPhase extends StoryPhase
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(
 				$phaseResult::FAILED,
-				$e->getMessage,
+				$e->getMessage(),
 				$e
 			);
 			$storyResult->setStoryHasFailed($phaseResult);

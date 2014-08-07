@@ -68,7 +68,7 @@ class ForeachHostWithRole extends HostsByRoleBase
 		$this->requireValidRoleDetails(__METHOD__);
 
 		// build the iterator that we're going to use
-		$return = new DelayedHostsIterator($st, $this->hostsDetails, $moduleName);
+		$return = new DelayedHostsModuleIterator($st, $this->hostsDetails, $moduleName);
 
 		// all done
 		$log->endAction();

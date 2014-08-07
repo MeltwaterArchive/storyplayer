@@ -63,7 +63,7 @@ class Phases_Player
 	const NEXT_SKIP     = 2;
 	const NEXT_FAIL     = 3;
 
-	const MSG_PHASE_BLACKLISTED = 'phase is not allowed to run against this environment';
+	const MSG_PHASE_BLACKLISTED = 'phase is not allowed to run';
 	const MSG_PHASE_FAILED      = 'phase failed with an unexpected error';
 	const MSG_PHASE_INCOMPLETE  = 'phase is incomplete';
 	const MSG_PHASE_NOT_ACTIVE  = 'phase is marked as inactive';
@@ -138,7 +138,7 @@ class Phases_Player
 						// why?
 						if ($phaseResult->getPhaseIsBlacklisted()) {
 							$phaseResults->setPhasesAreBlacklisted();
-							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED);
+							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED . ': ' . $phaseResult->getMessage());
 						}
 						else {
 							$phaseResults->setPhasesAreIncomplete();

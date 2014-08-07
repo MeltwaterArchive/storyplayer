@@ -63,6 +63,7 @@ class CheckBlacklistedPhase extends InternalPrePhase
 		$story       = $st->getStory();
 		$testEnv     = $st->getTestEnvironment();
 		$testEnvName = $st->getTestEnvironmentName();
+		$storyResult = $st->getStoryResult();
 
 		// our result object
 		$phaseResult = $this->getNewPhaseResult();
@@ -87,6 +88,18 @@ class CheckBlacklistedPhase extends InternalPrePhase
 				$phaseResult::BLACKLISTED,
 				"Cannot run story against the environment '{$testEnvName}'"
 			);
+			$storyResult->setStoryHasBeenBlacklisted($phaseResult);
+			return $phaseResult;
+		}
+
+		// is this story compatible with the current version of Storyplayer?
+		$requiredStoryplayerVersion = $story->getRequiredStoryplayerVersion();
+		if ($requiredStoryplayerVersion != STORYPLAYER_MAJOR_VERSION) {
+			$phaseResult->setSkipPlaying(
+				$phaseResult::BLACKLISTED,
+				"Story requires Storyplayer v{$requiredStoryplayerVersion}"
+			);
+			$storyResult->setStoryHasBeenBlacklisted($phaseResult);
 			return $phaseResult;
 		}
 

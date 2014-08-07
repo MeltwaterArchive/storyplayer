@@ -44,6 +44,10 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RecursiveRegexIterator;
+use RegexIterator;
 use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
@@ -460,7 +464,50 @@ class PlayStory_Command extends CliCommand
 
     protected function addStoriesFromFolder(CliEngine $engine, Injectables $injectables, $folder)
     {
-        // tbd
+        // find everything under the folder
+        $filenames = $this->findStoriesInFolder($folder);
+
+        // did we find anything?
+        if (!count($filenames)) {
+            $msg = "no stories found in '{$folder}'" . PHP_EOL . PHP_EOL
+                 . "do your stories' filenames end in 'Story.php'?";
+            $this->output->logCliError($msg);
+            exit(1);
+        }
+
+        // create a set of story players
+        $storiesToPlay = [];
+        foreach ($filenames as $filename) {
+            $storiesToPlay[] = new Story_Player($filename, $injectables);
+        }
+
+        // wrap them in a test environment
+        $return = [
+            new TestEnvironment_Player($storiesToPlay, $injectables)
+        ];
+
+        // all done
+        return $return;
+    }
+
+    protected function findStoriesInFolder($folder)
+    {
+        // use the SPL to do the heavy lifting
+        $dirIter = new RecursiveDirectoryIterator($folder);
+        $recIter = new RecursiveIteratorIterator($dirIter);
+        $regIter = new RegexIterator($recIter, '/^.+Story\.php$/i', RegexIterator::GET_MATCH);
+
+        // what happened?
+        $filenames = [];
+        foreach ($regIter as $match) {
+            $filenames[] = $match[0];
+        }
+
+        // let's get the list into some semblance of order
+        sort($filenames);
+
+        // all done
+        return $filenames;
     }
 
     protected function addStoriesFromTale(CliEngine $engine, Injectables $injectables, $taleFile)

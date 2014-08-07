@@ -131,10 +131,10 @@ class Story_Result
 		$this->failedPhase = null;
 	}
 
-	public function setStoryHasBeenBlacklisted()
+	public function setStoryHasBeenBlacklisted($phaseResult)
 	{
 		$this->resultCode  = self::BLACKLISTED;
-		$this->failedPhase = null;
+		$this->failedPhase = $phaseResult;
 	}
 
 	public function setStoryIsIncomplete(Phase_Result $phaseResult)
