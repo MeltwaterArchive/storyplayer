@@ -71,15 +71,6 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 		// our return value
 		$phaseResult = $this->getNewPhaseResult();
 
-		// special case - are we attempting to reuse the test environment?
-		if ($st->getReuseTarget()) {
-			if ($st->fromHostsTable()->hasTestEnvironment()) {
-				// nothing needs doing
-				$phaseResult->setContinuePlaying();
-				return $phaseResult;
-			}
-		}
-
 		// find out what we need to be doing
 		$testEnvironmentConfig = (array)$st->getTestEnvironmentConfig();
 

@@ -130,6 +130,16 @@ class JUnitReport implements Report
 		$this->verbosityLevel = $verbosityLevel;
 	}
 
+	public function resetSilent()
+	{
+		// no-op
+	}
+
+	public function setSilent()
+	{
+		// no-op
+	}
+
 	/**
 	 * @param string $storyName
 	 * @param string $storyCategory

@@ -85,6 +85,12 @@ class DefaultConsole extends Console
 	 */
 	protected $storyResults = [];
 
+	/**
+	 * are we running totally silently?
+	 * @var boolean
+	 */
+	protected $silentActivity = false;
+
 	public function __construct()
 	{
 		$this->resultStrings = array (
@@ -122,6 +128,16 @@ class DefaultConsole extends Console
 		if ($this->verbosityLevel > 2) {
 			$this->verbosityLevel = 2;
 		}
+	}
+
+	public function resetSilent()
+	{
+		$this->silentActivity = false;
+	}
+
+	public function setSilent()
+	{
+		$this->silentActivity = true;
 	}
 
 	/**
@@ -306,7 +322,9 @@ EOS;
 		];
 
 		// show the user that *something* happened
-		echo ".";
+		if (!$this->silentActivity) {
+			echo ".";
+		}
 	}
 
 	/**

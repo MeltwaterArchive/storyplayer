@@ -71,6 +71,9 @@ interface OutputPlugin
 	 */
 	public function endStoryplayer();
 
+	public function resetSilent();
+	public function setSilent();
+
 	/**
 	 * @param integer $verbosityLevel
 	 * @return void

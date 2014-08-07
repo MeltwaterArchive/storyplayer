@@ -71,12 +71,6 @@ class TestEnvironmentDestructionPhase extends InfrastructurePhase
 		// our return value
 		$phaseResult = $this->getNewPhaseResult();
 
-		// special case - do not destroy the test environment
-		if ($st->getPersistTarget()) {
-			$phaseResult->setContinuePlaying();
-			return $phaseResult;
-		}
-
 		// find out what we need to be doing
 		$testEnvironmentConfig = (array)$st->getTestEnvironmentConfig();
 

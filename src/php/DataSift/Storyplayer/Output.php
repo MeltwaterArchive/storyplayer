@@ -94,6 +94,22 @@ class Output implements OutputPlugin
 		}
 	}
 
+	public function resetSilent()
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->resetSilent();
+		}
+	}
+
+	public function setSilent()
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->setSilent();
+		}
+	}
+
 	/**
 	 * called when storyplayer starts
 	 *

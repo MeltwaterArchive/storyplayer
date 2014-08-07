@@ -229,15 +229,6 @@ class PlayStory_Command extends CliCommand
         // save the output for use in other methods
         $this->output = $output;
 
-        // initialise device persistence
-        $this->initDevicePersistence($engine, $injectables);
-
-        // initialise process persistence
-        $this->initProcessPersistence($engine, $injectables);
-
-        // initialise target persistence / reuse
-        $this->initTargetPersistence($engine, $injectables);
-
         // build our list of players to run
         $this->initPlayerList($engine, $injectables, $params);
 
@@ -246,6 +237,9 @@ class PlayStory_Command extends CliCommand
 
         // at this point, all of the services / data held in $injectables
         // has been initialised and is ready for use
+        //
+        // what's left is the stuff that needs initialising in phases
+        // or $st
 
         // create a new StoryTeller object
         $st = new StoryTeller($injectables);
@@ -254,20 +248,29 @@ class PlayStory_Command extends CliCommand
         // shutdown function
         $this->st = $st;
 
+        // initialise device persistence
+        $this->initDevicePersistence($st, $engine, $injectables);
+
+        // initialise process persistence
+        $this->initProcessPersistence($st, $engine, $injectables);
+
+        // initialise target persistence / reuse
+        $this->initTargetPersistence($st, $engine, $injectables);
+
         // are we persisting the test device?
         if ($this->persistDevice) {
             $st->setPersistDevice();
         }
 
         // are we persisting the test environment?
-        if ($this->persistTarget) {
-            $st->setPersistTarget();
-        }
+        // if ($this->persistTarget) {
+        //     $st->setPersistTarget();
+        // }
 
         // are we reusing the test environment?
-        if ($this->reuseTarget) {
-            $st->setReuseTarget();
-        }
+        // if ($this->reuseTarget) {
+        //     $st->setReuseTarget();
+        // }
 
         // install signal handling, now that $this->st is defined
         //
@@ -318,40 +321,6 @@ class PlayStory_Command extends CliCommand
     // CommonFunctionalitySupport trait have been initialised
     //
     // ------------------------------------------------------------------
-
-    /**
-     *
-     * @param  CliEngine   $engine
-     * @param  Injectables $injectables
-     * @return void
-     */
-    protected function initDevicePersistence(CliEngine $engine, Injectables $injectables)
-    {
-        // by default, no persistence
-        $this->persistDevice = false;
-
-        // are we persisting the device?
-        if (isset($engine->options->persistDevice) && $engine->options->persistDevice) {
-            $this->persistDevice = true;
-        }
-    }
-
-    /**
-     *
-     * @param  CliEngine   $engine
-     * @param  Injectables $injectables
-     * @return void
-     */
-    protected function initProcessPersistence(CliEngine $engine, Injectables $injectables)
-    {
-        // by default, no persistence
-        $this->persistProcesses = false;
-
-        // are we persisting processes?
-        if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
-            $this->persistProcesses = true;
-        }
-    }
 
     /**
      *
@@ -553,18 +522,72 @@ class PlayStory_Command extends CliCommand
         return $return;
     }
 
-    protected function initTargetPersistence(CliEngine $engine, Injectables $injectables)
+    // ==================================================================
+    //
+    // Phase-related initialisation
+    //
+    // ------------------------------------------------------------------
+
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
+    protected function initDevicePersistence(StoryTeller $st, CliEngine $engine, Injectables $injectables)
     {
-        // by default, no persistence, no reuse
-        $this->persistTarget = false;
-        $this->reuseTarget   = false;
+        // by default, no persistence
+        $this->persistDevice = false;
+
+        // are we persisting the device?
+        if (isset($engine->options->persistDevice) && $engine->options->persistDevice) {
+            $this->persistDevice = true;
+            $st->persistDevice;
+        }
+    }
+
+    /**
+     *
+     * @param  CliEngine   $engine
+     * @param  Injectables $injectables
+     * @return void
+     */
+    protected function initProcessPersistence(StoryTeller $st, CliEngine $engine, Injectables $injectables)
+    {
+        // by default, no persistence
+        $this->persistProcesses = false;
 
         // are we persisting processes?
-        if (isset($engine->options->persistTarget) && $engine->options->persistTarget) {
-            $this->persistTarget = true;
+        if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
+            $this->persistProcesses = true;
         }
-        if (isset($engine->options->reuseTarget) && $engine->options->reuseTarget) {
-            $this->reuseTarget = true;
+    }
+
+    protected function initTargetPersistence(StoryTeller $st, CliEngine $engine, Injectables $injectables)
+    {
+        // are we keeping the test environment hanging around afterwards?
+        if (isset($engine->options->persistTarget) && $engine->options->persistTarget)
+        {
+            $injectables->activeConfig->storyplayer->phases->testEnvShutdown->TestEnvironmentDestruction = false;
+            $injectables->activeConfig->storyplayer->phases->story->testEnvironmentTeardown = false;
+        }
+
+        // are we trying to use a test environment that has previously
+        // been persisted?
+        if (isset($engine->options->reuseTarget) && $engine->options->reuseTarget)
+        {
+            $this->output->setSilent();
+            $hasTarget = $st->fromHostsTable()->hasTestEnvironment();
+            $this->output->resetSilent();
+
+            // does the target exist to be reused?
+            if ($hasTarget) {
+                $injectables->activeConfig->storyplayer->phases->testEnvStartup->TestEnvironmentConstruction = false;
+                $injectables->activeConfig->storyplayer->phases->story->testEnvironmentSetup = false;
+            }
+            else {
+                $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' does not exist; ignoring --reuse-target switch");
+            }
         }
     }
 

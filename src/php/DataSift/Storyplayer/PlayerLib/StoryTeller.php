@@ -203,8 +203,6 @@ class StoryTeller
 	// the environment we are testing
 	private $testEnv = null;
 	private $testEnvName = null;
-	private $persistTarget = false;
-	private $reuseTarget = false;
 
 	// story / template params
 	private $defines = [];
@@ -823,32 +821,6 @@ class StoryTeller
 
 		// all done
 		$log->endAction();
-	}
-
-	// ==================================================================
-	//
-	// Target environment support
-	//
-	// ------------------------------------------------------------------
-
-	public function getPersistTarget()
-	{
-		return $this->persistTarget;
-	}
-
-	public function setPersistTarget()
-	{
-		$this->persistTarget = true;
-	}
-
-	public function getReuseTarget()
-	{
-		return $this->reuseTarget;
-	}
-
-	public function setReuseTarget()
-	{
-		$this->reuseTarget = true;
 	}
 
 	// ==================================================================

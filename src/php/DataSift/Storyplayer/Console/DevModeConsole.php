@@ -63,6 +63,12 @@ class DevModeConsole extends Console
 	protected $verbosityLevel = 0;
 	protected $resultStrings  = array();
 
+	/**
+	 * are we running totally silently?
+	 * @var boolean
+	 */
+	protected $silentActivity = false;
+
 	public function __construct()
 	{
 		$this->resultStrings = array (
@@ -97,6 +103,16 @@ class DevModeConsole extends Console
 	public function setVerbosity($verbosityLevel)
 	{
 		$this->verbosityLevel = $verbosityLevel;
+	}
+
+	public function resetSilent()
+	{
+		$this->silentActivity = false;
+	}
+
+	public function setSilent()
+	{
+		$this->silentActivity = true;
 	}
 
 	/**
@@ -242,8 +258,10 @@ EOS;
 	 */
 	public function logPhaseActivity($level, $msg)
 	{
-		// send this to the default logger
-		Log::write($level, $msg);
+		if (!$this->silentActivity) {
+			// send this to the default logger
+			Log::write($level, $msg);
+		}
 	}
 
 	/**
