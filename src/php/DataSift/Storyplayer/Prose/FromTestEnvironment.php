@@ -65,11 +65,10 @@ class FromTestEnvironment extends Prose
 
 		// what are we doing?
 		$log = $st->startAction("get $setting from test environment");
-
 		// get the details
 		$testEnv        = $st->getTestEnvironment();
 		$templateEngine = $st->getTemplateEngine();
-		$value          = json_decode($templateEngine->render('{{ ' . $setting . '|json_encode|raw }}', (array)$testEnv));
+		$value          = json_decode($templateEngine->render('{{ ' . $setting . '|json_encode|raw }}', json_decode(json_encode($testEnv), true)));
 
 		// log the settings
 		$printer  = new DataPrinter();
