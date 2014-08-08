@@ -102,6 +102,31 @@ class Story_Result extends PhaseGroup_Result
 		$this->storyShouldFail = true;
 	}
 
+	public function setStoryHasSucceeded()
+	{
+		$this->setPhaseGroupHasSucceeded();
+	}
+
+	public function setStoryHasBeenBlacklisted($phaseResult)
+	{
+		$this->setPhaseGroupHasBeenBlacklisted($phaseResult);
+	}
+
+	public function setStoryIsIncomplete($phaseResult)
+	{
+		$this->setPhaseGroupIsIncomplete($phaseResult);
+	}
+
+	public function setStoryHasFailed($phaseResult)
+	{
+		$this->setPhaseGroupHasFailed($phaseResult);
+	}
+
+	public function setPhaseGroupHasError($phaseResult)
+	{
+		$this->setPhaseGroupHasError($phaseResult);
+	}
+
 	public function calculateStoryResult()
 	{
 		// no-op

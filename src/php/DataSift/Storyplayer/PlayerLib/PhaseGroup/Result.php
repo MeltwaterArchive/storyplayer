@@ -124,21 +124,21 @@ class PhaseGroup_Result
 		$this->setEndTime();
 	}
 
-	public function setPhaseGroupIsIncomplete(Phase_Result $phaseResult)
+	public function setPhaseGroupIsIncomplete($phaseResult)
 	{
 		$this->resultCode  = self::INCOMPLETE;
 		$this->failedPhase = $phaseResult;
 		$this->setEndTime();
 	}
 
-	public function setPhaseGroupHasFailed(Phase_Result $phaseResult)
+	public function setPhaseGroupHasFailed($phaseResult)
 	{
 		$this->resultCode  = self::FAIL;
 		$this->failedPhase = $phaseResult;
 		$this->setEndTime();
 	}
 
-	public function setPhaseGroupHasError(Phase_Result $phaseResult)
+	public function setPhaseGroupHasError($phaseResult)
 	{
 		$this->resultCode  = self::ERROR;
 		$this->failedPhase = $phaseResult;
