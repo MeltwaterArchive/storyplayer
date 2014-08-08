@@ -66,7 +66,7 @@ class PostTestInspectionPhase extends StoryPhase
 	{
 		// shorthand
 		$st          = $this->st;
-		$storyResult = $story->getStoryResult();
+		$storyResult = $story->getResult();
 
 		// our results object
 		$phaseResult = $this->getNewPhaseResult();

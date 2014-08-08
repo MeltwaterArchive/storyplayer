@@ -1406,7 +1406,7 @@ class Story
 	//
 	// ------------------------------------------------------------------
 
-	public function getStoryResult()
+	public function getResult()
 	{
 		return $this->storyResult;
 	}

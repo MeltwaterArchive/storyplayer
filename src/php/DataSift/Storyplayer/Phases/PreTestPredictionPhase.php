@@ -65,7 +65,7 @@ class PreTestPredictionPhase extends StoryPhase
 	{
 		// shorthand
 		$st          = $this->st;
-		$storyResult = $story->getStoryResult();
+		$storyResult = $story->getResult();
 
 		// our return value
 		$phaseResult = $this->getNewPhaseResult();

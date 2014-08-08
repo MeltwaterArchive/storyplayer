@@ -65,7 +65,7 @@ class ActionPhase extends StoryPhase
 	{
 		// shorthand
 		$st          = $this->st;
-		$storyResult = $story->getStoryResult();
+		$storyResult = $story->getResult();
 
 		// keep track of what happens with the action
 		$phaseResult = $this->getNewPhaseResult();

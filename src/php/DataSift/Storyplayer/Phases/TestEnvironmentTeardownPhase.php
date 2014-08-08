@@ -65,7 +65,7 @@ class TestEnvironmentTeardownPhase extends StoryPhase
 	{
 		// shorthand
 		$st          = $this->st;
-		$storyResult = $story->getStoryResult();
+		$storyResult = $story->getResult();
 
 		// our result object
 		$phaseResult = $this->getNewPhaseResult();

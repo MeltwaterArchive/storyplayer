@@ -60,7 +60,7 @@ class CheckTestEnvironmentPhase extends InternalPrePhase
 	{
 		// shorthand
 		$st          = $this->st;
-		$storyResult = $story->getStoryResult();
+		$storyResult = $story->getResult();
 		$testEnv     = $st->getTestEnvironment();
 		$testEnvName = $st->getTestEnvironmentName();
 

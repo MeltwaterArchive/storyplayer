@@ -158,7 +158,7 @@ class Story_Player
 		//$storyResult->calculateStoryResult();
 
 		// announce the results
-		$output->endStory($story->getStoryResult());
+		$output->endStory($story->getResult());
 
 		// run the shutdown phase
         $phasesPlayer->playPhases(
