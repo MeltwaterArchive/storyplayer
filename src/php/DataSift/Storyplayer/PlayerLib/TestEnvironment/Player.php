@@ -74,20 +74,23 @@ class TestEnvironment_Player extends BasePlayer
         // shorthand
         $output = $st->getOutput();
 
-        // we're going to use this to play our setup and teardown phases
+        // we're building / destroying a test environment
+        $testEnv = new TestEnvironment();
+
+        // we're using this to build / destroy our test environment
         $phasesPlayer = new PhaseGroup_Player();
 
         // announce what we're doing
         $output->startPhaseGroup('Creating test environment ' . $injectables->activeTestEnvironmentName);
 
         // run the startup phase
-        $creationResult = new PhaseGroup_Result();
         $phasesPlayer->playPhases(
             $st,
             $injectables,
             $this->startupPhases,
-            $creationResult
+            $testEnv
         );
+        $creationResult = $testEnv->getResult();
         $output->endPhaseGroup($injectables->activeTestEnvironmentName, $creationResult);
 
         // what happened?
@@ -113,14 +116,14 @@ class TestEnvironment_Player extends BasePlayer
         $output->startPhaseGroup('Destroying test environment ' . $injectables->activeTestEnvironmentName);
 
         // run the shutdown phase
-        $destructionResult = new PhaseGroup_Result();
+        $testEnv->resetResult();
         $phasesPlayer->playPhases(
             $st,
             $injectables,
             $this->shutdownPhases,
-            $destructionResult
+            $testEnv
         );
-        $output->endPhaseGroup($injectables->activeTestEnvironmentName, $destructionResult);
+        $output->endPhaseGroup($injectables->activeTestEnvironmentName, $testEnv->getResult());
 
         // all done
     }
