@@ -157,9 +157,6 @@ class PhaseGroup_Player
 					case self::NEXT_CONTINUE:
 						// tell the output plugins that this phase is over
 						$phase->announcePhaseEnd();
-
-						// so far, so good
-						$phaseResults->setPhaseGroupHasSucceeded();
 				}
 			}
 
@@ -187,6 +184,7 @@ class PhaseGroup_Player
 		}
 
 		// all done
+		$phaseResults->setPhaseGroupHasSucceeded();
 		return $phaseResults;
 	}
 
