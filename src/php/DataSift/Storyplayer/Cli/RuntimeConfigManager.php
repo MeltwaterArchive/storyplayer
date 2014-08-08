@@ -107,7 +107,8 @@ class RuntimeConfigManager extends ConfigManagerBase
 			return $this->configHelper->loadRuntimeConfig(self::APP_NAME, 'runtime.json');
 		}
 		catch (E4xx_ConfigFileNotFound $e) {
-			// we don't care - it is optional
+			// we need to provide an empty runtime config
+			return new BaseObject;
 		}
 	}
 
