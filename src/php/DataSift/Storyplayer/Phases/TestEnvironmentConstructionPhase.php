@@ -102,8 +102,10 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 				}
 			}
 
+			$st->usingTargetsTable()->addCurrentTestEnvironment();
 			$phaseResult->setContinuePlaying();
 			$phaseResult->addPairedPhase('TestEnvironmentDestruction');
+
 		}
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(

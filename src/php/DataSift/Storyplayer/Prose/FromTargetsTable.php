@@ -34,99 +34,110 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Phases;
-
-use Exception;
-use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
-use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
+namespace DataSift\Storyplayer\Prose;
 
 /**
- * the TestEnvironmentDestruction phase
+ * retrieve data from the internal hosts table
  *
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-
-class TestEnvironmentDestructionPhase extends InfrastructurePhase
+class FromTargetsTable extends Prose
 {
-	public function doPhase()
+	/**
+	 * entryKey
+	 * The key that this table interacts with in the RuntimeConfig
+	 *
+	 * @var string
+	 */
+	protected $entryKey = "targets";
+
+
+	/**
+	 * getTargetsTable
+	 *
+	 *
+	 * @return object The targets table
+	 */
+	public function getCurrentTestEnvironment()
 	{
 		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+		$st = $this->st;
 
-		// our return value
-		$phaseResult = $this->getNewPhaseResult();
+		// what are we doing?
+		$log = $st->startAction("get the current test environment from the targets table");
 
-		// find out what we need to be doing
-		$testEnvironmentConfig = (array)$st->getTestEnvironmentConfig();
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
 
-		// are there any machines to destroy?
-		if (empty($testEnvironmentConfig)) {
-			// nothing to do
-			$phaseResult->setContinuePlaying();
-			return $phaseResult;
-		}
-
-		// destroy the environments
-		try {
-			foreach ($testEnvironmentConfig as $env) {
-				// destroy the machine(s) in this environment, including:
-				//
-				// * destroying any virtual machines
-				// * de-registering in the Hosts table
-				// * de-registering in the Roles table
-				$hostAdapter = HostLib::getHostAdapter($st, $env->type);
-				$hostAdapter->destroyHost($env->details);
-			}
-
-			$st->usingTargetsTable()->removeCurrentTestEnvironment();
-			$phaseResult->setContinuePlaying();
-		}
-		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-		}
-		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-		}
-		// if anything is marked as incomplete, deal with that too
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-		}
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-		}
+		// get the table
+		$table = $st->fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
 
 		// all done
-		return $phaseResult;
+		$log->endAction();
+		return $table;
+	}
+
+	public function hasCurrentTestEnvironment()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("do we already have the test environment defined in the targets table?");
+
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
+
+		// get the full targets table
+		$targetsTable = $st->fromRuntimeTable($this->entryKey)->getTable();
+
+		// does the test environment exist?
+		if (isset($targetsTable->$testEnvName)) {
+			$log->endAction("yes");
+			return true;
+		}
+
+		// no, it does not
+		$log->endAction("no");
+		return false;
+	}
+
+	public function getCurrentTestEnvironmentSignature()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("do we already have the test environment defined in the targets table?");
+
+		// which test environment are we working with?
+		$testEnvName = $st->getTestEnvironmentName();
+
+		// get the full targets table
+		$targetsTable = $st->fromRuntimeTable($this->entryKey)->getTable();
+		//var_dump($hostsTable);
+
+		// does the test environment exist?
+		if (!isset($targetsTable->$testEnvName)) {
+			$log->endAction('no signature found');
+			return '';
+		}
+
+		// no, it does not
+		$return = $targetsTable->$testEnvName;
+		$log->endAction($return);
+		return $return;
 	}
 }
