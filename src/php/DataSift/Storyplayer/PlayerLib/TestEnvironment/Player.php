@@ -110,16 +110,19 @@ class TestEnvironment_Player extends BasePlayer
         }
 
         // announce what we're doing
-        $output->startPhaseGroup($injectables->activeTestEnvironmentName);
+        $output->startPhaseGroup('Destroying test environment ' . $injectables->activeTestEnvironmentName);
 
         // run the shutdown phase
+        //
+        // we need a new results object to track the timing involved
+        $phaseResults = new PhaseGroup_Result();
         $phasesPlayer->playPhases(
             $st,
             $injectables,
             $this->shutdownPhases,
             $phaseResults
         );
-        $output->endPhaseGroup('Destroying test environment ' . $injectables->activeTestEnvironmentName, $phaseResults);
+        $output->endPhaseGroup($injectables->activeTestEnvironmentName, $phaseResults);
 
         // all done
     }
