@@ -114,7 +114,7 @@ class Script_Player
         );
 
 		// run the phases in the 'story' section
-		$phaseResults = $phasesPlayer->playPhases(
+		$phaseGroupResult = $phasesPlayer->playPhases(
 			$st,
 			$injectables,
 			$this->scriptPhases

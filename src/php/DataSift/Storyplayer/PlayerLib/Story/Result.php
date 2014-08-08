@@ -55,7 +55,7 @@ use DataSift\Storyplayer\StoryLib\Story;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Story_Result
+class Story_Result extends PhaseGroup_Result
 {
 	/**
 	 *
@@ -64,55 +64,32 @@ class Story_Result
 	public $story           = null;
 
 	/**
-	 *
-	 * @var PhaseResult
-	 */
-	public $failedPhase     = null;
-
-	/**
 	 * is this a story where a failure is the expected outcome?
 	 * @var boolean
 	 */
 	public $storyShouldFail = false;
 
-	/**
-	 * did the story pass, fail, or otherwise go horribly wrong?
-	 * @var integer
-	 */
-	public $resultCode     = 1;
+	public $resultStrings = [
+		'UNKNOWN',
+		'PASS',
+		'FAIL',
+		'ERROR',
+		'INCOMPLETE',
+		'BLACKLISTED'
+	];
 
-	/**
-	 * when did we start playing this story?
-	 * @var float
-	 */
-	public $startTime       = null;
-
-	/**
-	 * when did we finish playing this story?
-	 * @var float
-	 */
-	public $endTime         = null;
-
-	/**
-	 * how long did the story take to play?
-	 * @var float
-	 */
-	public $durationTime    = null;
-
-	const PASS        = 1;
-	const FAIL        = 2;
-	const ERROR       = 3;
-	const INCOMPLETE  = 4;
-	const BLACKLISTED = 5;
+	const PASS = 1;
 
 	public function __construct(Story $story)
 	{
+		// initialise our parent first
+		parent::__construct();
+
 		// remember the story we are reporting on
 		$this->story = $story;
 
-		// remember when we were created - we're going to treat that
-		// as the start time for this story!
-		$this->startTime = microtime(true);
+		// we want success to say 'PASS' rather than 'OKAY'
+		$this->resultStrings[self::OKAY] = 'PASS';
 	}
 
 	public function getStoryShouldFail()
@@ -125,44 +102,8 @@ class Story_Result
 		$this->storyShouldFail = true;
 	}
 
-	public function setStoryHasSucceeded()
-	{
-		$this->resultCode  = self::PASS;
-		$this->failedPhase = null;
-	}
-
-	public function setStoryHasBeenBlacklisted($phaseResult)
-	{
-		$this->resultCode  = self::BLACKLISTED;
-		$this->failedPhase = $phaseResult;
-	}
-
-	public function setStoryIsIncomplete(Phase_Result $phaseResult)
-	{
-		$this->resultCode  = self::INCOMPLETE;
-		$this->failedPhase = $phaseResult;
-	}
-
-	public function setStoryHasFailed(Phase_Result $phaseResult)
-	{
-		$this->resultCode  = self::FAIL;
-		$this->failedPhase = $phaseResult;
-	}
-
-	public function setStoryHasError(Phase_Result $phaseResult)
-	{
-		$this->resultCode  = self::ERROR;
-		$this->failedPhase = $phaseResult;
-	}
-
 	public function calculateStoryResult()
 	{
-		$this->setEndTime();
-	}
-
-	protected function setEndTime()
-	{
-		$this->endTime = microtime(true);
-		$this->durationTime = $this->endTime - $this->startTime;
+		// no-op
 	}
 }

@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\OutputLib;
 
 use DataSift\Storyplayer\PlayerLib\Story_Result;
+use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
 
 /**
  * the API for output plugins
@@ -79,6 +80,9 @@ interface OutputPlugin
 	 * @return void
 	 */
 	public function setVerbosity($verbosityLevel);
+
+	public function startPhaseGroup($name);
+	public function endPhaseGroup($name, PhaseGroup_Result $result);
 
 	/**
 	 * @param string $storyName

@@ -77,19 +77,23 @@ class TestEnvironment_Player extends BasePlayer
         // we're going to use this to play our setup and teardown phases
         $phasesPlayer = new PhaseGroup_Player();
 
+        // keep track of the results
+        $phaseResults = new PhaseGroup_Result();
+
         // announce what we're doing
-        $output->startTestEnvironmentCreation($injectables->activeTestEnvironmentName);
+        $output->startPhaseGroup('Creating test environment ' . $injectables->activeTestEnvironmentName);
 
         // run the startup phase
         $phaseResults = $phasesPlayer->playPhases(
             $st,
             $injectables,
-            $this->startupPhases
+            $this->startupPhases,
+            $phaseResults
         );
-        $output->endTestEnvironmentCreation($injectables->activeTestEnvironmentName);
+        $output->endPhaseGroup($injectables->activeTestEnvironmentName, $phaseResults);
 
         // what happened?
-        if ($phaseResults->getFinalResult() !== $phaseResults::RESULT_COMPLETE) {
+        if (!$phaseResults->getPhaseGroupSucceeded()) {
             $output->logCliError("failed to create test environment - cannot continue");
             exit(1);
         }
@@ -106,15 +110,16 @@ class TestEnvironment_Player extends BasePlayer
         }
 
         // announce what we're doing
-        $output->startTestEnvironmentDestruction($injectables->activeTestEnvironmentName);
+        $output->startPhaseGroup($injectables->activeTestEnvironmentName);
 
         // run the shutdown phase
         $phasesPlayer->playPhases(
             $st,
             $injectables,
-            $this->shutdownPhases
+            $this->shutdownPhases,
+            $phaseResults
         );
-        $output->endTestEnvironmentDestruction($injectables->activeTestEnvironmentName);
+        $output->endPhaseGroup('Destroying test environment ' . $injectables->activeTestEnvironmentName, $phaseResults);
 
         // all done
     }
