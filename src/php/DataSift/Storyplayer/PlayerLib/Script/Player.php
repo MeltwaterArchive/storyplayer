@@ -90,9 +90,7 @@ class Script_Player
 	public function __construct($scriptFilename, Injectables $injectables)
 	{
 		$this->scriptFilename = $scriptFilename;
-		$this->startupPhases  = [];
 		$this->scriptPhases   = $injectables->activeConfig->storyplayer->phases->script;
-		$this->shutdownPhases = [];
 	}
 
 	public function play(StoryTeller $st, Injectables $injectables)
@@ -100,41 +98,19 @@ class Script_Player
 		// shorthand
 		$output = $st->getOutput();
 
+		// we are playing this script
+		$script = new Script($this->scriptFilename);
+
         // we're going to use this to play our setup and teardown phases
         $phasesPlayer = new PhaseGroup_Player();
 
-        // tell $st what we are going to run
-        $st->setScriptFilename($this->scriptFilename);
-
-        // run the startup phase
-        $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$this->startupPhases
-        );
-
-		// run the phases in the 'story' section
-		$phaseGroupResult = $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->scriptPhases
-		);
-
-		// play the 'paired' phases too, in case they haven't yet
-		// executed correctly
-		$phasesPlayer->playPairedPhases(
+		// run the phases
+		$phasesPlayer->playPhases(
 			$st,
 			$injectables,
 			$this->scriptPhases,
-			$phaseResults
+			$script
 		);
-
-		// run the shutdown phase
-        $phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->shutdownPhases
-        );
 
 		// all done
 	}
