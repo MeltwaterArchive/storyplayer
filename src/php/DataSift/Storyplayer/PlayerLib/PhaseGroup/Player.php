@@ -75,7 +75,7 @@ class PhaseGroup_Player
 	 * @param Injectables $injectables
 	 * @param array $phases
 	 */
-	public function playPhases(StoryTeller $st, Injectables $injectables, $phases, $thingBeingPlayed = null)
+	public function playPhases(StoryTeller $st, Injectables $injectables, $phases, $thingBeingPlayed)
 	{
 		// shorthand
 		$output  = $st->getOutput();
@@ -103,7 +103,7 @@ class PhaseGroup_Player
 		}
 
 		// the result of playing this group of phases
-		$groupResult = new PhaseGroup_Result();
+		$groupResult = $thingBeingPlayed->getResult();
 
 		// execute each phase, until either:
 		//
@@ -147,7 +147,7 @@ class PhaseGroup_Player
 
 						// tell the output plugins that this phase is over
 						$phase->announcePhaseEnd();
-						return $groupResult;
+						return;
 
 					case self::NEXT_FAIL:
 						$groupResult->setPhaseGroupHasFailed($phaseResult);
@@ -155,7 +155,7 @@ class PhaseGroup_Player
 
 						// tell the output plugins that this phase is over
 						$phase->announcePhaseEnd();
-						return $groupResult;
+						return;
 
 					case self::NEXT_CONTINUE:
 						// tell the output plugins that this phase is over
@@ -182,13 +182,12 @@ class PhaseGroup_Player
 				$groupResult->setPhaseGroupHasError($phaseResult);
 
 				// run no more phases
-				return $groupResult;
+				return;
 			}
 		}
 
 		// all done
 		$groupResult->setPhaseGroupHasSucceeded();
-		return $groupResult;
 	}
 
 	/**
