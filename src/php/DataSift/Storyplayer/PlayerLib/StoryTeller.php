@@ -553,6 +553,11 @@ class StoryTeller
 		return $this->testEnvName;
 	}
 
+	public function getTestEnvironmentSignature()
+	{
+		return md5(json_encode($this->getTestEnvironmentConfig()));
+	}
+
 	public function setTestEnvironment($envName, $envConfig)
 	{
 		$this->testEnvName   = $envName;
