@@ -569,7 +569,7 @@ class PlayStory_Command extends CliCommand
         if (isset($engine->options->persistTarget) && $engine->options->persistTarget)
         {
             $injectables->activeConfig->storyplayer->phases->testEnvShutdown->TestEnvironmentDestruction = false;
-            $injectables->activeConfig->storyplayer->phases->story->testEnvironmentTeardown = false;
+            $injectables->activeConfig->storyplayer->phases->story->TestEnvironmentTeardown = false;
         }
 
         // are we trying to use a test environment that has previously
@@ -583,7 +583,7 @@ class PlayStory_Command extends CliCommand
             // does the target exist to be reused?
             if ($hasTarget) {
                 $injectables->activeConfig->storyplayer->phases->testEnvStartup->TestEnvironmentConstruction = false;
-                $injectables->activeConfig->storyplayer->phases->story->testEnvironmentSetup = false;
+                $injectables->activeConfig->storyplayer->phases->story->TestEnvironmentSetup = false;
             }
             else {
                 $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' does not exist; ignoring --reuse-target switch");
