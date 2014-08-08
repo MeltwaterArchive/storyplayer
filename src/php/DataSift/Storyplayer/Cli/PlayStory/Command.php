@@ -594,6 +594,11 @@ class PlayStory_Command extends CliCommand
             $this->output->resetSilent();
 
             if ($origSig != $currentSig) {
+                // our test environment entry isn't valid, so remove it
+                $this->output->setSilent();
+                $st->usingTargetsTable()->removeCurrentTestEnvironment();
+                $this->output->resetSilent();
+
                 $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' has changed; ignoring --reuse-target switch");
                 return;
             }
