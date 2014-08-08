@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 use DataSift\Storyplayer\StoryLib\Story;
 
 /**
- * a record of what happened with a story
+ * a record of what happened with a phase group
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -55,55 +55,123 @@ use DataSift\Storyplayer\StoryLib\Story;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Story_Result extends PhaseGroup_Result
+class PhaseGroup_Result
 {
 	/**
 	 *
-	 * @var Story
+	 * @var PhaseResult
 	 */
-	public $story           = null;
+	public $failedPhase     = null;
 
 	/**
-	 * is this a story where a failure is the expected outcome?
-	 * @var boolean
+	 * did the story pass, fail, or otherwise go horribly wrong?
+	 * @var integer
 	 */
-	public $storyShouldFail = false;
+	public $resultCode     = 0;
+
+	/**
+	 * when did we start playing this story?
+	 * @var float
+	 */
+	public $startTime       = null;
+
+	/**
+	 * when did we finish playing this story?
+	 * @var float
+	 */
+	public $endTime         = null;
+
+	/**
+	 * how long did the story take to play?
+	 * @var float
+	 */
+	public $durationTime    = null;
+
+	const UNKNOWN     = 0;
+	const OKAY        = 1;
+	const FAIL        = 2;
+	const ERROR       = 3;
+	const INCOMPLETE  = 4;
+	const BLACKLISTED = 5;
 
 	public $resultStrings = [
 		'UNKNOWN',
-		'PASS',
+		'OKAY',
 		'FAIL',
 		'ERROR',
 		'INCOMPLETE',
 		'BLACKLISTED'
 	];
 
-	const PASS = 1;
-
-	public function __construct(Story $story)
+	public function __construct()
 	{
-		// initialise our parent first
-		parent::__construct();
-
-		// remember the story we are reporting on
-		$this->story = $story;
-
-		// we want success to say 'PASS' rather than 'OKAY'
-		$this->resultStrings[self::OKAY] = 'PASS';
+		// remember when we were created - we're going to treat that
+		// as the start time for this story!
+		$this->startTime = microtime(true);
 	}
 
-	public function getStoryShouldFail()
+	public function setPhaseGroupHasSucceeded()
 	{
-		return $this->storyShouldFail;
+		$this->resultCode  = self::OKAY;
+		$this->failedPhase = null;
+		$this->setEndTime();
 	}
 
-	public function setStoryShouldFail()
+	public function setPhaseGroupHasBeenBlacklisted($phaseResult)
 	{
-		$this->storyShouldFail = true;
+		$this->resultCode  = self::BLACKLISTED;
+		$this->failedPhase = $phaseResult;
+		$this->setEndTime();
 	}
 
-	public function calculateStoryResult()
+	public function setPhaseGroupIsIncomplete(Phase_Result $phaseResult)
 	{
-		// no-op
+		$this->resultCode  = self::INCOMPLETE;
+		$this->failedPhase = $phaseResult;
+		$this->setEndTime();
+	}
+
+	public function setPhaseGroupHasFailed(Phase_Result $phaseResult)
+	{
+		$this->resultCode  = self::FAIL;
+		$this->failedPhase = $phaseResult;
+		$this->setEndTime();
+	}
+
+	public function setPhaseGroupHasError(Phase_Result $phaseResult)
+	{
+		$this->resultCode  = self::ERROR;
+		$this->failedPhase = $phaseResult;
+		$this->setEndTime();
+	}
+
+	public function getPhaseGroupSucceeded()
+	{
+		if ($this->resultCode = self::OKAY) {
+			return true;
+		}
+		return false;
+	}
+
+	protected function setEndTime()
+	{
+		$this->endTime = microtime(true);
+		$this->durationTime = $this->endTime - $this->startTime;
+	}
+
+	public function getDuration()
+	{
+		return $this->durationTime;
+	}
+
+	public function getResultString()
+	{
+		if (isset($this->resultStrings[$this->resultCode])) {
+			return $this->resultStrings[$this->resultCode];
+		}
+
+		// either we don't have a string, or the result code itself is
+		// an unexpected value
+		return 'UNKNOWN';
 	}
 }

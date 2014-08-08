@@ -75,21 +75,23 @@ class TestEnvironment_Player extends BasePlayer
         $output = $st->getOutput();
 
         // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new Phases_Player();
+        $phasesPlayer = new PhaseGroup_Player();
 
         // announce what we're doing
-        $output->startTestEnvironmentCreation($injectables->activeTestEnvironmentName);
+        $output->startPhaseGroup('Creating test environment ' . $injectables->activeTestEnvironmentName);
 
         // run the startup phase
-        $phaseResults = $phasesPlayer->playPhases(
+        $creationResult = new PhaseGroup_Result();
+        $phasesPlayer->playPhases(
             $st,
             $injectables,
-            $this->startupPhases
+            $this->startupPhases,
+            $creationResult
         );
-        $output->endTestEnvironmentCreation($injectables->activeTestEnvironmentName);
+        $output->endPhaseGroup($injectables->activeTestEnvironmentName, $creationResult);
 
         // what happened?
-        if ($phaseResults->getFinalResult() !== $phaseResults::RESULT_COMPLETE) {
+        if (!$creationResult->getPhaseGroupSucceeded()) {
             $output->logCliError("failed to create test environment - cannot continue");
             exit(1);
         }
@@ -98,7 +100,9 @@ class TestEnvironment_Player extends BasePlayer
         // test environment
         foreach ($this->wrappedPlayers as $wrappedPlayer)
         {
-            // play the story
+            // play the wrapped item
+            //
+            // this is normally a story
             $wrappedPlayer->play($st, $injectables);
 
             // make sure the test device has stopped after each story
@@ -106,15 +110,17 @@ class TestEnvironment_Player extends BasePlayer
         }
 
         // announce what we're doing
-        $output->startTestEnvironmentDestruction($injectables->activeTestEnvironmentName);
+        $output->startPhaseGroup('Destroying test environment ' . $injectables->activeTestEnvironmentName);
 
         // run the shutdown phase
+        $destructionResult = new PhaseGroup_Result();
         $phasesPlayer->playPhases(
             $st,
             $injectables,
-            $this->shutdownPhases
+            $this->shutdownPhases,
+            $destructionResult
         );
-        $output->endTestEnvironmentDestruction($injectables->activeTestEnvironmentName);
+        $output->endPhaseGroup($injectables->activeTestEnvironmentName, $destructionResult);
 
         // all done
     }

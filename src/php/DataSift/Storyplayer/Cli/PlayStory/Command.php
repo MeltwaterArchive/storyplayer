@@ -57,7 +57,7 @@ use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\LogLib\Log;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\Phases_Player;
+use DataSift\Storyplayer\PlayerLib\PhaseGroup_Player;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\Story_Context;
 use DataSift\Storyplayer\PlayerLib\Story_Player;
@@ -569,7 +569,7 @@ class PlayStory_Command extends CliCommand
         if (isset($engine->options->persistTarget) && $engine->options->persistTarget)
         {
             $injectables->activeConfig->storyplayer->phases->testEnvShutdown->TestEnvironmentDestruction = false;
-            $injectables->activeConfig->storyplayer->phases->story->testEnvironmentTeardown = false;
+            $injectables->activeConfig->storyplayer->phases->story->TestEnvironmentTeardown = false;
         }
 
         // are we trying to use a test environment that has previously
@@ -583,7 +583,7 @@ class PlayStory_Command extends CliCommand
             // does the target exist to be reused?
             if ($hasTarget) {
                 $injectables->activeConfig->storyplayer->phases->testEnvStartup->TestEnvironmentConstruction = false;
-                $injectables->activeConfig->storyplayer->phases->story->testEnvironmentSetup = false;
+                $injectables->activeConfig->storyplayer->phases->story->TestEnvironmentSetup = false;
             }
             else {
                 $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' does not exist; ignoring --reuse-target switch");
@@ -611,7 +611,7 @@ class PlayStory_Command extends CliCommand
         echo "\n";
 
         // cleanup
-        $phasesPlayer = new Phases_Player();
+        $phasesPlayer = new PhaseGroup_Player();
         $phasesPlayer->playPhases(
             $this->st,
             $this->injectables,

@@ -101,11 +101,14 @@ class Story_Player
 		$output = $st->getOutput();
 
         // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new Phases_Player();
+        $phasesPlayer = new PhaseGroup_Player();
 
         // load our story
         $story = Story_Loader::loadStory($this->storyFilename);
         $st->setStory($story);
+
+        // keep track of our results
+        $storyResult = new Story_Result($story);
 
         // does our story want to keep the test device open between
         // phases?
@@ -121,7 +124,8 @@ class Story_Player
         $phasesPlayer->playPhases(
         	$st,
         	$injectables,
-        	$this->startupPhases
+        	$this->startupPhases,
+        	$storyResult
         );
 
 		// set default callbacks up
@@ -137,10 +141,11 @@ class Story_Player
 		);
 
 		// run the phases in the 'story' section
-		$phaseResults = $phasesPlayer->playPhases(
+		$phasesPlayer->playPhases(
 			$st,
 			$injectables,
-			$this->storyPhases
+			$this->storyPhases,
+			$storyResult
 		);
 
 		// play the 'paired' phases too, in case they haven't yet
@@ -149,21 +154,25 @@ class Story_Player
 			$st,
 			$injectables,
 			$this->storyPhases,
-			$phaseResults
+			$storyResult
 		);
 
 		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($phaseResults);
+		$storyResult->calculateStoryResult();
 
 		// announce the results
 		$output->endStory($storyResult);
 
 		// run the shutdown phase
+		//
+		// we don't reuse the $storyResult here, because we don't want
+		// the shutdown phase to affect the result we report back
+		$phaseResults = new PhaseGroup_Result();
         $phasesPlayer->playPhases(
 			$st,
 			$injectables,
-			$this->shutdownPhases
+			$this->shutdownPhases,
+			$phaseResults
         );
 
 		// all done

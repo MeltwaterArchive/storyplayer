@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
+use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
 use DataSift\Storyplayer\PlayerLib\Story_Result;
 use DataSift\Storyplayer\OutputLib\OutputPlugin;
 use DataSift\Storyplayer\Console\DefaultConsole;
@@ -137,6 +138,22 @@ class Output implements OutputPlugin
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->endStoryplayer();
+		}
+	}
+
+	public function startPhaseGroup($name)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->startPhaseGroup($name);
+		}
+	}
+
+	public function endPhaseGroup($name, PhaseGroup_Result $result)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->endPhaseGroup($name, $result);
 		}
 	}
 

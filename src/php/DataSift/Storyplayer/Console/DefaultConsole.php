@@ -46,6 +46,7 @@ namespace DataSift\Storyplayer\Console;
 use DataSift\Storyplayer\OutputLib\CodeFormatter;
 use DataSift\Storyplayer\Phases\Phase;
 use DataSift\Storyplayer\PlayerLib\Phase_Result;
+use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
 use DataSift\Storyplayer\PlayerLib\Story_Result;
 use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Stone\LogLib\Log;
@@ -66,7 +67,6 @@ class DefaultConsole extends Console
 	protected $phaseNumber = 0;
 	protected $phaseMessages = array();
 	protected $verbosityLevel = 0;
-	protected $resultStrings = array();
 	protected $logLevelStrings = [
         Log::LOG_EMERGENCY => "EMERGENCY ",
         Log::LOG_ALERT     => "ALERT     ",
@@ -90,37 +90,6 @@ class DefaultConsole extends Console
 	 * @var boolean
 	 */
 	protected $silentActivity = false;
-
-	public function __construct()
-	{
-		$this->resultStrings = array (
-			Story_Result::PASS => array (
-				0 => '[PASS]',
-				1 => PHP_EOL . PHP_EOL . "Result: PASS",
-				2 => PHP_EOL . PHP_EOL . "Result: PASS"
-			),
-			Story_Result::FAIL => array (
-				0 => '[FAIL]',
-				1 => PHP_EOL . PHP_EOL . "Result: FAIL",
-				2 => PHP_EOL . PHP_EOL . "Result: FAIL"
-			),
-			Story_Result::ERROR => array (
-				0 => '[ERROR]',
-				1 => PHP_EOL . PHP_EOL . "Result: ERROR",
-				2 => PHP_EOL . PHP_EOL . "Result: ERROR"
-			),
-			Story_Result::INCOMPLETE => array (
-				0 => '[INCOMPLETE]',
-				1 => PHP_EOL . PHP_EOL . "Result: INCOMPLETE",
-				2 => PHP_EOL . PHP_EOL . "Result: INCOMPLETE"
-			),
-			Story_Result::BLACKLISTED => array (
-				0 => '[BLACKLISTED]',
-				1 => PHP_EOL . PHP_EOL . "Result: BLACKLISTED",
-				2 => PHP_EOL . PHP_EOL . "Result: BLACKLISTED"
-			),
-		);
-	}
 
 	public function setVerbosity($verbosityLevel)
 	{
@@ -167,6 +136,7 @@ EOS;
 	 */
 	public function endStoryplayer()
 	{
+		return;
 
 		// this is our opportunity to tell the user how our story(ies)
 		// went in detail
@@ -191,6 +161,34 @@ EOS;
 					break;
 			}
 		}
+	}
+
+	/**
+	 * called when we start a new set of phases
+	 *
+	 * @param  string $name
+	 * @return void
+	 */
+	public function startPhaseGroup($name)
+	{
+		if ($this->verbosityLevel > 0) {
+			echo <<<EOS
+=============================================================
+
+{$name}
+
+-------------------------------------------------------------
+
+EOS;
+		}
+		else {
+			echo $name . ': ';
+		}
+	}
+
+	public function endPhaseGroup($name, PhaseGroup_Result $result)
+	{
+		echo ' [' . $result->getResultString() . '] (' . round($result->getDuration(), 2) . ' secs)' . PHP_EOL;
 	}
 
 	/**
@@ -242,8 +240,8 @@ EOS;
 	{
 		// var_dump($storyResult);
 
-		echo ' ' . $this->resultStrings[$storyResult->resultCode][$this->verbosityLevel]
-		     . ' (' . round($storyResult->durationTime, 2) . ' secs)'
+		echo ' [' . $storyResult->getResultString() . ']'
+		     . ' (' . round($storyResult->getDuration(), 2) . ' secs)'
 		     . PHP_EOL;
 
 		// add this story result to our collection

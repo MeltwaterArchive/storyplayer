@@ -57,7 +57,7 @@ use DataSift\Storyplayer\Phases\Phase;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Phases_Player
+class PhaseGroup_Player
 {
 	const NEXT_CONTINUE = 1;
 	const NEXT_SKIP     = 2;
@@ -75,13 +75,10 @@ class Phases_Player
 	 * @param Injectables $injectables
 	 * @param array $phases
 	 */
-	public function playPhases(StoryTeller $st, Injectables $injectables, $phases)
+	public function playPhases(StoryTeller $st, Injectables $injectables, $phases, PhaseGroup_Result $phaseResults)
 	{
 		// shorthand
 		$output  = $st->getOutput();
-
-		// keep track of our results
-		$phaseResults = new Phase_Results;
 
 		// keep track of any paired phases
 		//
@@ -128,7 +125,7 @@ class Phases_Player
 				$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive);
 
 				// remember the result of this phase
-				$phaseResults->addResult($phase, $phaseResult);
+				//$phaseResults->addResult($phase, $phaseResult);
 
 				// now, what do we do?
 				$nextAction = $phaseResult->getNextAction();
@@ -137,11 +134,11 @@ class Phases_Player
 					case self::NEXT_SKIP:
 						// why?
 						if ($phaseResult->getPhaseIsBlacklisted()) {
-							$phaseResults->setPhasesAreBlacklisted();
+							$phaseResults->setPhaseGroupIsBlacklisted($phaseResult);
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED . ': ' . $phaseResult->getMessage());
 						}
 						else {
-							$phaseResults->setPhasesAreIncomplete();
+							$phaseResults->setPhaseGroupIsIncomplete($phaseResult);
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_INCOMPLETE);
 						}
 
@@ -150,7 +147,7 @@ class Phases_Player
 						break 2;
 
 					case self::NEXT_FAIL:
-						$phaseResults->setPhasesHaveFailed();
+						$phaseResults->setPhaseGroupHasFailed($phaseResults);
 						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED . ': ' . $phaseResult->getMessage());
 
 						// tell the output plugins that this phase is over
@@ -173,14 +170,13 @@ class Phases_Player
 
 				// we need to create a dummy phase result for this
 				$phaseResult = new Phase_Result($phaseName);
-				$phaseResult->setPlayingFailed($phaseResult::FAILED, self::MSG_PHASE_FAILED, $e);
-				// $phaseResults->addPhaseResult($phaseName, $phaseResult);
-
-				// this is a fatal exception
-				$phaseResults->setPhasesHaveFailed();
+				$phaseResult->setPlayingFailed($phaseResult::ERROR, self::MSG_PHASE_FAILED, $e);
 
 				// tell the world that this phase is over
 				$phase->announcePhaseEnd();
+
+				// this is a fatal exception
+				$phaseResults->setPhaseGroupHasError($phaseResult);
 
 				// run no more phases
 				return $phaseResults;
@@ -188,6 +184,7 @@ class Phases_Player
 		}
 
 		// all done
+		$phaseResults->setPhaseGroupHasSucceeded();
 		return $phaseResults;
 	}
 
@@ -197,7 +194,7 @@ class Phases_Player
 	 * @param array $phases
 	 * @param Phase_Results $phaseResults
 	 */
-	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, Phase_Results $phaseResults)
+	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, PhaseGroup_Result $phaseResults)
 	{
 		// special case
 		//
@@ -239,9 +236,6 @@ class Phases_Player
 
 			// play the phase
 			$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive);
-
-			// remember the result of this phase
-			$phaseResults->addResult($phase, $phaseResult);
 
 			// we *always* continue, even if the phase failed
 		}
