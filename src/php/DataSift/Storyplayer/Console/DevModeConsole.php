@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Console;
 
 use DataSift\Stone\LogLib\Log;
 use DataSift\Storyplayer\Phases\Phase;
+use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
 use DataSift\Storyplayer\PlayerLib\Phase_Result;
 use DataSift\Storyplayer\PlayerLib\Story_Result;
 
@@ -200,7 +201,7 @@ EOS;
 
 			default:
 				// everything else is an error of some kind
-
+				//
 				// sanity check: we should always have a failedPhase
 				if (!$storyResult->failedPhase instanceof Phase_Result) {
 					throw new E5xx_MissingFailedPhase();
@@ -208,6 +209,36 @@ EOS;
 				$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
 				break;
 		}
+	}
+
+	/**
+	 * called when we start a new set of phases
+	 *
+	 * @param  string $name
+	 * @return void
+	 */
+	public function startPhaseGroup($name)
+	{
+		echo <<<EOS
+=============================================================
+
+{$name}
+
+EOS;
+	}
+
+	public function endPhaseGroup($name, PhaseGroup_Result $result)
+	{
+		$resultString = $result->getResultString();
+		$duration     = round($result->getDuration(), 2);
+
+		echo <<<EOS
+
+-------------------------------------------------------------
+Result: {$resultString} ({$duration} secs)
+
+
+EOS;
 	}
 
 	/**
