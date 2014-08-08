@@ -158,8 +158,7 @@ class Story_Player
 		);
 
 		// make sense of what happened
-		$storyResult = $st->getStoryResult();
-		$storyResult->calculateStoryResult($storyResult);
+		$storyResult->calculateStoryResult();
 
 		// announce the results
 		$output->endStory($storyResult);
