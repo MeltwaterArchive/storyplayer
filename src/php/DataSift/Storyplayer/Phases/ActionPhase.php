@@ -61,12 +61,11 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class ActionPhase extends StoryPhase
 {
-	public function doPhase()
+	public function doPhase($story)
 	{
 		// shorthand
 		$st          = $this->st;
-		$story       = $st->getStory();
-		$storyResult = $st->getStoryResult();
+		$storyResult = $story->getStoryResult();
 
 		// keep track of what happens with the action
 		$phaseResult = $this->getNewPhaseResult();

@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\StoryLib\Story;
-
 /**
  * a record of what happened with a story
  *
@@ -122,7 +120,7 @@ class Story_Result extends PhaseGroup_Result
 		$this->setPhaseGroupHasFailed($phaseResult);
 	}
 
-	public function setPhaseGroupHasError($phaseResult)
+	public function setStoryHasError($phaseResult)
 	{
 		$this->setPhaseGroupHasError($phaseResult);
 	}

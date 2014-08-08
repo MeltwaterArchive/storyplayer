@@ -58,11 +58,10 @@ use Exception;
 
 class ApplyRoleChangesPhase extends InternalPostPhase
 {
-	public function doPhase()
+	public function doPhase($story)
 	{
 		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+		$st = $this->st;
 
 		// our results object
 		$phaseResult = $this->getNewPhaseResult();

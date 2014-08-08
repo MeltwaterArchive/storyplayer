@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\PlayerLib\Story;
 
 /**
  * a record of what happened with a phase group

@@ -41,7 +41,7 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\PlayerLib\Story;
 use DataSift\Storyplayer\Prose\E5xx_ProseException;
 
 /**

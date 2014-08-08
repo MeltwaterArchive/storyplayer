@@ -50,7 +50,6 @@ use DataSift\Storyplayer\Phases\Phase;
 use DataSift\Storyplayer\Prose\E4xx_ObsoleteProse;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
-use DataSift\Storyplayer\StoryLib\Story;
 use DataSift\Storyplayer\DeviceLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
@@ -175,9 +174,6 @@ class StoryTeller
 
 	// our output
 	private $output = null;
-
-	// the ongoing result of this story
-	private $storyResult = null;
 
 	/**
 	 *
@@ -348,9 +344,6 @@ class StoryTeller
 		// we're now tracking this story
 	    $this->story = $story;
 
-	    // we need to track the result of the story too
-	    $this->storyResult = new Story_Result($story);
-
 	    // all done
 	    return $this;
 	}
@@ -388,15 +381,6 @@ class StoryTeller
 
 	    // all done
 	    return $this;
-	}
-
-	/**
-	 *
-	 * @return Story_Result
-	 */
-	public function getStoryResult()
-	{
-		return $this->storyResult;
 	}
 
 	/**

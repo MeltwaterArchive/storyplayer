@@ -61,11 +61,11 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class TestTeardownPhase extends StoryPhase
 {
-	public function doPhase()
+	public function doPhase($story)
 	{
 		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+		$st          = $this->st;
+		$storyResult = $story->getStoryResult();
 
 		// our result
 		$phaseResult = $this->getNewPhaseResult();

@@ -107,9 +107,6 @@ class Story_Player
         $story = Story_Loader::loadStory($this->storyFilename);
         $st->setStory($story);
 
-        // keep track of our results
-        $storyResult = new Story_Result($story);
-
         // does our story want to keep the test device open between
         // phases?
         if ($story->getPersistDevice()) {
@@ -125,7 +122,7 @@ class Story_Player
         	$st,
         	$injectables,
         	$this->startupPhases,
-        	$storyResult
+        	$story
         );
 
 		// set default callbacks up
@@ -145,7 +142,7 @@ class Story_Player
 			$st,
 			$injectables,
 			$this->storyPhases,
-			$storyResult
+			$story
 		);
 
 		// play the 'paired' phases too, in case they haven't yet
@@ -154,29 +151,23 @@ class Story_Player
 			$st,
 			$injectables,
 			$this->storyPhases,
-			$storyResult
+			$story
 		);
 
 		// make sense of what happened
-		$storyResult->calculateStoryResult();
+		//$storyResult->calculateStoryResult();
 
 		// announce the results
-		$output->endStory($storyResult);
+		$output->endStory($story->getStoryResult());
 
 		// run the shutdown phase
-		//
-		// we don't reuse the $storyResult here, because we don't want
-		// the shutdown phase to affect the result we report back
-		$phaseResults = new PhaseGroup_Result();
         $phasesPlayer->playPhases(
 			$st,
 			$injectables,
 			$this->shutdownPhases,
-			$phaseResults
+			$story
         );
 
 		// all done
-		//var_dump($storyResult);
-		return $storyResult;
 	}
 }

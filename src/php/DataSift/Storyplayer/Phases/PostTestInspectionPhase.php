@@ -62,12 +62,11 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class PostTestInspectionPhase extends StoryPhase
 {
-	public function doPhase()
+	public function doPhase($story)
 	{
 		// shorthand
 		$st          = $this->st;
-		$story       = $st->getStory();
-		$storyResult = $st->getStoryResult();
+		$storyResult = $story->getStoryResult();
 
 		// our results object
 		$phaseResult = $this->getNewPhaseResult();
@@ -126,7 +125,6 @@ class PostTestInspectionPhase extends StoryPhase
 			}
 		}
 		catch (E5xx_ExpectFailed $e) {
-			$msg = "post-test inspection failed; " . (string)$e;
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
 					$phaseResult::SUCCESS,

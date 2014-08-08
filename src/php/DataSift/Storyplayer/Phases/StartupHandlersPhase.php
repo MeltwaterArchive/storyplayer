@@ -61,7 +61,7 @@ class StartupHandlersPhase extends InternalPostPhase
 		return "StartupHandlers";
 	}
 
-	public function doPhase()
+	public function doPhase($phaseResults)
 	{
 		// shorthand
 		$st      = $this->st;

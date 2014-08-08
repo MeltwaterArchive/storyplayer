@@ -48,7 +48,7 @@ use DataSift\Storyplayer\Phases\Phase;
 use DataSift\Storyplayer\PlayerLib\Phase_Result;
 use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
 use DataSift\Storyplayer\PlayerLib\Story_Result;
-use DataSift\Storyplayer\StoryLib\Story;
+use DataSift\Storyplayer\PlayerLib\Story;
 use DataSift\Stone\LogLib\Log;
 
 /**

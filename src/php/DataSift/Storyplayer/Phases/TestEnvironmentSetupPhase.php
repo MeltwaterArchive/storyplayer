@@ -61,17 +61,14 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class TestEnvironmentSetupPhase extends StoryPhase
 {
-	public function doPhase()
+	public function doPhase($story)
 	{
 		// shorthand
 		$st          = $this->st;
-		$storyResult = $st->getStoryResult();
+		$storyResult = $story->getStoryResult();
 
 		// our return value
 		$phaseResult = $this->getNewPhaseResult();
-
-		// shorthand
-		$story = $st->getStory();
 
 		// do we have anything to do?
 		if (!$story->hasTestEnvironmentSetup())

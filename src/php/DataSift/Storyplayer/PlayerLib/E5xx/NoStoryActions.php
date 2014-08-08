@@ -34,35 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/StoryLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\StoryLib;
+namespace DataSift\Storyplayer\PlayerLib;
 
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
-
 /**
- * Exception thrown when we attempt to load a file that is missing, or
- * contains an incorrectly-declared story
+ * Exception thrown when we discover a story that has no actions to perform
  *
  * @category  Libraries
- * @package   Storyplayer/StoryLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_InvalidStoryFile extends Exxx_Exception
+class E5xx_NoStoryActions extends Exxx_Exception
 {
     /**
-     * @param string $msg
+     * @param string $storyName
      */
-    public function __construct($msg)
+    public function __construct($storyName)
     {
+    	$msg = "No actions for story '$storyName'";
         parent::__construct(500, $msg, $msg);
     }
 }

@@ -56,14 +56,13 @@ namespace DataSift\Storyplayer\Phases;
 
 class CheckBlacklistedPhase extends InternalPrePhase
 {
-	public function doPhase()
+	public function doPhase($story)
 	{
 		// shorthand
 		$st          = $this->st;
-		$story       = $st->getStory();
+		$storyResult = $story->getStoryResult();
 		$testEnv     = $st->getTestEnvironment();
 		$testEnvName = $st->getTestEnvironmentName();
-		$storyResult = $st->getStoryResult();
 
 		// our result object
 		$phaseResult = $this->getNewPhaseResult();

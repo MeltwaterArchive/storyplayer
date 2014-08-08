@@ -34,18 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/StoryLib
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\StoryLib;
+namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\StoryTemplate;
 use DataSift\Stone\LogLib\Log;
 
 /**
@@ -279,6 +277,12 @@ class Story
 	 */
 	protected $compatibleVersion = 1;
 
+	/**
+	 * what happened to this story?
+	 * @var DataSift\PlayerLib\Story_Result
+	 */
+	protected $storyResult = null;
+
 	// ====================================================================
 	//
 	// Metadata about the story itself
@@ -287,7 +291,7 @@ class Story
 
 	public function __construct()
 	{
-		// currently does nothing
+		$this->storyResult = new Story_Result($this);
 	}
 
 	public function inGroup($groupName)
@@ -1394,6 +1398,16 @@ class Story
 				// at all
 				return null;
 		}
+	}
 
+	// ==================================================================
+	//
+	// Dealing with the story result
+	//
+	// ------------------------------------------------------------------
+
+	public function getStoryResult()
+	{
+		return $this->storyResult;
 	}
 }

@@ -56,12 +56,11 @@ namespace DataSift\Storyplayer\Phases;
 
 class CheckTestEnvironmentPhase extends InternalPrePhase
 {
-	public function doPhase()
+	public function doPhase($story)
 	{
 		// shorthand
 		$st          = $this->st;
-		$story       = $st->getStory();
-		$storyResult = $st->getStoryResult();
+		$storyResult = $story->getStoryResult();
 		$testEnv     = $st->getTestEnvironment();
 		$testEnvName = $st->getTestEnvironmentName();
 

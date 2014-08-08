@@ -61,7 +61,7 @@ class ShutdownHandlersPhase extends InternalPostPhase
 		return "ShutdownHandlers";
 	}
 
-	public function doPhase()
+	public function doPhase($phaseResults)
 	{
 		// shorthand
 		$st      = $this->st;

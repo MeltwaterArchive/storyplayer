@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\StoryLib\Story;
-
 /**
  * Helper for loading a single story, and verifying that the story was
  * properly created after being loaded
@@ -91,7 +89,7 @@ class Story_Loader
 
 		// make sure we have the right story
 		if (!$story instanceof Story) {
-			throw new E5xx_InvalidStoryFile("Story file '{$filename}' did create a \$story variable, but it is of type '" . get_class($story) . "' instead of type 'DataSift\Storyplayer\StoryLib\Story'");
+			throw new E5xx_InvalidStoryFile("Story file '{$filename}' did create a \$story variable, but it is of type '" . get_class($story) . "' instead of type 'DataSift\Storyplayer\PlayerLib\Story'");
 		}
 
 		// now that the story is built, we want to parse the source code

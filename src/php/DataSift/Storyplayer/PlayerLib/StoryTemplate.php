@@ -43,7 +43,6 @@
 namespace DataSift\Storyplayer\PlayerLib;
 
 use ReflectionObject;
-use DataSift\Storyplayer\StoryLib\Story;
 
 /**
  * Base class for reusable test environment setup/teardown instructions

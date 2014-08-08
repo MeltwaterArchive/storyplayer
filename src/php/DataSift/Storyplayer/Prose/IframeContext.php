@@ -42,7 +42,7 @@
  */
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\StoryLib\Story_Context;
+use DataSift\Storyplayer\PlayerLib\Story_Context;
 
 /**
  * this (when we finish it) will be used to tell Selenium to operate against

@@ -75,7 +75,7 @@ class PhaseGroup_Player
 	 * @param Injectables $injectables
 	 * @param array $phases
 	 */
-	public function playPhases(StoryTeller $st, Injectables $injectables, $phases, PhaseGroup_Result $phaseResults)
+	public function playPhases(StoryTeller $st, Injectables $injectables, $phases, $thingBeingPlayed = null)
 	{
 		// shorthand
 		$output  = $st->getOutput();
@@ -102,6 +102,9 @@ class PhaseGroup_Player
 			];
 		}
 
+		// the result of playing this group of phases
+		$groupResult = new PhaseGroup_Result();
+
 		// execute each phase, until either:
 		//
 		// 1. all listed phases have been executed, or
@@ -122,7 +125,7 @@ class PhaseGroup_Player
 
 			try {
 				// play the phase
-				$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive);
+				$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive, $thingBeingPlayed);
 
 				// remember the result of this phase
 				//$phaseResults->addResult($phase, $phaseResult);
@@ -134,25 +137,25 @@ class PhaseGroup_Player
 					case self::NEXT_SKIP:
 						// why?
 						if ($phaseResult->getPhaseIsBlacklisted()) {
-							$phaseResults->setPhaseGroupIsBlacklisted($phaseResult);
+							$groupResult->setPhaseGroupIsBlacklisted($phaseResult);
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED . ': ' . $phaseResult->getMessage());
 						}
 						else {
-							$phaseResults->setPhaseGroupIsIncomplete($phaseResult);
+							$groupResult->setPhaseGroupIsIncomplete($phaseResult);
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_INCOMPLETE);
 						}
 
 						// tell the output plugins that this phase is over
 						$phase->announcePhaseEnd();
-						break 2;
+						return $groupResult;
 
 					case self::NEXT_FAIL:
-						$phaseResults->setPhaseGroupHasFailed($phaseResults);
+						$groupResult->setPhaseGroupHasFailed($phaseResult);
 						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED . ': ' . $phaseResult->getMessage());
 
 						// tell the output plugins that this phase is over
 						$phase->announcePhaseEnd();
-						break 2;
+						return $groupResult;
 
 					case self::NEXT_CONTINUE:
 						// tell the output plugins that this phase is over
@@ -176,16 +179,16 @@ class PhaseGroup_Player
 				$phase->announcePhaseEnd();
 
 				// this is a fatal exception
-				$phaseResults->setPhaseGroupHasError($phaseResult);
+				$groupResult->setPhaseGroupHasError($phaseResult);
 
 				// run no more phases
-				return $phaseResults;
+				return $groupResult;
 			}
 		}
 
 		// all done
-		$phaseResults->setPhaseGroupHasSucceeded();
-		return $phaseResults;
+		$groupResult->setPhaseGroupHasSucceeded();
+		return $groupResult;
 	}
 
 	/**
@@ -194,7 +197,7 @@ class PhaseGroup_Player
 	 * @param array $phases
 	 * @param Phase_Results $phaseResults
 	 */
-	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, PhaseGroup_Result $phaseResults)
+	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, $thingBeingPlayed = null)
 	{
 		// special case
 		//
@@ -235,7 +238,7 @@ class PhaseGroup_Player
 			$phase = $phaseLoader->loadPhase($st, $phaseName);
 
 			// play the phase
-			$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive);
+			$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive, $thingBeingPlayed);
 
 			// we *always* continue, even if the phase failed
 		}
@@ -254,7 +257,7 @@ class PhaseGroup_Player
 	 * @param  boolean     $isActive
 	 * @return PhaseResult
 	 */
-	protected function playPhase(StoryTeller $st, Injectables $injectables, Phase $phase, $isActive)
+	protected function playPhase(StoryTeller $st, Injectables $injectables, Phase $phase, $isActive, $thingBeingPlayed = null)
 	{
 		// shorthand
 		$output  = $st->getOutput();
@@ -265,7 +268,7 @@ class PhaseGroup_Player
 		// run the phase if we're allowed to
 		if ($isActive) {
 			$st->setCurrentPhase($phase);
-			$phaseResult = $phase->doPhase();
+			$phaseResult = $phase->doPhase($thingBeingPlayed);
 		}
 		else {
 			$phaseName = $phase->getPhaseName();

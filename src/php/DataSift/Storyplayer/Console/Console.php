@@ -44,9 +44,9 @@
 namespace DataSift\Storyplayer\Console;
 
 use DataSift\Storyplayer\PlayerLib\Phase_Result;
+use DataSift\Storyplayer\PlayerLib\Story;
 use DataSift\Storyplayer\OutputLib\CodeFormatter;
 use DataSift\Storyplayer\OutputLib\OutputPlugin;
-use DataSift\Storyplayer\StoryLib\Story;
 
 /**
  * the API for console plugins
