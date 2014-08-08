@@ -65,7 +65,7 @@ class AutomatePhase extends StoryPhase
 	{
 		// shorthand
 		$st           = $this->st;
-		$scriptResult = $script->getScriptResult();
+		$scriptResult = $script->getResult();
 
 		// keep track of what happens with the action
 		$phaseResult = $this->getNewPhaseResult();
@@ -73,10 +73,11 @@ class AutomatePhase extends StoryPhase
 		// run ONE of the actions, picked at random
 		try {
 			// run the script
-			include $st->getScriptFilename();
+			include $script->getFilename();
 
 			// if we get here, all is well
 			$phaseResult->setContinuePlaying();
+			$scriptResult->setPhaseGroupHasSucceeded();
 		}
 
 		// if the set of actions fails, it will throw this exception
@@ -86,6 +87,7 @@ class AutomatePhase extends StoryPhase
 				$e->getMessage(),
 				$e
 			);
+			$scriptResult->setPhaseGroupHasFailed($phaseResult);
 		}
 		catch (E5xx_ExpectFailed $e) {
 			$phaseResult->setPlayingFailed(
@@ -93,6 +95,7 @@ class AutomatePhase extends StoryPhase
 				$e->getMessage(),
 				$e
 			);
+			$scriptResult->setPhaseGroupHasFailed($phaseResult);
 		}
 
 		// we treat this as a hard failure
@@ -102,6 +105,7 @@ class AutomatePhase extends StoryPhase
 				$e->getMessage(),
 				$e
 			);
+			$scriptResult->setPhaseGroupIsIncomplete($phaseResult);
 		}
 
 		// if this happens, something has gone badly wrong
@@ -111,6 +115,7 @@ class AutomatePhase extends StoryPhase
 				$e->getMessage(),
 				$e
 			);
+			$scriptResult->setPhaseGroupHasError($phaseResult);
 		}
 
 		// close off any open log actions
