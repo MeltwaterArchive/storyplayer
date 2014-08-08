@@ -576,18 +576,31 @@ class PlayStory_Command extends CliCommand
         // been persisted?
         if (isset($engine->options->reuseTarget) && $engine->options->reuseTarget)
         {
+            // does the target exist to be reused?
             $this->output->setSilent();
-            $hasTarget = $st->fromHostsTable()->hasTestEnvironment();
+            $hasTarget = $st->fromTargetsTable()->hasCurrentTestEnvironment();
             $this->output->resetSilent();
 
-            // does the target exist to be reused?
-            if ($hasTarget) {
-                $injectables->activeConfig->storyplayer->phases->testEnvStartup->TestEnvironmentConstruction = false;
-                $injectables->activeConfig->storyplayer->phases->story->TestEnvironmentSetup = false;
-            }
-            else {
+            if (!$hasTarget) {
                 $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' does not exist; ignoring --reuse-target switch");
+                return;
             }
+
+            // okay, so we have the test environment in the targets table,
+            // but has the test environment been changed at all?
+            $this->output->setSilent();
+            $origSig = $st->fromTargetsTable()->getCurrentTestEnvironmentSignature();
+            $currentSig = $st->getTestEnvironmentSignature();
+            $this->output->resetSilent();
+
+            if ($origSig != $currentSig) {
+                $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' has changed; ignoring --reuse-target switch");
+                return;
+            }
+
+            // if we get here, then we do not need to create the test environment
+            $injectables->activeConfig->storyplayer->phases->testEnvStartup->TestEnvironmentConstruction = false;
+            $injectables->activeConfig->storyplayer->phases->story->TestEnvironmentSetup = false;
         }
     }
 
