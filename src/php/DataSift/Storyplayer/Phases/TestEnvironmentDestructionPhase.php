@@ -93,6 +93,7 @@ class TestEnvironmentDestructionPhase extends InfrastructurePhase
 				$hostAdapter->destroyHost($env->details);
 			}
 
+			$st->usingTargetsTable()->removeCurrentTestEnvironment();
 			$phaseResult->setContinuePlaying();
 		}
 		catch (E5xx_ActionFailed $e) {
