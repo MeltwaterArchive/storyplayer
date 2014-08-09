@@ -633,7 +633,8 @@ class PlayStory_Command extends CliCommand
         $phasesPlayer->playPhases(
             $this->st,
             $this->injectables,
-            $this->injectables->staticConfig->phases->shutdown
+            $this->injectables->activeConfig->storyplayer->phases->shutdown,
+            null
         );
 
         // force a clean shutdown

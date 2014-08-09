@@ -103,7 +103,10 @@ class PhaseGroup_Player
 		}
 
 		// the result of playing this group of phases
-		$groupResult = $thingBeingPlayed->getResult();
+		$groupResult = null;
+		if ($thingBeingPlayed){
+			$groupResult = $thingBeingPlayed->getResult();
+		}
 
 		// execute each phase, until either:
 		//
@@ -137,11 +140,15 @@ class PhaseGroup_Player
 					case self::NEXT_SKIP:
 						// why?
 						if ($phaseResult->getPhaseIsBlacklisted()) {
-							$groupResult->setPhaseGroupIsBlacklisted($phaseResult);
+							if ($groupResult) {
+								$groupResult->setPhaseGroupIsBlacklisted($phaseResult);
+							}
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED . ': ' . $phaseResult->getMessage());
 						}
 						else {
-							$groupResult->setPhaseGroupIsIncomplete($phaseResult);
+							if ($groupResult) {
+								$groupResult->setPhaseGroupIsIncomplete($phaseResult);
+							}
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_INCOMPLETE);
 						}
 
@@ -150,7 +157,9 @@ class PhaseGroup_Player
 						return;
 
 					case self::NEXT_FAIL:
-						$groupResult->setPhaseGroupHasFailed($phaseResult);
+						if ($groupResult) {
+							$groupResult->setPhaseGroupHasFailed($phaseResult);
+						}
 						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED . ': ' . $phaseResult->getMessage());
 
 						// tell the output plugins that this phase is over
@@ -179,7 +188,9 @@ class PhaseGroup_Player
 				$phase->announcePhaseEnd();
 
 				// this is a fatal exception
-				$groupResult->setPhaseGroupHasError($phaseResult);
+				if ($groupResult) {
+					$groupResult->setPhaseGroupHasError($phaseResult);
+				}
 
 				// run no more phases
 				return;
@@ -187,7 +198,9 @@ class PhaseGroup_Player
 		}
 
 		// all done
-		$groupResult->setPhaseGroupHasSucceeded();
+		if ($groupResult) {
+			$groupResult->setPhaseGroupHasSucceeded();
+		}
 	}
 
 	/**
