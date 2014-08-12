@@ -180,7 +180,7 @@ class UsingZmq extends Prose
 			$log = $st->startAction("sendmulti() from ZMQ socket; no timeout");
 		}
 		else {
-			$log = $st->startAction("sendmulti() from ZMQ socket; timeout is {$timeout} seconds");
+			$log = $st->startAction("sendmulti() from ZMQ socket; timeout is {$timeout} milliseconds");
 		}
 
 		// set the socket timeout
@@ -203,7 +203,7 @@ class UsingZmq extends Prose
 			$log = $st->startAction("recvmulti() from ZMQ socket; no timeout");
 		}
 		else {
-			$log = $st->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
+			$log = $st->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} milliseconds");
 		}
 
 		// set the socket timeout
