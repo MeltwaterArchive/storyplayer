@@ -70,9 +70,14 @@ trait Injectables_ActiveSystemUnderTestConfigSupport
         $staticConfigManager = $injectables->staticConfigManager;
 
         // load the config file for the system-under-test
-        $activeSut = $staticConfigManager->loadConfigFile(
-            $injectables->knownSystemsUnderTest->$sutName
-        );
+        if (is_string($injectables->knownSystemsUnderTest->$sutName)) {
+            $activeSut = $staticConfigManager->loadConfigFile(
+                $injectables->knownSystemsUnderTest->$sutName
+            );
+        }
+        else {
+            $activeSut = $injectables->knownSystemsUnderTest->$sutName;
+        }
 
         // we need to merge the config for this system-under-test into
         // our active test environment config
