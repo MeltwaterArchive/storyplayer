@@ -185,7 +185,7 @@ class UsingZmq extends Prose
 		}
 
 		// set the socket timeout
-		$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout);
+		$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
 
 		// do it
 		$socket->sendmulti($message);
@@ -208,7 +208,7 @@ class UsingZmq extends Prose
 		}
 
 		// set the socket timeout
-		$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout);
+		$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
 
 		// do it
 		$return = $socket->recvmulti();
