@@ -134,7 +134,7 @@ trait Injectables_ActiveConfigSupport
         // reliable :(
 
         try {
-            $searchList = array("br0", "p2p1", "eth0", "en2", "en0", "en1", "wlan0");
+            $searchList = array("br0", "p2p1", "eth0", "em4", "en3", "en2", "en0", "en1", "wlan0");
             foreach ($searchList as $adapterToTest) {
                 // skip over any adapters that don't exist on this machine
                 if (!in_array($adapterToTest, $adapters)) {
