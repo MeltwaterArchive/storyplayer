@@ -63,7 +63,6 @@ class DevModeConsole extends Console
 {
 	protected $verbosityLevel = 0;
 	protected $resultStrings  = array();
-	protected $outputHandles  = [];
 
 	/**
 	 * are we running totally silently?
@@ -128,13 +127,14 @@ class DevModeConsole extends Console
 	 */
 	public function startStoryplayer($version, $url, $copyright, $license)
 	{
-		echo <<<EOS
+		$output = <<<EOS
 Storyplayer {$version} - {$url}
 {$copyright}
 {$license}
 
 
 EOS;
+		$this->writeString($output);
 	}
 
 	/**
@@ -161,7 +161,7 @@ EOS;
 	 */
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
-		echo <<<EOS
+		$output = <<<EOS
 =============================================================
 
       Story: {$storyName}
@@ -172,6 +172,8 @@ Environment: {$envName}
      Device: {$deviceName}
 
 EOS;
+
+		$this->writeString($output);
 	}
 
 	/**
@@ -182,15 +184,16 @@ EOS;
 	 */
 	public function endStory(Story_Result $storyResult)
 	{
-		echo <<<EOS
+		$output = <<<EOS
 
 -------------------------------------------------------------
 Final Result
 
 EOS;
+		$this->writeString($output);
 
-		echo $this->resultStrings[$storyResult->resultCode][$this->verbosityLevel] . PHP_EOL;
-		echo 'Duration: ' . round($storyResult->durationTime, 2) . ' secs' . PHP_EOL;
+		$this->writeString($this->resultStrings[$storyResult->resultCode][$this->verbosityLevel] . PHP_EOL);
+		$this->writeString('Duration: ' . round($storyResult->durationTime, 2) . ' secs' . PHP_EOL);
 
 		// do we need to say anything more?
 		switch ($storyResult->resultCode)
@@ -220,12 +223,13 @@ EOS;
 	 */
 	public function startPhaseGroup($name)
 	{
-		echo <<<EOS
+		$output = <<<EOS
 =============================================================
 
 {$name}
 
 EOS;
+		$this->writeString($output);
 	}
 
 	public function endPhaseGroup($name, PhaseGroup_Result $result)
@@ -233,13 +237,14 @@ EOS;
 		$resultString = $result->getResultString();
 		$duration     = round($result->getDuration(), 2);
 
-		echo <<<EOS
+		$output = <<<EOS
 
 -------------------------------------------------------------
 Result: {$resultString} ({$duration} secs)
 
 
 EOS;
+		$this->writeString($output);
 	}
 
 	/**
@@ -263,10 +268,10 @@ EOS;
 			return;
 		}
 
-		echo PHP_EOL;
-		echo "-------------------------------------------------------------" . PHP_EOL;
-		echo "Now performing: $phaseName" . PHP_EOL;
-		echo PHP_EOL;
+		$this->writeString(PHP_EOL);
+		$this->writeString("-------------------------------------------------------------" . PHP_EOL);
+		$this->writeString("Now performing: $phaseName" . PHP_EOL);
+		$this->writeString(PHP_EOL);
 	}
 
 	/**
@@ -332,7 +337,7 @@ EOS;
 	 */
 	public function logCliError($msg)
 	{
-		echo "*** error: $msg" . PHP_EOL;
+		$this->writeString("*** error: $msg" . PHP_EOL);
 	}
 
 	/**
@@ -343,9 +348,9 @@ EOS;
 	 */
 	public function logCliErrorWithException($msg, $e)
 	{
-		echo "*** error: $msg" . PHP_EOL . PHP_EOL
+		$this->writeString("*** error: $msg" . PHP_EOL . PHP_EOL
 		     . "This was caused by an unexpected exception " . get_class($e) . PHP_EOL . PHP_EOL
-		     . $e->getTraceAsString();
+		     . $e->getTraceAsString());
 	}
 
 	/**
@@ -358,7 +363,7 @@ EOS;
 	 */
 	public function logCliWarning($msg)
 	{
-		echo "*** warning: $msg" . PHP_EOL;
+		$this->writeString("*** warning: $msg" . PHP_EOL);
 	}
 
 	/**
@@ -371,7 +376,7 @@ EOS;
 	 */
 	public function logCliInfo($msg)
 	{
-		echo $msg . PHP_EOL;
+		$this->writeString($msg . PHP_EOL);
 	}
 
 	/**
@@ -411,12 +416,13 @@ EOS;
 	 */
 	public function startTestEnvironmentCreation($testEnvName)
 	{
-		echo <<<EOS
+		$output = <<<EOS
 =============================================================
 
 Creating Test Environment: {$testEnvName}
 
 EOS;
+		$this->writeString($output);
 	}
 
 	/**
@@ -438,12 +444,13 @@ EOS;
 	 */
 	public function startTestEnvironmentDestruction($testEnvName)
 	{
-		echo <<<EOS
+		$output = <<<EOS
 =============================================================
 
 Destroying Test Environment: {$testEnvName}
 
 EOS;
+		$this->writeString($output);
 	}
 
 	/**
