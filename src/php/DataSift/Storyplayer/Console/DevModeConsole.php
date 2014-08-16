@@ -197,21 +197,17 @@ EOS;
 	 * @param  string $name
 	 * @return void
 	 */
-	public function startPhaseGroup($name)
+	public function startPhaseGroup($activity, $name)
 	{
-		$output = <<<EOS
-=============================================================
-
-{$name}
-
-EOS;
-		$this->write($output);
+		$this->write("=============================================================" . PHP_EOL . PHP_EOL, $this->writer->commentStyle);
+		$this->write($activity . ' ', $this->writer->activityStyle);
+		$this->write($name . PHP_EOL . PHP_EOL, $this->writer->nameStyle);
 	}
 
-	public function endPhaseGroup($name, PhaseGroup_Result $result)
+	public function endPhaseGroup(PhaseGroup_Result $result)
 	{
 		$resultString = $result->getResultString();
-		$duration     = round($result->getDuration(), 2);
+		$duration     = $result->getDuration();
 
 		$this->write(PHP_EOL);
 		$this->write('-------------------------------------------------------------' . PHP_EOL);

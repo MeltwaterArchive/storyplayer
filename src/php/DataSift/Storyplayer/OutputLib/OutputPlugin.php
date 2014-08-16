@@ -100,7 +100,7 @@ abstract class OutputPlugin
 		$this->writer->write($output, $style);
 	}
 
-	public function writeDuration($duration, $style = null)
+	public function writeDuration($duration)
 	{
 		// break down the duration into reportable units
 		$hours = $mins = $secs = 0;
@@ -158,7 +158,7 @@ abstract class OutputPlugin
 		}
 
 		// send the string out to the user
-		$this->writer->write($output, $style);
+		$this->writer->write($output, $this->writer->durationStyle);
 	}
 
 	// ==================================================================
@@ -185,8 +185,8 @@ abstract class OutputPlugin
 	abstract public function resetSilent();
 	abstract public function setSilent();
 
-	abstract public function startPhaseGroup($name);
-	abstract public function endPhaseGroup($name, PhaseGroup_Result $result);
+	abstract public function startPhaseGroup($activity, $name);
+	abstract public function endPhaseGroup(PhaseGroup_Result $result);
 
 	/**
 	 * @param string $storyName

@@ -68,9 +68,9 @@ class OutputWriter
     public $successStyle = null;
     public $failStyle = null;
     public $skippedStyle = null;
+    public $nameStyle = null;
 
 	protected $outputHandles  = [];
-	protected $supportsColour = false;
 
 	public function __construct()
 	{
@@ -120,11 +120,14 @@ class OutputWriter
 		foreach ($this->outputHandles as $outputHandle) {
 			// do we need to colour the output?
 			if ($style && $outputHandle['colour']) {
-				$output = $this->colourize($output, $style);
+				$msg = $this->colourize($output, $style);
+			}
+			else {
+				$msg = $output;
 			}
 
 			// send the output
-			fwrite($outputHandle['handle'], $output);
+			fwrite($outputHandle['handle'], $msg);
 
 			// force the output to appear, in case where we are sending
 			// it to has some sort of buffering in operation
@@ -143,7 +146,7 @@ class OutputWriter
         // set the colours to use for our styles
         $this->argStyle = array(ConsoleColor::BOLD, ConsoleColor::BLUE_FG);
         $this->commandStyle = array(ConsoleColor::BOLD, ConsoleColor::GREEN_FG);
-        $this->commentStyle = array(ConsoleColor::BLUE_FG);
+        $this->commentStyle = array(ConsoleColor::BOLD, ConsoleColor::GRAY_FG);
         $this->errorStyle = array(ConsoleColor::BOLD, ConsoleColor::RED_FG);
         $this->exampleStyle = array(ConsoleColor::BOLD, ConsoleColor::YELLOW_FG);
         $this->highlightStyle = array(ConsoleColor::BOLD, ConsoleColor::GREEN_FG);
@@ -154,6 +157,10 @@ class OutputWriter
         $this->successStyle = array(ConsoleColor::GREEN_FG);
         $this->failStyle = array(ConsoleColor::BOLD, ConsoleColor::RED_FG);
         $this->skippedStyle = array(ConsoleColor::YELLOW_FG);
+        $this->activityStyle = [ConsoleColor::GREEN_FG];
+        $this->nameStyle = [ConsoleColor::WHITE_FG];
+        $this->durationStyle = [ConsoleColor::YELLOW_FG];
+        $this->punctuationStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
     }
 
 	protected function colourize($output, $style)

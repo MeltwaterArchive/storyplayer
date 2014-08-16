@@ -128,19 +128,19 @@ class Output extends OutputPlugin
 		}
 	}
 
-	public function startPhaseGroup($name)
+	public function startPhaseGroup($activity, $name)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startPhaseGroup($name);
+			$plugin->startPhaseGroup($activity, $name);
 		}
 	}
 
-	public function endPhaseGroup($name, PhaseGroup_Result $result)
+	public function endPhaseGroup(PhaseGroup_Result $result)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endPhaseGroup($name, $result);
+			$plugin->endPhaseGroup($result);
 		}
 	}
 

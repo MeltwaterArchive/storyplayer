@@ -147,14 +147,16 @@ class DefaultConsole extends Console
 	 * @param  string $name
 	 * @return void
 	 */
-	public function startPhaseGroup($name)
+	public function startPhaseGroup($activity, $name)
 	{
-		$this->write($name . ': ');
+		$this->write($activity . ' ', $this->writer->activityStyle);
+		$this->write($name, $this->writer->nameStyle);
+		$this->write(': ', $this->writer->punctuationStyle);
 	}
 
-	public function endPhaseGroup($name, PhaseGroup_Result $result)
+	public function endPhaseGroup(PhaseGroup_Result $result)
 	{
-		$this->write(' [');
+		$this->write(' [', $this->writer->punctuationStyle);
 		if ($result->getPhaseGroupSucceeded()) {
 			$style = $this->writer->successStyle;
 		}
@@ -165,9 +167,9 @@ class DefaultConsole extends Console
 			$style = $this->writer->skippedStyle;
 		}
 		$this->write($result->getResultString(), $style);
-		$this->write('] (');
+		$this->write('] (', $this->writer->punctuationStyle);
 		$this->writeDuration($result->getDuration());
-		$this->write(')' . PHP_EOL);
+		$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
 	}
 
 	/**
@@ -201,7 +203,7 @@ class DefaultConsole extends Console
 	{
 		// var_dump($storyResult);
 
-		$this->write(' [');
+		$this->write(' [', $this->writer->punctuationStyle);
 		if ($result->getPhaseGroupSucceeded()) {
 			$style = $this->writer->successStyle;
 		}
@@ -212,9 +214,9 @@ class DefaultConsole extends Console
 			$style = $this->writer->skippedStyle;
 		}
 		$this->write($result->getResultString(), $style);
-		$this->write('] (');
+		$this->write('] (', $this->writer->punctuationStyle);
 		$this->writeDuration($result->getDuration());
-		$this->write(')' . PHP_EOL);
+		$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
 
 		// add this story result to our collection
 		$this->storyResults[] = $result;
@@ -315,7 +317,7 @@ class DefaultConsole extends Console
 	public function logPhaseSkipped($phaseName, $msg)
 	{
 		// we have to show this now, and save it for final output later
-		$this->write("s");
+		$this->write("s", $this->writer->skippedStyle);
 
 		// $this->phaseMessages[$phaseName] = $msg;
 	}
