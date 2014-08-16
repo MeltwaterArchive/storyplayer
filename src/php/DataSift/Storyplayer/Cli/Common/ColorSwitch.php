@@ -93,6 +93,7 @@ class Common_ColorSwitch extends CliSwitch
 
 		// what are the long switches?
 		$this->addLongSwitch('color');
+		$this->addLongSwitch('colour');
 
 		// what is the required argument?
 		$this->setRequiredArg('<when>', "when to use colour; possible values are 'none', 'always' and 'auto'");
