@@ -47,16 +47,13 @@ use Phix_Project\Injectables as BaseInjectables;
 
 use DataSift\Storyplayer\Injectables\ActiveConfigSupport;
 use DataSift\Storyplayer\Injectables\ActiveDeviceSupport;
-use DataSift\Storyplayer\Injectables\ActiveLocalEnvironmentConfigSupport;
 use DataSift\Storyplayer\Injectables\ActiveSystemUnderTestConfigSupport;
 use DataSift\Storyplayer\Injectables\ActiveTestEnvironmentConfigSupport;
 use DataSift\Storyplayer\Injectables\AdditionalConfigsSupport;
 use DataSift\Storyplayer\Injectables\DefaultConfigSupport;
-use DataSift\Storyplayer\Injectables\DefaultLocalEnvironmentName;
 use DataSift\Storyplayer\Injectables\DefaultSystemUnderTestName;
 use DataSift\Storyplayer\Injectables\DefaultTestEnvironmentName;
 use DataSift\Storyplayer\Injectables\KnownDevicesSupport;
-use DataSift\Storyplayer\Injectables\KnownLocalEnvironmentsSupport;
 use DataSift\Storyplayer\Injectables\KnownSystemsUnderTestSupport;
 use DataSift\Storyplayer\Injectables\KnownTestEnvironmentsSupport;
 use DataSift\Storyplayer\Injectables\OutputSupport;
@@ -83,16 +80,13 @@ class Injectables extends BaseInjectables
 {
 	use ActiveConfigSupport;
 	use ActiveDeviceSupport;
-	use ActiveLocalEnvironmentConfigSupport;
 	use ActiveSystemUnderTestConfigSupport;
 	use ActiveTestEnvironmentConfigSupport;
 	use AdditionalConfigsSupport;
 	use DefaultConfigSupport;
-	use DefaultLocalEnvironmentName;
 	use DefaultSystemUnderTestName;
 	use DefaultTestEnvironmentName;
 	use KnownDevicesSupport;
-	use KnownLocalEnvironmentsSupport;
 	use KnownSystemsUnderTestSupport;
 	use KnownTestEnvironmentsSupport;
 	use OutputSupport;

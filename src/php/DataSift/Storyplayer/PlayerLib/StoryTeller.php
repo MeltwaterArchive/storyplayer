@@ -96,7 +96,6 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @method DataSift\Storyplayer\Prose\FromHostsTable fromHostsTable()
  * @method DataSift\Storyplayer\Prose\FromHttp fromHttp()
  * @method DataSift\Storyplayer\Prose\FromIframe fromIframe(string $id)
- * @method DataSift\Storyplayer\Prose\FromLocalEnvironment fromLocalEnvironment()
  * @method DataSift\Storyplayer\Prose\FromProcessesTable fromProcessesTable()
  * @method DataSift\Storyplayer\Prose\FromRuntimeTable fromRuntimeTable(string $tableName)
  * @method DataSift\Storyplayer\Prose\FromSauceLabs fromSauceLabs()

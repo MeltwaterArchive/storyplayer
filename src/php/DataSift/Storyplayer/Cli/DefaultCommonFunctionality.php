@@ -59,7 +59,6 @@ use Phix_Project\CliEngine\CliCommand;
 class DefaultCommonFunctionality
 {
 	public $classes = [
-		"Common_LocalEnvironmentConfigSupport" => "Common_LocalEnvironmentConfigSupport",
 		"Common_DefinesSupport"                => "Common_DefinesSupport",
 		"Common_DeviceSupport"                 => "Common_DeviceSupport",
 		"Common_TestEnvironmentConfigSupport"  => "Common_TestEnvironmentConfigSupport",

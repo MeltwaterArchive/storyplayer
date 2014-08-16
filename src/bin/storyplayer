@@ -29,13 +29,11 @@ use DataSift\Storyplayer\Cli\ExtraConfigHelper;
 use DataSift\Storyplayer\Cli\Install_Command;
 use DataSift\Storyplayer\Cli\KillProcesses_Switch;
 use DataSift\Storyplayer\Cli\ListHostsTable_Command;
-use DataSift\Storyplayer\Cli\ListLocalEnvironments_Switch;
 use DataSift\Storyplayer\Cli\ListProcesses_Switch;
 use DataSift\Storyplayer\Cli\ListSystems_Switch;
 use DataSift\Storyplayer\Cli\ListTargets_Switch;
 use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
-use DataSift\Storyplayer\Cli\ShowLocalEnvironment_Command;
 use DataSift\Storyplayer\Cli\ShowTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
@@ -211,8 +209,6 @@ function main($argv)
 
 		// put all of that into something we can give to the CliEngine
 		$injectables->initKnownDevicesSupport($additionalConfigs['devices']);
-		$injectables->initKnownLocalEnvironmentsSupport($additionalConfigs['localEnvironments']);
-		$injectables->initDefaultLocalEnvironmentName($injectables);
 		$injectables->initKnownTestEnvironmentsSupport($additionalConfigs['testEnvironments']);
 		$injectables->initDefaultTestEnvironmentName($injectables);
 		$injectables->initKnownSystemsUnderTestSupport($additionalConfigs['systemsUnderTest']);
@@ -252,7 +248,6 @@ function main($argv)
 	// add switches in the order of precedence
 	$engine->addEngineSwitch(new VersionSwitch);
 	$engine->addEngineSwitch(new KillProcesses_Switch);
-	$engine->addEngineSwitch(new ListLocalEnvironments_Switch($injectables->knownLocalEnvironmentsList));
 	$engine->addEngineSwitch(new ListProcesses_Switch);
 	$engine->addEngineSwitch(new ListSystems_Switch($injectables->knownSystemsUnderTestList));
 	$engine->addEngineSwitch(new ListTargets_Switch($injectables->knownTestEnvironmentsList));
@@ -272,7 +267,6 @@ function main($argv)
 	$engine->addCommand(new CreateStory_Command);
 	$engine->addCommand(new Install_Command);
 	$engine->addCommand(new ListHostsTable_Command);
-	$engine->addCommand(new ShowLocalEnvironment_Command);
 	$engine->addCommand(new ShowTestEnvironment_Command);
 
 	// all set - let's go
