@@ -154,7 +154,18 @@ class DefaultConsole extends Console
 
 	public function endPhaseGroup($name, PhaseGroup_Result $result)
 	{
-		$this->write(' [' . $result->getResultString() . '] (');
+		$this->write(' [');
+		if ($result->getPhaseGroupSucceeded()) {
+			$style = $this->writer->successStyle;
+		}
+		else if ($result->getPhaseGroupFailed()) {
+			$style = $this->writer->failStyle;
+		}
+		else {
+			$style = $this->writer->skippedStyle;
+		}
+		$this->write($result->getResultString(), $style);
+		$this->write('] (');
 		$this->writeDuration($result->getDuration());
 		$this->write(')' . PHP_EOL);
 	}
@@ -186,16 +197,27 @@ class DefaultConsole extends Console
 	 * @param Story_Result $storyResult
 	 * @return void
 	 */
-	public function endStory(Story_Result $storyResult)
+	public function endStory(Story_Result $result)
 	{
 		// var_dump($storyResult);
 
-		$this->write(' [' . $storyResult->getResultString() . '] (');
-		$this->writeDuration($storyResult->getDuration());
+		$this->write(' [');
+		if ($result->getPhaseGroupSucceeded()) {
+			$style = $this->writer->successStyle;
+		}
+		else if ($result->getPhaseGroupFailed()) {
+			$style = $this->writer->failStyle;
+		}
+		else {
+			$style = $this->writer->skippedStyle;
+		}
+		$this->write($result->getResultString(), $style);
+		$this->write('] (');
+		$this->writeDuration($result->getDuration());
 		$this->write(')' . PHP_EOL);
 
 		// add this story result to our collection
-		$this->storyResults[] = $storyResult;
+		$this->storyResults[] = $result;
 	}
 
 	/**
