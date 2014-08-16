@@ -41,7 +41,7 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Console;
+namespace DataSift\Storyplayer\OutputLib;
 
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
