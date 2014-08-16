@@ -199,16 +199,6 @@ class DevModeConsole extends Console
 		// this is a no-op for us
 	}
 
-	protected function logActivity($message)
-	{
-        $now = date('Y-m-d H:i:s', time());
-
-        $this->write('[', $this->writer->punctuationStyle);
-        $this->write($now, $this->writer->timeStyle);
-        $this->write('] ', $this->writer->punctuationStyle);
-        $this->write(rtrim($message) . PHP_EOL);
-	}
-
 	/**
 	 * called when a story logs an action
 	 *
@@ -219,7 +209,7 @@ class DevModeConsole extends Console
 	public function logPhaseActivity($msg)
 	{
 		if (!$this->silentActivity) {
-			$this->logActivity($msg);
+			$this->writeActivity($msg);
 		}
 	}
 
@@ -232,7 +222,7 @@ class DevModeConsole extends Console
 	 */
 	public function logPhaseError($phaseName, $msg)
 	{
-		$this->logActivity($msg);
+		$this->writeActivity($msg);
 	}
 
 	/**
@@ -244,7 +234,7 @@ class DevModeConsole extends Console
 	 */
 	public function logPhaseSkipped($phaseName, $msg)
 	{
-		$this->logActivity($msg);
+		$this->writeActivity($msg);
 	}
 
 	/**

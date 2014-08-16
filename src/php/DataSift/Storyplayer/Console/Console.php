@@ -135,6 +135,21 @@ abstract class Console extends OutputPlugin
 		}
 	}
 
+	protected function writeActivity($message, $timestamp = null)
+	{
+		// when did this happen?
+		if (!$timestamp) {
+			$timestamp = time();
+		}
+
+        $now = date('Y-m-d H:i:s', $timestamp);
+
+        $this->write('[', $this->writer->punctuationStyle);
+        $this->write($now, $this->writer->timeStyle);
+        $this->write('] ', $this->writer->punctuationStyle);
+        $this->write(rtrim($message) . PHP_EOL);
+	}
+
 	/**
 	 * @param Phase_Result $phaseResult
 	 */
@@ -252,10 +267,7 @@ abstract class Console extends OutputPlugin
 			$this->write(" phase:" . PHP_EOL . PHP_EOL);
 
 			foreach ($activityLog as $msg) {
-				$this->write("[", $this->writer->punctuationStyle);
-				$this->write(date("Y-m-d H:i:s", $msg['ts']), $this->writer->timeStyle);
-				$this->write("] ", $this->writer->punctuationStyle);
-                $this->write($msg['text'] . PHP_EOL);
+				$this->writeActivity($msg['text'], $msg['ts']);
 			}
 		}
 
