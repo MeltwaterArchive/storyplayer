@@ -43,7 +43,6 @@
 
 namespace DataSift\Storyplayer\Console;
 
-use DataSift\Stone\LogLib\Log;
 use DataSift\Storyplayer\Phases\Phase;
 use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
 use DataSift\Storyplayer\PlayerLib\Phase_Result;
@@ -61,7 +60,6 @@ use DataSift\Storyplayer\PlayerLib\Story_Result;
  */
 class DevModeConsole extends Console
 {
-	protected $verbosityLevel = 0;
 	protected $resultStrings  = array();
 
 	/**
@@ -74,38 +72,14 @@ class DevModeConsole extends Console
 	{
 		parent::__construct();
 
-		$this->resultStrings = array (
-			Story_Result::PASS => array (
-				0 => PHP_EOL . "Result: PASS",
-				1 => PHP_EOL . "Result: PASS",
-				2 => PHP_EOL . "Result: PASS"
-			),
-			Story_Result::FAIL => array (
-				0 => PHP_EOL . "Result: FAIL",
-				1 => PHP_EOL . "Result: FAIL",
-				2 => PHP_EOL . "Result: FAIL"
-			),
-			Story_Result::ERROR => array (
-				0 => PHP_EOL . "Result: ERROR",
-				1 => PHP_EOL . "Result: ERROR",
-				2 => PHP_EOL . "Result: ERROR"
-			),
-			Story_Result::INCOMPLETE => array (
-				0 => PHP_EOL . "Result: INCOMPLETE",
-				1 => PHP_EOL . "Result: INCOMPLETE",
-				2 => PHP_EOL . "Result: INCOMPLETE"
-			),
-			Story_Result::BLACKLISTED => array (
-				0 => PHP_EOL . "Result: BLACKLISTED",
-				1 => PHP_EOL . "Result: BLACKLISTED",
-				2 => PHP_EOL . "Result: BLACKLISTED"
-			),
-		);
-	}
-
-	public function setVerbosity($verbosityLevel)
-	{
-		$this->verbosityLevel = $verbosityLevel;
+		$this->resultStrings = [
+			PhaseGroup_Result::OKAY        => "Result: PASS",
+			PhaseGroup_Result::FAIL        => "Result: FAIL",
+			PhaseGroup_Result::ERROR       => "Result: ERROR",
+			PhaseGroup_Result::INCOMPLETE  => "Result: INCOMPLETE",
+			PhaseGroup_Result::BLACKLISTED => "Result: BLACKLISTED",
+			PhaseGroup_Result::SKIPPED     => "Result: SKIPPED",
+		];
 	}
 
 	public function resetSilent()
@@ -192,7 +166,7 @@ Final Result
 EOS;
 		$this->write($output);
 
-		$this->write($this->resultStrings[$storyResult->resultCode][$this->verbosityLevel] . PHP_EOL);
+		$this->write($this->resultStrings[$storyResult->resultCode] . PHP_EOL);
 		$this->write('Duration: ' . round($storyResult->durationTime, 2) . ' secs' . PHP_EOL);
 
 		// do we need to say anything more?
@@ -300,7 +274,7 @@ EOS;
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($level, $msg)
+	public function logPhaseActivity($msg)
 	{
 		if (!$this->silentActivity) {
 			$this->logActivity($msg);

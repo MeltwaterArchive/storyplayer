@@ -124,12 +124,6 @@ abstract class OutputPlugin
 	abstract public function resetSilent();
 	abstract public function setSilent();
 
-	/**
-	 * @param integer $verbosityLevel
-	 * @return void
-	 */
-	abstract public function setVerbosity($verbosityLevel);
-
 	abstract public function startPhaseGroup($name);
 	abstract public function endPhaseGroup($name, PhaseGroup_Result $result);
 
@@ -163,11 +157,10 @@ abstract class OutputPlugin
 	abstract public function endPhase($phaseName, $phaseType);
 
 	/**
-	 * @param integer $level
 	 * @param string $msg
 	 * @return void
 	 */
-	abstract public function logPhaseActivity($level, $msg);
+	abstract public function logPhaseActivity($msg);
 
 	/**
 	 * @param string $phaseName
@@ -218,36 +211,4 @@ abstract class OutputPlugin
 	 * @return void
 	 */
 	abstract public function logVardump($name, $var);
-
-	/**
-	 * called when we start to create a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	abstract public function startTestEnvironmentCreation($testEnvName);
-
-	/**
-	 * called when we have finished making the test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	abstract public function endTestEnvironmentCreation($testEnvName);
-
-	/**
-	 * called when we start to destroy a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	abstract public function startTestEnvironmentDestruction($testEnvName);
-
-	/**
-	 * called when we have finished destroying a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	abstract public function endTestEnvironmentDestruction($testEnvName);
 }

@@ -101,23 +101,6 @@ class DefaultConfig extends BaseObject
             getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/test-environments'
         ];
 
-        // defaults for LogLib
-        $this->logger = new BaseObject();
-        $this->logger->writer = "StdErrWriter";
-
-        $levels = new BaseObject();
-        $levels->LOG_EMERGENCY = true;
-        $levels->LOG_ALERT = true;
-        $levels->LOG_CRITICAL = true;
-        $levels->LOG_ERROR = true;
-        $levels->LOG_WARNING = true;
-        $levels->LOG_NOTICE = true;
-        $levels->LOG_INFO = true;
-        $levels->LOG_DEBUG = false;
-        $levels->LOG_TRACE = false;
-
-        $this->logger->levels = $levels;
-
         // defaults for phases
         $phases = new BaseObject();
         $phases->startup = new BaseObject();

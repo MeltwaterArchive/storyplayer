@@ -63,17 +63,15 @@ class Action_LogItem
 	private $endTime;
 	private $nestedActions = array();
 	private $steps = array();
-	private $logLevel = null;
 	private $injectables;
 	private $output;
 
 	/**
 	 * @param integer $nestLevel
 	 */
-	public function __construct($injectables, $nestLevel, $logLevel = null)
+	public function __construct($injectables, $nestLevel)
 	{
 		$this->nestLevel   = $nestLevel;
-		$this->logLevel    = $logLevel;
 		$this->injectables = $injectables;
 		$this->output      = $injectables->output;
 	}
@@ -86,9 +84,6 @@ class Action_LogItem
 		// what is about to happen?
 		$this->text = $text;
 		//echo '#' . $this->nestLevel . ' -> ' . $text . PHP_EOL;
-
-		// set the log level
-		$this->setLogLevel($text);
 
 		// write to screen
 		$this->writeToLog($this->text);
@@ -117,7 +112,7 @@ class Action_LogItem
 
 		if (!is_object($openItem) || $openItem->isComplete()) {
 			// we have no open actions - start a new one
-			$openItem = new Action_LogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
+			$openItem = new Action_LogItem($this->injectables, $this->nestLevel + 1);
 			$this->nestedActions[] = $openItem;
 		}
 		else {
@@ -233,7 +228,7 @@ class Action_LogItem
 	public function addStep($text, $callable)
 	{
 		// create a log item for this step
-		$action = new Action_LogItem($this->injectables, $this->nestLevel + 1, $this->getLogLevel());
+		$action = new Action_LogItem($this->injectables, $this->nestLevel + 1);
 		$action->startAction($text);
 
 		// add the action to our collection
@@ -268,82 +263,8 @@ class Action_LogItem
 		$this->nestLevel--;
 	}
 
-	protected function getLogLevel()
-	{
-		if (isset($this->logLevel))
-		{
-			return $this->logLevel;
-		}
-
-		// no - default is LOG_INFO
-		$logLevel = Log::LOG_INFO;
-		return $logLevel;
-	}
-
-	protected function setLogLevel($text)
-	{
-		// by default, no 'bookend'
-		//
-		// bookend is the character used to close the log message
-		$bookend = null;
-
-		// use the nesting to set the log level
-		switch ($this->nestLevel)
-		{
-			case 1:
-				$this->logLevel = Log::LOG_INFO;
-				break;
-
-			case 2:
-				$this->logLevel = Log::LOG_DEBUG;
-				break;
-
-			default:
-				$this->logLevel = Log::LOG_TRACE;
-				break;
-		}
-
-		// now, we let the message override the nesting
-		switch ($text[0])
-		{
-			case '*':
-				$this->text = substr($text, 2);
-				$this->logLevel = Log::LOG_WARNING;
-				$bookend  = "*";
-				break;
-
-			// support for other overrides goes here
-
-			// default behaviour
-			default:
-				$this->text = $text;
-		}
-
-		// strip trailing text if necessary
-		if ($bookend !== null) {
-			if (substr($this->text, -2, 2) == ' ' . $bookend) {
-				$this->text = substr($this->text, 0, -2);
-			}
-		}
-	}
-
-	protected function getMessageBookends($logLevel)
-	{
-		switch ($logLevel)
-		{
-			case Log::LOG_WARNING:
-				return array("* ", " *");
-
-			default:
-				return array("", "");
-		}
-	}
-
 	protected function writeToLog($text)
 	{
-		$logLevel = $this->getLogLevel();
-		list($startText, $endText) = $this->getMessageBookends($logLevel);
-
-		$this->output->logPhaseActivity($logLevel, str_repeat("  ", $this->nestLevel - 1) . $startText . $text . $endText);
+		$this->output->logPhaseActivity(str_repeat("  ", $this->nestLevel - 1) . $text);
 	}
 }

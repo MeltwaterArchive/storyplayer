@@ -60,7 +60,6 @@ class JUnitReport implements Report
 	protected $filename;
 	protected $testCount = 0;
 	protected $tests = [];
-	protected $verbosityLevel = 0;
 
 	public function __construct($params)
 	{
@@ -124,12 +123,6 @@ class JUnitReport implements Report
 		fclose($fp);
 	}
 
-	public function setVerbosity($verbosityLevel)
-	{
-		// doesn't really affect report
-		$this->verbosityLevel = $verbosityLevel;
-	}
-
 	public function resetSilent()
 	{
 		// no-op
@@ -183,11 +176,10 @@ class JUnitReport implements Report
 	}
 
 	/**
-	 * @param integer $level
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($level, $msg)
+	public function logPhaseActivity($msg)
 	{
 
 	}

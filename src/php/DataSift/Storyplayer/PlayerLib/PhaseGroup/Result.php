@@ -93,6 +93,7 @@ class PhaseGroup_Result
 	const ERROR       = 3;
 	const INCOMPLETE  = 4;
 	const BLACKLISTED = 5;
+	const SKIPPED     = 6;
 
 	public $resultStrings = [
 		'UNKNOWN',
