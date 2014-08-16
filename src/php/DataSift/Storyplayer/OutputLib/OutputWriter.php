@@ -65,6 +65,9 @@ class OutputWriter
     public $normalStyle = null;
     public $switchStyle = null;
     public $urlStyle = null;
+    public $successStyle = null;
+    public $failStyle = null;
+    public $skippedStyle = null;
 
 	protected $outputHandles  = [];
 	protected $supportsColour = false;
@@ -147,6 +150,10 @@ class OutputWriter
         $this->normalStyle = array(ConsoleColor::NONE);
         $this->switchStyle = array(ConsoleColor::BOLD, ConsoleColor::YELLOW_FG);
         $this->urlStyle = array(ConsoleColor::BOLD, ConsoleColor::BLUE_FG);
+
+        $this->successStyle = array(ConsoleColor::GREEN_FG);
+        $this->failStyle = array(ConsoleColor::BOLD, ConsoleColor::RED_FG);
+        $this->skippedStyle = array(ConsoleColor::YELLOW_FG);
     }
 
 	protected function colourize($output, $style)
