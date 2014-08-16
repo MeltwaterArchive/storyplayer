@@ -101,15 +101,15 @@ abstract class Console extends OutputPlugin
 		$this->write(PHP_EOL);
 		if (empty($succeededGroups) && empty($skippedGroups) && empty($failedGroups)) {
 			// huh - nothing happened at all
-			$this->write("HUH - nothing appears to have happened" . PHP_EOL, $this->writer->puzzledSummaryStyle);
-			$this->write(PHP_EOL);
+			$this->write("HUH - nothing appears to have happened", $this->writer->puzzledSummaryStyle);
+			$this->write(PHP_EOL . PHP_EOL);
 			return;
 		}
 
 		if (empty($failedGroups)) {
 			// nothing failed
-			$this->write("SUCCESS - " . count($succeededGroups) . ' PASSED, ' . count($skippedGroups) . ' SKIPPED' . PHP_EOL, $this->writer->successSummaryStyle);
-			$this->write(PHP_EOL);
+			$this->write("SUCCESS - " . count($succeededGroups) . ' PASSED, ' . count($skippedGroups) . ' SKIPPED', $this->writer->successSummaryStyle);
+			$this->write(PHP_EOL . PHP_EOL);
 			return;
 		}
 
@@ -117,11 +117,10 @@ abstract class Console extends OutputPlugin
 		$this->write("FAILURE - "
 			. count($succeededGroups) . ' PASSED, '
 			. count($skippedGroups) . ' SKIPPED, '
-			. count($failedGroups) . ' FAILED :('
-			. PHP_EOL,
+			. count($failedGroups) . ' FAILED :(',
 			$this->writer->failSummaryStyle);
 
-		$this->write(PHP_EOL);
+		$this->write(PHP_EOL . PHP_EOL);
 
 		foreach ($failedGroups as $result) {
 			// sanity check: we should always have a failedPhase
@@ -143,6 +142,7 @@ abstract class Console extends OutputPlugin
 	{
 		// what is the phase that we are dealing with?
 		$phaseName = $phaseResult->getPhaseName();
+		$activityLog = $phaseResult->activityLog;
 
 		// our final messages to show the user
 		$codePoints = [];
@@ -245,13 +245,13 @@ abstract class Console extends OutputPlugin
 				}
 			}
 		}
-		if (isset($this->phaseMessages[$phaseName])) {
+		if (!empty($activityLog)) {
 			$this->write(PHP_EOL . "-----" . PHP_EOL, $this->writer->commentStyle);
 			$this->write("This is the detailed output from the ");
 			$this->write($phaseName, $this->writer->failedPhaseStyle);
 			$this->write(" phase:" . PHP_EOL . PHP_EOL);
 
-			foreach ($this->phaseMessages[$phaseName] as $msg) {
+			foreach ($activityLog as $msg) {
 				$this->write("[", $this->writer->punctuationStyle);
 				$this->write(date("Y-m-d H:i:s", $msg['ts']), $this->writer->timeStyle);
 				$this->write("] ", $this->writer->punctuationStyle);

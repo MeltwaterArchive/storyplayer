@@ -167,11 +167,8 @@ class DefaultConsole extends Console
 			return;
 		}
 
-		// increment our internal counter
-		$this->phaseNumber = $phaseSeqNo;
-
 		// tell the user
-		$this->write($this->phaseNumber, $this->writer->miniPhaseNameStyle);
+		$this->write($phaseSeqNo, $this->writer->miniPhaseNameStyle);
 	}
 
 	/**
@@ -179,7 +176,7 @@ class DefaultConsole extends Console
 	 *
 	 * @return void
 	 */
-	public function endPhase($phase)
+	public function endPhase($phase, $phaseResult)
 	{
 		// shorthand
 		$phaseType = $phase->getPhaseType();

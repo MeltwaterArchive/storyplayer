@@ -221,7 +221,7 @@ abstract class OutputPlugin
 	/**
 	 * @return void
 	 */
-	abstract public function endPhase($phase);
+	abstract public function endPhase($phase, $phaseResult);
 
 	/**
 	 * @param string $msg

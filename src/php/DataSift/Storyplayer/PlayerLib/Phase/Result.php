@@ -75,6 +75,8 @@ class Phase_Result
 	protected $result;
 	protected $exception;
 
+	public $activityLog = [];
+
 	const MIN_RESULT = 1;
 	const MAX_RESULT = 7;
 

@@ -73,24 +73,6 @@ abstract class Phase
 		$this->st = $st;
 	}
 
-	public function announcePhaseStart()
-	{
-		// shorthand
-		$output = $this->st->getOutput();
-
-		// tell the world who we are
-		$output->startPhase($this);
-	}
-
-	public function announcePhaseEnd()
-	{
-		// shorthand
-		$output = $this->st->getOutput();
-
-		// all done
-		$output->endPhase($this);
-	}
-
 	public function getPhaseName()
 	{
 		static $phaseName = null;

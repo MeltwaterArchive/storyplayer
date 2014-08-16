@@ -62,6 +62,8 @@ class Output extends OutputPlugin
 {
 	protected $plugins = array();
 
+	protected $activityLog = [];
+
 	public function __construct()
 	{
 		// we need a default output for the console
@@ -186,11 +188,16 @@ class Output extends OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function endPhase($phase)
+	public function endPhase($phase, $phaseResult)
 	{
+		// inject the captured activity into the phase
+		$phaseResult->activityLog = $this->activityLog;
+		$this->activityLog=[];
+
+		// pass the phase on
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endPhase($phase);
+			$plugin->endPhase($phase, $phaseResult);
 		}
 	}
 
@@ -202,6 +209,13 @@ class Output extends OutputPlugin
 	 */
 	public function logPhaseActivity($msg)
 	{
+		// keep track of what was attempted, in case we need to show
+		// the user what was attempted
+		$this->activityLog[] = [
+			'ts'    => time(),
+			'text'  => $msg
+		];
+
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logPhaseActivity($msg);
@@ -217,6 +231,13 @@ class Output extends OutputPlugin
 	 */
 	public function logPhaseError($phaseName, $msg)
 	{
+		// keep track of what was attempted, in case we need to show
+		// the user what was attempted
+		$this->activityLog[] = [
+			'ts'    => time(),
+			'text'  => $msg
+		];
+
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logPhaseError($phaseName, $msg);
@@ -232,6 +253,13 @@ class Output extends OutputPlugin
 	 */
 	public function logPhaseSkipped($phaseName, $msg)
 	{
+		// keep track of what was attempted, in case we need to show
+		// the user what was attempted
+		$this->activityLog[] = [
+			'ts'    => time(),
+			'text'  => $msg
+		];
+
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logPhaseSkipped($phaseName, $msg);

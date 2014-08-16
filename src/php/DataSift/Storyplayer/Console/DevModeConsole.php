@@ -194,7 +194,7 @@ class DevModeConsole extends Console
 	 *
 	 * @return void
 	 */
-	public function endPhase($phase)
+	public function endPhase($phase, $phaseResult)
 	{
 		// this is a no-op for us
 	}
