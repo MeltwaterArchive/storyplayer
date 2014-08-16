@@ -148,7 +148,7 @@ class PhaseGroup_Result
 
 	public function getPhaseGroupSucceeded()
 	{
-		if ($this->resultCode = self::OKAY) {
+		if (self::OKAY == $this->resultCode) {
 			return true;
 		}
 		return false;
