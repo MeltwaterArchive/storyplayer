@@ -98,6 +98,30 @@ class Output extends OutputPlugin
 		}
 	}
 
+	public function disableColourSupport()
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->disableColourSupport();
+		}
+	}
+
+	public function enforceColourSupport()
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->enforceColourSupport();
+		}
+	}
+
+	public function enableColourSupport()
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->enableColourSupport();
+		}
+	}
+
 	/**
 	 * called when storyplayer starts
 	 *

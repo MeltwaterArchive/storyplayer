@@ -59,6 +59,22 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Common_ColorSwitch extends CliSwitch
 {
+	const NO_COLOR = 0;
+	const ALWAYS_COLOR = 1;
+	const AUTO_COLOR = 2;
+
+    static $supportedValues = [
+        "none" => 0,
+        "false" => 0,
+        "no" => 0,
+        "n" => 0,
+        "always" => 1,
+        "yes" => 1,
+        "true" => 1,
+        "y" => 1,
+        "auto" => 2
+    ];
+
 	public function __construct()
 	{
 		// define our name, and our description
@@ -97,7 +113,7 @@ class Common_ColorSwitch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->color = $params[0];
+		$engine->options->color = self::$supportedValues[strtolower($params[0])];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

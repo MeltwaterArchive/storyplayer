@@ -64,8 +64,8 @@ class DefaultCommonFunctionality
 		"Common_TestEnvironmentConfigSupport"  => "Common_TestEnvironmentConfigSupport",
 		"Common_SystemUnderTestConfigSupport"  => "Common_SystemUnderTestConfigSupport",
 		"Common_ActiveConfigSupport"           => "Common_ActiveConfigSupport",
-		"Common_ColorSupport"                  => "Common_ColorSupport",
 		"Common_ConsoleSupport"                => "Common_ConsoleSupport",
+		"Common_ColorSupport"                  => "Common_ColorSupport",
 		"Common_PhaseLoaderSupport"            => "Common_PhaseLoaderSupport",
 		"Common_ProseLoaderSupport"            => "Common_ProseLoaderSupport",
 	];

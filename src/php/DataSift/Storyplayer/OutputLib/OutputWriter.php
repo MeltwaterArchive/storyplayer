@@ -86,17 +86,33 @@ class OutputWriter
 
 	public function addOutputToStdout()
 	{
+		$handle = fopen('php://stdout', 'w');
+		$colour = true;
+
+		// special case - check for writing to a pipe
+		if (!function_exists('posix_isatty') || !posix_isatty($handle)) {
+			$colour = false;
+		}
+
 		$this->outputHandles['stdout'] = [
-			'handle' => fopen('php://stdout', 'w'),
-			'colour' => true
+			'handle' => $handle,
+			'colour' => $colour
 		];
 	}
 
 	public function addOutputToStderr()
 	{
+		$handle = fopen('php://stderr', 'w');
+		$colour = true;
+
+		// special case - check for writing to a pipe
+		if (!function_exists('posix_isatty') || !posix_isatty($handle)) {
+			$colour = false;
+		}
+
 		$this->outputHandles['stderr'] = [
-			'handle' => fopen('php://stderr', 'w'),
-			'colour' => true
+			'handle' => $handle,
+			'colour' => $colour
 		];
 	}
 
@@ -140,6 +156,31 @@ class OutputWriter
 	// Colour support
 	//
 	// ------------------------------------------------------------------
+
+	public function setColourMode($mode)
+	{
+		switch ($mode)
+		{
+			case OutputPlugin::COLOUR_MODE_OFF:
+				foreach ($this->outputHandles as $index => $outputHandle) {
+					if ($outputHandle['colour']) {
+						$this->outputHandles[$index]['colour'] = false;
+					}
+				}
+				break;
+
+			case OutputPlugin::COLOUR_MODE_ON:
+				foreach ($this->outputHandles as $index => $outputHandle) {
+					switch ($index)
+					{
+						case 'stdout':
+						case 'stderr':
+							$this->outputHandles[$index]['colour'] = true;
+					}
+				}
+				break;
+		}
+	}
 
     protected function setupColourStyles()
     {

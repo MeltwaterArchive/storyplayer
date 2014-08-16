@@ -60,9 +60,13 @@ abstract class OutputPlugin
 {
 	protected $writer = null;
 
+	const COLOUR_MODE_OFF  = 1;
+	const COLOUR_MODE_ON   = 2;
+	const COLOUR_MODE_AUTO = 3;
+
 	public function __construct()
 	{
-		$this->writer = new OutputWriter();
+		$this->writer = new OutputWriter(self::COLOUR_MODE_AUTO);
 	}
 
 	// ==================================================================
@@ -159,6 +163,27 @@ abstract class OutputPlugin
 
 		// send the string out to the user
 		$this->writer->write($output, $this->writer->durationStyle);
+	}
+
+	// ==================================================================
+	//
+	// Colour support
+	//
+	// ------------------------------------------------------------------
+
+	public function disableColourSupport()
+	{
+		$this->writer->setColourMode(self::COLOUR_MODE_OFF);
+	}
+
+	public function enableColourSupport()
+	{
+		$this->writer->setColourMode(self::COLOUR_MODE_AUTO);
+	}
+
+	public function enforceColourSupport()
+	{
+		$this->writer->setColourMode(self::COLOUR_MODE_ON);
 	}
 
 	// ==================================================================

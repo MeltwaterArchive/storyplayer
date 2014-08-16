@@ -77,5 +77,19 @@ class Common_ColorSupport implements Common_Functionality
 
     public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
+    	// which colour mode are we in?
+    	switch ($engine->options->color) {
+    		case Common_ColorSwitch::NO_COLOR:
+    			$injectables->output->disableColourSupport();
+    			break;
+
+    		case Common_ColorSwitch::ALWAYS_COLOR:
+    			$injectables->output->enforceColourSupport();
+    			break;
+
+    		case Common_ColorSwitch::AUTO_COLOR:
+    			$injectables->output->enableColourSupport();
+    			break;
+    	}
     }
 }
