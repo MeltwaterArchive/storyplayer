@@ -419,6 +419,15 @@ class PlayStory_Command extends CliCommand
 
     protected function addStoryFromFile(CliEngine $engine, Injectables $injectables, $storyFile)
     {
+        // warn the user if the story file doesn't end in 'Story.php'
+        //
+        // this is because Storyplayer will ignore the file if you
+        // point Storyplayer at a folder instead of a specific file
+        if (substr($storyFile, -9) != 'Story.php') {
+            $msg = "your story should end in 'Story.php', but it does not" . PHP_EOL;
+            $this->output->logCliWarning($msg);
+        }
+
         // these are the players we want to execute for the story
         $return = [
             new TestEnvironment_Player([
