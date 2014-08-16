@@ -274,7 +274,7 @@ EOS;
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($level, $msg)
+	public function logPhaseActivity($msg)
 	{
 		if (!$this->silentActivity) {
 			$this->logActivity($msg);

@@ -176,11 +176,10 @@ class JUnitReport implements Report
 	}
 
 	/**
-	 * @param integer $level
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($level, $msg)
+	public function logPhaseActivity($msg)
 	{
 
 	}

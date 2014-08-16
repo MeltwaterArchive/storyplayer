@@ -248,7 +248,7 @@ class DefaultConsole extends Console
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($level, $msg)
+	public function logPhaseActivity($msg)
 	{
 		// keep track of what was attempted, in case we need to show
 		// the user what was attempted

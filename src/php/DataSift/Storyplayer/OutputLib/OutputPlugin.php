@@ -157,11 +157,10 @@ abstract class OutputPlugin
 	abstract public function endPhase($phaseName, $phaseType);
 
 	/**
-	 * @param integer $level
 	 * @param string $msg
 	 * @return void
 	 */
-	abstract public function logPhaseActivity($level, $msg);
+	abstract public function logPhaseActivity($msg);
 
 	/**
 	 * @param string $phaseName

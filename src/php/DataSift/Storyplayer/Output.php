@@ -211,15 +211,14 @@ class Output extends OutputPlugin
 	/**
 	 * called when a story logs an action
 	 *
-	 * @param integer $level
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($level, $msg)
+	public function logPhaseActivity($msg)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->logPhaseActivity($level, $msg);
+			$plugin->logPhaseActivity($msg);
 		}
 	}
 

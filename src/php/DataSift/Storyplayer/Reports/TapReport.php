@@ -181,7 +181,7 @@ class TapReport implements Report
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($level, $msg)
+	public function logPhaseActivity($msg)
 	{
 
 	}
