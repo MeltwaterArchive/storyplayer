@@ -120,13 +120,14 @@ class DefaultConsole extends Console
 	 */
 	public function startStoryplayer($version, $url, $copyright, $license)
 	{
-		echo <<<EOS
+		$output = <<<EOS
 Storyplayer {$version} - {$url}
 {$copyright}
 {$license}
 
 
 EOS;
+		$this->writeString($output);
 	}
 
 	/**
@@ -172,7 +173,7 @@ EOS;
 	public function startPhaseGroup($name)
 	{
 		if ($this->verbosityLevel > 0) {
-			echo <<<EOS
+			$output = <<<EOS
 =============================================================
 
 {$name}
@@ -180,15 +181,16 @@ EOS;
 -------------------------------------------------------------
 
 EOS;
+			$this->writeString($output);
 		}
 		else {
-			echo $name . ': ';
+			$this->writeString($name . ': ');
 		}
 	}
 
 	public function endPhaseGroup($name, PhaseGroup_Result $result)
 	{
-		echo ' [' . $result->getResultString() . '] (' . round($result->getDuration(), 2) . ' secs)' . PHP_EOL;
+		$this->writeString(' [' . $result->getResultString() . '] (' . round($result->getDuration(), 2) . ' secs)' . PHP_EOL);
 	}
 
 	/**
@@ -206,7 +208,7 @@ EOS;
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
 		if ($this->verbosityLevel > 0) {
-			echo <<<EOS
+			$output = <<<EOS
 =============================================================
 
       Story: {$storyName}
@@ -222,8 +224,9 @@ Environment: {$envName}
 EOS;
 		}
 		else {
-			echo $storyName . ': ';
+			$output = $storyName . ': ';
 		}
+		$this->writeString($output);
 
 
 		// reset the phaseNumber counter
@@ -240,9 +243,9 @@ EOS;
 	{
 		// var_dump($storyResult);
 
-		echo ' [' . $storyResult->getResultString() . ']'
+		$this->writeString(' [' . $storyResult->getResultString() . ']'
 		     . ' (' . round($storyResult->getDuration(), 2) . ' secs)'
-		     . PHP_EOL;
+		     . PHP_EOL);
 
 		// add this story result to our collection
 		$this->storyResults[] = $storyResult;
@@ -272,10 +275,10 @@ EOS;
 
 		// tell the user which phase we're doing
 		if ($this->verbosityLevel > 0) {
-			echo $phaseName . ': ';
+			$this->writeString($phaseName . ': ');
 		}
 		else {
-			echo $this->phaseNumber;
+			$this->writeString($this->phaseNumber);
 		}
 	}
 
@@ -295,10 +298,10 @@ EOS;
 		}
 
 		if ($this->verbosityLevel > 0) {
-			echo PHP_EOL;
+			$this->writeString(PHP_EOL);
 		}
 		else {
-			echo ' ';
+			$this->writeString(' ');
 		}
 	}
 
@@ -321,7 +324,7 @@ EOS;
 
 		// show the user that *something* happened
 		if (!$this->silentActivity) {
-			echo ".";
+			$this->writeString(".");
 		}
 	}
 
@@ -335,7 +338,7 @@ EOS;
 	public function logPhaseError($phaseName, $msg)
 	{
 		// we have to show this now, and save it for final output later
-		echo "e";
+		$this->writeString("e");
 
 		$this->phaseMessages[$this->currentPhase][] = [
 			'ts'    => time(),
@@ -354,7 +357,7 @@ EOS;
 	public function logPhaseSkipped($phaseName, $msg)
 	{
 		// we have to show this now, and save it for final output later
-		echo "s";
+		$this->writeString("s");
 
 		// $this->phaseMessages[$phaseName] = $msg;
 	}
@@ -369,7 +372,7 @@ EOS;
 	 */
 	public function logCliError($msg)
 	{
-		echo "*** error: $msg" . PHP_EOL;
+		$this->writeString("*** error: $msg" . PHP_EOL);
 	}
 
 	/**
@@ -380,9 +383,9 @@ EOS;
 	 */
 	public function logCliErrorWithException($msg, $e)
 	{
-		echo "*** error: $msg" . PHP_EOL . PHP_EOL
+		$this->writeString("*** error: $msg" . PHP_EOL . PHP_EOL
 		     . "This was caused by an unexpected exception " . get_class($e) . PHP_EOL . PHP_EOL
-		     . $e->getTraceAsString();
+		     . $e->getTraceAsString());
 	}
 
 	/**
@@ -395,7 +398,7 @@ EOS;
 	 */
 	public function logCliWarning($msg)
 	{
-		echo "*** warning: $msg" . PHP_EOL;
+		$this->writeString("*** warning: $msg" . PHP_EOL);
 	}
 
 	/**
@@ -408,7 +411,7 @@ EOS;
 	 */
 	public function logCliInfo($msg)
 	{
-		echo $msg . PHP_EOL;
+		$this->writeString($msg . PHP_EOL);
 	}
 
 	/**
@@ -436,7 +439,7 @@ EOS;
 	public function startTestEnvironmentCreation($testEnvName)
 	{
 		if ($this->verbosityLevel > 0) {
-			echo <<<EOS
+			$output = <<<EOS
 =============================================================
 
 Creating Test Environment: {$testEnvName}
@@ -444,8 +447,9 @@ Creating Test Environment: {$testEnvName}
 EOS;
 		}
 		else {
-			echo "Creating test environment {$testEnvName}: ";
+			$output = "Creating test environment {$testEnvName}: ";
 		}
+		$this->writeString($output);
 	}
 
 	/**
@@ -456,7 +460,7 @@ EOS;
 	 */
 	public function endTestEnvironmentCreation($testEnvName)
 	{
-		echo PHP_EOL;
+		$this->writeString(PHP_EOL);
 	}
 
 	/**
@@ -468,7 +472,7 @@ EOS;
 	public function startTestEnvironmentDestruction($testEnvName)
 	{
 		if ($this->verbosityLevel > 0) {
-			echo <<<EOS
+			$output = <<<EOS
 =============================================================
 
 Destroying Test Environment: {$testEnvName}
@@ -476,8 +480,9 @@ Destroying Test Environment: {$testEnvName}
 EOS;
 		}
 		else {
-			echo "Destroying test environment {$testEnvName}: ";
+			$output = "Destroying test environment {$testEnvName}: ";
 		}
+		$this->writeString($output);
 	}
 
 	/**
@@ -488,6 +493,6 @@ EOS;
 	 */
 	public function endTestEnvironmentDestruction($testEnvName)
 	{
-		echo PHP_EOL;
+		$this->writeString(PHP_EOL);
 	}
 }
