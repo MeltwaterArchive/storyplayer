@@ -616,6 +616,26 @@ class PlayStory_Command extends CliCommand
             $injectables->activeConfig->storyplayer->phases->testEnvStartup->TestEnvironmentConstruction = false;
             $injectables->activeConfig->storyplayer->phases->story->TestEnvironmentSetup = false;
         }
+        else
+        {
+            // do we already have this target?
+            //
+            // this can happen when the test environment was previously
+            // persisted, and this time we're being run without the
+            // --reuse-target flag
+
+            // does the target exist to be reused?
+            $this->output->setSilent();
+            $hasTarget = $st->fromTargetsTable()->hasCurrentTestEnvironment();
+            $this->output->resetSilent();
+
+            if ($hasTarget) {
+                // remove this target from the table
+                $this->output->setSilent();
+                $st->usingTargetsTable()->removeCurrentTestEnvironment();
+                $this->output->resetSilent();
+            }
+        }
     }
 
     // ==================================================================
