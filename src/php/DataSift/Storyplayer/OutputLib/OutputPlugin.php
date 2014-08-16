@@ -58,7 +58,12 @@ use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
  */
 abstract class OutputPlugin
 {
-	protected $outputHandles = [];
+	protected $writer = null;
+
+	public function __construct()
+	{
+		$this->writer = new OutputWriter();
+	}
 
 	// ==================================================================
 	//
@@ -68,12 +73,12 @@ abstract class OutputPlugin
 
 	public function addOutputToStdout()
 	{
-		$this->outputHandles['stdout'] = fopen('php://stdout', 'w');
+		$this->writer->addOutputToStdout();
 	}
 
 	public function addOutputToStderr()
 	{
-		$this->outputHandles['stderr'] = fopen('php://stderr', 'w');
+		$this->writer->addOutputToStderr();
 	}
 
 	public function addOutputFile($filename)
@@ -87,22 +92,12 @@ abstract class OutputPlugin
 				throw new E4xx_OutputFilenameIsAReservedName($filename);
 		}
 
-		// can we open the file?
-		$fp = @fopen($filename, 'w');
-		if (!$fp) {
-			throw new E4xx_CannotOpenOutputFile($filename);
-		}
-
-		// add the file to our list to write to
-		$this->outputHandles[$filename] = $fp;
+		$this->writer->addOutputFile($filename);
 	}
 
-	protected function writeString($string)
+	public function write($output, $style = null)
 	{
-		// write the string to each output handle that is open
-		foreach ($this->outputHandles as $fp) {
-			fwrite($fp, $string);
-		}
+		$this->writer->write($output, $style);
 	}
 
 	// ==================================================================

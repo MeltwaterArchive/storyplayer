@@ -72,6 +72,8 @@ class DevModeConsole extends Console
 
 	public function __construct()
 	{
+		parent::__construct();
+
 		$this->resultStrings = array (
 			Story_Result::PASS => array (
 				0 => PHP_EOL . "Result: PASS",
@@ -127,14 +129,12 @@ class DevModeConsole extends Console
 	 */
 	public function startStoryplayer($version, $url, $copyright, $license)
 	{
-		$output = <<<EOS
-Storyplayer {$version} - {$url}
-{$copyright}
-{$license}
-
-
-EOS;
-		$this->writeString($output);
+		$this->write("Storyplayer {$version}", $this->writer->highlightStyle);
+		$this->write(" - ");
+		$this->write($url, $this->writer->urlStyle);
+		$this->write(PHP_EOL);
+		$this->write($copyright . PHP_EOL);
+		$this->write($license . PHP_EOL . PHP_EOL);
 	}
 
 	/**
@@ -173,7 +173,7 @@ Environment: {$envName}
 
 EOS;
 
-		$this->writeString($output);
+		$this->write($output);
 	}
 
 	/**
@@ -190,10 +190,10 @@ EOS;
 Final Result
 
 EOS;
-		$this->writeString($output);
+		$this->write($output);
 
-		$this->writeString($this->resultStrings[$storyResult->resultCode][$this->verbosityLevel] . PHP_EOL);
-		$this->writeString('Duration: ' . round($storyResult->durationTime, 2) . ' secs' . PHP_EOL);
+		$this->write($this->resultStrings[$storyResult->resultCode][$this->verbosityLevel] . PHP_EOL);
+		$this->write('Duration: ' . round($storyResult->durationTime, 2) . ' secs' . PHP_EOL);
 
 		// do we need to say anything more?
 		switch ($storyResult->resultCode)
@@ -229,7 +229,7 @@ EOS;
 {$name}
 
 EOS;
-		$this->writeString($output);
+		$this->write($output);
 	}
 
 	public function endPhaseGroup($name, PhaseGroup_Result $result)
@@ -244,7 +244,7 @@ Result: {$resultString} ({$duration} secs)
 
 
 EOS;
-		$this->writeString($output);
+		$this->write($output);
 	}
 
 	/**
@@ -268,17 +268,17 @@ EOS;
 			return;
 		}
 
-		$this->writeString(PHP_EOL);
-		$this->writeString("-------------------------------------------------------------" . PHP_EOL);
-		$this->writeString("Now performing: $phaseName" . PHP_EOL);
-		$this->writeString(PHP_EOL);
+		$this->write(PHP_EOL);
+		$this->write("-------------------------------------------------------------" . PHP_EOL);
+		$this->write("Now performing: $phaseName" . PHP_EOL);
+		$this->write(PHP_EOL);
 	}
 
 	protected function logActivity($message)
 	{
         $now = date('Y-m-d H:i:s', time());
 
-        $this->writeString('[' . $now . '] ' . rtrim($message) . "\n");
+        $this->write('[' . $now . '] ' . rtrim($message) . "\n");
 	}
 
 	/**
@@ -341,7 +341,7 @@ EOS;
 	 */
 	public function logCliError($msg)
 	{
-		$this->writeString("*** error: $msg" . PHP_EOL);
+		$this->write("*** error: $msg" . PHP_EOL);
 	}
 
 	/**
@@ -352,7 +352,7 @@ EOS;
 	 */
 	public function logCliErrorWithException($msg, $e)
 	{
-		$this->writeString("*** error: $msg" . PHP_EOL . PHP_EOL
+		$this->write("*** error: $msg" . PHP_EOL . PHP_EOL
 		     . "This was caused by an unexpected exception " . get_class($e) . PHP_EOL . PHP_EOL
 		     . $e->getTraceAsString());
 	}
@@ -367,7 +367,7 @@ EOS;
 	 */
 	public function logCliWarning($msg)
 	{
-		$this->writeString("*** warning: $msg" . PHP_EOL);
+		$this->write("*** warning: $msg" . PHP_EOL);
 	}
 
 	/**
@@ -380,7 +380,7 @@ EOS;
 	 */
 	public function logCliInfo($msg)
 	{
-		$this->writeString($msg . PHP_EOL);
+		$this->write($msg . PHP_EOL);
 	}
 
 	/**
@@ -409,7 +409,7 @@ EOS;
 		ob_end_clean();
 
 		// send the output to the default logger
-		Log::write(Log::LOG_DEBUG, $name . ' => ' . $output);
+		$this->write($name . ' => ' . $output);
 	}
 
 	/**
@@ -426,7 +426,7 @@ EOS;
 Creating Test Environment: {$testEnvName}
 
 EOS;
-		$this->writeString($output);
+		$this->write($output);
 	}
 
 	/**
@@ -454,7 +454,7 @@ EOS;
 Destroying Test Environment: {$testEnvName}
 
 EOS;
-		$this->writeString($output);
+		$this->write($output);
 	}
 
 	/**

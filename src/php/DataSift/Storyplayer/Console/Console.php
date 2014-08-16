@@ -131,21 +131,21 @@ DETAILED ERROR REPORT
 
 
 EOS;
-		$this->writeString($output);
+		$this->write($output);
 
-		$this->writeString("The story failed in the " . $phaseName . " phase." . PHP_EOL);
+		$this->write("The story failed in the " . $phaseName . " phase." . PHP_EOL);
 		if (count($codePoints) > 0) {
-			$this->writeString(PHP_EOL . "-----" . PHP_EOL
+			$this->write(PHP_EOL . "-----" . PHP_EOL
 			     . "The story was executing this Prose code when it failed:"
 			     . PHP_EOL);
 
 			$codePoints = array_reverse($codePoints);
 			foreach ($codePoints as $codePoint) {
-				$this->writeString(PHP_EOL . str_repeat(' ', 4) . $codePoint['file'] . '@' . $codePoint['line'] . ':' . PHP_EOL . PHP_EOL);
-				$this->writeString(CodeFormatter::indentBySpaces($codePoint['code'], 8) . PHP_EOL);
+				$this->write(PHP_EOL . str_repeat(' ', 4) . $codePoint['file'] . '@' . $codePoint['line'] . ':' . PHP_EOL . PHP_EOL);
+				$this->write(CodeFormatter::indentBySpaces($codePoint['code'], 8) . PHP_EOL);
 
 				if (isset($codePoint['args']) && count($codePoint['args'])) {
-					$this->writeString(PHP_EOL . '        Arguments:' . PHP_EOL);
+					$this->write(PHP_EOL . '        Arguments:' . PHP_EOL);
 					foreach ($codePoint['args'] as $key => $arg) {
 						ob_start();
 						var_dump($arg);
@@ -163,25 +163,25 @@ EOS;
 							$printableArg .= '...' . PHP_EOL;
 						}
 
-						$this->writeString(PHP_EOL . CodeFormatter::indentBySpaces($printableArg, 12));
+						$this->write(PHP_EOL . CodeFormatter::indentBySpaces($printableArg, 12));
 					}
 				}
 			}
 		}
 		if (isset($this->phaseMessages[$phaseName])) {
-			$this->writeString(PHP_EOL . "-----" . PHP_EOL
+			$this->write(PHP_EOL . "-----" . PHP_EOL
 			     . "This is the detailed output from the {$phaseName} phase:"
 			     . PHP_EOL . PHP_EOL);
 
 			foreach ($this->phaseMessages[$phaseName] as $msg) {
-				$this->writeString("[" . date("Y-m-d H:i:s", $msg['ts']) . "] "
+				$this->write("[" . date("Y-m-d H:i:s", $msg['ts']) . "] "
 				     . $this->logLevelStrings[$msg['level']]
                      . $msg['text'] . PHP_EOL);
 			}
 		}
 
 		if ($trace) {
-			$this->writeString(PHP_EOL . "-----" . PHP_EOL
+			$this->write(PHP_EOL . "-----" . PHP_EOL
 			     . "This is the stack trace for this failure:"
 			     . PHP_EOL . PHP_EOL
 			     . CodeFormatter::indentBySpaces($trace, 4) . PHP_EOL);
@@ -195,6 +195,6 @@ END OF ERROR REPORT
 =============================================================
 
 EOS;
-		$this->writeString($output);
+		$this->write($output);
 	}
 }
