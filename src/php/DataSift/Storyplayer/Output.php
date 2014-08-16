@@ -66,6 +66,7 @@ class Output extends OutputPlugin
 	{
 		// we need a default output for the console
 		$this->plugins['console'] = new DefaultConsole();
+		$this->plugins['console']->addOutputToStdout();
 	}
 
 	/**
