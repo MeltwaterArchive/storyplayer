@@ -60,7 +60,6 @@ class TapReport implements Report
 	protected $filename;
 	protected $testCount = 0;
 	protected $tests = [];
-	protected $verbosityLevel = 0;
 
 	public function __construct($params)
 	{
@@ -123,12 +122,6 @@ class TapReport implements Report
 
 		// all done
 		fclose($fp);
-	}
-
-	public function setVerbosity($verbosityLevel)
-	{
-		// doesn't really affect reports
-		$this->verbosityLevel = $verbosityLevel;
 	}
 
 	public function resetSilent()

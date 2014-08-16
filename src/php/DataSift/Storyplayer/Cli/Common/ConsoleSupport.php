@@ -51,7 +51,6 @@ use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
 use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\LogLib\Log;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\TalePlayer;
@@ -82,41 +81,16 @@ class Common_ConsoleSupport implements Common_Functionality
         $activeConfig = $injectables->activeConfig;
         $output       = $injectables->output;
 
+        $devModeConsole = new DevModeConsole();
+
         // switch output plugins first, before we do anything else at all
         if (isset($engine->options->dev) && $engine->options->dev) {
             // switch our main output to 'dev mode'
-            $output->usePlugin('console', new DevModeConsole());
-
-            // dev mode means 'show me everything'
-            $engine->options->verbosity = 2;
-        }
-        else {
-            // we want our main output to be 'normal' mode
-            // and we want to write the devmode output to a log file
-            $console = new DevModeConsole();
-            $console->addOutputFile('storyplayer.log');
-            $output->usePlugin('logfile', $console);
+            $output->usePlugin('console', $devModeConsole);
         }
 
-        // setup logging
-        //
-        // by default, we go with what is in the config, and use the
-        // command-line switch(es) to override it
-        $loggingConfig = $activeConfig->storyplayer->logger;
-        if (isset($engine->options->logLevels)) {
-            $loggingConfig->levels = $engine->options->logLevels;
-        }
-
-        // allow the command-line to override the config
-        $verbosity = $engine->options->verbosity;
-        $output->setVerbosity($engine->options->verbosity);
-        if ($verbosity > 0) {
-            $loggingConfig->levels->LOG_DEBUG = true;
-        }
-        if ($verbosity > 1 ) {
-            $loggingConfig->levels->LOG_TRACE = true;
-        }
-
-        // we're ready to switch logging on now
-        Log::init("storyplayer", $loggingConfig);    }
+        // we also want to create storyplayer.log every time
+        $devModeConsole->addOutputFile('storyplayer.log');
+        $output->usePlugin('logfile', $devModeConsole);
+    }
 }

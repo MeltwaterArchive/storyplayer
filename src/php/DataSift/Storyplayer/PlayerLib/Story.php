@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
-use DataSift\Stone\LogLib\Log;
 
 /**
  * Object that represents a single story
@@ -520,6 +519,7 @@ class Story
 			foreach ($params as $key => $value) {
 				// do we have a clash?
 				if (isset($return[$key])) {
+					// TODO: address when we revisit -D support
 					Log::write(Log::LOG_WARNING, "StoryTemplate '" . get_class($template) . "' attempting to set duplicate story parameter '{$key}'; using existing value '{$return['$key']}' instead of template value '{$value}'");
 				}
 				else {

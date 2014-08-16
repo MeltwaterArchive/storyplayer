@@ -17,8 +17,6 @@ use Phix_Project\Autoloader4\Autoloader_Path;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\Switches\LongHelpSwitch;
 use Phix_Project\CliEngine\Switches\ShortHelpSwitch;
-use Phix_Project\CliEngine\Switches\VerboseShortSwitch;
-use Phix_Project\CliEngine\Switches\VerboseLongSwitch;
 use Phix_Project\CliEngine\Switches\VersionSwitch;
 use Phix_Project\CliEngine\Commands\HelpCommand;
 
@@ -259,8 +257,6 @@ function main($argv)
 	$engine->addEngineSwitch(new ListTargets_Switch($injectables->knownTestEnvironmentsList));
 	$engine->addEngineSwitch(new LongHelpSwitch);
 	$engine->addEngineSwitch(new ShortHelpSwitch);
-	$engine->addEngineSwitch(new VerboseShortSwitch($engine->options, 0, 3));
-	$engine->addEngineSwitch(new VerboseLongSwitch($engine->options, 0, 3));
 
 	// what is our default command?
 	// this is normally some sort of help command

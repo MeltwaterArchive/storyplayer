@@ -110,7 +110,11 @@ class TimedAction
 
     public function handleSigAlarm()
     {
-        Log::write(Log::LOG_DEBUG, __METHOD__ . '() called');
+        // shorthand
+        $st = $this->st;
+
+        // what are we doing?
+        $log = $st->startAction("SIGALRM received");
 
         // try and terminate the running code
         $this->terminate = true;
@@ -119,6 +123,9 @@ class TimedAction
             $callback = $this->cleanupAction;
             $callback();
         }
+
+        // all done
+        $log->endAction();
     }
 
     public function getDuration()

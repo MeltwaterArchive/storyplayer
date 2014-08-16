@@ -82,20 +82,6 @@ class Output extends OutputPlugin
 		$this->plugins[$slot] = $plugin;
 	}
 
-	/**
-	 * tell our output plugins how chatty they should be
-	 *
-	 * @param int $verbosityLevel
-	 *        the amount (0-2) of verbosity to be
-	 */
-	public function setVerbosity($verbosityLevel)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->setVerbosity($verbosityLevel);
-		}
-	}
-
 	public function resetSilent()
 	{
 		foreach ($this->plugins as $plugin)
@@ -347,62 +333,6 @@ class Output extends OutputPlugin
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logVardump($name, $var);
-		}
-	}
-
-	/**
-	 * called when we start to create a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	public function startTestEnvironmentCreation($testEnvName)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->startTestEnvironmentCreation($testEnvName);
-		}
-	}
-
-	/**
-	 * called when we have finished making the test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	public function endTestEnvironmentCreation($testEnvName)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->endTestEnvironmentCreation($testEnvName);
-		}
-	}
-
-	/**
-	 * called when we start to destroy a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	public function startTestEnvironmentDestruction($testEnvName)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->startTestEnvironmentDestruction($testEnvName);
-		}
-	}
-
-	/**
-	 * called when we have finished destroying a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	public function endTestEnvironmentDestruction($testEnvName)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->endTestEnvironmentDestruction($testEnvName);
 		}
 	}
 }

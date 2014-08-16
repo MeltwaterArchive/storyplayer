@@ -69,10 +69,7 @@ class Common_DevModeSwitch extends CliSwitch
 			. PHP_EOL . PHP_EOL
 			. "* displays the full story log on stdout"
 			. PHP_EOL . PHP_EOL
-			. "Without 'dev' mode, if you want to see the log, you will need to:"
-			. PHP_EOL . PHP_EOL
-			. "* use --log to write the log to a file" . PHP_EOL
-			. "* and --verbose to increase the logging level if you want extra detail"
+			. "The full story log is also available in storyplayer.log."
 		);
 
 		// what are the long switches?

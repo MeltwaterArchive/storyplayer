@@ -49,7 +49,6 @@ use DataSift\Storyplayer\PlayerLib\Phase_Result;
 use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
 use DataSift\Storyplayer\PlayerLib\Story_Result;
 use DataSift\Storyplayer\PlayerLib\Story;
-use DataSift\Stone\LogLib\Log;
 
 /**
  * the console plugin we use unless the user specifies something else
@@ -66,18 +65,6 @@ class DefaultConsole extends Console
 	protected $currentPhase;
 	protected $phaseNumber = 0;
 	protected $phaseMessages = array();
-	protected $verbosityLevel = 0;
-	protected $logLevelStrings = [
-        Log::LOG_EMERGENCY => "EMERGENCY ",
-        Log::LOG_ALERT     => "ALERT     ",
-        Log::LOG_CRITICAL  => "CRITICAL  ",
-        Log::LOG_ERROR     => "ERROR     ",
-        Log::LOG_WARNING   => "WARNING   ",
-        Log::LOG_NOTICE    => "NOTICE    ",
-        Log::LOG_INFO      => "INFO      ",
-        Log::LOG_DEBUG     => "DEBUG     ",
-        Log::LOG_TRACE     => "TRACE     ",
-	];
 
 	/**
 	 * a list of the results we have received from stories
@@ -90,14 +77,6 @@ class DefaultConsole extends Console
 	 * @var boolean
 	 */
 	protected $silentActivity = false;
-
-	public function setVerbosity($verbosityLevel)
-	{
-		$this->verbosityLevel = $verbosityLevel;
-		if ($this->verbosityLevel > 2) {
-			$this->verbosityLevel = 2;
-		}
-	}
 
 	public function resetSilent()
 	{
@@ -170,20 +149,7 @@ class DefaultConsole extends Console
 	 */
 	public function startPhaseGroup($name)
 	{
-		if ($this->verbosityLevel > 0) {
-			$output = <<<EOS
-=============================================================
-
-{$name}
-
--------------------------------------------------------------
-
-EOS;
-			$this->write($output);
-		}
-		else {
-			$this->write($name . ': ');
-		}
+		$this->write($name . ': ');
 	}
 
 	public function endPhaseGroup($name, PhaseGroup_Result $result)
@@ -205,27 +171,8 @@ EOS;
 	 */
 	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
 	{
-		if ($this->verbosityLevel > 0) {
-			$output = <<<EOS
-=============================================================
-
-      Story: {$storyName}
-   Category: {$storyCategory}
-      Group: {$storyGroup}
-
-Environment: {$envName}
-     Device: {$deviceName}
-
--------------------------------------------------------------
-
-
-EOS;
-		}
-		else {
-			$output = $storyName . ': ';
-		}
-		$this->write($output);
-
+		// tell the user what is happening
+		$this->write($storyName . ': ');
 
 		// reset the phaseNumber counter
 		$this->phaseNumber = 0;
@@ -271,13 +218,8 @@ EOS;
 		// increment our internal counter
 		$this->phaseNumber++;
 
-		// tell the user which phase we're doing
-		if ($this->verbosityLevel > 0) {
-			$this->write($phaseName . ': ');
-		}
-		else {
-			$this->write($this->phaseNumber);
-		}
+		// tell the user
+		$this->write($this->phaseNumber);
 	}
 
 	/**
@@ -295,12 +237,8 @@ EOS;
 			return;
 		}
 
-		if ($this->verbosityLevel > 0) {
-			$this->write(PHP_EOL);
-		}
-		else {
-			$this->write(' ');
-		}
+		// tell the user
+		$this->write(' ');
 	}
 
 	/**
@@ -316,7 +254,6 @@ EOS;
 		// the user what was attempted
 		$this->phaseMessages[$this->currentPhase][] = [
 			'ts'    => time(),
-			'level' => $level,
 			'text'  => $msg
 		];
 
@@ -340,7 +277,6 @@ EOS;
 
 		$this->phaseMessages[$this->currentPhase][] = [
 			'ts'    => time(),
-			'level' => Log::LOG_CRITICAL,
 			'text'  => $msg
 		];
 	}
@@ -426,71 +362,5 @@ EOS;
 	public function logVardump($name, $var)
 	{
 		// this is a no-op for us
-	}
-
-	/**
-	 * called when we start to create a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	public function startTestEnvironmentCreation($testEnvName)
-	{
-		if ($this->verbosityLevel > 0) {
-			$output = <<<EOS
-=============================================================
-
-Creating Test Environment: {$testEnvName}
-
-EOS;
-		}
-		else {
-			$output = "Creating test environment {$testEnvName}: ";
-		}
-		$this->write($output);
-	}
-
-	/**
-	 * called when we have finished making the test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	public function endTestEnvironmentCreation($testEnvName)
-	{
-		$this->write(PHP_EOL);
-	}
-
-	/**
-	 * called when we start to destroy a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	public function startTestEnvironmentDestruction($testEnvName)
-	{
-		if ($this->verbosityLevel > 0) {
-			$output = <<<EOS
-=============================================================
-
-Destroying Test Environment: {$testEnvName}
-
-EOS;
-		}
-		else {
-			$output = "Destroying test environment {$testEnvName}: ";
-		}
-		$this->write($output);
-	}
-
-	/**
-	 * called when we have finished destroying a test environment
-	 *
-	 * @param  string $testEnvName
-	 * @return void
-	 */
-	public function endTestEnvironmentDestruction($testEnvName)
-	{
-		$this->write(PHP_EOL);
 	}
 }
