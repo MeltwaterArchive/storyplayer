@@ -154,6 +154,20 @@ class PhaseGroup_Result
 		return false;
 	}
 
+	public function getPhaseGroupFailed()
+	{
+		switch ($this->resultCode)
+		{
+			case self::FAIL:
+			case self::ERROR:
+			case self::INCOMPLETE:
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
 	protected function setEndTime()
 	{
 		$this->endTime = microtime(true);
