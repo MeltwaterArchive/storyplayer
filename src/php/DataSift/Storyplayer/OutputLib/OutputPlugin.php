@@ -186,36 +186,17 @@ abstract class OutputPlugin
 	abstract public function setSilent();
 
 	abstract public function startPhaseGroup($activity, $name);
-	abstract public function endPhaseGroup(PhaseGroup_Result $result);
-
-	/**
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
-	 * @return void
-	 */
-	abstract public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
+	abstract public function endPhaseGroup($result);
 
 	/**
 	 * @return void
 	 */
-	abstract public function endStory(Story_Result $storyResult);
+	abstract public function startPhase($phase);
 
 	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	abstract public function startPhase($phaseName, $phaseType);
-
-	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
-	 * @return void
-	 */
-	abstract public function endPhase($phaseName, $phaseType);
+	abstract public function endPhase($phase);
 
 	/**
 	 * @param string $msg

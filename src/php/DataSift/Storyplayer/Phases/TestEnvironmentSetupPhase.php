@@ -61,6 +61,8 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class TestEnvironmentSetupPhase extends StoryPhase
 {
+	protected $sequenceNo = 1;
+
 	public function doPhase($story)
 	{
 		// shorthand

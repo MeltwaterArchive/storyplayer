@@ -122,76 +122,6 @@ class DevModeConsole extends Console
 	}
 
 	/**
-	 * called when a new story starts
-	 *
-	 * a single copy of Storyplayer may execute multiple tests
-	 *
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
-	 * @return void
-	 */
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
-	{
-		$output = <<<EOS
-=============================================================
-
-      Story: {$storyName}
-   Category: {$storyCategory}
-      Group: {$storyGroup}
-
-Environment: {$envName}
-     Device: {$deviceName}
-
-EOS;
-
-		$this->write($output);
-	}
-
-	/**
-	 * called when a story finishes
-	 *
-	 * @param Story_Result $storyResult
-	 * @return void
-	 */
-	public function endStory(Story_Result $storyResult)
-	{
-		$output = <<<EOS
-
--------------------------------------------------------------
-Final Result
-
-EOS;
-		$this->write($output);
-
-		$this->write($this->resultStrings[$storyResult->resultCode] . PHP_EOL);
-		$this->write('Duration: ');
-		$this->writeDuration($storyResult->durationTime);
-		$this->write(PHP_EOL);
-
-		// do we need to say anything more?
-		switch ($storyResult->resultCode)
-		{
-			case Story_Result::PASS:
-			case Story_Result::BLACKLISTED:
-				// no, we're happy enough
-				return;
-
-			default:
-				// everything else is an error of some kind
-				//
-				// sanity check: we should always have a failedPhase
-				if (!$storyResult->failedPhase instanceof Phase_Result) {
-					throw new E5xx_MissingFailedPhase();
-				}
-				$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
-				break;
-		}
-	}
-
-	/**
 	 * called when we start a new set of phases
 	 *
 	 * @param  string $name
@@ -199,32 +129,50 @@ EOS;
 	 */
 	public function startPhaseGroup($activity, $name)
 	{
-		$this->write("=============================================================" . PHP_EOL . PHP_EOL, $this->writer->commentStyle);
+		$this->write("=============================================================" . PHP_EOL, $this->writer->commentStyle);
 		$this->write($activity . ' ', $this->writer->activityStyle);
-		$this->write($name . PHP_EOL . PHP_EOL, $this->writer->nameStyle);
+		$this->write($name . PHP_EOL, $this->writer->nameStyle);
+		//$this->write('-------------------------------------------------------------' . PHP_EOL, $this->writer->commentStyle);
+		//$this->write(PHP_EOL);
 	}
 
-	public function endPhaseGroup(PhaseGroup_Result $result)
+	public function endPhaseGroup($result)
 	{
 		$resultString = $result->getResultString();
 		$duration     = $result->getDuration();
 
 		$this->write(PHP_EOL);
-		$this->write('-------------------------------------------------------------' . PHP_EOL);
-		$this->write("Result: {$resultString} (");
+		//$this->write('-------------------------------------------------------------' . PHP_EOL, $this->writer->commentStyle);
+		$this->write('----' . PHP_EOL, $this->writer->commentStyle);
+		$this->write("Result: ");
+		if ($result->getPhaseGroupSucceeded()){
+			$this->write($resultString, $this->writer->successStyle);
+		}
+		else if ($result->getPhaseGroupFailed()) {
+			$this->write($resultString, $this->writer->failStyle);
+		}
+		else {
+			$this->write($resultString, $this->writer->skippedStyle);
+		}
+
+		$this->write(" (", $this->writer->punctuationStyle);
 		$this->writeDuration($duration);
-		$this->write(")" . PHP_EOL . PHP_EOL);
+		$this->write(")" . PHP_EOL, $this->writer->punctuationStyle);
+		$this->write('-------------------------------------------------------------' . PHP_EOL . PHP_EOL, $this->writer->commentStyle);
 	}
 
 	/**
 	 * called when a story starts a new phase
 	 *
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function startPhase($phaseName, $phaseType)
+	public function startPhase($phase)
 	{
+		// shorthand
+		$phaseName  = $phase->getPhaseName();
+		$phaseType  = $phase->getPhaseType();
+		$phaseSeqNo = $phase->getPhaseSequenceNo();
+
 		// our whitelist of phases that we want to announce
 		static $announcedPhases = [
 			Phase::STORY_PHASE => true,
@@ -238,28 +186,35 @@ EOS;
 		}
 
 		$this->write(PHP_EOL);
-		$this->write("-------------------------------------------------------------" . PHP_EOL);
-		$this->write("Now performing: $phaseName" . PHP_EOL);
+		$this->write("----" . PHP_EOL, $this->writer->commentStyle);
+//		$this->write("-------------------------------------------------------------" . PHP_EOL, $this->writer->commentStyle);
+		$this->write("Running phase ", $this->writer->activityStyle);
+		if ($phaseSeqNo) {
+			$this->write("$phaseSeqNo. ");
+		}
+		$this->write("$phaseName" . PHP_EOL);
 		$this->write(PHP_EOL);
+		//$this->write("  -----------------------------------------------------------" . PHP_EOL, $this->writer->commentStyle);
+	}
+
+	/**
+	 * called when a story ends a phase
+	 *
+	 * @return void
+	 */
+	public function endPhase($phase)
+	{
+		// this is a no-op for us
 	}
 
 	protected function logActivity($message)
 	{
         $now = date('Y-m-d H:i:s', time());
 
-        $this->write('[' . $now . '] ' . rtrim($message) . "\n");
-	}
-
-	/**
-	 * called when a story ends a phase
-	 *
-	 * @param string $phaseName
-	 * @param integer $phaseType
-	 * @return void
-	 */
-	public function endPhase($phaseName, $phaseType)
-	{
-		// this is a no-op for us
+        $this->write('[', $this->writer->punctuationStyle);
+        $this->write($now, $this->writer->timeStyle);
+        $this->write('] ', $this->writer->punctuationStyle);
+        $this->write(rtrim($message) . PHP_EOL);
 	}
 
 	/**

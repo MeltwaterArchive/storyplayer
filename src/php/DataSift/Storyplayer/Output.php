@@ -136,7 +136,7 @@ class Output extends OutputPlugin
 		}
 	}
 
-	public function endPhaseGroup(PhaseGroup_Result $result)
+	public function endPhaseGroup($result)
 	{
 		foreach ($this->plugins as $plugin)
 		{
@@ -145,66 +145,28 @@ class Output extends OutputPlugin
 	}
 
 	/**
-	 * called when a new story starts
-	 *
-	 * a single copy of Storyplayer may execute multiple tests
-	 *
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
-	 * @return void
-	 */
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
-		}
-	}
-
-	/**
-	 * called when a story finishes
-	 *
-	 * @param Story_Result $storyResult
-	 * @return void
-	 */
-	public function endStory(Story_Result $storyResult)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->endStory($storyResult);
-		}
-	}
-
-	/**
 	 * called when a story starts a new phase
 	 *
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function startPhase($phaseName, $phaseType)
+	public function startPhase($phase)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startPhase($phaseName, $phaseType);
+			$plugin->startPhase($phase);
 		}
 	}
 
 	/**
 	 * called when a story ends a phase
 	 *
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function endPhase($phaseName, $phaseType)
+	public function endPhase($phase)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endPhase($phaseName, $phaseType);
+			$plugin->endPhase($phase);
 		}
 	}
 

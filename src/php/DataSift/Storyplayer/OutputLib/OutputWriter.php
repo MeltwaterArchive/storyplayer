@@ -155,12 +155,15 @@ class OutputWriter
         $this->urlStyle = array(ConsoleColor::BOLD, ConsoleColor::BLUE_FG);
 
         $this->successStyle = array(ConsoleColor::GREEN_FG);
-        $this->failStyle = array(ConsoleColor::BOLD, ConsoleColor::RED_FG);
+        $this->failStyle = array(ConsoleColor::RED_FG);
         $this->skippedStyle = array(ConsoleColor::YELLOW_FG);
         $this->activityStyle = [ConsoleColor::GREEN_FG];
         $this->nameStyle = [ConsoleColor::WHITE_FG];
         $this->durationStyle = [ConsoleColor::YELLOW_FG];
         $this->punctuationStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
+        $this->miniActivityStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
+        $this->miniPhaseNameStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
+        $this->timeStyle = [ConsoleColor::YELLOW_FG];
     }
 
 	protected function colourize($output, $style)

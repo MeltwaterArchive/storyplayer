@@ -154,7 +154,7 @@ class DefaultConsole extends Console
 		$this->write(': ', $this->writer->punctuationStyle);
 	}
 
-	public function endPhaseGroup(PhaseGroup_Result $result)
+	public function endPhaseGroup($result)
 	{
 		$this->write(' [', $this->writer->punctuationStyle);
 		if ($result->getPhaseGroupSucceeded()) {
@@ -170,68 +170,22 @@ class DefaultConsole extends Console
 		$this->write('] (', $this->writer->punctuationStyle);
 		$this->writeDuration($result->getDuration());
 		$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
-	}
-
-	/**
-	 * called when a new story starts
-	 *
-	 * a single copy of Storyplayer may execute multiple tests
-	 *
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
-	 * @return void
-	 */
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
-	{
-		// tell the user what is happening
-		$this->write($storyName . ': ');
-
-		// reset the phaseNumber counter
-		$this->phaseNumber = 0;
-	}
-
-	/**
-	 * called when a story finishes
-	 *
-	 * @param Story_Result $storyResult
-	 * @return void
-	 */
-	public function endStory(Story_Result $result)
-	{
-		// var_dump($storyResult);
-
-		$this->write(' [', $this->writer->punctuationStyle);
-		if ($result->getPhaseGroupSucceeded()) {
-			$style = $this->writer->successStyle;
-		}
-		else if ($result->getPhaseGroupFailed()) {
-			$style = $this->writer->failStyle;
-		}
-		else {
-			$style = $this->writer->skippedStyle;
-		}
-		$this->write($result->getResultString(), $style);
-		$this->write('] (', $this->writer->punctuationStyle);
-		$this->writeDuration($result->getDuration());
-		$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
-
-		// add this story result to our collection
-		$this->storyResults[] = $result;
 	}
 
 	/**
 	 * called when a story starts a new phase
 	 *
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function startPhase($phaseName, $phaseType)
+	public function startPhase($phase)
 	{
+		// shorthand
+		$phaseName  = $phase->getPhaseName();
+		$phaseType  = $phase->getPhaseType();
+		$phaseSeqNo = $phase->getPhaseSequenceNo();
+
 		// make sure we can keep track of what the phase is doing
+		$phaseName = $phase->getPhaseName();
 		$this->phaseMessages[$phaseName] = [];
 		$this->currentPhase = $phaseName;
 
@@ -242,21 +196,22 @@ class DefaultConsole extends Console
 		}
 
 		// increment our internal counter
-		$this->phaseNumber++;
+		$this->phaseNumber = $phaseSeqNo;
 
 		// tell the user
-		$this->write($this->phaseNumber);
+		$this->write($this->phaseNumber, $this->writer->miniPhaseNameStyle);
 	}
 
 	/**
 	 * called when a story ends a phase
 	 *
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function endPhase($phaseName, $phaseType)
+	public function endPhase($phase)
 	{
+		// shorthand
+		$phaseType = $phase->getPhaseType();
+
 		// we're only interested in telling the user about the
 		// phases of a story
 		if ($phaseType !== Phase::STORY_PHASE) {
@@ -285,7 +240,7 @@ class DefaultConsole extends Console
 
 		// show the user that *something* happened
 		if (!$this->silentActivity) {
-			$this->write(".");
+			$this->write(".", $this->writer->miniActivityStyle);
 		}
 	}
 
