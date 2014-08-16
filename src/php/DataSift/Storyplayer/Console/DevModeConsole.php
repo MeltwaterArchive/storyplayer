@@ -167,7 +167,9 @@ EOS;
 		$this->write($output);
 
 		$this->write($this->resultStrings[$storyResult->resultCode] . PHP_EOL);
-		$this->write('Duration: ' . round($storyResult->durationTime, 2) . ' secs' . PHP_EOL);
+		$this->write('Duration: ');
+		$this->writeDuration($storyResult->durationTime);
+		$this->write(PHP_EOL);
 
 		// do we need to say anything more?
 		switch ($storyResult->resultCode)
@@ -211,14 +213,11 @@ EOS;
 		$resultString = $result->getResultString();
 		$duration     = round($result->getDuration(), 2);
 
-		$output = <<<EOS
-
--------------------------------------------------------------
-Result: {$resultString} ({$duration} secs)
-
-
-EOS;
-		$this->write($output);
+		$this->write(PHP_EOL);
+		$this->write('-------------------------------------------------------------' . PHP_EOL);
+		$this->write("Result: {$resultString} (");
+		$this->writeDuration($duration);
+		$this->write(")" . PHP_EOL . PHP_EOL);
 	}
 
 	/**

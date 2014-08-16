@@ -154,7 +154,9 @@ class DefaultConsole extends Console
 
 	public function endPhaseGroup($name, PhaseGroup_Result $result)
 	{
-		$this->write(' [' . $result->getResultString() . '] (' . round($result->getDuration(), 2) . ' secs)' . PHP_EOL);
+		$this->write(' [' . $result->getResultString() . '] (');
+		$this->writeDuration($result->getDuration());
+		$this->write(')' . PHP_EOL);
 	}
 
 	/**
@@ -188,9 +190,9 @@ class DefaultConsole extends Console
 	{
 		// var_dump($storyResult);
 
-		$this->write(' [' . $storyResult->getResultString() . ']'
-		     . ' (' . round($storyResult->getDuration(), 2) . ' secs)'
-		     . PHP_EOL);
+		$this->write(' [' . $storyResult->getResultString() . '] (');
+		$this->writeDuration($storyResult->getDuration());
+		$this->write(')' . PHP_EOL);
 
 		// add this story result to our collection
 		$this->storyResults[] = $storyResult;

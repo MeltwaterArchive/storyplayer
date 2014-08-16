@@ -100,6 +100,67 @@ abstract class OutputPlugin
 		$this->writer->write($output, $style);
 	}
 
+	public function writeDuration($duration, $style = null)
+	{
+		// break down the duration into reportable units
+		$hours = $mins = $secs = 0;
+
+		// this gives us the ability to report on durations of
+		// less than one second
+		$secs = round($duration, 2);
+		if ($duration > 59) {
+			$mins  = (int)($duration / 60);
+			// when things take a minute or more, we don't care
+			// about sub-second accuracy any more
+			$secs  = $duration % 60;
+		}
+		else {
+		}
+		if ($duration > 3600) {
+			$hours = (int)($duration / 3600);
+		}
+
+		// turn the breakdown into a printable string
+		$output = '';
+		if ($hours) {
+			if ($hours > 1) {
+				$output = "{$hours} hours";
+			}
+			else {
+				$output = "1 hour";
+			}
+		}
+		if ($mins) {
+			$minsUnit = 'mins';
+			if ($mins == 1) {
+				$minsUnit = 'min';
+			}
+			if ($hours && $secs) {
+				$output .= ", {$mins} {$minsUnit}";
+			}
+			else if ($hours) {
+				$output .= " and {$mins} {$minsUnit}";
+			}
+			else {
+				$output = "{$mins} {$minsUnit}";
+			}
+		}
+
+		$secsUnit = 'secs';
+		if ($secs == 1) {
+			$secsUnit = 'sec';
+		}
+		if (($hours || $mins) && $secs) {
+			$output .= " and {$secs} {$secsUnit}";
+		}
+		else {
+			$output = "{$secs} {$secsUnit}";
+		}
+
+		// send the string out to the user
+		$this->writer->write($output, $style);
+	}
+
 	// ==================================================================
 	//
 	// These are the methods that Storyplayer will call as things
