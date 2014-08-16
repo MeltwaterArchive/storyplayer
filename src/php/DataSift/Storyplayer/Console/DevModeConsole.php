@@ -63,6 +63,7 @@ class DevModeConsole extends Console
 {
 	protected $verbosityLevel = 0;
 	protected $resultStrings  = array();
+	protected $outputHandles  = [];
 
 	/**
 	 * are we running totally silently?

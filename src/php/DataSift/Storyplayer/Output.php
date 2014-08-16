@@ -58,7 +58,7 @@ use DataSift\Storyplayer\Console\DefaultConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Output implements OutputPlugin
+class Output extends OutputPlugin
 {
 	protected $plugins = array();
 

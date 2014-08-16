@@ -34,27 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Reports
+ * @package   Storyplayer/OutputLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Reports;
+namespace DataSift\Storyplayer\Console;
 
-use DataSift\StoryPlayer\OutputLib\OutputPlugin;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * the API for output plugins
+ * Exception thrown when we're asked to open an output file that is a
+ * reserved name (ie a name that has a special meaning in our code)
  *
- * @category  Libraries
- * @package   Storyplayer/ReportLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/OutputLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-abstract class Report extends OutputPlugin
+class E4xx_OutputFilenameIsAReservedName extends Exxx_Exception
 {
+	public function __construct($filename) {
+		$msg = "'{$filename}' is reserved for internal use; please use a different filename";
+		parent::__construct(400, $msg, $msg);
+	}
 }

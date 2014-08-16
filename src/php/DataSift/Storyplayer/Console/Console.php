@@ -58,7 +58,7 @@ use DataSift\Storyplayer\OutputLib\OutputPlugin;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-abstract class Console implements OutputPlugin
+abstract class Console extends OutputPlugin
 {
 	/**
 	 * @param Phase_Result $phaseResult

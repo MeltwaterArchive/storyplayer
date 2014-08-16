@@ -47,7 +47,7 @@ use DataSift\Storyplayer\PlayerLib\Story_Result;
 use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
 
 /**
- * the API for output plugins
+ * the base class for output plugins
  *
  * @category  Libraries
  * @package   Storyplayer/OutputLib
@@ -56,8 +56,62 @@ use DataSift\Storyplayer\PlayerLib\PhaseGroup_Result;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-interface OutputPlugin
+abstract class OutputPlugin
 {
+	protected $outputHandles = [];
+
+	// ==================================================================
+	//
+	// Support for outputting to various places
+	//
+	// ------------------------------------------------------------------
+
+	public function addOutputToStdout()
+	{
+		$this->outputHandles['stdout'] = fopen('php://stdout', 'w');
+	}
+
+	public function addOutputToStderr()
+	{
+		$this->outputHandles['stderr'] = fopen('php://stderr', 'w');
+	}
+
+	public function addOutputFile($filename)
+	{
+		// make sure $filename isn't a reserved name
+		switch($filename)
+		{
+			case 'stdout':
+			case 'stderr':
+			case 'null':
+				throw new E4xx_OutputFilenameIsAReservedName($filename);
+		}
+
+		// can we open the file?
+		$fp = @fopen($filename, 'w');
+		if (!$fp) {
+			throw new E4xx_CannotOpenOutputFile($filename);
+		}
+
+		// add the file to our list to write to
+		$this->outputHandles[$filename] = $fp;
+	}
+
+	protected function writeString($string)
+	{
+		// write the string to each output handle that is open
+		foreach ($this->outputHandles as $fp) {
+			fwrite($fp, $string);
+		}
+	}
+
+	// ==================================================================
+	//
+	// These are the methods that Storyplayer will call as things
+	// happen ...
+	//
+	// ------------------------------------------------------------------
+
 	/**
 	 * @param string $version
 	 * @param string $url
@@ -65,24 +119,24 @@ interface OutputPlugin
 	 * @param string $license
 	 * @return void
 	 */
-	public function startStoryplayer($version, $url, $copyright, $license);
+	abstract public function startStoryplayer($version, $url, $copyright, $license);
 
 	/**
 	 * @return void
 	 */
-	public function endStoryplayer();
+	abstract public function endStoryplayer();
 
-	public function resetSilent();
-	public function setSilent();
+	abstract public function resetSilent();
+	abstract public function setSilent();
 
 	/**
 	 * @param integer $verbosityLevel
 	 * @return void
 	 */
-	public function setVerbosity($verbosityLevel);
+	abstract public function setVerbosity($verbosityLevel);
 
-	public function startPhaseGroup($name);
-	public function endPhaseGroup($name, PhaseGroup_Result $result);
+	abstract public function startPhaseGroup($name);
+	abstract public function endPhaseGroup($name, PhaseGroup_Result $result);
 
 	/**
 	 * @param string $storyName
@@ -92,61 +146,61 @@ interface OutputPlugin
 	 * @param string $deviceName
 	 * @return void
 	 */
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
+	abstract public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
 
 	/**
 	 * @return void
 	 */
-	public function endStory(Story_Result $storyResult);
-
-	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
-	 * @return void
-	 */
-	public function startPhase($phaseName, $phaseType);
+	abstract public function endStory(Story_Result $storyResult);
 
 	/**
 	 * @param string $phaseName
 	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function endPhase($phaseName, $phaseType);
+	abstract public function startPhase($phaseName, $phaseType);
+
+	/**
+	 * @param string $phaseName
+	 * @param integer $phaseType
+	 * @return void
+	 */
+	abstract public function endPhase($phaseName, $phaseType);
 
 	/**
 	 * @param integer $level
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($level, $msg);
+	abstract public function logPhaseActivity($level, $msg);
 
 	/**
 	 * @param string $phaseName
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseError($phaseName, $msg);
+	abstract public function logPhaseError($phaseName, $msg);
 
 	/**
 	 * @param string $phaseName
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseSkipped($phaseName, $msg);
+	abstract public function logPhaseSkipped($phaseName, $msg);
 
 	/**
 	 * @param string $msg
 	 *
 	 * @return void
 	 */
-	public function logCliWarning($msg);
+	abstract public function logCliWarning($msg);
 
 	/**
 	 * @param string $msg
 	 *
 	 * @return void
 	 */
-	public function logCliError($msg);
+	abstract public function logCliError($msg);
 
 	/**
 	 *
@@ -154,21 +208,21 @@ interface OutputPlugin
 	 * @param  Exception $e
 	 * @return void
 	 */
-	public function logCliErrorWithException($msg, $e);
+	abstract public function logCliErrorWithException($msg, $e);
 
 	/**
 	 * @param string $msg
 	 *
 	 * @return void
 	 */
-	public function logCliInfo($msg);
+	abstract public function logCliInfo($msg);
 
 	/**
 	 * @param string $name
 	 *
 	 * @return void
 	 */
-	public function logVardump($name, $var);
+	abstract public function logVardump($name, $var);
 
 	/**
 	 * called when we start to create a test environment
@@ -176,7 +230,7 @@ interface OutputPlugin
 	 * @param  string $testEnvName
 	 * @return void
 	 */
-	public function startTestEnvironmentCreation($testEnvName);
+	abstract public function startTestEnvironmentCreation($testEnvName);
 
 	/**
 	 * called when we have finished making the test environment
@@ -184,7 +238,7 @@ interface OutputPlugin
 	 * @param  string $testEnvName
 	 * @return void
 	 */
-	public function endTestEnvironmentCreation($testEnvName);
+	abstract public function endTestEnvironmentCreation($testEnvName);
 
 	/**
 	 * called when we start to destroy a test environment
@@ -192,7 +246,7 @@ interface OutputPlugin
 	 * @param  string $testEnvName
 	 * @return void
 	 */
-	public function startTestEnvironmentDestruction($testEnvName);
+	abstract public function startTestEnvironmentDestruction($testEnvName);
 
 	/**
 	 * called when we have finished destroying a test environment
@@ -200,5 +254,5 @@ interface OutputPlugin
 	 * @param  string $testEnvName
 	 * @return void
 	 */
-	public function endTestEnvironmentDestruction($testEnvName);
+	abstract public function endTestEnvironmentDestruction($testEnvName);
 }
