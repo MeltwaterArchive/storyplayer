@@ -91,9 +91,6 @@ class DefaultConfig extends BaseObject
         $this->configs->devices = [
             getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/devices',
         ];
-        $this->configs->localEnvironments = [
-            getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/local-environments',
-        ];
         $this->configs->systemsUnderTest = [
             getcwd() . DIRECTORY_SEPARATOR . '.storyplayer/systems-under-test',
         ];
