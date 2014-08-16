@@ -63,6 +63,7 @@ use DataSift\Storyplayer\PlayerLib\Story_Player;
 use DataSift\Storyplayer\PlayerLib\Tale_Player;
 use DataSift\Storyplayer\PlayerLib\TestEnvironment_Player;
 use DataSift\Storyplayer\Console\DevModeConsole;
+use DataSift\Storyplayer\Injectables;
 
 /**
  * A command to play a story, or a list of stories

@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Injectables;
 
+use DataSift\Storyplayer\Injectables;
 use DataSift\Storyplayer\PlayerLib\Prose_Loader;
 
 /**

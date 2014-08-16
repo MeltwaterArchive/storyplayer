@@ -56,6 +56,7 @@ use DataSift\Storyplayer\PlayerLib\PhaseGroup_Player;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\Script_Player;
 use DataSift\Storyplayer\Console\ScriptConsole;
+use DataSift\Storyplayer\Injectables;
 
 /**
  * A command to play an automation

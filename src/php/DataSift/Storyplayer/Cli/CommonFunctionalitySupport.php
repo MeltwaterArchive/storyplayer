@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use DataSift\Storyplayer\Injectables;
+
 use Exception;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
