@@ -108,40 +108,6 @@ class DefaultConsole extends Console
 	}
 
 	/**
-	 * called when Storyplayer exits
-	 *
-	 * @return void
-	 */
-	public function endStoryplayer()
-	{
-		return;
-
-		// this is our opportunity to tell the user how our story(ies)
-		// went in detail
-		foreach ($this->storyResults as $storyResult)
-		{
-			// do we need to say anything more?
-			switch ($storyResult->resultCode)
-			{
-				case Story_Result::PASS:
-				case Story_Result::BLACKLISTED:
-					// no, we're happy enough
-					break;
-
-				default:
-					// everything else is an error of some kind
-
-					// sanity check: we should always have a failedPhase
-					if (!$storyResult->failedPhase instanceof Phase_Result) {
-						throw new E5xx_MissingFailedPhase();
-					}
-					$this->showActivityForPhase($storyResult->story, $storyResult->failedPhase);
-					break;
-			}
-		}
-	}
-
-	/**
 	 * called when we start a new set of phases
 	 *
 	 * @param  string $name
@@ -170,6 +136,12 @@ class DefaultConsole extends Console
 		$this->write('] (', $this->writer->punctuationStyle);
 		$this->writeDuration($result->getDuration());
 		$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
+
+		// remember the result for the final report
+		//
+		// we have to clone as the result object apparently changes
+		// afterwards. no idea why (yet)
+		$this->results[] = clone $result;
 	}
 
 	/**

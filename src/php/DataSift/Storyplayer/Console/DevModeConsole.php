@@ -112,16 +112,6 @@ class DevModeConsole extends Console
 	}
 
 	/**
-	 * called when Storyplayer exits
-	 *
-	 * @return void
-	 */
-	public function endStoryplayer()
-	{
-
-	}
-
-	/**
 	 * called when we start a new set of phases
 	 *
 	 * @param  string $name
@@ -159,6 +149,8 @@ class DevModeConsole extends Console
 		$this->writeDuration($duration);
 		$this->write(")" . PHP_EOL, $this->writer->punctuationStyle);
 		$this->write('-------------------------------------------------------------' . PHP_EOL . PHP_EOL, $this->writer->commentStyle);
+
+		$this->results[] = clone $result;
 	}
 
 	/**
