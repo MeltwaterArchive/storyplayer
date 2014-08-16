@@ -274,6 +274,13 @@ EOS;
 		$this->writeString(PHP_EOL);
 	}
 
+	protected function logActivity($message)
+	{
+        $now = date('Y-m-d H:i:s', time());
+
+        $this->writeString('[' . $now . '] ' . rtrim($message) . "\n");
+	}
+
 	/**
 	 * called when a story ends a phase
 	 *
@@ -296,8 +303,7 @@ EOS;
 	public function logPhaseActivity($level, $msg)
 	{
 		if (!$this->silentActivity) {
-			// send this to the default logger
-			Log::write($level, $msg);
+			$this->logActivity($msg);
 		}
 	}
 
@@ -310,8 +316,7 @@ EOS;
 	 */
 	public function logPhaseError($phaseName, $msg)
 	{
-		// send this to the default logger
-		Log::write(Log::LOG_CRITICAL, $msg);
+		$this->logActivity($msg);
 	}
 
 	/**
@@ -323,8 +328,7 @@ EOS;
 	 */
 	public function logPhaseSkipped($phaseName, $msg)
 	{
-		// send this to the default logger
-		Log::write(Log::LOG_NOTICE, $msg);
+		$this->logActivity($msg);
 	}
 
 	/**
