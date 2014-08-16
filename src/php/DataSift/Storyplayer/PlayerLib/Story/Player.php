@@ -129,13 +129,7 @@ class Story_Player
 		$story->setDefaultCallbacks();
 
 		// tell the outside world what we're doing
-		$output->startStory(
-			$story->getName(),
-			$story->getCategory(),
-			$story->getGroup(),
-			$st->getTestEnvironmentName(),
-			$st->getDeviceName()
-		);
+		$output->startPhaseGroup("Running story", $story->getCategory() . ' > ' . $story->getGroup() . ' > ' . $story->getName());
 
 		// run the phases in the 'story' section
 		$phasesPlayer->playPhases(
@@ -158,7 +152,7 @@ class Story_Player
 		//$storyResult->calculateStoryResult();
 
 		// announce the results
-		$output->endStory($story->getResult());
+		$output->endPhaseGroup($story->getResult());
 
 		// run the shutdown phase
         $phasesPlayer->playPhases(

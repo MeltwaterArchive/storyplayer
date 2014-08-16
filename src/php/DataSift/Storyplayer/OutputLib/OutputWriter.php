@@ -65,9 +65,12 @@ class OutputWriter
     public $normalStyle = null;
     public $switchStyle = null;
     public $urlStyle = null;
+    public $successStyle = null;
+    public $failStyle = null;
+    public $skippedStyle = null;
+    public $nameStyle = null;
 
 	protected $outputHandles  = [];
-	protected $supportsColour = false;
 
 	public function __construct()
 	{
@@ -83,17 +86,33 @@ class OutputWriter
 
 	public function addOutputToStdout()
 	{
+		$handle = fopen('php://stdout', 'w');
+		$colour = true;
+
+		// special case - check for writing to a pipe
+		if (!function_exists('posix_isatty') || !posix_isatty($handle)) {
+			$colour = false;
+		}
+
 		$this->outputHandles['stdout'] = [
-			'handle' => fopen('php://stdout', 'w'),
-			'colour' => true
+			'handle' => $handle,
+			'colour' => $colour
 		];
 	}
 
 	public function addOutputToStderr()
 	{
+		$handle = fopen('php://stderr', 'w');
+		$colour = true;
+
+		// special case - check for writing to a pipe
+		if (!function_exists('posix_isatty') || !posix_isatty($handle)) {
+			$colour = false;
+		}
+
 		$this->outputHandles['stderr'] = [
-			'handle' => fopen('php://stderr', 'w'),
-			'colour' => true
+			'handle' => $handle,
+			'colour' => $colour
 		];
 	}
 
@@ -117,11 +136,14 @@ class OutputWriter
 		foreach ($this->outputHandles as $outputHandle) {
 			// do we need to colour the output?
 			if ($style && $outputHandle['colour']) {
-				$output = $this->colourize($output, $style);
+				$msg = $this->colourize($output, $style);
+			}
+			else {
+				$msg = $output;
 			}
 
 			// send the output
-			fwrite($outputHandle['handle'], $output);
+			fwrite($outputHandle['handle'], $msg);
 
 			// force the output to appear, in case where we are sending
 			// it to has some sort of buffering in operation
@@ -135,18 +157,61 @@ class OutputWriter
 	//
 	// ------------------------------------------------------------------
 
+	public function setColourMode($mode)
+	{
+		switch ($mode)
+		{
+			case OutputPlugin::COLOUR_MODE_OFF:
+				foreach ($this->outputHandles as $index => $outputHandle) {
+					if ($outputHandle['colour']) {
+						$this->outputHandles[$index]['colour'] = false;
+					}
+				}
+				break;
+
+			case OutputPlugin::COLOUR_MODE_ON:
+				foreach ($this->outputHandles as $index => $outputHandle) {
+					switch ($index)
+					{
+						case 'stdout':
+						case 'stderr':
+							$this->outputHandles[$index]['colour'] = true;
+					}
+				}
+				break;
+		}
+	}
+
     protected function setupColourStyles()
     {
         // set the colours to use for our styles
         $this->argStyle = array(ConsoleColor::BOLD, ConsoleColor::BLUE_FG);
         $this->commandStyle = array(ConsoleColor::BOLD, ConsoleColor::GREEN_FG);
-        $this->commentStyle = array(ConsoleColor::BLUE_FG);
+        $this->commentStyle = array(ConsoleColor::BOLD, ConsoleColor::GRAY_FG);
         $this->errorStyle = array(ConsoleColor::BOLD, ConsoleColor::RED_FG);
         $this->exampleStyle = array(ConsoleColor::BOLD, ConsoleColor::YELLOW_FG);
         $this->highlightStyle = array(ConsoleColor::BOLD, ConsoleColor::GREEN_FG);
         $this->normalStyle = array(ConsoleColor::NONE);
         $this->switchStyle = array(ConsoleColor::BOLD, ConsoleColor::YELLOW_FG);
         $this->urlStyle = array(ConsoleColor::BOLD, ConsoleColor::BLUE_FG);
+
+        $this->successStyle = array(ConsoleColor::GREEN_FG);
+        $this->failStyle = array(ConsoleColor::RED_FG);
+        $this->skippedStyle = array(ConsoleColor::YELLOW_FG);
+        $this->activityStyle = [ConsoleColor::GREEN_FG];
+        $this->nameStyle = [ConsoleColor::WHITE_FG];
+        $this->durationStyle = [ConsoleColor::YELLOW_FG];
+        $this->punctuationStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
+        $this->miniActivityStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
+        $this->miniPhaseNameStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
+        $this->timeStyle = [ConsoleColor::YELLOW_FG];
+
+        $this->successSummaryStyle = [ConsoleColor::GREEN_BG, ConsoleColor::BLACK_FG];
+        $this->failSummaryStyle = [ConsoleColor::RED_BG, ConsoleColor::WHITE_FG];
+        $this->puzzledSummaryStyle = [ConsoleColor::YELLOW_BG, ConsoleColor::BLACK_FG];
+
+        $this->argumentsHeadingStyle = [ConsoleColor::YELLOW_FG];
+        $this->failedPhaseStyle = [ConsoleColor::GREEN_FG];
     }
 
 	protected function colourize($output, $style)

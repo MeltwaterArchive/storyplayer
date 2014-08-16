@@ -127,6 +127,9 @@ class PhaseGroup_Player
 			}
 
 			try {
+				// tell the world that we're running this phase
+				$output->startPhase($phase);
+
 				// play the phase
 				$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive, $thingBeingPlayed);
 
@@ -153,7 +156,7 @@ class PhaseGroup_Player
 						}
 
 						// tell the output plugins that this phase is over
-						$phase->announcePhaseEnd();
+						$output->endPhase($phase, $phaseResult);
 						return;
 
 					case self::NEXT_FAIL:
@@ -163,12 +166,12 @@ class PhaseGroup_Player
 						$output->logPhaseError($phaseName, self::MSG_PHASE_FAILED . ': ' . $phaseResult->getMessage());
 
 						// tell the output plugins that this phase is over
-						$phase->announcePhaseEnd();
+						$output->endPhase($phase, $phaseResult);
 						return;
 
 					case self::NEXT_CONTINUE:
 						// tell the output plugins that this phase is over
-						$phase->announcePhaseEnd();
+						$output->endPhase($phase, $phaseResult);
 				}
 			}
 
@@ -249,8 +252,14 @@ class PhaseGroup_Player
 			// load the phase
 			$phase = $phaseLoader->loadPhase($st, $phaseName);
 
+			// tell the world that we're running this phase
+			$phase->announcePhaseStart();
+
 			// play the phase
 			$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive, $thingBeingPlayed);
+
+			// tell the world that the phase is over
+			$phase->announcePhaseEnd();
 
 			// we *always* continue, even if the phase failed
 		}
@@ -273,9 +282,6 @@ class PhaseGroup_Player
 	{
 		// shorthand
 		$output  = $st->getOutput();
-
-		// tell the world that we're running this phase
-		$phase->announcePhaseStart();
 
 		// run the phase if we're allowed to
 		if ($isActive) {
@@ -300,9 +306,6 @@ class PhaseGroup_Player
 		// close off any log actions left open by closing down
 		// the test device
 		$st->closeAllOpenActions();
-
-		// tell the world that the phase is over
-		$phase->announcePhaseEnd();
 
 		// all done
 		return $phaseResult;

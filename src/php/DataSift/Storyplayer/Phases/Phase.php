@@ -66,40 +66,11 @@ abstract class Phase
 	const INFRASTRUCTURE_PHASE = 5;
 
 	protected $st;
+	protected $sequenceNo = null;
 
 	public function __construct(StoryTeller $st)
 	{
 		$this->st = $st;
-	}
-
-	public function announcePhaseStart()
-	{
-		// shorthand
-		$output = $this->st->getOutput();
-
-		// what is our name?
-		$phaseName = $this->getPhaseName();
-
-		// what kind of phase are we?
-		$phaseType = $this->getPhaseType();
-
-		// tell the world who we are
-		$output->startPhase($phaseName, $phaseType);
-	}
-
-	public function announcePhaseEnd()
-	{
-		// shorthand
-		$output = $this->st->getOutput();
-
-		// what is our name?
-		$phaseName = $this->getPhaseName();
-
-		// what kind of phase are we?
-		$phaseType = $this->getPhaseType();
-
-		// all done
-		$output->endPhase($phaseName, $phaseType);
 	}
 
 	public function getPhaseName()
@@ -112,6 +83,11 @@ abstract class Phase
 		}
 
 		return $phaseName;
+	}
+
+	public function getPhaseSequenceNo()
+	{
+		return $this->sequenceNo;
 	}
 
 	public function getNewPhaseResult()

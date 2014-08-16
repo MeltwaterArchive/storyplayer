@@ -60,9 +60,13 @@ abstract class OutputPlugin
 {
 	protected $writer = null;
 
+	const COLOUR_MODE_OFF  = 1;
+	const COLOUR_MODE_ON   = 2;
+	const COLOUR_MODE_AUTO = 3;
+
 	public function __construct()
 	{
-		$this->writer = new OutputWriter();
+		$this->writer = new OutputWriter(self::COLOUR_MODE_AUTO);
 	}
 
 	// ==================================================================
@@ -100,7 +104,7 @@ abstract class OutputPlugin
 		$this->writer->write($output, $style);
 	}
 
-	public function writeDuration($duration, $style = null)
+	public function writeDuration($duration)
 	{
 		// break down the duration into reportable units
 		$hours = $mins = $secs = 0;
@@ -158,7 +162,28 @@ abstract class OutputPlugin
 		}
 
 		// send the string out to the user
-		$this->writer->write($output, $style);
+		$this->writer->write($output, $this->writer->durationStyle);
+	}
+
+	// ==================================================================
+	//
+	// Colour support
+	//
+	// ------------------------------------------------------------------
+
+	public function disableColourSupport()
+	{
+		$this->writer->setColourMode(self::COLOUR_MODE_OFF);
+	}
+
+	public function enableColourSupport()
+	{
+		$this->writer->setColourMode(self::COLOUR_MODE_AUTO);
+	}
+
+	public function enforceColourSupport()
+	{
+		$this->writer->setColourMode(self::COLOUR_MODE_ON);
 	}
 
 	// ==================================================================
@@ -185,37 +210,18 @@ abstract class OutputPlugin
 	abstract public function resetSilent();
 	abstract public function setSilent();
 
-	abstract public function startPhaseGroup($name);
-	abstract public function endPhaseGroup($name, PhaseGroup_Result $result);
-
-	/**
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
-	 * @return void
-	 */
-	abstract public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
+	abstract public function startPhaseGroup($activity, $name);
+	abstract public function endPhaseGroup($result);
 
 	/**
 	 * @return void
 	 */
-	abstract public function endStory(Story_Result $storyResult);
+	abstract public function startPhase($phase);
 
 	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	abstract public function startPhase($phaseName, $phaseType);
-
-	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
-	 * @return void
-	 */
-	abstract public function endPhase($phaseName, $phaseType);
+	abstract public function endPhase($phase, $phaseResult);
 
 	/**
 	 * @param string $msg

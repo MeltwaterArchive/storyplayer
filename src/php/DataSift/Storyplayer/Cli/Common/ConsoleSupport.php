@@ -81,16 +81,18 @@ class Common_ConsoleSupport implements Common_Functionality
         $activeConfig = $injectables->activeConfig;
         $output       = $injectables->output;
 
+        // we also want to create storyplayer.log every time
         $devModeConsole = new DevModeConsole();
+        $devModeConsole->addOutputFile('storyplayer.log');
 
         // switch output plugins first, before we do anything else at all
         if (isset($engine->options->dev) && $engine->options->dev) {
             // switch our main output to 'dev mode'
             $output->usePlugin('console', $devModeConsole);
+            $devModeConsole->addOutputToStdout();
         }
-
-        // we also want to create storyplayer.log every time
-        $devModeConsole->addOutputFile('storyplayer.log');
-        $output->usePlugin('logfile', $devModeConsole);
+        else {
+            $output->usePlugin('logfile', $devModeConsole);
+        }
     }
 }

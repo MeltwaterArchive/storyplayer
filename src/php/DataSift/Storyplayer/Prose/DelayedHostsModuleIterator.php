@@ -74,7 +74,7 @@ class DelayedHostsModuleIterator
 		// make sure each host is up and running
 		foreach ($this->hostsDetails as $hostDetails) {
 			$module = $st->$moduleName($hostDetails->name);
-			$return[$hostDetails->name] = call_user_method_array($methodName, $module, $params);
+			$return[$hostDetails->name] = call_user_func_array([$module, $methodName], $params);
 		}
 
 		// all done

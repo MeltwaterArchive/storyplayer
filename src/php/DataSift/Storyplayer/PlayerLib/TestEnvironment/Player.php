@@ -81,7 +81,7 @@ class TestEnvironment_Player extends BasePlayer
         $phasesPlayer = new PhaseGroup_Player();
 
         // announce what we're doing
-        $output->startPhaseGroup('Creating test environment ' . $injectables->activeTestEnvironmentName);
+        $output->startPhaseGroup('Creating test environment', $injectables->activeTestEnvironmentName);
 
         // run the startup phase
         $phasesPlayer->playPhases(
@@ -91,7 +91,7 @@ class TestEnvironment_Player extends BasePlayer
             $testEnv
         );
         $creationResult = $testEnv->getResult();
-        $output->endPhaseGroup($injectables->activeTestEnvironmentName, $creationResult);
+        $output->endPhaseGroup($creationResult);
 
         // what happened?
         if (!$creationResult->getPhaseGroupSucceeded()) {
@@ -113,7 +113,7 @@ class TestEnvironment_Player extends BasePlayer
         }
 
         // announce what we're doing
-        $output->startPhaseGroup('Destroying test environment ' . $injectables->activeTestEnvironmentName);
+        $output->startPhaseGroup('Destroying test environment', $injectables->activeTestEnvironmentName);
 
         // run the shutdown phase
         $testEnv->resetResult();
@@ -123,7 +123,7 @@ class TestEnvironment_Player extends BasePlayer
             $this->shutdownPhases,
             $testEnv
         );
-        $output->endPhaseGroup($injectables->activeTestEnvironmentName, $testEnv->getResult());
+        $output->endPhaseGroup($testEnv->getResult());
 
         // all done
     }

@@ -52,7 +52,13 @@ class Common_ColorValidator implements Validator
 
     protected $supportedValues = array(
         "none" => 0,
+        "false" => 0,
+        "no" => 0,
+        "n" => 0,
         "always" => 1,
+        "yes" => 1,
+        "true" => 1,
+        "y" => 1,
         "auto" => 2
     );
 

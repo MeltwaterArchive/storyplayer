@@ -62,6 +62,8 @@ class Output extends OutputPlugin
 {
 	protected $plugins = array();
 
+	protected $activityLog = [];
+
 	public function __construct()
 	{
 		// we need a default output for the console
@@ -98,6 +100,30 @@ class Output extends OutputPlugin
 		}
 	}
 
+	public function disableColourSupport()
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->disableColourSupport();
+		}
+	}
+
+	public function enforceColourSupport()
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->enforceColourSupport();
+		}
+	}
+
+	public function enableColourSupport()
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->enableColourSupport();
+		}
+	}
+
 	/**
 	 * called when storyplayer starts
 	 *
@@ -128,83 +154,50 @@ class Output extends OutputPlugin
 		}
 	}
 
-	public function startPhaseGroup($name)
+	public function startPhaseGroup($activity, $name)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startPhaseGroup($name);
+			$plugin->startPhaseGroup($activity, $name);
 		}
 	}
 
-	public function endPhaseGroup($name, PhaseGroup_Result $result)
+	public function endPhaseGroup($result)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endPhaseGroup($name, $result);
-		}
-	}
-
-	/**
-	 * called when a new story starts
-	 *
-	 * a single copy of Storyplayer may execute multiple tests
-	 *
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
-	 * @return void
-	 */
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName);
-		}
-	}
-
-	/**
-	 * called when a story finishes
-	 *
-	 * @param Story_Result $storyResult
-	 * @return void
-	 */
-	public function endStory(Story_Result $storyResult)
-	{
-		foreach ($this->plugins as $plugin)
-		{
-			$plugin->endStory($storyResult);
+			$plugin->endPhaseGroup($result);
 		}
 	}
 
 	/**
 	 * called when a story starts a new phase
 	 *
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function startPhase($phaseName, $phaseType)
+	public function startPhase($phase)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->startPhase($phaseName, $phaseType);
+			$plugin->startPhase($phase);
 		}
 	}
 
 	/**
 	 * called when a story ends a phase
 	 *
-	 * @param string $phaseName
-	 * @param integer $phaseType
 	 * @return void
 	 */
-	public function endPhase($phaseName, $phaseType)
+	public function endPhase($phase, $phaseResult)
 	{
+		// inject the captured activity into the phase
+		$phaseResult->activityLog = $this->activityLog;
+		$this->activityLog=[];
+
+		// pass the phase on
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endPhase($phaseName, $phaseType);
+			$plugin->endPhase($phase, $phaseResult);
 		}
 	}
 
@@ -216,6 +209,13 @@ class Output extends OutputPlugin
 	 */
 	public function logPhaseActivity($msg)
 	{
+		// keep track of what was attempted, in case we need to show
+		// the user what was attempted
+		$this->activityLog[] = [
+			'ts'    => time(),
+			'text'  => $msg
+		];
+
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logPhaseActivity($msg);
@@ -231,6 +231,13 @@ class Output extends OutputPlugin
 	 */
 	public function logPhaseError($phaseName, $msg)
 	{
+		// keep track of what was attempted, in case we need to show
+		// the user what was attempted
+		$this->activityLog[] = [
+			'ts'    => time(),
+			'text'  => $msg
+		];
+
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logPhaseError($phaseName, $msg);
@@ -246,6 +253,13 @@ class Output extends OutputPlugin
 	 */
 	public function logPhaseSkipped($phaseName, $msg)
 	{
+		// keep track of what was attempted, in case we need to show
+		// the user what was attempted
+		$this->activityLog[] = [
+			'ts'    => time(),
+			'text'  => $msg
+		];
+
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logPhaseSkipped($phaseName, $msg);
