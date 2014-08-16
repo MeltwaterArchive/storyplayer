@@ -90,6 +90,13 @@ class Common_ConsoleSupport implements Common_Functionality
             // dev mode means 'show me everything'
             $engine->options->verbosity = 2;
         }
+        else {
+            // we want our main output to be 'normal' mode
+            // and we want to write the devmode output to a log file
+            $console = new DevModeConsole();
+            $console->addOutputFile('storyplayer.log');
+            $output->usePlugin('logfile', $console);
+        }
 
         // setup logging
         //
