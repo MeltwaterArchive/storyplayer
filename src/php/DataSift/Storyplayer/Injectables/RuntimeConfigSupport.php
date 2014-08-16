@@ -34,47 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
-use Twig_Environment;
-use Twig_Loader_String;
+use DataSift\Storyplayer\Injectables;
+use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 
 /**
- * support for rendering templates of any kind
+ * support for working with the persistent, app-generated config
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_TemplateEngineSupport
+trait RuntimeConfigSupport
 {
-	/**
-	 * an engine any part of Storyplayer can use to expand templates,
-	 * such as config files
-	 *
-	 * @var \Twig_Environment
-	 */
-	public $tempateEngine;
+	public $runtimeConfigManager;
+	public $runtimeConfig;
 
 	/**
 	 *
-	 * @return void
+	 * @return RuntimeConfigManager
 	 */
-	public function initTemplateEngineSupport()
+	public function initRuntimeConfigSupport(Injectables $injectables)
 	{
-        // we're going to expose this environment through Twig, to give
-        // us template support
-        $loader = new Twig_Loader_String();
-        $this->templateEngine   = new Twig_Environment($loader);
+		// create the runtime config's manager
+		$this->runtimeConfigManager = new RuntimeConfigManager();
+
+		// create the folder where we will store the persistent config
+		$this->runtimeConfigManager->makeConfigDir($injectables);
+
+		// load any config from the last time Storyplayer ran
+		$this->runtimeConfig = $this->runtimeConfigManager->loadRuntimeConfig();
+
+		// all done
+		return $this->runtimeConfigManager;
 	}
 }

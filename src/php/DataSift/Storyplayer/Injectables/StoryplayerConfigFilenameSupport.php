@@ -34,39 +34,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
-
-use DataSift\Storyplayer\Output;
+namespace DataSift\Storyplayer\Injectables;
 
 /**
- * support for output to the user
+ * determine our storyplayer config file
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_OutputSupport
+trait StoryplayerConfigFilenameSupport
 {
-	public $output;
+	public $storyplayerConfigFilename;
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initOutputSupport()
+	public function initStoryplayerConfigFilenameSupport()
 	{
-		$this->output = new Output();
+		// what are the candidates?
+		$searchList = [
+			"storyplayer.json",
+			"storyplayer.json.dist"
+		];
 
-		return $this->output;
+		// do we have them?
+		foreach ($searchList as $filename) {
+			if (is_file($filename)) {
+				// YES!!
+				$this->storyplayerConfigFilename = $filename;
+				return;
+			}
+		}
+
+		// we have nothing
+		//
+		// the best we can do is return our preferred file, and let
+		// the wider app decide what to do about the fact that it is
+		// missing
+		$this->storyplayerConfigFilename = end($searchList);
 	}
 }

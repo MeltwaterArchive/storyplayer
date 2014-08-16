@@ -34,47 +34,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\PlayerLib\Report_Loader;
+use DataSift\Storyplayer\Cli\KnownLocalEnvironments;
 
 /**
- * support for our ReportLoader service
+ * support for working with the list of known local environments
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_ReportLoaderSupport
+trait KnownLocalEnvironmentsSupport
 {
-	public $reportLoader;
+	public $knownLocalEnvironments;
+	public $knownLocalEnvironmentsList = array();
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initReportLoaderSupport(Injectables $injectables)
+	public function initKnownLocalEnvironmentsSupport($additionalEnvs)
 	{
-		// we will use this to load different reports
-		$this->reportLoader = new Report_Loader();
-
-		// does the user have any namespaces of their own that they
-		// want to search?
-		if (isset($injectables->staticConfig->reports, $injectables->staticConfig->reports->namespaces) && is_array($injectables->staticConfig->reports->namespaces)) {
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			$this->reportLoader->setNamespaces($injectables->staticConfig->reports->namespaces);
+		// start with the list of local environments that are hard-coded
+		// into Storyplayer
+		$this->knownLocalEnvironments = new KnownLocalEnvironments;
+		foreach ($this->knownLocalEnvironments as $name => $config) {
+			$this->knownLocalEnvironmentsList[$name] = $name;
 		}
 
+		// now add in all the local environments that we have discovered
+		// in the config files
+		foreach ($additionalEnvs as $filename => $config) {
+			$envName = basename($filename, 'json');
+			$this->knownLocalEnvironmentsList[$envName] = $envName;
+			$this->knownLocalEnvironments->$envName = $config;
+		}
+
+		// now put the list of local environments into a sensible order
+		ksort($this->knownLocalEnvironmentsList);
+
+		// all done
 	}
 }

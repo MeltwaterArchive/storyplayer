@@ -34,46 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
-use DataSift\Stone\ObjectLib\BaseObject;
-use Datasift\Os;
-use Datasift\IfconfigParser;
-use Datasift\netifaces;
-use Datasift\netifaces\NetifacesException;
+use DataSift\Storyplayer\Cli\StaticConfigManager;
 
 /**
- * Helper to find our hostname
+ * support for Storyplayer's static config file manager
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostnameHelper
+trait StaticConfigManagerSupport
 {
-    static public function getHostname()
-    {
-        $hostname = getHostname();
+	public $staticConfigManager;
 
-        // we get different results on different operating systems
-        // make sure the hostname is not the FQDN
-        $dotPos = strpos($hostname, '.');
-        if ($dotPos) {
-            $hostname = substr($hostname, 0, $dotPos);
-        }
+	public function initStaticConfigManagerSupport()
+	{
+		// create an object to manage the static config
+		$this->staticConfigManager = new StaticConfigManager;
 
-        // all done
-        return $hostname;
-    }
+		// all done
+		return $this->staticConfigManager;
+	}
 }

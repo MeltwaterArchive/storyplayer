@@ -34,36 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
 /**
- * support for our built-in defaults
+ * determine our default local environment to load additional config for
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_DefaultConfigSupport
+trait DefaultLocalEnvironmentName
 {
-	public $defaultConfig;
+	public $defaultLocalEnvironmentName;
 
-	public function initDefaultConfigSupport()
+	public function initDefaultLocalEnvironmentName($injectables)
 	{
-		// create our default config - the config that we'll use
-		// unless the config file on disk overrides it
-		$this->defaultConfig = new DefaultConfig();
+		// what are the candidates?
+		$searchList = [
+			HostnameHelper::getHostname(),
+			"localhost"
+		];
 
-		// all done
-		return $this->defaultConfig;
+		// do any of these environments exist?
+		foreach ($searchList as $envName) {
+			if (isset($injectables->knownLocalEnvironments->$envName)) {
+				$this->defaultLocalEnvironmentName = $envName;
+				// all done
+				return;
+			}
+		}
+
+		// if we get here, then none of the environments exist
+		$this->defaultLocalEnvironmentName = end($searchList);
 	}
 }

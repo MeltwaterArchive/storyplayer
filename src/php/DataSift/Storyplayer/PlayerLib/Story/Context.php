@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Injectables;
 use DataSift\Storyplayer\UserLib\ConfigUserLoader;
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;

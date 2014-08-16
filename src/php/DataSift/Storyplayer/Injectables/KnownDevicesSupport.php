@@ -34,64 +34,56 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
+
+use DataSift\Storyplayer\DeviceLib\KnownDevices;
 
 /**
- * support for working with the list of local environments
+ * support for working with the list of known devices
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_LocalEnvironmentListSupport
+trait KnownDevicesSupport
 {
-	public $defaultLocalEnvName;
-	public $localEnvList;
+	public $knownDevices;
+	public $knownDevicesList = array();
 
 	/**
-	 *
-	 * @param  stdClass $environments
+	 * @param  stdClass $devices
 	 * @return stdClass
 	 */
-	public function initLocalEnvironmentListSupport($environments, $additionalConfigs)
+	public function initKnownDevicesSupport($additionalDevices)
 	{
-		$this->localEnvList = [];
-
-		foreach ($environments as $envName => $environment)
-		{
-			$this->localEnvList[$envName] = $envName;
+		// start with a list of all the devices that are hard-coded
+		// into Storyplayer
+		$this->knownDevices = new KnownDevices;
+		foreach ($this->knownDevices as $deviceName => $device) {
+			$this->knownDevicesList[$deviceName] = $deviceName;
 		}
 
-		foreach ($additionalConfigs as $config) {
-			if (isset($config->environments)) {
-				foreach ($config->environments as $envName => $envConfig) {
-					$this->localEnvList[$envName] = $envName;
-				}
-			}
+		// now add in all the devices that we have discovered in
+		// the config files
+		foreach ($additionalDevices as $filename => $config) {
+			$deviceName = basename($filename, 'json');
+			$this->knownDevicesList[$deviceName] = $deviceName;
+			$this->knownDevices->$deviceName = $config;
 		}
 
-		// hide the 'defaults' section
-		if (isset($this->localEnvList['defaults'])) {
-			unset($this->localEnvList['defaults']);
-		}
-
-		// sort the list
-		sort($this->localEnvList);
-
-		// set our default environment to target
-		$this->defaultLocalEnvName = EnvironmentHelper::getDefaultEnvironmentName($this->localEnvList);
+		// now put the list of devices into a sensible order
+		ksort($this->knownDevicesList);
 
 		// all done
-		return $this->localEnvList;
 	}
 }

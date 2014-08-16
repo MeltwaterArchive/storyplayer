@@ -34,43 +34,74 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
+
+use DataSift\Storyplayer\Cli\KnownSystemsUnderTest;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * determine our default system-under-test to test against
+ * support for working with the list of known systems-under-test
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_DefaultSystemUnderTestName
+trait KnownSystemsUnderTestSupport
 {
-	public $defaultSystemUnderTestName;
+	public $knownSystemsUnderTest;
+	public $knownSystemsUnderTestList = array();
 
-	public function initDefaultSystemUnderTestName($injectables)
+	public function initKnownSystemsUnderTestSupport($additionalSuts)
 	{
-		// special case - if there's only one defined, use that
-		if (count($injectables->knownSystemsUnderTestList) == 1) {
-			reset($injectables->knownSystemsUnderTestList);
-			$this->defaultSystemUnderTestName = current($injectables->knownSystemsUnderTestList);
+		// special case:
+		//
+		// did we find any systems-under-test in the config files?
+		//
+		// if we didn't, then we create a fake system-under-test entry
+		// so that Storyplayer will run. this is better for new users
+		// than Storyplayer throwing an error because they haven't created
+		// any systems-under-test in the configs
+		if (count($additionalSuts) == 0) {
+			$this->knownSystemsUnderTest = new KnownSystemsUnderTest;
+
+			foreach ($this->knownSystemsUnderTest as $name => $config) {
+				$this->knownSystemsUnderTestList[$name] = $name;
+			}
+
+			// all done
 			return;
 		}
 
-		// special case - is there one in the storyplayer.json[.dist]
-		// config that we've already loaded?
-		// TBD
+		// if we get here, then we ONLY want the systems-under-test that
+		// have been explicitly defined in the configs
+		//
+		// the hardcoded systems-under-test in the KnownSystemsUnderTest
+		// class are only a fallback for when there is NO config at all
+		//
+		// we start with NO known systems under test
+		$this->knownSystemsUnderTest = new BaseObject;
 
-		// if we get here, then we do not know what the default should be
-		$this->defaultSystemUnderTestName = null;
+		// now add in all the systems-under-test that we have discovered
+		// in the config files
+		foreach ($additionalSuts as $filename => $config) {
+			$sutName = basename($filename, 'json');
+			$this->knownSystemsUnderTestList[$sutName] = $sutName;
+			$this->knownSystemsUnderTest->$sutName     = $config;
+		}
+
+		// now put the list of systems-under-test into a sensible order
+		ksort($this->knownSystemsUnderTestList);
+
+		// all done
 	}
 }

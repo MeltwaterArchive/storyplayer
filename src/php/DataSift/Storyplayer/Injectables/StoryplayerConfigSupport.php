@@ -34,50 +34,66 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
+
+use DataSift\Storyplayer\Injectables;
+use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E4xx_InvalidConfigFile;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * support for working with the list of known local environments
+ * support for working with Storyplayer's config file
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_KnownLocalEnvironmentsSupport
+trait StoryplayerConfigSupport
 {
-	public $knownLocalEnvironments;
-	public $knownLocalEnvironmentsList = array();
+	public $storyplayerConfig;
 
-	public function initKnownLocalEnvironmentsSupport($additionalEnvs)
+	public function initStoryplayerConfigSupport(Injectables $injectables, $configFilename)
 	{
-		// start with the list of local environments that are hard-coded
-		// into Storyplayer
-		$this->knownLocalEnvironments = new KnownLocalEnvironments;
-		foreach ($this->knownLocalEnvironments as $name => $config) {
-			$this->knownLocalEnvironmentsList[$name] = $name;
-		}
+		// shorthand
+		$output = $injectables->output;
 
-		// now add in all the local environments that we have discovered
-		// in the config files
-		foreach ($additionalEnvs as $filename => $config) {
-			$envName = basename($filename, 'json');
-			$this->knownLocalEnvironmentsList[$envName] = $envName;
-			$this->knownLocalEnvironments->$envName = $config;
-		}
+		// we start with an empty object
+		$config = new BaseObject;
 
-		// now put the list of local environments into a sensible order
-		ksort($this->knownLocalEnvironmentsList);
+		try {
+			// try to load our main config file
+			$injectables->staticConfigManager->loadDefaultConfig(
+				$config,
+				$configFilename
+			);
+		}
+		catch (E4xx_ConfigFileNotFound $e) {
+			// there is no default config file
+			//
+			// it isn't fatal, but we do want to tell people about it
+			$output->logCliWarning("storyplayer config file '$configFilename' not found");
+		}
+		catch (E4xx_InvalidConfigFile $e) {
+			// we either can't read the config file, or it contains
+			// invalid JSON
+			//
+			// that is fatal
+			$output->logCliError("unable to read or prase storyplayer config file '$configFilename'");
+			exit(1);
+		}
 
 		// all done
+		$this->storyplayerConfig = json_encode($config);
+		return $this->storyplayerConfig;
 	}
 }

@@ -44,7 +44,7 @@
 namespace DataSift\Storyplayer\PlayerLib;
 
 use Exception;
-use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Injectables;
 use DataSift\Storyplayer\Phases\Phase;
 
 /**

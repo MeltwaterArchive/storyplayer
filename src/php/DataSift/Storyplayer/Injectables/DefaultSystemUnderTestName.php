@@ -34,32 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
 /**
- * support for remembering the additional config files that are available
- * if the user selects them
+ * determine our default system-under-test to test against
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_AdditionalConfigsSupport
+trait DefaultSystemUnderTestName
 {
-	public $additionalConfigs;
+	public $defaultSystemUnderTestName;
 
-	public function initAdditionalConfigsSupport($additionalConfigs)
+	public function initDefaultSystemUnderTestName($injectables)
 	{
-		$this->additionalConfigs = $additionalConfigs;
+		// special case - if there's only one defined, use that
+		if (count($injectables->knownSystemsUnderTestList) == 1) {
+			reset($injectables->knownSystemsUnderTestList);
+			$this->defaultSystemUnderTestName = current($injectables->knownSystemsUnderTestList);
+			return;
+		}
+
+		// special case - is there one in the storyplayer.json[.dist]
+		// config that we've already loaded?
+		// TBD
+
+		// if we get here, then we do not know what the default should be
+		$this->defaultSystemUnderTestName = null;
 	}
 }
