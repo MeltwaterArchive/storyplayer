@@ -34,51 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
+
+use DataSift\Storyplayer\PlayerLib\Prose_Loader;
 
 /**
- * determine our storyplayer config file
+ * support for our ProseLoader service
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_StoryplayerConfigFilenameSupport
+trait ProseLoaderSupport
 {
-	public $storyplayerConfigFilename;
+	public $proseLoader;
 
-	public function initStoryplayerConfigFilenameSupport()
+	/**
+	 *
+	 * @return void
+	 */
+	public function initProseLoaderSupport(Injectables $injectables)
 	{
-		// what are the candidates?
-		$searchList = [
-			"storyplayer.json",
-			"storyplayer.json.dist"
-		];
+		// $st will use this to load modules
+		$this->proseLoader = new Prose_Loader();
 
-		// do we have them?
-		foreach ($searchList as $filename) {
-			if (is_file($filename)) {
-				// YES!!
-				$this->storyplayerConfigFilename = $filename;
-				return;
-			}
+		// does the user have any namespaces of their own that they
+		// want to search?
+		if (isset($injectables->staticConfig->prose, $injectables->staticConfig->prose->namespaces) && is_array($injectables->staticConfig->prose->namespaces)) {
+			// yes, the user does have some namespaces
+			// copy them across into our list
+			$this->proseLoader->setNamespaces($injectables->staticConfig->prose->namespaces);
 		}
 
-		// we have nothing
-		//
-		// the best we can do is return our preferred file, and let
-		// the wider app decide what to do about the fact that it is
-		// missing
-		$this->storyplayerConfigFilename = end($searchList);
 	}
 }

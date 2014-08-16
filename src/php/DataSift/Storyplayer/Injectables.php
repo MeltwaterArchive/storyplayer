@@ -34,22 +34,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer;
 
 use Phix_Project\Injectables as BaseInjectables;
+
+use DataSift\Storyplayer\Injectables\ActiveConfigSupport;
+use DataSift\Storyplayer\Injectables\ActiveDeviceSupport;
+use DataSift\Storyplayer\Injectables\ActiveLocalEnvironmentConfigSupport;
+use DataSift\Storyplayer\Injectables\ActiveSystemUnderTestConfigSupport;
+use DataSift\Storyplayer\Injectables\ActiveTestEnvironmentConfigSupport;
+use DataSift\Storyplayer\Injectables\AdditionalConfigsSupport;
+use DataSift\Storyplayer\Injectables\DefaultConfigSupport;
+use DataSift\Storyplayer\Injectables\DefaultLocalEnvironmentName;
+use DataSift\Storyplayer\Injectables\DefaultSystemUnderTestName;
+use DataSift\Storyplayer\Injectables\DefaultTestEnvironmentName;
+use DataSift\Storyplayer\Injectables\KnownDevicesSupport;
+use DataSift\Storyplayer\Injectables\KnownLocalEnvironmentsSupport;
+use DataSift\Storyplayer\Injectables\KnownSystemsUnderTestSupport;
+use DataSift\Storyplayer\Injectables\KnownTestEnvironmentsSupport;
+use DataSift\Storyplayer\Injectables\OutputSupport;
+use DataSift\Storyplayer\Injectables\PhaseLoaderSupport;
+use DataSift\Storyplayer\Injectables\ProseLoaderSupport;
+use DataSift\Storyplayer\Injectables\ReportLoaderSupport;
+use DataSift\Storyplayer\Injectables\RuntimeConfigSupport;
+use DataSift\Storyplayer\Injectables\StaticConfigManagerSupport;
+use DataSift\Storyplayer\Injectables\StoryplayerConfigFilenameSupport;
+use DataSift\Storyplayer\Injectables\StoryplayerConfigSupport;
+use DataSift\Storyplayer\Injectables\TemplateEngineSupport;
 
 /**
  * a container for common services and data, to avoid making them global
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -57,27 +81,27 @@ use Phix_Project\Injectables as BaseInjectables;
  */
 class Injectables extends BaseInjectables
 {
-	use Injectables_ActiveConfigSupport;
-	use Injectables_ActiveDeviceSupport;
-	use Injectables_ActiveLocalEnvironmentConfigSupport;
-	use Injectables_ActiveSystemUnderTestConfigSupport;
-	use Injectables_ActiveTestEnvironmentConfigSupport;
-	use Injectables_AdditionalConfigsSupport;
-	use Injectables_DefaultConfigSupport;
-	use Injectables_DefaultLocalEnvironmentName;
-	use Injectables_DefaultSystemUnderTestName;
-	use Injectables_DefaultTestEnvironmentName;
-	use Injectables_KnownDevicesSupport;
-	use Injectables_KnownLocalEnvironmentsSupport;
-	use Injectables_KnownSystemsUnderTestSupport;
-	use Injectables_KnownTestEnvironmentsSupport;
-	use Injectables_OutputSupport;
-	use Injectables_PhaseLoaderSupport;
-	use Injectables_ProseLoaderSupport;
-	use Injectables_ReportLoaderSupport;
-	use Injectables_RuntimeConfigSupport;
-	use Injectables_StaticConfigManagerSupport;
-	use Injectables_StoryplayerConfigFilenameSupport;
-	use Injectables_StoryplayerConfigSupport;
-	use Injectables_TemplateEngineSupport;
+	use ActiveConfigSupport;
+	use ActiveDeviceSupport;
+	use ActiveLocalEnvironmentConfigSupport;
+	use ActiveSystemUnderTestConfigSupport;
+	use ActiveTestEnvironmentConfigSupport;
+	use AdditionalConfigsSupport;
+	use DefaultConfigSupport;
+	use DefaultLocalEnvironmentName;
+	use DefaultSystemUnderTestName;
+	use DefaultTestEnvironmentName;
+	use KnownDevicesSupport;
+	use KnownLocalEnvironmentsSupport;
+	use KnownSystemsUnderTestSupport;
+	use KnownTestEnvironmentsSupport;
+	use OutputSupport;
+	use PhaseLoaderSupport;
+	use ProseLoaderSupport;
+	use ReportLoaderSupport;
+	use RuntimeConfigSupport;
+	use StaticConfigManagerSupport;
+	use StoryplayerConfigFilenameSupport;
+	use StoryplayerConfigSupport;
+	use TemplateEngineSupport;
 }

@@ -34,60 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\DeviceLib\KnownDevices;
+use DataSift\Storyplayer\PlayerLib\Phase_Loader;
 
 /**
- * support for the device that the user chooses
+ * support for our PhaseLoader service
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_ActiveDeviceSupport
+trait PhaseLoaderSupport
 {
-	public $activeDevice;
-	public $activeDeviceName;
+	public $phaseLoader;
 
 	/**
-	 * @param  string $deviceName
-	 *         the name of the device to make active
-	 * @param  Injectables $injectables
-	 *         our DI container, which contains the list of known devices
+	 *
 	 * @return void
 	 */
-	public function initActiveDevice($deviceName, $injectables)
+	public function initPhaseLoaderSupport(Injectables $injectables)
 	{
-        // does the device exist?
-        if (!isset($injectables->knownDevices->$deviceName)) {
-            throw new E4xx_NoSuchDevice($deviceName);
-        }
+		// $st will use this to load modules
+		$this->phaseLoader = new Phase_Loader();
 
-        // a helper to load the config
-        $staticConfigManager = $injectables->staticConfigManager;
+		// does the user have any namespaces of their own that they
+		// want to search?
+		if (isset($injectables->staticConfig->phases, $injectables->staticConfig->phases->namespaces) && is_array($injectables->staticConfig->phases->namespaces)) {
+			// yes, the user does have some namespaces
+			// copy them across into our list
+			$this->phaseLoader->setNamespaces($injectables->staticConfig->phases->namespaces);
+		}
 
-        // load the device that we want
-        if (is_string($injectables->knownDevices->$deviceName)) {
-	        $this->activeDevice = $staticConfigManager->loadConfigFile(
-	        	$injectables->knownDevices->$deviceName
-	        );
-        }
-        else {
-        	$this->activeDevice = $injectables->knownDevices->$deviceName;
-        }
-
-        // remember the device name
-        $this->activeDeviceName = $deviceName;
 	}
 }

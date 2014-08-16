@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Injectables;
 
 /**
  * constructs / demolishes test environments around stories / tales

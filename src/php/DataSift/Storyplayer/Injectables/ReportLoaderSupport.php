@@ -34,84 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\Injectables;
+use DataSift\Storyplayer\PlayerLib\Report_Loader;
 
 /**
- * the main class for animating a single story
+ * support for our ReportLoader service
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Script_Player
+trait ReportLoaderSupport
 {
-	/**
-	 * path to the script that we are going to run
-	 *
-	 * @var string
-	 */
-	protected $scriptFilename;
+	public $reportLoader;
 
 	/**
-	 * a list of the phases we need to run to get everything ready to
-	 * run the script
 	 *
-	 * @var array
+	 * @return void
 	 */
-	protected $startupPhases;
-
-	/**
-	 * a list of the phases that make up the script
-	 *
-	 * @var array
-	 */
-	protected $scriptPhases;
-
-	/**
-	 * a list of the phases that we need to run once the script has
-	 * finished
-	 *
-	 * @var array
-	 */
-	protected $shutdownPhases;
-
-	public function __construct($scriptFilename, Injectables $injectables)
+	public function initReportLoaderSupport(Injectables $injectables)
 	{
-		$this->scriptFilename = $scriptFilename;
-		$this->scriptPhases   = $injectables->activeConfig->storyplayer->phases->script;
-	}
+		// we will use this to load different reports
+		$this->reportLoader = new Report_Loader();
 
-	public function play(StoryTeller $st, Injectables $injectables)
-	{
-		// shorthand
-		$output = $st->getOutput();
+		// does the user have any namespaces of their own that they
+		// want to search?
+		if (isset($injectables->staticConfig->reports, $injectables->staticConfig->reports->namespaces) && is_array($injectables->staticConfig->reports->namespaces)) {
+			// yes, the user does have some namespaces
+			// copy them across into our list
+			$this->reportLoader->setNamespaces($injectables->staticConfig->reports->namespaces);
+		}
 
-		// we are playing this script
-		$script = new Script($this->scriptFilename);
-
-        // we're going to use this to play our setup and teardown phases
-        $phasesPlayer = new PhaseGroup_Player();
-
-		// run the phases
-		$phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->scriptPhases,
-			$script
-		);
-
-		// all done
 	}
 }

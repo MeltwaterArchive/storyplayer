@@ -34,65 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
-
-use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E4xx_InvalidConfigFile;
-use DataSift\Stone\ObjectLib\BaseObject;
+namespace DataSift\Storyplayer\Injectables;
 
 /**
- * support for working with Storyplayer's config file
+ * support for remembering the additional config files that are available
+ * if the user selects them
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_StoryplayerConfigSupport
+trait AdditionalConfigsSupport
 {
-	public $storyplayerConfig;
+	public $additionalConfigs;
 
-	public function initStoryplayerConfigSupport(Injectables $injectables, $configFilename)
+	public function initAdditionalConfigsSupport($additionalConfigs)
 	{
-		// shorthand
-		$output = $injectables->output;
-
-		// we start with an empty object
-		$config = new BaseObject;
-
-		try {
-			// try to load our main config file
-			$injectables->staticConfigManager->loadDefaultConfig(
-				$config,
-				$configFilename
-			);
-		}
-		catch (E4xx_ConfigFileNotFound $e) {
-			// there is no default config file
-			//
-			// it isn't fatal, but we do want to tell people about it
-			$output->logCliWarning("storyplayer config file '$configFilename' not found");
-		}
-		catch (E4xx_InvalidConfigFile $e) {
-			// we either can't read the config file, or it contains
-			// invalid JSON
-			//
-			// that is fatal
-			$output->logCliError("unable to read or prase storyplayer config file '$configFilename'");
-			exit(1);
-		}
-
-		// all done
-		$this->storyplayerConfig = json_encode($config);
-		return $this->storyplayerConfig;
+		$this->additionalConfigs = $additionalConfigs;
 	}
 }

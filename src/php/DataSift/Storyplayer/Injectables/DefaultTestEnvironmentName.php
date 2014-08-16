@@ -34,50 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
 /**
- * support for working with the list of known test environments
+ * determine our default target environment to test against
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_KnownTestEnvironmentsSupport
+trait DefaultTestEnvironmentName
 {
-	public $knownTestEnvironments;
-	public $knownTestEnvironmentsList = array();
+	public $defaultTestEnvironmentName;
 
-	public function initKnownTestEnvironmentsSupport($additionalEnvs)
+	public function initDefaultTestEnvironmentName($injectables)
 	{
-		// start with the list of test environments that are hard-coded
-		// into Storyplayer
-		$this->knownTestEnvironments = new KnownTestEnvironments;
-		foreach ($this->knownTestEnvironments as $name => $config) {
-			$this->knownTestEnvironmentsList[$name] = $name;
+		// what are the candidates?
+		$searchList = [
+			HostnameHelper::getHostname(),
+			"localhost"
+		];
+
+		// do any of these environments exist?
+		foreach ($searchList as $testEnvName) {
+			if (isset($injectables->knownTestEnvironments->$testEnvName)) {
+				$this->defaultTestEnvironmentName = $testEnvName;
+				// all done
+				return;
+			}
 		}
 
-		// now add in all the target environments that we have discovered
-		// in the config files
-		foreach ($additionalEnvs as $filename => $config) {
-			$testEnvName = basename($filename, 'json');
-			$this->knownTestEnvironmentsList[$testEnvName] = $testEnvName;
-			$this->knownTestEnvironments->$testEnvName = $config;
-		}
-
-		// now put the list of test environments into a sensible order
-		ksort($this->knownTestEnvironmentsList);
-
-		// all done
+		// if we get here, then none of the environments exist
+		$this->defaultTestEnvironmentName = end($searchList);
 	}
 }

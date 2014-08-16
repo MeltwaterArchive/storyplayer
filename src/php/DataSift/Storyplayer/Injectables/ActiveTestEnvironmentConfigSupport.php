@@ -34,19 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\PlayerLib\Prose_Loader;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * support for our ProseLoader service
+ * support for the test environment that the user chooses
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,26 +55,31 @@ use DataSift\Storyplayer\PlayerLib\Prose_Loader;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_ProseLoaderSupport
+trait ActiveTestEnvironmentConfigSupport
 {
-	public $proseLoader;
+	public $activeTestEnvironmentName;
+    public $activeTestEnvironmentConfig;
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initProseLoaderSupport(Injectables $injectables)
+	public function initActiveTestEnvironmentConfigSupport($envName, $injectables)
 	{
-		// $st will use this to load modules
-		$this->proseLoader = new Prose_Loader();
+        // does the test environment exist?
+        if (!isset($injectables->knownTestEnvironments->$envName)) {
+            throw new E4xx_NoSuchTestEnvironment($envName);
+        }
 
-		// does the user have any namespaces of their own that they
-		// want to search?
-		if (isset($injectables->staticConfig->prose, $injectables->staticConfig->prose->namespaces) && is_array($injectables->staticConfig->prose->namespaces)) {
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			$this->proseLoader->setNamespaces($injectables->staticConfig->prose->namespaces);
-		}
+        // a helper to load the config
+        $staticConfigManager = $injectables->staticConfigManager;
 
+        // we need to store the test environment's config as a string,
+        // as it will need expanding as we provision the test environment
+        if (is_string($injectables->knownTestEnvironments->$envName)) {
+            $this->activeTestEnvironmentConfig = json_encode($staticConfigManager->loadConfigFile($injectables->knownTestEnvironments->$envName));
+        }
+        else {
+            $this->activeTestEnvironmentConfig = json_encode($injectables->knownTestEnvironments->$envName);
+        }
+
+        // remember the environment name
+        $this->activeTestEnvironmentName = $envName;
 	}
 }

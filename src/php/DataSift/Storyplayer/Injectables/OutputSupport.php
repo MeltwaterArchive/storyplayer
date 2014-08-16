@@ -34,47 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\PlayerLib\Phase_Loader;
+use DataSift\Storyplayer\Output;
 
 /**
- * support for our PhaseLoader service
+ * support for output to the user
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_PhaseLoaderSupport
+trait OutputSupport
 {
-	public $phaseLoader;
+	public $output;
 
 	/**
 	 *
 	 * @return void
 	 */
-	public function initPhaseLoaderSupport(Injectables $injectables)
+	public function initOutputSupport()
 	{
-		// $st will use this to load modules
-		$this->phaseLoader = new Phase_Loader();
+		$this->output = new Output();
 
-		// does the user have any namespaces of their own that they
-		// want to search?
-		if (isset($injectables->staticConfig->phases, $injectables->staticConfig->phases->namespaces) && is_array($injectables->staticConfig->phases->namespaces)) {
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			$this->phaseLoader->setNamespaces($injectables->staticConfig->phases->namespaces);
-		}
-
+		return $this->output;
 	}
 }

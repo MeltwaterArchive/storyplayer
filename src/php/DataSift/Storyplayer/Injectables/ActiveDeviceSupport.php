@@ -34,52 +34,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\DeviceLib\KnownDevices;
 
 /**
- * support for the test environment that the user chooses
+ * support for the device that the user chooses
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_ActiveTestEnvironmentConfigSupport
+trait ActiveDeviceSupport
 {
-	public $activeTestEnvironmentName;
-    public $activeTestEnvironmentConfig;
+	public $activeDevice;
+	public $activeDeviceName;
 
-	public function initActiveTestEnvironmentConfigSupport($envName, $injectables)
+	/**
+	 * @param  string $deviceName
+	 *         the name of the device to make active
+	 * @param  Injectables $injectables
+	 *         our DI container, which contains the list of known devices
+	 * @return void
+	 */
+	public function initActiveDevice($deviceName, $injectables)
 	{
-        // does the test environment exist?
-        if (!isset($injectables->knownTestEnvironments->$envName)) {
-            throw new E4xx_NoSuchTestEnvironment($envName);
+        // does the device exist?
+        if (!isset($injectables->knownDevices->$deviceName)) {
+            throw new E4xx_NoSuchDevice($deviceName);
         }
 
         // a helper to load the config
         $staticConfigManager = $injectables->staticConfigManager;
 
-        // we need to store the test environment's config as a string,
-        // as it will need expanding as we provision the test environment
-        if (is_string($injectables->knownTestEnvironments->$envName)) {
-            $this->activeTestEnvironmentConfig = json_encode($staticConfigManager->loadConfigFile($injectables->knownTestEnvironments->$envName));
+        // load the device that we want
+        if (is_string($injectables->knownDevices->$deviceName)) {
+	        $this->activeDevice = $staticConfigManager->loadConfigFile(
+	        	$injectables->knownDevices->$deviceName
+	        );
         }
         else {
-            $this->activeTestEnvironmentConfig = json_encode($injectables->knownTestEnvironments->$envName);
+        	$this->activeDevice = $injectables->knownDevices->$deviceName;
         }
 
-        // remember the environment name
-        $this->activeTestEnvironmentName = $envName;
+        // remember the device name
+        $this->activeDeviceName = $deviceName;
 	}
 }

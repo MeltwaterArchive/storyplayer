@@ -34,19 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- * support for the local environment that the user chooses
+ * support for the system-under-test that the user chooses
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -55,34 +55,60 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait Injectables_ActiveLocalEnvironmentConfigSupport
+trait ActiveSystemUnderTestConfigSupport
 {
-	public $activeLocalEnvironmentName;
-    public $activeLocalEnvironmentConfig;
+	public $activeSystemUnderTestName;
 
-	public function initActiveLocalEnvironmentConfigSupport($envName, $injectables)
+	public function initActiveSystemUnderTestConfigSupport($sutName, $injectables)
 	{
-        // does the local environment exist?
-        if (!isset($injectables->knownLocalEnvironments->$envName)) {
-            throw new E4xx_NoSuchLocalEnvironment($envName);
+        // does the system-under-test exist?
+        if (!isset($injectables->knownSystemsUnderTest->$sutName)) {
+            throw new E4xx_NoSuchSystemUnderTest($sutName);
         }
 
         // a helper to load the config
         $staticConfigManager = $injectables->staticConfigManager;
 
-        // build the environment that we want
-        if (is_string($injectables->knownLocalEnvironments->$envName)) {
-            $this->activeLocalEnvironmentConfig = $staticConfigManager->loadConfigFile(
-                $injectables->knownLocalEnvironments->$envName
+        // load the config file for the system-under-test
+        if (is_string($injectables->knownSystemsUnderTest->$sutName)) {
+            $activeSut = $staticConfigManager->loadConfigFile(
+                $injectables->knownSystemsUnderTest->$sutName
             );
         }
         else {
-            $this->activeLocalEnvironmentConfig = $injectables->knownLocalEnvironments->$envName;
+            $activeSut = $injectables->knownSystemsUnderTest->$sutName;
         }
 
-        // remember the environment name, just in case
-        $this->activeLocalEnvironmentName = $envName;
+        // we need to merge the config for this system-under-test into
+        // our active test environment config
+        //
+        // we're going to add the params section from our system-under-test
+        // to each host in the active test environment that can host
+        // the system-under-test
+        //
+        // we use the 'roles' data to match the two up
 
-        // all done
+        $activeTestEnv = new BaseObject;
+        $activeTestEnv->mergeFrom(json_decode($injectables->activeTestEnvironmentConfig));
+
+        foreach ($activeSut as $sutDetails) {
+            foreach ($activeTestEnv as $envDetails) {
+                foreach ($envDetails->details->machines as $machine) {
+                    if (in_array($sutDetails->role, $machine->roles) || in_array('*', $machine->roles)) {
+                        if (!isset($machine->params)) {
+                            $machine->params = new BaseObject;
+                        }
+                        $machine->params->mergeFrom($sutDetails->params);
+                    }
+                }
+            }
+        }
+
+        // we need to store the test environment's config as a string,
+        // as it will need expanding as we provision the test environment
+        $injectables->activeTestEnvironmentConfig = json_encode($activeTestEnv);
+
+        // remember the system-under-test
+        $this->activeSystemUnderTestName = $sutName;
 	}
 }

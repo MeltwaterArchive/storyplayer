@@ -59,7 +59,7 @@ class Action_Logger
 	protected $injectables;
 
 	/**
-	 * @param \DataSift\Storyplayer\Cli\Injectables $injectables
+	 * @param \DataSift\Storyplayer\Injectables $injectables
 	 */
 	public function __construct($injectables)
 	{
