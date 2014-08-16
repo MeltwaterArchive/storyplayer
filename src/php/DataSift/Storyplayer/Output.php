@@ -58,7 +58,7 @@ use DataSift\Storyplayer\Console\DefaultConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Output implements OutputPlugin
+class Output extends OutputPlugin
 {
 	protected $plugins = array();
 
@@ -66,6 +66,7 @@ class Output implements OutputPlugin
 	{
 		// we need a default output for the console
 		$this->plugins['console'] = new DefaultConsole();
+		$this->plugins['console']->addOutputToStdout();
 	}
 
 	/**

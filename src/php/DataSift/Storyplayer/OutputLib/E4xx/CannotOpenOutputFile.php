@@ -34,27 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Reports
+ * @package   Storyplayer/OutputLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Reports;
+namespace DataSift\Storyplayer\OutputLib;
 
-use DataSift\StoryPlayer\OutputLib\OutputPlugin;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * the API for output plugins
+ * Exception thrown when we can't open a file to write output to
  *
- * @category  Libraries
- * @package   Storyplayer/ReportLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @category    Libraries
+ * @package     Storyplayer/OutputLib
+ * @author      Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright   2011-present Mediasift Ltd www.datasift.com
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link        http://datasift.github.io/storyplayer
  */
-abstract class Report extends OutputPlugin
+class E4xx_CannotOpenOutputFile extends Exxx_Exception
 {
+	public function __construct($filename) {
+		$msg = "cannot open '{$filename}' to write to";
+		parent::__construct(400, $msg, $msg);
+	}
 }
