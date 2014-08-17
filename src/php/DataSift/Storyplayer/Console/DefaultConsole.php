@@ -223,7 +223,7 @@ class DefaultConsole extends Console
 	public function logPhaseError($phaseName, $msg)
 	{
 		// we have to show this now, and save it for final output later
-		$this->write("e");
+		$this->write("e", $this->writer->failStyle);
 
 		$this->phaseMessages[$this->currentPhase][] = [
 			'ts'    => time(),
