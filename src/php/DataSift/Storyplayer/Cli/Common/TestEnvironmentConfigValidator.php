@@ -82,6 +82,11 @@ class Common_TestEnvironmentConfigValidator implements Validator
             $result = new ValidationResult($value);
         }
 
+        // strip off .json if it is there
+        //
+        // this helps if the user has copy and pasted the filename
+        $value = basename($value, '.json');
+
         // the $value must be a valid environment name, but it's ok if it doesn't
         // exist if it's the default env as we might not have created it yet
         if (!in_array($value, $this->envList) && $value !== $this->defaultValue) {
