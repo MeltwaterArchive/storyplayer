@@ -79,7 +79,36 @@ trait ActiveTestEnvironmentConfigSupport
             $this->activeTestEnvironmentConfig = json_encode($injectables->knownTestEnvironments->$envName);
         }
 
+        $this->validateActiveTestEnvironmentConfig(json_decode($this->activeTestEnvironmentConfig), $injectables);
+
         // remember the environment name
         $this->activeTestEnvironmentName = $envName;
 	}
+
+    protected function validateActiveTestEnvironmentConfig($testEnv, $injectables)
+    {
+        // shorthand
+        $output = $injectables->output;
+
+        foreach ($testEnv as $index => $group) {
+            // do we have any machines defined?
+            if (!isset($group->details, $group->details->machines)) {
+                $output->logCliError("group #{$index} in your test environment config needs to define at least one machine");
+                exit(1);
+            }
+
+            foreach ($group->details->machines as $name => $machine) {
+                // does each machine have a role?
+                if (!isset($machine->roles)) {
+                    $output->logCliError("machine '{$name}' in your test environment defines no roles :(");
+                    exit(1);
+                }
+                // is the roles an array?
+                if (!is_array($machine->roles)) {
+                    $output->logCliError("machine '{$name}' must provide an array of roles");
+                    exit(1);
+                }
+            }
+        }
+    }
 }
