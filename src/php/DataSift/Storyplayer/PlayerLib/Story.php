@@ -483,18 +483,14 @@ class Story
 	/**
 	 * Set the parameters for this story
 	 *
-	 * Parameters are simple settings for use throughout the execution
-	 * of the story.  They were originally added for injection into
-	 * virtual machine configurations, but have since evolved to be
-	 * arbitrary key/value settings used throughout the story, and to be
-	 * overridable from the command-line.
+	 * Parameters are a way of passing settings between Stories and
+	 * StoryTemplates.
 	 *
 	 * Order of precedence:
 	 *
-	 * 1) StoryTemplates (in 'basedOn()' order)
+	 * 1) Story
+	 * 2) StoryTemplates (in 'basedOn()' order)
 	 *    (templates cannot override each other)
-	 * 2) Story
-	 * 3) -D on the command-line
 	 *
 	 * @param array $defaults
 	 *        a list of the parameters for this story
@@ -518,11 +514,7 @@ class Story
 			// any params already set have precedence
 			foreach ($params as $key => $value) {
 				// do we have a clash?
-				if (isset($return[$key])) {
-					// TODO: address when we revisit -D support
-					Log::write(Log::LOG_WARNING, "StoryTemplate '" . get_class($template) . "' attempting to set duplicate story parameter '{$key}'; using existing value '{$return['$key']}' instead of template value '{$value}'");
-				}
-				else {
+				if (!isset($return[$key])) {
 					$return[$key] = $value;
 				}
 			}

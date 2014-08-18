@@ -94,14 +94,36 @@ class Common_DefineSwitch extends CliSwitch
 			$engine->options->defines = new stdClass;
 		}
 
-		foreach ($params as $param) {
+		foreach ($params as $param)
+		{
 			// split up the setting
 			$parts = explode('=', $param);
 			$key   = array_shift($parts);
 			$value = implode('=', $parts);
 
-			// remember the setting
-			$engine->options->defines->$key = $value;
+			// do we want to convert the type of $value?
+			$lowerValue = strtolower($value);
+			if ($lowerValue == 'false') {
+				$value = false;
+			}
+			else if ($lowerValue == 'true') {
+				$value = true;
+			}
+			else if ($lowerValue == 'null') {
+				$value = null;
+			}
+
+			// expand dot notation
+			$parts = explode('.', $key);
+			$currentLevel = $engine->options->defines;
+			$lastPart = array_pop($parts);
+
+			foreach ($parts as $part) {
+				$currentLevel->$part = new stdClass;
+				$currentLevel = $currentLevel->$part;
+			}
+			// store the value into the tree
+			$currentLevel->$lastPart = $value;
 		}
 
 		// tell the engine that it is done

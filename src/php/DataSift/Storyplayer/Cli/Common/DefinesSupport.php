@@ -85,7 +85,7 @@ class Common_DefinesSupport implements Common_Functionality
         // this must be done AFTER all config files have been loaded!
         if (isset($engine->options->defines)) {
             // merge into the default + what was loaded from config files
-            $staticConfig->defines->mergeFrom($engine->options->defines);
+            $injectables->activeConfig->mergeFrom($engine->options->defines);
         }
     }
 }

@@ -54,7 +54,13 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * 3: we override config with command-line params
  *
  * The StaticConfigManager class is where you'll find all of the logic
- * for loading and merging data.
+ * for loading data.
+ *
+ * Injectables\ActiveConfigSupport is where you'll find all of the logic
+ * for merging data from config files.
+ *
+ * Cli\Common\DefinesSupport is where you'll find all of the logic for
+ * merging data from the command-line params (-D switch)
  *
  * ALL of the public properties on this object are data bags of one kind
  * or another.
@@ -69,8 +75,6 @@ use DataSift\Stone\ObjectLib\BaseObject;
 class DefaultConfig extends BaseObject
 {
     public $appSettings;
-    public $defines;
-    public $logger;
     public $phases;
     public $prose;
     public $reports;
@@ -125,9 +129,6 @@ class DefaultConfig extends BaseObject
         $phases->script->Automate = true;
 
         $this->phases = $phases;
-
-        // defaults for defines
-        $this->defines = new BaseObject();
     }
 
     public function checkPhases()

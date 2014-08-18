@@ -592,44 +592,26 @@ class StoryTeller
 		return $this->storyContext->user;
 	}
 
-	/**
-	 *
-	 * @return array
-	 */
-	public function getDefines()
-	{
-		return $this->defines;
-	}
-
-	/**
-	 *
-	 * @param array $defines
-	 */
-	public function setDefines($defines)
-	{
-		$this->defines = $defines;
-	}
+	// ==================================================================
+	//
+	// Per-story parameter support
+	//
+	// ------------------------------------------------------------------
 
 	public function getParams()
 	{
 		// get the current parameters from the story
 		//
-		// these may have been previously augmented by a template
-		// calling $st->addDefaultParams()
-		$return = $this->getStory()->getParams();
-
-		// merge in any defines from the command-line
-		$defines = $this->getDefines();
-		foreach ($defines as $key => $value) {
-			$return[$key] = $value;
-		}
-
-		// all done
-		//
 		// NOTE that we deliberately don't cache $return in here, as
 		// the parameters storied in the story can (in theory) change
 		// at any moment
-		return $return;
+		//
+		// NOTE that these are (deliberately) completely independent
+		// from anything set using -D on the command-line
+		//
+		// parameters are now simply a way for stories to pass settings
+		// into StoryTemplates that they are based upon, nothing more
+		return $this->getStory()->getParams();
 	}
 
 	// ==================================================================
