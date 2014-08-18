@@ -285,9 +285,6 @@ class PlayStory_Command extends CliCommand
             $engine->getAppLicense()
         );
 
-        var_dump($injectables->activeConfig);
-        exit(0);
-
         // $this->playerList contains one or more things to play
         //
         // let's play each of them in order
