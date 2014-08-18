@@ -41,34 +41,12 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer;
+namespace DataSift\Storyplayer\Injectables;
 
-use Phix_Project\Injectables as BaseInjectables;
-
-use DataSift\Storyplayer\Injectables\ActiveConfigSupport;
-use DataSift\Storyplayer\Injectables\ActiveDeviceSupport;
-use DataSift\Storyplayer\Injectables\ActiveSystemUnderTestConfigSupport;
-use DataSift\Storyplayer\Injectables\ActiveTestEnvironmentConfigSupport;
-use DataSift\Storyplayer\Injectables\AdditionalConfigsSupport;
-use DataSift\Storyplayer\Injectables\CodeParserSupport;
-use DataSift\Storyplayer\Injectables\DefaultConfigSupport;
-use DataSift\Storyplayer\Injectables\DefaultSystemUnderTestName;
-use DataSift\Storyplayer\Injectables\DefaultTestEnvironmentName;
-use DataSift\Storyplayer\Injectables\KnownDevicesSupport;
-use DataSift\Storyplayer\Injectables\KnownSystemsUnderTestSupport;
-use DataSift\Storyplayer\Injectables\KnownTestEnvironmentsSupport;
-use DataSift\Storyplayer\Injectables\OutputSupport;
-use DataSift\Storyplayer\Injectables\PhaseLoaderSupport;
-use DataSift\Storyplayer\Injectables\ProseLoaderSupport;
-use DataSift\Storyplayer\Injectables\ReportLoaderSupport;
-use DataSift\Storyplayer\Injectables\RuntimeConfigSupport;
-use DataSift\Storyplayer\Injectables\StaticConfigManagerSupport;
-use DataSift\Storyplayer\Injectables\StoryplayerConfigFilenameSupport;
-use DataSift\Storyplayer\Injectables\StoryplayerConfigSupport;
-use DataSift\Storyplayer\Injectables\TemplateEngineSupport;
+use DataSift\Storyplayer\OutputLib\CodeParser;
 
 /**
- * a container for common services and data, to avoid making them global
+ * support for parsing code
  *
  * @category  Libraries
  * @package   Storyplayer/Injectables
@@ -77,27 +55,16 @@ use DataSift\Storyplayer\Injectables\TemplateEngineSupport;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Injectables extends BaseInjectables
+trait CodeParserSupport
 {
-	use ActiveConfigSupport;
-	use ActiveDeviceSupport;
-	use ActiveSystemUnderTestConfigSupport;
-	use ActiveTestEnvironmentConfigSupport;
-	use AdditionalConfigsSupport;
-	use CodeParserSupport;
-	use DefaultConfigSupport;
-	use DefaultSystemUnderTestName;
-	use DefaultTestEnvironmentName;
-	use KnownDevicesSupport;
-	use KnownSystemsUnderTestSupport;
-	use KnownTestEnvironmentsSupport;
-	use OutputSupport;
-	use PhaseLoaderSupport;
-	use ProseLoaderSupport;
-	use ReportLoaderSupport;
-	use RuntimeConfigSupport;
-	use StaticConfigManagerSupport;
-	use StoryplayerConfigFilenameSupport;
-	use StoryplayerConfigSupport;
-	use TemplateEngineSupport;
+	public $codeParser;
+
+	/**
+	 *
+	 * @return void
+	 */
+	public function initCodeParserSupport()
+	{
+		$this->codeParser = new CodeParser();
+	}
 }
