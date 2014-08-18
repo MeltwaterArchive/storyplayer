@@ -68,10 +68,13 @@ class UsingSupervisor extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("start program '{$programName}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("start program '{$programName}' on host '{$this->args[0]}'");
+
+		// get the host details
+		$hostDetails = $this->getHostDetails();
 
 		// start the program
-		$result = $st->usingHost($this->hostDetails->name)->runCommand("sudo supervisorctl start '{$programName}'");
+		$result = $st->usingHost($hostDetails->name)->runCommand("sudo supervisorctl start '{$programName}'");
 
 		// did the command succeed?
 		if ($result->didCommandFail()) {
@@ -89,10 +92,13 @@ class UsingSupervisor extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop program '{$programName}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("stop program '{$programName}' on host '{$hostDetails->name}'");
+
+		// get the host details
+		$hostDetails = $this->getHostDetails();
 
 		// stop the program
-		$result = $st->usingHost($this->hostDetails->name)->runCommand("sudo supervisorctl stop '{$programName}'");
+		$result = $st->usingHost($hostDetails->name)->runCommand("sudo supervisorctl stop '{$programName}'");
 
 		// did the command succeed?
 		if ($result->didCommandFail()) {

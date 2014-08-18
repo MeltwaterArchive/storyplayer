@@ -63,16 +63,16 @@ class UsingHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("run command '{$command}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
 
 		// run the command in the guest operating system
-		$result = $host->runCommand($this->hostDetails, $command);
+		$result = $host->runCommand($hostDetails, $command);
 
 		// did the command succeed?
 		if ($result->didCommandFail()) {
@@ -92,16 +92,16 @@ class UsingHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
 
 		// make a copy of the hostDetails, so that we can override them
-		$myHostDetails = clone $this->hostDetails;
+		$myHostDetails = clone $hostDetails;
 		$myHostDetails->sshUsername = $user;
 
 		// run the command in the guest operating system
@@ -125,16 +125,16 @@ class UsingHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("run command '{$command}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
 
 		// run the command in the guest operating system
-		$result = $host->runCommand($this->hostDetails, $command);
+		$result = $host->runCommand($hostDetails, $command);
 
 		// all done
 		$log->endAction();
@@ -147,16 +147,16 @@ class UsingHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
 
 		// make a copy of the hostDetails, so that we can override them
-		$myHostDetails = clone $this->hostDetails;
+		$myHostDetails = clone $hostDetails;
 		$myHostDetails->sshUsername = $user;
 
 		// run the command in the guest operating system
