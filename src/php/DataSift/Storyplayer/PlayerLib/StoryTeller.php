@@ -205,6 +205,9 @@ class StoryTeller
 	// our template engine, used to expand $testEnv
 	private $templateEngine = null;
 
+	// our repository of parsed code, for printing code statements
+	private $codeParser = null;
+
 	public function __construct(Injectables $injectables)
 	{
 		// remember our output object
@@ -212,6 +215,9 @@ class StoryTeller
 
         // our template engine
         $this->setTemplateEngine($injectables->templateEngine);
+
+        // our code parser
+        $this->setCodeParser($injectables->codeParser);
 
 		// set a default page context
 		$this->setPageContext(new PageContext);
@@ -480,6 +486,16 @@ class StoryTeller
 	public function setTemplateEngine($templateEngine)
 	{
 		$this->templateEngine = $templateEngine;
+	}
+
+	public function getCodeParser()
+	{
+		return $this->codeParser;
+	}
+
+	public function setCodeParser($codeParser)
+	{
+		$this->codeParser = $codeParser;
 	}
 
 	// ====================================================================
