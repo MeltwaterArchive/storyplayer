@@ -67,7 +67,7 @@ abstract class Console extends OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function endStoryplayer()
+	public function writeFinalReport($summary)
 	{
 		// keep count of what the final results are
 		$succeededGroups = [];
@@ -122,6 +122,18 @@ abstract class Console extends OutputPlugin
 
 		$this->write(PHP_EOL . PHP_EOL);
 
+		// do we stop here?
+		if ($summary) {
+			if (function_exists("posix_isatty") && posix_isatty(STDOUT)) {
+				$this->write("See ");
+				$this->write("storyplayer.log", $this->writer->argStyle);
+				$this->write(" for details on what went wrong." . PHP_EOL . PHP_EOL);
+
+				return;
+			}
+		}
+
+		// if we get here, then we want a detailed report!
 		foreach ($failedGroups as $result) {
 			// sanity check: we should always have a failedPhase
 			if (!$result->failedPhase instanceof Phase_Result) {

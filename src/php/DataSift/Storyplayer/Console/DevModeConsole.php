@@ -111,6 +111,11 @@ class DevModeConsole extends Console
 		$this->write($license . PHP_EOL . PHP_EOL);
 	}
 
+	public function endStoryplayer()
+	{
+		$this->writeFinalReport(false);
+	}
+
 	/**
 	 * called when we start a new set of phases
 	 *

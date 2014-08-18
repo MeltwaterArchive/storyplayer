@@ -107,6 +107,11 @@ class DefaultConsole extends Console
 		$this->write($license . PHP_EOL . PHP_EOL);
 	}
 
+	public function endStoryplayer()
+	{
+		$this->writeFinalReport(true);
+	}
+
 	/**
 	 * called when we start a new set of phases
 	 *
