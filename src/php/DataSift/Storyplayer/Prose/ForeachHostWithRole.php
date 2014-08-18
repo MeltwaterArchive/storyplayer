@@ -71,6 +71,7 @@ class ForeachHostWithRole extends HostsByRoleBase
 		$return = new DelayedHostsModuleIterator($st, $hostsDetails, $moduleName);
 
 		// all done
+		$log->endAction();
 		return $return;
 	}
 }
