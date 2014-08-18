@@ -144,7 +144,7 @@ class PhaseGroup_Player
 						// why?
 						if ($phaseResult->getPhaseIsBlacklisted()) {
 							if ($groupResult) {
-								$groupResult->setPhaseGroupIsBlacklisted($phaseResult);
+								$groupResult->setPhaseGroupHasBeenBlacklisted($phaseResult);
 							}
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED . ': ' . $phaseResult->getMessage());
 						}
