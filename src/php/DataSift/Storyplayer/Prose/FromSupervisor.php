@@ -66,10 +66,13 @@ class FromSupervisor extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("is program '{$programName}' running under supervisor on host '{$this->hostDetails->name}'?");
+		$log = $st->startAction("is program '{$programName}' running under supervisor on host '{$this->args[0]}'?");
+
+		// get the host details
+		$hostDetails = $this->getHostDetails();
 
 		//run the supervisorctl command
-		$result = $st->usingHost($this->hostDetails->name)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \$2}'");
+		$result = $st->usingHost($hostDetails->name)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \$2}'");
 
 		// did the command succeed?
 		if ($result->didCommandFail()) {
@@ -81,6 +84,5 @@ class FromSupervisor extends HostBase
 		// all done
 		$log->endAction();
 		return true;
-
 	}
 }

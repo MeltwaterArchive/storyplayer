@@ -66,10 +66,13 @@ class ExpectsSupervisor extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure program '{$programName}' is running on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("make sure program '{$programName}' is running on host '{$this->args[0]}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
 
 		// is it running?
-		$running = $st->fromSupervisor($this->hostDetails->name)->getProgramIsRunning($programName);
+		$running = $st->fromSupervisor($hostDetails->name)->getProgramIsRunning($programName);
 		if (!$running) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, 'program is running', 'program is not running');
@@ -85,10 +88,13 @@ class ExpectsSupervisor extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure program '{$programName}' is not running on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("make sure program '{$programName}' is not running on host '{$this->args[0]}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
 
 		// is it running?
-		$running = $st->fromSupervisor($this->hostDetails->name)->getProgramIsRunning($programName);
+		$running = $st->fromSupervisor($hostDetails->name)->getProgramIsRunning($programName);
 		if ($running) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, 'program is not running', 'program is running');

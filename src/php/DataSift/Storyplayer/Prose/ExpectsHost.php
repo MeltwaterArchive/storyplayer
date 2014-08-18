@@ -62,13 +62,13 @@ class ExpectsHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure host '{$this->hostDetails->name}' is running");
+		$log = $st->startAction("make sure host '{$this->args[0]}' is running");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// is it running?
-		$running = $st->fromHost($this->hostDetails->name)->getHostIsRunning();
+		$running = $st->fromHost($hostDetails->name)->getHostIsRunning();
 		if (!$running) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, 'host is running', 'host is not running');
@@ -84,13 +84,13 @@ class ExpectsHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure host '{$this->hostDetails->name}' is not running");
+		$log = $st->startAction("make sure host '{$this->args[0]}' is not running");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// is it running?
-		$running = $st->fromHost($this->hostDetails->name)->getHostIsRunning();
+		$running = $st->fromHost($hostDetails->name)->getHostIsRunning();
 		if ($running) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, 'host is not running', 'host is running');
@@ -106,13 +106,13 @@ class ExpectsHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure package '{$packageName}' is installed on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("make sure package '{$packageName}' is installed on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// is it installed?
-		$details = $st->fromHost($this->hostDetails->name)->getInstalledPackageDetails($packageName);
+		$details = $st->fromHost($hostDetails->name)->getInstalledPackageDetails($packageName);
 		if (!isset($details->version)) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
@@ -128,13 +128,13 @@ class ExpectsHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure package '{$packageName}' is not installed on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("make sure package '{$packageName}' is not installed on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// is it installed?
-		$details = $st->fromHost($this->hostDetails->name)->getInstalledPackageDetails($packageName);
+		$details = $st->fromHost($hostDetails->name)->getInstalledPackageDetails($packageName);
 
 		if (isset($details->version)) {
 			$log->endAction();
@@ -151,13 +151,13 @@ class ExpectsHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is running on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// is the process running?
-		$isRunning = $st->fromHost($this->hostDetails->name)->getProcessIsRunning($processName);
+		$isRunning = $st->fromHost($hostDetails->name)->getProcessIsRunning($processName);
 
 		if (!$isRunning) {
 			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' running", "process '{$processName}' is not running");
@@ -173,13 +173,13 @@ class ExpectsHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// is the process running?
-		$isRunning = $st->fromHost($this->hostDetails->name)->getProcessIsRunning($processName);
+		$isRunning = $st->fromHost($hostDetails->name)->getProcessIsRunning($processName);
 
 		if ($isRunning) {
 			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");

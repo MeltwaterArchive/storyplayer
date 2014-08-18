@@ -51,6 +51,7 @@ use DataSift\Storyplayer\Prose\E4xx_ObsoleteProse;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\DeviceLib;
+use DataSift\Storyplayer\OutputLib\CodeFormatter;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
@@ -205,6 +206,9 @@ class StoryTeller
 	// our template engine, used to expand $testEnv
 	private $templateEngine = null;
 
+	// our repository of parsed code, for printing code statements
+	private $codeParser = null;
+
 	public function __construct(Injectables $injectables)
 	{
 		// remember our output object
@@ -212,6 +216,9 @@ class StoryTeller
 
         // our template engine
         $this->setTemplateEngine($injectables->templateEngine);
+
+        // our code parser
+        $this->setCodeParser($injectables->codeParser);
 
 		// set a default page context
 		$this->setPageContext(new PageContext);
@@ -482,6 +489,16 @@ class StoryTeller
 		$this->templateEngine = $templateEngine;
 	}
 
+	public function getCodeParser()
+	{
+		return $this->codeParser;
+	}
+
+	public function setCodeParser($codeParser)
+	{
+		$this->codeParser = $codeParser;
+	}
+
 	// ====================================================================
 	//
 	// Helpers to get parts of the story's context go here
@@ -641,6 +658,14 @@ class StoryTeller
 			throw new E5xx_NoMatchingActions($methodName);
 		}
 
+		// who called us?
+		$stackTrace = debug_backtrace();
+		$codeLine = $this->codeParser->buildExecutingCodeLine($stackTrace);
+		$this->lastSeenCodeLine = null;
+		if ($codeLine && !empty($codeLine)) {
+			$this->lastSeenCodeLine = $codeLine;
+		}
+
 		// all done
 		return $obj;
 	}
@@ -653,7 +678,7 @@ class StoryTeller
 
 	public function startAction($text)
 	{
-		return $this->actionLogger->startAction($text);
+		return $this->actionLogger->startAction($text, $this->lastSeenCodeLine);
 	}
 
 	public function closeAllOpenActions()

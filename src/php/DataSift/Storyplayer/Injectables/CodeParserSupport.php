@@ -34,64 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\OutputLib\CodeParser;
 
 /**
- * base class for all 'Host' Prose modules
+ * support for parsing code
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsByRoleBase extends Prose
+trait CodeParserSupport
 {
-	protected $roleName;
+	public $codeParser;
 
-	public function __construct(StoryTeller $st, $args = array())
+	/**
+	 *
+	 * @return void
+	 */
+	public function initCodeParserSupport()
 	{
-		// call the parent constructor
-		parent::__construct($st, $args);
-
-		// arg[0] is the name of the box
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
-		}
-
-		$this->roleName = $args[0];
-	}
-
-	protected function retrieveHostsDetails()
-	{
-		// shorthand
-		$st = $this->st;
-		$roleName = $this->roleName;
-
-		// do we have this role?
-		$role = $st->fromRolesTable()->getDetailsForRole($roleName);
-		if (!count(get_object_vars($role))) {
-			throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
-		}
-		return $role;
-	}
-
-	protected function requireValidRoleDetails($caller)
-	{
-		// do we have valid host details?
-		if (!count(get_object_vars($this->hostsDetails))) {
-			throw new E5xx_ActionFailed($caller, "no hosts left in role {$this->roleName}");
-		}
+		$this->codeParser = new CodeParser();
 	}
 }

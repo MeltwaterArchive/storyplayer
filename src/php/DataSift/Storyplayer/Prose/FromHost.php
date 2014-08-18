@@ -64,18 +64,21 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("retrieve details for host '{$this->hostDetails->name}'");
+		$log = $st->startAction("retrieve details for host '{$this->args[0]}'");
+
+		// get the host details
+		$hostDetails = $this->getHostDetails();
 
 		// we already have details - are they valid?
-		if (isset($this->hostDetails->invalidHost) && $this->hostDetails->invalidHost) {
-			$msg = "there are no details about host '{$this->hostDetails->name}'";
+		if (isset($hostDetails->invalidHost) && $hostDetails->invalidHost) {
+			$msg = "there are no details about host '{$hostDetails->name}'";
 			$log->endAction($msg);
 			throw new E5xx_ActionFailed(__METHOD__, $msg);
 		}
 
 		// return the details
 		$log->endAction();
-		return $this->hostDetails;
+		return $hostDetails;
 	}
 
 	public function getHostIsRunning()
@@ -84,16 +87,16 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("is host '{$this->hostDetails->name}' running?");
+		$log = $st->startAction("is host '{$this->args[0]}' running?");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = HostLib::getHostAdapter($st, $this->hostDetails->type);
+		$host = HostLib::getHostAdapter($st, $hostDetails->type);
 
 		// if the box is running, it should have a status of 'running'
-		$result = $host->isRunning($this->hostDetails);
+		$result = $host->isRunning($hostDetails);
 
 		if (!$result) {
 			$log->endAction("host is not running");
@@ -111,14 +114,14 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get IP address of host '{$this->hostDetails->name}'");
+		$log = $st->startAction("get IP address of host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// all done
-		$log->endAction("IP address is '{$this->hostDetails->ipAddress}'");
-		return $this->hostDetails->ipAddress;
+		$log->endAction("IP address is '{$hostDetails->ipAddress}'");
+		return $hostDetails->ipAddress;
 	}
 
 	public function getInstalledPackageDetails($packageName)
@@ -127,16 +130,16 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get details for package '{$packageName}' installed on host '{$this->hostDetails->name}'");
+		$log = $st->startAction("get details for package '{$packageName}' installed on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
 
 		// get the information
-		$return = $host->getInstalledPackageDetails($this->hostDetails, $packageName);
+		$return = $host->getInstalledPackageDetails($hostDetails, $packageName);
 
 		// all done
 		$log->endAction();
@@ -149,16 +152,16 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("is process '{$processName}' running on VM '{$this->hostDetails->name}'?");
+		$log = $st->startAction("is process '{$processName}' running on VM '{$this->args[0]}'?");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
 
 		// get the information
-		$return = $host->getProcessIsRunning($this->hostDetails, $processName);
+		$return = $host->getProcessIsRunning($hostDetails, $processName);
 
 		// did it work?
 		if ($return) {
@@ -176,16 +179,16 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// log some info to the user
-		$log = $st->startAction("get id of process '{$processName}' running on VM '{$this->hostDetails->name}'");
+		$log = $st->startAction("get id of process '{$processName}' running on VM '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $this->hostDetails->osName);
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
 
 		// get the information
-		$return = $host->getPid($this->hostDetails, $processName);
+		$return = $host->getPid($hostDetails, $processName);
 
 		// success
 		$log->endAction("pid is '{$return}'");
@@ -198,13 +201,13 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get username to use with SSH to host '{$this->hostDetails->name}'");
+		$log = $st->startAction("get username to use with SSH to host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get the information
-		$return = $this->hostDetails->sshUsername;
+		$return = $hostDetails->sshUsername;
 
 		// all done
 		$log->endAction("username is '{$return}'");
@@ -217,13 +220,13 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get key file to use with SSH to host '{$this->hostDetails->name}'");
+		$log = $st->startAction("get key file to use with SSH to host '{$this->args[0]}'");
 
 		// make sure we have valid host details
-		$this->requireValidHostDetails(__METHOD__);
+		$hostDetails = $this->getHostDetails();
 
 		// get the information
-		$return = $this->hostDetails->sshKeyFile;
+		$return = $hostDetails->sshKeyFile;
 
 		// all done
 		$log->endAction("key file is '{$return}'");

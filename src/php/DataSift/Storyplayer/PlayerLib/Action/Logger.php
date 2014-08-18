@@ -66,7 +66,7 @@ class Action_Logger
 		$this->injectables = $injectables;
 	}
 
-	public function startAction($text)
+	public function startAction($text, $codeLine = null)
 	{
 		// is this our first action?
 		if (count($this->actions) == 0)
@@ -87,7 +87,7 @@ class Action_Logger
 			}
 		}
 
-		return $openItem->startAction($text);
+		return $openItem->startAction($text, $codeLine);
 	}
 
 	public function closeAllOpenActions()

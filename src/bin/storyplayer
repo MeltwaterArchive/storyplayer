@@ -182,6 +182,9 @@ function main($argv)
 	// activate support for rendering templates of any kind
 	$injectables->initTemplateEngineSupport();
 
+	// activate support for parsing code
+	$injectables->initCodeParserSupport();
+
 	// create our built-in default config
 	$defaultConfig = $injectables->initDefaultConfigSupport();
 

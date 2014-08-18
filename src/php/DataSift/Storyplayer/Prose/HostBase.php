@@ -69,29 +69,26 @@ class HostBase extends Prose
 		if (!isset($args[0])) {
 			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name you've given to the machine");
 		}
+	}
 
+	protected function getHostDetails()
+	{
 		// shorthand
-		$name = $args[0];
+		$st   = $this->st;
+		$name = $this->args[0];
 
 		// do we know anything about this host?
 		$hostsTable = $st->fromHostsTable()->getHostsTable();
 		if (!isset($hostsTable->$name)) {
-			$this->hostDetails = new BaseObject();
-			$this->hostDetails->name = $args[0];
-			$this->hostDetails->nameInHostsTable = $name;
-			$this->hostDetails->invalidHost = true;
+			$hostDetails = new BaseObject();
+			$hostDetails->name = $args[0];
+			$hostDetails->nameInHostsTable = $name;
+			$hostDetails->invalidHost = true;
 		}
 		else {
-			$this->hostDetails = $hostsTable->$name;
+			$hostDetails = $hostsTable->$name;
 		}
-	}
 
-	protected function requireValidHostDetails($caller)
-	{
-		// do we have valid host details?
-		if (isset($this->hostDetails->invalidHost) && $this->hostDetails->invalidHost) {
-			// no - throw an exception
-			throw new E5xx_ActionFailed($caller, "unknown host '{$this->hostDetails->name}'");
-		}
+		return $hostDetails;
 	}
 }
