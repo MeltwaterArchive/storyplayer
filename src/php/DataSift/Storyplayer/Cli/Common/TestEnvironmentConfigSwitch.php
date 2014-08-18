@@ -115,6 +115,9 @@ class Common_TestEnvironmentConfigSwitch extends CliSwitch
 	 */
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
+		// strip off .json if it is there
+		$params[0] = basename($params[0], '.json');
+
 		// remember the setting
 		$engine->options->testEnvironmentName = $params[0];
 
