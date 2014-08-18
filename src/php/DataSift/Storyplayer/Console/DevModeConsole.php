@@ -206,10 +206,10 @@ class DevModeConsole extends Console
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($msg)
+	public function logPhaseActivity($msg, $codeLine = null)
 	{
 		if (!$this->silentActivity) {
-			$this->writeActivity($msg);
+			$this->writeActivity($msg, $codeLine);
 		}
 	}
 
@@ -235,6 +235,11 @@ class DevModeConsole extends Console
 	public function logPhaseSkipped($phaseName, $msg)
 	{
 		$this->writeActivity($msg);
+	}
+
+	public function logCodeLine($codeLine)
+	{
+		$this->writeCodePointCode($codeLine);
 	}
 
 	/**

@@ -135,18 +135,37 @@ abstract class Console extends OutputPlugin
 		}
 	}
 
-	protected function writeActivity($message, $timestamp = null)
+	protected function writeActivity($message, $codeLine = null, $timestamp = null)
 	{
 		// when did this happen?
 		if (!$timestamp) {
 			$timestamp = time();
 		}
 
+		// prepare date/time for output
         $now = date('Y-m-d H:i:s', $timestamp);
 
+        // do we have a codeLine to output?
+        if ($codeLine) {
+	        $this->write('[', $this->writer->punctuationStyle);
+	        $this->write($now, $this->writer->timeStyle);
+	        $this->write('] ', $this->writer->punctuationStyle);
+
+	        // how many spaces do we need to write?
+	        $shorterMsg = trim($message);
+	        $indent = strlen($message) - strlen($shorterMsg);
+	        $this->write(str_repeat(" ", $indent));
+	        $this->write("code -- ", $this->writer->commentStyle);
+        	$this->writeCodePointCode($codeLine, $this->writer->commentStyle);
+        	$this->write(PHP_EOL);
+        }
+
+		// output date/time
         $this->write('[', $this->writer->punctuationStyle);
         $this->write($now, $this->writer->timeStyle);
         $this->write('] ', $this->writer->punctuationStyle);
+
+        // output the message
         $this->write(rtrim($message) . PHP_EOL);
 	}
 
@@ -230,11 +249,11 @@ abstract class Console extends OutputPlugin
 			$codePoints = array_reverse($codePoints);
 			foreach ($codePoints as $codePoint) {
 				$this->write(PHP_EOL . str_repeat(' ', 4));
-				$this->write($codePoint['file'], $this->writer->activityStyle);
-				$this->write('@', $this->writer->punctuationStyle);
-				$this->write($codePoint['line'], $this->writer->activityStyle);
+				$this->writeCodePointFile($codePoint);
 				$this->write(':' . PHP_EOL . PHP_EOL);
-				$this->write(CodeFormatter::indentBySpaces($codePoint['code'], 8) . PHP_EOL);
+				$this->write('        ');
+				$this->writeCodePointCode($codePoint);
+				$this->write(PHP_EOL);
 
 				if (isset($codePoint['args']) && count($codePoint['args'])) {
 					$this->write(PHP_EOL . '        Arguments:' . PHP_EOL, $this->writer->argumentsHeadingStyle);
@@ -267,7 +286,7 @@ abstract class Console extends OutputPlugin
 			$this->write(" phase:" . PHP_EOL . PHP_EOL);
 
 			foreach ($activityLog as $msg) {
-				$this->writeActivity($msg['text'], $msg['ts']);
+				$this->writeActivity($msg['text'], $msg['codeLine'], $msg['ts']);
 			}
 		}
 
@@ -282,5 +301,17 @@ abstract class Console extends OutputPlugin
 		$this->write("----------------------------------------" . PHP_EOL, $this->writer->commentStyle);
 		$this->write("END OF ERROR REPORT" . PHP_EOL);
 		$this->write("=============================================================" . PHP_EOL, $this->writer->commentStyle);
+	}
+
+	protected function writeCodePointFile($codeLine)
+	{
+		$this->write($codeLine['file'], $this->writer->activityStyle);
+		$this->write('@', $this->writer->punctuationStyle);
+		$this->write($codeLine['line'], $this->writer->activityStyle);
+	}
+
+	protected function writeCodePointCode($codeLine, $style = null)
+	{
+		$this->write(rtrim($codeLine['code'] . PHP_EOL), $style);
 	}
 }

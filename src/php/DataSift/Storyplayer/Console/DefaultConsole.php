@@ -198,15 +198,8 @@ class DefaultConsole extends Console
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($msg)
+	public function logPhaseActivity($msg, $codeLine = null)
 	{
-		// keep track of what was attempted, in case we need to show
-		// the user what was attempted
-		$this->phaseMessages[$this->currentPhase][] = [
-			'ts'    => time(),
-			'text'  => $msg
-		];
-
 		// show the user that *something* happened
 		if (!$this->silentActivity) {
 			$this->write(".", $this->writer->miniActivityStyle);
@@ -224,11 +217,6 @@ class DefaultConsole extends Console
 	{
 		// we have to show this now, and save it for final output later
 		$this->write("e", $this->writer->failStyle);
-
-		$this->phaseMessages[$this->currentPhase][] = [
-			'ts'    => time(),
-			'text'  => $msg
-		];
 	}
 
 	/**
@@ -244,6 +232,11 @@ class DefaultConsole extends Console
 		$this->write("s", $this->writer->skippedStyle);
 
 		// $this->phaseMessages[$phaseName] = $msg;
+	}
+
+	public function logCodeLine($codeLine)
+	{
+		// this is a no-op for us
 	}
 
 	/**

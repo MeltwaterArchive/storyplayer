@@ -207,18 +207,19 @@ class Output extends OutputPlugin
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($msg)
+	public function logPhaseActivity($msg, $codeLine = null)
 	{
 		// keep track of what was attempted, in case we need to show
 		// the user what was attempted
 		$this->activityLog[] = [
-			'ts'    => time(),
-			'text'  => $msg
+			'ts'       => time(),
+			'text'     => $msg,
+			'codeLine' => $codeLine,
 		];
 
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->logPhaseActivity($msg);
+			$plugin->logPhaseActivity($msg, $codeLine);
 		}
 	}
 
@@ -234,8 +235,9 @@ class Output extends OutputPlugin
 		// keep track of what was attempted, in case we need to show
 		// the user what was attempted
 		$this->activityLog[] = [
-			'ts'    => time(),
-			'text'  => $msg
+			'ts'       => time(),
+			'text'     => $msg,
+			'codeLine' => null,
 		];
 
 		foreach ($this->plugins as $plugin)
@@ -256,13 +258,22 @@ class Output extends OutputPlugin
 		// keep track of what was attempted, in case we need to show
 		// the user what was attempted
 		$this->activityLog[] = [
-			'ts'    => time(),
-			'text'  => $msg
+			'ts'       => time(),
+			'text'     => $msg,
+			'codeLine' => null,
 		];
 
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logPhaseSkipped($phaseName, $msg);
+		}
+	}
+
+	public function logCodeLine($codeLine)
+	{
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->logCodeLine($codeLine);
 		}
 	}
 
