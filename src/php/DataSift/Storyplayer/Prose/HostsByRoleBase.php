@@ -58,7 +58,6 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class HostsByRoleBase extends Prose
 {
-	protected $hostsDetails;
 	protected $roleName;
 
 	public function __construct(StoryTeller $st, $args = array())
@@ -71,15 +70,21 @@ class HostsByRoleBase extends Prose
 			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
 		}
 
+		$this->roleName = $args[0];
+	}
+
+	protected function retrieveHostsDetails()
+	{
 		// shorthand
-		$this->roleName = $roleName = $args[0];
+		$st = $this->st;
+		$roleName = $this->roleName;
 
 		// do we have this role?
 		$role = $st->fromRolesTable()->getDetailsForRole($roleName);
 		if (!count(get_object_vars($role))) {
 			throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
 		}
-		$this->hostsDetails = $role;
+		return $role;
 	}
 
 	protected function requireValidRoleDetails($caller)
