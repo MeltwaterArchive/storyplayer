@@ -77,9 +77,6 @@ class Common_DefinesSupport implements Common_Functionality
 
     public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
-        // shorthand
-        $staticConfig = $injectables->staticConfig;
-
         // do we have any defines from the command-line to merge in?
         //
         // this must be done AFTER all config files have been loaded!

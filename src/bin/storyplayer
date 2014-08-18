@@ -112,7 +112,7 @@ $composerFiles = array (
 	__DIR__ . '/../../vendor/autoload.php',
 );
 foreach ($composerFiles as $composerFile) {
-	if (file_exists($composerFile) && can_load($composerFile)) {
+	if (file_exists($composerFile) && can_load($composerFile) &&!$composerAutoloader) {
 		require_once($composerFile);
 		$composerAutoloader = true;
 	}
