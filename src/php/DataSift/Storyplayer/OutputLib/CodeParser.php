@@ -102,11 +102,33 @@ class CodeParser
 
 	public function buildExecutingCodeLine($stackTrace)
 	{
+		static $ourPaths = [
+			"src/bin/storyplayer",
+			"src/php/DataSift/Storyplayer",
+			"vendor/aws",
+			"vendor/bin",
+			"vendor/composer",
+			"vendor/datasift",
+			"vendor/guzzle",
+			"vendor/nikic",
+			"vendor/phix",
+			"vendor/stuart",
+			"vendor/symfony",
+			"vendor/twig",
+		];
+
 		// find the code that is executing
-		foreach ($stackTrace as $stackEntry)
+		foreach ($stackTrace as $index => $stackEntry)
 		{
 			if (!isset($stackEntry['file'])) {
 				continue;
+			}
+
+			// filter out our files
+			foreach ($ourPaths as $ourPath) {
+				if (strpos($stackEntry['file'], $ourPath) !== false) {
+					continue 2;
+				}
 			}
 
 			// do we have any code for this?
@@ -132,9 +154,9 @@ class CodeParser
 
 			// we only care about code that is calling $st
 			// for debugging purposes
-			if (strpos($codePoint['code'], '$st->') === false) {
-				continue;
-			}
+			// if (strpos($codePoint['code'], '$st->') === false) {
+			// 	continue;
+			// }
 
 			// if we get here, we have code that's interesting
 			return $codePoint;
