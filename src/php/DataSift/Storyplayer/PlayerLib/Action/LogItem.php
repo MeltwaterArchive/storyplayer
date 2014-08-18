@@ -76,7 +76,7 @@ class Action_LogItem
 		$this->output      = $injectables->output;
 	}
 
-	public function startAction($text)
+	public function startAction($text, $codeLine = null)
 	{
 		// when did this happen?
 		$this->startTime = microtime(true);
@@ -85,8 +85,13 @@ class Action_LogItem
 		$this->text = $text;
 		//echo '#' . $this->nestLevel . ' -> ' . $text . PHP_EOL;
 
+		// only log the top-level item
+		if ($this->nestLevel > 1) {
+			$codeLine = null;
+		}
+
 		// write to screen
-		$this->writeToLog($this->text);
+		$this->writeToLog($this->text, $codeLine);
 
 		// all done
 		return $this;
@@ -263,8 +268,13 @@ class Action_LogItem
 		$this->nestLevel--;
 	}
 
-	protected function writeToLog($text)
+	protected function writeToLog($text, $codeLine = null)
 	{
-		$this->output->logPhaseActivity(str_repeat("  ", $this->nestLevel - 1) . $text);
+		$this->output->logPhaseActivity(str_repeat("  ", $this->nestLevel - 1) . $text, $codeLine);
+	}
+
+	public function getNestLevel()
+	{
+		return $this->nestLevel;
 	}
 }

@@ -51,6 +51,7 @@ use DataSift\Storyplayer\Prose\E4xx_ObsoleteProse;
 use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
 use DataSift\Storyplayer\Prose\PageContext;
 use DataSift\Storyplayer\DeviceLib;
+use DataSift\Storyplayer\OutputLib\CodeFormatter;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
@@ -657,6 +658,14 @@ class StoryTeller
 			throw new E5xx_NoMatchingActions($methodName);
 		}
 
+		// who called us?
+		$stackTrace = debug_backtrace();
+		$codeLine = $this->codeParser->buildExecutingCodeLine($stackTrace);
+		$this->lastSeenCodeLine = null;
+		if ($codeLine && !empty($codeLine)) {
+			$this->lastSeenCodeLine = $codeLine;
+		}
+
 		// all done
 		return $obj;
 	}
@@ -669,7 +678,7 @@ class StoryTeller
 
 	public function startAction($text)
 	{
-		return $this->actionLogger->startAction($text);
+		return $this->actionLogger->startAction($text, $this->lastSeenCodeLine);
 	}
 
 	public function closeAllOpenActions()
