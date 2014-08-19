@@ -69,6 +69,16 @@ class OutputWriter
     public $failStyle = null;
     public $skippedStyle = null;
     public $nameStyle = null;
+    public $durationStyle = null;
+    public $punctuationStyle = null;
+    public $miniActivityStyle = null;
+    public $miniPhaseNameStyle = null;
+    public $timeStyle = null;
+    public $successSummaryStyle = null;
+    public $failSummaryStyle = null;
+    public $puzzledSummaryStyle = null;
+    public $argumentsHeadingStyle = null;
+    public $failedPhaseStyle = null;
 
 	protected $outputHandles  = [];
 

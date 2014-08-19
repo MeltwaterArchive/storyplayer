@@ -80,8 +80,8 @@ class CommandRunner
 		// NOTE: this only occurs when something like a fork() failure
 		// happened
 		if (!$process) {
-			$retval = 255;
-			return;
+			$return = new CommandResult(255, '');
+			return $return;
 		}
 
 		// we do not want to block whilst reading from the child process's

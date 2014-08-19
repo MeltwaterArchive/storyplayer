@@ -161,11 +161,6 @@ class DefaultConsole extends Console
 		$phaseType  = $phase->getPhaseType();
 		$phaseSeqNo = $phase->getPhaseSequenceNo();
 
-		// make sure we can keep track of what the phase is doing
-		$phaseName = $phase->getPhaseName();
-		$this->phaseMessages[$phaseName] = [];
-		$this->currentPhase = $phaseName;
-
 		// we're only interested in telling the user about the
 		// phases of a story
 		if ($phaseType !== Phase::STORY_PHASE) {
@@ -235,8 +230,6 @@ class DefaultConsole extends Console
 	{
 		// we have to show this now, and save it for final output later
 		$this->write("s", $this->writer->skippedStyle);
-
-		// $this->phaseMessages[$phaseName] = $msg;
 	}
 
 	public function logCodeLine($codeLine)

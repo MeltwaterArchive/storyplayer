@@ -63,6 +63,12 @@ use DataSift\Storyplayer\OutputLib\OutputPlugin;
 abstract class Console extends OutputPlugin
 {
 	/**
+	 *
+	 * @var PhaseGroup_Result
+	 */
+	protected $results;
+
+	/**
 	 * called when Storyplayer exits
 	 *
 	 * @return void
