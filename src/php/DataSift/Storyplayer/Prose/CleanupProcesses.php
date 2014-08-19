@@ -72,12 +72,24 @@ class CleanupProcesses extends BaseCleanup
      */
     private function pruneProcessList()
     {
-        foreach ($this->table as $pid => $details) {
+        // shorthand
+        $st = $this->st;
+
+        // get the processes table, if we have one
+        $table = $this->getTable();
+        if (!$table) {
+            return;
+        }
+
+        foreach ($table as $pid => $details) {
             if (!posix_kill($pid, 0)) {
                 // process no longer running
-                unset($this->table->$pid);
+                unset($table->$pid);
             }
         }
+
+        $this->removeTablesIfEmpty();
+        $st->saveRuntimeConfig();
 
         return;
 
