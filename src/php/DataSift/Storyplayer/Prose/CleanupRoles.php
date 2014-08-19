@@ -57,6 +57,26 @@ class CleanupRoles extends BaseCleanup
 
     public function shutdown()
     {
-        // do nothing
+    	// shorthand
+    	$st = $this->st;
+
+        // get the roles table, if we have one
+        $rolesTable = $this->getTable();
+        if (!$rolesTable) {
+        	return;
+        }
+
+        // remove any empty test environments
+        foreach ($rolesTable as $testEnv => $roles) {
+        	if (count(get_object_vars($roles)) == 0) {
+        		unset($rolesTable->$testEnv);
+        	}
+        }
+
+        // cleanup the tables
+        $this->removeTablesIfEmpty();
+
+        // save the runtimeConfig
+        $st->saveRuntimeConfig();
     }
 }

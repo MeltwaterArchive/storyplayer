@@ -154,26 +154,12 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
         // remove the entry
         unset($tables->$tableName->$targetEnv->$key);
 
-        // remove the table if it's empty
-        if (!count(get_object_vars($tables->$tableName->$targetEnv))) {
-            $log->addStep("table '{$tableName}->{$targetEnv}' is empty, removing from runtime config", function() use ($tables, $tableName, $targetEnv){
-                unset($tables->$tableName->$targetEnv);
-            });
-        }
-        if (!count(get_object_vars($tables->$tableName))) {
-            $log->addStep("table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName){
-                unset($tables->$tableName);
-            });
-        }
-
         // save the changes
         $st->saveRuntimeConfig();
 
         // all done
         $log->endAction();
-
     }
-
 
     /**
      * Add an item to a module's runtime config table
@@ -281,29 +267,11 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
         // remove the entry
         unset($tables->$tableName->$targetEnv->$group->$key);
 
-        // remove the table if it's empty
-        if (!count(get_object_vars($tables->$tableName->$targetEnv->$group))) {
-            $log->addStep("table group '{$group}' is empty, removing from runtime config", function() use ($tables, $tableName, $group){
-                unset($tables->$tableName->$targetEnv->$group);
-            });
-        }
-        if (!count(get_object_vars($tables->$tableName->$targetEnv))) {
-            $log->addStep("table '{$tableName}->{$targetEnv}' is empty, removing from runtime config", function() use ($tables, $tableName, $group){
-                unset($tables->$tableName->$targetEnv);
-            });
-        }
-        if (!count(get_object_vars($tables->$tableName))) {
-            $log->addStep("table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName, $group){
-                unset($tables->$tableName);
-            });
-        }
-
         // save the changes
         $st->saveRuntimeConfig();
 
         // all done
         $log->endAction();
-
     }
 
     /**
@@ -359,18 +327,6 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
                     unset($tables->$tableName->$targetEnv->$groupName);
                 });
             }
-        }
-
-        // remove any empty tables
-        if (!count(get_object_vars($tables->$tableName->$targetEnv))) {
-            $log->addStep("table '{$tableName}->{$targetEnv}' is empty, removing from runtime config", function() use ($tables, $tableName, $targetEnv){
-                unset($tables->$tableName->$targetEnv);
-            });
-        }
-        if (!count(get_object_vars($tables->$tableName))) {
-            $log->addStep("table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName){
-                unset($tables->$tableName);
-            });
         }
 
         // save the changes

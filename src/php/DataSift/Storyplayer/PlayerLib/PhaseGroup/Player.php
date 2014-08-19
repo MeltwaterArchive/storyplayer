@@ -188,7 +188,7 @@ class PhaseGroup_Player
 				$phaseResult->setPlayingFailed($phaseResult::ERROR, self::MSG_PHASE_FAILED, $e);
 
 				// tell the world that this phase is over
-				$phase->announcePhaseEnd();
+				$output->endPhase($phase, $phaseResult);
 
 				// this is a fatal exception
 				if ($groupResult) {
@@ -232,6 +232,9 @@ class PhaseGroup_Player
 		//
 		// this is (essentially) a slimmed down version of playPhases()
 
+		// shorthand
+		$output  = $st->getOutput();
+
 		// we are going to need something to help us load each of our
 		// phases
 		$phaseLoader = $injectables->phaseLoader;
@@ -253,13 +256,13 @@ class PhaseGroup_Player
 			$phase = $phaseLoader->loadPhase($st, $phaseName);
 
 			// tell the world that we're running this phase
-			$phase->announcePhaseStart();
+			$output->startPhase($phase);
 
 			// play the phase
 			$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive, $thingBeingPlayed);
 
 			// tell the world that the phase is over
-			$phase->announcePhaseEnd();
+			$output->endPhase($phase, $phaseResult);
 
 			// we *always* continue, even if the phase failed
 		}

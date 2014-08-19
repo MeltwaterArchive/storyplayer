@@ -85,8 +85,7 @@ class TableHandlersHelper
         foreach ($runtimeConfig->storyplayer->tables as $key => $value) {
             $className = "cleanup".ucfirst($key);
             try {
-                $st->$className($key, $value)->$type();
-                $st->$className($key, $value)->removeTableIfEmpty();
+                $st->$className($key)->$type();
             } catch(E5xx_NoMatchingActions $e){
                 // We don't know about a cleanup module for this, SHOUT LOUDLY
                 $missingCleanupHandlers[] = "Missing cleanup module for '{$key}'".PHP_EOL;

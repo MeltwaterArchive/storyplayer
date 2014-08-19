@@ -57,17 +57,16 @@ abstract class BaseCleanup extends Prose
     /**
      * key
      * The key of the table we're working with
-     * 
+     *
      * @var string
      */
     protected $key;
 
-
     /**
-     * table 
+     * table
      *
      * The actual table that we're working with
-     * 
+     *
      * @var BaseObject
      */
     protected $table;
@@ -82,51 +81,76 @@ abstract class BaseCleanup extends Prose
      */
     public function __construct(StoryTeller $st, $args = array())
     {
-
         // The key of the entry we're working with
         $this->key = $args[0];
-
-        // Store the table we're working with in $this->table
-        // This is the *actual table*, not just the key
-        $this->table = $args[1];
 
         return parent::__construct($st, $args);
     }
 
     /**
-     * startup 
+     * startup
      *
      * The function to run before stories are run
-     * 
+     *
      * @return void
      */
     abstract public function startup();
 
     /**
-     * shutdown 
+     * shutdown
      *
      * The function to run after stories are run
-     * 
-     * 
+     *
+     *
      * @return void
      */
     abstract public function shutdown();
 
-    /**
-     * removeTableIfEmpty 
-     *
-     * Remove an entry in the runtime config if it is empty
-     * 
-     * 
-     * @return void
-     */
-    public function removeTableIfEmpty(){
+    protected function getTable()
+    {
+        // shorthand
+        $st = $this->st;
 
-        $runtimeConfig = $this->st->getRuntimeConfig();
+        // get the table, if we have one
+        $runtimeConfig = $st->getRuntimeConfig();
         $key = $this->key;
 
-        if (!count(get_object_vars($runtimeConfig->storyplayer->tables->$key))) {
+        if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables, $runtimeConfig->storyplayer->tables->$key)) {
+            return null;
+        }
+
+        // return the table
+        return $runtimeConfig->storyplayer->tables->$key;
+    }
+
+    /**
+     * removeTableIfEmpty
+     *
+     * Remove an entry in the runtime config if it is empty
+     *
+     *
+     * @return void
+     */
+    protected function removeTablesIfEmpty()
+    {
+        // shorthand
+        $key = $this->key;
+        $runtimeConfig = $this->st->getRuntimeConfig();
+
+        // is the roles table now empty?
+        if (count(get_object_vars($runtimeConfig->storyplayer->tables->$key)) == 0) {
             unset($runtimeConfig->storyplayer->tables->$key);
+        }
+
+        // did we just delete the last table?
+        if (count(get_object_vars($runtimeConfig->storyplayer->tables)) == 0) {
+            unset($runtimeConfig->storyplayer->tables);
+        }
+
+        // did we just remove the last entry from the storyplayer section
+        // of the runtimeConfig?
+        if (count(get_object_vars($runtimeConfig->storyplayer)) == 0) {
+            unset($runtimeConfig->storyplayer);
         }
     }
 }

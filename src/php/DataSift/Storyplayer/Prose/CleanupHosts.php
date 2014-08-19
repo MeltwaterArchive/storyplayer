@@ -58,6 +58,26 @@ class CleanupHosts extends BaseCleanup
 
     public function shutdown()
     {
-        // do nothing
+    	// shorthand
+    	$st = $this->st;
+
+        // get the hosts table, if we have one
+        $hostsTable = $this->getTable();
+        if (!$hostsTable) {
+        	return;
+        }
+
+        // remove any empty test environments
+        foreach ($hostsTable as $testEnv => $hosts) {
+        	if (count(get_object_vars($hosts)) == 0) {
+        		unset($hostsTable->$testEnv);
+        	}
+        }
+
+        // cleanup the tables
+        $this->removeTablesIfEmpty();
+
+        // save the runtimeConfig
+        $st->saveRuntimeConfig();
     }
 }
