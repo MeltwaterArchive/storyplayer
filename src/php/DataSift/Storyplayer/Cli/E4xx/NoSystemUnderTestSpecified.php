@@ -58,7 +58,7 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_NoSystemUnderTestSpecified extends Exxx_Exception
 {
-    public function __construct($sutName)
+    public function __construct()
     {
     	$msg = "You need to use -s to specify which system to test." . PHP_EOL . PHP_EOL
     	     . "Use 'storyplayer --list-systems' to see the list of known systems under test.";

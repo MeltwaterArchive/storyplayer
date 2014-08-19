@@ -78,8 +78,7 @@ class Common_ConsoleSupport implements Common_Functionality
     public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
         // shorthand
-        $activeConfig = $injectables->activeConfig;
-        $output       = $injectables->output;
+        $output = $injectables->output;
 
         // we also want to create storyplayer.log every time
         $devModeConsole = new DevModeConsole();

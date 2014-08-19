@@ -60,7 +60,7 @@ class ConfigManagerBase
 	const APP_NAME = 'storyplayer';
 
 	/**
-	 * @var DataSift\Stone\ConfigLib\ConfigHelper
+	 * @var \DataSift\Stone\ConfigLib\ConfigHelper
 	 */
 	protected $configHelper;
 

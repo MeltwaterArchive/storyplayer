@@ -41,7 +41,7 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\HelperLib;
 
 use Exception;
 use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;

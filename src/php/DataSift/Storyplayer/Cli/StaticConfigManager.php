@@ -85,7 +85,7 @@ class StaticConfigManager extends ConfigManagerBase
 			// We start with an empty config
 			$this->configHelper->loadDotFileConfig($config, self::APP_NAME, self::USER_DOTFILE);
 		}
-		catch (E5xx_ConfigFileNotFound $e) {
+		catch (E4xx_ConfigFileNotFound $e) {
 			// we don't care - user configs are optional
 		}
 		// all done

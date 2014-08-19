@@ -77,10 +77,6 @@ class Common_DeviceSupport implements Common_Functionality
 
     public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
     {
-        // shorthand
-        $output       = $injectables->output;
-        $staticConfig = $injectables->staticConfig;
-
         // do we have a device to load?
         if (!isset($engine->options->device)) {
             // nothing to do

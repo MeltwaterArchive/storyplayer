@@ -396,7 +396,7 @@ class PlayStory_Command extends CliCommand
                         break;
 
                     case 'json':
-                        $this->playerList = $this->playerList + $this->addStoriesFromTale($cliEgine, $injectables, $cliParam);
+                        $this->playerList = $this->playerList + $this->addStoriesFromTale($cliEngine, $injectables, $cliParam);
                         break;
 
                     default:
@@ -551,7 +551,7 @@ class PlayStory_Command extends CliCommand
         // are we persisting the device?
         if (isset($engine->options->persistDevice) && $engine->options->persistDevice) {
             $this->persistDevice = true;
-            $st->persistDevice;
+            $st->setPersistDevice();
         }
     }
 
