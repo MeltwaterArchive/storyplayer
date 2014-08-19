@@ -45,7 +45,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 use PHPUnit_Framework_TestCase;
-use DataSift\Storyplayer\Cli\Injectables;
+use DataSift\Storyplayer\Injectables;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class AssertsDoubleTest extends PHPUnit_Framework_TestCase
@@ -60,6 +60,7 @@ class AssertsDoubleTest extends PHPUnit_Framework_TestCase
 
 		$i  = new Injectables;
 		$i->initOutputSupport();
+		$i->initRuntimeConfigSupport($i);
 	    $st = new StoryTeller($i);
 
 	    $expectedArray = array("1.5");
