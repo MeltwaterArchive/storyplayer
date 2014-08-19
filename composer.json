@@ -35,7 +35,8 @@
 		"twig/twig": "1.*"
 	},
 	"require-dev": {
-		"stuart/phingtasks": "1.0.0"
+		"stuart/phingtasks": "1.0.0",
+		"mockery/mockery": "dev-master"
 	},
 	"autoload": {
 		"psr-0": { "" : "src/php/" }
