@@ -170,7 +170,7 @@ class Automate_Command extends CliCommand
         //    b. report-to-file plugins
 
         // make sure we're using the ScriptConsole by default
-        $injectables->output->usePlugin('console', new ScriptConsole);
+        $injectables->output->usePluginInSlot(new ScriptConsole, 'console');
 
         // process the common functionality
         $this->applyCommonFunctionalitySupport($engine, $this, $injectables);

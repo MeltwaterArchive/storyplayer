@@ -34,64 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Phases;
 
-use Exception;
-use stdClass;
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
-
-/**
- * Common support for the console
- *
- * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class Common_ConsoleSupport implements Common_Functionality
+class ExampleStoryPhase extends StoryPhase
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        $command->addSwitches([
-            new Common_DevModeSwitch
-        ]);
-    }
-
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // shorthand
-        $output = $injectables->output;
-
-        // we also want to create storyplayer.log every time
-        $devModeConsole = new DevModeConsole();
-        $devModeConsole->addOutputToFile('storyplayer.log');
-
-        // switch output plugins first, before we do anything else at all
-        if (isset($engine->options->dev) && $engine->options->dev) {
-            // switch our main output to 'dev mode'
-            $output->usePluginAsConsole($devModeConsole);
-            $devModeConsole->addOutputToStdout();
-        }
-        else {
-            $output->usePluginInSlot($devModeConsole, 'logfile');
-        }
-    }
 }

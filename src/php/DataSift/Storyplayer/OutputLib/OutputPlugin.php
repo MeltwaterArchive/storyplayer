@@ -85,7 +85,7 @@ abstract class OutputPlugin
 		$this->writer->addOutputToStderr();
 	}
 
-	public function addOutputFile($filename)
+	public function addOutputToFile($filename)
 	{
 		// make sure $filename isn't a reserved name
 		switch($filename)
@@ -96,7 +96,7 @@ abstract class OutputPlugin
 				throw new E4xx_OutputFilenameIsAReservedName($filename);
 		}
 
-		$this->writer->addOutputFile($filename);
+		$this->writer->addOutputToFile($filename);
 	}
 
 	public function write($output, $style = null)
@@ -165,6 +165,11 @@ abstract class OutputPlugin
 		$this->writer->write($output, $this->writer->durationStyle);
 	}
 
+	public function getWriter()
+	{
+		return $this->writer;
+	}
+
 	// ==================================================================
 	//
 	// Colour support
@@ -207,8 +212,8 @@ abstract class OutputPlugin
 	 */
 	abstract public function endStoryplayer();
 
-	abstract public function resetSilent();
-	abstract public function setSilent();
+	abstract public function resetSilentMode();
+	abstract public function setSilentMode();
 
 	abstract public function startPhaseGroup($activity, $name);
 	abstract public function endPhaseGroup($result);

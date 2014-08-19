@@ -126,7 +126,7 @@ class OutputWriter
 		];
 	}
 
-	public function addOutputFile($filename)
+	public function addOutputToFile($filename)
 	{
 		// can we open the file?
 		$fp = fopen($filename, 'w');
@@ -230,5 +230,38 @@ class OutputWriter
         return sprintf(ConsoleColor::ESCAPE_SEQUENCE, \implode(';', $style))
                . $output
                . sprintf(ConsoleColor::ESCAPE_SEQUENCE, ConsoleColor::NONE);
+	}
+
+	// ==================================================================
+	//
+	// Additional helpers for testing etc
+	//
+	// ------------------------------------------------------------------
+
+	public function getIsUsingStdout()
+	{
+		if (isset($this->outputHandles['stdout'])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function getIsUsingStderr()
+	{
+		if (isset($this->outputHandles['stderr'])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function getIsUsingOutputFile($filename)
+	{
+		if (isset($this->outputHandles[$filename])) {
+			return true;
+		}
+
+		return false;
 	}
 }

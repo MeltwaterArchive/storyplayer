@@ -78,12 +78,12 @@ class DefaultConsole extends Console
 	 */
 	protected $silentActivity = false;
 
-	public function resetSilent()
+	public function resetSilentMode()
 	{
 		$this->silentActivity = false;
 	}
 
-	public function setSilent()
+	public function setSilentMode()
 	{
 		$this->silentActivity = true;
 	}
@@ -232,7 +232,7 @@ class DefaultConsole extends Console
 		$this->write("s", $this->writer->skippedStyle);
 	}
 
-	public function logCodeLine($codeLine)
+	public function logPhaseCodeLine($codeLine)
 	{
 		// this is a no-op for us
 	}

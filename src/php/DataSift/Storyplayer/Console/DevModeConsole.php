@@ -82,12 +82,12 @@ class DevModeConsole extends Console
 		];
 	}
 
-	public function resetSilent()
+	public function resetSilentMode()
 	{
 		$this->silentActivity = false;
 	}
 
-	public function setSilent()
+	public function setSilentMode()
 	{
 		$this->silentActivity = true;
 	}
@@ -242,7 +242,7 @@ class DevModeConsole extends Console
 		$this->writeActivity($msg);
 	}
 
-	public function logCodeLine($codeLine)
+	public function logPhaseCodeLine($codeLine)
 	{
 		$this->writeCodePointCode($codeLine);
 	}

@@ -347,7 +347,7 @@ class PlayStory_Command extends CliCommand
                 $injectables->output->logCliError("no such report '{$reportName}'");
                 exit(1);
             }
-            $injectables->output->usePlugin($reportName, $report);
+            $injectables->output->usePluginInSlot($report, $reportName);
         }
 
         // all done
@@ -586,9 +586,9 @@ class PlayStory_Command extends CliCommand
         if (isset($engine->options->reuseTarget) && $engine->options->reuseTarget)
         {
             // does the target exist to be reused?
-            $this->output->setSilent();
+            $this->output->setSilentMode();
             $hasTarget = $st->fromTargetsTable()->hasCurrentTestEnvironment();
-            $this->output->resetSilent();
+            $this->output->resetSilentMode();
 
             if (!$hasTarget) {
                 $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' does not exist; ignoring --reuse-target switch");
@@ -597,16 +597,16 @@ class PlayStory_Command extends CliCommand
 
             // okay, so we have the test environment in the targets table,
             // but has the test environment been changed at all?
-            $this->output->setSilent();
+            $this->output->setSilentMode();
             $origSig = $st->fromTargetsTable()->getCurrentTestEnvironmentSignature();
             $currentSig = $st->getTestEnvironmentSignature();
-            $this->output->resetSilent();
+            $this->output->resetSilentMode();
 
             if ($origSig != $currentSig) {
                 // our test environment entry isn't valid, so remove it
-                $this->output->setSilent();
+                $this->output->setSilentMode();
                 $st->usingTargetsTable()->removeCurrentTestEnvironment();
-                $this->output->resetSilent();
+                $this->output->resetSilentMode();
 
                 $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' has changed; ignoring --reuse-target switch");
                 return;
@@ -625,15 +625,15 @@ class PlayStory_Command extends CliCommand
             // --reuse-target flag
 
             // does the target exist to be reused?
-            $this->output->setSilent();
+            $this->output->setSilentMode();
             $hasTarget = $st->fromTargetsTable()->hasCurrentTestEnvironment();
-            $this->output->resetSilent();
+            $this->output->resetSilentMode();
 
             if ($hasTarget) {
                 // remove this target from the table
-                $this->output->setSilent();
+                $this->output->setSilentMode();
                 $st->usingTargetsTable()->removeCurrentTestEnvironment();
-                $this->output->resetSilent();
+                $this->output->resetSilentMode();
             }
         }
     }

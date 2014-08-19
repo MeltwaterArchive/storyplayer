@@ -124,12 +124,12 @@ class TapReport implements Report
 		fclose($fp);
 	}
 
-	public function resetSilent()
+	public function resetSilentMode()
 	{
 		// no-op
 	}
 
-	public function setSilent()
+	public function setSilentMode()
 	{
 		// no-op
 	}
