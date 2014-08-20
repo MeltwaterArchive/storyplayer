@@ -107,9 +107,9 @@ class DefaultConsole extends Console
 		$this->write($license . PHP_EOL . PHP_EOL);
 	}
 
-	public function endStoryplayer()
+	public function endStoryplayer($duration)
 	{
-		$this->writeFinalReport(true);
+		$this->writeFinalReport($duration, true);
 	}
 
 	/**

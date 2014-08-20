@@ -277,6 +277,9 @@ class PlayStory_Command extends CliCommand
         // we wouldn't want signal handling called out of order :)
         $this->initSignalHandling($injectables);
 
+        // let's keep score :)
+        $startTime = microtime(true);
+
         // and we're ready to tell the world that we're here
         $output->startStoryplayer(
             $engine->getAppVersion(),
@@ -306,8 +309,11 @@ class PlayStory_Command extends CliCommand
         // write out any changed runtime config to disk
         $runtimeConfigManager->saveRuntimeConfig($runtimeConfig);
 
+        // how long did that take?
+        $duration = microtime(true) - $startTime;
+
         // tell the output plugins that we're all done
-        $output->endStoryplayer();
+        $output->endStoryplayer($duration);
 
         // all done
         return 0;

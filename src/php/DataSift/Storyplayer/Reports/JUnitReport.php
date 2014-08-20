@@ -81,7 +81,7 @@ class JUnitReport implements Report
 	/**
 	 * @return void
 	 */
-	public function endStoryplayer()
+	public function endStoryplayer($duration)
 	{
 		// right, now we need to report on what we've seen
 		$fp = fopen($this->filename, "w");

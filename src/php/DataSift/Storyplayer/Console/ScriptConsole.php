@@ -93,7 +93,7 @@ EOS;
 	 *
 	 * @return void
 	 */
-	public function endStoryplayer()
+	public function endStoryplayer($duration)
 	{
 		echo PHP_EOL;
 	}

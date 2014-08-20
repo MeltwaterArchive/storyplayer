@@ -273,13 +273,15 @@ class Output extends OutputPlugin
 	/**
 	 * called when Storyplayer exits
 	 *
+	 * @param  float $duration
+	 *         how long did storyplayer take to run (in seconds)?
 	 * @return void
 	 */
-	public function endStoryplayer()
+	public function endStoryplayer($duration)
 	{
 		foreach ($this->plugins as $plugin)
 		{
-			$plugin->endStoryplayer();
+			$plugin->endStoryplayer($duration);
 		}
 	}
 

@@ -73,12 +73,21 @@ abstract class Console extends OutputPlugin
 	 *
 	 * @return void
 	 */
-	public function writeFinalReport($summary)
+	public function writeFinalReport($duration, $summary)
 	{
 		// keep count of what the final results are
 		$succeededGroups = [];
 		$skippedGroups   = [];
 		$failedGroups    = [];
+
+		// do we have any results?
+		if (!isset($this->results)) {
+			// huh - nothing happened at all
+			$this->write("HUH - nothing appears to have happened. Time taken: ", $this->writer->puzzledSummaryStyle);
+			$this->writeDuration($duration, $this->writer->puzzledSummaryStyle);
+			$this->write(PHP_EOL . PHP_EOL);
+			return;
+		}
 
 		// this is our opportunity to tell the user how our story(ies)
 		// went in detail
@@ -107,14 +116,16 @@ abstract class Console extends OutputPlugin
 		$this->write(PHP_EOL);
 		if (empty($succeededGroups) && empty($skippedGroups) && empty($failedGroups)) {
 			// huh - nothing happened at all
-			$this->write("HUH - nothing appears to have happened", $this->writer->puzzledSummaryStyle);
+			$this->write("HUH - nothing appears to have happened. Time taken: ", $this->writer->puzzledSummaryStyle);
+			$this->writeDuration($duration, $this->writer->puzzledSummaryStyle);
 			$this->write(PHP_EOL . PHP_EOL);
 			return;
 		}
 
 		if (empty($failedGroups)) {
 			// nothing failed
-			$this->write("SUCCESS - " . count($succeededGroups) . ' PASSED, ' . count($skippedGroups) . ' SKIPPED', $this->writer->successSummaryStyle);
+			$this->write("SUCCESS - " . count($succeededGroups) . ' PASSED, ' . count($skippedGroups) . ' SKIPPED. Time taken: ', $this->writer->successSummaryStyle);
+			$this->writeDuration($duration, $this->writer->successSummaryStyle);
 			$this->write(PHP_EOL . PHP_EOL);
 			return;
 		}
@@ -123,9 +134,9 @@ abstract class Console extends OutputPlugin
 		$this->write("FAILURE - "
 			. count($succeededGroups) . ' PASSED, '
 			. count($skippedGroups) . ' SKIPPED, '
-			. count($failedGroups) . ' FAILED :(',
+			. count($failedGroups) . ' FAILED :( Time taken: ',
 			$this->writer->failSummaryStyle);
-
+		$this->writeDuration($duration, $this->writer->failSummaryStyle);
 		$this->write(PHP_EOL . PHP_EOL);
 
 		// do we stop here?

@@ -104,7 +104,7 @@ abstract class OutputPlugin
 		$this->writer->write($output, $style);
 	}
 
-	public function writeDuration($duration)
+	public function writeDuration($duration, $style = null)
 	{
 		// break down the duration into reportable units
 		$hours = $mins = $secs = 0;
@@ -161,8 +161,13 @@ abstract class OutputPlugin
 			$output = "{$secs} {$secsUnit}";
 		}
 
+		// are we using our default style?
+		if (!$style) {
+			$style = $this->writer->durationStyle;
+		}
+
 		// send the string out to the user
-		$this->writer->write($output, $this->writer->durationStyle);
+		$this->writer->write($output, $style);
 	}
 
 	public function getWriter()
@@ -210,7 +215,7 @@ abstract class OutputPlugin
 	/**
 	 * @return void
 	 */
-	abstract public function endStoryplayer();
+	abstract public function endStoryplayer($duration);
 
 	abstract public function resetSilentMode();
 	abstract public function setSilentMode();

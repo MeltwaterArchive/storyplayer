@@ -111,9 +111,9 @@ class DevModeConsole extends Console
 		$this->write($license . PHP_EOL . PHP_EOL);
 	}
 
-	public function endStoryplayer()
+	public function endStoryplayer($duration)
 	{
-		$this->writeFinalReport(false);
+		$this->writeFinalReport($duration, false);
 	}
 
 	/**
