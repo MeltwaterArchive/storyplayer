@@ -60,10 +60,19 @@ trait DefaultTestEnvironmentName
 	public function initDefaultTestEnvironmentName($injectables)
 	{
 		// what are the candidates?
-		$searchList = [
-			HostnameHelper::getHostname(),
-			"localhost"
-		];
+		$searchList = [];
+
+		// do we have any defaults in the storyplayer.json file?
+		$config = json_decode($injectables->storyplayerConfig);
+		if (isset($config->defaults, $config->defaults->target)) {
+			$searchList[] = $config->defaults->target;
+		}
+
+		// our user might have a test environment for this specific host
+		$searchList[] = HostnameHelper::getHostname();
+
+		// this is our fallback when all else fails
+		$searchList[] = "localhost";
 
 		// do any of these environments exist?
 		foreach ($searchList as $testEnvName) {
