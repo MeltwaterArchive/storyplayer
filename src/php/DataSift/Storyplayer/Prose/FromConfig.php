@@ -162,4 +162,45 @@ class FromConfig extends Prose
 		// all done
 		return $value;
 	}
+
+	public function get($name)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get '$name' from the storyplayer config");
+
+		// get the details
+		$config = $st->getConfig();
+
+		// find what we are looking for
+		$parts = explode('.', $name);
+		$currentLevel = $config;
+		$endPart = array_pop($parts);
+
+		foreach ($parts as $part) {
+			if (!isset($currentLevel->$part)) {
+				$log->endAction("no such setting '{$name}'");
+				return null;
+			}
+			$currentLevel = $currentLevel->$part;
+		}
+
+		if (!isset($currentLevel->$endPart)) {
+			$log->endAction("no such setting '{$name}'");
+			return null;
+		}
+
+		// if we get here, then success \o/
+		$value = $currentLevel->$endPart;
+
+		// log the settings
+		$printer  = new DataPrinter();
+		$logValue = $printer->convertToString($value);
+		$log->endAction("value is: '{$logValue}'");
+
+		// all done
+		return $value;
+	}
 }
