@@ -70,7 +70,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 		// do we have a configDir remembered yet?
 		if (!$configDir)
 		{
-			$configDir = getenv("HOME") . '/.storyplayer';
+			$configDir = getcwd() . '/.storyplayer';
 		}
 
 		return $configDir;
