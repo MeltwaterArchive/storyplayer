@@ -149,6 +149,12 @@ class DefaultConsole extends Console
 		// we have to clone as the result object apparently changes
 		// afterwards. no idea why (yet)
 		$this->results[] = clone $result;
+
+		// if we are not connected to a terminal, we need to write out
+		// a detailed error report
+		if (!function_exists("posix_isatty") || !posix_isatty(STDOUT)) {
+			$this->writeDetailedErrorReport($result);
+		}
 	}
 
 	/**

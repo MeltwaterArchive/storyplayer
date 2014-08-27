@@ -166,26 +166,36 @@ abstract class Console extends OutputPlugin
 		$this->write(PHP_EOL);
 
 		// do we stop here?
-		if ($summary) {
-			if (function_exists("posix_isatty") && posix_isatty(STDOUT)) {
-				$this->write("See ");
-				$this->write("storyplayer.log", $this->writer->argStyle);
-				$this->write(" for details on what went wrong." . PHP_EOL . PHP_EOL);
-			}
+		if (!$summary) {
+			// we're in dev mode, which means the error reports have
+			// already been shown where they happened
 			return;
 		}
 
-		// if we get here, then we want a detailed report!
-		foreach ($failedGroups as $result) {
-			// sanity check: we should always have a failedPhase
-			if (!$result->failedPhase instanceof Phase_Result) {
-				throw new E5xx_MissingFailedPhase();
-			}
+		// are we being run by hand?
+		if (function_exists("posix_isatty") && posix_isatty(STDOUT)) {
+			$this->write("See ");
+			$this->write("storyplayer.log", $this->writer->argStyle);
+			$this->write(" for details on what went wrong." . PHP_EOL . PHP_EOL);
+		}
+	}
 
-			// is it a story?
-			if ($result instanceof Story_Result) {
-				$this->showActivityForPhase($result->story, $result->failedPhase);
-			}
+	protected function writeDetailedErrorReport($result)
+	{
+		// did anything go wrong?
+		if ($result->getPhaseGroupSucceeded() || $result->getPhaseGroupSkipped()) {
+			// everything is fine
+			return;
+		}
+
+		// sanity check: we should always have a failedPhase
+		if (!$result->failedPhase instanceof Phase_Result) {
+			throw new E5xx_MissingFailedPhase();
+		}
+
+		// is it a story?
+		if ($result instanceof Story_Result) {
+			$this->showActivityForPhase($result->story, $result->failedPhase);
 		}
 	}
 
@@ -385,7 +395,7 @@ abstract class Console extends OutputPlugin
 		// all done
 		$this->write("----------------------------------------" . PHP_EOL, $this->writer->commentStyle);
 		$this->write("END OF ERROR REPORT" . PHP_EOL);
-		$this->write("=============================================================" . PHP_EOL, $this->writer->commentStyle);
+		$this->write("=============================================================" . PHP_EOL . PHP_EOL, $this->writer->commentStyle);
 	}
 
 	protected function writeCodePointFile($codeLine)

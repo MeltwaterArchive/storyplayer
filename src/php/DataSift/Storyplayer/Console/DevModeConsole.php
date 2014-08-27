@@ -156,6 +156,9 @@ class DevModeConsole extends Console
 		$this->write('-------------------------------------------------------------' . PHP_EOL . PHP_EOL, $this->writer->commentStyle);
 
 		$this->results[] = clone $result;
+
+		// we want a detailed error report if something went wrong
+		$this->writeDetailedErrorReport($result);
 	}
 
 	/**
