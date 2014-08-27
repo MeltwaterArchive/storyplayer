@@ -288,11 +288,6 @@ class Story
 	//
 	// --------------------------------------------------------------------
 
-	public function __construct()
-	{
-		$this->storyResult = new Story_Result($this);
-	}
-
 	public function inGroup($groupName)
 	{
 		$this->setGroup($groupName);
@@ -1400,6 +1395,10 @@ class Story
 
 	public function getResult()
 	{
+		if (!isset($this->storyResult)) {
+			$this->storyResult = new Story_Result($this);
+		}
+
 		return $this->storyResult;
 	}
 }

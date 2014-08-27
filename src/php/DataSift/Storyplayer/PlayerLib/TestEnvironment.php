@@ -55,11 +55,13 @@ namespace DataSift\Storyplayer\PlayerLib;
  */
 class TestEnvironment
 {
+	protected $name;
 	protected $result;
 
-	public function __construct()
+	public function __construct($name)
 	{
-		$this->result = new PhaseGroup_Result();
+		$this->name   = $name;
+		$this->result = new PhaseGroup_Result($name);
 	}
 
 	public function getResult()
@@ -69,6 +71,6 @@ class TestEnvironment
 
 	public function resetResult()
 	{
-		$this->result = new PhaseGroup_Result();
+		$this->result = new PhaseGroup_Result($this->name);
 	}
 }

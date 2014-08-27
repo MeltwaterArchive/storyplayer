@@ -75,7 +75,7 @@ class PhaseGroup_Player
 	 * @param Injectables $injectables
 	 * @param array $phases
 	 */
-	public function playPhases(StoryTeller $st, Injectables $injectables, $phases, $thingBeingPlayed)
+	public function playPhases($activity, StoryTeller $st, Injectables $injectables, $phases, $thingBeingPlayed)
 	{
 		// shorthand
 		$output  = $st->getOutput();
@@ -106,6 +106,7 @@ class PhaseGroup_Player
 		$groupResult = null;
 		if ($thingBeingPlayed){
 			$groupResult = $thingBeingPlayed->getResult();
+			$groupResult->setActivity($activity);
 		}
 
 		// execute each phase, until either:

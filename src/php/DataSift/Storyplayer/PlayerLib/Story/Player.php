@@ -118,7 +118,9 @@ class Story_Player
         //$context->initUser($st);
 
         // run the startup phase
+		$activity = "Running story";
         $phasesPlayer->playPhases(
+        	$activity,
         	$st,
         	$injectables,
         	$this->startupPhases,
@@ -129,10 +131,12 @@ class Story_Player
 		$story->setDefaultCallbacks();
 
 		// tell the outside world what we're doing
-		$output->startPhaseGroup("Running story", $story->getCategory() . ' > ' . $story->getGroup() . ' > ' . $story->getName());
+		$name    = $story->getCategory() . ' > ' . $story->getGroup() . ' > ' . $story->getName();
+		$output->startPhaseGroup($activity, $name);
 
 		// run the phases in the 'story' section
 		$phasesPlayer->playPhases(
+			$activity,
 			$st,
 			$injectables,
 			$this->storyPhases,
@@ -148,14 +152,16 @@ class Story_Player
 			$story
 		);
 
-		// make sense of what happened
-		//$storyResult->calculateStoryResult();
+		// make sure the result has the filename in
+		$result = $story->getResult();
+		$result->filename = $this->storyFilename;
 
 		// announce the results
 		$output->endPhaseGroup($story->getResult());
 
 		// run the shutdown phase
         $phasesPlayer->playPhases(
+        	$activity,
 			$st,
 			$injectables,
 			$this->shutdownPhases,

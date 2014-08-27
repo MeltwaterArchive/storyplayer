@@ -81,7 +81,7 @@ class Story_Result extends PhaseGroup_Result
 	public function __construct(Story $story)
 	{
 		// initialise our parent first
-		parent::__construct();
+		parent::__construct($story->getCategory() . ' > ' . $story->getGroup() . ' > ' . $story->getName());
 
 		// remember the story we are reporting on
 		$this->story = $story;

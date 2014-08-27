@@ -58,6 +58,23 @@ use DataSift\Storyplayer\PlayerLib\Story;
 class PhaseGroup_Result
 {
 	/**
+	 * the name of the group that we are reporting on
+	 *
+	 * this is an end-user name (e.g. the name of the story) rather than
+	 * the name of the internal class
+	 *
+	 * @var string
+	 */
+	public $name = null;
+
+	/**
+	 * the reason that the PhaseGroup is running at all
+	 *
+	 * @var string
+	 */
+	public $activity = null;
+
+	/**
 	 *
 	 * @var PhaseResult
 	 */
@@ -104,11 +121,20 @@ class PhaseGroup_Result
 		'BLACKLISTED'
 	];
 
-	public function __construct()
+	public function __construct($name)
 	{
+		// remember our name - we're going to need it when writing
+		// out reports
+		$this->name = $name;
+
 		// remember when we were created - we're going to treat that
 		// as the start time for this story!
 		$this->startTime = microtime(true);
+	}
+
+	public function setActivity($activity)
+	{
+		$this->activity = $activity;
 	}
 
 	public function setPhaseGroupHasSucceeded()
@@ -161,6 +187,19 @@ class PhaseGroup_Result
 			case self::FAIL:
 			case self::ERROR:
 			case self::INCOMPLETE:
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	public function getPhaseGroupSkipped()
+	{
+		switch ($this->resultCode)
+		{
+			case self::BLACKLISTED:
+			case self::SKIPPED:
 				return true;
 
 			default:

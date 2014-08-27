@@ -121,7 +121,6 @@ abstract class Console extends OutputPlugin
 			$this->write(PHP_EOL . PHP_EOL);
 			return;
 		}
-
 		if (empty($failedGroups)) {
 			// nothing failed
 			$this->write("SUCCESS - " . count($succeededGroups) . ' PASSED, ' . count($skippedGroups) . ' SKIPPED. Time taken: ', $this->writer->successSummaryStyle);
@@ -139,15 +138,41 @@ abstract class Console extends OutputPlugin
 		$this->writeDuration($duration, $this->writer->failSummaryStyle);
 		$this->write(PHP_EOL . PHP_EOL);
 
+		// write out a list of failed tests - someone will want to look
+		// at them in detail
+		$this->write("The following did not pass:" . PHP_EOL . PHP_EOL);
+		foreach ($skippedGroups as $skippedGroup) {
+			$this->writePhaseGroupSkipped();
+			$this->write(' ' . $skippedGroup->activity, $this->writer->activityStyle);
+			$this->write(' ' . $skippedGroup->name . PHP_EOL, $this->writer->nameStyle);
+
+			if (isset($skippedGroup->filename)) {
+				$this->write('       (', $this->writer->punctuationStyle);
+				$this->write($skippedGroup->filename, $this->writer->punctuationStyle);
+				$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
+			}
+		}
+		foreach ($failedGroups as $failedGroup) {
+			$this->writePhaseGroupFailed();
+			$this->write(' ' . $failedGroup->activity, $this->writer->activityStyle);
+			$this->write(' ' . $failedGroup->name . PHP_EOL, $this->writer->nameStyle);
+
+			if (isset($failedGroup->filename)) {
+				$this->write('       (', $this->writer->punctuationStyle);
+				$this->write($failedGroup->filename, $this->writer->punctuationStyle);
+				$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
+			}
+		}
+		$this->write(PHP_EOL);
+
 		// do we stop here?
 		if ($summary) {
 			if (function_exists("posix_isatty") && posix_isatty(STDOUT)) {
 				$this->write("See ");
 				$this->write("storyplayer.log", $this->writer->argStyle);
 				$this->write(" for details on what went wrong." . PHP_EOL . PHP_EOL);
-
-				return;
 			}
+			return;
 		}
 
 		// if we get here, then we want a detailed report!
@@ -196,6 +221,27 @@ abstract class Console extends OutputPlugin
 
         // output the message
         $this->write(rtrim($message) . PHP_EOL);
+	}
+
+	protected function writePhaseGroupSucceeded($msg = 'OKAY')
+	{
+		$this->write('[', $this->writer->punctuationStyle);
+		$this->write($msg, $this->writer->successStyle);
+		$this->write(']', $this->writer->punctuationStyle);
+	}
+
+	protected function writePhaseGroupFailed($msg = 'FAIL')
+	{
+		$this->write('[', $this->writer->punctuationStyle);
+		$this->write($msg, $this->writer->failStyle);
+		$this->write(']', $this->writer->punctuationStyle);
+	}
+
+	protected function writePhaseGroupSkipped($msg = 'SKIP')
+	{
+		$this->write('[', $this->writer->punctuationStyle);
+		$this->write($msg, $this->writer->skippedStyle);
+		$this->write(']', $this->writer->punctuationStyle);
 	}
 
 	/**
