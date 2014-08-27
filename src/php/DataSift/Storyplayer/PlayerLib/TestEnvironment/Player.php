@@ -96,7 +96,7 @@ class TestEnvironment_Player extends BasePlayer
         $output->endPhaseGroup($creationResult);
 
         // what happened?
-        if (!$creationResult->getPhaseGroupSucceeded()) {
+        if (!$creationResult->getPhaseGroupSucceeded() && !$creationResult->getPhaseGroupSkipped()) {
             $output->logCliError("failed to create test environment - cannot continue");
             exit(1);
         }

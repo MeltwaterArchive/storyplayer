@@ -160,6 +160,16 @@ class PhaseGroup_Player
 						return;
 
 					case self::NEXT_CONTINUE:
+						if ($groupResult) {
+							// keep the result up to date, in case this
+							// is the last one
+							if ($phaseResult->getPhaseHasBeenSkipped()) {
+								$groupResult->setPhaseGroupHasBeenSkipped();
+							}
+							else {
+								$groupResult->setPhaseGroupHasSucceeded();
+							}
+						}
 						// tell the output plugins that this phase is over
 						$output->endPhase($phase, $phaseResult);
 				}
@@ -191,9 +201,9 @@ class PhaseGroup_Player
 		}
 
 		// all done
-		if ($groupResult) {
-			$groupResult->setPhaseGroupHasSucceeded();
-		}
+		// if ($groupResult) {
+		// 	$groupResult->setPhaseGroupHasSucceeded();
+		// }
 	}
 
 	/**

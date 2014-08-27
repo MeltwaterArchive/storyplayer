@@ -177,7 +177,7 @@ class Phase_Result
 		return false;
 	}
 
-	public function getPhaseWasSkipped()
+	public function getPhaseHasBeenSkipped()
 	{
 		if ($this->result == self::SKIPPED) {
 			return true;

@@ -101,6 +101,7 @@ abstract class Console extends OutputPlugin
 					$succeededGroups[] = $result;
 					break;
 
+				case PhaseGroup_Result::SKIPPED:
 				case PhaseGroup_Result::BLACKLISTED:
 					// this can legitimately happen
 					$skippedGroups[] = $result;
@@ -140,18 +141,18 @@ abstract class Console extends OutputPlugin
 
 		// write out a list of failed tests - someone will want to look
 		// at them in detail
-		$this->write("The following did not pass:" . PHP_EOL . PHP_EOL);
-		foreach ($skippedGroups as $skippedGroup) {
-			$this->writePhaseGroupSkipped();
-			$this->write(' ' . $skippedGroup->activity, $this->writer->activityStyle);
-			$this->write(' ' . $skippedGroup->name . PHP_EOL, $this->writer->nameStyle);
+		$this->write("Here's the list of everything that failed:" . PHP_EOL . PHP_EOL);
+		// foreach ($skippedGroups as $skippedGroup) {
+		// 	$this->writePhaseGroupSkipped();
+		// 	$this->write(' ' . $skippedGroup->activity, $this->writer->activityStyle);
+		// 	$this->write(' ' . $skippedGroup->name . PHP_EOL, $this->writer->nameStyle);
 
-			if (isset($skippedGroup->filename)) {
-				$this->write('       (', $this->writer->punctuationStyle);
-				$this->write($skippedGroup->filename, $this->writer->punctuationStyle);
-				$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
-			}
-		}
+		// 	if (isset($skippedGroup->filename)) {
+		// 		$this->write('       (', $this->writer->punctuationStyle);
+		// 		$this->write($skippedGroup->filename, $this->writer->punctuationStyle);
+		// 		$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
+		// 	}
+		// }
 		foreach ($failedGroups as $failedGroup) {
 			$this->writePhaseGroupFailed();
 			$this->write(' ' . $failedGroup->activity, $this->writer->activityStyle);

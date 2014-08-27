@@ -118,7 +118,8 @@ class PhaseGroup_Result
 		'FAIL',
 		'ERROR',
 		'INCOMPLETE',
-		'BLACKLISTED'
+		'BLACKLISTED',
+		'SKIPPED',
 	];
 
 	public function __construct($name)
@@ -140,6 +141,13 @@ class PhaseGroup_Result
 	public function setPhaseGroupHasSucceeded()
 	{
 		$this->resultCode  = self::OKAY;
+		$this->failedPhase = null;
+		$this->setEndTime();
+	}
+
+	public function setPhaseGroupHasBeenSkipped()
+	{
+		$this->resultCode  = self::SKIPPED;
 		$this->failedPhase = null;
 		$this->setEndTime();
 	}
