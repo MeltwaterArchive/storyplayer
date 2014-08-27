@@ -96,7 +96,6 @@ class TestEnvironmentSetupPhase extends StoryPhase
 			}
 
 			$phaseResult->setContinuePlaying();
-			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
 		}
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(
@@ -129,7 +128,6 @@ class TestEnvironmentSetupPhase extends StoryPhase
 				$e->getMessage(),
 				$e
 			);
-			$phaseResult->addPairedPhase('TestEnvironmentTeardown');
 			$storyResult->setStoryHasFailed($phaseResult);
 		}
 

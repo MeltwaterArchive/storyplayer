@@ -71,7 +71,6 @@ class Phase_Result
 	protected $phaseName;
 	protected $message;
 	protected $nextAction;
-	protected $pairedPhases = array();
 	protected $result;
 	protected $exception;
 
@@ -227,27 +226,5 @@ class Phase_Result
 		$this->nextAction = PhaseGroup_Player::NEXT_SKIP;
 		$this->result     = $result;
 		$this->message    = $msg;
-	}
-
-	/**
-	 * @param string $phaseName
-	 */
-	public function addPairedPhase($phaseName)
-	{
-		$this->pairedPhases[$phaseName] = $phaseName;
-	}
-
-	public function getPairedPhases()
-	{
-		return $this->pairedPhases;
-	}
-
-	public function hasPairedPhases()
-	{
-		if (count($this->pairedPhases) > 0) {
-			return true;
-		}
-
-		return false;
 	}
 }

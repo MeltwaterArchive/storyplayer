@@ -68,8 +68,6 @@ class PhaseGroup_Player
 	const MSG_PHASE_INCOMPLETE  = 'phase is incomplete';
 	const MSG_PHASE_NOT_ACTIVE  = 'phase is marked as inactive';
 
-	protected $pairedPhases = [];
-
 	/**
 	 * @param StoryTeller $st
 	 * @param Injectables $injectables
@@ -79,12 +77,6 @@ class PhaseGroup_Player
 	{
 		// shorthand
 		$output  = $st->getOutput();
-
-		// keep track of any paired phases
-		//
-		// these are phases that need to run on cleanup because an
-		// earlier phase was attempted
-		$this->pairedPhases = [];
 
 		// we are going to need something to help us load each of our
 		// phases
@@ -118,14 +110,6 @@ class PhaseGroup_Player
 			// shorthand
 			$phase    = $phaseData['phase'];
 			$isActive = $phaseData['isActive'];
-
-			// remove this phase from the list of paired phases
-			//
-			// this ensures we do not accidentally execute a phase
-			// twice or more!
-			if (isset($this->pairedPhases[$phaseName])) {
-				unset($this->pairedPhases[$phaseName]);
-			}
 
 			try {
 				// tell the world that we're running this phase
@@ -208,73 +192,6 @@ class PhaseGroup_Player
 	}
 
 	/**
-	 * @param StoryTeller $st
-	 * @param Injectables $injectables
-	 * @param array $phases
-	 * @param Phase_Results $phaseResults
-	 */
-	public function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, $thingBeingPlayed = null)
-	{
-		// special case
-		//
-		// do we actually have any work to do?
-		if (!isset($this->pairedPhases)) {
-			// nope - so let's bail now
-			return;
-		}
-
-		// ----------------------------------------------------------------
-		// CLEANUP TIME
-		//
-		// execute any paired phases that haven't yet been executed
-		//
-		// we execute all of the paired phases here, even if they fail,
-		// because we want all of the cleaning up to at least be attempted
-		//
-		// this is (essentially) a slimmed down version of playPhases()
-
-		// shorthand
-		$output  = $st->getOutput();
-
-		// we are going to need something to help us load each of our
-		// phases
-		$phaseLoader = $injectables->phaseLoader;
-
-		foreach ($this->pairedPhases as $phaseName)
-		{
-			// is the phase active?
-			//
-			// by default, we assume that it is
-			$isActive = true;
-
-			// check the phases list to see if it has a different
-			// opinion
-			if (isset($phases->$phaseName)) {
-				$isActive = $phases->$phaseName;
-			}
-
-			// load the phase
-			$phase = $phaseLoader->loadPhase($st, $phaseName);
-
-			// tell the world that we're running this phase
-			$output->startPhase($phase);
-
-			// play the phase
-			$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive, $thingBeingPlayed);
-
-			// tell the world that the phase is over
-			$output->endPhase($phase, $phaseResult);
-
-			// we *always* continue, even if the phase failed
-		}
-
-		// reset our list of paired phases, in case we get reused
-		$this->pairedPhases = [];
-
-		// all done
-	}
-
-	/**
 	 *
 	 * @param  StoryTeller $st
 	 * @param  Injectables $injectables
@@ -285,7 +202,16 @@ class PhaseGroup_Player
 	protected function playPhase(StoryTeller $st, Injectables $injectables, Phase $phase, $isActive, $thingBeingPlayed = null)
 	{
 		// shorthand
-		$output  = $st->getOutput();
+		$output    = $st->getOutput();
+		$phaseName = $phase->getPhaseName();
+
+		// remove this phase from the list of paired phases
+		//
+		// this ensures we do not accidentally execute a phase
+		// twice or more!
+		if (isset($this->pairedPhases[$phaseName])) {
+			unset($this->pairedPhases[$phaseName]);
+		}
 
 		// run the phase if we're allowed to
 		if ($isActive) {
@@ -293,7 +219,6 @@ class PhaseGroup_Player
 			$phaseResult = $phase->doPhase($thingBeingPlayed);
 		}
 		else {
-			$phaseName = $phase->getPhaseName();
 			$phaseResult = new Phase_Result($phaseName);
 			$phaseResult->setContinuePlaying($phaseResult::SKIPPED);
 			$output->logPhaseSkipped($phaseName, self::MSG_PHASE_NOT_ACTIVE);

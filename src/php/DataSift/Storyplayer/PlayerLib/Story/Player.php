@@ -90,9 +90,8 @@ class Story_Player
 	public function __construct($storyFilename, Injectables $injectables)
 	{
 		$this->storyFilename  = $storyFilename;
-		$this->startupPhases  = $injectables->activeConfig->storyplayer->phases->startup;
 		$this->storyPhases    = $injectables->activeConfig->storyplayer->phases->story;
-		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->shutdown;
+		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->after_story;
 	}
 
 	public function play(StoryTeller $st, Injectables $injectables)
@@ -117,21 +116,12 @@ class Story_Player
         //$context = $st->getStoryContext();
         //$context->initUser($st);
 
-        // run the startup phase
-		$activity = "Running story";
-        $phasesPlayer->playPhases(
-        	$activity,
-        	$st,
-        	$injectables,
-        	$this->startupPhases,
-        	$story
-        );
-
 		// set default callbacks up
 		$story->setDefaultCallbacks();
 
 		// tell the outside world what we're doing
-		$name    = $story->getCategory() . ' > ' . $story->getGroup() . ' > ' . $story->getName();
+		$activity = "Running story";
+		$name     = $story->getCategory() . ' > ' . $story->getGroup() . ' > ' . $story->getName();
 		$output->startPhaseGroup($activity, $name);
 
 		// run the phases in the 'story' section
@@ -143,21 +133,8 @@ class Story_Player
 			$story
 		);
 
-		// play the 'paired' phases too, in case they haven't yet
-		// executed correctly
-		$phasesPlayer->playPairedPhases(
-			$st,
-			$injectables,
-			$this->storyPhases,
-			$story
-		);
-
-		// make sure the result has the filename in
-		$result = $story->getResult();
-		$result->filename = $this->storyFilename;
-
-		// announce the results
-		$output->endPhaseGroup($story->getResult());
+		// grab the result at this point
+		$result = clone $story->getResult();
 
 		// run the shutdown phase
         $phasesPlayer->playPhases(
@@ -167,6 +144,18 @@ class Story_Player
 			$this->shutdownPhases,
 			$story
         );
+
+        // do we also need to look at any failures that happened during
+        // the shutdown phase?
+        if ($result->getPhaseGroupSucceeded()) {
+        	$result = $story->getResult();
+        }
+
+		// make sure the result has the story's filename in
+		$result->filename = $this->storyFilename;
+
+		// announce the results
+		$output->endPhaseGroup($result);
 
 		// all done
 	}

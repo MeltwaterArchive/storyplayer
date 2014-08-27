@@ -561,7 +561,7 @@ class PlayStory_Command extends CliCommand
         if (isset($engine->options->persistTarget) && $engine->options->persistTarget)
         {
             $injectables->activeConfig->storyplayer->phases->testEnvShutdown->TestEnvironmentDestruction = false;
-            $injectables->activeConfig->storyplayer->phases->story->TestEnvironmentTeardown = false;
+            $injectables->activeConfig->storyplayer->phases->after_story->TestEnvironmentTeardown = false;
         }
 
         // are we trying to use a test environment that has previously
