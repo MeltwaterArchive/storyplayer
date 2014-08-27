@@ -330,28 +330,38 @@ abstract class Console extends OutputPlugin
 				$this->writeCodePointCode($codePoint);
 				$this->write(PHP_EOL);
 
-				if (isset($codePoint['args']) && count($codePoint['args'])) {
-					$this->write(PHP_EOL . '        Arguments:' . PHP_EOL, $this->writer->argumentsHeadingStyle);
-					foreach ($codePoint['args'] as $key => $arg) {
-						ob_start();
-						var_dump($arg);
-						$printableArg = ob_get_contents();
-						ob_end_clean();
+				// unfortunately, I've had to comment this out
+				//
+				// it's just far too easy to end up with a variable that
+				// can't be var_dump()ed without running out of RAM :(
+				//
+				// if (isset($codePoint['args']) && count($codePoint['args'])) {
+				// 	$this->write(PHP_EOL . '        Arguments:' . PHP_EOL, $this->writer->argumentsHeadingStyle);
+				// 	foreach ($codePoint['args'] as $key => $arg) {
+				// 		if (is_object($arg) && get_class($arg) == 'DataSift\Storyplayer\PlayerLib\Storyteller') {
+				// 			$printableArg = '$st';
+				// 		}
+				// 		else {
+				// 			ob_start();
+				// 			var_dump($arg);
+				// 			$printableArg = ob_get_contents();
+				// 			ob_end_clean();
+				// 		}
 
-						// how many lines do we have?
-						$lines = explode(PHP_EOL, $printableArg);
-						$maxLength = 100;
-						if (count($lines) > $maxLength) {
-							$printableArg = '';
-							for ($i = 0; $i < $maxLength; $i++) {
-								$printableArg .= $lines[$i] . PHP_EOL;
-							}
-							$printableArg .= '...' . PHP_EOL;
-						}
+				// 		// how many lines do we have?
+				// 		$lines = explode(PHP_EOL, $printableArg);
+				// 		$maxLength = 100;
+				// 		if (count($lines) > $maxLength) {
+				// 			$printableArg = '';
+				// 			for ($i = 0; $i < $maxLength; $i++) {
+				// 				$printableArg .= $lines[$i] . PHP_EOL;
+				// 			}
+				// 			$printableArg .= '...' . PHP_EOL;
+				// 		}
 
-						$this->write(PHP_EOL . CodeFormatter::indentBySpaces($printableArg, 12));
-					}
-				}
+				// 		$this->write(PHP_EOL . CodeFormatter::indentBySpaces($printableArg, 12));
+				// 	}
+				// }
 			}
 		}
 		if (!empty($activityLog)) {
