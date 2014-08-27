@@ -405,10 +405,13 @@ class PlayStory_Command extends CliCommand
             exit(1);
         }
 
+        // keep track of the stories to play
+        $storiesToPlay = [];
+
         foreach ($cliParams as $cliParam) {
             // figure out what to do?
             if (is_dir($cliParam)) {
-                $this->playerList = $this->playerList + $this->addStoriesFromFolder($cliEngine, $injectables, $cliParam);
+                $storiesToPlay = array_merge($storiesToPlay, $this->addStoriesFromFolder($cliEngine, $injectables, $cliParam));
             }
             else if (is_file($cliParam)) {
                 // are we loading a story, or a list of stories?
@@ -417,11 +420,7 @@ class PlayStory_Command extends CliCommand
 
                 switch ($paramSuffix) {
                     case 'php':
-                        $this->playerList = $this->playerList + $this->addStoryFromFile($cliEngine, $injectables, $cliParam);
-                        break;
-
-                    case 'json':
-                        $this->playerList = $this->playerList + $this->addStoriesFromTale($cliEngine, $injectables, $cliParam);
+                        $storiesToPlay = array_merge($storiesToPlay, $this->addStoryFromFile($cliEngine, $injectables, $cliParam));
                         break;
 
                     default:
@@ -435,6 +434,15 @@ class PlayStory_Command extends CliCommand
                 exit(1);
             }
         }
+
+        // did we find any stories to play?
+        if (count($storiesToPlay) == 0) {
+            $this->output->logCliError("no stories to play :(");
+            exit(1);
+        }
+
+        // wrap all of the stories in a TestEnvironment
+        $this->playerList[] = new TestEnvironment_Player($storiesToPlay, $injectables);
     }
 
     // ==================================================================
@@ -456,9 +464,7 @@ class PlayStory_Command extends CliCommand
 
         // these are the players we want to execute for the story
         $return = [
-            new TestEnvironment_Player([
-                new Story_Player($storyFile, $injectables),
-            ], $injectables)
+            new Story_Player($storyFile, $injectables),
         ];
 
         // all done
@@ -484,13 +490,8 @@ class PlayStory_Command extends CliCommand
             $storiesToPlay[] = new Story_Player($filename, $injectables);
         }
 
-        // wrap them in a test environment
-        $return = [
-            new TestEnvironment_Player($storiesToPlay, $injectables)
-        ];
-
         // all done
-        return $return;
+        return $storiesToPlay;
     }
 
     protected function findStoriesInFolder($folder)
@@ -511,49 +512,6 @@ class PlayStory_Command extends CliCommand
 
         // all done
         return $filenames;
-    }
-
-    protected function addStoriesFromTale(CliEngine $engine, Injectables $injectables, $taleFile)
-    {
-        // the list of actions we're building up
-        $return = [];
-
-        // let's get our tale
-        //
-        // this gives us a stdClass of the tale file, with defaults
-        // added to the options section if required
-        $tale = Tale_Loader::loadTale($taleFile);
-
-        // support for reusing test environments
-        if ($tale->options->reuseTestEnvironment) {
-            $injectables->activeConfig->phases->story->testEnvironmentSetup = false;
-            $injectables->activeConfig->phases->story->testEnvironmentTeardown = false;
-        }
-        else {
-            // we are not reusing test environments, so ALWAYS create
-            // and destroy
-            $injectables->activeConfig->phases->story->testEnvironmentSetup = true;
-            $injectables->activeConfig->phases->story->testEnvironmentTeardown = true;
-        }
-        // our first story ALWAYS needs to create the test environment
-        $firstStoryPhases = clone $injectables->activeConfig->phases->story;
-        $firstStoryPhases->testEnvironmentSetup = true;
-
-        // our last story ALWAYS needs to destroy the test environment
-        $lastStoryPhases  = clone $injectables->activeConfig->phases->story;
-        $lastStoryPhases->testEnvironmentTeardown = true;
-
-        foreach ($tale->stories as $storyFile) {
-            $return[] = new StoryPlayer($storyFile);
-        }
-
-        if ($tale->options->reuseTestEnvironment) {
-            // clean up after ourselves at the end
-            $return[] = new TestEnvironmentTeardownPlayer($tale->stories[0]);
-        }
-
-        // all done
-        return $return;
     }
 
     // ==================================================================
