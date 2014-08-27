@@ -1,6 +1,6 @@
 ---
-layout: stories
-title: Pre-Test Inspection Phase
+layout: v2/stories
+title: "Pre-Test Inspection Phase"
 prev: '<a href="../stories/pre-test-prediction.html">Prev: The Pre-Test Prediction Phase</a>'
 next: '<a href="../stories/action.html">Next: Action Phase</a>'
 ---

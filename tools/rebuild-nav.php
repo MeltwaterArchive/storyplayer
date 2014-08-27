@@ -11,6 +11,7 @@ define('MANUAL_VERSION', $argv[1]);
 define('TOP_DIR', realpath(__DIR__ . '/..'));
 define('SOURCE_DIR', TOP_DIR . '/' . MANUAL_VERSION);
 define('NAVBAR_INCLUDE', TOP_DIR . '/_includes/' . MANUAL_VERSION . '/nav.html');
+define('ALLCHAPTERS_INCLUDE', TOP_DIR . '/_includes/' . MANUAL_VERSION . '/all_chapters.html');
 define('SIDEBAR_DIR', TOP_DIR . '/_includes/' . MANUAL_VERSION . '/sidebar');
 
 // ========================================================================
@@ -44,30 +45,64 @@ function buildNavBar($toc)
 			continue;
 		}
 
-		// start a dropdown menu for this section
-		$navBarHtml .= '<li class="dropdown">' . "\n"
-					 . '<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">'
-					 . htmlentities($sectionName)
-					 . '<b class="caret"></b>'
-					 . "</a>\n"
-					 . '<ul class="dropdown-menu">' . "\n";
-
-		// add the contents of this section
-		foreach ($contents as $name => $url) {
-			if (empty($url)) {
-				$navBarHtml .= '<li class="divider"></li>' . "\n";
-			}
-			else {
-				$navBarHtml .= '<li><a href="' . BASE_URL . MANUAL_VERSION . '/' . $url . '.html">' . htmlentities($name) . "</a></li>\n";
-			}
+		// if we get here, then we need to find the first member of this
+		// section that has a link in it
+		$firstKey = array_keys((array)$contents)[0];
+		if (is_string($contents->$firstKey)) {
+			$navBarHtml .= '<li><a href="' . BASE_URL . MANUAL_VERSION . '/' . $contents->$firstKey . '.html">' . htmlentities($sectionName) . "</a></li>\n";
+			continue;
 		}
-
-		// all done - close the dropdown
-		$navBarHtml .= "</ul>\n</li>\n";
+		$secondKey = array_keys((array)$contents->$firstKey)[0];
+		$navBarHtml .= '<li><a href="' . BASE_URL . MANUAL_VERSION . '/' . $contents->$firstKey->$secondKey . '.html">' . htmlentities($sectionName) . "</a></li>\n";
 	}
 
 	// all done
 	return $navBarHtml;
+}
+
+function buildAllChapters($navbar)
+{
+	$return = '';
+	$append = false;
+	foreach ($navbar as $sectionName => $contents)
+	{
+		if ($append) {
+			$return .= '<option disabled="disabled">&nbsp;</option>' . "\n";
+		}
+		$return .= '<optgroup label="' . htmlentities($sectionName) . '">' . "\n";
+		$return .= buildAllChaptersOptgroup($contents);
+		$return .= "</optgroup>\n";
+
+		$append = true;
+	}
+
+	return $return;
+}
+
+function buildAllChaptersOptgroup($contents)
+{
+	$return = '';
+	$append = false;
+	foreach ($contents as $label => $details) {
+		if (is_string($details)) {
+			if (empty($details)) {
+				$return .= '<option disabled="disabled">-</option>' . "\n";
+			}
+			else {
+				$return .= '<option value="' . BASE_URL . MANUAL_VERSION . '/' . $details . '.html">' . htmlentities($label) . "</option>\n";
+			}
+		}
+		else {
+			if ($append) {
+				$return .= '<option disabled="disabled">&nbsp;</option>' . "\n";
+			}
+			$return .= '<option disabled="disabled">' . htmlentities($label) .  "</option>\n";
+			$return .= buildAllChaptersOptgroup($details);
+		}
+		$append = true;
+	}
+
+	return $return;
 }
 
 function buildPageMap($toc)
@@ -128,7 +163,7 @@ function buildSidebar($sidebar, $toc, $pages)
 
 		// add the links into the sidebar
 		$sidebarHtml .= '<li><a href="' . basename($page['name']) . '.html">' . $page['title'] . "</a></li>\n";
-		echo $page['title'] . "\n";
+		// echo $page['title'] . "\n";
 
 		if (isset($page['h2']))
 		{
@@ -136,7 +171,7 @@ function buildSidebar($sidebar, $toc, $pages)
 			foreach ($page['h2'] as $h2)
 			{
 				$sidebarHtml .= '<li><a href="' . basename($page['name']) . '.html#' . $h2['id'] . '">' . $h2['text'] . "</a></li>\n";
-				echo "- " . $h2["text"] . "\n";
+				// echo "- " . $h2["text"] . "\n";
 			}
 
 			$sidebarHtml .= "</ul>\n";
@@ -297,6 +332,10 @@ function getPageInfo($filename)
 
 	// extract the page title
 	preg_match("|<title>(.*)</title>|", $pageHtml, $matches);
+	if (!isset($matches[1])) {
+		echo "*** " . $page['HtmlFilename'] . ": no <title> found\n";
+		return;
+	}
 	$page['title'] = $matches[1];
 
 	// extract the h2 headings
@@ -419,6 +458,10 @@ $navBarHtml = buildNavBar($toc);
 
 // write the navbar our to disk
 file_put_contents(NAVBAR_INCLUDE, $navBarHtml);
+
+// build the all_chapters
+$allChaptersHtml = buildAllChapters($toc->navbar);
+file_put_contents(ALLCHAPTERS_INCLUDE, $allChaptersHtml);
 
 // extract our list of sections from the navbar
 // $sections = buildSectionsList($toc);
