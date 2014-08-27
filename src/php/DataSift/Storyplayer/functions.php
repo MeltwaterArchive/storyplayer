@@ -51,21 +51,21 @@ use DataSift\Storyplayer\Prose\E5xx_ProseException;
  * this function avoids reset()ing the array, so it will not mess with
  * any iteration that you may currently be part-way through
  *
- * @param  array $array
+ * @param  array $arrayToSearch
  *         the array to get the first element of
  * @return mixed
  *         the first element of $array, or NULL if the array is empty
  */
-function first($array)
+function first($arrayToSearch)
 {
-	if (count($array) == 0) {
+	if (count($arrayToSearch) == 0) {
 		return null;
 	}
 
-	$keys = array_keys($array);
+	$keys = array_keys($arrayToSearch);
 	$key = reset($keys);
 
-	return $array($key);
+	return $arrayToSearch[$key];
 }
 
 /**

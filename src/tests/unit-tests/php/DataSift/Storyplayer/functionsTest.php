@@ -52,6 +52,106 @@ if (!function_exists("newStoryFor")) {
 class FunctionsTest extends PHPUnit_Framework_TestCase
 {
 	/**
+	 * @covers ::first
+	 */
+	public function testCanGetFirstElementOfAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $parts = [ 11, 12, 13 ];
+	    $expectedResult = 11;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actualResult = first($parts);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expectedResult, $actualResult);
+	}
+
+	/**
+	 * @covers ::first
+	 */
+	public function testCanGetFirstElementOfAnArrayWithoutDisturbingIterator()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $parts = [ 11, 12, 13 ];
+	    $expectedResult = $parts;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+	    //
+	    // here, we iterate over an array, whilst repeatedly getting the
+	    // first element in the array
+	    //
+	    // this proves that first() does not cause a reset() on the array
+
+	    $actualResult = [];
+	    foreach ($parts as $part) {
+	    	$actualResult[] = $part;
+		    first($parts);
+	    }
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expectedResult, $actualResult);
+	}
+
+	/**
+	 * @covers ::hostWithRole
+	 */
+	public function testCanIterateOverHosts()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+		// the role to iterate over
+		$rolename = 'test';
+
+		// the hostnames that we expect to get
+	    $expectedHosts = [ 'fred', 'alice', 'bob' ];
+
+	    // our list of hostDetails to iterate over
+	    $hosts = new stdClass;
+	    foreach ($expectedHosts as $hostname) {
+	    	$hosts->$hostname = (object)['name' => $hostname];
+	    }
+
+	   	// our fake Prose module to get the hostDetails
+	    $fromRolesTable = Mockery::mock("DataSift\Storyplayer\Prose\FromRolesTable");
+	    $fromRolesTable->shouldReceive('getDetailsForRole')->once()->with($rolename)->andReturn($hosts);
+
+	    // a fake logging object
+	    $log = Mockery::mock("DataSift\Storyplayer\PlayerLib\Action_LogItem");
+	    $log->shouldReceive('endAction')->once();
+
+	    // our fake $st object
+	    $st = Mockery::mock("DataSift\Storyplayer\PlayerLib\StoryTeller");
+	   	$st->shouldReceive('startAction')->andReturn($log);
+	   	$st->shouldReceive('fromRolesTable')->once()->andReturn($fromRolesTable);
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    foreach (hostWithRole($st, 'test') as $hostname) {
+	    	$actualHosts[] = $hostname;
+	    }
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expectedHosts, $actualHosts);
+	}
+
+
+	/**
 	 * @covers ::newStoryFor
 	 */
 	public function testCanCreateStoryViaHelperFunction()
