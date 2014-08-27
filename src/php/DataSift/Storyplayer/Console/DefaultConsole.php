@@ -127,18 +127,20 @@ class DefaultConsole extends Console
 
 	public function endPhaseGroup($result)
 	{
-		$this->write(' [', $this->writer->punctuationStyle);
-		if ($result->getPhaseGroupSucceeded()) {
-			$style = $this->writer->successStyle;
+		// tell the user what happened
+		$this->write(' ');
+		if ($result->getPhaseGroupSkipped()) {
+			$this->writePhaseGroupSkipped($result->getResultString());
 		}
-		else if ($result->getPhaseGroupFailed()) {
-			$style = $this->writer->failStyle;
+		else if ($result->getPhaseGroupSucceeded()) {
+			$this->writePhaseGroupSucceeded($result->getResultString());
 		}
 		else {
-			$style = $this->writer->skippedStyle;
+			$this->writePhaseGroupFailed($result->getResultString());
 		}
-		$this->write($result->getResultString(), $style);
-		$this->write('] (', $this->writer->punctuationStyle);
+
+		// write out the duration too
+		$this->write(' (', $this->writer->punctuationStyle);
 		$this->writeDuration($result->getDuration());
 		$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
 
