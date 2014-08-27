@@ -53,9 +53,6 @@ if (!function_exists("newStoryFor")) {
 
 class StoryTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @covers DataSift\Storyplayer\PlayerLib\Story::__construct
-	 */
 	public function testCanInstantiate()
 	{
 	    // ----------------------------------------------------------------

@@ -503,7 +503,7 @@ class OutputTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup the test
 
-		$result = new PhaseGroup_Result();
+		$result = new PhaseGroup_Result('testing');
 
 	    $plugin1 = Mockery::mock("DataSift\Storyplayer\OutputLib\OutputPlugin");
 	   	$plugin1->shouldReceive('endPhaseGroup')->once()->with($result);
