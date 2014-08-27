@@ -145,11 +145,23 @@ abstract class Console extends OutputPlugin
 			$this->writePhaseGroupSkipped();
 			$this->write(' ' . $skippedGroup->activity, $this->writer->activityStyle);
 			$this->write(' ' . $skippedGroup->name . PHP_EOL, $this->writer->nameStyle);
+
+			if (isset($skippedGroup->filename)) {
+				$this->write('       (', $this->writer->punctuationStyle);
+				$this->write($skippedGroup->filename, $this->writer->punctuationStyle);
+				$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
+			}
 		}
 		foreach ($failedGroups as $failedGroup) {
 			$this->writePhaseGroupFailed();
 			$this->write(' ' . $failedGroup->activity, $this->writer->activityStyle);
 			$this->write(' ' . $failedGroup->name . PHP_EOL, $this->writer->nameStyle);
+
+			if (isset($failedGroup->filename)) {
+				$this->write('       (', $this->writer->punctuationStyle);
+				$this->write($failedGroup->filename, $this->writer->punctuationStyle);
+				$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
+			}
 		}
 		$this->write(PHP_EOL);
 

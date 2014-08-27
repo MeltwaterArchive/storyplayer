@@ -152,8 +152,9 @@ class Story_Player
 			$story
 		);
 
-		// make sense of what happened
-		//$storyResult->calculateStoryResult();
+		// make sure the result has the filename in
+		$result = $story->getResult();
+		$result->filename = $this->storyFilename;
 
 		// announce the results
 		$output->endPhaseGroup($story->getResult());
