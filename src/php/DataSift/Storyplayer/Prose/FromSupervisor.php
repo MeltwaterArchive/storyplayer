@@ -72,17 +72,24 @@ class FromSupervisor extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		//run the supervisorctl command
-		$result = $st->usingHost($hostDetails->name)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \$2}'");
+		$result = $st->usingHost($hostDetails->name)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \\$2}'");
 
 		// did the command succeed?
 		if ($result->didCommandFail()) {
 			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
 			$log->endAction($msg);
-			return false;
+			throw new E5xx_ActionFailed(__METHOD__);
 		}
 
-		// all done
-		$log->endAction();
-		return true;
+		// what happened?
+		if (rtrim($result->output) == 'RUNNING') {
+			$log->endAction('current status is RUNNING');
+			return true;
+		}
+
+		// if we get here, then the program is not RUNNING, and we
+		// treat that as a failure
+		$log->endAction('current status is ' . rtrim($result->output));
+		return false;
 	}
 }
