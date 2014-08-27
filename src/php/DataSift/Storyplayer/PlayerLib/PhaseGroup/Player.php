@@ -46,6 +46,8 @@ namespace DataSift\Storyplayer\PlayerLib;
 use Exception;
 use DataSift\Storyplayer\Injectables;
 use DataSift\Storyplayer\Phases\Phase;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 
 /**
  * runs a set of phases, and returns the result
@@ -101,6 +103,9 @@ class PhaseGroup_Player
 			$groupResult->setActivity($activity);
 		}
 
+        // we need to wrap our code to catch old-style PHP errors
+        $legacyHandler = new Legacy_ErrorHandler();
+
 		// execute each phase, until either:
 		//
 		// 1. all listed phases have been executed, or
@@ -116,7 +121,7 @@ class PhaseGroup_Player
 				$output->startPhase($phase);
 
 				// play the phase
-				$phaseResult = $this->playPhase($st, $injectables, $phase, $isActive, $thingBeingPlayed);
+				$phaseResult = $legacyHandler->run([$this, 'playPhase'], [$st, $injectables, $phase, $isActive, $thingBeingPlayed]);
 
 				// remember the result of this phase
 				//$phaseResults->addResult($phase, $phaseResult);
@@ -199,7 +204,7 @@ class PhaseGroup_Player
 	 * @param  boolean     $isActive
 	 * @return PhaseResult
 	 */
-	protected function playPhase(StoryTeller $st, Injectables $injectables, Phase $phase, $isActive, $thingBeingPlayed = null)
+	public function playPhase(StoryTeller $st, Injectables $injectables, Phase $phase, $isActive, $thingBeingPlayed = null)
 	{
 		// shorthand
 		$output    = $st->getOutput();
