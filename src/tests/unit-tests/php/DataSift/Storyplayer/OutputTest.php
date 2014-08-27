@@ -442,10 +442,12 @@ class OutputTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup the test
 
+		$duration = 100;
+
 	    $plugin1 = Mockery::mock("DataSift\Storyplayer\OutputLib\OutputPlugin");
-	   	$plugin1->shouldReceive('endStoryplayer')->once();
+	   	$plugin1->shouldReceive('endStoryplayer')->once()->with($duration);
 	    $plugin2 = Mockery::mock("DataSift\Storyplayer\OutputLib\OutputPlugin");
-	    $plugin2->shouldReceive('endStoryplayer')->once();
+	    $plugin2->shouldReceive('endStoryplayer')->once()->with($duration);
 
 	    $obj = new Output();
 	    $obj->usePluginInSlot($plugin1, "console");
@@ -454,7 +456,7 @@ class OutputTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj->endStoryplayer();
+	    $obj->endStoryplayer($duration);
 
 	    // ----------------------------------------------------------------
 	    // test the results

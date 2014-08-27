@@ -42,7 +42,60 @@
  */
 
 use DataSift\Storyplayer\PlayerLib\Story;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\Prose\E5xx_ProseException;
+
+/**
+ * return the first element in an array
+ *
+ * this function avoids reset()ing the array, so it will not mess with
+ * any iteration that you may currently be part-way through
+ *
+ * @param  array $array
+ *         the array to get the first element of
+ * @return mixed
+ *         the first element of $array, or NULL if the array is empty
+ */
+function first($array)
+{
+	if (count($array) == 0) {
+		return null;
+	}
+
+	$keys = array_keys($array);
+	$key = reset($keys);
+
+	return $array($key);
+}
+
+/**
+ * iterate over all hosts that match the given role
+ *
+ * @param  StoryTeller $st
+ *         our ubiquitous $st object
+ * @param  string $roleName
+ *         The role that we want
+ *
+ * @return string
+ *         a hostname that matches the role
+ */
+function hostWithRole(StoryTeller $st, $roleName)
+{
+	$hostsDetails = $st->fromRolesTable()->getDetailsForRole($roleName);
+	if (!count(get_object_vars($hostsDetails))) {
+		throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+	}
+
+	// what are we doing?
+	$log = $st->startAction("for each host with role '{$roleName}' ... ");
+
+	foreach ($hostsDetails as $hostDetails) {
+		yield($hostDetails->name);
+	}
+
+	// all done
+	$log->endAction();
+}
 
 /**
  * Create a new story object
