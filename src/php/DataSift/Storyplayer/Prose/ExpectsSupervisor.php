@@ -82,7 +82,7 @@ class ExpectsSupervisor extends HostBase
 		$log->endAction();
 	}
 
-	public function programIsNotRunning()
+	public function programIsNotRunning($programName)
 	{
 		// shorthand
 		$st = $this->st;

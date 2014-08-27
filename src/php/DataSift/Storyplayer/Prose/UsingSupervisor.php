@@ -92,7 +92,7 @@ class UsingSupervisor extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop program '{$programName}' on host '{$hostDetails->name}'");
+		$log = $st->startAction("stop program '{$programName}' on host '{$this->args[0]}'");
 
 		// get the host details
 		$hostDetails = $this->getHostDetails();
