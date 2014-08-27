@@ -77,6 +77,9 @@ class PlayStory_ReuseTargetSwitch extends CliSwitch
 			."test environment behind, so that you can then use this switch."
 		);
 
+		// what are the short switches?
+		$this->addShortSwitch('R');
+
 		// what are the long switches?
 		$this->addLongSwitch('reuse-target');
 

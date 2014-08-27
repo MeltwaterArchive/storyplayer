@@ -76,6 +76,9 @@ class PlayStory_PersistTargetSwitch extends CliSwitch
 			."test environment."
 		);
 
+		// what are the short switches?
+		$this->addShortSwitch('P');
+
 		// what are the long switches?
 		$this->addLongSwitch('persist-target');
 
