@@ -119,13 +119,20 @@ class UsingZmq extends Prose
 		return $socket;
 	}
 
-	public function send($socket, $message)
+	public function send($socket, $message, $timeout = -1)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("send() to ZMQ socket");
+		if ($timeout == -1) {
+			$log = $st->startAction("send() from ZMQ socket; no timeout");
+			$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
+		}
+		else {
+			$log = $st->startAction("send() from ZMQ socket; timeout is {$timeout} seconds");
+			$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
+		}
 
 		// do it
 		$socket->send($message);
@@ -134,13 +141,20 @@ class UsingZmq extends Prose
 		$log->endAction();
 	}
 
-	public function recv($socket)
+	public function recv($socket, $timeout = -1)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("recv() from ZMQ socket");
+		if ($timeout == -1) {
+			$log = $st->startAction("recv() from ZMQ socket; no timeout");
+			$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
+		}
+		else {
+			$log = $st->startAction("recv() from ZMQ socket; timeout is {$timeout} seconds");
+			$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
+		}
 
 		// do it
 		$return = $socket->recv();
@@ -179,13 +193,12 @@ class UsingZmq extends Prose
 		// what are we doing?
 		if ($timeout == -1) {
 			$log = $st->startAction("sendmulti() from ZMQ socket; no timeout");
+			$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
 		}
 		else {
 			$log = $st->startAction("sendmulti() from ZMQ socket; timeout is {$timeout} seconds");
+			$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
 		}
-
-		// set the socket timeout
-		$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
 
 		// do it
 		$socket->sendmulti($message);
@@ -202,13 +215,12 @@ class UsingZmq extends Prose
 		// what are we doing?
 		if ($timeout == -1) {
 			$log = $st->startAction("recvmulti() from ZMQ socket; no timeout");
+			$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
 		}
 		else {
 			$log = $st->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
+			$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
 		}
-
-		// set the socket timeout
-		$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
 
 		// do it
 		$return = $socket->recvmulti();
