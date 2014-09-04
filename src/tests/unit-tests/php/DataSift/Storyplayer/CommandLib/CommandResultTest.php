@@ -65,6 +65,7 @@ class CommandResultTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\CommandLib\CommandResult::didCommandFail
+	 * @covers DataSift\Storyplayer\CommandLib\CommandResult::didCommandSucceed
 	 */
 	public function testCanDetectFailedCommand()
 	{
@@ -96,6 +97,7 @@ class CommandResultTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\CommandLib\CommandResult::didCommandFail
+	 * @covers DataSift\Storyplayer\CommandLib\CommandResult::didCommandSucceed
 	 */
 	public function testCanDetectSucceededCommand()
 	{
