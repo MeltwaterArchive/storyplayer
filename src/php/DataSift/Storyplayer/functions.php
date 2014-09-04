@@ -43,6 +43,7 @@
 
 use DataSift\Storyplayer\PlayerLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\Prose\E5xx_ProseException;
 
 /**
@@ -58,6 +59,10 @@ use DataSift\Storyplayer\Prose\E5xx_ProseException;
  */
 function first($arrayToSearch)
 {
+	if (!is_array($arrayToSearch)) {
+		return null;
+	}
+
 	if (count($arrayToSearch) == 0) {
 		return null;
 	}

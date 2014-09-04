@@ -43,6 +43,7 @@
  */
 
 use DataSift\Storyplayer\PlayerLib\Story;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\Prose\E5xx_ProseException;
 // load our global functions, used for defining stories
 if (!function_exists("newStoryFor")) {
@@ -105,6 +106,54 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers ::first
+	 */
+	public function testFirstReturnsNullWhenParamIsNotAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $inputs = [
+	    	"fred",
+	    	1,
+	    	3.14,
+	    	null,
+	    	(object)[ ' fred' ],
+	    ];
+	    $expectedResult = null;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    foreach ($inputs as $input) {
+		    $actualResult = first($input);
+	    	$this->assertEquals($expectedResult, $actualResult);
+	    }
+	}
+
+	/**
+	 * @covers ::first
+	 */
+	public function testFirstReturnsNullWhenArrayIsEmpty()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $parts = [ ];
+	    $expectedResult = null;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actualResult = first($parts);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expectedResult, $actualResult);
+	}
+
+	/**
 	 * @covers ::hostWithRole
 	 */
 	public function testCanIterateOverHosts()
@@ -150,6 +199,47 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
 	    $this->assertEquals($expectedHosts, $actualHosts);
 	}
 
+	/**
+	 * @covers ::hostWithRole
+	 */
+	public function testHostsIteratorThrowsExceptionForUnknownRole()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+		// the role to iterate over
+		$rolename = 'test';
+
+		// the hostnames that we expect to get
+	    $expectedHosts = [ 'fred', 'alice', 'bob' ];
+
+	    // our empty list of hostDetails to iterate over
+	    $hosts = new stdClass;
+
+	   	// our fake Prose module to get the hostDetails
+	    $fromRolesTable = Mockery::mock("DataSift\Storyplayer\Prose\FromRolesTable");
+	    $fromRolesTable->shouldReceive('getDetailsForRole')->once()->with($rolename)->andReturn($hosts);
+
+	    // our fake $st object
+	    $st = Mockery::mock("DataSift\Storyplayer\PlayerLib\StoryTeller");
+	   	$st->shouldReceive('startAction')->never();
+	   	$st->shouldReceive('fromRolesTable')->once()->andReturn($fromRolesTable);
+
+	    // ----------------------------------------------------------------
+	    // perform the change and test the results
+
+    	$caughtException = false;
+    	try {
+		    foreach (hostWithRole($st, 'test') as $hostname) {
+		    	$actualHosts[] = $hostname;
+	    	}
+	    }
+    	catch (E5xx_ActionFailed $e) {
+    		$caughtException = true;
+    	}
+
+    	$this->assertTrue($caughtException);
+	}
 
 	/**
 	 * @covers ::newStoryFor
