@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\CommandLib;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Phix_Project\ContractLib2\Contract;
 
 /**
  * helpers for using SSH to interact with the supported operating system
@@ -85,12 +86,15 @@ class SshClient
 	 *
 	 * @var array<string>
 	 */
-	protected $sshOptions = array("-n");
+	protected $sshOptions = [];
 
 	public function __construct(StoryTeller $st, $sshOptions = array())
 	{
 		// remember for future use
 		$this->st = $st;
+
+		// set the default SSH options
+		$this->sshOptions = $this->getDefaultSshOptions();
 
 		// add in the options
 		foreach ($sshOptions as $option) {
@@ -109,11 +113,37 @@ class SshClient
 
 	/**
 	 *
+	 * @return boolean
+	 */
+	public function hasIpAddress()
+	{
+		if (empty($this->ipAddress)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 *
 	 * @param string $ipAddress
 	 */
 	public function setIpAddress($ipAddress)
 	{
+		// vet our inputs
+		Contract::RequiresValue($ipAddress, is_string($ipAddress));
+		Contract::RequiresValue($ipAddress, !empty($ipAddress));
+
+		// save the result
 		$this->ipAddress = $ipAddress;
+	}
+
+	public function getDefaultSshOptions()
+	{
+		return [
+			'-n' // attach stdin to /dev/null - req to run SSH when not
+			     // connected to a terminal
+		];
 	}
 
 	/**
@@ -141,6 +171,11 @@ class SshClient
 	 */
 	public function addSshOption($option)
 	{
+		// vet our input
+		Contract::RequiresValue($option, is_string($option));
+		Contract::RequiresValue($option, !empty($option));
+
+		// add this option to our collection
 		$this->sshOptions[] = $option;
 	}
 
@@ -155,11 +190,29 @@ class SshClient
 
 	/**
 	 *
+	 * @return boolean
+	 */
+	public function hasSshUsername()
+	{
+		if (empty($this->sshUsername)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 *
 	 * @param string $username
 	 * @return void
 	 */
 	public function setSshUsername($username)
 	{
+		// vet our input
+		Contract::RequiresValue($username, is_string($username));
+		Contract::RequiresValue($username, !empty($username));
+
+		// save the username
 		$this->sshUsername = $username;
 	}
 
@@ -174,12 +227,30 @@ class SshClient
 
 	/**
 	 *
+	 * @return string
+	 */
+	public function getSshKeyForUse()
+	{
+		if (empty($this->sshKey)) {
+			return '';
+		}
+
+		return "-i '" . $this->sshKey . "'";
+	}
+
+	/**
+	 *
 	 * @param string $path
 	 * @return void
 	 */
 	public function setSshKey($path)
 	{
-		$this->sshKey = "-i '{$path}'";
+		// vet our input
+		Contract::RequiresValue($path, is_string($path));
+		Contract::RequiresValue($path, !empty($path));
+
+		// set the option
+		$this->sshKey = $path;
 	}
 
 	/**
@@ -190,6 +261,10 @@ class SshClient
 	 */
 	public function convertParamsForUse($params)
 	{
+		// vet our input
+		Contract::RequiresValue($params, is_string($params));
+		// we don't mind if the params are empty
+
 		// our list of what to convert from
 		$convertFrom = [
 			'\'',
@@ -216,6 +291,10 @@ class SshClient
 	 */
 	public function runCommand($command)
 	{
+		// vet our input
+		Contract::RequiresValue($command, is_string($command));
+		Contract::RequiresValue($command, !empty($command));
+
 		// shorthand
 		$st = $this->st;
 
@@ -224,6 +303,14 @@ class SshClient
 
 		// what are we doing?
 		$log = $st->startAction("run command '{$command}' against host ");
+
+		// do we actually have everything we need to run the command?
+		if (!$this->hasSshUsername()) {
+			throw new E4xx_NeedSshUsername();
+		}
+		if (!$this->hasIpAddress()) {
+			throw new E4xx_NeedIpAddress();
+		}
 
 		// build the full command
 		//
@@ -241,16 +328,16 @@ class SshClient
 		//    the command to run on the remote/guest OS
 		//    (assumes the command will be globbed by the remote shell)
 		$fullCommand = 'ssh -o StrictHostKeyChecking=no'
-					 . ' ' . $this->getSshKey()
+					 . ' ' . $this->getSshKeyForUse()
 					 . ' ' . $this->getSshOptionsForUse()
 					 . ' ' . $this->getSshUsername() . '@' . $this->getIpAddress()
 					 . ' "' . str_replace('"', '\"', $command) . '"';
 
 		// run the command
-		$result = $log->addStep("run command via SSH: {$fullCommand}", function() use($st, $fullCommand) {
-			$commandRunner = new CommandRunner();
-			return $commandRunner->runSilently($st, $fullCommand);
-		});
+		//$log->startStep("run command via SSH: {$fullCommand}");
+		$commandRunner = $st->getNewCommandRunner();
+		$result = $commandRunner->runSilently($st, $fullCommand);
+		//$log->endStep();
 
 		// all done
 		$log->endAction("return code was '{$result->returnCode}'");

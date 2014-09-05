@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 
 use DataSift\Storyplayer\Injectables;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
+use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\Output;
 use DataSift\Storyplayer\Phases\Phase;
 use DataSift\Storyplayer\Prose\E4xx_ObsoleteProse;
@@ -815,6 +816,17 @@ class StoryTeller
 
 		// all done
 		$log->endAction();
+	}
+
+	// ==================================================================
+	//
+	// Helpful methods that we can use to help with testing
+	//
+	// ------------------------------------------------------------------
+
+	public function getNewCommandRunner()
+	{
+		return new CommandRunner();
 	}
 
 	// ==================================================================

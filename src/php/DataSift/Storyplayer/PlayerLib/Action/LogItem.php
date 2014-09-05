@@ -257,6 +257,25 @@ class Action_LogItem
 		return $return;
 	}
 
+	public function startStep($text)
+	{
+		// create a log item for this step
+		$action = new Action_LogItem($this->injectables, $this->nestLevel + 1);
+		$action->startAction($text);
+
+		// add the action to our collection
+		$this->nestedActions[] = $action;
+	}
+
+	public function endStep()
+	{
+		// end the action that we're ending
+		$action = end($this->nestedActions);
+
+		// mark this action as complete
+		$action->endAction();
+	}
+
 	public function captureOutput($text)
 	{
 		// trick the logger into indenting the output one more
