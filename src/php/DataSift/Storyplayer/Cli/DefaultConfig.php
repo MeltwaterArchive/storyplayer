@@ -108,7 +108,6 @@ class DefaultConfig extends BaseObject
         $phases->story->StartupHandlers = true;
         $phases->story->CheckBlacklisted = true;
         $phases->story->CheckTestEnvironment = true;
-        $phases->story->TestEnvironmentSetup = true;
         $phases->story->TestSetup = true;
         $phases->story->PreTestPrediction = true;
         $phases->story->PreTestInspection = true;
@@ -116,7 +115,6 @@ class DefaultConfig extends BaseObject
         $phases->story->PostTestInspection = true;
         $phases->after_story = new BaseObject();
         $phases->after_story->TestTeardown = true;
-        $phases->after_story->TestEnvironmentTeardown = true;
         $phases->after_story->ApplyRoleChanges = true;
         $phases->after_story->ShutdownHandlers = true;
         $phases->testEnvStartup = new BaseObject;

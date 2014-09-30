@@ -97,19 +97,6 @@ class Story
 	protected $hintsCallback;
 
 	/**
-	 * the function that provides any (optional) environment setup work
-	 *
-	 * @var array
-	 */
-	protected $testEnvironmentSetupCallback = array();
-
-	/**
-	 * the function that provides any (optional) environment teardown action
-	 * @var array
-	 */
-	protected $testEnvironmentTeardownCallback = array();
-
-	/**
 	 * the function that provides any story-specific setup work
 	 *
 	 * @var array
@@ -613,8 +600,6 @@ class Story
 		// tell the template which story it is being used with
 		$tmpl->setStory($this);
 
-		$tmpl->hasTestEnvironmentSetup()    && $this->addTestEnvironmentSetup($tmpl->getTestEnvironmentSetup());
-		$tmpl->hasTestEnvironmentTeardown() && $this->addTestEnvironmentTeardown($tmpl->getTestEnvironmentTeardown());
 		$tmpl->hasTestSetup()               && $this->addTestSetup($tmpl->getTestSetup());
 		$tmpl->hasTestTeardown()            && $this->addTestTeardown($tmpl->getTestTeardown());
 		$tmpl->hasPerPhaseSetup()           && $this->addPerPhaseSetup($tmpl->getPerPhaseSetup());
@@ -729,66 +714,28 @@ class Story
 	//
 	// Information about how to setup and teardown the test environment
 	//
+	// This is a feature from Storyplayer v1 that we've dropped in v2
+	//
 	// --------------------------------------------------------------------
-
-	/**
-	 * get the callback for per-environment setup work
-	 *
-	 * @return array
-	 */
-	public function getTestEnvironmentSetup()
-	{
-	    return $this->testEnvironmentSetupCallback;
-	}
-
-	/**
-	 * do we have a per-environment setup callback?
-	 *
-	 * @return boolean true if there is a per-environment setup callback
-	 */
-	public function hasTestEnvironmentSetup()
-	{
-		return count($this->testEnvironmentSetupCallback) > 0;
-	}
 
 	public function setTestEnvironmentSetup($newCallback)
 	{
-		$this->testEnvironmentSetupCallback = array($newCallback);
+		throw new E4xx_DeprecatedFeature('TestEnvironmentSetup phase was removed from Storyplayer v2.');
 	}
 
 	public function addTestEnvironmentSetup($newCallback)
 	{
-		$this->testEnvironmentSetupCallback[] = $newCallback;
-	}
-
-	/**
-	 * get the callback for per-environment teardown work
-	 *
-	 * @return array
-	 */
-	public function getTestEnvironmentTeardown()
-	{
-	    return $this->testEnvironmentTeardownCallback;
-	}
-
-	/**
-	 * do we have a per-environment teardown callback?
-	 *
-	 * @return boolean true if there is a per-environment teardown callback
-	 */
-	public function hasTestEnvironmentTeardown()
-	{
-		return count($this->testEnvironmentTeardownCallback) > 0;
+		throw new E4xx_DeprecatedFeature('TestEnvironmentSetup phase was removed from Storyplayer v2.');
 	}
 
 	public function setTestEnvironmentTeardown($newCallback)
 	{
-		$this->testEnvironmentTeardownCallback = array($newCallback);
+		throw new E4xx_DeprecatedFeature('TestEnvironmentSetup phase was removed from Storyplayer v2.');
 	}
 
 	public function addTestEnvironmentTeardown($newCallback)
 	{
-		$this->testEnvironmentTeardownCallback[] = $newCallback;
+		throw new E4xx_DeprecatedFeature('TestEnvironmentSetup phase was removed from Storyplayer v2.');
 	}
 
 	// ====================================================================
@@ -1172,35 +1119,28 @@ class Story
 
 	public function setDefaultCallbacks()
 	{
-		// 1: environment setup
-		if (!$this->hasTestEnvironmentSetup()) {
-			$this->addTestEnvironmentSetup(function(StoryTeller $st) {
-				$st->usingReporting()->reportNotRequired();
-			});
-		}
-
-		// 2: test setup
+		// 1: test setup
 		if (!$this->hasTestSetup()) {
 			$this->addTestSetup(function(StoryTeller $st) {
 				$st->usingReporting()->reportNotRequired();
 			});
 		}
 
-		// 3: pre-test prediction
+		// 2: pre-test prediction
 		if (!$this->hasPreTestPrediction()) {
 			$this->addPreTestPrediction(function(StoryTeller $st) {
 				$st->usingReporting()->reportShouldAlwaysSucceed();
 			});
 		}
 
-		// 4: pre-test inspection
+		// 3: pre-test inspection
 		if (!$this->hasPreTestInspection()) {
 			$this->addPreTestInspection(function(StoryTeller $st) {
 				$st->usingReporting()->reportNotRequired();
 			});
 		}
 
-		// 5: test action
+		// 4: test action
 		//
 		// we set no default for this, because we do not want the action
 		// to be chosen by StoryPlayer
@@ -1208,21 +1148,14 @@ class Story
 		// (StoryPlayer chooses one action at random from the set of
 		// supplied actions)
 
-		// 6: post-test inspection
+		// 5: post-test inspection
 		//
 		// we set no default for this, because each story must provide
 		// this
 
-		// 7: test tear down
+		// 6: test tear down
 		if (!$this->hasTestTeardown()) {
 			$this->addTestTeardown(function(StoryTeller $st) {
-				$st->usingReporting()->reportNotRequired();
-			});
-		}
-
-		// 8: environment teardown
-		if (!$this->hasTestEnvironmentTeardown()) {
-			$this->addTestEnvironmentTeardown(function(StoryTeller $st) {
 				$st->usingReporting()->reportNotRequired();
 			});
 		}

@@ -62,7 +62,7 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class PostTestInspectionPhase extends StoryPhase
 {
-	protected $sequenceNo = 6;
+	protected $sequenceNo = 5;
 
 	public function doPhase($story)
 	{

@@ -84,11 +84,6 @@ class StoryTemplate
 	 * Helper methods to keep the Templates API in line with the phases
 	 */
 
-	public function hasTestEnvironmentSetup()
-	{
-		return method_exists($this, 'testEnvironmentSetup');
-	}
-
 	public function hasTestSetup()
 	{
 		return method_exists($this, 'testSetup');
@@ -144,18 +139,6 @@ class StoryTemplate
 		return method_exists($this, 'testTeardown');
 	}
 
-	public function hasTestEnvironmentTeardown()
-	{
-		return method_exists($this, 'testEnvironmentTeardown');
-	}
-
-
-
-	public function getTestEnvironmentSetup()
-	{
-		return array($this, 'testEnvironmentSetup');
-	}
-
 	public function getTestSetup()
 	{
 		return array($this, 'testSetup');
@@ -209,11 +192,6 @@ class StoryTemplate
 	public function getTestTeardown()
 	{
 		return array($this, 'testTeardown');
-	}
-
-	public function getTestEnvironmentTeardown()
-	{
-		return array($this, 'testEnvironmentTeardown');
 	}
 
     public function getSourceFilename()

@@ -61,7 +61,7 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class PreTestInspectionPhase extends StoryPhase
 {
-	protected $sequenceNo = 4;
+	protected $sequenceNo = 3;
 
 	public function doPhase($story)
 	{
