@@ -125,6 +125,11 @@ class DefaultConfig extends BaseObject
         $phases->script = new BaseObject;
         $phases->script->Automate = true;
 
+        // what to do when a user presses CTRL+C
+        $phases->userAbort = new BaseObject();
+        $phases->userAbort->ShutdownHandlers = true;
+        $phases->userAbort->TestEnvironmentDestruction = true;
+
         $this->phases = $phases;
     }
 

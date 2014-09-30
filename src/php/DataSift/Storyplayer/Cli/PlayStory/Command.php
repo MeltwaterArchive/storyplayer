@@ -632,20 +632,22 @@ class PlayStory_Command extends CliCommand
      */
     public function sigtermHandler($signo)
     {
-        echo "\n";
-        echo "============================================================\n";
-        echo "USER ABORT!!\n";
-        echo "============================================================\n";
-        echo "\n";
+        echo PHP_EOL;
+        echo "============================================================" . PHP_EOL;
+        echo "USER ABORT!!" . PHP_EOL . PHP_EOL;
+        echo "Cleaning up: ";
 
         // cleanup
         $phasesPlayer = new PhaseGroup_Player();
         $phasesPlayer->playPhases(
+            "user abort",
             $this->st,
             $this->injectables,
-            $this->injectables->activeConfig->storyplayer->phases->shutdown,
+            $this->injectables->activeConfig->storyplayer->phases->userAbort,
             null
         );
+
+        echo " done" . PHP_EOL . "============================================================" . PHP_EOL . PHP_EOL;
 
         // force a clean shutdown
         exit(1);
