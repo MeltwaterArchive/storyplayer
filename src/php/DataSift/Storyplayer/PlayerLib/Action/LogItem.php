@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Stone\LogLib\Log;
-
 /**
  * Represents a single activity item in the log
  *
@@ -61,7 +59,7 @@ class Action_LogItem
 	private $text;
 	private $startTime;
 	private $endTime;
-	private $nestedActions = array();
+	private $nestedAction = null;
 	private $steps = array();
 	private $injectables;
 	private $output;
@@ -76,14 +74,20 @@ class Action_LogItem
 		$this->output      = $injectables->output;
 	}
 
+	/**
+	 *
+	 * @param  string $text
+	 *         the message to log
+	 * @param  array $codeLine
+	 *         metadata about the line of code that we're logging about
+	 * @return Action_LogItem
+	 *         return $this for fluent interfaces
+	 */
 	public function startAction($text, $codeLine = null)
 	{
 		// when did this happen?
 		$this->startTime = microtime(true);
-
-		// what is about to happen?
-		$this->text = $text;
-		//echo '#' . $this->nestLevel . ' -> ' . $text . PHP_EOL;
+		$this->endTime   = null;
 
 		// only log the top-level item
 		if ($this->nestLevel > 1) {
@@ -91,7 +95,7 @@ class Action_LogItem
 		}
 
 		// write to screen
-		$this->writeToLog($this->text, $codeLine);
+		$this->writeToLog($text, $codeLine);
 
 		// all done
 		return $this;
@@ -102,6 +106,9 @@ class Action_LogItem
 	 */
 	public function endAction($resultText = null)
 	{
+		// close any open sub-actions
+		$this->closeAllOpenSubActions();
+
 		// remember when the action completed
 		$this->endTime = microtime(true);
 
@@ -111,147 +118,92 @@ class Action_LogItem
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public function newNestedAction()
 	{
-		$openItem = $this->getLastOpenAction();
-
-		if (!is_object($openItem) || $openItem->isComplete()) {
+		// do we have a nested action open?
+		if (!isset($this->nestedAction) || $this->nestedAction->getIsComplete()) {
 			// we have no open actions - start a new one
-			$openItem = new Action_LogItem($this->injectables, $this->nestLevel + 1);
-			$this->nestedActions[] = $openItem;
+			$openItem = $this->nestedAction = new Action_LogItem($this->injectables, $this->nestLevel + 1);
 		}
 		else {
 			// we have an open action - nest something inside
-			$openItem = $openItem->newNestedAction();
+			$openItem = $this->nestedAction->newNestedAction();
 		}
 
 		// all done
 		return $openItem;
 	}
 
-	public function getLastOpenAction()
+	/**
+	 *
+	 * @return void
+	 */
+	protected function closeAllOpenSubActions()
 	{
-		// is this action now completed?
-		if ($this->isComplete()) {
-			// nothing to see, move along
-			return null;
+		if (!isset($this->nestedAction)) {
+			return;
 		}
 
-		// do we have any actions at all?
-		if (count($this->nestedActions) == 0)
-		{
-			return null;
-		}
-
-		// is our last nested action currently open?
-		$endAction = end($this->nestedActions);
-		if ($endAction->isComplete()) {
-			// no it is not
-			//
-			// *we* are the currently open action
-			return null;
-		}
-
-		// if we get here, then we have an open, nested action
-		//
-		// ask *it* to get the last action
-		$nestedOpenAction = $endAction->getLastOpenAction();
-
-		// is there a further nested action, or not?
-		if (is_object($nestedOpenAction)) {
-			// yes there is - return it
-			return $nestedOpenAction;
-		}
-		else {
-			// no there isn't
-			return $endAction;
-		}
+		$this->nestedAction->endAction();
+		unset($this->nestedAction);
 	}
 
-	public function getFirstOpenAction()
+	/**
+	 *
+	 * @return boolean
+	 *         TRUE if the action is complete
+	 *         FALSE if the action is currently in progress or has never
+	 *               been started
+	 */
+	public function getIsComplete()
 	{
-		// is this action now completed?
-		if ($this->isComplete()) {
-			// nothing to see, move along
-			return null;
-		}
-
-		// do we have any actions at all?
-		if (count($this->nestedActions) == 0)
-		{
-			return null;
-		}
-
-		// is our last nested action currently open?
-		$endAction = end($this->nestedActions);
-		if ($endAction->isComplete()) {
-			// no it is not
-			//
-			// *we* are the currently open action
-			return null;
-		}
-
-		// yes it is
-		return $endAction;
-	}
-
-	public function closeAllOpenActions()
-	{
-		$openItem = $this->getFirstOpenAction();
-		if (is_object($openItem)) {
-			$openItem->closeAllOpenActions();
-			$openItem->endAction();
-		}
-	}
-
-	public function closeAllOpenSubActions()
-	{
-		$openItem = $this->getFirstOpenAction();
-		if (is_object($openItem)) {
-			$openItem->closeAllOpenActions();
-		}
-	}
-
-	public function isComplete()
-	{
-		if (!empty($this->endTime)) {
+		if (isset($this->endTime) && $this->endTime !== null) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public function isOpen()
+	/**
+	 *
+	 * @return boolean
+	 *         TRUE if the action is currently in progress
+	 *         FALSE if the action is complete or has never been started
+	 */
+	public function getIsOpen()
 	{
-		if (empty($this->endTime)) {
+		if (isset($this->startTime) && $this->startTime !== null && !isset($this->endTime)) {
 			return true;
 		}
 
 		return false;
 	}
 
+	/**
+	 *
+	 * @param string $text
+	 *        the message to write
+	 * @param callback $callable
+	 *        the function / lambda to call
+	 */
 	public function addStep($text, $callable)
 	{
-		// create a log item for this step
-		$action = new Action_LogItem($this->injectables, $this->nestLevel + 1);
-		$action->startAction($text);
+		// make sure any nested action has completed
+		$this->closeAllOpenSubActions();
 
-		// add the action to our collection
-		$this->nestedActions[] = $action;
+		// create a log item for this step
+		$action = $this->newNestedAction();
+		$action->startAction($text);
 
 		// call the callback
 		$return = $callable($action);
 
-		// was there a return value?
-		if ($return === true) {
-			$this->text .= ' ... YES';
-		}
-		else if ($return === false) {
-			$this->text .= ' ... NO';
-		}
-
 		// mark this action as complete
 		$action->endAction();
+		unset($this->nestedAction);
 
 		// all done
 		return $return;
@@ -259,21 +211,20 @@ class Action_LogItem
 
 	public function startStep($text)
 	{
+		// make sure any nested action has completed
+		$this->closeAllOpenSubActions();
+
 		// create a log item for this step
 		$action = new Action_LogItem($this->injectables, $this->nestLevel + 1);
 		$action->startAction($text);
 
 		// add the action to our collection
-		$this->nestedActions[] = $action;
+		$this->nestedAction = $action;
 	}
 
 	public function endStep()
 	{
-		// end the action that we're ending
-		$action = end($this->nestedActions);
-
-		// mark this action as complete
-		$action->endAction();
+		$this->closeAllOpenSubActions();
 	}
 
 	public function captureOutput($text)
@@ -295,5 +246,46 @@ class Action_LogItem
 	public function getNestLevel()
 	{
 		return $this->nestLevel;
+	}
+
+	// ==================================================================
+	//
+	// Helpers for testing etc go here
+	//
+	// ------------------------------------------------------------------
+
+	public function getOpenAction()
+	{
+		// do we have an active nested action?
+		if (isset($this->nestedAction) && $this->nestedAction->getIsOpen()) {
+			// ask it to figure out what to return
+			return $this->nestedAction->getOpenAction();
+		}
+
+		// are we the open action?
+		if ($this->getIsOpen()) {
+			return $this;
+		}
+
+		// if we get here, then there is no current open action
+		return null;
+	}
+
+	public function getStartTime()
+	{
+		if (!isset($this->startTime)) {
+			return null;
+		}
+
+		return $this->startTime;
+	}
+
+	public function getEndTime()
+	{
+		if (!isset($this->endTime)) {
+			return null;
+		}
+
+		return $this->endTime;
 	}
 }

@@ -55,7 +55,7 @@ namespace DataSift\Storyplayer\PlayerLib;
  */
 class Action_Logger
 {
-	protected $actions = array();
+	protected $action = null;
 	protected $injectables;
 
 	/**
@@ -66,25 +66,25 @@ class Action_Logger
 		$this->injectables = $injectables;
 	}
 
+	/**
+	 *
+	 * @param  string $text
+	 *         the message to write to the log
+	 * @param  array $codeLine
+	 *         details about the line of code we are currently executing
+	 * @return Action_LogItem
+	 *         the object that tracks this log entry
+	 */
 	public function startAction($text, $codeLine = null)
 	{
-		// is this our first action?
-		if (count($this->actions) == 0)
+		// do we have an open action?
+		if (!$this->action || !$this->action->getIsOpen())
 		{
-			$openItem = new Action_LogItem($this->injectables, 1);
-			$this->actions[] = $openItem;
+			$openItem = $this->action = new Action_LogItem($this->injectables, 1);
 		}
 		else {
-			// do we have any open actions to nest inside?
-			$endItem  = end($this->actions);
-			if ($endItem->isOpen()) {
-				// this is a new nested item
-				$openItem = $endItem->newNestedAction();
-			}
-			else {
-				$openItem = new Action_LogItem($this->injectables, 1);
-				$this->actions[] = $openItem;
-			}
+			// this is a new nested item
+			$openItem = $this->action->newNestedAction();
 		}
 
 		return $openItem->startAction($text, $codeLine);
@@ -93,16 +93,32 @@ class Action_Logger
 	public function closeAllOpenActions()
 	{
 		// do we have any empty log items?
-		if (count($this->actions) == 0)
+		if (!$this->action)
 		{
 			return;
 		}
 
-		$endItem = end($this->actions);
-		if ($endItem->isOpen()) {
-			$endItem->closeAllOpenActions();
+		// close the action
+		if ($this->action->getIsOpen()) {
+			$this->action->endAction();
 		}
 
-		$endItem->endAction();
+		// forget the action
+		$this->action = null;
+	}
+
+	// ==================================================================
+	//
+	// Helper methods for testing etc go here
+	//
+	// ------------------------------------------------------------------
+
+	public function getOpenAction()
+	{
+		if (!$this->action || $this->action->getIsComplete()) {
+			return null;
+		}
+
+		return $this->action;
 	}
 }
