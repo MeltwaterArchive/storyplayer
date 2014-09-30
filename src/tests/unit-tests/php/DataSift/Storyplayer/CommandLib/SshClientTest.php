@@ -49,6 +49,7 @@ use stdClass;
 use DataSift\Storyplayer\Injectables;
 use DataSift\Storyplayer\PlayerLib\Action_LogItem;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\OutputLib\DataFormatter;
 
 class SshClientTest extends PHPUnit_Framework_TestCase
 {
@@ -62,6 +63,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
 
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -89,6 +91,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -127,6 +130,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -157,6 +161,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -195,6 +200,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -237,6 +243,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -269,6 +276,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -315,6 +323,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -357,6 +366,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -394,6 +404,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -432,6 +443,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // our $st object
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -463,6 +475,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
 
         $i  = new Injectables;
         $i->initOutputSupport();
+        $i->initDataFormatterSupport();
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
@@ -523,6 +536,8 @@ class SshClientTest extends PHPUnit_Framework_TestCase
 
         // our fake injectables container
         $injectables = new stdClass;
+        $injectables->dataFormatter = new DataFormatter;
+        $injectables->dataFormatter->setIsVerbose(true);
         $injectables->output = $output;
 
         // our mocked $st needs to do things too
@@ -573,6 +588,8 @@ class SshClientTest extends PHPUnit_Framework_TestCase
 
         // our fake injectables container
         $injectables = new stdClass;
+        $injectables->dataFormatter = new DataFormatter;
+        $injectables->dataFormatter->setIsVerbose(true);
         $injectables->output = $output;
 
         // our mocked $st needs to do things too
@@ -622,6 +639,8 @@ class SshClientTest extends PHPUnit_Framework_TestCase
 
         // our fake injectables container
         $injectables = new stdClass;
+        $injectables->dataFormatter = new DataFormatter;
+        $injectables->dataFormatter->setIsVerbose(true);
         $injectables->output = $output;
 
         // our mocked $st needs to do things too

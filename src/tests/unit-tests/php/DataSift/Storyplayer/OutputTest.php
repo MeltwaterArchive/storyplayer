@@ -654,6 +654,35 @@ class OutputTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers DataSift\Storyplayer\Output::logPhaseSubprocessOutput()
+	 */
+	public function testCanLogPhaseSubprocessOutput()
+	{
+	    // ----------------------------------------------------------------
+	    // setup the test
+
+		$msg = "a unit-test is running ... do not be alarmed!";
+
+	    $plugin1 = Mockery::mock("DataSift\Storyplayer\OutputLib\OutputPlugin");
+	   	$plugin1->shouldReceive('logPhaseSubprocessOutput')->once()->with($msg);
+	    $plugin2 = Mockery::mock("DataSift\Storyplayer\OutputLib\OutputPlugin");
+	    $plugin2->shouldReceive('logPhaseSubprocessOutput')->once()->with($msg);
+
+	    $obj = new Output();
+	    $obj->usePluginInSlot($plugin1, "console");
+	    $obj->usePluginInSlot($plugin2, "slot1");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj->logPhaseSubprocessOutput($msg);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    Mockery::close();
+	}
+	/**
 	 * @covers DataSift\Storyplayer\Output::logPhaseError()
 	 */
 	public function testCanLogPhaseError()

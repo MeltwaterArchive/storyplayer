@@ -127,14 +127,10 @@ class ExpectsHttpResponse extends Prose
 
 		// make a printable version of $expectedBody
 		$printer = new DataPrinter();
-		$logValue = $printer->convertToString($expectedBody);
-
-		if (strlen($logValue) > 1024) {
-			$logValue = substr($logValue, 0, 1024) + '...';
-		}
+		$logValue = $st->convertDataForOutput($expectedBody);
 
 		// what are we doing?
-		$log = $st->startAction("make sure HTTP response has body '{$logValue}'");
+		$log = $st->startAction(["make sure HTTP response has body", $expectedBody]);
 
 		// do the comparison
 		$st->assertsString($response->getBody())->equals($expectedBody);

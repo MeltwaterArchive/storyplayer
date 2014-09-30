@@ -240,6 +240,15 @@ abstract class OutputPlugin
 	abstract public function logPhaseActivity($msg);
 
 	/**
+	 * called when a story logs the (possibly partial) output from
+	 * running a subprocess
+	 *
+	 * @param  string $msg the output to log
+	 * @return void
+	 */
+	abstract public function logPhaseSubprocessOutput($msg);
+
+	/**
 	 * @param string $phaseName
 	 * @param string $msg
 	 * @return void

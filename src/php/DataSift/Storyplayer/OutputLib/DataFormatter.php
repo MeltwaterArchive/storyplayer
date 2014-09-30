@@ -34,102 +34,75 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/OutputLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\OutputLib;
 
-use DataSift\Stone\HttpLib\HttpClient;
-use DataSift\Stone\HttpLib\HttpClientRequest;
-use DataSift\Stone\HttpLib\HttpClientResponse;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * do things to a web site by making requests directly to it (i.e. not
- * using the web browser at all)
- *
- * Great for testing APIs
+ * helper for producing printable PHP data
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/OutputLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingHttp extends Prose
+class DataFormatter
 {
-	public function delete($url, $params = array(), $body = null, $headers = array())
+	private $isVerbose = false;
+
+	public function getIsVerbose()
 	{
-		return $this->makeHttpRequest($url, "DELETE", $params, $body, $headers);
+		return $this->isVerbose;
 	}
 
-	public function post($url, $params = array(), $body = null, $headers = array())
+	public function setIsVerbose($isVerbose = true)
 	{
-		return $this->makeHttpRequest($url, "POST", $params, $body, $headers);
+		$this->isVerbose = $isVerbose;
 	}
 
-	public function put($url, $params = array(), $body = null, $headers = array())
+	public function convertData($data, $alwaysVerbose = false)
 	{
-		return $this->makeHttpRequest($url, "PUT", $params, $body, $headers);
+		$printer = new DataPrinter();
+		$logValue = $printer->convertToString($data);
+
+		return $this->truncateIfRequired($logValue);
 	}
 
-	/**
-	 * @param string $verb
-	 */
-	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array())
+	public function convertMessageArray($message)
 	{
-		// shorthand
-		$st = $this->st;
+		$printer = new DataPrinter();
+		$logValue = '';
+		$parts = false;
 
-		// create the full URL
-		if (count($params) > 0) {
-			$url = $url . '?' . http_build_query($params);
+		foreach ($message as $part) {
+			$parts[] = $printer->convertToString($part);
 		}
 
-		// what are we doing?
-		$logMsg = [ "HTTP " . strtoupper($verb) . " '${url}'" ];
-		if ($body != null) {
-			$logMsg[] = $body;
-		}
-		if (count($headers) > 0) {
-			$logMsg[] = $headers;
-		}
-		$log = $st->startAction($logMsg);
+		$logValue = implode(' ', $parts);
 
-		// build the HTTP request
-		$request = new HttpClientRequest($url);
-		$request->withUserAgent("Storyplayer")
-				->withHttpVerb($verb);
+		return $this->truncateIfRequired($logValue);
+	}
 
-		if (is_array($headers)) {
-			foreach ($headers as $key => $value) {
-				$request->withExtraHeader($key, $value);
-			}
+	protected function truncateIfRequired($logValue, $alwaysVerbose = false)
+	{
+		$isVerbose = $alwaysVerbose;
+		if (!$isVerbose) {
+			$isVerbose = $this->isVerbose;
 		}
 
-		if (is_array($body)) {
-			foreach ($body as $key => $value) {
-				$request->addData($key, $value);
-			}
-		}else{
-            $request->setPayload($body);
-        }
-
-		// make the call
-		$client = new HttpClient();
-		$response = $client->newRequest($request);
-
-		// is this a valid response?
-		if (!$response instanceof HttpClientResponse) {
-			throw new E5xx_ActionFailed(__METHOD__);
+		if (!$isVerbose && strlen($logValue) > 100) {
+			$logValue = substr($logValue, 0, 100) . ' ...';
 		}
 
-		// all done
-		$log->endAction($response);
-		return $response;
+		return $logValue;
 	}
 }

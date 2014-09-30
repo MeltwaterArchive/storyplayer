@@ -212,6 +212,9 @@ class StoryTeller
 	// our repository of parsed code, for printing code statements
 	private $codeParser = null;
 
+	// our data formatter
+	private $dataFormatter = null;
+
 	public function __construct(Injectables $injectables)
 	{
 		// remember our output object
@@ -222,6 +225,9 @@ class StoryTeller
 
         // our code parser
         $this->setCodeParser($injectables->codeParser);
+
+        // our data formatter
+        $this->setDataFormatter($injectables->dataFormatter);
 
 		// set a default page context
 		$this->setPageContext(new PageContext);
@@ -499,6 +505,11 @@ class StoryTeller
 		$this->codeParser = $codeParser;
 	}
 
+	public function setDataFormatter($dataFormatter)
+	{
+		$this->dataFormatter = $dataFormatter;
+	}
+
 	// ====================================================================
 	//
 	// Helpers to get parts of the story's context go here
@@ -666,6 +677,11 @@ class StoryTeller
 	public function closeAllOpenActions()
 	{
 		return $this->actionLogger->closeAllOpenActions();
+	}
+
+	public function convertDataForOutput($data)
+	{
+		return $this->dataFormatter->convertData($data);
 	}
 
 	// ==================================================================

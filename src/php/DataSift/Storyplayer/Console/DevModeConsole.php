@@ -222,6 +222,21 @@ class DevModeConsole extends Console
 	}
 
 	/**
+	 * called when a story logs the (possibly partial) output from
+	 * running a subprocess
+	 *
+	 * @param  string $msg the output to log
+	 * @return void
+	 */
+	public function logPhaseSubprocessOutput($msg)
+	{
+		// show the user that *something* happened
+		if (!$this->silentActivity) {
+			$this->write(rtrim($msg) . PHP_EOL);
+		}
+	}
+
+	/**
 	 * called when a story logs an error
 	 *
 	 * @param string $phaseName

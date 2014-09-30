@@ -79,7 +79,7 @@ class UsingMysql extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run SQL against '{$this->args[0]}'");
+		$log = $st->startAction(["run SQL against '{$this->args[0]}':", $sql]);
 
 		// connect
 		$conn = new mysqli($this->args[0], $this->args[1], $this->args[2]);

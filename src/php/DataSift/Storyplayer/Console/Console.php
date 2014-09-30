@@ -216,11 +216,23 @@ abstract class Console extends OutputPlugin
 	        $this->write($now, $this->writer->timeStyle);
 	        $this->write('] ', $this->writer->punctuationStyle);
 
+	        // prepare the code for output
+	        //
+	        // if the code is longer than a single line, we want to display
+	        // it on its own line, to make the output more readable
+	        $parts = explode("\n", $codeLine['code']);
+	        if (count($parts) > 1) {
+	        	$codeLine['code'] = PHP_EOL . $codeLine['code'];
+	        }
+	        else {
+	        	$codeLine['code'] = ' ' . $codeLine['code'];
+	        }
+
 	        // how many spaces do we need to write?
 	        $shorterMsg = trim($message);
 	        $indent = strlen($message) - strlen($shorterMsg);
 	        $this->write(str_repeat(" ", $indent));
-	        $this->write("code -- ", $this->writer->commentStyle);
+	        $this->write("code --", $this->writer->commentStyle);
         	$this->writeCodePointCode($codeLine, $this->writer->commentStyle);
         	$this->write(PHP_EOL);
         }

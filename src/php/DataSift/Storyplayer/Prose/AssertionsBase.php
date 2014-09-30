@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\TextLib\TextHelper;
 
 /**
  * Base class used for all assertions
@@ -67,22 +68,50 @@ class AssertionsBase extends Prose
 
 	public function __call($methodName, $params)
 	{
-		// pass this through to our comparitor, if it has the same method
-		// name
-		if (method_exists($this->comparitor, $methodName)) {
-			$result = call_user_func_array(array($this->comparitor, $methodName), $params);
+		// shorthand
+		$st = $this->st;
 
-			// was the comparison successful?
-			if ($result->hasPassed()) {
-				return true;
+		// what are we doing?
+		//
+		// let's try and make it a bit more useful to the reader
+		$className = get_class($this);
+		$className = preg_replace('/^.*[\\\\_]([A-Za-z0-9]+)$/', "$1", get_class($this));
+		$words = TextHelper::convertCamelCaseToWords($className);
+		if (isset($words[1])) {
+			$msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
+			if (isset($params[0])) {
+				if (is_string($params[0])) {
+					$msg .= " '" . $params[0] . "'";
+				}
+				else if (is_scalar($params[0])) {
+					$msg .= ' ' . $params[0];
+				}
+				else {
+					$msg .= ' ' . $st->convertDataForOutput($params[0]);
+				}
 			}
+		}
+		else {
+			$msg = "check data using $className::$methodName";
+		}
+		$log = $st->startAction($msg);
 
-			// if we get here, then the comparison failed
-			throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
+		// is the user trying to call a method that exists in our comparitor?
+		if (!method_exists($this->comparitor, $methodName)) {
+			throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
 		}
 
-		// this only gets called if there's no matching method
-		throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
+		// if we get here, then there's a comparitor we can call
+		$result = call_user_func_array(array($this->comparitor, $methodName), $params);
+
+		// was the comparison successful?
+		if ($result->hasPassed()) {
+			$log->endAction();
+			return true;
+		}
+
+		// if we get here, then the comparison failed
+		throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
 	}
 
 	public function getComparitor()

@@ -47,6 +47,7 @@ use Exception;
 use Mockery;
 use PHPUnit_Framework_TestCase;
 use stdClass;
+use DataSift\Storyplayer\OutputLib\DataFormatter;
 
 class Action_LoggerTest extends PHPUnit_Framework_TestCase
 {
@@ -59,6 +60,8 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 	    // perform the change
 
 		$i   = new stdClass;
+		$i->dataFormatter = new DataFormatter();
+		$i->dataFormatter->setIsVerbose(true);
 	    $obj = new Action_Logger($i);
 
 	    // ----------------------------------------------------------------
@@ -85,6 +88,8 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 
 	    // our mock DI container
 	    $i = new stdClass();
+		$i->dataFormatter = new DataFormatter();
+		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
 
 	    // and, our test subject
@@ -126,6 +131,8 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 
 	    // our mock DI container
 	    $i = new stdClass();
+		$i->dataFormatter = new DataFormatter();
+		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
 
 	    // and, our test subject
@@ -168,6 +175,8 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 
 	    // our mock DI container
 	    $i = new stdClass();
+		$i->dataFormatter = new DataFormatter();
+		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
 
 	    // and, our test subject
@@ -200,6 +209,8 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 
 	    // our mock DI container
 	    $i = new stdClass();
+		$i->dataFormatter = new DataFormatter();
+		$i->dataFormatter->setIsVerbose(true);
 
 	    // and, our test subject
 	    $obj = new Action_Logger($i);
@@ -239,6 +250,8 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 
 	    // our mock DI container
 	    $i = new stdClass();
+		$i->dataFormatter = new DataFormatter();
+		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
 
 	    // and, our test subject
@@ -284,6 +297,8 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 
 	    // our mock DI container
 	    $i = new stdClass();
+		$i->dataFormatter = new DataFormatter();
+		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
 
 	    // and, our test subject

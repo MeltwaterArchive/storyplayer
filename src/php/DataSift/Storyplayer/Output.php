@@ -396,12 +396,41 @@ class Output extends OutputPlugin
 			'ts'       => time(),
 			'text'     => $msg,
 			'codeLine' => $codeLine,
+			'isOutput' => false,
 		];
 
 		// call all of our plugins
 		foreach ($this->plugins as $plugin)
 		{
 			$plugin->logPhaseActivity($msg, $codeLine);
+		}
+	}
+
+	/**
+	 * called when a story logs the (possibly partial) output from
+	 * running a subprocess
+	 *
+	 * @param  string $msg the output to log
+	 * @return void
+	 */
+	public function logPhaseSubprocessOutput($msg)
+	{
+		// enforce our input type
+		Contract::RequiresValue($msg, is_string($msg));
+
+		// keep track of what was attempted, in case we need to show
+		// the user what was attempted
+		$this->activityLog[] = [
+			'ts'       => time(),
+			'text'     => $msg,
+			'codeLine' => null,
+			'isOutput' => true,
+		];
+
+		// call all of our plugins
+		foreach ($this->plugins as $plugin)
+		{
+			$plugin->logPhaseSubprocessOutput($msg);
 		}
 	}
 

@@ -59,6 +59,7 @@ use Phix_Project\CliEngine\CliCommand;
 class DefaultCommonFunctionality
 {
 	public $classes = [
+		"Common_VerboseSupport"				   => "Common_VerboseSupport",
 		"Common_DeviceSupport"                 => "Common_DeviceSupport",
 		"Common_TestEnvironmentConfigSupport"  => "Common_TestEnvironmentConfigSupport",
 		"Common_SystemUnderTestConfigSupport"  => "Common_SystemUnderTestConfigSupport",

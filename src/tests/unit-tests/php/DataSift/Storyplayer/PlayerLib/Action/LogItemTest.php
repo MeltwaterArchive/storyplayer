@@ -47,6 +47,7 @@ use Exception;
 use Mockery;
 use PHPUnit_Framework_TestCase;
 use stdClass;
+use DataSift\Storyplayer\OutputLib\DataFormatter;
 
 class Action_LogItemTest extends PHPUnit_Framework_TestCase
 {
@@ -60,6 +61,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 
 		$i   = new stdClass;
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
+		$i->dataFormatter = new DataFormatter;
 	    $obj = new Action_LogItem($i, 1);
 
 	    // ----------------------------------------------------------------
@@ -82,6 +84,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 
 		$i   = new stdClass;
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
+		$i->dataFormatter = new DataFormatter;
 	    $obj = new Action_LogItem($i, 1);
 
 	    $this->assertTrue($obj instanceof Action_LogItem);
@@ -109,6 +112,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 
 		$i   = new stdClass;
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
+		$i->dataFormatter = new DataFormatter;
 	    $obj = new Action_LogItem($i, 1);
 
 	    $this->assertTrue($obj instanceof Action_LogItem);
@@ -145,6 +149,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($msg, null);
+
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
 
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
@@ -186,6 +193,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($startMsg, null);
+
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
 
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
@@ -231,6 +241,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($startMsg, null);
 		$i->output->shouldReceive('logPhaseActivity')->once()->with('... ' . $endMsg, null);
 
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
+
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
 	    $obj->startAction($startMsg);
@@ -272,6 +285,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($startMsg1, null);
 
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
+
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
 	    $obj->startAction($startMsg1);
@@ -312,7 +328,10 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($startMsg1, null);
-		$i->output->shouldReceive('logPhaseActivity')->once()->with('  ' . $startMsg2, null);
+		$i->output->shouldReceive('logPhaseSubprocessOutput')->once()->with($startMsg2);
+
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
 
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
@@ -354,6 +373,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($startMsg1, null);
 		$i->output->shouldReceive('logPhaseActivity')->once()->with('  ' . $startMsg2, null);
+
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
 
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
@@ -403,6 +425,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($startMsg1, null);
 		$i->output->shouldReceive('logPhaseActivity')->once()->with('  ' . $startMsg2, null);
+
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
 
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
@@ -454,6 +479,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($msg, null);
 
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
+
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
 	    $this->assertNull($obj->getStartTime());
@@ -493,6 +521,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($startMsg1, null);
 		$i->output->shouldReceive('logPhaseActivity')->once()->with('  ' . $startMsg2, null);
+
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
 
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);
@@ -544,6 +575,9 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->output->shouldReceive('logPhaseActivity')->once()->with($startMsg1, null);
 		$i->output->shouldReceive('logPhaseActivity')->once()->with('  ' . $startMsg2, null);
+
+		// our real data formatter
+		$i->dataFormatter = new DataFormatter;
 
 		// our unit under test
 	    $obj = new Action_LogItem($i, 1);

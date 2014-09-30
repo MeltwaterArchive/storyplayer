@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Stone\DataLib\DataPrinter;
-
 /**
  * our data container, that is available to each phase of a test
  *
@@ -146,13 +144,7 @@ class Story_Checkpoint
 		}
 
 		// yes, we do
-		//
-		// make a printable version of the data, for our logs
-		$printer = new DataPrinter();
-		$logValue = $printer->convertToString($this->data[$key]);
-
-		$log->endAction("value is '{$logValue}'");
-        //$log->endAction();
+        $log->endAction($this->data[$key]);
 
 		// all done
 		return $this->data[$key];
@@ -189,12 +181,8 @@ class Story_Checkpoint
 		// shorthand
 		$st = $this->st;
 
-		// convert the value into something we can log
-		$printer = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-
 		// what are we doing?
-		$log = $st->startAction("store '{$key}' => '{$logValue}' in the checkpoint");
+		$log = $st->startAction("store '{$key}' in the checkpoint");
 
 		// are we allowed to change the data at this time?
 		if ($this->readOnly)
@@ -208,7 +196,7 @@ class Story_Checkpoint
 		$this->data[$key] = $value;
 
 		// all done
-		$log->endAction();
+		$log->endAction($value);
 	}
 
     // ====================================================================

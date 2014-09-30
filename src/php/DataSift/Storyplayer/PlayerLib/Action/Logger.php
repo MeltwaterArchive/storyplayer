@@ -68,14 +68,14 @@ class Action_Logger
 
 	/**
 	 *
-	 * @param  string $text
+	 * @param  mixed $message
 	 *         the message to write to the log
 	 * @param  array $codeLine
 	 *         details about the line of code we are currently executing
 	 * @return Action_LogItem
 	 *         the object that tracks this log entry
 	 */
-	public function startAction($text, $codeLine = null)
+	public function startAction($message, $codeLine = null)
 	{
 		// do we have an open action?
 		if (!$this->action || !$this->action->getIsOpen())
@@ -87,7 +87,7 @@ class Action_Logger
 			$openItem = $this->action->newNestedAction();
 		}
 
-		return $openItem->startAction($text, $codeLine);
+		return $openItem->startAction($message, $codeLine);
 	}
 
 	public function closeAllOpenActions()

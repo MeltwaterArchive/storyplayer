@@ -185,6 +185,9 @@ function main($argv)
 	// activate support for parsing code
 	$injectables->initCodeParserSupport();
 
+	// activate support for printing data
+	$injectables->initDataFormatterSupport();
+
 	// create our built-in default config
 	$defaultConfig = $injectables->initDefaultConfigSupport();
 

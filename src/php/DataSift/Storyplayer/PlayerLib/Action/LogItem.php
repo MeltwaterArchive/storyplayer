@@ -69,21 +69,23 @@ class Action_LogItem
 	 */
 	public function __construct($injectables, $nestLevel)
 	{
-		$this->nestLevel   = $nestLevel;
-		$this->injectables = $injectables;
-		$this->output      = $injectables->output;
+		$this->nestLevel     = $nestLevel;
+		$this->injectables   = $injectables;
+		$this->output        = $injectables->output;
+		$this->dataFormatter = $injectables->dataFormatter;
 	}
 
 	/**
 	 *
-	 * @param  string $text
-	 *         the message to log
+	 * @param  mixed $message
+	 *         the message to log. if it isn't a string, we'll convert it
+	 *         and apply the user's -V preference before logging
 	 * @param  array $codeLine
 	 *         metadata about the line of code that we're logging about
 	 * @return Action_LogItem
 	 *         return $this for fluent interfaces
 	 */
-	public function startAction($text, $codeLine = null)
+	public function startAction($message, $codeLine = null)
 	{
 		// when did this happen?
 		$this->startTime = microtime(true);
@@ -94,6 +96,17 @@ class Action_LogItem
 			$codeLine = null;
 		}
 
+		// convert to string if required
+		//
+		// if the user hasn't used -V from the command-line, then this
+		// will also truncate the output
+		if (is_array($message)) {
+			$text = $this->dataFormatter->convertMessageArray($message);
+		}
+		else {
+			$text = $this->dataFormatter->convertData($message);
+		}
+
 		// write to screen
 		$this->writeToLog($text, $codeLine);
 
@@ -102,9 +115,9 @@ class Action_LogItem
 	}
 
 	/**
-	 * @param string $resultText
+	 * @param mixed $message
 	 */
-	public function endAction($resultText = null)
+	public function endAction($message = null)
 	{
 		// close any open sub-actions
 		$this->closeAllOpenSubActions();
@@ -113,9 +126,17 @@ class Action_LogItem
 		$this->endTime = microtime(true);
 
 		// do we any output to log?
-		if (!empty($resultText)) {
-			$this->writeToLog('... ' . $resultText);
+		if ($message == null || empty($message)) {
+			return;
 		}
+		// convert to string if required
+		//
+		// if the user hasn't used -V from the command-line, then this
+		// will also truncate the output
+		$text = $this->dataFormatter->convertData($message);
+
+		// log the result
+		$this->writeToLog('... ' . $text);
 	}
 
 	/**
@@ -232,7 +253,9 @@ class Action_LogItem
 		// trick the logger into indenting the output one more
 		$this->nestLevel++;
 
-		$this->writeToLog($text);
+		// NOTE: output captured from sub-processes is NEVER subjected
+		// to truncation if -V is not used from the command-line
+		$this->output->logPhaseSubprocessOutput($text);
 
 		// restore our original output nesting level
 		$this->nestLevel--;
