@@ -90,8 +90,9 @@ class Story_Player
 	public function __construct($storyFilename, Injectables $injectables)
 	{
 		$this->storyFilename  = $storyFilename;
+		$this->startupPhases  = $injectables->activeConfig->storyplayer->phases->beforeStory;
 		$this->storyPhases    = $injectables->activeConfig->storyplayer->phases->story;
-		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->after_story;
+		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->afterStory;
 	}
 
 	public function play(StoryTeller $st, Injectables $injectables)
@@ -123,6 +124,28 @@ class Story_Player
 		$activity = "Running story";
 		$name     = $story->getCategory() . ' > ' . $story->getGroup() . ' > ' . $story->getName();
 		$output->startPhaseGroup($activity, $name);
+
+		// run the phases before the story truly starts
+		$phasesPlayer->playPhases(
+			$activity,
+			$st,
+			$injectables,
+			$this->startupPhases,
+			$story
+		);
+
+		// what happened?
+		$result = $story->getResult();
+		if (!$result->getPhaseGroupSucceeded()) {
+			// make sure the result has the story's filename in
+			$result->filename = $this->storyFilename;
+
+			// announce the results
+			$output->endPhaseGroup($result);
+
+			// all done
+			return;
+		}
 
 		// run the phases in the 'story' section
 		$phasesPlayer->playPhases(

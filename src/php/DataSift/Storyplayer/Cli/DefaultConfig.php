@@ -104,19 +104,21 @@ class DefaultConfig extends BaseObject
 
         // defaults for phases
         $phases = new BaseObject();
+        $phases->beforeStory = new BaseObject();
+        $phases->beforeStory->StartupHandlers = true;
+        $phases->beforeStory->CheckBlacklisted = true;
+        $phases->beforeStory->CheckTestEnvironment = true;
+        $phases->beforeStory->TestCanRunCheck = true;
         $phases->story = new BaseObject();
-        $phases->story->StartupHandlers = true;
-        $phases->story->CheckBlacklisted = true;
-        $phases->story->CheckTestEnvironment = true;
         $phases->story->TestSetup = true;
         $phases->story->PreTestPrediction = true;
         $phases->story->PreTestInspection = true;
         $phases->story->Action = true;
         $phases->story->PostTestInspection = true;
-        $phases->after_story = new BaseObject();
-        $phases->after_story->TestTeardown = true;
-        $phases->after_story->ApplyRoleChanges = true;
-        $phases->after_story->ShutdownHandlers = true;
+        $phases->afterStory = new BaseObject();
+        $phases->afterStory->TestTeardown = true;
+        $phases->afterStory->ApplyRoleChanges = true;
+        $phases->afterStory->ShutdownHandlers = true;
         $phases->testEnvStartup = new BaseObject;
         $phases->testEnvStartup->TestEnvironmentConstruction = true;
         $phases->testEnvShutdown = new BaseObject;

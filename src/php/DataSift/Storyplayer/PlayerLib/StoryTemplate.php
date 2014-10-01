@@ -84,6 +84,11 @@ class StoryTemplate
 	 * Helper methods to keep the Templates API in line with the phases
 	 */
 
+	public function hasTestCanRunCheck()
+	{
+		return method_exists($this, 'testCanRunCheck');
+	}
+
 	public function hasTestSetup()
 	{
 		return method_exists($this, 'testSetup');
@@ -137,6 +142,11 @@ class StoryTemplate
 	public function hasTestTeardown()
 	{
 		return method_exists($this, 'testTeardown');
+	}
+
+	public function getTestCanRunCheck()
+	{
+		return array($this, 'testCanRunCheck');
 	}
 
 	public function getTestSetup()

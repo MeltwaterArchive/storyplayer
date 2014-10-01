@@ -77,7 +77,7 @@ class Phase_Result
 	public $activityLog = [];
 
 	const MIN_RESULT = 1;
-	const MAX_RESULT = 7;
+	const MAX_RESULT = 8;
 
 	const COMPLETED    = 1;
 	// success is an alias for completed!
@@ -88,6 +88,7 @@ class Phase_Result
 	const HASNOACTIONS = 5;
 	const SKIPPED      = 6;
 	const BLACKLISTED  = 7;
+	const CANNOTRUN    = 8;
 
 	public function __construct($phaseName)
 	{
@@ -186,6 +187,15 @@ class Phase_Result
 		return false;
 	}
 
+	public function getPhaseCannotRun()
+	{
+		if ($this->result == self::CANNOTRUN) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public function getNextAction()
 	{
 		return $this->nextAction;
@@ -221,10 +231,11 @@ class Phase_Result
 	 * @param integer $result
 	 * @param string $msg
 	 */
-	public function setSkipPlaying($result, $msg)
+	public function setSkipPlaying($result, $msg, $e = null)
 	{
 		$this->nextAction = PhaseGroup_Player::NEXT_SKIP;
 		$this->result     = $result;
 		$this->message    = $msg;
+		$this->exception  = $e;
 	}
 }

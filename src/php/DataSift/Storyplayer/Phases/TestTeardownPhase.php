@@ -61,7 +61,7 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class TestTeardownPhase extends StoryPhase
 {
-	protected $sequenceNo = 6;
+	protected $sequenceNo = 7;
 
 	public function doPhase($story)
 	{

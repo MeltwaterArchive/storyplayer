@@ -47,9 +47,10 @@ use Exception;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
 use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
+use DataSift\Storyplayer\Prose\E5xx_StoryCannotRun;
 
 /**
- * the TestSetup phase
+ * the TestShouldRun phase
  *
  * @category  Libraries
  * @package   Storyplayer/Phases
@@ -59,9 +60,9 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class TestSetupPhase extends StoryPhase
+class TestCanRunCheckPhase extends StoryPhase
 {
-	protected $sequenceNo = 2;
+	protected $sequenceNo = 1;
 
 	public function doPhase($story)
 	{
@@ -69,34 +70,56 @@ class TestSetupPhase extends StoryPhase
 		$st          = $this->st;
 		$storyResult = $story->getResult();
 
-		// our return value
+		// keep track of what happens with the action
 		$phaseResult = $this->getNewPhaseResult();
 
 		// do we have anything to do?
-		if (!$story->hasTestSetup())
+		if (!$story->hasTestCanRunCheck())
 		{
 			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no test setup instructions"
+				$phaseResult::COMPLETED,
+				"story can always run"
 			);
-
-			// as far as the rest of the test is concerned, the setup was
-			// a success
 			return $phaseResult;
 		}
 
 		// get the callback to call
-		$callbacks = $story->getTestSetup();
+		$callbacks = $story->getTestCanRunCheck();
 
 		// make the call
 		try {
 			foreach ($callbacks as $callback) {
-				call_user_func($callback, $st);
+				$canRun = call_user_func($callback, $st);
+
+				// what did the callback tell us?
+				//
+				// we treat TWO results as valid reports that the test
+				// should be skipped:
+				//
+				// 1: FALSE
+				// 2: an error message to write to the outputs
+				//
+				// ANYTHING else is treated as permission to continue
+				// and potentially run the rest of the story
+				if ($canRun === false || is_string($canRun)) {
+					$msg = "test reported that it cannot run";
+					if (is_string($canRun)) {
+						$msg = $canRun;
+					}
+					$phaseResult->setSkipPlaying(
+						$phaseResult::CANNOTRUN,
+						$msg
+					);
+					$storyResult->setStoryHasBeenSkipped($phaseResult);
+					return $phaseResult;
+				}
 			}
 
 			// if we get here, then all is well
 			$phaseResult->setContinuePlaying();
 		}
+		// if an action fails, we treat that as a fault, and mark the
+		// story as failed
 		catch (E5xx_ActionFailed $e) {
 			$phaseResult->setPlayingFailed(
 				$phaseResult::FAILED,
@@ -105,15 +128,17 @@ class TestSetupPhase extends StoryPhase
 			);
 			$storyResult->setStoryHasFailed($phaseResult);
 		}
+		// if an expect fails, we treat that as meaning that the story
+		// cannot run
 		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
+			$phaseResult->setSkipPlaying(
+				$phaseResult::CANNOTRUN,
 				$e->getMessage(),
 				$e
 			);
-			$storyResult->setStoryHasFailed($phaseResult);
+			$storyResult->setStoryHasBeenSkipped($phaseResult);
 		}
-		// if any of the tests are incomplete, deal with that too
+		// if any of the modules used are incomplete, deal with that too
 		catch (E5xx_NotImplemented $e) {
 			$phaseResult->setPlayingFailed(
 				$phaseResult::INCOMPLETE,
@@ -121,6 +146,13 @@ class TestSetupPhase extends StoryPhase
 				$e
 			);
 			$storyResult->setStoryIsIncomplete($phaseResult);
+		}
+		catch (E5xx_StoryCannotRun $e) {
+			$phaseResult->setSkipPlaying(
+				$phaseResult::CANNOTRUN,
+				$e->getMessage()
+			);
+			$storyResult->setStoryHasBeenSkipped($phaseResult);
 		}
 		catch (Exception $e)
 		{

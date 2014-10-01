@@ -138,6 +138,9 @@ class PhaseGroup_Player
 							}
 							$output->logPhaseSkipped($phaseName, self::MSG_PHASE_BLACKLISTED . ': ' . $phaseResult->getMessage());
 						}
+						else if ($phaseResult->getPhaseCannotRun()) {
+							$output->logPhaseSkipped($phaseName, $phaseResult->getMessage());
+						}
 						else {
 							if ($groupResult) {
 								$groupResult->setPhaseGroupIsIncomplete($phaseResult);

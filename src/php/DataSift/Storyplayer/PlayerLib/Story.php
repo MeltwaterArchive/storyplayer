@@ -97,6 +97,14 @@ class Story
 	protected $hintsCallback;
 
 	/**
+	 * the function that checks to see if the test should run at all,
+	 * or should be skipped
+	 *
+	 * @var array
+	 */
+	protected $testCanRunCheckCallback = array();
+
+	/**
 	 * the function that provides any story-specific setup work
 	 *
 	 * @var array
@@ -600,6 +608,7 @@ class Story
 		// tell the template which story it is being used with
 		$tmpl->setStory($this);
 
+		$tmpl->hasTestCanRunCheck()			&& $this->addTestCanRunCheck($tmpl->getTestCanRunCheck());
 		$tmpl->hasTestSetup()               && $this->addTestSetup($tmpl->getTestSetup());
 		$tmpl->hasTestTeardown()            && $this->addTestTeardown($tmpl->getTestTeardown());
 		$tmpl->hasPerPhaseSetup()           && $this->addPerPhaseSetup($tmpl->getPerPhaseSetup());
@@ -708,6 +717,42 @@ class Story
 	{
 		$this->persistDevice = true;
 		return $this;
+	}
+
+	// ====================================================================
+	//
+	// Information about how check if the test should run at all
+	//
+	// --------------------------------------------------------------------
+
+	/**
+	 * get the callback which allows the story to be skipped
+	 *
+	 * @return array
+	 */
+	public function getTestCanRunCheck()
+	{
+	    return $this->testCanRunCheckCallback;
+	}
+
+	/**
+	 * do we have a 'check story can run' callback?
+	 *
+	 * @return boolean true if the callback exists
+	 */
+	public function hasTestCanRunCheck()
+	{
+		return count($this->testCanRunCheckCallback) > 0;
+	}
+
+	public function setTestCanRunCheck($newCallback)
+	{
+		$this->testCanRunCheckCallback = array($newCallback);
+	}
+
+	public function addTestCanRunCheck($newCallback)
+	{
+		$this->testCanRunCheckCallback[] = $newCallback;
 	}
 
 	// ====================================================================

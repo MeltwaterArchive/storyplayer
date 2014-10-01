@@ -73,7 +73,8 @@ class Story_Result extends PhaseGroup_Result
 		'FAIL',
 		'ERROR',
 		'INCOMPLETE',
-		'BLACKLISTED'
+		'BLACKLISTED',
+		'SKIPPED',
 	];
 
 	const PASS = 1;
@@ -123,6 +124,11 @@ class Story_Result extends PhaseGroup_Result
 	public function setStoryHasError($phaseResult)
 	{
 		$this->setPhaseGroupHasError($phaseResult);
+	}
+
+	public function setStoryHasBeenSkipped($phaseResult)
+	{
+		$this->setPhaseGroupHasBeenSkipped($phaseResult);
 	}
 
 	public function calculateStoryResult()
