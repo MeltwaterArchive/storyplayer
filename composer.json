@@ -32,7 +32,8 @@
 		"phix/injectables": "*",
 		"symfony/yaml": "2.*",
 		"nikic/php-parser": "dev-master",
-		"twig/twig": "1.*"
+		"twig/twig": "1.*",
+		"predis/predis": "~1.0"
 	},
 	"require-dev": {
 		"stuart/phingtasks": "1.0.0",
