@@ -108,6 +108,7 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 // do we have a composer autoloader?
 $composerAutoloader = false;
 $composerFiles = array (
+	__DIR__ . "/../../../../autoload.php",
 	getcwd() . '/vendor/autoload.php',
 	__DIR__ . '/../../vendor/autoload.php',
 );
@@ -123,8 +124,9 @@ if (!$composerAutoloader) {
 	// work out where the vendor folder might be
 	$vendorDir = '';
 	$vendorDirs = array(
-		__DIR__ . '/../../vendor/php',
-		getcwd() . '/vendor/php'
+		__DIR__ . '/../../../../',
+		__DIR__ . '/../../',
+		getcwd() . '/vendor/'
 	);
 	foreach ($vendorDirs as $key => $candidateDir) {
 		if (is_dir($candidateDir)) {
