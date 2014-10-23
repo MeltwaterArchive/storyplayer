@@ -99,7 +99,7 @@ trait CommonFunctionalitySupport
 		}
 		catch (Exception $e) {
 			// no matter what has gone wrong, we cannot continue
-			$injectables->output->logCliError($e->getMessage());
+			$injectables->output->logCliErrorWithException($e->getMessage(), $e);
 			exit(1);
 		}
 	}
