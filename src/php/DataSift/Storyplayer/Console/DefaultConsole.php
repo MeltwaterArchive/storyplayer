@@ -283,7 +283,7 @@ class DefaultConsole extends Console
 	{
 		$this->write("*** error: $msg" . PHP_EOL . PHP_EOL
 		     . "This was caused by an unexpected exception " . get_class($e) . PHP_EOL . PHP_EOL
-		     . $e->getTraceAsString());
+		     . $e->getTraceAsString() . PHP_EOL);
 	}
 
 	/**
