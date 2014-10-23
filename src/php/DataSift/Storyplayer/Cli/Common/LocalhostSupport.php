@@ -80,6 +80,9 @@ class Common_LocalhostSupport implements Common_Functionality
         $hostsTable = $runtimeConfigManager->getTable($injectables->runtimeConfig, 'hosts');
         $testEnv = $injectables->activeTestEnvironmentName;
 
+        if (!isset($hostsTable->$testEnv)) {
+            $hostsTable->$testEnv = new BaseObject();
+        }
         $hostsTable->$testEnv->localhost = $host;
     }
 
