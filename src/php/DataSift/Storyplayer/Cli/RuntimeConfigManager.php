@@ -105,7 +105,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 	public function loadRuntimeConfig()
 	{
 		try {
-			return $this->configHelper->loadRuntimeConfig(self::APP_NAME, 'runtime.json');
+			return $this->configHelper->loadRuntimeConfig(self::APP_NAME, 'runtime-v2.json');
 		}
 		catch (E4xx_ConfigFileNotFound $e) {
 			// we need to provide an empty runtime config
@@ -120,7 +120,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 */
 	public function saveRuntimeConfig($config)
 	{
-		return $this->configHelper->saveRuntimeConfig($config, self::APP_NAME, 'runtime.json');
+		return $this->configHelper->saveRuntimeConfig($config, self::APP_NAME, 'runtime-v2.json');
 	}
 
     /**
