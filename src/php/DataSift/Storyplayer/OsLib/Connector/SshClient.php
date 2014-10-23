@@ -34,33 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\OsLib;
+
+use DataSift\Storyplayer\CommandLib\SshClient;
 
 /**
- * get information from the UNIX shell
- *
- * as of Storyplayer v2, this is now just an alias for:
- *
- *   $st->fromHost('localhost')
+ * adds support for running commands via ssh
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromShell extends FromHost
+
+trait Connector_SshClient
 {
-	public function __construct($st)
+	// keep track of sshClients so that we can reuse them
+	private $sshClients = [];
+
+	public function getClient($hostDetails)
 	{
-		parent::__construct($st, ['localhost']);
+		// shorthand
+		$name = $hostDetails->name;
+
+		// do we already have a client?
+		if (isset($this->sshClients[$name])) {
+			// yes - reuse it
+			return $this->sshClients[$name];
+		}
+
+		// if we get here, we need to make a new client
+		$sshClient = new SshClient($this->st, $hostDetails->sshOptions);
+		$sshClient->setIpAddress($hostDetails->ipAddress);
+		$sshClient->setSshUsername($hostDetails->sshUsername);
+
+		if (isset($hostDetails->sshKey)) {
+			$sshClient->setSshKey($hostDetails->sshKey);
+		}
+
+		// all done
+		$this->sshClients[$name] = $sshClient;
+		return $sshClient;
 	}
 }

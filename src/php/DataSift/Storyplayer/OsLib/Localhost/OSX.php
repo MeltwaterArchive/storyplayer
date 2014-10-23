@@ -34,21 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\OsLib;
 
 /**
- * get information from the UNIX shell
- *
- * as of Storyplayer v2, this is now just an alias for:
- *
- *   $st->fromHost('localhost')
+ * support for Storyplayer running on OSX
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -57,10 +53,8 @@ namespace DataSift\Storyplayer\Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromShell extends FromHost
+
+class Localhost_OSX extends Base_OSX
 {
-	public function __construct($st)
-	{
-		parent::__construct($st, ['localhost']);
-	}
+	use Connector_UnixShell;
 }

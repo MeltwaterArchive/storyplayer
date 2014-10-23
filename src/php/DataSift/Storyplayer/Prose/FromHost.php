@@ -232,4 +232,80 @@ class FromHost extends HostBase
 		$log->endAction("key file is '{$return}'");
 		return $return;
 	}
+
+	public function getIsScreenRunning($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("check if process '{$processName}' is still running in screen");
+
+		// get the details
+		$appData = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
+
+		// is it still running?
+		$isRunning = $st->fromHost($this->args[0])->getIsProcessRunning($appData->pid);
+
+		// all done
+		if ($isRunning) {
+			$log->endAction("still running");
+			return true;
+		}
+		else {
+			$log->endAction("not running");
+			return false;
+		}
+	}
+
+	public function getScreenSessionDetails($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get details about process '{$processName}'");
+
+		// are there any details?
+		$processesTable = $st->fromProcessesTable()->getProcessesTable();
+		foreach ($processesTable as $processDetails) {
+			if (isset($processDetails->processName) && $processDetails->processName == $processName) {
+				// success!
+				$log->endAction();
+				return $processDetails;
+			}
+		}
+
+		// we don't have this process
+		$msg = "no process with the screen name '{$processName}'";
+		$log->endAction($msg);
+		throw new E5xx_ActionFailed(__METHOD__, $msg);
+	}
+
+	public function getAllScreenSessions()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get details about all screen processes");
+
+		// our return data
+		$return = array();
+
+		// are there any details?
+		$processesTable = $st->fromProcessesTable()->getProcessesTable();
+		foreach ($processesTable as $processDetails) {
+			if (isset($processDetails->screenName)) {
+				$return[] = $processDetails;
+			}
+		}
+
+		// all done
+		$log->endAction("found " . count($return) . " screen process(es)");
+
+		// all done
+		return $return;
+	}
+
 }

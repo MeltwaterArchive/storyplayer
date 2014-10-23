@@ -34,33 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\OsLib;
+
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\HostLib\SupportedHost;
 
 /**
- * get information from the UNIX shell
- *
- * as of Storyplayer v2, this is now just an alias for:
- *
- *   $st->fromHost('localhost')
+ * support for Storyplayer testing against an arbitrary UNIX system
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromShell extends FromHost
+
+class Remote_Centos5 extends Base_Unix
 {
-	public function __construct($st)
-	{
-		parent::__construct($st, ['localhost']);
-	}
+	use Connector_SshClient;
 }

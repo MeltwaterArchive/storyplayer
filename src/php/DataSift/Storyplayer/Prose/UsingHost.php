@@ -166,4 +166,150 @@ class UsingHost extends HostBase
 		$log->endAction();
 		return $result;
 	}
+
+	public function startInScreen($processName, $commandLine)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("run process '{$processName}' ({$commandLine}) in the background on host '{$this->args[0]}'");
+
+		// build up the process data structure
+		$processDetails = new BaseObject();
+
+		// remember where we are running this
+		$processDetails->hostname = $this->args[0]->name;
+
+		// remember how users will refer to this
+		$processDetails->processName = $processName;
+
+		// we need to create a unique screen name
+		$processDetails->screenName = $processName . '_' . date('YmdHis');
+
+		// build up our command to run
+		$processDetails->commandLine = "screen -L -d -m -S " . $processDetails->screenName
+		         . ' bash -c "' . $commandLine . '"';
+
+		// run our command
+		//
+		// this creates a detached screen session called $appData->screenName
+		$this->runCommand($processDetails->commandLine);
+
+		// find the PID of the screen session, for future use
+		$cmd = "screen -ls | grep {$processDetails->screenName} | awk -F. '{print $1}'";
+		$result = $this->runCommand($cmd);
+		$processDetails->pid = trim($cmd->output);
+
+		// did the process start, or has it already terminated?
+		if (empty($processDetails->pid)) {
+			$log->endAction("process failed to start");
+			throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$processName}'");
+		}
+
+		// remember this process
+		$st->usingProcessesTable()->addProcess($processDetails);
+
+		// all done
+		$log->endAction("process running as '{$processDetails->screenName}' ({$processDetails->pid})");
+	}
+
+	public function stopInScreen($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("stop screen process '{$processName}' on host '{$this->args[0]}'");
+
+		// get the process details
+		$processDetails = $st->fromShell()->getScreenSessionDetails($processName);
+
+		// stop the process
+		$st->usingHost($this->args[0])->stopProcess($processDetails->pid);
+
+		// remove the process from the processes table
+		$st->usingProcessesTable()->removeProcess($processDetails);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function stopAllScreens()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("stop all running screen processes on host '{$this->args[0]}'");
+
+		// get the app details
+		$processes = $st->fromHost($this->args[0])->getAllScreenSessions();
+
+		// stop the process
+		foreach ($processes as $processDetails) {
+			$st->usingHost($this->args[0])->stopProcess($processDetails->pid);
+			$st->usingProcessesTable()->removeProcess($processDetails);
+		}
+
+		// all done
+		$log->endAction();
+	}
+
+	public function stopProcess($pid)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
+
+		// is the process running at all?
+		if (!$st->fromHost($this->args[0])->getIsProcessRunning($pid)) {
+			$log->endAction("process is not running");
+			return;
+		}
+
+		// yes it is, so stop it
+		// send a TERM signal to the screen session
+		$log->addStep("send SIGTERM to process '{$pid}'", function() use ($pid) {
+			if ($this->getIsLocalhost()) {
+				posix_kill($pid, SIGTERM);
+			}
+			else {
+				$st->usingHost($this->args[0])->runCommand("kill {$pid}");
+			}
+		});
+
+		// has this worked?
+		$log->addStep("wait for process to terminate", function() use($st, $pid) {
+			for($i = 0; $i < 2; $i++) {
+				if ($st->fromHost($this->args[0])->getIsProcessRunning($pid)) {
+					// process still exists
+					sleep(1);
+				}
+			}
+		});
+
+		if (posix_kill($pid, 0)) {
+			$log->addStep("send SIGKILL to process '{$pid}'", function() use($pid) {
+				if ($this->getIsLocalhost()) {
+					posix_kill($pid, SIGKILL);
+				}
+				else {
+					$this->usingHost($this->args[0])->runCommand("kill -9 {$pid}");
+				}
+				sleep(1);
+			});
+		}
+
+		// success?
+		if ($st->fromHost($this->args[0])->getIsProcessRunning($pid)) {
+			$log->endAction("process is still running :(");
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		// all done
+		$log->endAction("process has finished");
+	}
 }

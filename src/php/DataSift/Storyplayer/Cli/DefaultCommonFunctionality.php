@@ -63,6 +63,7 @@ class DefaultCommonFunctionality
 		"Common_DeviceSupport"                 => "Common_DeviceSupport",
 		"Common_TestEnvironmentConfigSupport"  => "Common_TestEnvironmentConfigSupport",
 		"Common_SystemUnderTestConfigSupport"  => "Common_SystemUnderTestConfigSupport",
+		"Common_LocalhostSupport"			   => "Common_LocalhostSupport",
 		"Common_ActiveConfigSupport"           => "Common_ActiveConfigSupport",
 		"Common_DefinesSupport"                => "Common_DefinesSupport",
 		"Common_ConsoleSupport"                => "Common_ConsoleSupport",

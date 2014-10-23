@@ -81,7 +81,8 @@ class HostBase extends Prose
 		$hostsTable = $st->fromHostsTable()->getHostsTable();
 		if (!isset($hostsTable->$name)) {
 			$hostDetails = new BaseObject();
-			$hostDetails->name = $args[0];
+			$hostDetails->name = $name;
+			$hostDetails->osName = "unknown";
 			$hostDetails->nameInHostsTable = $name;
 			$hostDetails->invalidHost = true;
 		}
@@ -90,5 +91,14 @@ class HostBase extends Prose
 		}
 
 		return $hostDetails;
+	}
+
+	protected function getIsLocalhost()
+	{
+		if (strtolower($this->args[0]) == 'localhost') {
+			return true;
+		}
+
+		return false;
 	}
 }

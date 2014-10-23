@@ -34,33 +34,69 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\Cli;
+
+use DataSift\Stone\ObjectLib\BaseObject;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
 
 /**
- * get information from the UNIX shell
- *
- * as of Storyplayer v2, this is now just an alias for:
- *
- *   $st->fromHost('localhost')
+ * Common support for registering 'localhost' as a host you can interact
+ * with
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromShell extends FromHost
+class Common_LocalhostSupport implements Common_Functionality
 {
-	public function __construct($st)
-	{
-		parent::__construct($st, ['localhost']);
-	}
+    public function addSwitches(CliCommand $command, $additionalContext)
+    {
+        // nothing to do - localhost is always enabled
+    }
+
+    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    {
+        // create a definition for localhost
+        $host = new BaseObject();
+        $host->name        = "localhost";
+        $host->osName      = $this->detectOs();
+        $host->type        = "PhysicalHost";
+        $host->ipAddress   = "127.0.0.1";
+        $host->provisioned = true;
+
+        // we need to make sure it's registered in the hosts table
+        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $hostsTable = $runtimeConfigManager->getTable($injectables->runtimeConfig, 'hosts');
+        $testEnv = $injectables->activeTestEnvironmentName;
+
+        $hostsTable->$testEnv->localhost = $host;
+    }
+
+    protected function detectOs()
+    {
+        if (stristr(PHP_OS, 'DAR')) {
+            return "Localhost_OSX";
+        }
+        else if (stristr(PHP_OS, 'WIN')) {
+            return "Localhost_Windows";
+        }
+        else if (stristr(PHP_OS, 'LINUX')) {
+            // @TODO: detect the different types of Linux here
+            return "Localhost_Unix";
+        }
+        else {
+            return "Localhost_Unix";
+        }
+    }
 }

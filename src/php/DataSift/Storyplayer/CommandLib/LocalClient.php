@@ -34,33 +34,106 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/CommandLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Prose;
+namespace DataSift\Storyplayer\CommandLib;
+
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Phix_Project\ContractLib2\Contract;
 
 /**
- * get information from the UNIX shell
- *
- * as of Storyplayer v2, this is now just an alias for:
- *
- *   $st->fromHost('localhost')
+ * helpers for interacting with the local operating system
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/CommandLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromShell extends FromHost
+
+class LocalClient
 {
-	public function __construct($st)
+	/**
+	 *
+	 * @var StoryTeller
+	 */
+	protected $st;
+
+	public function __construct(StoryTeller $st)
 	{
-		parent::__construct($st, ['localhost']);
+		// remember for future use
+		$this->st = $st;
+	}
+
+	/**
+	 *
+	 * @param  string $params
+	 * @return string
+	 * @deprecated
+	 */
+	public function convertParamsForUse($params)
+	{
+		// vet our input
+		Contract::RequiresValue($params, is_string($params));
+		// we don't mind if the params are empty
+
+		// our list of what to convert from
+		$convertFrom = [
+			'\'',
+			'*'
+		];
+
+		// our list of what to convert to
+		$convertTo = [
+			'\\\'',
+			'\'*\''
+		];
+
+		// our return value
+		$result = str_replace($convertFrom, $convertTo, $params);
+
+		// all done
+		return rtrim($result);
+	}
+
+	/**
+	 *
+	 * @param  string $command
+	 * @return CommandResult
+	 */
+	public function runCommand($command)
+	{
+		// vet our input
+		Contract::RequiresValue($command, is_string($command));
+		Contract::RequiresValue($command, !empty($command));
+
+		// shorthand
+		$st = $this->st;
+
+		// make the params printable / executable
+		// $printableParams = $this->convertParamsForUse($params);
+
+		// what are we doing?
+		$log = $st->startAction("run command '{$command}' against localhost ");
+
+		// build the full command
+		// <command> <command-args>
+		//    the command to run on the local OS
+		//    (assumes the command will be globbed by the local shell)
+		$fullCommand = str_replace('"', '\"', $command);
+
+		// run the command
+		$commandRunner = $st->getNewCommandRunner();
+		$result = $commandRunner->runSilently($st, $fullCommand);
+
+		// all done
+		$log->endAction("return code was '{$result->returnCode}'");
+		return $result;
 	}
 }

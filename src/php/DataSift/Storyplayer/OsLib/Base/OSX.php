@@ -43,42 +43,32 @@
 
 namespace DataSift\Storyplayer\OsLib;
 
-use DataSift\Storyplayer\CommandLib\SshClient;
+use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\HostLib\SupportedHost;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * the things you can do / learn about a machine running one of our
- * supported operatating systems
+ * support for Storyplayer running on OSX
  *
  * @category  Libraries
- * @package   Storyplayer/OsLib
+ * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-abstract class OsBase implements SupportedOs
+
+class Base_OSX extends OsBase
 {
-	/**
-	 *
-	 * @var DataSift\Storyplayer\PlayerLib\StoryTeller;
-	 */
-	protected $st;
-
-	public function __construct(StoryTeller $st)
-	{
-		// remember for future use
-		$this->st = $st;
-	}
-
 	/**
 	 *
 	 * @param  HostDetails $hostDetails
 	 * @param  SupportedHost $host
 	 * @return string
 	 */
-	abstract public function determineIpAddress($hostDetails, SupportedHost $host);
+	public function determineIpAddress($hostDetails, SupportedHost $host)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "not supported");
+	}
 
 	/**
 	 *
@@ -86,7 +76,10 @@ abstract class OsBase implements SupportedOs
 	 * @param  string $packageName
 	 * @return BaseObject
 	 */
-	abstract public function getInstalledPackageDetails($hostDetails, $packageName);
+	public function getInstalledPackageDetails($hostDetails, $packageName)
+	{
+		throw new E5xx_ActionFailed(__METHOD__, "not supported");
+	}
 
 	/**
 	 *
@@ -94,7 +87,28 @@ abstract class OsBase implements SupportedOs
 	 * @param  string $processName
 	 * @return boolean
 	 */
-	abstract public function getProcessIsRunning($hostDetails, $processName);
+	public function getProcessIsRunning($hostDetails, $processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("is process '{$processName}' running on OSX '{$hostDetails->name}'?");
+
+		// SSH in and have a look
+		$command   = "ps -ef | awk '{ print \\\$8 }' | grep '[" . $processName{0} . "]" . substr($processName, 1) . "'";
+		$result    = $this->runCommand($command);
+
+		// what did we find?
+		if ($result->didCommandFail() || empty($result->output)) {
+			$log->endAction("not running");
+			return false;
+		}
+
+		// success
+		$log->endAction("is running");
+		return true;
+	}
 
 	/**
 	 *
@@ -102,20 +116,36 @@ abstract class OsBase implements SupportedOs
 	 * @param  string $processName
 	 * @return integer
 	 */
-	abstract public function getPid($hostDetails, $processName);
-
-	/**
-	 * @param HostDetails $hostDetails
-	 * @param string $command
-	 *
-	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
-	 */
-	public function runCommand($hostDetails, $command)
+	public function getPid($hostDetails, $processName)
 	{
-		// get an SSH client
-		$client = $this->getClient($hostDetails);
+		// alias the storyteller object
+		$st = $this->st;
 
-		// run the command
-		return $client->runCommand($command);
+		// log some info to the user
+		$log = $st->startAction("get pid for process '{$processName}' running on OSX '{$hostDetails->name}'");
+
+		// run the command to get the process id
+		$command   = "ps -ef | grep '[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
+		$result    = $this->runCommand($command);
+
+		// check that we got something
+		if ($result->didCommandFail() || empty($result->output)) {
+			$log->endAction("could not get pid ... is the process running?");
+			return 0;
+		}
+
+		// check that we found exactly one process
+		$pids = explode("\n", $result->output);
+		if (count($pids) != 1) {
+			$log->endAction("found more than one process but expecting only one ... is this correct?");
+			return 0;
+		}
+
+		// we can now reason that we have the correct pid
+		$pid = $pids[0];
+
+		// all done
+		$log->endAction("{$pid}");
+		return $pid;
 	}
 }

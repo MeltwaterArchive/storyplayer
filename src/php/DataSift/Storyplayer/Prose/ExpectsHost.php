@@ -189,4 +189,48 @@ class ExpectsHost extends HostBase
 		$log->endAction();
 	}
 
+	public function isRunningInScreen($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
+
+		// get the details
+		$processDetails = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
+
+		// is this process still running?
+		if (!$st->fromHost($this->args[0])->getIsProcessRunning($processDetails->pid)) {
+			$log->endAction("process is not running");
+			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} running", "process {$processDetails->pid} not running");
+		}
+
+		// all done
+		$log->endAction();
+		return true;
+	}
+
+	public function isNotRunningInScreen($processName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
+
+		// get the details
+		$processDetails = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
+
+		// is this process still running?
+		if ($st->fromHost($this->args[0])->getIsProcessRunning($processDetails->pid)) {
+			$log->endAction("process is running");
+			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} not running", "process {$processDetails->pid} is running");
+		}
+
+		// all done
+		$log->endAction();
+		return true;
+	}
+
 }
