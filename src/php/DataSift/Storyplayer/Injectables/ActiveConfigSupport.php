@@ -136,16 +136,8 @@ trait ActiveConfigSupport
         // reliable :(
 
         try {
-            $searchList = array("br0", "p2p1", "eth0", "em4", "en3", "en2", "en0", "en1", "wlan0");
-            foreach ($searchList as $adapterToTest) {
-                // skip over any adapters that don't exist on this machine
-                if (!in_array($adapterToTest, $adapters)) {
-                    continue;
-                }
-
-                // we think the adapter is present
-                //
-                // does it have an IP address?
+            foreach ($adapters as $adapterToTest) {
+                // does the adapter have an IP address?
                 try {
                     $ipAddress = $netifaces->getIpAddress($adapterToTest);
                 } catch(NetifacesException $e){
