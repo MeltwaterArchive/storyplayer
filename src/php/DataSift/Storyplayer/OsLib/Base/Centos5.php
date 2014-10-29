@@ -108,7 +108,7 @@ class Base_Centos5 extends Base_Unix
 
 		// get the details
 		$command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";
-		$result    = $this->runCommand($command);
+		$result    = $this->runCommand($hostDetails, $command);
 
 		// any luck?
 		if ($result->didCommandFail()) {

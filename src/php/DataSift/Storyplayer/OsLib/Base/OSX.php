@@ -97,7 +97,7 @@ class Base_OSX extends OsBase
 
 		// SSH in and have a look
 		$command   = "ps -ef | awk '{ print \\\$8 }' | grep '[" . $processName{0} . "]" . substr($processName, 1) . "'";
-		$result    = $this->runCommand($command);
+		$result    = $this->runCommand($hostDetails, $command);
 
 		// what did we find?
 		if ($result->didCommandFail() || empty($result->output)) {
@@ -126,7 +126,7 @@ class Base_OSX extends OsBase
 
 		// run the command to get the process id
 		$command   = "ps -ef | grep '[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
-		$result    = $this->runCommand($command);
+		$result    = $this->runCommand($hostDetails, $command);
 
 		// check that we got something
 		if ($result->didCommandFail() || empty($result->output)) {
