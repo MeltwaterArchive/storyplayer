@@ -391,9 +391,14 @@ class LocalVagrantVms implements SupportedHost
 				// our network interface contains an IPAddress - it is likely
 				// to be one that works
 				if ($matches[1] != '0.0.0.0') {
+					$log->endAction($iface);
 					return $iface;
 				}
 			}
 		}
+
+		// if we get here, then we haven't found a network interface to use
+		$log->endAction("no bridgeable network interface found :(");
+		throw new E5xx_ActionFailed(__METHOD__);
 	}
 }
