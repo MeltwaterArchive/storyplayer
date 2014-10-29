@@ -86,15 +86,15 @@ function first($arrayToSearch)
  */
 function hostWithRole(StoryTeller $st, $roleName)
 {
-	$hostsDetails = $st->fromRolesTable()->getDetailsForRole($roleName);
-	if (!count(get_object_vars($hostsDetails))) {
+	$listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+	if (!count(get_object_vars($listOfHosts))) {
 		throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
 	}
 
 	// what are we doing?
 	$log = $st->startAction("for each host with role '{$roleName}' ... ");
 
-	foreach ($hostsDetails as $hostDetails) {
+	foreach ($listOfHosts as $hostDetails) {
 		yield($hostDetails->name);
 	}
 
