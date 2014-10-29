@@ -94,7 +94,7 @@ class SshClient
 		$this->st = $st;
 
 		// set the default SSH options
-		$this->sshOptions = $this->getDefaultSshOptions();
+		$sshOptions = $this->getDefaultSshOptions();
 
 		// add in the options
 		foreach ($sshOptions as $option) {
