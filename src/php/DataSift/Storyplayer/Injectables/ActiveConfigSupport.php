@@ -132,10 +132,19 @@ trait ActiveConfigSupport
         // step 2 - find an adapter that is most likely to have the IP address
         // that we want
         //
-        // note: am not sure that the search list for OSX interfaces is
-        // reliable :(
+        // our algorithm is simple:
+        //
+        // * we return the first non-loopback adapter that has an IP address
+        // * if that fails, we return the first loopback adapter that has
+        //   an IP address
+        //
+        // and if that fails, we give up
 
         try {
+            // special case - when loopback is our only adapter
+            $loopback = null;
+
+            // loop over the adapters
             foreach ($adapters as $adapterToTest) {
                 // does the adapter have an IP address?
                 try {
@@ -149,8 +158,23 @@ trait ActiveConfigSupport
                 $parts = explode('.', $ipAddress);
                 if (count($parts) == 4) {
                     // success!
-                    return $ipAddress;
+                    //
+                    // but wait - is it actually the loopback interface?
+                    if (in_array($adapterToTest, ['lo0', 'lo']) && ($loopback == null)) {
+                        $loopback = $ipAddress;
+                    }
+                    else {
+                        return $ipAddress;
+                    }
                 }
+            }
+
+            // we didn't find any adapters with an IP address
+            //
+            // but is the loopback up and running?
+            if ($loopback != null) {
+                // this is better than throwing an error
+                return $loopback;
             }
 
             // if we get here, we could not determine the IP address of our
