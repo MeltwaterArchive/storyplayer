@@ -853,7 +853,7 @@ class StoryTeller
 
 	public function getEnvironment()
 	{
-		return $st->fromEnvironment();
+		return $this->fromEnvironment();
 	}
 
 	public function getEnvironmentName()
