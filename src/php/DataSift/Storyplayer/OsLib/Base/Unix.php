@@ -165,4 +165,33 @@ class Base_Unix extends OsBase
 		$log->endAction("{$pid}");
 		return $pid;
 	}
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return boolean
+	 */
+	public function getPidIsRunning($hostDetails, $pid)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("is process PID '{$pid}' running on UNIX '{$hostDetails->name}'?");
+
+		// SSH in and have a look
+		$command   = "ps -ef | awk '{ print \\\$2 }' | grep '[" . $pid{0} . "]" . substr($pid, 1) . "'";
+		$result    = $this->runCommand($hostDetails, $command);
+
+		// what did we find?
+		if ($result->didCommandFail() || empty($result->output)) {
+			$log->endAction("not running");
+			return false;
+		}
+
+		// success
+		$log->endAction("is running");
+		return true;
+	}
 }
