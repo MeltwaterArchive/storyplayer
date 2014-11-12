@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\OsLib;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * do things with vagrant
@@ -175,11 +176,14 @@ class UsingHost extends HostBase
 		// what are we doing?
 		$log = $st->startAction("run process '{$processName}' ({$commandLine}) in the background on host '{$this->args[0]}'");
 
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
 		// build up the process data structure
 		$processDetails = new BaseObject();
 
 		// remember where we are running this
-		$processDetails->hostname = $this->args[0]->name;
+		$processDetails->hostname = $hostDetails->name;
 
 		// remember how users will refer to this
 		$processDetails->processName = $processName;
