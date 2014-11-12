@@ -96,7 +96,7 @@ class PlayStory_Command extends CliCommand
      *
      * @var boolean
      */
-    protected $peristTarget = false;
+    protected $persistTarget = false;
 
     /**
      * should we skip the TestEnvironmentConstruction phase?
@@ -561,6 +561,8 @@ class PlayStory_Command extends CliCommand
         if (isset($engine->options->persistTarget) && $engine->options->persistTarget)
         {
             $injectables->activeConfig->storyplayer->phases->testEnvShutdown->TestEnvironmentDestruction = false;
+            unset($injectables->activeConfig->storyplayer->phases->userAbort->TestEnvironmentDestruction);
+            $this->persistTarget = true;
         }
 
         // are we trying to use a test environment that has previously
@@ -596,6 +598,7 @@ class PlayStory_Command extends CliCommand
 
             // if we get here, then we do not need to create the test environment
             $injectables->activeConfig->storyplayer->phases->testEnvStartup->TestEnvironmentConstruction = false;
+            $this->reuseTarget = true;
         }
         else
         {
@@ -634,10 +637,16 @@ class PlayStory_Command extends CliCommand
     {
         echo PHP_EOL;
         echo "============================================================" . PHP_EOL;
-        echo "USER ABORT!!" . PHP_EOL . PHP_EOL;
-        echo "Cleaning up: ";
+        echo "USER ABORT!!" . PHP_EOL;
+
+        // do we skip destroying the test environment?
+        if ($this->persistTarget) {
+            echo PHP_EOL . "* Warning: NOT destroying test environment" . PHP_EOL
+                 .         "           --reuse-target flag is set" . PHP_EOL;
+        }
 
         // cleanup
+        echo PHP_EOL . "Cleaning up: ";
         $phasesPlayer = new PhaseGroup_Player();
         $phasesPlayer->playPhases(
             "user abort",
