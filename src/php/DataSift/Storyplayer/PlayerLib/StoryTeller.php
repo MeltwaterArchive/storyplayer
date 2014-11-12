@@ -853,10 +853,7 @@ class StoryTeller
 
 	public function getEnvironment()
 	{
-		throw new E4xx_ObsoleteProse(
-			'$st->getEnvironment()',
-			'either $st->getConfig() or $st->fromTestEnvironment()'
-		);
+		return $st->fromEnvironment();
 	}
 
 	public function getEnvironmentName()

@@ -43,11 +43,8 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\DataLib\DataPrinter;
-
 /**
- * Was available in v1.x. Has been rejigged to help with backwards
- * compatibility.
+ * Helper to try and bridge the gap between Storyplayer v1 and v2.
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -56,10 +53,64 @@ use DataSift\Stone\DataLib\DataPrinter;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromEnvironment extends Prose
+class EnvironmentHelper extends Prose
 {
-	public function __construct()
+	public function getAppSetting($appName, $settingName)
 	{
-		return new EnvironmentHelper();
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get $settingName for '{$appName}'");
+
+		// do we have any settings anywhere for this app?
+		$appSettings = $this->getAppSettings($appName);
+
+		// do we have the setting we want?
+		if (!isset($appSettings->$settingName)) {
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+
+		// if we get here, then we have what we want
+		$value = $appSettings->$appName;
+		$logValue = $printer->convertToString($value);
+		$log->endAction("setting for '{$appName}' is '{$logValue}'");
+
+		// all done
+		return $value;
+	}
+
+	public function getAppSettings($appName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get all settings for $appName");
+
+		// do we have any in the storyplayer.json file?
+		$config = $st->getConfig();
+		if (isset($config->appSettings, $config->appSettings->$appName)) {
+			// success!
+			$value = $config->appSettings->$appName;
+
+			// log the settings
+			$printer  = new DataPrinter();
+			$logValue = $printer->convertToString($value);
+			$log->endAction("settings for '{$appName}' are '{$logValue}'");
+
+			// all done
+			return $value;
+		}
+
+		// TODO: search test environments too?
+
+		// if we get here, then we could not find the settings
+		throw new E5xx_ActionFailed(__METHOD__);
+	}
+
+	public function __get($paramName)
+	{
+		return $this->getAppSettings($paramName);
 	}
 }
