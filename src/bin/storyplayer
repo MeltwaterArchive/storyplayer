@@ -108,9 +108,10 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 // do we have a composer autoloader?
 $composerAutoloader = false;
 $composerFiles = array (
-	__DIR__ . "/../../../../autoload.php",
+	dirname($argv[0]) . "/../autoload.php",
 	getcwd() . '/vendor/autoload.php',
 	__DIR__ . '/../../vendor/autoload.php',
+	__DIR__ . "/../../../../autoload.php",
 );
 foreach ($composerFiles as $composerFile) {
 	if (file_exists($composerFile) && can_load($composerFile) &&!$composerAutoloader) {
