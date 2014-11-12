@@ -96,7 +96,7 @@ class Base_OSX extends OsBase
 		$log = $st->startAction("is process '{$processName}' running on OSX '{$hostDetails->name}'?");
 
 		// SSH in and have a look
-		$command   = "ps -ef | awk '{ print \\\$8 }' | grep '[" . $processName{0} . "]" . substr($processName, 1) . "'";
+		$command   = "ps -ef | awk '{ print \$8 }' | grep '[" . $processName{0} . "]" . substr($processName, 1) . "'";
 		$result    = $this->runCommand($hostDetails, $command);
 
 		// what did we find?
@@ -122,10 +122,10 @@ class Base_OSX extends OsBase
 		$st = $this->st;
 
 		// log some info to the user
-		$log = $st->startAction("get pid for process '{$processName}' running on OSX '{$hostDetails->name}'");
+		$log = $st->startAction("get pid for process '{$processName}' running on OSX machine '{$hostDetails->name}'");
 
 		// run the command to get the process id
-		$command   = "ps -ef | grep '[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
+		$command   = "ps -ef | grep '[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \$2}'";
 		$result    = $this->runCommand($hostDetails, $command);
 
 		// check that we got something
@@ -148,4 +148,34 @@ class Base_OSX extends OsBase
 		$log->endAction("{$pid}");
 		return $pid;
 	}
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return boolean
+	 */
+	public function getPidIsRunning($hostDetails, $pid)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("is process PID '{$pid}' running on OSX '{$hostDetails->name}'?");
+
+		// SSH in and have a look
+		$command   = "ps -ef | awk '{ print \$2 }' | grep '[" . $pid{0} . "]" . substr($pid, 1) . "'";
+		$result    = $this->runCommand($hostDetails, $command);
+
+		// what did we find?
+		if ($result->didCommandFail() || empty($result->output)) {
+			$log->endAction("not running");
+			return false;
+		}
+
+		// success
+		$log->endAction("is running");
+		return true;
+	}
+
 }

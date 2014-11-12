@@ -201,7 +201,7 @@ class ExpectsHost extends HostBase
 		$processDetails = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
 
 		// is this process still running?
-		if (!$st->fromHost($this->args[0])->getIsProcessRunning($processDetails->pid)) {
+		if (!$st->fromHost($this->args[0])->getPidIsRunning($processDetails->pid)) {
 			$log->endAction("process is not running");
 			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} running", "process {$processDetails->pid} not running");
 		}
@@ -223,7 +223,7 @@ class ExpectsHost extends HostBase
 		$processDetails = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
 
 		// is this process still running?
-		if ($st->fromHost($this->args[0])->getIsProcessRunning($processDetails->pid)) {
+		if ($st->fromHost($this->args[0])->getPidIsRunning($processDetails->pid)) {
 			$log->endAction("process is running");
 			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} not running", "process {$processDetails->pid} is running");
 		}

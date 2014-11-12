@@ -203,7 +203,7 @@ class UsingHost extends HostBase
 		// find the PID of the screen session, for future use
 		$cmd = "screen -ls | grep {$processDetails->screenName} | awk -F. '{print $1}'";
 		$result = $this->runCommand($cmd);
-		$processDetails->pid = trim($cmd->output);
+		$processDetails->pid = trim(rtrim($result->output));
 
 		// did the process start, or has it already terminated?
 		if (empty($processDetails->pid)) {
@@ -269,7 +269,7 @@ class UsingHost extends HostBase
 		$log = $st->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
 
 		// is the process running at all?
-		if (!$st->fromHost($this->args[0])->getIsProcessRunning($pid)) {
+		if (!$st->fromHost($this->args[0])->getProcessIsRunning($pid)) {
 			$log->endAction("process is not running");
 			return;
 		}
@@ -288,7 +288,7 @@ class UsingHost extends HostBase
 		// has this worked?
 		$log->addStep("wait for process to terminate", function() use($st, $pid) {
 			for($i = 0; $i < 2; $i++) {
-				if ($st->fromHost($this->args[0])->getIsProcessRunning($pid)) {
+				if ($st->fromHost($this->args[0])->getProcessIsRunning($pid)) {
 					// process still exists
 					sleep(1);
 				}
@@ -308,7 +308,7 @@ class UsingHost extends HostBase
 		}
 
 		// success?
-		if ($st->fromHost($this->args[0])->getIsProcessRunning($pid)) {
+		if ($st->fromHost($this->args[0])->getProcessIsRunning($pid)) {
 			$log->endAction("process is still running :(");
 			throw new E5xx_ActionFailed(__METHOD__);
 		}

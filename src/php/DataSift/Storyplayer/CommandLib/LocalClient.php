@@ -126,7 +126,8 @@ class LocalClient
 		// <command> <command-args>
 		//    the command to run on the local OS
 		//    (assumes the command will be globbed by the local shell)
-		$fullCommand = str_replace('"', '\"', $command);
+		//$fullCommand = str_replace('"', '\"', $command);
+		$fullCommand = $command;
 
 		// run the command
 		$commandRunner = $st->getNewCommandRunner();

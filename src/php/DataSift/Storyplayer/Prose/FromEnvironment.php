@@ -114,7 +114,6 @@ class FromEnvironment extends Prose
 
 	public function __get($appName)
 	{
-		echo "__get() called\n";
 		return $this->getAppSettings($appName);
 	}
 

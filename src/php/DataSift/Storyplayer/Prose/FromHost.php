@@ -146,6 +146,33 @@ class FromHost extends HostBase
 		return $return;
 	}
 
+	public function getPidIsRunning($pid)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("is process PID '{$pid}' running on VM '{$this->args[0]}'?");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// get an object to talk to this host
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+
+		// get the information
+		$return = $host->getPidIsRunning($hostDetails, $pid);
+
+		// did it work?
+		if ($return) {
+			$log->endAction("'{$pid}' is running");
+			return true;
+		}
+
+		$log->endAction("'{$pid}' is not running");
+		return false;
+	}
+
 	public function getProcessIsRunning($processName)
 	{
 		// shorthand
@@ -245,7 +272,7 @@ class FromHost extends HostBase
 		$appData = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
 
 		// is it still running?
-		$isRunning = $st->fromHost($this->args[0])->getIsProcessRunning($appData->pid);
+		$isRunning = $st->fromHost($this->args[0])->getPidIsRunning($appData->pid);
 
 		// all done
 		if ($isRunning) {
