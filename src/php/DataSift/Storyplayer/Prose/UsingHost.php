@@ -233,7 +233,7 @@ class UsingHost extends HostBase
 		$st->usingHost($this->args[0])->stopProcess($processDetails->pid);
 
 		// remove the process from the processes table
-		$st->usingProcessesTable()->removeProcess($this->args[0],$processDetails->pid);
+		$st->usingProcessesTable()->removeProcess($this->args[0],$processDetails);
 
 		// all done
 		$log->endAction();
