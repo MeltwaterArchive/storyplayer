@@ -212,7 +212,7 @@ class UsingHost extends HostBase
 		}
 
 		// remember this process
-		$st->usingProcessesTable()->addProcess($processDetails);
+		$st->usingProcessesTable()->addProcess($this->args[0], $processDetails);
 
 		// all done
 		$log->endAction("process running as '{$processDetails->screenName}' ({$processDetails->pid})");
@@ -233,7 +233,7 @@ class UsingHost extends HostBase
 		$st->usingHost($this->args[0])->stopProcess($processDetails->pid);
 
 		// remove the process from the processes table
-		$st->usingProcessesTable()->removeProcess($processDetails);
+		$st->usingProcessesTable()->removeProcess($this->args[0],$processDetails->pid);
 
 		// all done
 		$log->endAction();
@@ -253,7 +253,7 @@ class UsingHost extends HostBase
 		// stop the process
 		foreach ($processes as $processDetails) {
 			$st->usingHost($this->args[0])->stopProcess($processDetails->pid);
-			$st->usingProcessesTable()->removeProcess($processDetails);
+			$st->usingProcessesTable()->removeProcess($this->args[0], $processDetails);
 		}
 
 		// all done
