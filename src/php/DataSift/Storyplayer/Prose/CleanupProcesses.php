@@ -81,7 +81,12 @@ class CleanupProcesses extends BaseCleanup
             return;
         }
 
-        foreach ($table as $pid => $details) {
+        foreach ($table as $key => $details) {
+            list($hostname, $pid) = explode($key, ":");
+            if ($hostname != "localhost") {
+                continue;
+            }
+
             if (!posix_kill($pid, 0)) {
                 // process no longer running
                 unset($table->$pid);
