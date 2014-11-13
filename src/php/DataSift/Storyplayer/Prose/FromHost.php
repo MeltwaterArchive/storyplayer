@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
  * get information about a given host
