@@ -335,4 +335,61 @@ class FromHost extends HostBase
 		return $return;
 	}
 
+	public function getAppSettings($appName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get settings for '{$appName}' from host '{$this->args[0]}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// do we have any app settings?
+		if (!isset($hostDetails->appSettings, $hostDetails->appSettings->$appName)) {
+			$log->endAction("... setting does not exist :(");
+			throw new E4xx_ActionFailed(__METHOD__);
+		}
+
+		// yes we do
+		$value = $hostDetails->appSettings->$appName;
+
+		// log the settings
+		$printer  = new DataPrinter();
+		$logValue = $printer->convertToString($value);
+		$log->endAction("settings for '{$appName}' are '{$logValue}'");
+
+		// all done
+		return $value;
+	}
+
+	public function getAppSetting($appName, $settingName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get $settingName for '{$appName}' from host '{$this->args[0]}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// do we have any app settings?
+		if (!isset($hostDetails->appSettings, $hostDetails->appSettings->$appName, $hostDetails->appSettings->$settingName)) {
+			$log->endAction("... setting does not exist :(");
+			throw new E4xx_ActionFailed(__METHOD__);
+		}
+
+		// yes we do
+		$value = $hostDetails->appSettings->$appName->$settingName;
+
+		// log the settings
+		$printer  = new DataPrinter();
+		$logValue = $printer->convertToString($value);
+		$log->endAction("setting for '{$appName}' is '{$logValue}'");
+
+		// all done
+		return $value;
+	}
 }
