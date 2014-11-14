@@ -269,7 +269,7 @@ class UsingHost extends HostBase
 		$log = $st->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
 
 		// is the process running at all?
-		if (!$st->fromHost($this->args[0])->getProcessIsRunning($pid)) {
+		if (!$st->fromHost($this->args[0])->getPidIsRunning($pid)) {
 			$log->endAction("process is not running");
 			return;
 		}
