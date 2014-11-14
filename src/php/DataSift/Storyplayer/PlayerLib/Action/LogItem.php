@@ -162,7 +162,7 @@ class Action_LogItem
 	 *
 	 * @return void
 	 */
-	protected function closeAllOpenSubActions()
+	public function closeAllOpenSubActions()
 	{
 		if (!isset($this->nestedAction)) {
 			return;
