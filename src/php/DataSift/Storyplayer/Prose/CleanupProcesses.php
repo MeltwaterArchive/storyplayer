@@ -89,7 +89,7 @@ class CleanupProcesses extends BaseCleanup
 
             if (!posix_kill($pid, 0)) {
                 // process no longer running
-                unset($table->$pid);
+                unset($table->$key);
             }
         }
 
