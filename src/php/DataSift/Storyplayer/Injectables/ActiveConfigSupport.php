@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\Injectables;
 
+use Exception;
 use DataSift\Storyplayer\Injectables;
 
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
