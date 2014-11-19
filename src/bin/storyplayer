@@ -259,7 +259,7 @@ function main($argv)
 
 	// set the main metadata
 	$engine->setAppName('storyplayer');
-	$engine->setAppVersion('1.5.6');
+	$engine->setAppVersion('1.5.7');
 	$engine->setAppUrl('https://datasift.github.io/storyplayer/');
 	$engine->setAppCopyright('Copyright (c) 2012-present MediaSift Ltd. All rights reserved.');
 	$engine->setAppLicense('Released under the BSD 3-Clause license');
