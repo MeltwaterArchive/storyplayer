@@ -67,131 +67,131 @@ use Exception;
  */
 class StoryContext extends BaseObject
 {
-	/**
-	 * the details about the user that has been chosen
-	 *
-	 * @var DataSift\Stone\ObjectLib\BaseObject
-	 */
-	public $user;
+    /**
+     * the details about the user that has been chosen
+     *
+     * @var DataSift\Stone\ObjectLib\BaseObject
+     */
+    public $user;
 
-	/**
-	 * the details of the environment, taken directly from the app's JSON
-	 * config file
-	 *
-	 * @var DataSift\Stone\ObjectLib\BaseObject
-	 */
-	public $env;
-	public $envName;
+    /**
+     * the details of the environment, taken directly from the app's JSON
+     * config file
+     *
+     * @var DataSift\Stone\ObjectLib\BaseObject
+     */
+    public $env;
+    public $envName;
 
-	public $defines;
+    public $defines;
 
-	public $device;
-	public $deviceName;
+    public $device;
+    public $deviceName;
 
-	/**
-	 * persistent config (users, vms, etc) that gets cached to disk
-	 * between runs
-	 *
-	 * @var DataSift\Stone\ObjectLib\BaseObject
-	 */
-	public $runtime;
+    /**
+     * persistent config (users, vms, etc) that gets cached to disk
+     * between runs
+     *
+     * @var DataSift\Stone\ObjectLib\BaseObject
+     */
+    public $runtime;
 
-	public function __construct($staticConfig, $runtimeConfig, $envName, $deviceName)
-	{
-		$this->user    = new BaseObject;
+    public function __construct($staticConfig, $runtimeConfig, $envName, $deviceName)
+    {
+        $this->user = new BaseObject;
 
-		// if there are any 'defines', we need those
-		$this->initDefines($staticConfig);
+        // if there are any 'defines', we need those
+        $this->initDefines($staticConfig);
 
-		// build up the environment of app settings
-		$this->initEnvironment($staticConfig, $envName);
+        // build up the environment of app settings
+        $this->initEnvironment($staticConfig, $envName);
 
-		// which device are we using for testing?
-		$this->initDevice($staticConfig, $deviceName);
+        // which device are we using for testing?
+        $this->initDevice($staticConfig, $deviceName);
 
-		// we need to know where to look for Prose classes
-		$this->initProse($staticConfig);
-	}
+        // we need to know where to look for Prose classes
+        $this->initProse($staticConfig);
+    }
 
-	public function initDefines($staticConfig)
-	{
-		// make sure we start with an empty set of defines
-		$this->defines = new BaseObject;
+    public function initDefines($staticConfig)
+    {
+        // make sure we start with an empty set of defines
+        $this->defines = new BaseObject;
 
-		// merge any that are present in the config
-		$this->defines->mergeFrom($staticConfig->defines);
-	}
+        // merge any that are present in the config
+        $this->defines->mergeFrom($staticConfig->defines);
+    }
 
-	public function initDevice($staticConfig, $deviceName)
-	{
-		// copy over the device that we want
-		$this->device = $staticConfig->devices->$deviceName;
+    public function initDevice($staticConfig, $deviceName)
+    {
+        // copy over the device that we want
+        $this->device = $staticConfig->devices->$deviceName;
 
-		// remember the device name
-		$this->deviceName = $deviceName;
-	}
+        // remember the device name
+        $this->deviceName = $deviceName;
+    }
 
-	public function initEnvironment($staticConfig, $envName)
-	{
-		// make sure we start with a fresh environment
-		$this->env = new BaseObject;
+    public function initEnvironment($staticConfig, $envName)
+    {
+        // make sure we start with a fresh environment
+        $this->env = new BaseObject;
 
-		// we need to work out which environment we are running against,
-		// as all other decisions are affected by this
-		$this->env->mergeFrom($staticConfig->environments->defaults);
-		try {
-			$this->env->mergeFrom($staticConfig->environments->$envName);
-		} catch (E5xx_NoSuchProperty $e){
-			echo "*** warning: using empty config instead of '{$envName}'";
-		}
+        // we need to work out which environment we are running against,
+        // as all other decisions are affected by this
+        $this->env->mergeFrom($staticConfig->environments->defaults);
+        try {
+            $this->env->mergeFrom($staticConfig->environments->$envName);
+        } catch (E5xx_NoSuchProperty $e) {
+            echo "*** warning: using empty config instead of '{$envName}'";
+        }
 
-		// we need to remember the name of the environment too!
-		$this->envName = $envName;
+        // we need to remember the name of the environment too!
+        $this->envName = $envName;
 
-		// we need to provide information about the machine that we
-		// are running on
-		$this->env->host = new BaseObject;
-		list($this->env->host->networkInterface, $this->env->host->ipAddress) = $this->getHostIpAddress();
-	}
+        // we need to provide information about the machine that we
+        // are running on
+        $this->env->host = new BaseObject;
+        list($this->env->host->networkInterface, $this->env->host->ipAddress) = $this->getHostIpAddress();
+    }
 
-	public function initProse($staticConfig)
-	{
-		// start with an empty list
-		$this->prose = array();
+    public function initProse($staticConfig)
+    {
+        // start with an empty list
+        $this->prose = array();
 
-		// where are we looking?
-		if (isset($staticConfig->prose, $staticConfig->prose->namespaces)) {
-			if (!is_array($staticConfig->prose->namespaces)) {
-				throw new E5xx_InvalidConfig("the 'prose.namespaces' section of the config must either be an array, or it must be left out");
-			}
+        // where are we looking?
+        if (isset($staticConfig->prose, $staticConfig->prose->namespaces)) {
+            if (!is_array($staticConfig->prose->namespaces)) {
+                throw new E5xx_InvalidConfig("the 'prose.namespaces' section of the config must either be an array, or it must be left out");
+            }
 
-			// copy over where to look for Prose classes
-			$this->prose = $staticConfig->prose;
-		}
-	}
+            // copy over where to look for Prose classes
+            $this->prose = $staticConfig->prose;
+        }
+    }
 
-	public function initUser($staticConfig, $runtimeConfig, Story $story)
-	{
-		// do we have a cached user?
+    public function initUser($staticConfig, $runtimeConfig, Story $story)
+    {
+        // do we have a cached user?
 
-		// our default provider of users
-		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
+        // our default provider of users
+        $className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
 
-		// do we have a specific generator to load?
-		if (isset($this->env->users, $this->env->users->generator)) {
-			$className = $this->env->users->generator;
-		}
+        // do we have a specific generator to load?
+        if (isset($this->env->users, $this->env->users->generator)) {
+            $className = $this->env->users->generator;
+        }
 
-		// create the generator
-		$generator = new ConfigUserLoader(new $className());
+        // create the generator
+        $generator = new ConfigUserLoader(new $className());
 
-		// get a user from the generator
-		$this->user = $generator->getUser($staticConfig, $runtimeConfig, $this, $story);
+        // get a user from the generator
+        $this->user = $generator->getUser($staticConfig, $runtimeConfig, $this, $story);
 
-		// all done
-	}
+        // all done
+    }
 
-	protected function getHostIpAddress()
+    protected function getHostIpAddress()
     {
         // step 1 - how many adapters do we have on this box?
         // @todo Maybe we want to move this somewhere more central later?
@@ -224,7 +224,7 @@ class StoryContext extends BaseObject
                 // does the adapter have an IP address?
                 try {
                     $ipAddress = $netifaces->getIpAddress($adapterToTest);
-                } catch(NetifacesException $e){
+                } catch (NetifacesException $e) {
                     // We couldn't get an IP address
                     $ipAddress = null;
                 }
@@ -236,10 +236,10 @@ class StoryContext extends BaseObject
                     //
                     // but wait - is it actually the loopback interface?
                     if (in_array($adapterToTest, ['lo0', 'lo']) && ($loopback == null)) {
+                        $loopbackAdapter = $adapterToTest;
                         $loopback = $ipAddress;
-                    }
-                    else {
-                        return $ipAddress;
+                    } else {
+                        return array($adapterToTest, $ipAddress);
                     }
                 }
             }
@@ -249,7 +249,7 @@ class StoryContext extends BaseObject
             // but is the loopback up and running?
             if ($loopback != null) {
                 // this is better than throwing an error
-                return $loopback;
+                return array($loopbackAdapter,$loopback);
             }
 
             // if we get here, we could not determine the IP address of our
@@ -258,7 +258,7 @@ class StoryContext extends BaseObject
             // this sucks
             throw new NetifacesException("Unable to determine IP address");
 
-        } catch (NetifacesException $e){
+        } catch (NetifacesException $e) {
             throw new Exception("could not determine IP address of host machine");
         }
     }
