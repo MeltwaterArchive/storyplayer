@@ -192,61 +192,74 @@ class StoryContext extends BaseObject
 	}
 
 	protected function getHostIpAddress()
-	{
-		// we can't use constants inside our strings
-		$BIN_DIR=APP_BINDIR;
+    {
+        // step 1 - how many adapters do we have on this box?
+        // @todo Maybe we want to move this somewhere more central later?
+        $os = Os::getOs();
+        $parser = IfconfigParser::fromDistributions($os->getPossibleClassNames());
+        $netifaces = new netifaces($os, $parser);
 
-		// step 1 - how many adapters do we have on this box?
-		// @todo Maybe we want to move this somewhere more central later?
-		$os = Os::getOs();
-		$parser = IfconfigParser::fromDistributions($os->getPossibleClassNames());
-		$netifaces = new netifaces($os, $parser);
+        $adapters = $netifaces->listAdapters();
+        if (empty($adapters)) {
+            throw new Exception("unable to parse host machine network adapters list");
+        }
 
-		$adapters = $netifaces->listAdapters();
-		if (empty($adapters)) {
-			throw new Exception("unable to parse host machine network adapters list");
-		}
+        // step 2 - find an adapter that is most likely to have the IP address
+        // that we want
+        //
+        // our algorithm is simple:
+        //
+        // * we return the first non-loopback adapter that has an IP address
+        // * if that fails, we return the first loopback adapter that has
+        //   an IP address
+        //
+        // and if that fails, we give up
 
-		// step 2 - find an adapter that is most likely to have the IP address
-		// that we want
-		//
-		// note: am not sure that the search list for OSX interfaces is
-		// reliable :(
+        try {
+            // special case - when loopback is our only adapter
+            $loopback = null;
 
-		try {
-			$searchList = array("br0", "p2p1", "eth0", "en4", "en3", "en2", "en0", "en1", "wlan0", "p6p1");
-			foreach ($searchList as $adapterToTest) {
-				// skip over any adapters that don't exist on this machine
-				if (!in_array($adapterToTest, $adapters)) {
-					continue;
-				}
+            // loop over the adapters
+            foreach ($adapters as $adapterToTest) {
+                // does the adapter have an IP address?
+                try {
+                    $ipAddress = $netifaces->getIpAddress($adapterToTest);
+                } catch(NetifacesException $e){
+                    // We couldn't get an IP address
+                    $ipAddress = null;
+                }
 
-				// we think the adapter is present
-				//
-				// does it have an IP address?
-				try {
-					$ipAddress = $netifaces->getIpAddress($adapterToTest);
-				} catch(NetifacesException $e){
-					// We couldn't get an IP address
-					$ipAddress = null;
-				}
+                // did we get back a valid IP address?
+                $parts = explode('.', $ipAddress);
+                if (count($parts) == 4) {
+                    // success!
+                    //
+                    // but wait - is it actually the loopback interface?
+                    if (in_array($adapterToTest, ['lo0', 'lo']) && ($loopback == null)) {
+                        $loopback = $ipAddress;
+                    }
+                    else {
+                        return $ipAddress;
+                    }
+                }
+            }
 
-				// did we get back a valid IP address?
-				$parts = explode('.', $ipAddress);
-				if (count($parts) == 4) {
-					// success!
-					return array($adapterToTest, $ipAddress);
-				}
-			}
+            // we didn't find any adapters with an IP address
+            //
+            // but is the loopback up and running?
+            if ($loopback != null) {
+                // this is better than throwing an error
+                return $loopback;
+            }
 
-			// if we get here, we could not determine the IP address of our
-			// host :(
-			//
-			// this sucks
-			throw new NetifacesException("Unable to determine IP address");
+            // if we get here, we could not determine the IP address of our
+            // host :(
+            //
+            // this sucks
+            throw new NetifacesException("Unable to determine IP address");
 
-		} catch (NetifacesException $e){
-			throw new Exception("could not determine IP address of host machine");
-		}
-	}
+        } catch (NetifacesException $e){
+            throw new Exception("could not determine IP address of host machine");
+        }
+    }
 }
