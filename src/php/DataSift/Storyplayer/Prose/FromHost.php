@@ -349,8 +349,8 @@ class FromHost extends HostBase
 
 		// do we have any app settings?
 		if (!isset($hostDetails->appSettings, $hostDetails->appSettings->$appName)) {
-			$log->endAction("... setting does not exist :(");
-			throw new E4xx_ActionFailed(__METHOD__);
+			$log->endAction("setting does not exist :(");
+			throw new E5xx_ActionFailed(__METHOD__);
 		}
 
 		// yes we do
@@ -377,9 +377,17 @@ class FromHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// do we have any app settings?
-		if (!isset($hostDetails->appSettings, $hostDetails->appSettings->$appName, $hostDetails->appSettings->$settingName)) {
-			$log->endAction("... setting does not exist :(");
-			throw new E4xx_ActionFailed(__METHOD__);
+		if (!isset($hostDetails->appSettings)) {
+			$log->endAction("host has no appSettings at all");
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+		if (!isset($hostDetails->appSettings->$appName)) {
+			$log->endAction("host has no appSettings for {$appName}");
+			throw new E5xx_ActionFailed(__METHOD__);
+		}
+		if (!isset($hostDetails->appSettings->$appName->$settingName)) {
+			$log->endAction("host has no appSetting '{$settingName}' for {$appName}");
+			throw new E5xx_ActionFailed(__METHOD__);
 		}
 
 		// yes we do
