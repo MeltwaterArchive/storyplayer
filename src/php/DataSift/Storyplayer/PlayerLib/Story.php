@@ -745,11 +745,6 @@ class Story
 		return count($this->testCanRunCheckCallback) > 0;
 	}
 
-	public function setTestCanRunCheck($newCallback)
-	{
-		$this->testCanRunCheckCallback = array($newCallback);
-	}
-
 	public function addTestCanRunCheck($newCallback)
 	{
 		$this->testCanRunCheckCallback[] = $newCallback;
@@ -809,11 +804,6 @@ class Story
 		return count($this->testSetupCallback) > 0;
 	}
 
-	public function setTestSetup($newCallback)
-	{
-		$this->testSetupCallback = array($newCallback);
-	}
-
 	public function addTestSetup($newCallback)
 	{
 		$this->testSetupCallback[] = $newCallback;
@@ -837,12 +827,6 @@ class Story
 	public function hasTestTeardown()
 	{
 		return count($this->testTeardownCallback) > 0;
-	}
-
-
-	public function setTestTeardown($newCallback)
-	{
-		$this->testTeardownCallback = array($newCallback);
 	}
 
 	public function addTestTeardown($newCallback)
@@ -876,12 +860,6 @@ class Story
 		return count($this->perPhaseSetupCallback) > 0;
 	}
 
-
-	public function setPerPhaseSetup($newCallback)
-	{
-		$this->perPhaseSetupCallback = array($newCallback);
-	}
-
 	public function addPerPhaseSetup($newCallback)
 	{
 		$this->perPhaseSetupCallback[] = $newCallback;
@@ -905,11 +883,6 @@ class Story
 	public function hasPerPhaseTeardown()
 	{
 		return count($this->perPhaseTeardownCallback) > 0;
-	}
-
-	public function setPerPhaseTeardown($newCallback)
-	{
-		$this->perPhaseTeardownCallback = array($newCallback);
 	}
 
 	public function addPerPhaseTeardown($newCallback)
@@ -1034,11 +1007,6 @@ class Story
 		return count($this->preTestPredictionCallback) > 0;
 	}
 
-	public function setPreTestPrediction($newCallback)
-	{
-		$this->preTestPredictionCallback = array($newCallback);
-	}
-
 	public function addPreTestPrediction($newCallback)
 	{
 		$this->preTestPredictionCallback[] = $newCallback;
@@ -1067,11 +1035,6 @@ class Story
 	public function hasPreTestInspection()
 	{
 		return count($this->preTestInspectionCallback) > 0;
-	}
-
-	public function setPreTestInspection($newCallback)
-	{
-		$this->preTestInspectionCallback = array($newCallback);
 	}
 
 	public function addPreTestInspection($newCallback)
@@ -1144,11 +1107,6 @@ class Story
 	public function hasPostTestInspection()
 	{
 		return count($this->postTestInspectionCallback) > 0;
-	}
-
-	public function setPostTestInspection($newCallback)
-	{
-		$this->postTestInspectionCallback = array($newCallback);
 	}
 
 	public function addPostTestInspection($newCallback)
