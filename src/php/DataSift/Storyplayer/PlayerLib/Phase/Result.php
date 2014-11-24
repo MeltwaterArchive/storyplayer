@@ -90,6 +90,17 @@ class Phase_Result
 	const BLACKLISTED  = 7;
 	const CANNOTRUN    = 8;
 
+	var $RESULT_STRING = [
+		1 => "SUCCEEDED",
+		2 => "FAILED",
+		3 => "INCOMPLETE",
+		4 => "ERROR",
+		5 => "HASNOACTIONS",
+		6 => "SKIPPED",
+		7 => "BLACKLISTED",
+		8 => "CANNOTRUN",
+	];
+
 	public function __construct($phaseName)
 	{
 		$this->phaseName = $phaseName;
@@ -122,6 +133,15 @@ class Phase_Result
 	public function getPhaseResult()
 	{
 		return $this->result;
+	}
+
+	public function getPhaseResultString()
+	{
+		if (isset($this->RESULT_STRING[$this->result])) {
+			return $this->RESULT_STRING[$this->result];
+		}
+
+		return "UNKNOWN";
 	}
 
 	public function getPhaseCompleted()
