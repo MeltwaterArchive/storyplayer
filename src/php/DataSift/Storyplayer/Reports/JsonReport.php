@@ -156,11 +156,21 @@ class JsonReport extends Report
 		$this->currentPhaseGroup = $o;
 	}
 
+	/**
+	 * called when we end a set of phases
+	 *
+	 * @param  PhaseGroup_Result $result
+	 * @return void
+	 */
 	public function endPhaseGroup($result)
 	{
 		$o = $this->currentPhaseGroup;
 		$o->result = $result->getResultString();
 		$o->duration = $result->getDuration();
+		if (isset($result->filename)) {
+			$o->filename = $result->filename;
+			$o->shortFilename = basename($result->filename);
+		}
 
 		$this->results->testrun->results[] = clone $o;
 	}
