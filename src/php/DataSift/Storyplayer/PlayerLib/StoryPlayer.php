@@ -183,6 +183,16 @@ class StoryPlayer
 		// tell the outside world what we're doing
 		$this->announceStory($st);
 
+		// is this story compatible with this version of Storyplayer?
+		$reqVersion = $story->getRequiredStoryplayerVersion();
+		if ($reqVersion != 1) {
+			// no, it is not compatible
+			Log::write(Log::LOG_NOTICE, "Story requires Storyplayer v{$reqVersion}; cannot run story");
+
+			// all done
+			return $result;
+		}
+
 		// is this story allowed to run on the current environment?
 		$blacklistedEnvironment = false;
 		if (isset($env->mustBeWhitelisted) && $env->mustBeWhitelisted) {
