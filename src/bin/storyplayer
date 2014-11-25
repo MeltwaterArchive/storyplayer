@@ -222,6 +222,9 @@ function main($argv)
 		$injectables->initDefaultTestEnvironmentName($injectables);
 		$injectables->initKnownSystemsUnderTestSupport($additionalConfigs['systemsUnderTest']);
 		$injectables->initDefaultSystemUnderTestName($injectables);
+
+		// do we have any command-line defaults set in the config?
+		$injectables->initDefaultCommandLineSupport($injectables->storyplayerConfig);
 	}
 	catch (Exception $e)
 	{
@@ -238,7 +241,7 @@ function main($argv)
 	// --------------------------------------------------------------------
 
 	// create the engine
-	$engine = new CliEngine();
+	$engine = new CliEngine($injectables->defaultCommandLine);
 
 	// set the main metadata
 	//
