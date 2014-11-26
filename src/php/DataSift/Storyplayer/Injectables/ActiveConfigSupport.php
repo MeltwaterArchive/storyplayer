@@ -71,9 +71,6 @@ trait ActiveConfigSupport
 
 	public function initActiveConfigSupport(Injectables $injectables)
 	{
-		// shorthand
-		$output = $injectables->output;
-
 		// start with what we know about where storyplayer is running
 		//
 		// this gives us an initial set of variables that can be supported
