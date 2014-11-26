@@ -224,7 +224,7 @@ function main($argv)
 		$injectables->initDefaultSystemUnderTestName($injectables);
 
 		// do we have any command-line defaults set in the config?
-		$injectables->initDefaultCommandLineSupport($injectables->storyplayerConfig);
+		$injectables->initDefaultCommandLineSupport($injectables->storyplayerConfig, $injectables);
 	}
 	catch (Exception $e)
 	{
