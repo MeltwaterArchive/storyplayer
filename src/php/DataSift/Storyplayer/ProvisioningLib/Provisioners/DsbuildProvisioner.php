@@ -131,9 +131,27 @@ class DsbuildProvisioner extends Provisioner
 		// write them out
 		$this->writeDsbuildParamsFile((array)$dsbuildParams);
 
+		// which dsbuildfile are we going to run?
+		$dsbuildFilename = "";
+		$candidateFilenames = [
+			"dsbuildfile-" . $hostName,
+			"dsbuildfile",
+		];
+		foreach ($candidateFilenames as $candidateFilename) {
+			if (file_exists($candidateFilename)) {
+				$dsbuildFilename = $candidateFilename;
+				break;
+			}
+		}
+		if ($dsbuildFilename == "") {
+			// there is no dsbuildfile at all to run
+			$log->endAction("cannot find dsbuildfile to run :(");
+			throw new E5xx_ActionFailed(__METHOD__, "no dsbuildfile to run");
+		}
+
 		// at this point, we are ready to provision
 		$commandRunner = new CommandRunner();
-		$command = 'vagrant ssh -c "sudo bash /vagrant/dsbuildfile"';
+		$command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '"';
 		$result = $commandRunner->runSilently($st, $command);
 
 		// what happened?
