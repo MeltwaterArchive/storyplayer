@@ -64,7 +64,7 @@ trait TemplateEngineSupport
 	 *
 	 * @var \Twig_Environment
 	 */
-	public $tempateEngine;
+	public $templateEngine;
 
 	/**
 	 *
