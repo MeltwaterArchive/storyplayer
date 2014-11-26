@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\OsLib;
 
+use stdClass;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 
 /**
