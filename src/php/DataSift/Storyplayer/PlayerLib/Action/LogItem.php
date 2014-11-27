@@ -65,6 +65,7 @@ class Action_LogItem
 	private $steps = array();
 	private $injectables;
 	private $output;
+	private $dataFormatter;
 
 	/**
 	 * @param integer $nestLevel
