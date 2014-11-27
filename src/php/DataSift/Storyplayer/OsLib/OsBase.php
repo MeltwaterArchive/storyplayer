@@ -46,6 +46,7 @@ namespace DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\CommandLib\SshClient;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * the things you can do / learn about a machine running one of our
