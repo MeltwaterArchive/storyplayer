@@ -66,7 +66,6 @@ class TestEnvironmentDestructionPhase extends InfrastructurePhase
 	{
 		// shorthand
 		$st    = $this->st;
-		$story = $st->getStory();
 
 		// our return value
 		$phaseResult = $this->getNewPhaseResult();
