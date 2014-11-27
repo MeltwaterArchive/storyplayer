@@ -382,8 +382,8 @@ class LocalVagrantVms implements SupportedHost
 		// now we just need to make sense of it all
 		$lines = explode("\n", $result->output);
 		$iface = null;
-		$matches = [];
 		foreach($lines as $line) {
+			$matches = [];
 			if (preg_match("|Name:[\s]+(.*)|", $line, $matches)) {
 				$iface = $matches[1];
 			}
