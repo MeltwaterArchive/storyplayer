@@ -87,6 +87,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @method DataSift\Storyplayer\Prose\FromAws fromAws()
  * @method DataSift\Storyplayer\Prose\FromBrowser fromBrowser()
  * @method DataSift\Storyplayer\Prose\FromCheckpoint fromCheckpoint()
+ * @method DataSift\Storyplayer\Prose\FromConfig fromConfig()
  * @method DataSift\Storyplayer\Prose\FromCurl fromCurl()
  * @method DataSift\Storyplayer\Prose\FromEc2 fromEc2()
  * @method DataSift\Storyplayer\Prose\FromEc2Instance fromEc2Instance(string $hostname)
