@@ -142,7 +142,7 @@ class Action_LogItem
 	}
 
 	/**
-	 * @return void
+	 * @return Action_LogItem
 	 */
 	public function newNestedAction()
 	{
