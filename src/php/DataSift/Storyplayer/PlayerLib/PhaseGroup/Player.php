@@ -223,14 +223,6 @@ class PhaseGroup_Player
 		$output    = $st->getOutput();
 		$phaseName = $phase->getPhaseName();
 
-		// remove this phase from the list of paired phases
-		//
-		// this ensures we do not accidentally execute a phase
-		// twice or more!
-		if (isset($this->pairedPhases[$phaseName])) {
-			unset($this->pairedPhases[$phaseName]);
-		}
-
 		// run the phase if we're allowed to
 		if ($isActive) {
 			$st->setCurrentPhase($phase);
