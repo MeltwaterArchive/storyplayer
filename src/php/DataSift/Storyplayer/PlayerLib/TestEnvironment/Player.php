@@ -55,7 +55,7 @@ use DataSift\Storyplayer\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironment_Player extends BasePlayer
+class TestEnvironment_Player
 {
     protected $startupPhases;
     protected $shutdownPhases;
