@@ -107,7 +107,7 @@ abstract class OutputPlugin
 	public function writeDuration($duration, $style = null)
 	{
 		// break down the duration into reportable units
-		$hours = $mins = $secs = 0;
+		$hours = $mins = 0;
 
 		// this gives us the ability to report on durations of
 		// less than one second
