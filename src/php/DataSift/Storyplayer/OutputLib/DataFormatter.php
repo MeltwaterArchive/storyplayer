@@ -80,7 +80,6 @@ class DataFormatter
 	public function convertMessageArray($message)
 	{
 		$printer = new DataPrinter();
-		$logValue = '';
 		$parts = false;
 
 		foreach ($message as $part) {
