@@ -113,7 +113,7 @@ abstract class OsBase implements SupportedOs
 	public function runCommand($hostDetails, $command)
 	{
 		// get an SSH client
-		$client = $this->getClient($hostDetails);
+		$client = $this->getClient($this->st, $hostDetails);
 
 		// run the command
 		return $client->runCommand($command);

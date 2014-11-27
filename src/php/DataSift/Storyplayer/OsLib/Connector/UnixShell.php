@@ -58,8 +58,8 @@ use DataSift\Storyplayer\CommandLib\LocalClient;
 
 trait Connector_UnixShell
 {
-	public function getClient($hostDetails)
+	public function getClient($st, $hostDetails)
 	{
-		return new LocalClient($this->st);
+		return new LocalClient($st);
 	}
 }

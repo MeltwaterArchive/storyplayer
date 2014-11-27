@@ -61,7 +61,7 @@ trait Connector_SshClient
 	// keep track of sshClients so that we can reuse them
 	private $sshClients = [];
 
-	public function getClient($hostDetails)
+	public function getClient($st, $hostDetails)
 	{
 		// shorthand
 		$name = $hostDetails->name;
@@ -73,7 +73,7 @@ trait Connector_SshClient
 		}
 
 		// if we get here, we need to make a new client
-		$sshClient = new SshClient($this->st, $hostDetails->sshOptions);
+		$sshClient = new SshClient($st, $hostDetails->sshOptions);
 		$sshClient->setIpAddress($hostDetails->ipAddress);
 		$sshClient->setSshUsername($hostDetails->sshUsername);
 
