@@ -155,28 +155,7 @@ EOS;
         $story .= ";";
         $story .= <<<EOS
 
-
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
-
-/*
-\$story->addTestEnvironmentSetup(function(StoryTeller \$st) {
-    // create any test environment (e.g. start a virtual machine)
-    // that this story requires
-    //
-    // test environments are normally the same for several stories;
-    // so you might prefer to add them to a StoryTemplate instead
-});
-*/
-
-/*
-\$story->addTestEnvironmentTeardown(function(StoryTeller \$st) {
-    // undo anything that you did in addTestEnvironmentSetup()
-});
-*/
+\$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
