@@ -57,7 +57,7 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Base_Unix extends OsBase
+abstract class Base_Unix extends OsBase
 {
 	/**
 	 *
