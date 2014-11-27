@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\OsLib;
 
-use DataSift\Storyplayer\CommandLib\SshClient;
+use DataSift\Storyplayer\CommandLib\CommandClient;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
@@ -104,6 +104,16 @@ abstract class OsBase implements SupportedOs
 	 * @return integer
 	 */
 	abstract public function getPid($hostDetails, $processName);
+
+	/**
+	 *
+	 * @param  Storyteller $st
+	 *         our module loader
+	 * @param  HostDetails $hostDetails
+	 *         the details for the host we want a client for
+	 * @return CommandClient
+	 */
+	abstract public function getClient($st, $hostDetails);
 
 	/**
 	 * @param HostDetails $hostDetails

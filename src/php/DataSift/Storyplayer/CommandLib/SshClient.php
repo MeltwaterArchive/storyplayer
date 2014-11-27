@@ -57,7 +57,7 @@ use Phix_Project\ContractLib2\Contract;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class SshClient
+class SshClient implements CommandClient
 {
     /**
      *

@@ -43,9 +43,6 @@
 
 namespace DataSift\Storyplayer\CommandLib;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use Phix_Project\ContractLib2\Contract;
-
 /**
  * helpers for interacting with the local operating system
  *
@@ -57,84 +54,12 @@ use Phix_Project\ContractLib2\Contract;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class LocalClient implements CommandClient
+interface CommandClient
 {
-	/**
-	 *
-	 * @var StoryTeller
-	 */
-	protected $st;
-
-	public function __construct(StoryTeller $st)
-	{
-		// remember for future use
-		$this->st = $st;
-	}
-
-	/**
-	 *
-	 * @param  string $params
-	 * @return string
-	 * @deprecated
-	 */
-	public function convertParamsForUse($params)
-	{
-		// vet our input
-		Contract::RequiresValue($params, is_string($params));
-		// we don't mind if the params are empty
-
-		// our list of what to convert from
-		$convertFrom = [
-			'\'',
-			'*'
-		];
-
-		// our list of what to convert to
-		$convertTo = [
-			'\\\'',
-			'\'*\''
-		];
-
-		// our return value
-		$result = str_replace($convertFrom, $convertTo, $params);
-
-		// all done
-		return rtrim($result);
-	}
-
 	/**
 	 *
 	 * @param  string $command
 	 * @return CommandResult
 	 */
-	public function runCommand($command)
-	{
-		// vet our input
-		Contract::RequiresValue($command, is_string($command));
-		Contract::RequiresValue($command, !empty($command));
-
-		// shorthand
-		$st = $this->st;
-
-		// make the params printable / executable
-		// $printableParams = $this->convertParamsForUse($params);
-
-		// what are we doing?
-		$log = $st->startAction("run command '{$command}' against localhost ");
-
-		// build the full command
-		// <command> <command-args>
-		//    the command to run on the local OS
-		//    (assumes the command will be globbed by the local shell)
-		//$fullCommand = str_replace('"', '\"', $command);
-		$fullCommand = $command;
-
-		// run the command
-		$commandRunner = $st->getNewCommandRunner();
-		$result = $commandRunner->runSilently($st, $fullCommand);
-
-		// all done
-		$log->endAction("return code was '{$result->returnCode}'");
-		return $result;
-	}
+	public function runCommand($command);
 }
