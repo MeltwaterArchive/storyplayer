@@ -253,6 +253,6 @@ EOS;
         }
 
         // all done
-        return new CliResult(0);
+        return 0;
     }
 }
