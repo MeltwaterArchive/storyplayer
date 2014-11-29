@@ -137,4 +137,69 @@ class LocalClient
 		$log->endAction("return code was '{$result->returnCode}'");
 		return $result;
 	}
+
+    public function downloadFile($sourceFilename, $destFilename)
+    {
+        // vet our input
+        Contract::RequiresValue($sourceFilename, is_string($sourceFilename));
+        Contract::RequiresValue($sourceFilename, !empty($sourceFilename));
+        Contract::RequiresValue($destFilename, is_string($destFilename));
+        Contract::RequiresValue($destFilename, !empty($destFilename));
+
+        // shorthand
+        $st = $this->st;
+
+        // make the params printable / executable
+        // $printableParams = $this->convertParamsForUse($params);
+
+        // what are we doing?
+        $log = $st->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
+
+        // build the full command
+        //
+        $fullCommand = 'cp '
+                     . "'" . $sourceFilename . "' "
+                     . "'" . $destFilename . "'";
+
+        // run the command
+        $commandRunner = $st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($st, $fullCommand);
+
+        // all done
+        $log->endAction("return code was '{$result->returnCode}'");
+        return $result;
+    }
+
+    public function uploadFile($sourceFilename, $destFilename)
+    {
+        // vet our input
+        Contract::RequiresValue($sourceFilename, is_string($sourceFilename));
+        Contract::RequiresValue($sourceFilename, !empty($sourceFilename));
+        Contract::RequiresValue($sourceFilename, is_file($sourceFilename));
+        Contract::RequiresValue($destFilename, is_string($destFilename));
+        Contract::RequiresValue($destFilename, !empty($destFilename));
+
+        // shorthand
+        $st = $this->st;
+
+        // make the params printable / executable
+        // $printableParams = $this->convertParamsForUse($params);
+
+        // what are we doing?
+        $log = $st->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
+
+        // build the full command
+        //
+        $fullCommand = 'cp '
+                     . "'" . $sourceFilename . "' "
+                     . "'" . $destFilename . "'";
+
+        // run the command
+        $commandRunner = $st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($st, $fullCommand);
+
+        // all done
+        $log->endAction("return code was '{$result->returnCode}'");
+        return $result;
+    }
 }

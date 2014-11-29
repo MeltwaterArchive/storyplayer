@@ -399,4 +399,111 @@ class SshClient
         $log->endAction("return code was '{$result->returnCode}'");
         return $result;
     }
+
+    public function downloadFile($sourceFilename, $destFilename)
+    {
+        // vet our input
+        Contract::RequiresValue($sourceFilename, is_string($sourceFilename));
+        Contract::RequiresValue($sourceFilename, !empty($sourceFilename));
+        Contract::RequiresValue($destFilename, is_string($destFilename));
+        Contract::RequiresValue($destFilename, !empty($destFilename));
+
+        // shorthand
+        $st = $this->st;
+
+        // make the params printable / executable
+        // $printableParams = $this->convertParamsForUse($params);
+
+        // what are we doing?
+        $log = $st->startAction("download file '{$sourceFilename}' from host as '{$destFilename}'");
+
+        // do we actually have everything we need to run the command?
+        if (!$this->hasSshUsername()) {
+            throw new E4xx_NeedSshUsername();
+        }
+        if (!$this->hasIpAddress()) {
+            throw new E4xx_NeedIpAddress();
+        }
+
+        // build the full command
+        //
+        // the options that we pass (by default) to SCP:
+        //
+        // -o StrictHostKeyChecking=no
+        //    do not verify the SSH host key (avoids an interactive prompt)
+        // -i <private_key>
+        //    use specified private key to access the remote/guest OS
+        // <username>@<hostname>
+        //    who we are logging in as (should never be root)
+        // <additional SSH options>
+        //    any other flags, such as -n to force non-interactive session
+        $fullCommand = 'scp '
+                     . ' ' . $this->getSshKeyForUse()
+                     . ' ' . $this->getScpOptionsForUse()
+                     . ' "' . $this->getSshUsername() . '@' . $this->getIpAddress()
+                     . ':' . $sourceFilename . '"'
+                     . ' "' . $destFilename . '"';
+
+        // run the command
+        $commandRunner = $st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($st, $fullCommand);
+
+        // all done
+        $log->endAction("return code was '{$result->returnCode}'");
+        return $result;
+    }
+
+    public function uploadFile($sourceFilename, $destFilename)
+    {
+        // vet our input
+        Contract::RequiresValue($sourceFilename, is_string($sourceFilename));
+        Contract::RequiresValue($sourceFilename, !empty($sourceFilename));
+        Contract::RequiresValue($sourceFilename, is_file($sourceFilename));
+        Contract::RequiresValue($destFilename, is_string($destFilename));
+        Contract::RequiresValue($destFilename, !empty($destFilename));
+
+        // shorthand
+        $st = $this->st;
+
+        // make the params printable / executable
+        // $printableParams = $this->convertParamsForUse($params);
+
+        // what are we doing?
+        $log = $st->startAction("upload file '{$sourceFilename}' to host as '{$destFilename}'");
+
+        // do we actually have everything we need to run the command?
+        if (!$this->hasSshUsername()) {
+            throw new E4xx_NeedSshUsername();
+        }
+        if (!$this->hasIpAddress()) {
+            throw new E4xx_NeedIpAddress();
+        }
+
+        // build the full command
+        //
+        // the options that we pass (by default) to SCP:
+        //
+        // -o StrictHostKeyChecking=no
+        //    do not verify the SSH host key (avoids an interactive prompt)
+        // -i <private_key>
+        //    use specified private key to access the remote/guest OS
+        // <username>@<hostname>
+        //    who we are logging in as (should never be root)
+        // <additional SSH options>
+        //    any other flags, such as -n to force non-interactive session
+        $fullCommand = 'scp '
+                     . ' ' . $this->getSshKeyForUse()
+                     . ' ' . $this->getScpOptionsForUse()
+                     . ' "' . $sourceFilename . '" '
+                     . ' "' . $this->getSshUsername() . '@' . $this->getIpAddress()
+                     . ':' . $destFilename . '"';
+
+        // run the command
+        $commandRunner = $st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($st, $fullCommand);
+
+        // all done
+        $log->endAction("return code was '{$result->returnCode}'");
+        return $result;
+    }
 }

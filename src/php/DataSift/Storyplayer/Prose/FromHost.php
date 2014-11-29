@@ -401,4 +401,34 @@ class FromHost extends HostBase
 		// all done
 		return $value;
 	}
+
+	public function downloadFile($sourceFilename, $destFilename)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("download file '{$this->args[0]}':'{$sourceFilename}' to '{$destFilename}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// get an object to talk to this host
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+
+		// upload the file
+		$result = $host->downloadFile($hostDetails, $sourceFilename, $destFilename);
+
+		// did the command used to upload succeed?
+		if ($result->didCommandFail()) {
+			$msg = "download failed with return code '{$result->returnCode}' and output '{$result->output}'";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
+		}
+
+		// all done
+		$log->endAction();
+		return $result;
+	}
+
 }

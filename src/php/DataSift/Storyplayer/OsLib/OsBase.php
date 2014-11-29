@@ -118,4 +118,22 @@ abstract class OsBase implements SupportedOs
 		// run the command
 		return $client->runCommand($command);
 	}
+
+	public function downloadFile($hostDetails, $sourceFilename, $destFilename)
+	{
+		// get a client
+		$client = $this->getClient($hostDetails);
+
+		// attempt the upload
+		return $client->downloadFile($sourceFilename, $destFilename);
+	}
+
+	public function uploadFile($hostDetails, $sourceFilename, $destFilename)
+	{
+		// get a client
+		$client = $this->getClient($hostDetails);
+
+		// attempt the upload
+		return $client->uploadFile($sourceFilename, $destFilename);
+	}
 }

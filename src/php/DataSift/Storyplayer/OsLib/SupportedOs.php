@@ -94,4 +94,32 @@ interface SupportedOs
 	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
 	 */
 	public function runCommand($hostDetails, $command);
+
+	/**
+	 * download a file from a (possibly) remote host to wherever
+	 * Storyplayer is running
+	 *
+	 * @param  HostDetails $hostDetails
+	 *         the details of the host to upload to
+	 * @param  string $sourceFilename
+	 *         path to the file to download
+	 * @param  string $destFilename
+	 *         path to download the file to
+	 * @return void
+	 */
+	public function downloadFile($hostDetails, $sourceFilename, $destFilename);
+
+	/**
+	 * upload a file from wherever Storyplayer is running to the
+	 * (possibly) remote host
+	 *
+	 * @param  HostDetails $hostDetails
+	 *         the details of the host to upload to
+	 * @param  string $sourceFilename
+	 *         path to the file to upload
+	 * @param  string $destFilename
+	 *         path to upload the file to
+	 * @return void
+	 */
+	public function uploadFile($hostDetails, $sourceFilename, $destFilename);
 }
