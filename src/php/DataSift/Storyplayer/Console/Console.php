@@ -64,7 +64,7 @@ abstract class Console extends OutputPlugin
 {
 	/**
 	 *
-	 * @var PhaseGroup_Result
+	 * @var array(PhaseGroup_Result)
 	 */
 	protected $results;
 

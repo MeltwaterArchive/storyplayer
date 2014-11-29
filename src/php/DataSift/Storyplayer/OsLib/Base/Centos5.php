@@ -57,7 +57,7 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Base_Centos5 extends Base_Unix
+abstract class Base_Centos5 extends Base_Unix
 {
 	/**
 	 *

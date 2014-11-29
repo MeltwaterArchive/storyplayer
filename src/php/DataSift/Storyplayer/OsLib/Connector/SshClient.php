@@ -61,7 +61,7 @@ trait Connector_SshClient
 	// keep track of sshClients so that we can reuse them
 	private $sshClients = [];
 
-	public function getClient($hostDetails)
+	public function getClient($st, $hostDetails)
 	{
 		// shorthand
 		$name = $hostDetails->name;

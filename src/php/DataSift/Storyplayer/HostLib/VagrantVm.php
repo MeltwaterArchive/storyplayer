@@ -386,7 +386,7 @@ class VagrantVm implements SupportedHost
 		$result = $commandRunner->runSilently($st, $fullCommand);
 
 		// all done
-		$log->endAction("return code was '{$returnCode}'");
+		$log->endAction("return code was '{$result->returnCode}'");
 		return $result;
 	}
 

@@ -634,7 +634,7 @@ class Story
 	 *
 	 * can be empty
 	 *
-	 * @return array(StoryTemplate)
+	 * @return array<StoryTemplate>
 	 */
 	public function getStoryTemplates()
 	{
@@ -1061,7 +1061,7 @@ class Story
 	/**
 	 * pick one action at random, and return it to the caller
 	 *
-	 * @return callback(Story_Context)
+	 * @return callable
 	 */
 	public function getOneAction()
 	{

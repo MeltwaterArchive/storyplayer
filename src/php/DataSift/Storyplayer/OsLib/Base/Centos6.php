@@ -54,7 +54,7 @@ namespace DataSift\Storyplayer\OsLib;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Base_Centos6 extends Base_Centos5
+abstract class Base_Centos6 extends Base_Centos5
 {
 
 }

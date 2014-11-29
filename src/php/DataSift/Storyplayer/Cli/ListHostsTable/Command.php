@@ -82,7 +82,7 @@ class ListHostsTable_Command extends CliCommand
 	 * @param  CliEngine $engine
 	 * @param  array     $params
 	 * @param  mixed     $additionalContext
-	 * @return CliResult
+	 * @return int
 	 */
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
@@ -90,22 +90,24 @@ class ListHostsTable_Command extends CliCommand
 		$runtimeConfig = $additionalContext->runtimeConfig;
 
 		// are there any hosts in the table?
-		if (!isset($runtimeConfig->hosts)) {
+		if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables, $runtimeConfig->storyplayer->tables->hosts)) {
 			// we're done
-			return new CliResult(0);
+			return 0;
 		}
 
 		// let's walk through the table
-		foreach ($runtimeConfig->hosts as $hostName => $details) {
-			// is this in the list we are filtering against?
-			if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
-				continue;
-			}
+		foreach ($runtimeConfig->storyplayer->tables->hosts as $envName => $hosts) {
+			foreach ($hosts as $hostName => $details) {
+				// is this in the list we are filtering against?
+				if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
+					continue;
+				}
 
-			echo "{$details->name}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
+				echo "{$envName}:{$details->name}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
+			}
 		}
 
 		// all done
-		return new CliResult(0);
+		return 0;
 	}
 }

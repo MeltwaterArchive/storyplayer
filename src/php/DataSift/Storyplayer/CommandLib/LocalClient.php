@@ -57,7 +57,7 @@ use Phix_Project\ContractLib2\Contract;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class LocalClient
+class LocalClient implements CommandClient
 {
 	/**
 	 *

@@ -34,56 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/CommandLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
-
-use DataSift\Storyplayer\Injectables;
+namespace DataSift\Storyplayer\CommandLib;
 
 /**
- * our main base class for actually playing things
+ * helpers for interacting with the local operating system
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/CommandLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-abstract class BasePlayer
+
+interface CommandClient
 {
-	abstract public function play(StoryTeller $st, Injectables $injectables);
-
-    protected function playPhases(StoryTeller $st, Injectables $injectables, $phases)
-    {
-        // we need something to play our phases
-        $phasesPlayer = new PhaseGroup_Player();
-
-        // run the phases
-        $phaseResults = $phasesPlayer->playPhases(
-        	$st,
-        	$injectables,
-        	$phases
-        );
-
-        // all done
-        return $phaseResults;
-	}
-
-	protected function playPairedPhases(StoryTeller $st, Injectables $injectables, $phases, $phaseResults)
-	{
-		// play the 'paired' phases too, in case they haven't yet
-		// executed correctly
-		$phasesPlayer->playPairedPhases(
-			$st,
-			$injectables,
-			$phases,
-			$phaseResults
-		);
-	}
+	/**
+	 *
+	 * @param  string $command
+	 * @return CommandResult
+	 */
+	public function runCommand($command);
 }

@@ -43,9 +43,10 @@
 
 namespace DataSift\Storyplayer\OsLib;
 
-use DataSift\Storyplayer\CommandLib\SshClient;
+use DataSift\Storyplayer\CommandLib\CommandClient;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * the things you can do / learn about a machine running one of our
@@ -105,6 +106,16 @@ abstract class OsBase implements SupportedOs
 	abstract public function getPid($hostDetails, $processName);
 
 	/**
+	 *
+	 * @param  Storyteller $st
+	 *         our module loader
+	 * @param  HostDetails $hostDetails
+	 *         the details for the host we want a client for
+	 * @return CommandClient
+	 */
+	abstract public function getClient($st, $hostDetails);
+
+	/**
 	 * @param HostDetails $hostDetails
 	 * @param string $command
 	 *
@@ -113,7 +124,7 @@ abstract class OsBase implements SupportedOs
 	public function runCommand($hostDetails, $command)
 	{
 		// get an SSH client
-		$client = $this->getClient($hostDetails);
+		$client = $this->getClient($this->st, $hostDetails);
 
 		// run the command
 		return $client->runCommand($command);

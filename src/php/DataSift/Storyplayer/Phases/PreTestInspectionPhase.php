@@ -107,7 +107,6 @@ class PreTestInspectionPhase extends StoryPhase
 			$storyResult->setStoryHasError($phaseResult);
 		}
 		catch (E5xx_ExpectFailed $e) {
-			$msg = "pre-test inspection failed; " . (string)$e;
 			$phaseResult->setPlayingFailed(
 				$phaseResult::FAILED,
 				$e->getMessage(),

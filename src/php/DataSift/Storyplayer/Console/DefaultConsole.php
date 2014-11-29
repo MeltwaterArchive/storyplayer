@@ -165,7 +165,6 @@ class DefaultConsole extends Console
 	public function startPhase($phase)
 	{
 		// shorthand
-		$phaseName  = $phase->getPhaseName();
 		$phaseType  = $phase->getPhaseType();
 		$phaseSeqNo = $phase->getPhaseSequenceNo();
 

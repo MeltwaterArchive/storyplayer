@@ -58,6 +58,7 @@ use Phix_Project\ConsoleDisplayLib4\ConsoleColor;
 class OutputWriter
 {
     public $argStyle = null;
+    public $commandStyle = null;
     public $commentStyle = null;
     public $errorStyle = null;
     public $exampleStyle = null;

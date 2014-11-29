@@ -131,32 +131,37 @@ class DsbuildProvisioner extends Provisioner
 		// write them out
 		$this->writeDsbuildParamsFile((array)$dsbuildParams);
 
-		// which dsbuildfile are we going to run?
-		$dsbuildFilename = "";
-		$candidateFilenames = [
-			"dsbuildfile-" . $hostName,
-			"dsbuildfile",
-		];
-		foreach ($candidateFilenames as $candidateFilename) {
-			if (file_exists($candidateFilename)) {
-				$dsbuildFilename = $candidateFilename;
-				break;
+		// at this point, we are ready to attempt provisioning
+		//
+		// provision each host in the order that they're listed
+		foreach($hosts as $hostName => $hostProps) {
+			// which dsbuildfile are we going to run?
+			$dsbuildFilename = "";
+			$candidateFilenames = [
+				"dsbuildfile-" . $hostName,
+				"dsbuildfile",
+			];
+			foreach ($candidateFilenames as $candidateFilename) {
+				if (file_exists($candidateFilename)) {
+					$dsbuildFilename = $candidateFilename;
+					break;
+				}
 			}
-		}
-		if ($dsbuildFilename == "") {
-			// there is no dsbuildfile at all to run
-			$log->endAction("cannot find dsbuildfile to run :(");
-			throw new E5xx_ActionFailed(__METHOD__, "no dsbuildfile to run");
-		}
+			if ($dsbuildFilename == "") {
+				// there is no dsbuildfile at all to run
+				$log->endAction("cannot find dsbuildfile to run :(");
+				throw new E5xx_ActionFailed(__METHOD__, "no dsbuildfile to run");
+			}
 
-		// at this point, we are ready to provision
-		$commandRunner = new CommandRunner();
-		$command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '"';
-		$result = $commandRunner->runSilently($st, $command);
+			// at this point, we are ready to provision
+			$commandRunner = new CommandRunner();
+			$command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '" "' . $hostName . '"';
+			$result = $commandRunner->runSilently($st, $command);
 
-		// what happened?
-		if (!$result->didCommandSucceed()) {
-			throw new E5xx_ActionFailed(__METHOD__, "provisioning failed");
+			// what happened?
+			if (!$result->didCommandSucceed()) {
+				throw new E5xx_ActionFailed(__METHOD__, "provisioning failed");
+			}
 		}
 
 		// all done

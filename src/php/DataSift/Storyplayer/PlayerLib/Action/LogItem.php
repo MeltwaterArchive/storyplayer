@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use DataSift\Storyplayer\Injectables;
+
 /**
  * Represents a single activity item in the log
  *
@@ -63,11 +65,12 @@ class Action_LogItem
 	private $steps = array();
 	private $injectables;
 	private $output;
+	private $dataFormatter;
 
 	/**
 	 * @param integer $nestLevel
 	 */
-	public function __construct($injectables, $nestLevel)
+	public function __construct(Injectables $injectables, $nestLevel)
 	{
 		$this->nestLevel     = $nestLevel;
 		$this->injectables   = $injectables;
@@ -140,7 +143,7 @@ class Action_LogItem
 	}
 
 	/**
-	 * @return void
+	 * @return Action_LogItem
 	 */
 	public function newNestedAction()
 	{
