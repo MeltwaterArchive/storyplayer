@@ -1,24 +1,7 @@
 {
-    "environments": {
-        "defaults": {
-            "savaged": {
-                "httpPort": 8091
-            }
-        },
-        "self-test": {
-            "vagrant": {
-                "dir": "../vagrant-environments"
-            }
-        }
-    },
-    "phases": {
-        "TestEnvironmentSetup": true,
-        "TestSetup": true,
-        "PreTestPrediction": true,
-        "PreTestInspection": true,
-        "Action": true,
-        "PostTestInspection": true,
-        "TestTeardown": true,
-        "TestEnvironmentTeardown": true
-    }
+    "defaults": [
+        "--system-under-test", "storyplayer-2.x",
+        "--target", "dsbuild-centos6",
+        "play-story", "src/tests/stories/"
+    ]
 }

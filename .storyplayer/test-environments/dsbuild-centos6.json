@@ -1,0 +1,18 @@
+[
+	{
+		"type": "LocalVagrantVms",
+		"details": {
+			"machines": {
+				"default": {
+					"osName": "centos6",
+					"roles": [
+						"upload_target"
+					]
+				}
+			}
+		},
+		"provisioning": {
+			"engine": "dsbuild"
+		}
+	}
+]
