@@ -24,7 +24,7 @@ $story->requiresStoryplayerVersion(2);
 $story->addTestTeardown(function(StoryTeller $st) {
     // cleanup after ourselves
     foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; done");
+        $st->usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
     }
 });
 
