@@ -133,7 +133,7 @@ abstract class OsBase implements SupportedOs
 	public function downloadFile($hostDetails, $sourceFilename, $destFilename)
 	{
 		// get a client
-		$client = $this->getClient($hostDetails);
+		$client = $this->getClient($this->st, $hostDetails);
 
 		// attempt the upload
 		return $client->downloadFile($sourceFilename, $destFilename);
@@ -142,7 +142,7 @@ abstract class OsBase implements SupportedOs
 	public function uploadFile($hostDetails, $sourceFilename, $destFilename)
 	{
 		// get a client
-		$client = $this->getClient($hostDetails);
+		$client = $this->getClient($this->st, $hostDetails);
 
 		// attempt the upload
 		return $client->uploadFile($sourceFilename, $destFilename);

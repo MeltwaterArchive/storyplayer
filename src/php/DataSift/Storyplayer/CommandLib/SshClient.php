@@ -96,6 +96,9 @@ class SshClient implements CommandClient
 
     public function __construct(StoryTeller $st, $sshOptions = array(), $scpOptions = array())
     {
+        Contract::RequiresValue($sshOptions, is_array($sshOptions));
+        Contract::RequiresValue($scpOptions, is_array($scpOptions));
+
         // remember for future use
         $this->st = $st;
 
