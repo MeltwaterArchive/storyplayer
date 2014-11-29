@@ -87,6 +87,10 @@ class UsingVagrant extends VmActionsBase
 			"-o UserKnownHostsFile=/dev/null",
 			"-o LogLevel=quiet",
 		];
+		$vmDetails->scpOptions  = [
+			"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'",
+			"-o StrictHostKeyChecking=no",
+		];
 
 		// create our host adapter
 		$host = HostLib::getHostAdapter($st, $vmDetails->type);

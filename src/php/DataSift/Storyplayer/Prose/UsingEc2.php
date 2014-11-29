@@ -91,6 +91,9 @@ class UsingEc2 extends VmActionsBase
 		$vmDetails->sshOptions    = array (
 			"-i '" . $awsSettings->ec2->sshKeyFile . "'"
 		);
+		$vmDetails->scpOptions    = array (
+			"-i '" . $awsSettings->ec2->sshKeyFile . "'"
+		);
 
 		// create our host adapter
 		$host = HostLib::getHostAdapter($st, $vmDetails->type);

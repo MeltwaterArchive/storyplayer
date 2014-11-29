@@ -88,7 +88,13 @@ class SshClient
      */
     protected $sshOptions = [];
 
-    public function __construct(StoryTeller $st, $sshOptions = array())
+    /**
+     *
+     * @var array<string>
+     */
+    protected $scpOptions = [];
+
+    public function __construct(StoryTeller $st, $sshOptions = array(), $scpOptions = array())
     {
         // remember for future use
         $this->st = $st;
@@ -99,6 +105,13 @@ class SshClient
         // add in the options
         foreach ($sshOptions as $option) {
             $this->addSshOption($option);
+        }
+
+        // set the default SCP options
+        $scpOptions = array_merge($this->getDefaultScpOptions(), $scpOptions);
+
+        foreach ($scpOptions as $option) {
+            $this->addScpOption($option);
         }
     }
 
@@ -136,6 +149,14 @@ class SshClient
 
         // save the result
         $this->ipAddress = $ipAddress;
+    }
+
+    public function getDefaultScpOptions()
+    {
+        return [
+            '-o StrictHostKeyChecking=no', // avoid prompting for accepting
+                                           // a host key
+        ];
     }
 
     public function getDefaultSshOptions()
@@ -179,6 +200,39 @@ class SshClient
 
         // add this option to our collection
         $this->sshOptions[] = $option;
+    }
+
+    /**
+     *
+     * @return array<string>
+     */
+    public function getScpOptions()
+    {
+        return $this->scpOptions;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getScpOptionsForUse()
+    {
+        return implode(' ', $this->scpOptions);
+    }
+
+    /**
+     *
+     * @param string $option
+     * @return void
+     */
+    public function addScpOption($option)
+    {
+        // vet our input
+        Contract::RequiresValue($option, is_string($option));
+        Contract::RequiresValue($option, !empty($option));
+
+        // add this option to our collection
+        $this->scpOptions[] = $option;
     }
 
     /**

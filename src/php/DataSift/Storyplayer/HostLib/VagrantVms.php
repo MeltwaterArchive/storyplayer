@@ -182,6 +182,10 @@ class VagrantVms implements SupportedHost
 				"-o UserKnownHostsFile=/dev/null",
 				"-o LogLevel=quiet",
 			];
+			$vmDetails->scpOptions = [
+				"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'",
+				"-o StrictHostKeyChecking=no",
+			];
 
 			// remember how to connect to the machine via the network
 			$vmDetails->ipAddress   = $this->determineIpAddress($vmDetails);

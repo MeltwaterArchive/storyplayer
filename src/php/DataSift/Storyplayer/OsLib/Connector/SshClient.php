@@ -73,7 +73,7 @@ trait Connector_SshClient
 		}
 
 		// if we get here, we need to make a new client
-		$sshClient = new SshClient($this->st, $hostDetails->sshOptions);
+		$sshClient = new SshClient($this->st, $hostDetails->sshOptions, $hostDetails->scpOptions);
 		$sshClient->setIpAddress($hostDetails->ipAddress);
 		$sshClient->setSshUsername($hostDetails->sshUsername);
 
