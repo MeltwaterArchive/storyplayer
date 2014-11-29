@@ -386,17 +386,6 @@ class PlayStory_Command extends CliCommand
         // our list of stories to play
         $this->playerList = [];
 
-        // special case - we have no cliParams
-        if (empty($cliParams)) {
-            // do we have anything in storyplayer's config?
-            if (isset($injectables->activeConfig, $injectables->activeConfig->storyplayer, $injectables->activeConfig->storyplayer->defaults, $injectables->activeConfig->storyplayer->defaults->run)) {
-                $cliParams = $injectables->activeConfig->storyplayer->defaults->run;
-                if (is_string($cliParams)) {
-                    $cliParams = [ $cliParams ];
-                }
-            }
-        }
-
         // do we have any parameters at this point?
         if (empty($cliParams)) {
             $msg = "no stories listed on the command-line." . PHP_EOL . PHP_EOL
