@@ -62,8 +62,9 @@ class OsLib
 	 */
 	static public function getHostAdapter($st, $osName)
 	{
+
 		// what are we looking for?
-		$className = 'DataSift\Storyplayer\OsLib\\' . ucfirst(strtolower($osName));
+		$className = 'DataSift\Storyplayer\OsLib\\' . $osName;
 
 		// does it exist?
 		if (!class_exists($className)) {
