@@ -63,6 +63,13 @@ class OsLib
 	static public function getHostAdapter($st, $osName)
 	{
 
+		// Make sure that osName is capitalised correctly
+		$osNameFixed = array();
+		foreach (explode("_", $osName) as $part) {
+			$osNameFixed[] = ucfirst(strtolower($part));
+		}
+		$osName = implode("_", $osNameFixed);
+
 		// what are we looking for?
 		$className = 'DataSift\Storyplayer\OsLib\\' . $osName;
 
