@@ -88,11 +88,7 @@ class UsingTimer extends Prose
 				$log->endAction();
 				return;
 			}
-			catch (E5xx_ActionFailed $e) {
-				// do nothing
-				$log->closeAllOpenSubActions();
-			}
-			catch (E5xx_ExpectFailed $e) {
+			catch (Exception $e) {
 				// do nothing
 				$log->closeAllOpenSubActions();
 			}
