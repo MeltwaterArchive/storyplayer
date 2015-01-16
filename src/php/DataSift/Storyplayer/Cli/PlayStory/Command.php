@@ -307,7 +307,7 @@ class PlayStory_Command extends CliCommand
         }
 
         // write out any changed runtime config to disk
-        $runtimeConfigManager->saveRuntimeConfig($runtimeConfig);
+        $runtimeConfigManager->saveRuntimeConfig($runtimeConfig, $output);
 
         // how long did that take?
         $duration = microtime(true) - $startTime;

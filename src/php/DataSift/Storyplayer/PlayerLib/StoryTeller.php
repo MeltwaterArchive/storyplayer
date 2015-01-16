@@ -594,7 +594,7 @@ class StoryTeller
 			throw new E5xx_ActionFailed(__METHOD__, "no runtimeConfigManager available");
 		}
 
-		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig);
+		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig, $this->output);
 	}
 
 	/**

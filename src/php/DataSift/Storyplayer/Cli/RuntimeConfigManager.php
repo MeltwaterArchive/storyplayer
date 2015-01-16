@@ -43,9 +43,8 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\Injectables;
-use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
 use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\Output;
 
 /**
  * Helper class for working with Storyplayer's persistent state
@@ -59,6 +58,8 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class RuntimeConfigManager extends ConfigManagerBase
 {
+	const RUNTIME_FILENAME = "runtime-v2.json";
+
 	/**
 	 *
 	 * @return string
@@ -80,7 +81,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 *
 	 * @return void
 	 */
-	public function makeConfigDir(Injectables $injectables)
+	public function makeConfigDir(Output $output)
 	{
 		// what is the path to the config directory?
 		$configDir = $this->getConfigDir();
@@ -92,7 +93,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 			if (!$success)
 			{
 				// cannot create it - bail out now
-				$injectables->output->logCliError("unable to create config directory '{$configDir}'");
+				$output->logCliError("unable to create config directory '{$configDir}'");
 				exit(1);
 			}
 		}
@@ -102,15 +103,37 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 *
 	 * @return stdClass
 	 */
-	public function loadRuntimeConfig()
+	public function loadRuntimeConfig(Output $output)
 	{
-		try {
-			return $this->configHelper->loadRuntimeConfig(self::APP_NAME, 'runtime-v2.json');
-		}
-		catch (E4xx_ConfigFileNotFound $e) {
-			// we need to provide an empty runtime config
+		// where is the config file?
+		$configDir = $this->getConfigDir();
+		$filename = $configDir . "/" . self::RUNTIME_FILENAME;
+
+		// does the file exist?
+		if (!is_file($filename)) {
 			return new BaseObject;
 		}
+
+		// at this point, we should be able to load the config
+		$raw = @file_get_contents($filename);
+		if (FALSE === $raw) {
+			$output->logCliError("unable to read config file '{$filename}'; permissions error?");
+			exit(1);
+		}
+
+		// the config file may be empty
+		if (strlen(rtrim($raw)) === 0) {
+			return new BaseObject;
+		}
+
+		$config = @json_decode($raw);
+		if (NULL === $config) {
+			$output->logCliError("unable to parse JSON in config file '{$filename}'");
+			exit(1);
+		}
+
+		// all done
+		return $config;
 	}
 
 	/**
@@ -118,9 +141,16 @@ class RuntimeConfigManager extends ConfigManagerBase
 	 * @param stdClass $config
 	 * @return void
 	 */
-	public function saveRuntimeConfig($config)
+	public function saveRuntimeConfig($config, Output $output)
 	{
-		return $this->configHelper->saveRuntimeConfig($config, self::APP_NAME, 'runtime-v2.json');
+		$this->makeConfigDir($output);
+		$raw = json_encode($config);
+
+		$filename = $this->getConfigDir() .	"/" . self::RUNTIME_FILENAME;
+		if (FALSE === file_put_contents($filename, $raw)) {
+			$output->logCliError("unable to write config file '{$filename}'");
+			exit(1);
+		}
 	}
 
     /**

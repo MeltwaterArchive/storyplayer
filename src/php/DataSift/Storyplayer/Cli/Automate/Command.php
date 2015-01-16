@@ -222,7 +222,7 @@ class Automate_Command extends CliCommand
         }
 
         // write out any changed runtime config to disk
-        $runtimeConfigManager->saveRuntimeConfig($runtimeConfig);
+        $runtimeConfigManager->saveRuntimeConfig($runtimeConfig, $output);
 
         // tell the output plugins that we're all done
         $output->endStoryplayer();
