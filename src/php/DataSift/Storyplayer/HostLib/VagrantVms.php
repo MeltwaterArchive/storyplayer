@@ -175,15 +175,15 @@ class VagrantVms implements SupportedHost
 
 			// we need to remember how to SSH into the box
 			$vmDetails->sshUsername = 'vagrant';
-			$vmDetails->sshKeyFile  = getenv('HOME') . "/.vagrant.d/insecure_private_key";
+			$vmDetails->sshKeyFile  = $this->determinePrivateKey($vmDetails);
 			$vmDetails->sshOptions  = [
-				"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'",
+				"-i '" . $vmDetails->sshKeyFile . "'",
 				"-o StrictHostKeyChecking=no",
 				"-o UserKnownHostsFile=/dev/null",
 				"-o LogLevel=quiet",
 			];
 			$vmDetails->scpOptions = [
-				"-i '" . getenv('HOME') . "/.vagrant.d/insecure_private_key'",
+				"-i '" . $vmDetails->sshKeyFile . "'",
 				"-o StrictHostKeyChecking=no",
 			];
 
@@ -412,5 +412,38 @@ class VagrantVms implements SupportedHost
 				}
 			}
 		}
+	}
+
+	public function determinePrivateKey($vmDetails)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->name}'");
+
+		// the key will be in one of two places, in this order:
+		//
+		// cwd()/.vagrant/machines/:name/virtualbox/private_key
+		// $HOME/.vagrant.d/insecure_private_key
+		//
+		// we use the first that we can find
+		$keyFilenames = [
+			getcwd() . "/.vagrant/machines/{$vmDetails->name}/virtualbox/private_key",
+			getenv("HOME") . "/.vagrant.d/insecure_private_key"
+		];
+
+		foreach ($keyFilenames as $keyFilename)
+		{
+			$st->usingLog()->writeToLog("checking if {$keyFilename} exists");
+			if (file_exists($keyFilename)) {
+				$log->endAction($keyFilename);
+				return $keyFilename;
+			}
+		}
+
+		// if we get here, then we do not know where the private key is
+		$log->endAction("unable to find Vagrant private key for VM");
+		throw new E5xx_ActionFailed(__METHOD__);
 	}
 }
