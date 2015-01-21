@@ -14,12 +14,6 @@ $story = newStoryFor('Storyplayer Service Stories')
 
 // ========================================================================
 //
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
-
-// ========================================================================
-//
 // STORY SETUP / TEAR-DOWN
 //
 // ------------------------------------------------------------------------
@@ -30,7 +24,7 @@ $story = newStoryFor('Storyplayer Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->setPreTestPrediction(function(StoryTeller $st) {
+$story->addPreTestPrediction(function(StoryTeller $st) {
 	// do we have the UUID extension installed?
 	$st->expectsUuid()->requirementsAreMet();
 });
@@ -61,7 +55,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function(StoryTeller $st) {
 	// get the checkpoint
 	$checkpoint = $st->getCheckpoint();
 

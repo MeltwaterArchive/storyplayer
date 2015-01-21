@@ -12,11 +12,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Browsing')
          ->called('Can resize the web browser');
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -82,7 +78,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function(StoryTeller $st) {
 	// get the checkpoint
 	$checkpoint = $st->getCheckpoint();
 

@@ -15,11 +15,7 @@ $story = newStoryFor('Storyplayer Service Stories')
 // keep the test device open
 $story->setPersistDevice();
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -56,7 +52,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function(StoryTeller $st) {
 	// if this feature is working, the browser should already be open
 	// and we can just grab the title
 	$title = $st->fromBrowser()->getTitle();

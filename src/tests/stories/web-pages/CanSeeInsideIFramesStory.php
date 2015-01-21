@@ -12,11 +12,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Pages')
          ->called('Can see inside iFrames');
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -65,7 +61,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function(StoryTeller $st) {
 	// get the checkpoint
 	$checkpoint = $st->getCheckpoint();
 

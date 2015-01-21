@@ -12,11 +12,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Browsing')
          ->called('Can retrieve form field by its label');
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -47,10 +43,10 @@ $story->addAction(function(StoryTeller $st) {
 	$checkpoint = $st->getCheckpoint();
 
     // load our test page
-    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/testpage.html');
+    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithForms.html');
 
-    // get the title of the test page
-    $checkpoint->contents = $st->fromBrowser()->get()->fieldLabelled('');
+    // get a field from a form
+    $checkpoint->field1 = $st->fromForm("test_form")->getValue()->fieldLabelled('Page Name');
 });
 
 // ========================================================================
@@ -59,11 +55,11 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function(StoryTeller $st) {
 	// get the checkpoint
 	$checkpoint = $st->getCheckpoint();
 
 	// do we have the title we expected?
-	$st->assertsObject($checkpoint)->hasAttribute('title');
-	$st->assertsString($checkpoint->title)->equals("Storyplayer: Self-Host Tests Page");
+	$st->assertsObject($checkpoint)->hasAttribute('field1');
+	$st->assertsString($checkpoint->field1)->equals("Storyplayer: Working With Forms");
 });
