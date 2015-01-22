@@ -7,6 +7,8 @@ next: '<a href="../../learn/fundamentals/index.html">Next: Fundamentals Of Story
 
 # Testing Your Setup
 
+## Running Storyplayer's Own Test Suite
+
 The best way to test that everything is installed is to run Storyplayer's own test suite:
 
     cd $HOME
