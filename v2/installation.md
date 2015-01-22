@@ -1,8 +1,7 @@
 ---
 layout: v2/top-level
 title: Installing Storyplayer
-prev: '<a href="learn/index.html">Prev: Learning Storyplayer</a>'
-next: '<a href="running-storyplayer.html">Next: Running Storyplayer</a>'
+prev: '<a href="learn/getting-setup/installing-storyplayer.html">Prev: Installing Storyplayer</a>'
 ---
 
 # Installing Storyplayer

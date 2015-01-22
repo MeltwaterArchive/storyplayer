@@ -21,4 +21,6 @@ In this guide, we'll show you the fundamentals you need to know to start using S
 
 ## Test Philosophy
 
+* [An Introduction To User Stories](user-stories.html).
+* [An Introduction To Service Stories](service-stories.html).
 * The [Belt And Braces Testing](belt-and-braces-testing.html) approach for solid and accurate test results

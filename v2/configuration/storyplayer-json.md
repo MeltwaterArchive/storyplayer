@@ -1,8 +1,8 @@
 ---
 layout: v2/configuration
 title: "The storyplayer.json File"
-prev: '<a href="../configuration/index.html">Prev: Configuring Storyplayer</a>'
 next: '<a href="../configuration/app-settings.html">Next: Adding App Settings To Your Config File</a>'
+prev: '<a href="../configuration/index.html">Prev: Configuring Storyplayer</a>'
 ---
 
 # The storyplayer.json File

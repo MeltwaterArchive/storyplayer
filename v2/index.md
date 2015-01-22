@@ -1,5 +1,5 @@
 ---
-layout: v2/top-level
+layout: v2/frontpage
 title: Storyplayer
 prev: '&nbsp;'
 next: '<a href="learn/index.html">Next: Learning Storyplayer</a>'

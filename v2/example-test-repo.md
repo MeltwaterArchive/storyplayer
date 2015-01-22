@@ -2,7 +2,6 @@
 layout: v2/top-level
 title: An Example Test Repository
 prev: '<a href="running-storyplayer.html">Prev: Running Storyplayer</a>'
-next: '<a href="configuration/index.html">Next: Configuring Storyplayer</a>'
 ---
 
 # An Example Test Repository
