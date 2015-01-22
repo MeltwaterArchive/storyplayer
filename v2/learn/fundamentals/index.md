@@ -13,7 +13,7 @@ In this guide, we'll show you the fundamentals you need to know to start using S
 * [How To Add Storyplayer](installing-storyplayer.html) to your project
 * [How To Run Storyplayer](running-storyplayer.html) from inside your project
 
-## What You Need To Know
+## How Storyplayer Works
 
 * [Understanding The Stories](understanding-stories.html) that Storyplayer runs
 * [Understanding The System Under Test](understanding-system-under-test.html) that your stories are testing
