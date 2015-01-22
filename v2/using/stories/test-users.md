@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: Test Users
-prev: '<a href="../stories/story-params.html">Prev: Story Parameters</a>'
-next: '<a href="../stories/tales.html">Next: Tales</a>'
+prev: '<a href="../../using/stories/story-params.html">Prev: Story Parameters</a>'
+next: '<a href="../../using/prose/index.html">Next: Introducing Prose</a>'
 ---
 
 # Test Users

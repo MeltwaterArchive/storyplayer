@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: Introducing Stories
-prev: '<a href="../configuration/runtime-config.html">Prev: The Runtime Configuration</a>'
-next: '<a href="../stories/user-stories.html">Next: User Stories</a>'
+prev: '<a href="../../configuration/runtime-config.html">Prev: The Runtime Configuration</a>'
+next: '<a href="../../using/stories/user-stories.html">Next: User Stories</a>'
 ---
 
 # Introducing Stories

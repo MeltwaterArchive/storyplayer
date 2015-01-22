@@ -1,8 +1,8 @@
 ---
-layout: v2/prose
+layout: v2/using-prose
 title: Module Loading
-prev: '<a href="../prose/st-helper-methods.html">Prev: $st Helper Methods</a>'
-next: '<a href="../prose/module-namespaces.html">Next: Module Namespaces</a>'
+prev: '<a href="../../using/prose/st-helper-methods.html">Prev: $st Helper Methods</a>'
+next: '<a href="../../using/prose/module-namespaces.html">Next: Module Namespaces</a>'
 ---
 
 # Module Loading

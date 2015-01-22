@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: The Environment
-prev: '<a href="../stories/the-checkpoint.html">Prev: The Checkpoint</a>'
-next: '<a href="../stories/test-environment-setup-teardown.html">Next: Test Environment Setup / Teardown Phases</a>'
+prev: '<a href="../../using/stories/the-checkpoint.html">Prev: The Checkpoint</a>'
+next: '<a href="../../using/stories/test-setup-teardown.html">Next: Test Setup / Teardown Phases</a>'
 ---
 
 # The Environment

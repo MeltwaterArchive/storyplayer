@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: User Stories
-prev: '<a href="../stories/index.html">Prev: Introducing Stories</a>'
-next: '<a href="../stories/service-stories.html">Next: Service Stories</a>'
+prev: '<a href="../../using/stories/index.html">Prev: Introducing Stories</a>'
+next: '<a href="../../using/stories/service-stories.html">Next: Service Stories</a>'
 ---
 
 # User Stories

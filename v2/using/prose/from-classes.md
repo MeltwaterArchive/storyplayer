@@ -1,8 +1,8 @@
 ---
-layout: v2/prose
+layout: v2/using-prose
 title: From Classes
-prev: '<a href="../prose/expects-classes.html">Prev: Expects Classes</a>'
-next: '<a href="../prose/using-classes.html">Next: Using Classes</a>'
+prev: '<a href="../../using/prose/expects-classes.html">Prev: Expects Classes</a>'
+next: '<a href="../../using/prose/using-classes.html">Next: Using Classes</a>'
 ---
 
 # From Classes

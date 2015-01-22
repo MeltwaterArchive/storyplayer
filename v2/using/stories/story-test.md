@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: The Story Test
-prev: '<a href="../stories/service-stories.html">Prev: Service Stories</a>'
-next: '<a href="../stories/phases.html">Next: The Eight Phases Of A Story Test</a>'
+prev: '<a href="../../using/stories/service-stories.html">Prev: Service Stories</a>'
+next: '<a href="../../using/stories/phases.html">Next: The Eight Phases Of A Story Test</a>'
 ---
 
 # The Story Test

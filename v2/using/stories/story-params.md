@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: Story Parameters
-prev: '<a href="../stories/story-templates.html">Prev: Story Templates</a>'
-next: '<a href="../stories/test-users.html">Next: Test Users</a>'
+prev: '<a href="../../using/stories/story-templates.html">Prev: Story Templates</a>'
+next: '<a href="../../using/stories/test-users.html">Next: Test Users</a>'
 ---
 
 # Story Parameters

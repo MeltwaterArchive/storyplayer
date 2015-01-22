@@ -1,8 +1,8 @@
 ---
-layout: v2/prose
+layout: v2/using-prose
 title: Creating Your Own Prose Modules
-prev: '<a href="../prose/module-namespaces.html">Prev: Module Namespaces</a>'
-next: '<a href="../prose/asserts-classes.html">Next: Asserts Classes</a>'
+prev: '<a href="../../using/prose/module-namespaces.html">Prev: Module Namespaces</a>'
+next: '<a href="../../using/prose/asserts-classes.html">Next: Asserts Classes</a>'
 ---
 
 # Creating Your Own Prose Modules

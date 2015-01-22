@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: The Pre-Test Prediction Phase
-prev: '<a href="../stories/test-setup-teardown.html">Prev: Test Setup / Teardown Phases</a>'
-next: '<a href="../stories/pre-test-inspection.html">Next: Pre-Test Inspection Phase</a>'
+prev: '<a href="../../using/stories/test-setup-teardown.html">Prev: Test Setup / Teardown Phases</a>'
+next: '<a href="../../using/stories/pre-test-inspection.html">Next: Pre-Test Inspection Phase</a>'
 ---
 
 # The Pre-Test Prediction Phase

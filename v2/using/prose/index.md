@@ -1,8 +1,8 @@
 ---
-layout: v2/prose
+layout: v2/using-prose
 title: Introducing Prose
-prev: '<a href="../stories/tales.html">Prev: Tales</a>'
-next: '<a href="../prose/the-st-object.html">Next: The $st Object</a>'
+prev: '<a href="../../using/stories/test-users.html">Prev: Test Users</a>'
+next: '<a href="../../using/prose/the-st-object.html">Next: The $st Object</a>'
 ---
 
 # Introducing Prose

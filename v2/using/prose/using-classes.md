@@ -1,8 +1,8 @@
 ---
-layout: v2/prose
+layout: v2/using-prose
 title: Using Classes
-prev: '<a href="../prose/from-classes.html">Prev: From Classes</a>'
-next: '<a href="../environments/index.html">Next: Test Environments</a>'
+prev: '<a href="../../using/prose/from-classes.html">Prev: From Classes</a>'
+next: '<a href="../../environments/index.html">Next: Test Environments</a>'
 ---
 
 # Using Classes
