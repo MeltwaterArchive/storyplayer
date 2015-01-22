@@ -2,4 +2,4 @@ safe: true
 pygments: true
 url: http://datasift.github.io/storyplayer
 baseurl: /storyplayer
-markdown: maruku
+markdown: kramdown
