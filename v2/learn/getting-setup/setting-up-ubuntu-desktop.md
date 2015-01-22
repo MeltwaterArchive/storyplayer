@@ -9,6 +9,6 @@ next: '<a href="../../learn/getting-setup/testing-your-setup.html">Next: Testing
 
 These are the instructions to prepare your Ubuntu Desktop machine for running Storyplayer.
 
-## Install Steps
+## Install Steps
 
 Coming very soon!
