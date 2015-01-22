@@ -53,3 +53,5 @@ If you are deploying software into a virtual machine on your computer, then you 
 * Vagrant
 * Virtualbox
 * A supported server orchestration solution (Ansible)
+
+Once you've installed everything, it's a good idea to [test your setup](testing-your-setup.html) to catch any problems.
