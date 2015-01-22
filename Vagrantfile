@@ -14,8 +14,17 @@ end
 
 # provider-specfic configuration
 Vagrant.configure("2") do |config|
-  # enable 4 CPUs by default
   config.vm.provider :virtualbox do |vb|
+    # enable 4 CPUs by default
   	vb.customize ["modifyvm", :id, "--cpus", "2", "--memory", "2048"]
+
+	# change the network card hardware for better performance
+    vb.customize ["modifyvm", :id, "--nictype1", "virtio" ]
+    vb.customize ["modifyvm", :id, "--nictype2", "virtio" ]
+
+    # suggested fix for slow network performance
+    # see https://github.com/mitchellh/vagrant/issues/1807
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
 end
