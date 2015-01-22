@@ -1,5 +1,5 @@
 ---
-layout: v2/stories
+layout: v2/using-stories
 title: The Pre-Test Prediction Phase
 prev: '<a href="../stories/test-setup-teardown.html">Prev: Test Setup / Teardown Phases</a>'
 next: '<a href="../stories/pre-test-inspection.html">Next: Pre-Test Inspection Phase</a>'

@@ -1,5 +1,5 @@
 ---
-layout: v2/stories
+layout: v2/using-stories
 title: The Checkpoint
 prev: '<a href="../stories/phases.html">Prev: The Eight Phases Of A Story Test</a>'
 next: '<a href="../stories/the-environment.html">Next: The Environment</a>'

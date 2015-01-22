@@ -1,5 +1,5 @@
 ---
-layout: v2/stories
+layout: v2/using-stories
 title: Story Parameters
 prev: '<a href="../stories/story-templates.html">Prev: Story Templates</a>'
 next: '<a href="../stories/test-users.html">Next: Test Users</a>'

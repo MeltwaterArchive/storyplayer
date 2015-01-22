@@ -1,5 +1,5 @@
 ---
-layout: v2/stories
+layout: v2/using-stories
 title: The Environment
 prev: '<a href="../stories/the-checkpoint.html">Prev: The Checkpoint</a>'
 next: '<a href="../stories/test-environment-setup-teardown.html">Next: Test Environment Setup / Teardown Phases</a>'
