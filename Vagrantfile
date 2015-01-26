@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
     # enable 4 CPUs by default
   	vb.customize ["modifyvm", :id, "--cpus", "2", "--memory", "2048"]
 
-	# change the network card hardware for better performance
+    # change the network card hardware for better performance
     vb.customize ["modifyvm", :id, "--nictype1", "virtio" ]
     vb.customize ["modifyvm", :id, "--nictype2", "virtio" ]
 
