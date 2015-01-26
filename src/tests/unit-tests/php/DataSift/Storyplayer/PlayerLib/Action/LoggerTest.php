@@ -48,6 +48,7 @@ use Mockery;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 use DataSift\Storyplayer\OutputLib\DataFormatter;
+use DataSift\Storyplayer\Injectables;
 
 class Action_LoggerTest extends PHPUnit_Framework_TestCase
 {
@@ -59,7 +60,7 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-		$i   = new stdClass;
+        $i = new Injectables;
 		$i->dataFormatter = new DataFormatter();
 		$i->dataFormatter->setIsVerbose(true);
 	    $obj = new Action_Logger($i);
@@ -87,7 +88,7 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 		$output->shouldReceive('logPhaseActivity')->once()->with($expectedMsg, null);
 
 	    // our mock DI container
-	    $i = new stdClass();
+        $i = new Injectables;
 		$i->dataFormatter = new DataFormatter();
 		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
@@ -130,7 +131,7 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 		$output->shouldReceive('logPhaseActivity')->once()->with($expectedMsg2, null);
 
 	    // our mock DI container
-	    $i = new stdClass();
+        $i = new Injectables;
 		$i->dataFormatter = new DataFormatter();
 		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
@@ -174,7 +175,7 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 		$output->shouldReceive('logPhaseActivity')->once()->with($msg, null);
 
 	    // our mock DI container
-	    $i = new stdClass();
+        $i = new Injectables;
 		$i->dataFormatter = new DataFormatter();
 		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
@@ -208,7 +209,7 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 	    // setup your test
 
 	    // our mock DI container
-	    $i = new stdClass();
+        $i = new Injectables;
 		$i->dataFormatter = new DataFormatter();
 		$i->dataFormatter->setIsVerbose(true);
 
@@ -249,7 +250,7 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 		$output->shouldReceive('logPhaseActivity')->once()->with($expectedMsg2, null);
 
 	    // our mock DI container
-	    $i = new stdClass();
+        $i = new Injectables;
 		$i->dataFormatter = new DataFormatter();
 		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;
@@ -296,7 +297,7 @@ class Action_LoggerTest extends PHPUnit_Framework_TestCase
 		$output->shouldReceive('logPhaseActivity')->once()->with($expectedMsg, null);
 
 	    // our mock DI container
-	    $i = new stdClass();
+        $i = new Injectables;
 		$i->dataFormatter = new DataFormatter();
 		$i->dataFormatter->setIsVerbose(true);
 	    $i->output = $output;

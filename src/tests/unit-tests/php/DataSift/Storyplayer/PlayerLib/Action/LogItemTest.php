@@ -48,6 +48,7 @@ use Mockery;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 use DataSift\Storyplayer\OutputLib\DataFormatter;
+use DataSift\Storyplayer\Injectables;
 
 class Action_LogItemTest extends PHPUnit_Framework_TestCase
 {
@@ -59,7 +60,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-		$i   = new stdClass;
+        $i = new Injectables;
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->dataFormatter = new DataFormatter;
 	    $obj = new Action_LogItem($i, 1);
@@ -82,7 +83,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
     	// setup your test
 
-		$i   = new stdClass;
+        $i = new Injectables;
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->dataFormatter = new DataFormatter;
 	    $obj = new Action_LogItem($i, 1);
@@ -110,7 +111,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
     	// setup your test
 
-		$i   = new stdClass;
+        $i = new Injectables;
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
 		$i->dataFormatter = new DataFormatter;
 	    $obj = new Action_LogItem($i, 1);
@@ -144,7 +145,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$msg = "This is a test message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -188,7 +189,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$startMsg = "This is a test message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -234,7 +235,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$endMsg   = "this is the end message";
 
     	// our DI container
-		$i = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -279,7 +280,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$startMsg1 = "This is a test message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -323,7 +324,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$startMsg2 = "This is a nested message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -367,7 +368,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$startMsg2 = "This is the nested test message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -419,7 +420,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$startMsg2 = "This is the nested test message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -473,7 +474,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$msg = "This is a test message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -515,7 +516,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$startMsg2 = "This is the nested test message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
@@ -569,7 +570,7 @@ class Action_LogItemTest extends PHPUnit_Framework_TestCase
     	$startMsg2 = "This is the nested test message";
 
     	// our DI container
-		$i   = new stdClass;
+        $i = new Injectables;
 
 		// our mocked output object
 		$i->output = Mockery::mock("DataSift\Storyplayer\Output");
