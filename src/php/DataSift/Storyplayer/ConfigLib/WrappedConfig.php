@@ -332,8 +332,14 @@ class WrappedConfig extends BaseObject
         }
 
         // convert from stdClass to our useful BaseObject
-        $config = new BaseObject;
-        $config->mergeFrom($json);
+        if (is_object($json)) {
+            $config = new BaseObject;
+            $config->mergeFrom($json);
+        }
+        else {
+            // *probably* an array, but it doesn't matter right now
+            $config = $json;
+        }
 
         // store the config
         $this->setConfig($config);
