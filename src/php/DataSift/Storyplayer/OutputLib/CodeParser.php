@@ -210,17 +210,25 @@ class CodeParser
 				// an exact match!!
 				return $stmt;
 			}
-			else {
+			else if ($lastStmt !== null) {
 				// we have overshot!
 				//
 				// this is where we have to start working quite hard!
 				return $this->searchCodeStatementFor($lastStmt, $lineToFind);
 			}
+			else {
+				// something unexpected has happened
+				return null;
+			}
 		}
 
-		// if we get here, then the line we are looking for is buried
-		// inside the last statement we saw
-		return $this->searchCodeStatementFor($lastStmt, $lineToFind);
+		if ($lastStmt !== null) {
+			return $this->searchCodeStatementFor($lastStmt, $lineToFind);
+		}
+
+		// if we get here, then we have been unable to find the code at
+		// all
+		return null;
 	}
 
 	protected function searchCodeStatementFor($stmt, $lineToFind)
