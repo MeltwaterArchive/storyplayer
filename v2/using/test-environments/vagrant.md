@@ -1,5 +1,5 @@
 ---
-layout: v2/environments
+layout: v2/using-test-environments
 title: Creating Test Environments Using Vagrant
 prev: '<a href="../environments/physical-hosts.html">Prev: Creating Test Environments On Physical Hosts</a>'
 next: '<a href="../environments/safeguarding.html">Next: Safeguarding Environments</a>'
