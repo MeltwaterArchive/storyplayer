@@ -44,9 +44,12 @@
 namespace DataSift\Storyplayer\Injectables;
 
 use DataSift\Storyplayer\Injectables;
-use DataSift\Stone\ConfigLib\E4xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E4xx_InvalidConfigFile;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\ConfigLib\StoryplayerConfig;
+use DataSift\Storyplayer\ConfigLib\E4xx_ConfigFileNotFound;
+use DataSift\Storyplayer\ConfigLib\E4xx_ConfigFileContainsInvalidJson;
+use DataSift\Storyplayer\ConfigLib\E4xx_StoryplayerConfigMustBeAnObject;
+use DataSift\Storyplayer\ConfigLib\E4xx_StoryplayerDefaultsMustBeStrings;
+use DataSift\Storyplayer\ConfigLib\E4xx_StoryplayerDefaultsSectionMustBeAnArray;
 
 /**
  * support for working with Storyplayer's config file
@@ -68,32 +71,31 @@ trait StoryplayerConfigSupport
 		$output = $injectables->output;
 
 		// we start with an empty object
-		$config = new BaseObject;
+		$config = new StoryplayerConfig();
 
 		try {
 			// try to load our main config file
-			$injectables->staticConfigManager->loadDefaultConfig(
-				$config,
-				$configFilename
-			);
+			$config->loadConfigFromFile($configFilename);
 		}
 		catch (E4xx_ConfigFileNotFound $e) {
 			// there is no default config file
 			//
 			// it isn't fatal, but we do want to tell people about it
-			$output->logCliWarning("storyplayer config file '$configFilename' not found");
+			$output->logCliWarning("storyplayer config file '$configFilename' not found or unreadable");
 		}
-		catch (E4xx_InvalidConfigFile $e) {
-			// we either can't read the config file, or it contains
-			// invalid JSON
-			//
+		catch (E4xx_ConfigFileContainsInvalidJson $e) {
 			// that is fatal
-			$output->logCliError("unable to read or prase storyplayer config file '$configFilename'");
+			$output->logCliError("storyplayer config file '$configFilename' is not valid JSON");
 			exit(1);
+		}
+		catch (E4xx_StoryplayerConfigInvalid $e) {
+			$output->logCliError($e->getMessage());
+		}
+		catch (Exception $e) {
+			$output->logCliErrorWithException("unexpected error: " . $e->getMessage(), $e);
 		}
 
 		// all done
-		$this->storyplayerConfig = json_encode($config);
-		return $this->storyplayerConfig;
+		$this->storyplayerConfig = $config->getConfig();
 	}
 }

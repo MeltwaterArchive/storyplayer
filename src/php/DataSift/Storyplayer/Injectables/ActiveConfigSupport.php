@@ -87,7 +87,7 @@ trait ActiveConfigSupport
 
 		// add in the storyplayer config file
 		$config = json_decode($injectables->templateEngine->render(
-			$injectables->storyplayerConfig,
+			json_encode($injectables->storyplayerConfig),
 			json_decode(json_encode($this->activeConfig), true)
 		));
 		$this->activeConfig->storyplayer->mergeFrom($config);

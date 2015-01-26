@@ -69,7 +69,7 @@ trait DefaultSystemUnderTestName
 		// special case - is there one in the storyplayer.json[.dist]
 		// config that we've already loaded?
 		// do we have any defaults in the storyplayer.json file?
-		$config = json_decode($injectables->storyplayerConfig);
+		$config = $injectables->storyplayerConfig;
 		if (isset($config->defaults, $config->defaults->{'system-under-test'})) {
 			$this->defaultSystemUnderTestName = $config->defaults->{'system-under-test'};
 			return;

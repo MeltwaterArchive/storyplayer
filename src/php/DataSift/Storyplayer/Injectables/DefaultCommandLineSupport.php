@@ -60,15 +60,10 @@ trait DefaultCommandLineSupport
 {
 	public $defaultCommandLine;
 
-	public function initDefaultCommandLineSupport($rawConfig, $injectables)
+	public function initDefaultCommandLineSupport($storyplayerConfig, $injectables)
 	{
-		$config = json_decode($rawConfig);
-		if (isset($config->defaults)) {
-			if (!is_array($config->defaults)) {
-				$injectables->output->logCliError("'defaults' section in " . $injectables->storyplayerConfigFilename . " must be an array");
-				exit(1);
-			}
-			$this->defaultCommandLine = $config->defaults;
+		if (isset($storyplayerConfig->defaults)) {
+			$this->defaultCommandLine = $storyplayerConfig->defaults;
 		}
 		else {
 			$this->defaultCommandLine = [];
