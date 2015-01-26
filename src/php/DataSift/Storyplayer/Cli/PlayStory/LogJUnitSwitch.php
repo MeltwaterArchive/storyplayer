@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
-use Phix_Project\ValidationLib4\File_MustBeValidPath;
+use Phix_Project\ValidationLib4\File_MustBeFileOrHaveValidParent;
 
 /**
  * Tell Storyplayer to output 'JUnit' XML format
@@ -79,7 +79,7 @@ class PlayStory_LogJUnitSwitch extends CliSwitch
 
 		// what is our parameter?
 		$this->setRequiredArg('<file>', "the file to write the report to");
-		$this->setArgValidator(new File_MustBeValidPath());
+		$this->setArgValidator(new File_MustBeFileOrHaveValidParent());
 
 		// all done
 	}
