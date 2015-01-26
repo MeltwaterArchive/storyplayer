@@ -43,8 +43,6 @@
 
 namespace DataSift\Storyplayer\ConfigLib;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
-
 /**
  * Exception thrown when the 'defaults' entry in storyplayer.json exists
  * but is not an array
@@ -56,7 +54,7 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_StoryplayerDefaultsSectionMustBeAnArray extends Exxx_Exception
+class E4xx_StoryplayerDefaultsSectionMustBeAnArray extends E4xx_StoryplayerConfigInvalid
 {
     public function __construct($pathToFile)
     {

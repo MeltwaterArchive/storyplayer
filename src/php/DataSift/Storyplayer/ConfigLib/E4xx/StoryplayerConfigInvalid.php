@@ -43,9 +43,10 @@
 
 namespace DataSift\Storyplayer\ConfigLib;
 
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+
 /**
- * Exception thrown when the storyplayer.json file doesn't define an
- * object at the top-level
+ * Base exception thrown when the storyplayer.json file is somehow invalid
  *
  * @category  Libraries
  * @package   Storyplayer/ConfigLib
@@ -54,11 +55,6 @@ namespace DataSift\Storyplayer\ConfigLib;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_StoryplayerConfigMustBeAnObject extends E4xx_StoryplayerConfigInvalid
+class E4xx_StoryplayerConfigInvalid extends Exxx_Exception
 {
-    public function __construct($pathToFile)
-    {
-    	$msg = "Storyplayer config file '{$pathToFile}' must be a JSON object";
-        parent::__construct(400, $msg, $msg);
-    }
 }
