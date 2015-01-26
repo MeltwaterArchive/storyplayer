@@ -1,5 +1,5 @@
 ---
-layout: v2/configuration
+layout: v2/using-configuration
 title: Configuring Storyplayer
 next: '<a href="../configuration/storyplayer-json.html">Next: The storyplayer.json File</a>'
 prev: '<a href="../using/storyplayer-commands/play-story.html">Prev: The play-story Command</a>'

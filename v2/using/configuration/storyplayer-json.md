@@ -1,5 +1,5 @@
 ---
-layout: v2/configuration
+layout: v2/using-configuration
 title: "The storyplayer.json File"
 next: '<a href="../configuration/app-settings.html">Next: Adding App Settings To Your Config File</a>'
 prev: '<a href="../configuration/index.html">Prev: Configuring Storyplayer</a>'

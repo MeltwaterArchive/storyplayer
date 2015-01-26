@@ -1,5 +1,5 @@
 ---
-layout: v2/configuration
+layout: v2/using-configuration
 title: Logging
 next: '<a href="../configuration/test-phases.html">Next: Test Phases Configuration</a>'
 prev: '<a href="../configuration/app-settings.html">Prev: Adding App Settings To Your Config File</a>'

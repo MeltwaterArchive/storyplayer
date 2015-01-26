@@ -1,5 +1,5 @@
 ---
-layout: v2/configuration
+layout: v2/using-configuration
 title: Per-Device Configuration
 prev: '<a href="../configuration/environment-config.html">Prev: Per-Environment Configuration</a>'
 next: '<a href="../configuration/user-config.html">Next: Per-User Configuration</a>'

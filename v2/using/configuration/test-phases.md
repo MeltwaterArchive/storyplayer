@@ -1,5 +1,5 @@
 ---
-layout: v2/configuration
+layout: v2/using-configuration
 title:  Test Phases Configuration
 next: '<a href="../configuration/environment-config.html">Next: Per-Environment Configuration</a>'
 prev: '<a href="../configuration/logging.html">Prev: Logging</a>'
