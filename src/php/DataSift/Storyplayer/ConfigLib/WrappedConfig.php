@@ -69,6 +69,12 @@ class WrappedConfig extends BaseObject
     private $config;
 
     /**
+     * remember where we were loaded from
+     * @var string
+     */
+    private $filename = null;
+
+    /**
      * constructor
      */
     public function __construct()
@@ -79,13 +85,20 @@ class WrappedConfig extends BaseObject
 
     /**
      * get the config that we wrap
-     * @return [type] [description]
+     *
+     * @return array|object
      */
     public function getConfig()
     {
         return $this->config;
     }
 
+    /**
+     * store the config that we wrap
+     *
+     * @param array|object $config
+     *        the config to store
+     */
     public function setConfig($config)
     {
         $this->config = $config;
@@ -325,6 +338,7 @@ class WrappedConfig extends BaseObject
         // store the config
         $this->setConfig($config);
         $this->setName(basename($pathToFile, '.json'));
+        $this->setFilename($pathToFile);
 
         // all done
     }
@@ -347,5 +361,26 @@ class WrappedConfig extends BaseObject
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * returns the filename we loaded this config from
+     *
+     * @return string|null
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * sets the filename that we loaded this config from
+     *
+     * @param string $filename
+     *        the filename to store
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
     }
 }

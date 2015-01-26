@@ -117,6 +117,8 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setConfig()
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getName()
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setName()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getFilename()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setFilename()
 	 */
 	public function testCanLoadConfigFile()
 	{
@@ -128,21 +130,25 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	    $expectedName = "wrapped-config-1";
 
+	    $expectedFilename = __DIR__ . "/wrapped-config-1.json";
+
 	    $obj = new WrappedConfig();
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-1.json");
+	    $obj->loadConfigFromFile($expectedFilename);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualConfig = $obj->getConfig();
-	    $actualName   = $obj->getName();
+		$actualConfig   = $obj->getConfig();
+		$actualName     = $obj->getName();
+		$actualFilename = $obj->getFilename();
 
 	    $this->assertEquals($expectedConfig, $actualConfig);
 	    $this->assertEquals($expectedName, $actualName);
+	    $this->assertEquals($expectedFilename, $actualFilename);
 	}
 
 	/**
