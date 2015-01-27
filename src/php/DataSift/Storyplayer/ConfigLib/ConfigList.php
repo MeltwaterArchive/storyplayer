@@ -79,7 +79,7 @@ class ConfigList
      *
      * @var array<SystemUnderTestConfig>
      */
-    private $configs = [];
+    private $list = [];
 
     /**
      * constructor
@@ -126,12 +126,12 @@ class ConfigList
             $config = $this->newWrappedConfigObject();
             $config->loadConfigFromFile($filename);
             $config->validateConfig();
-            $this->configs[$config->getName()] = $config;
+            $this->list[$config->getName()] = $config;
         }
 
         // we want our list of configs to be sorted, to make presentation
         // to end-users easier
-        ksort($this->configs);
+        ksort($this->list);
 
         // all done
     }
@@ -218,7 +218,7 @@ class ConfigList
      * @param object $config
      *        the config to inject into our list
      */
-    public function addConfig($name, $config)
+    public function addEntry($name, $config)
     {
         // make sure $config is the right type
         $classname = $this->getWrappedConfigClassname();
@@ -227,10 +227,10 @@ class ConfigList
         }
 
         // if we get here, all is good
-        $this->configs[$name] = $config;
+        $this->list[$name] = $config;
 
         // keep the configs sorted
-        ksort($this->configs);
+        ksort($this->list);
     }
 
     /**
@@ -240,13 +240,13 @@ class ConfigList
      *         the name of the config to retrieve
      * @return array|object
      */
-    public function getConfig($name)
+    public function getEntry($name)
     {
-        if (!isset($this->configs[$name])) {
+        if (!isset($this->list[$name])) {
             throw new E4xx_NoSuchConfigEntry($name);
         }
 
-        return $this->configs[$name];
+        return $this->list[$name];
     }
 
     /**
@@ -256,9 +256,9 @@ class ConfigList
      *         the name of the config to check for
      * @return boolean
      */
-    public function hasConfig($name)
+    public function hasEntry($name)
     {
-        if (!isset($this->configs[$name])) {
+        if (!isset($this->list[$name])) {
             return false;
         }
 
@@ -270,8 +270,8 @@ class ConfigList
      *
      * @return array
      */
-    public function getConfigs()
+    public function getEntries()
     {
-        return $this->configs;
+        return $this->list;
     }
 }

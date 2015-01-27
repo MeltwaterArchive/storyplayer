@@ -69,7 +69,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
-	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getConfigs
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getEntries
 	 */
 	public function testStartsWithEmptyConfig()
 	{
@@ -86,7 +86,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actual = $obj->getConfigs();
+	    $actual = $obj->getEntries();
 	    $this->assertEquals($expected, $actual);
 	}
 
@@ -201,7 +201,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $configs = $obj->getConfigs();
+	    $configs = $obj->getEntries();
 
 	    $this->assertTrue(is_array($configs));
 	    $this->assertTrue(isset($configs['config-1']));
@@ -230,7 +230,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $configs = $obj->getConfigs();
+	    $configs = $obj->getEntries();
 
 	    $this->assertEquals($expectedKeys, array_keys($configs));
 	}
@@ -255,7 +255,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $configs = $obj->getConfigs();
+	    $configs = $obj->getEntries();
 
 	    $this->assertTrue(is_array($configs));
 	    $this->assertEquals(0, count($configs));
@@ -281,7 +281,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $configs = $obj->getConfigs();
+	    $configs = $obj->getEntries();
 
 	    $this->assertTrue(is_array($configs));
 	    $this->assertEquals(0, count($configs));
@@ -289,7 +289,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
-	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::addConfig
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::addEntry
 	 */
 	public function testCanAddConfigManually()
 	{
@@ -305,12 +305,12 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj->addConfig($expectedName, $expectedConfig);
+	    $obj->addEntry($expectedName, $expectedConfig);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $configs = $obj->getConfigs();
+	    $configs = $obj->getEntries();
 
 	    $this->assertTrue(isset($configs[$expectedName]));
 	    $this->assertEquals($expectedConfig, $configs[$expectedName]);
@@ -318,7 +318,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
-	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::addConfig
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::addEntry
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_IncompatibleConfigClass
 	 */
 	public function testManuallyAddedConfigsMustBeCompatibleType()
@@ -335,12 +335,12 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj->addConfig($expectedName, $expectedConfig);
+	    $obj->addEntry($expectedName, $expectedConfig);
 	}
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
-	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::hasConfig
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::hasEntry
 	 */
 	public function testCanCheckForConfigEntry()
 	{
@@ -353,8 +353,8 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual1 = $obj->hasConfig('config-1');
-	    $actual2 = $obj->hasConfig('config-does-not-exist');
+	    $actual1 = $obj->hasEntry('config-1');
+	    $actual2 = $obj->hasEntry('config-does-not-exist');
 
 	    // ----------------------------------------------------------------
 	    // test the results
@@ -366,7 +366,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
-	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getConfig
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getEntry
 	 */
 	public function testCanGetSingleConfigEntry()
 	{
@@ -379,19 +379,19 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->getConfig('config-1');
+	    $actual = $obj->getEntry('config-1');
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $configs = $obj->getConfigs();
+	    $configs = $obj->getEntries();
 
 	    $this->assertSame($configs['config-1'], $actual);
 	}
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
-	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getConfig
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getEntry
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_NoSuchConfigEntry
 	 */
 	public function testThrowsExceptionWhenSingleConfigEntryNotFound()
@@ -405,7 +405,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->getConfig('config-does-not-exist');
+	    $actual = $obj->getEntry('config-does-not-exist');
 	}
 
 }
