@@ -59,14 +59,4 @@ class TestEnvironmentsList extends ConfigList
     {
         parent::__construct('DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentConfig', $searchFolder);
     }
-
-    public function addHardCodedDefaults($hardCodedDefaults)
-    {
-        $sutList = $hardCodedDefaults->getConfigs();
-
-        foreach ($sutList as $name => $config)
-        {
-            $this->addConfig($name, $config);
-        }
-    }
 }

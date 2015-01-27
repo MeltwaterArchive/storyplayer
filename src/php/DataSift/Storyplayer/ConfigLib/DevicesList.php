@@ -62,14 +62,4 @@ class DevicesList extends ConfigList
     {
         parent::__construct('DataSift\Storyplayer\DeviceLib\DeviceConfig', $searchFolder);
     }
-
-    public function addHardCodedDefaults($hardCodedDefaults)
-    {
-        $sutList = $hardCodedDefaults->getConfigs();
-
-        foreach ($sutList as $name => $config)
-        {
-            $this->addConfig($name, $config);
-        }
-    }
 }

@@ -62,14 +62,4 @@ class SystemsUnderTestList extends ConfigList
     {
         parent::__construct('DataSift\Storyplayer\SystemsUnderTestLib\SystemUnderTestConfig', $searchFolder);
     }
-
-    public function addHardCodedDefaults($hardCodedDefaults)
-    {
-        $sutList = $hardCodedDefaults->getConfigs();
-
-        foreach ($sutList as $name => $config)
-        {
-            $this->addConfig($name, $config);
-        }
-    }
 }
