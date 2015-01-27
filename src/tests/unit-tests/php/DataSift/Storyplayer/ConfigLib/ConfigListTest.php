@@ -408,4 +408,30 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    $actual = $obj->getEntry('config-does-not-exist');
 	}
 
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getEntryNames
+	 */
+	public function testCanGetEntryNames()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj->findConfigs();
+
+	    $expected = [ 'config-1', 'config-2' ];
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getEntryNames();
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertSame($expected, $actual);
+	}
+
+
 }

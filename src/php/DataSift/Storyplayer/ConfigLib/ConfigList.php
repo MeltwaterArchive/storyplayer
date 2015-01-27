@@ -274,4 +274,14 @@ class ConfigList
     {
         return $this->list;
     }
+
+    /**
+     * returns the names of all of the entries in our list
+     *
+     * @return array<string>
+     */
+    public function getEntryNames()
+    {
+        return array_keys($this->list);
+    }
 }
