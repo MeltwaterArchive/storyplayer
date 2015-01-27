@@ -192,9 +192,7 @@ class ConfigList
      */
     public function getWrappedConfigClassname()
     {
-        $classname = 'DataSift\Storyplayer\ConfigLib\\' . $this->configType;
-
-        return $classname;
+        return $this->configType;
     }
 
     /**

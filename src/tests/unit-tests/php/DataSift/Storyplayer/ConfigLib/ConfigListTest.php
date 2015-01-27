@@ -59,7 +59,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj = new ConfigList("WrappedConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\WrappedConfig", __DIR__ . '/ConfigListTestData1');
 
 	    // ----------------------------------------------------------------
 	    // test the results
@@ -81,7 +81,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj = new ConfigList("WrappedConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\WrappedConfig", __DIR__ . '/ConfigListTestData1');
 
 	    // ----------------------------------------------------------------
 	    // test the results
@@ -100,7 +100,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 		// ----------------------------------------------------------------
 		// setup the test
 
-		$expected = "WrappedConfig";
+		$expected = "DataSift\Storyplayer\ConfigLib\WrappedConfig";
 
 	    // ----------------------------------------------------------------
 	    // perform the change
@@ -131,7 +131,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj = new ConfigList("WrappedConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj = new ConfigList($expectedClassname, __DIR__ . '/ConfigListTestData1');
 
 	    // ----------------------------------------------------------------
 	    // test the results
@@ -171,7 +171,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $obj = new ConfigList("StoryplayerConfig", $expected);
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", $expected);
 
 	    // ----------------------------------------------------------------
 	    // test the results
@@ -191,7 +191,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // setup your test
 
 		$expectedKeys = [ 'config-1', 'config-2' ];
-	    $obj = new ConfigList("StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
 
 	    // ----------------------------------------------------------------
 	    // perform the change
@@ -220,7 +220,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // setup your test
 
 		$expectedKeys = [ 'config-1', 'config-2' ];
-	    $obj = new ConfigList("StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
 
 	    // ----------------------------------------------------------------
 	    // perform the change
@@ -245,7 +245,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $obj = new ConfigList("StoryplayerConfig", __DIR__ . '/ConfigListEmptyFolder');
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListEmptyFolder');
 
 	    // ----------------------------------------------------------------
 	    // perform the change
@@ -271,7 +271,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $obj = new ConfigList("StoryplayerConfig", __DIR__ . '/ConfigListFolderDoesNotExist');
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListFolderDoesNotExist');
 
 	    // ----------------------------------------------------------------
 	    // perform the change
@@ -296,7 +296,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $obj = new ConfigList("StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
 	    $obj->findConfigs();
 
 	    $expectedName = 'injected-1';
@@ -326,7 +326,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $obj = new ConfigList("StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
 	    $obj->findConfigs();
 
 	    $expectedName = 'injected-1';
