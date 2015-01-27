@@ -433,5 +433,35 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    $this->assertSame($expected, $actual);
 	}
 
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::addHardCodedList
+	 */
+	public function testCanAddEntriesFromAHardCodedList()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\WrappedConfig", __DIR__ . '/ConfigListTestData1');
+
+	    $hardCodedList = new HardCodedList('DataSift\Storyplayer\ConfigLib\WrappedConfig');
+	    $expected1 = $hardCodedList->newConfig('hard-coded-config-1');
+	    $expected1->getConfig()->name = 'config-1';
+	    $expected2 = $hardCodedList->newConfig('hard-coded-config-2');
+	    $expected2->getConfig()->name = 'config-2';
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj->addHardCodedList($hardCodedList);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($obj->hasEntry('hard-coded-config-1'));
+	    $this->assertSame($expected1, $obj->getEntry('hard-coded-config-1'));
+	    $this->assertTrue($obj->hasEntry('hard-coded-config-2'));
+	    $this->assertSame($expected2, $obj->getEntry('hard-coded-config-2'));
+	}
 
 }

@@ -284,4 +284,20 @@ class ConfigList
     {
         return array_keys($this->list);
     }
+
+    /**
+     * add config entries from a hard-coded list
+     *
+     * @param HardCodedList $hardCodedDefaults
+     *        the entries to add
+     */
+    public function addHardCodedList(HardCodedList $hardCodedDefaults)
+    {
+        $list = $hardCodedDefaults->getConfigs();
+
+        foreach ($list as $name => $config)
+        {
+            $this->addEntry($name, $config);
+        }
+    }
 }
