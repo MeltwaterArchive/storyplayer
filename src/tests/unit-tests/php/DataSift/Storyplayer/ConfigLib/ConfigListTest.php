@@ -330,7 +330,7 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    $obj->findConfigs();
 
 	    $expectedName = 'injected-1';
-	    $expectedConfig = new SystemUnderTestConfig();
+	    $expectedConfig = new WrappedConfig();
 
 	    // ----------------------------------------------------------------
 	    // perform the change
