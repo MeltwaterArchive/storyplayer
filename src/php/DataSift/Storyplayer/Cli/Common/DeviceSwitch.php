@@ -85,8 +85,9 @@ class Common_DeviceSwitch extends CliSwitch
 
 		// do we have any devices defined?
 		$msg = "the device to test with";
-		if (count($deviceList)) {
-			$msg .= "; one of: " . implode(", ", $deviceList);
+		$deviceNames = $deviceList->getEntryNames();
+		if (count($deviceNames)) {
+			$msg .= "; one of: " . implode(", ", $deviceNames);
 		}
 		else {
 			// no devices found

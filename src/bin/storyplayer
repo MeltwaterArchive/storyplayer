@@ -216,15 +216,15 @@ function main($argv)
 
 		// a list of the additional files that the user can select from
 		$sutList = new SystemsUnderTestList();
-		$sutList->addHardCodedDefaults(new HardCodedSystemsUnderTest);
+		$sutList->addHardCodedList(new HardCodedSystemsUnderTest);
 		$sutList->findConfigs();
 
 		$envList = new TestEnvironmentsList();
-		$envList->addHardCodedDefaults(new HardCodedTestEnvironments);
+		$envList->addHardCodedList(new HardCodedTestEnvironments);
 		$envList->findConfigs();
 
 		$deviceList = new DevicesList();
-		$deviceList->addHardCodedDefaults(new HardCodedDevices);
+		$deviceList->addHardCodedList(new HardCodedDevices);
 		$deviceList->findConfigs();
 
 		$additionalConfigs = [];
@@ -235,7 +235,7 @@ function main($argv)
 		$injectables->initAdditionalConfigsSupport($additionalConfigs);
 
 		// put all of that into something we can give to the CliEngine
-		$injectables->initKnownDevicesSupport($additionalConfigs['devices']);
+		$injectables->initKnownDevicesSupport($deviceList);
 		$injectables->initKnownTestEnvironmentsSupport($additionalConfigs['testEnvironments']);
 		$injectables->initDefaultTestEnvironmentName($injectables);
 		$injectables->initKnownSystemsUnderTestSupport($additionalConfigs['systemsUnderTest']);

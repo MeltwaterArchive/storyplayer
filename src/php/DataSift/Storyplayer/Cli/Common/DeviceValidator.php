@@ -75,7 +75,7 @@ class Common_DeviceValidator implements Validator
 
         // the $value must be a valid environment name, but it's ok if it doesn't
         // exist if it's the default env as we might not have created it yet
-        if (!isset($this->deviceList[$value])) {
+        if (!$this->deviceList->hasEntry($value)) {
             $result->addError(static::MSG_NOTVALIDDEVICE);
             return $result;
         }

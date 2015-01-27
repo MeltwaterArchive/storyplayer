@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\DeviceLib\KnownDevices;
+use DataSift\Storyplayer\ConfigLib\DevicesList;
 
 /**
  * support for working with the list of known devices
@@ -57,33 +57,14 @@ use DataSift\Storyplayer\DeviceLib\KnownDevices;
  */
 trait KnownDevicesSupport
 {
-	public $knownDevices;
-	public $knownDevicesList = array();
+	public $knownDevicesList;
 
 	/**
-	 * @param  stdClass $devices
-	 * @return stdClass
+	 * @param  DevicesList $devicesList
+	 * @return void
 	 */
-	public function initKnownDevicesSupport($additionalDevices)
+	public function initKnownDevicesSupport($devicesList)
 	{
-		// start with a list of all the devices that are hard-coded
-		// into Storyplayer
-		$this->knownDevices = new KnownDevices;
-		foreach ($this->knownDevices as $deviceName => $device) {
-			$this->knownDevicesList[$deviceName] = $deviceName;
-		}
-
-		// now add in all the devices that we have discovered in
-		// the config files
-		foreach ($additionalDevices as $filename => $config) {
-			$deviceName = basename($filename, 'json');
-			$this->knownDevicesList[$deviceName] = $deviceName;
-			$this->knownDevices->$deviceName = $config;
-		}
-
-		// now put the list of devices into a sensible order
-		ksort($this->knownDevicesList);
-
-		// all done
+		$this->knownDevicesList = $devicesList;
 	}
 }
