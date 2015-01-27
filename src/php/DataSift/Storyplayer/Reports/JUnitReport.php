@@ -35,6 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Reports
+ * @author    Nicola Asuni <nicola.asuni@datasift.com>
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -43,30 +44,62 @@
 
 namespace DataSift\Storyplayer\Reports;
 
-use DataSift\Storyplayer\PlayerLib\Story_Result;
-
 /**
- * the plugin for JUnit-style reporting
+ * Plugin for JUnit
  *
  * @category  Libraries
  * @package   Storyplayer/Reports
+ * @author    Nicola Asuni <nicola.asuni@datasift.com>
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class JUnitReport implements Report
+class JUnitReport extends Report
 {
-	protected $filename;
-	protected $testCount = 0;
-	protected $tests = [];
+	/**
+	 * are we running totally silently?
+	 * @var boolean
+	 */
+	protected $silentActivity = false;
 
-	public function __construct($params)
+	/**
+	 * where will we write our report to?
+	 * @var string
+	 */
+	protected $filename = null;
+
+	/**
+	 * JUnit testsuite maps to the whole story
+	 * @var array
+	 */
+	protected $testsuite = array();
+	
+	/**
+	 * JUnit testcase maps to the phase groups
+	 * @var array
+	 */
+	protected $testcase = array();
+
+
+	public function resetSilentMode()
 	{
-		$this->filename = $params['filename'];
+		$this->silentActivity = false;
+	}
+
+	public function setSilentMode()
+	{
+		$this->silentActivity = true;
+	}
+
+	public function __construct($args)
+	{
+		$this->filename = $args['filename'];
 	}
 
 	/**
+	 * called when storyplayer starts
+	 *
 	 * @param string $version
 	 * @param string $url
 	 * @param string $copyright
@@ -75,182 +108,237 @@ class JUnitReport implements Report
 	 */
 	public function startStoryplayer($version, $url, $copyright, $license)
 	{
-
+		$this->testsuite = array(
+			'id'        => 0, // testsuite ID
+			'name'      => 'StoryPlayer', // testsuite name
+			'tests'     => 0, // the total number of tests in the suite, required
+			'disabled'  => 0, // the total number of disabled tests in the suite
+			'errors'    => 0, // the total number of tests in the suite that errored
+			'failures'  => 0, // the total number of tests in the suite that failed
+			'skipped'   => 0, // the total number of skipped tests
+			'timestamp' => gmdate('Y-m-d\TH:i:s'), // when the test was executed in ISO 8601 format (2014-01-21T16:17:18)
+			'testcase'  => array(), // test cases data
+		);
 	}
 
 	/**
+	 * called when storyplayer ends
+	 *
+	 * @param  float $duration duration in seconds
 	 * @return void
 	 */
 	public function endStoryplayer($duration)
 	{
-		// right, now we need to report on what we've seen
-		$fp = fopen($this->filename, "w");
-		if (!$fp) {
-			throw new E5xx_CannotCreateReportFile($this->filename);
-		}
+		// generate the XML
+		$junitxml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+		$junitxml .= '<testsuite'
+			.' id="'.$this->testsuite['id'].'"'
+			.' name="'.$this->testsuite['name'].'"'
+			.' tests="'.$this->testsuite['tests'].'"'
+			.' disabled="'.$this->testsuite['disabled'].'"'
+			.' errors="'.$this->testsuite['errors'].'"'
+			.' failures="'.$this->testsuite['failures'].'"'
+			.' skipped="'.$this->testsuite['skipped'].'"'
+			.' time="'.round($duration, 6).'"'
+			.' timestamp="'.$this->testsuite['timestamp'].'">'.PHP_EOL;
 
-		// write out the header
-		fwrite($fp, '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL);
-		fwrite($fp, "<testsuites>" . PHP_EOL);
+		foreach ($this->testsuite['testcase'] as $testcase) {
+			$junitxml .= "\t".'<testcase'
+				.' name="'.$testcase['name'].'"'
+				.' assertions="'.$testcase['assertions'].'"'
+				.' classname="'.$testcase['classname'].'"'
+				.' status="'.$testcase['status'].'"'
+				.' time="'.round($testcase['time'], 6).'">'.PHP_EOL;
 
-		// write out each test in turn
-		foreach ($this->tests as $storyResult) {
-			switch ($storyResult->resultCode) {
-				case $storyResult::PASS:
-					$this->writeOkay($fp, $storyResult, 'Pass');
-					break;
-
-				case $storyResult::FAIL:
-					$this->writeNotOkay($fp, $storyResult, 'Fail');
-					break;
-
-				case $storyResult::INCOMPLETE:
-					$this->writeNotOkay($fp, $storyResult, 'Incomplete');
-					break;
-
-				case $storyResult::BLACKLISTED:
-					$this->writeOkay($fp, $storyResult, 'Blacklisted');
-					break;
-
-				case $storyResult::ERROR:
-				default:
-					$this->writeNotOkay($fp, $storyResult, 'Error');
-					break;
+			if ($testcase['skipped']) {
+				$junitxml .= "\t\t".'<skipped/>'.PHP_EOL;
 			}
+			if ($testcase['failure']) {
+				$junitxml .= "\t\t".'<failure/>'.PHP_EOL;
+			}
+			if ($testcase['error']) {
+				$junitxml .= "\t\t".'<error/>'.PHP_EOL;
+			}
+
+			$junitxml .= "\t".'</testcase>'.PHP_EOL;
 		}
 
-		// all done
-		fclose($fp);
-	}
+		$junitxml .= '</testsuite>'.PHP_EOL;
 
-	public function resetSilentMode()
-	{
-		// no-op
-	}
-
-	public function setSilentMode()
-	{
-		// no-op
+		file_put_contents($this->filename, $junitxml);
 	}
 
 	/**
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
+	 * called when we start a new set of phases
+	 *
+	 * @param  string $name
 	 * @return void
 	 */
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
+	public function startPhaseGroup($activity, $name)
 	{
-		// keep track of how many tests we have seen
-		$this->testCount++;
+		// encode name for XML
+		$name = htmlspecialchars($name, ENT_QUOTES | ENT_XML1, 'UTF-8');
+		$this->testcase = array(
+			'name'       => $name,
+			'assertions' => 0,     // number of assertions in the test case
+			'classname'  => $name, // full class name for the class the test method is in
+			'status'     => '',    // result status string
+			'time'       => 0,     // time taken (in seconds) to execute the test
+			'skipped'    => false,
+			'failure'    => false,
+			'error'      => false,
+		);
 	}
 
 	/**
+	 * called when we end a set of phases
+	 *
+	 * @param  PhaseGroup_Result $result
 	 * @return void
 	 */
-	public function endStory(Story_Result $storyResult)
+	public function endPhaseGroup($result)
 	{
-		$this->tests[] = $storyResult;
+		$this->testcase['time'] = $result->getDuration();
+		$this->testcase['status'] = htmlspecialchars($result->getResultString(), ENT_QUOTES | ENT_XML1, 'UTF-8');
+		$this->testcase['skipped'] = $result->getPhaseGroupSkipped();
+		$this->testcase['failure'] = ($result->resultCode === $result::FAIL);
+		$this->testcase['error'] = ($result->resultCode === $result::ERROR);
+		// parent
+		$this->testsuite['testcase'][] = $this->testcase;
+		$this->testsuite['tests'] += 1;
+		$this->testsuite['disabled'] += intval($result->resultCode === $result::BLACKLISTED);
+		$this->testsuite['errors'] += intval($this->testcase['error']);
+		$this->testsuite['failures'] += intval($this->testcase['failure']);
+		$this->testsuite['skipped'] += intval($result->resultCode === $result::SKIPPED);
 	}
 
 	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
+	 * called when a story starts a new phase
+	 *
 	 * @return void
 	 */
-	public function startPhase($phaseName, $phaseType)
+	public function startPhase($phase)
 	{
-
+		$this->testcase['assertions'] += 1;
 	}
 
 	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
+	 * called when a story ends a phase
+	 *
 	 * @return void
 	 */
-	public function endPhase($phaseName, $phaseType)
+	public function endPhase($phase, $phaseResult)
 	{
-
 	}
 
 	/**
+	 * called when a story logs an action
+	 *
+	 * @param integer $level
 	 * @param string $msg
 	 * @return void
 	 */
-	public function logPhaseActivity($msg)
+	public function logPhaseActivity($msg, $codeLine = null)
 	{
-
 	}
 
 	/**
+	 * called when a story logs the (possibly partial) output from
+	 * running a subprocess
+	 *
+	 * @param  string $msg the output to log
+	 * @return void
+	 */
+	public function logPhaseSubprocessOutput($msg)
+	{
+	}
+
+	/**
+	 * called when a story logs an error
+	 *
 	 * @param string $phaseName
 	 * @param string $msg
 	 * @return void
 	 */
 	public function logPhaseError($phaseName, $msg)
 	{
-
 	}
 
 	/**
+	 * called when a story is skipped
+	 *
 	 * @param string $phaseName
 	 * @param string $msg
 	 * @return void
 	 */
 	public function logPhaseSkipped($phaseName, $msg)
 	{
-
 	}
 
-	/**
-	 * @param string $msg
-	 *
-	 * @return void
-	 */
-	public function logCliWarning($msg)
+	public function logPhaseCodeLine($codeLine)
 	{
-
+		// this is a no-op for us
 	}
 
 	/**
-	 * @param string $msg
+	 * called when the outer CLI shell encounters a fatal error
+	 *
+	 * @param  string $msg
+	 *         the error message to show the user
 	 *
 	 * @return void
 	 */
 	public function logCliError($msg)
 	{
-
 	}
 
 	/**
-	 * @param string $msg
+	 *
+	 * @param  string $msg
+	 * @param  Exception $e
+	 * @return void
+	 */
+	public function logCliErrorWithException($msg, $e)
+	{
+	}
+
+	/**
+	 * called when the outer CLI shell needs to publish a warning
+	 *
+	 * @param  string $msg
+	 *         the warning message to show the user
+	 *
+	 * @return void
+	 */
+	public function logCliWarning($msg)
+	{
+	}
+
+	/**
+	 * called when the outer CLI shell needs to tell the user something
+	 *
+	 * @param  string $msg
+	 *         the message to show the user
 	 *
 	 * @return void
 	 */
 	public function logCliInfo($msg)
 	{
-
 	}
 
 	/**
-	 * @param string $name
+	 * an alternative to using PHP's built-in var_dump()
+	 *
+	 * @param  string $name
+	 *         a human-readable name to describe $var
+	 *
+	 * @param  mixed $var
+	 *         the variable to dump
 	 *
 	 * @return void
 	 */
 	public function logVardump($name, $var)
 	{
-
-	}
-
-	protected function writeOkay($fp, $storyCounter, $storyResult, $reason)
-	{
-		fwrite($fp, 'ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
-	}
-
-	protected function writeNotOkay($fp, $storyCounter, $storyResult, $reason)
-	{
-		fwrite($fp, 'not ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
+		// this is a no-op for us
 	}
 }
