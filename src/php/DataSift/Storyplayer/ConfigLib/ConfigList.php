@@ -211,6 +211,31 @@ class ConfigList
     }
 
     /**
+     * inject a config into our list
+     *
+     * useful for adding in hard-coded config options
+     *
+     * @param string $name
+     *        the name of the config to inject
+     * @param object $config
+     *        the config to inject into our list
+     */
+    public function addConfig($name, $config)
+    {
+        // make sure $config is the right type
+        $classname = $this->getWrappedConfigClassname();
+        if (!$config instanceof $classname) {
+            throw new E4xx_IncompatibleConfigClass(get_class($config), $classname);
+        }
+
+        // if we get here, all is good
+        $this->configs[$name] = $config;
+
+        // keep the configs sorted
+        ksort($this->configs);
+    }
+
+    /**
      * returns our list of all known configs
      *
      * @return array

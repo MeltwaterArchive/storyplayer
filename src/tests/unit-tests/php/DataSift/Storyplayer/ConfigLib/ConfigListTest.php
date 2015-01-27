@@ -286,4 +286,55 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    $this->assertTrue(is_array($configs));
 	    $this->assertEquals(0, count($configs));
 	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::addConfig
+	 */
+	public function testCanAddConfigManually()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new ConfigList("StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj->findConfigs();
+
+	    $expectedName = 'injected-1';
+	    $expectedConfig = new StoryplayerConfig();
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj->addConfig($expectedName, $expectedConfig);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $configs = $obj->getConfigs();
+
+	    $this->assertTrue(isset($configs[$expectedName]));
+	    $this->assertEquals($expectedConfig, $configs[$expectedName]);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::addConfig
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_IncompatibleConfigClass
+	 */
+	public function testManuallyAddedConfigsMustBeCompatibleType()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new ConfigList("StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj->findConfigs();
+
+	    $expectedName = 'injected-1';
+	    $expectedConfig = new SystemUnderTestConfig();
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj->addConfig($expectedName, $expectedConfig);
+	}
 }
