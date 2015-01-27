@@ -227,13 +227,6 @@ function main($argv)
 		$deviceList->addHardCodedList(new HardCodedDevices);
 		$deviceList->findConfigs();
 
-		$additionalConfigs = [];
-		foreach ($defaultConfig->configs as $name => $dirs)
-		{
-			$additionalConfigs[$name] = $staticConfigManager->getListOfConfigFiles($dirs);
-		}
-		$injectables->initAdditionalConfigsSupport($additionalConfigs);
-
 		// put all of that into something we can give to the CliEngine
 		$injectables->initKnownDevicesSupport($deviceList);
 		$injectables->initKnownTestEnvironmentsSupport($envList);
