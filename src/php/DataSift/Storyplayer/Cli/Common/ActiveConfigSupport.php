@@ -81,7 +81,7 @@ class Common_ActiveConfigSupport implements Common_Functionality
         // a) storyplayer.json[.dist] has been loaded
         //    >> $injectables->defaultConfig (object)
         // b) .storyplayer/test-environments/<env>.json has been loaded
-        //    >> $injectables->activeTestEnvironmentConfig (string)
+        //    >> $injectables->activeTestEnvironmentConfig (TestEnvironmentConfig)
         //
         // we now want to create $injectables->activeConfig
 

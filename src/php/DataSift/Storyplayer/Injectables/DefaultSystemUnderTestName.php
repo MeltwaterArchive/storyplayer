@@ -60,9 +60,9 @@ trait DefaultSystemUnderTestName
 	public function initDefaultSystemUnderTestName($injectables)
 	{
 		// special case - if there's only one defined, use that
-		if (count($injectables->knownSystemsUnderTestList) == 1) {
-			reset($injectables->knownSystemsUnderTestList);
-			$this->defaultSystemUnderTestName = current($injectables->knownSystemsUnderTestList);
+		if (count($injectables->knownSystemsUnderTestFilenames) == 1) {
+			reset($injectables->knownSystemsUnderTestFilenames);
+			$this->defaultSystemUnderTestName = current($injectables->knownSystemsUnderTestFilenames);
 			return;
 		}
 

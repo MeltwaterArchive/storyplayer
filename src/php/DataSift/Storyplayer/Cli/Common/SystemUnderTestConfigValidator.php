@@ -86,7 +86,7 @@ class Common_SystemUnderTestConfigValidator implements Validator
         $value = basename($value, ".json");
 
         // the $value must be a valid system-under-test name
-        if (!in_array($value, $this->sutList)) {
+        if (!$this->sutList->hasEntry($value)) {
             $result->addError(static::MSG_NOTVALIDSUT);
             return $result;
         }

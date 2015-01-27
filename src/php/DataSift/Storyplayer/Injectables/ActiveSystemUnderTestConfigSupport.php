@@ -58,26 +58,16 @@ use DataSift\Stone\ObjectLib\BaseObject;
 trait ActiveSystemUnderTestConfigSupport
 {
 	public $activeSystemUnderTestName;
+    public $activeSystemUnderTest;
 
 	public function initActiveSystemUnderTestConfigSupport($sutName, $injectables)
 	{
         // does the system-under-test exist?
-        if (!isset($injectables->knownSystemsUnderTest->$sutName)) {
+        if (!$injectables->knownSystemsUnderTestList->hasEntry($sutName)) {
             throw new E4xx_NoSuchSystemUnderTest($sutName);
         }
 
-        // a helper to load the config
-        $staticConfigManager = $injectables->staticConfigManager;
-
-        // load the config file for the system-under-test
-        if (is_string($injectables->knownSystemsUnderTest->$sutName)) {
-            $activeSut = $staticConfigManager->loadConfigFile(
-                $injectables->knownSystemsUnderTest->$sutName
-            );
-        }
-        else {
-            $activeSut = $injectables->knownSystemsUnderTest->$sutName;
-        }
+        $activeSut = $injectables->knownSystemsUnderTestList->getEntry($sutName);
 
         // we need to merge the config for this system-under-test into
         // our active test environment config
@@ -88,10 +78,9 @@ trait ActiveSystemUnderTestConfigSupport
         //
         // we use the 'roles' data to match the two up
 
-        $activeTestEnv = new BaseObject;
-        $activeTestEnv->mergeFrom(json_decode($injectables->activeTestEnvironmentConfig));
+        $activeTestEnv =& $injectables->activeTestEnvironmentConfig->getConfig();
 
-        foreach ($activeSut as $sutDetails) {
+        foreach ($activeSut->getConfig() as $sutDetails) {
             foreach ($activeTestEnv as $envDetails) {
                 foreach ($envDetails->details->machines as $machine) {
                     if (in_array($sutDetails->role, $machine->roles) || in_array('*', $machine->roles)) {
@@ -104,11 +93,8 @@ trait ActiveSystemUnderTestConfigSupport
             }
         }
 
-        // we need to store the test environment's config as a string,
-        // as it will need expanding as we provision the test environment
-        $injectables->activeTestEnvironmentConfig = json_encode($activeTestEnv);
-
         // remember the system-under-test
         $this->activeSystemUnderTestName = $sutName;
+        $this->activeSystemUnderTest = $activeSut;
 	}
 }

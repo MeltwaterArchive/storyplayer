@@ -238,7 +238,7 @@ function main($argv)
 		$injectables->initKnownDevicesSupport($deviceList);
 		$injectables->initKnownTestEnvironmentsSupport($envList);
 		$injectables->initDefaultTestEnvironmentName($injectables);
-		$injectables->initKnownSystemsUnderTestSupport($additionalConfigs['systemsUnderTest']);
+		$injectables->initKnownSystemsUnderTestSupport($sutList);
 		$injectables->initDefaultSystemUnderTestName($injectables);
 
 		// do we have any command-line defaults set in the config?
