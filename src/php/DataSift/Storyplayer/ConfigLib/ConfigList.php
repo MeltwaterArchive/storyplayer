@@ -225,7 +225,7 @@ class ConfigList
         // make sure $config is the right type
         $classname = $this->getWrappedConfigClassname();
         if (!$config instanceof $classname) {
-            throw new E4xx_IncompatibleConfigClass(get_class($config), $classname);
+            throw new E4xx_IncompatibleConfigClass($classname, get_class($config));
         }
 
         // if we get here, all is good
