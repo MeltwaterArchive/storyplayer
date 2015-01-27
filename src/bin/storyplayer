@@ -236,7 +236,7 @@ function main($argv)
 
 		// put all of that into something we can give to the CliEngine
 		$injectables->initKnownDevicesSupport($deviceList);
-		$injectables->initKnownTestEnvironmentsSupport($additionalConfigs['testEnvironments']);
+		$injectables->initKnownTestEnvironmentsSupport($envList);
 		$injectables->initDefaultTestEnvironmentName($injectables);
 		$injectables->initKnownSystemsUnderTestSupport($additionalConfigs['systemsUnderTest']);
 		$injectables->initDefaultSystemUnderTestName($injectables);

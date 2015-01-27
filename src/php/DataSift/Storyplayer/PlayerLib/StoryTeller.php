@@ -546,7 +546,7 @@ class StoryTeller
 		// expand the config, filling in any template vars that we
 		// can
 		$config = json_decode($this->templateEngine->render(
-			$this->testEnvConfig,
+			json_encode($this->testEnvConfig->getConfig()),
 			json_decode(json_encode($this->config), true)
 		));
 

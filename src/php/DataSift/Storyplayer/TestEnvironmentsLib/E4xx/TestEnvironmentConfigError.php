@@ -34,66 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/TestEnvironmentsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\TestEnvironmentsLib;
 
-use Phix_Project\ValidationLib4\Validator;
-use Phix_Project\ValidationLib4\ValidationResult;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
-class Common_TestEnvironmentConfigValidator implements Validator
+/**
+ * Base class for all of our config-related exceptions
+ *
+ * @category  Libraries
+ * @package   Storyplayer/TestEnvironmentsLib
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+class E4xx_TestEnvironmentConfigError extends Exxx_Exception
 {
-    const MSG_NOTVALIDENVIRONMENT = "Unknown test environment '%value%'";
-
-    /**
-     * @var array
-     */
-    protected $envList;
-
-    /**
-     * @var string
-     */
-    protected $defaultValue;
-
-    /**
-     * @param array $envList
-     * @param string $defaultValue
-     */
-    public function __construct($envList, $defaultValue)
-    {
-        $this->envList = $envList;
-        $this->defaultValue = $defaultValue;
-    }
-
-    /**
-     *
-     * @param  mixed $value
-     * @param  ValidationResult $result
-     * @return ValidationResult
-     */
-    public function validate($value, ValidationResult $result = null)
-    {
-        if ($result === null) {
-            $result = new ValidationResult($value);
-        }
-
-        // strip off .json if it is there
-        //
-        // this helps if the user has copy and pasted the filename
-        $value = basename($value, '.json');
-
-        // the $value must be a valid environment name, but it's ok if it doesn't
-        // exist if it's the default env as we might not have created it yet
-        if (!$this->envList->hasEntry($value)) {
-            $result->addError(static::MSG_NOTVALIDENVIRONMENT);
-            return $result;
-        }
-
-        return $result;
-    }
 }

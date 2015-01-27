@@ -65,7 +65,49 @@ class TestEnvironmentConfig extends WrappedConfig
 
     public function validateConfig()
     {
-        // no-op for now
+        // do we have any config?
+        $config = $this->getConfig();
+        if (count($config) == 0) {
+            // at the moment, an empty test environment is not considered
+            // to be an error
+            //
+            // perhaps it should be one day?
+            return;
+        }
+
+        foreach ($config as $index => $group) {
+            // what type of machines does this group define?
+            if (!isset($group->type)) {
+                throw new E4xx_TestEnvironmentGroupNeedsAType($index);
+            }
+            // is this a valid type?
+            $this->validateGroupType($index, $group->type);
+
+            // do we have any machines defined?
+            if (!isset($group->details, $group->details->machines)) {
+                throw new E4xx_TestEnvironmentGroupNeedsMachines($index);
+            }
+
+            // are the machines valid?
+            foreach ($group->details->machines as $name => $machine) {
+                // does each machine have a role?
+                if (!isset($machine->roles)) {
+                    throw new E4xx_TestEnvironmentMachineNeedsARole($index, $name);
+                }
+                // is the roles an array?
+                if (!is_array($machine->roles)) {
+                    throw new E4xx_TestEnvironmentMachineRolesMustBeArray($index, $name, gettype($machine->roles));
+                }
+            }
+        }
+    }
+
+    protected function validateGroupType($groupIndex, $typeName)
+    {
+        $className = "DataSift\Storyplayer\HostLib\\" . $typeName;
+        if (!class_exists($className)) {
+            throw new E4xx_InvalidTestEnvironmentGroupType($index, $typeName, $className);
+        }
     }
 
 	public function mergeSystemUnderTestConfig($sutConfig)

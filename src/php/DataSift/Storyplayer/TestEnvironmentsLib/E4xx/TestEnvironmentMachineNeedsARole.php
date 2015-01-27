@@ -34,51 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/TestEnvironmentsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
-
-use DataSift\Stone\ObjectLib\BaseObject;
+namespace DataSift\Storyplayer\TestEnvironmentsLib;
 
 /**
- * Our list of known test environments
+ * Exception thrown when a machine in a test environment group has no
+ * roles defined
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/TestEnvironmentsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class KnownTestEnvironments extends BaseObject
+class E4xx_TestEnvironmentMachineNeedsARole extends E4xx_TestEnvironmentConfigError
 {
-    public function __construct()
-    {
-        $this->initDefaultConfig();
-    }
-
-    /**
-     * @return void
-     */
-    public function initDefaultConfig()
-    {
-        // defaults for the local computer
-        $localhost = new BaseObject;
-        $localhost->roles = [ '*' ];
-
-        $env = new BaseObject;
-        $env->type = "Blackboxes";
-        $env->details = new BaseObject;
-        $env->details->machines = [ $localhost ];
-
-        // create the test environment
-        $this->localhost = [ $env ];
-
-        // all done
-    }
+	public function __construct($groupIndex, $name)
+	{
+		$msg = "machine '{$name}' in environment group #{$groupIndex} must define at least one role";
+		parent::__construct(400, $msg, $msg);
+	}
 }

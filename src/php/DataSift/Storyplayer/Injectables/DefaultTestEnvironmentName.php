@@ -76,7 +76,7 @@ trait DefaultTestEnvironmentName
 
 		// do any of these environments exist?
 		foreach ($searchList as $testEnvName) {
-			if (isset($injectables->knownTestEnvironments->$testEnvName)) {
+			if ($injectables->knownTestEnvironmentsList->hasEntry($testEnvName)) {
 				$this->defaultTestEnvironmentName = $testEnvName;
 				// all done
 				return;

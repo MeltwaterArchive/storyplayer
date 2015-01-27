@@ -57,29 +57,10 @@ use DataSift\Storyplayer\Cli\KnownTestEnvironments;
  */
 trait KnownTestEnvironmentsSupport
 {
-	public $knownTestEnvironments;
-	public $knownTestEnvironmentsList = array();
+	public $knownTestEnvironmentsList;
 
-	public function initKnownTestEnvironmentsSupport($additionalEnvs)
+	public function initKnownTestEnvironmentsSupport($envsList)
 	{
-		// start with the list of test environments that are hard-coded
-		// into Storyplayer
-		$this->knownTestEnvironments = new KnownTestEnvironments;
-		foreach ($this->knownTestEnvironments as $name => $config) {
-			$this->knownTestEnvironmentsList[$name] = $name;
-		}
-
-		// now add in all the target environments that we have discovered
-		// in the config files
-		foreach ($additionalEnvs as $filename => $config) {
-			$testEnvName = basename($filename, 'json');
-			$this->knownTestEnvironmentsList[$testEnvName] = $testEnvName;
-			$this->knownTestEnvironments->$testEnvName = $config;
-		}
-
-		// now put the list of test environments into a sensible order
-		ksort($this->knownTestEnvironmentsList);
-
-		// all done
+		$this->knownTestEnvironmentsList = $envsList;
 	}
 }

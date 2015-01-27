@@ -63,52 +63,14 @@ trait ActiveTestEnvironmentConfigSupport
 	public function initActiveTestEnvironmentConfigSupport($envName, $injectables)
 	{
         // does the test environment exist?
-        if (!isset($injectables->knownTestEnvironments->$envName)) {
+        if (!$injectables->knownTestEnvironmentsList->hasEntry($envName)) {
             throw new E4xx_NoSuchTestEnvironment($envName);
         }
 
-        // a helper to load the config
-        $staticConfigManager = $injectables->staticConfigManager;
-
-        // we need to store the test environment's config as a string,
-        // as it will need expanding as we provision the test environment
-        if (is_string($injectables->knownTestEnvironments->$envName)) {
-            $this->activeTestEnvironmentConfig = json_encode($staticConfigManager->loadConfigFile($injectables->knownTestEnvironments->$envName));
-        }
-        else {
-            $this->activeTestEnvironmentConfig = json_encode($injectables->knownTestEnvironments->$envName);
-        }
-
-        $this->validateActiveTestEnvironmentConfig(json_decode($this->activeTestEnvironmentConfig), $injectables);
+        // it does - stash the config
+        $this->activeTestEnvironmentConfig = $injectables->knownTestEnvironmentsList->getEntry($envName);
 
         // remember the environment name
         $this->activeTestEnvironmentName = $envName;
 	}
-
-    protected function validateActiveTestEnvironmentConfig($testEnv, $injectables)
-    {
-        // shorthand
-        $output = $injectables->output;
-
-        foreach ($testEnv as $index => $group) {
-            // do we have any machines defined?
-            if (!isset($group->details, $group->details->machines)) {
-                $output->logCliError("group #{$index} in your test environment config needs to define at least one machine");
-                exit(1);
-            }
-
-            foreach ($group->details->machines as $name => $machine) {
-                // does each machine have a role?
-                if (!isset($machine->roles)) {
-                    $output->logCliError("machine '{$name}' in your test environment defines no roles :(");
-                    exit(1);
-                }
-                // is the roles an array?
-                if (!is_array($machine->roles)) {
-                    $output->logCliError("machine '{$name}' must provide an array of roles");
-                    exit(1);
-                }
-            }
-        }
-    }
 }
