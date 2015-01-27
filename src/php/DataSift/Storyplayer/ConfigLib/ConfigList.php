@@ -234,6 +234,38 @@ class ConfigList
     }
 
     /**
+     * retrieve a single config entry
+     *
+     * @param  string $name
+     *         the name of the config to retrieve
+     * @return array|object
+     */
+    public function getConfig($name)
+    {
+        if (!isset($this->configs[$name])) {
+            throw new E4xx_NoSuchConfigEntry($name);
+        }
+
+        return $this->configs[$name];
+    }
+
+    /**
+     * do we have a config entry called $name?
+     *
+     * @param  string $name
+     *         the name of the config to check for
+     * @return boolean
+     */
+    public function hasConfig($name)
+    {
+        if (!isset($this->configs[$name])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * returns our list of all known configs
      *
      * @return array

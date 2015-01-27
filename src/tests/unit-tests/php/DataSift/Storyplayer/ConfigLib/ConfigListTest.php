@@ -337,4 +337,75 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 
 	    $obj->addConfig($expectedName, $expectedConfig);
 	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::hasConfig
+	 */
+	public function testCanCheckForConfigEntry()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj->findConfigs();
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual1 = $obj->hasConfig('config-1');
+	    $actual2 = $obj->hasConfig('config-does-not-exist');
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($actual1);
+	    $this->assertFalse($actual2);
+	}
+
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getConfig
+	 */
+	public function testCanGetSingleConfigEntry()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj->findConfigs();
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getConfig('config-1');
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $configs = $obj->getConfigs();
+
+	    $this->assertSame($configs['config-1'], $actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::__construct
+	 * @covers DataSift\Storyplayer\ConfigLib\ConfigList::getConfig
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_NoSuchConfigEntry
+	 */
+	public function testThrowsExceptionWhenSingleConfigEntryNotFound()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
+	    $obj->findConfigs();
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getConfig('config-does-not-exist');
+	}
+
 }
