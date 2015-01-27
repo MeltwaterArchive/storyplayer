@@ -92,6 +92,28 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::__construct
 	 */
+	public function testCanStartWithEmptyArrayForConfig()
+	{
+		// ----------------------------------------------------------------
+		// setup the test
+
+		$expected = [];
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj = new WrappedConfig(WrappedConfig::ROOT_IS_ARRAY);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $actual = $obj->getConfig();
+	    $this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::__construct
+	 */
 	public function testStartsWithNoName()
 	{
 		// ----------------------------------------------------------------

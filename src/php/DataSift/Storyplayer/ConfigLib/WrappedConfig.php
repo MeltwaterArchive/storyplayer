@@ -62,6 +62,9 @@ class WrappedConfig extends BaseObject
      */
     const NO_NAME = "UNKNOWN";
 
+    const ROOT_IS_OBJECT = false;
+    const ROOT_IS_ARRAY = true;
+
     /**
      * the config settings that this object wraps
      * @var BaseObject
@@ -77,10 +80,15 @@ class WrappedConfig extends BaseObject
     /**
      * constructor
      */
-    public function __construct()
+    public function __construct($isArray = false)
     {
         $this->setName("UNKNOWN");
-        $this->setConfig(new BaseObject);
+        if (!$isArray) {
+            $this->setConfig(new BaseObject);
+        }
+        else {
+            $this->setConfig([]);
+        }
     }
 
     /**
@@ -88,7 +96,7 @@ class WrappedConfig extends BaseObject
      *
      * @return array|object
      */
-    public function getConfig()
+    public function &getConfig()
     {
         return $this->config;
     }
