@@ -166,42 +166,7 @@ class WrappedConfig extends BaseObject
      */
     public function getExpandedConfig($baseConfig = null)
     {
-        // we're going to use Twig to expand any parameters in our
-        // config
-        //
-        // this seems horribly inefficient, but it does work reliably
-        //
-        // unfortunately, we cannot build any sort of cache, because we
-        // have absolutely no way of knowing if $this->config has changed
-        // at all
-        $loader = new Twig_Loader_String();
-        $templateEngine   = new Twig_Environment($loader);
-
-        // Twig is a template engine. it needs a text string to operate on
-        $configString = json_encode($this->config);
-
-        // Twig needs an array of data to expand variables from
-        if ($baseConfig === null) {
-            $baseConfig = $this->config;
-        }
-        $varData = json_decode(json_encode($baseConfig), true);
-
-        // use Twig to expand any config variables
-        $expandedConfig = json_decode($templateEngine->render(
-            $configString, $varData
-        ));
-
-        // make sure we have our handy BaseObject, because it does nice
-        // things like throw exceptions when someone tries to access an
-        // attribute that does not exist
-        if (is_object($expandedConfig)) {
-            $tmp = new BaseObject();
-            $tmp->mergeFrom($expandedConfig);
-            $expandedConfig = $tmp;
-        }
-
-        // all done
-        return $expandedConfig;
+        return $this->expandData($this->config, $baseConfig);
     }
 
     /**
