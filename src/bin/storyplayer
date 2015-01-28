@@ -53,6 +53,9 @@ define('APP_BINDIR', __DIR__);
 // enable signal handling
 declare(ticks=1);
 
+// we want all the memory
+ini_set('memory_limit', -1);
+
 /**
  * can we safely load this file?
  *
