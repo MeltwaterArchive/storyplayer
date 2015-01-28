@@ -282,9 +282,6 @@ class WrappedConfig extends BaseObject
         // walk down the path
         $parts = explode(".", $path);
 
-        // keep track of where we have gotten to
-        $pathSoFar = '';
-
         // this is where we start from
         $retval = $this->getExpandedConfig();
 
