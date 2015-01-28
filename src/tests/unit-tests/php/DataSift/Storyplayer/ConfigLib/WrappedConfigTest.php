@@ -840,4 +840,184 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	    $actual = $obj->getData("storyplayer.ipAddress.netmask");
 	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 */
+	public function testCanUnsetDataFromAnObject()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.ipAddress");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $config = $obj->getConfig();
+	    $this->assertTrue(isset($config->storyplayer));
+	    $this->assertFalse(isset($config->storyplayer->ipAddress));
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 */
+	public function testCanUnsetDataFromAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.roles.0.cli");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $config = $obj->getConfig();
+	    $this->assertTrue(isset($config->storyplayer->roles[0]));
+	    $this->assertFalse(isset($config->storyplayer->roles[0]->cli));
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 */
+	public function testCanUnsetAnArrayOfData()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.roles.0");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $config = $obj->getConfig();
+	    $this->assertTrue(isset($config->storyplayer->roles));
+	    $this->assertFalse(isset($config->storyplayer->roles[0]));
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundInAnObject()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.ipAddres");
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundDeepInAnObject()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.user.does.not.exist");
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundInAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.roles.1");
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundDeepInAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.roles.does.not.exist");
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundInAScalar()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.ipAddress.not-found");
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundDeepInAScalar()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->unsetData("storyplayer.ipAddress.does.not.exist");
+	}
 }

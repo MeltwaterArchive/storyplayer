@@ -306,6 +306,74 @@ class WrappedConfig extends BaseObject
     }
 
     /**
+     * remove data using a dot.notation.path
+     *
+     * @param  string $path
+     *         the dot.notation.path to use to navigate
+     *
+     * @return void
+     */
+    public function unsetData($path)
+    {
+        // walk down the path
+        $parts = explode(".", $path);
+        $lastPart = end($parts);
+        $parts = array_slice($parts, 0, count($parts) - 1);
+
+        // keep track of where we have gotten to
+        $pathSoFar = '';
+
+        // this is where we start from
+        $retval = $this->config;
+
+        foreach ($parts as $part)
+        {
+            if (is_object($retval)) {
+                if (isset($retval->$part)) {
+                    $retval = &$retval->$part;
+                }
+                else {
+                    throw new E4xx_ConfigPathNotFound($path);
+                }
+            }
+            else if (is_array($retval)) {
+                if (isset($retval[$part])) {
+                    $retval = &$retval[$part];
+                }
+                else {
+                    throw new E4xx_ConfigPathNotFound($path);
+                }
+            }
+            else {
+                // we can go no further
+                throw new E4xx_ConfigPathNotFound($path);
+            }
+        }
+
+        // if we get here, we have walked the whole path, and are ready
+        // to unset the value
+        if (is_object($retval)) {
+            if (isset($retval->$lastPart)) {
+                unset($retval->$lastPart);
+            }
+            else {
+                throw new E4xx_ConfigPathNotFound($path);
+            }
+        }
+        else if (is_array($retval)) {
+            if (isset($retval[$lastPart])) {
+                unset($retval[$lastPart]);
+            }
+            else {
+                throw new E4xx_ConfigPathNotFound($path);
+            }
+        }
+        else {
+            throw new E4xx_ConfigPathNotFound($path);
+        }
+    }
+
+    /**
      * extend the config (if required) to ensure that a dot.notation.path
      * exists
      *
