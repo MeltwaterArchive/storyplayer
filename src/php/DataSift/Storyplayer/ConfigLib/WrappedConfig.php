@@ -220,6 +220,12 @@ class WrappedConfig extends BaseObject
      */
     public function setData($path, $data)
     {
+        // special case - empty path
+        if (empty($path)) {
+            $this->config = $data;
+            return;
+        }
+
         // walk down the path
         $parts = explode(".", $path);
         $lastPart = null;
@@ -267,6 +273,13 @@ class WrappedConfig extends BaseObject
 
         // walk down the path
         foreach ($parts as $part) {
+            // special case - ignore '..' in the path
+            //
+            // also ignore empty paths
+            if (empty($part)) {
+                continue;
+            }
+
             // what are we looking at?
             if (is_object($config)) {
                 // are we extending the config tree?

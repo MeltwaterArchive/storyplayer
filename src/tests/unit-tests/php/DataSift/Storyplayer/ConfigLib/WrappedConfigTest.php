@@ -421,6 +421,33 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 */
+	public function testCanReplaceTopLevelUsingSetData()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    $this->assertTrue(is_object($obj->getConfig()->storyplayer->user));
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj->setData("", getenv("HOME"));
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $config = $obj->getConfig();
+	    $this->assertTrue(is_string($config));
+	    $this->assertEquals(getenv("HOME"), $config);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
 	 */
 	public function testCannotSetDataByExtendingAScalar()
@@ -584,6 +611,38 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	    // this is data loaded from the config file
 	    $this->assertEquals("test-user", $config->storyplayer->user->name);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 */
+	public function testCanMergeIntoTopLevel()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    $dataToMerge = new stdClass;
+	    $dataToMerge->home = getenv("HOME");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj->mergeData("", $dataToMerge);
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $config = $obj->getConfig();
+
+	    // this is the data we have merged
+	    $this->assertEquals(getenv("HOME"), $config->home);
+
+	    // this is data loaded from the config file
+	    $this->assertTrue(isset($config->storyplayer));
 	}
 
 	/**
