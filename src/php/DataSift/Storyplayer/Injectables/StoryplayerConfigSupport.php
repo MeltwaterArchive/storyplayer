@@ -95,6 +95,12 @@ trait StoryplayerConfigSupport
 			$output->logCliErrorWithException("unexpected error: " . $e->getMessage(), $e);
 		}
 
+		// special case - deprecated details in the config file
+		if ($config->hasData('appSettings')) {
+			$output->logCliWarning("'appSettings' in storyplayer config file is deprecated");
+			$output->logCliWarning("please move to your system-under-test config file(s)");
+		}
+
 		// all done
 		$this->storyplayerConfig = $config->getConfig();
 	}
