@@ -58,20 +58,23 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class FromConfig extends Prose
 {
-	public function getAppSetting($app, $setting)
+	public function getAppSetting($path)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get $setting for '{$app}' from the storyplayer config");
+		$log = $st->startAction("get app setting '{$path}' from the storyplayer config");
+
+		// what is the full path to this data?
+		$fullPath = 'storyplayer.appSettings.' . $path;
 
 		// get the details
-		$config = $st->getConfig();
-		if (!isset($config->appSettings, $config->appSettings->$app, $config->appSettings->$app->$setting)) {
+		$config = $st->getActiveConfig();
+		if (!$config->hasData($fullPath)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
-		$value = $config->appSettings->$app->$setting;
+		$value = $config->getData($fullPath);
 
 		// log the settings
 		$printer  = new DataPrinter();
@@ -90,12 +93,15 @@ class FromConfig extends Prose
 		// what are we doing?
 		$log = $st->startAction("get all settings for '{$app}' from the storyplayer config");
 
+		// what is the full path to this data?
+		$fullPath = 'storyplayer.appSettings.' . $app;
+
 		// get the details
-		$config = $st->getConfig();
-		if (!isset($config->appSettings, $config->appSettings->$app)) {
+		$config = $st->getActiveConfig();
+		if (!$config->hasData($fullPath)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
-		$value = $config->appSettings->$app;
+		$value = $config->getData($fullPath);
 
 		// log the settings
 		$printer  = new DataPrinter();
@@ -106,26 +112,25 @@ class FromConfig extends Prose
 		return $value;
 	}
 
-	public function getModuleSetting($module, $setting)
+	public function getModuleSetting($path)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get $setting for '{$module}' from the storyplayer config");
+		$log = $st->startAction("get module setting '{$path}' from the storyplayer config");
+
+		// what is the full path to this data?
+		$fullPath = 'storyplayer.moduleSettings.' . $path;
 
 		// get the details
-		$config = $st->getConfig();
-		if (!isset($config->storyplayer->modules)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no 'modules' section in your storyplayer.json config");
+		$config = $st->getActiveConfig();
+		if (!$config->hasData($fullPath)) {
+			throw new E5xx_ActionFailed(__METHOD__, "module setting '$path' not found");
 		}
-		if (!isset($config->storyplayer->modules->$module)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no 'modules->$module' section in your storyplayer.json config");
-		}
-		if (!isset($config->storyplayer->modules->$module->$setting)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no 'modules->{$module}->{$setting}' setting in your storyplayer.json config");
-		}
-		$value = $config->storyplayer->modules->$module->$setting;
+
+		// success!
+		$value = $config->getData($fullPath);
 
 		// log the settings
 		$printer  = new DataPrinter();
@@ -144,15 +149,17 @@ class FromConfig extends Prose
 		// what are we doing?
 		$log = $st->startAction("get all settings for '{$module}' from the storyplayer config");
 
+		// what is the full path to this data?
+		$fullPath = 'storyplayer.moduleSettings.' . $module;
+
 		// get the details
-		$config = $st->getConfig();
-		if (!isset($config->storyplayer->modules)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no 'modules' section in your storyplayer.json config");
+		$config = $st->getActiveConfig();
+		if (!$config->hasData($fullPath)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no module '$module' found in the config");
 		}
-		if (!isset($config->storyplayer->modules->$module)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no 'modules->$module' section in your storyplayer.json config");
-		}
-		$value = $config->storyplayer->modules->$module;
+
+		// success!
+		$value = $config->getData($fullPath);
 
 		// log the settings
 		$printer  = new DataPrinter();
@@ -172,28 +179,15 @@ class FromConfig extends Prose
 		$log = $st->startAction("get '$name' from the storyplayer config");
 
 		// get the details
-		$config = $st->getConfig();
+		$config = $st->getActiveConfig();
 
-		// find what we are looking for
-		$parts = explode('.', $name);
-		$currentLevel = $config;
-		$endPart = array_pop($parts);
-
-		foreach ($parts as $part) {
-			if (!isset($currentLevel->$part)) {
-				$log->endAction("no such setting '{$name}'");
-				return null;
-			}
-			$currentLevel = $currentLevel->$part;
-		}
-
-		if (!isset($currentLevel->$endPart)) {
+		if (!$config->hasData($name)) {
 			$log->endAction("no such setting '{$name}'");
 			return null;
 		}
 
 		// if we get here, then success \o/
-		$value = $currentLevel->$endPart;
+		$value = $config->getData($name);
 
 		// log the settings
 		$printer  = new DataPrinter();

@@ -512,6 +512,11 @@ class StoryTeller
 		return $return;
 	}
 
+	public function getActiveConfig()
+	{
+		return $this->config;
+	}
+
 	public function setConfig($config)
 	{
 		$this->config = $config;
