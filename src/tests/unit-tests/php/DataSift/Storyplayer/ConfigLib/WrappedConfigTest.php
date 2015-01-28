@@ -1020,4 +1020,138 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	    $actual = $obj->unsetData("storyplayer.ipAddress.does.not.exist");
 	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::hasData()
+	 */
+	public function testCanCheckForDataInAnObject()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->hasData("storyplayer.ipAddress");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::hasData()
+	 */
+	public function testCanCheckDataInAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->hasData("storyplayer.roles.0.cli");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::hasData()
+	 */
+	public function testCanCheckForTopLevelData()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->hasData("");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::hasData()
+	 */
+	public function testHasDataReturnsFalseWhenConfigPathNotFoundInAnObject()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->hasData("storyplayer.ipAddres");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertFalse($actual);
+	}
+
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::hasData()
+	 */
+	public function testHasDataReturnsFalseWhenConfigPathNotFoundInAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->hasData("storyplayer.roles.1");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertFalse($actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::hasData()
+	 */
+	public function testHasDataReturnsFalseWhenConfigPathNotFoundInAScalar()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->hasData("storyplayer.ipAddress.netmask");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertFalse($actual);
+	}
+
 }

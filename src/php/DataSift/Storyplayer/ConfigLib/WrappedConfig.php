@@ -265,6 +265,58 @@ class WrappedConfig extends BaseObject
     }
 
     /**
+     * check for existence of data using a dot.notation.path
+     *
+     * @param  string $path
+     *         the dot.notation.path to use to navigate
+     *
+     * @return boolean
+     */
+    public function hasData($path)
+    {
+        // special case
+        if (empty($path)) {
+            return true;
+        }
+
+        // walk down the path
+        $parts = explode(".", $path);
+
+        // keep track of where we have gotten to
+        $pathSoFar = '';
+
+        // this is where we start from
+        $retval = $this->getExpandedConfig();
+
+        foreach ($parts as $part)
+        {
+            if (is_object($retval)) {
+                if (isset($retval->$part)) {
+                    $retval = $retval->$part;
+                }
+                else {
+                    return false;
+                }
+            }
+            else if (is_array($retval)) {
+                if (isset($retval[$part])) {
+                    $retval = $retval[$part];
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                // we can go no further
+                return false;
+            }
+        }
+
+        // if we get here, we have walked the whole path
+        return true;
+    }
+
+    /**
      * assigns data to a specific path
      *
      * @param string $path
