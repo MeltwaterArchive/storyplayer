@@ -45,6 +45,9 @@ namespace DataSift\Storyplayer\ConfigLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
+use Twig_Environment;
+use Twig_Loader_String;
+
 /**
  * represents config loaded from a single file
  *
@@ -161,15 +164,13 @@ class WrappedConfig extends BaseObject
     /**
      * expand any variables in $this
      *
-     * @param  DataSift\Storyplayer\Injectables $injectables
-     *         our dependency injection container
      * @param  array|object $baseConfig
      *         the config to use for expanding variables (optional)
      * @return array|object
      *         a copy of the config stored in $this, with any Twig
      *         variables expanded
      */
-    public function getExpandedConfig($injectables, $baseConfig = null)
+    public function getExpandedConfig($baseConfig = null)
     {
         // we're going to use Twig to expand any parameters in our
         // config
@@ -179,6 +180,8 @@ class WrappedConfig extends BaseObject
         // unfortunately, we cannot build any sort of cache, because we
         // have absolutely no way of knowing if $this->config has changed
         // at all
+        $loader = new Twig_Loader_String();
+        $templateEngine   = new Twig_Environment($loader);
 
         // Twig is a template engine. it needs a text string to operate on
         $configString = json_encode($this->config);
@@ -190,7 +193,7 @@ class WrappedConfig extends BaseObject
         $varData = json_decode(json_encode($baseConfig), true);
 
         // use Twig to expand any config variables
-        $expandedConfig = json_decode($injectables->templateEngine->render(
+        $expandedConfig = json_decode($templateEngine->render(
             $configString, $varData
         ));
 

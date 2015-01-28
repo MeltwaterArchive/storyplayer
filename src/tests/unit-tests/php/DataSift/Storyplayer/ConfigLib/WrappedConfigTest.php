@@ -635,10 +635,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-		// we need a Twig engine
-	    $i = new Injectables;
-	    $i->initTemplateEngineSupport();
-
 	    // we need a config that contains a variable
 	    $obj = new WrappedConfig();
 	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
@@ -648,7 +644,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $config = $obj->getExpandedConfig($i);
+	    $config = $obj->getExpandedConfig();
 
 	    // ----------------------------------------------------------------
 	    // test the results
