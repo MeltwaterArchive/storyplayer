@@ -891,13 +891,11 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	    $obj = new WrappedConfig();
 	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
-	    $expected = $obj->getConfig()->storyplayer;
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->getObject("storyplayer.ipAddress");
-
+	    $obj->getObject("storyplayer.ipAddress");
 	}
 
 	/**
@@ -993,7 +991,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->getArray("storyplayer.ipAddress");
+	    $obj->getArray("storyplayer.ipAddress");
 	}
 
 	/**
