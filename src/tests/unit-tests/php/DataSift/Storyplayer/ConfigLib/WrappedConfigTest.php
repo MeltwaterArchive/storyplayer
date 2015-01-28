@@ -761,6 +761,30 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 */
+	public function testCanGetTopLevelData()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    $expected = $obj->getConfig();
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getData("");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
 	 */
 	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAnObject()
@@ -815,6 +839,5 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // perform the change
 
 	    $actual = $obj->getData("storyplayer.ipAddress.netmask");
-
 	}
 }

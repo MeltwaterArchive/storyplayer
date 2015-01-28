@@ -222,6 +222,11 @@ class WrappedConfig extends BaseObject
      */
     public function getData($path)
     {
+        // special case
+        if (empty($path)) {
+            return $this->config;
+        }
+
         // walk down the path
         $parts = explode(".", $path);
 
