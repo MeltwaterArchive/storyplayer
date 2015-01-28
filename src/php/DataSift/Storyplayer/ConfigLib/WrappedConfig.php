@@ -211,6 +211,55 @@ class WrappedConfig extends BaseObject
     }
 
     /**
+     * retrieve data using a dot.notation.path
+     *
+     * NOTE that you should treat any data returned from here as READ-ONLY
+     *
+     * @param  string $path
+     *         the dot.notation.path to use to navigate
+     *
+     * @return mixed
+     */
+    public function getData($path)
+    {
+        // walk down the path
+        $parts = explode(".", $path);
+
+        // keep track of where we have gotten to
+        $pathSoFar = '';
+
+        // this is where we start from
+        $retval = $this->getExpandedConfig();
+
+        foreach ($parts as $part)
+        {
+            if (is_object($retval)) {
+                if (isset($retval->$part)) {
+                    $retval = $retval->$part;
+                }
+                else {
+                    throw new E4xx_ConfigPathNotFound($path);
+                }
+            }
+            else if (is_array($retval)) {
+                if (isset($retval[$part])) {
+                    $retval = $retval[$part];
+                }
+                else {
+                    throw new E4xx_ConfigPathNotFound($path);
+                }
+            }
+            else {
+                // we can go no further
+                throw new E4xx_ConfigPathNotFound($path);
+            }
+        }
+
+        // if we get here, we have walked the whole path
+        return $retval;
+    }
+
+    /**
      * assigns data to a specific path
      *
      * @param string $path

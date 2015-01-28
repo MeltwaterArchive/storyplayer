@@ -711,4 +711,110 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    $this->assertEquals(getenv("HOME"), $config->storyplayer->test->home);
 	}
 
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 */
+	public function testCanGetDataFromAnObject()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    $expected = "127.0.0.1";
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getData("storyplayer.ipAddress");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 */
+	public function testCanGetDataFromAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    $expected = "localhost";
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getData("storyplayer.roles.0.cli");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAnObject()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getData("storyplayer.ipAddres");
+
+	}
+
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getData("storyplayer.roles.1");
+
+	}
+
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 */
+	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAScalar()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getData("storyplayer.ipAddress.netmask");
+
+	}
 }
