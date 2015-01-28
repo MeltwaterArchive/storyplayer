@@ -192,9 +192,6 @@ function main($argv)
 	// activate support for printing to the user
 	$output = $injectables->initOutputSupport();
 
-	// activate support for rendering templates of any kind
-	$injectables->initTemplateEngineSupport();
-
 	// activate support for parsing code
 	$injectables->initCodeParserSupport();
 

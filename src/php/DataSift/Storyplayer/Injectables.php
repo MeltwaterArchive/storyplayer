@@ -66,7 +66,6 @@ use DataSift\Storyplayer\Injectables\RuntimeConfigSupport;
 use DataSift\Storyplayer\Injectables\StaticConfigManagerSupport;
 use DataSift\Storyplayer\Injectables\StoryplayerConfigFilenameSupport;
 use DataSift\Storyplayer\Injectables\StoryplayerConfigSupport;
-use DataSift\Storyplayer\Injectables\TemplateEngineSupport;
 
 /**
  * a container for common services and data, to avoid making them global
@@ -101,5 +100,4 @@ class Injectables extends BaseInjectables
 	use StaticConfigManagerSupport;
 	use StoryplayerConfigFilenameSupport;
 	use StoryplayerConfigSupport;
-	use TemplateEngineSupport;
 }
