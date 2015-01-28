@@ -122,7 +122,7 @@ class TestEnvironmentConfig extends WrappedConfig
         $sutRoles = $sutConfig->getData('roles');
 
         foreach ($sutRoles as $sutRole) {
-            foreach ($this->getData() as $envDetails) {
+            foreach ($this->getConfig() as $envDetails) {
                 foreach ($envDetails->details->machines as $machine) {
                     if (in_array($sutRole->role, $machine->roles) || in_array('*', $machine->roles)) {
                         if (!isset($machine->params)) {
