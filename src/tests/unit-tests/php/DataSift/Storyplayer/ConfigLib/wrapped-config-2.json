@@ -9,7 +9,8 @@
 			}
 		],
 		"user": {
-			"name": "test-user"
+			"name": "test-user",
+			"id": 500
 		},
 		"dirs": []
 	}

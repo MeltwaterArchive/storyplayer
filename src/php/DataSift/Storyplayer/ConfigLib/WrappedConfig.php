@@ -205,6 +205,70 @@ class WrappedConfig extends BaseObject
     }
 
     /**
+     * expand any piece of data
+     *
+     * @param  mixed $dataToExpand
+     *         the data to run through Twig
+     * @param  array|object $baseConfig
+     *         the config to use for expanding variables (optional)
+     * @return array|object
+     *         a copy of the config stored in $this, with any Twig
+     *         variables expanded
+     */
+    protected function expandData($dataToExpand, $baseConfig = null)
+    {
+        // special case - is the data expandable in the first place?
+        if (!is_object($dataToExpand) && !is_array($dataToExpand) && !is_string($dataToExpand)) {
+            return $dataToExpand;
+        }
+
+        // we're going to use Twig to expand any parameters in our
+        // config
+        //
+        // this seems horribly inefficient, but it does work reliably
+        //
+        // unfortunately, we cannot build any sort of cache, because we
+        // have absolutely no way of knowing if $this->config has changed
+        // at all
+        $loader = new Twig_Loader_String();
+        $templateEngine   = new Twig_Environment($loader);
+
+        // Twig is a template engine. it needs a text string to operate on
+        $configString = json_encode($dataToExpand);
+
+        // Twig needs an array of data to expand variables from
+        if ($baseConfig === null) {
+            $baseConfig = $this->config;
+        }
+        $varData = json_decode(json_encode($baseConfig), true);
+
+        // use Twig to expand any config variables
+        $raw = $templateEngine->render($configString, $varData);
+        $expandedData = json_decode($raw);
+
+        // make sure we have our handy BaseObject, because it does nice
+        // things like throw exceptions when someone tries to access an
+        // attribute that does not exist
+        if (is_object($expandedData)) {
+            $tmp = new BaseObject();
+            $tmp->mergeFrom($expandedData);
+            $expandedData = $tmp;
+        }
+        else if (is_array($expandedData)) {
+            foreach (array_keys($expandedData) as $key) {
+                if (is_object($expandedData[$key])) {
+                    $tmp = new BaseObject();
+                    $tmp->mergeFrom($expandedData[$key]);
+                    $expandedData[$key] = $tmp;
+                }
+            }
+        }
+
+        // all done
+        return $expandedData;
+    }
+
+    /**
      * retrieve data using a dot.notation.path
      *
      * NOTE that you should treat any data returned from here as READ-ONLY
@@ -221,16 +285,33 @@ class WrappedConfig extends BaseObject
             return $this->config;
         }
 
+        $retval = $this->getPath($path);
+        $retval = $this->expandData($retval);
+
+        return $retval;
+    }
+
+    protected function &getPath($path, $expandPath = false)
+    {
+        // special case
+        if (empty($path)) {
+            return $this->config;
+        }
+
         // walk down the path
         $parts = explode(".", $path);
 
         // this is where we start from
-        $retval = $this->getExpandedConfig();
+        $retval = $this->config;
 
         foreach ($parts as $part)
         {
             if (is_object($retval)) {
                 if (isset($retval->$part)) {
+                    $retval = &$retval->$part;
+                }
+                else if ($expandPath) {
+                    $retval->$part = new BaseObject;
                     $retval = $retval->$part;
                 }
                 else {
@@ -239,6 +320,10 @@ class WrappedConfig extends BaseObject
             }
             else if (is_array($retval)) {
                 if (isset($retval[$part])) {
+                    $retval = &$retval[$part];
+                }
+                else if ($expandPath) {
+                    $retval[$part] = new BaseObject;
                     $retval = $retval[$part];
                 }
                 else {

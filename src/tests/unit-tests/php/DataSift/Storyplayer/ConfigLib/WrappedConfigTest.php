@@ -713,6 +713,8 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetDataFromAnObject()
 	{
@@ -722,21 +724,26 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    $obj = new WrappedConfig();
 	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
 
-	    $expected = "127.0.0.1";
+	    $expected1 = "127.0.0.1";
+	    $expected2 = 500;
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->getData("storyplayer.ipAddress");
+	    $actual1 = $obj->getData("storyplayer.ipAddress");
+	    $actual2 = $obj->getData("storyplayer.user.id");
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $this->assertEquals($expected, $actual);
+	    $this->assertEquals($expected1, $actual1);
+	    $this->assertEquals($expected2, $actual2);
 	}
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetDataFromAnArray()
 	{
@@ -761,6 +768,8 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetTopLevelData()
 	{
@@ -785,6 +794,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
 	 */
 	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAnObject()
@@ -802,9 +812,9 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	}
 
-
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
 	 */
 	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAnArray()
@@ -822,9 +832,9 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	}
 
-
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
 	 */
 	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAScalar()
@@ -839,6 +849,151 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // perform the change
 
 	    $actual = $obj->getData("storyplayer.ipAddress.netmask");
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getObject()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
+	 */
+	public function testCanGetAnObjectFromAnObject()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+	    $expected = $obj->getConfig()->storyplayer;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getObject("storyplayer");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getObject()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigDataNotAnObject
+	 */
+	public function testGetObjectThrowsExceptionWhenNonObjectRetrieved()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+	    $expected = $obj->getConfig()->storyplayer;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getObject("storyplayer.ipAddress");
+
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getArray()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
+	 */
+	public function testCanGetArrayFromAnArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+	    $expected = $obj->getConfig()->storyplayer->roles;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getArray("storyplayer.roles");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getArray()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
+	 */
+	public function testCanGetArrayFromAnAssocArray()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+	    //
+	    // this one will need some explaining
+	    //
+	    // in PHP, we can declare associative arrays. however, these are
+	    // converted to objects as part of our support for expanding
+	    // Twig variables in the config
+	    //
+	    // - we use json_encode() to create the text that Twig operates on
+	    // - json_encode() has to turn assoc arrays into objects
+	    // - if we used serialize(), then the assoc arrays would not change
+	    //   into objects
+	    // - we cannot use serialize() because the format includes
+	    //   run-length encoding ... and expanding Twig variables breaks
+	    //   that :(
+	    //
+	    // as a workaround, we assume that the caller knows what they are
+	    // doing, and if the dot.notation.path resolves to an object, we
+	    // convert it to an array before returning it
+	    //
+	    // we *could* walk the non-Twigged data to check that it is an
+	    // array, but in all honesty ... why go to the extra effort?
+
+	    $obj = new WrappedConfig();
+	    $config = $obj->getConfig();
+	    $config->phases = [
+	    	"Startup" => true,
+	    	"Shutdown" => false,
+	    ];
+	    $expected = $config->phases;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getArray("phases");
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getArray()
+	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigDataNotAnArray
+	 */
+	public function testGetArrayThrowsExceptionWhenNonObjectRetrieved()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new WrappedConfig();
+	    $obj->loadConfigFromFile(__DIR__ . "/wrapped-config-2.json");
+	    $expected = $obj->getConfig()->storyplayer;
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $actual = $obj->getArray("storyplayer.ipAddress");
 	}
 
 	/**
