@@ -229,9 +229,6 @@ class PlayStory_Command extends CliCommand
         // save the output for use in other methods
         $this->output = $output;
 
-        // build our list of players to run
-        $this->initPlayerList($engine, $injectables, $params);
-
         // setup reporting modules
         $this->initReporting($engine, $injectables);
 
@@ -276,6 +273,9 @@ class PlayStory_Command extends CliCommand
         //
         // we wouldn't want signal handling called out of order :)
         $this->initSignalHandling($injectables);
+
+        // build our list of players to run
+        $this->initPlayerList($engine, $injectables, $params);
 
         // let's keep score :)
         $startTime = microtime(true);
