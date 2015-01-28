@@ -522,10 +522,7 @@ class StoryTeller
 	public function getConfig()
 	{
 		// get our config
-		$return = clone $this->config;
-
-		// now, apply all of the defines that we know about
-		// TBD
+		$return = $this->config->getExpandedConfig();
 
 		// all done
 		return $return;
