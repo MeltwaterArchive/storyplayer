@@ -586,7 +586,7 @@ class PlayStory_Command extends CliCommand
             }
 
             // if we get here, then we do not need to create the test environment
-            $injectables->activeConfig->set('storyplayer.phases.testEnvStartup.TestEnvironmentConstruction', false);
+            $injectables->activeConfig->setData('storyplayer.phases.testEnvStartup.TestEnvironmentConstruction', false);
             $this->reuseTarget = true;
         }
         else
