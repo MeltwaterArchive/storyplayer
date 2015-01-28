@@ -190,7 +190,6 @@ class ConfigListTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-		$expectedKeys = [ 'config-1', 'config-2' ];
 	    $obj = new ConfigList("DataSift\Storyplayer\ConfigLib\StoryplayerConfig", __DIR__ . '/ConfigListTestData1');
 
 	    // ----------------------------------------------------------------

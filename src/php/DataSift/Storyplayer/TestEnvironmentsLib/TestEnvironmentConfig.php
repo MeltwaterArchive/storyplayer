@@ -106,7 +106,7 @@ class TestEnvironmentConfig extends WrappedConfig
     {
         $className = "DataSift\Storyplayer\HostLib\\" . $typeName;
         if (!class_exists($className)) {
-            throw new E4xx_InvalidTestEnvironmentGroupType($index, $typeName, $className);
+            throw new E4xx_InvalidTestEnvironmentGroupType($groupIndex, $typeName, $className);
         }
     }
 

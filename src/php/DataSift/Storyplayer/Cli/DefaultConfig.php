@@ -104,33 +104,40 @@ class DefaultConfig extends BaseObject
 
         // defaults for phases
         $phases = new BaseObject();
-        $phases->beforeStory = new BaseObject();
-        $phases->beforeStory->StartupHandlers = true;
-        $phases->beforeStory->CheckBlacklisted = true;
-        $phases->beforeStory->CheckTestEnvironment = true;
-        $phases->beforeStory->TestCanRunCheck = true;
-        $phases->story = new BaseObject();
-        $phases->story->TestSetup = true;
-        $phases->story->PreTestPrediction = true;
-        $phases->story->PreTestInspection = true;
-        $phases->story->Action = true;
-        $phases->story->PostTestInspection = true;
-        $phases->afterStory = new BaseObject();
-        $phases->afterStory->TestTeardown = true;
-        $phases->afterStory->ApplyRoleChanges = true;
-        $phases->afterStory->ShutdownHandlers = true;
-        $phases->testEnvStartup = new BaseObject;
-        $phases->testEnvStartup->TestEnvironmentConstruction = true;
-        $phases->testEnvShutdown = new BaseObject;
-        $phases->testEnvShutdown->TestEnvironmentDestruction = true;
+        $phases->beforeStory = [
+            'StartupHandlers' => true,
+            'CheckBlacklisted' => true,
+            'CheckTestEnvironment' => true,
+            'TestCanRunCheck' => true,
+        ];
+        $phases->story = [
+            'TestSetup' => true,
+            'PreTestPrediction' => true,
+            'PreTestInspection' => true,
+            'Action' => true,
+            'PostTestInspection' => true,
+        ];
+        $phases->afterStory = [
+            'TestTeardown' => true,
+            'ApplyRoleChanges' => true,
+            'ShutdownHandlers' => true,
+        ];
+        $phases->testEnvStartup = [
+            'TestEnvironmentConstruction' => true,
+        ];
+        $phases->testEnvShutdown = [
+            'TestEnvironmentDestruction' => true,
+        ];
 
-        $phases->script = new BaseObject;
-        $phases->script->Automate = true;
+        $phases->script = [
+            'Automate' => true,
+        ];
 
         // what to do when a user presses CTRL+C
-        $phases->userAbort = new BaseObject();
-        $phases->userAbort->ShutdownHandlers = true;
-        $phases->userAbort->TestEnvironmentDestruction = true;
+        $phases->userAbort = [
+            'ShutdownHandlers' => true,
+            'TestEnvironmentDestruction' => true,
+        ];
 
         $this->phases = $phases;
     }

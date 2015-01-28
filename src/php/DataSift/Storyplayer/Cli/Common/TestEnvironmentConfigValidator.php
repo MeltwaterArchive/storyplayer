@@ -51,7 +51,7 @@ class Common_TestEnvironmentConfigValidator implements Validator
     const MSG_NOTVALIDENVIRONMENT = "Unknown test environment '%value%'";
 
     /**
-     * @var array
+     * @var DataSift\Storyplayer\ConfigLib\TestEnvironmentsList
      */
     protected $envList;
 
@@ -61,7 +61,7 @@ class Common_TestEnvironmentConfigValidator implements Validator
     protected $defaultValue;
 
     /**
-     * @param array $envList
+     * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
      * @param string $defaultValue
      */
     public function __construct($envList, $defaultValue)

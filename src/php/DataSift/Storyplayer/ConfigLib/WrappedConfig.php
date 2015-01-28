@@ -70,7 +70,7 @@ class WrappedConfig extends BaseObject
 
     /**
      * the config settings that this object wraps
-     * @var BaseObject
+     * @var BaseObject|array
      */
     private $config;
 
@@ -126,12 +126,6 @@ class WrappedConfig extends BaseObject
      */
     public function mergeData($path, $dataToMerge)
     {
-        // we're going to start walking from here
-        $config = $this->config;
-
-        // we need to track this for error reporting
-        $pathSoFar = "";
-
         // special case - we treat objects and arrays differently to other
         // data types
         if (!is_object($dataToMerge) && !is_array($dataToMerge)) {
@@ -230,9 +224,6 @@ class WrappedConfig extends BaseObject
         // walk down the path
         $parts = explode(".", $path);
 
-        // keep track of where we have gotten to
-        $pathSoFar = '';
-
         // this is where we start from
         $retval = $this->getExpandedConfig();
 
@@ -261,6 +252,53 @@ class WrappedConfig extends BaseObject
         }
 
         // if we get here, we have walked the whole path
+        return $retval;
+    }
+
+    /**
+     * retrieve data from a dot.notation.path
+     *
+     * throws an exception if the path does not point to an array
+     *
+     * @param string $path
+     *        the dot.notation.path to the data to return
+     * @return array
+     */
+    public function getArray($path)
+    {
+        $retval = $this->getData($path);
+
+        // special case - assoc arrays get converted to objects by
+        // $this->getExpandedData()
+        //
+        // give the caller the benefit of the doubt, and assume that
+        // this was originally an array
+        if (is_object($retval)) {
+            $retval = (array)$retval;
+        }
+        else if (!is_array($retval)) {
+            throw new E4xx_ConfigDataNotAnArray($path);
+        }
+
+        return $retval;
+    }
+
+    /**
+     * retrieve data from a dot.notation.path
+     *
+     * throws an exception if the path does not point to an object
+     *
+     * @param string $path
+     *        the dot.notation.path to the data to return
+     * @return object
+     */
+    public function getObject($path)
+    {
+        $retval = $this->getData($path);
+        if (!is_object($retval)) {
+            throw new E4xx_ConfigDataNotAnObject($path);
+        }
+
         return $retval;
     }
 
@@ -331,7 +369,6 @@ class WrappedConfig extends BaseObject
 
         // walk down the path
         $parts = explode(".", $path);
-        $lastPart = null;
         $lastPart = end($parts);
         $parts = array_slice($parts, 0, count($parts) - 1);
 
@@ -368,9 +405,6 @@ class WrappedConfig extends BaseObject
         $parts = explode(".", $path);
         $lastPart = end($parts);
         $parts = array_slice($parts, 0, count($parts) - 1);
-
-        // keep track of where we have gotten to
-        $pathSoFar = '';
 
         // this is where we start from
         $retval = $this->config;

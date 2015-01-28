@@ -855,7 +855,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.ipAddress");
+	    $obj->unsetData("storyplayer.ipAddress");
 
 	    // ----------------------------------------------------------------
 	    // test the results
@@ -879,7 +879,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.roles.0.cli");
+	    $obj->unsetData("storyplayer.roles.0.cli");
 
 	    // ----------------------------------------------------------------
 	    // test the results
@@ -903,7 +903,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.roles.0");
+	    $obj->unsetData("storyplayer.roles.0");
 
 	    // ----------------------------------------------------------------
 	    // test the results
@@ -928,7 +928,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.ipAddres");
+	    $obj->unsetData("storyplayer.ipAddres");
 	}
 
 	/**
@@ -946,7 +946,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.user.does.not.exist");
+	    $obj->unsetData("storyplayer.user.does.not.exist");
 	}
 
 	/**
@@ -982,7 +982,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.roles.does.not.exist");
+	    $obj->unsetData("storyplayer.roles.does.not.exist");
 	}
 
 	/**
@@ -1000,7 +1000,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.ipAddress.not-found");
+	    $obj->unsetData("storyplayer.ipAddress.not-found");
 	}
 
 	/**
@@ -1018,7 +1018,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.ipAddress.does.not.exist");
+	    $obj->unsetData("storyplayer.ipAddress.does.not.exist");
 	}
 
 	/**

@@ -125,7 +125,6 @@ class HardCodedDevices extends HardCodedList
         $config->desiredCapabilities['version'] = "21";
 
         $config = $this->newConfig('sl_firefox20_win8_1')->getConfig();
-        $config = new BaseObject;
         $config->adapter = 'SauceLabsWebDriver';
         $config->browser = 'firefox';
         $config->desiredCapabilities = array();

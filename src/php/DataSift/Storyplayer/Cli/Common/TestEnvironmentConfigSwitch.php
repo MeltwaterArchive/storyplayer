@@ -61,7 +61,7 @@ use Phix_Project\CliEngine\CliSwitch;
 class Common_TestEnvironmentConfigSwitch extends CliSwitch
 {
 	/**
-	 * @param array $envList
+	 * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
 	 * @param string $defaultEnvName
 	 */
 	public function __construct($envList, $defaultEnvName)
