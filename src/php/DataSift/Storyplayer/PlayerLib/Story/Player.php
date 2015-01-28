@@ -90,9 +90,9 @@ class Story_Player
 	public function __construct($storyFilename, Injectables $injectables)
 	{
 		$this->storyFilename  = $storyFilename;
-		$this->startupPhases  = $injectables->activeConfig->storyplayer->phases->beforeStory;
-		$this->storyPhases    = $injectables->activeConfig->storyplayer->phases->story;
-		$this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->afterStory;
+		$this->startupPhases  = $injectables->activeConfig->getData('storyplayer.phases.beforeStory');
+		$this->storyPhases    = $injectables->activeConfig->getData('storyplayer.phases.story');
+		$this->shutdownPhases = $injectables->activeConfig->getData('storyplayer.phases.afterStory');
 	}
 
 	public function play(StoryTeller $st, Injectables $injectables)

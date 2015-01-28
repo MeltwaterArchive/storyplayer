@@ -65,8 +65,8 @@ class TestEnvironment_Player
     {
         $this->wrappedPlayers = $wrappedPlayers;
 
-        $this->startupPhases  = $injectables->activeConfig->storyplayer->phases->testEnvStartup;
-        $this->shutdownPhases = $injectables->activeConfig->storyplayer->phases->testEnvShutdown;
+        $this->startupPhases  = $injectables->activeConfig->getData('storyplayer.phases.testEnvStartup');
+        $this->shutdownPhases = $injectables->activeConfig->getData('storyplayer.phases.testEnvShutdown');
     }
 
     public function play(StoryTeller $st, Injectables $injectables)

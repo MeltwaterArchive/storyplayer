@@ -340,45 +340,7 @@ class Automate_Command extends CliCommand
 
     protected function addScriptsFromFile(CliEngine $engine, Injectables $injectables, $file)
     {
-        // the list of actions we're building up
-        $return = [];
-
-        // let's get our tale
-        //
-        // this gives us a stdClass of the tale file, with defaults
-        // added to the options section if required
-        $tale = Tale_Loader::loadTale($taleFile);
-
-        // support for reusing test environments
-        if ($tale->options->reuseTestEnvironment) {
-            $injectables->activeConfig->phases->story->testEnvironmentSetup = false;
-            $injectables->activeConfig->phases->story->testEnvironmentTeardown = false;
-        }
-        else {
-            // we are not reusing test environments, so ALWAYS create
-            // and destroy
-            $injectables->activeConfig->phases->story->testEnvironmentSetup = true;
-            $injectables->activeConfig->phases->story->testEnvironmentTeardown = true;
-        }
-        // our first story ALWAYS needs to create the test environment
-        $firstStoryPhases = clone $injectables->activeConfig->phases->story;
-        $firstStoryPhases->testEnvironmentSetup = true;
-
-        // our last story ALWAYS needs to destroy the test environment
-        $lastStoryPhases  = clone $injectables->activeConfig->phases->story;
-        $lastStoryPhases->testEnvironmentTeardown = true;
-
-        foreach ($tale->stories as $storyFile) {
-            $return[] = new StoryPlayer($storyFile);
-        }
-
-        if ($tale->options->reuseTestEnvironment) {
-            // clean up after ourselves at the end
-            $return[] = new TestEnvironmentTeardownPlayer($tale->stories[0]);
-        }
-
-        // all done
-        return $return;
+        // tbd
     }
 
     // ==================================================================
@@ -394,6 +356,7 @@ class Automate_Command extends CliCommand
      */
     public function sigtermHandler($signo)
     {
+        // tell the user what is happening
         echo "\n";
         echo "============================================================\n";
         echo "USER ABORT!!\n";
@@ -405,7 +368,8 @@ class Automate_Command extends CliCommand
         $phasesPlayer->playPhases(
             $this->st,
             $this->injectables,
-            $this->injectables->staticConfig->phases->shutdown
+            $this->injectables->activeConfig->getData('storyplayer.phases.userAbort'),
+            null
         );
 
         // force a clean shutdown

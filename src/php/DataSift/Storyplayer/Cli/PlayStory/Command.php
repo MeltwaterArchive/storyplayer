@@ -549,8 +549,8 @@ class PlayStory_Command extends CliCommand
         // are we keeping the test environment hanging around afterwards?
         if (isset($engine->options->persistTarget) && $engine->options->persistTarget)
         {
-            $injectables->activeConfig->storyplayer->phases->testEnvShutdown->TestEnvironmentDestruction = false;
-            unset($injectables->activeConfig->storyplayer->phases->userAbort->TestEnvironmentDestruction);
+            $injectables->activeConfig->setData('storyplayer.phases.testEnvShutdown.TestEnvironmentDestruction', false);
+            $injectables->activeConfig->unsetData('storyplayer.phases.userAbort.TestEnvironmentDestruction');
             $this->persistTarget = true;
         }
 
@@ -586,7 +586,7 @@ class PlayStory_Command extends CliCommand
             }
 
             // if we get here, then we do not need to create the test environment
-            $injectables->activeConfig->storyplayer->phases->testEnvStartup->TestEnvironmentConstruction = false;
+            $injectables->activeConfig->set('storyplayer.phases.testEnvStartup.TestEnvironmentConstruction', false);
             $this->reuseTarget = true;
         }
         else
@@ -624,6 +624,7 @@ class PlayStory_Command extends CliCommand
      */
     public function sigtermHandler($signo)
     {
+        // tell the user what is happening
         echo PHP_EOL;
         echo "============================================================" . PHP_EOL;
         echo "USER ABORT!!" . PHP_EOL;
@@ -641,7 +642,7 @@ class PlayStory_Command extends CliCommand
             "user abort",
             $this->st,
             $this->injectables,
-            $this->injectables->activeConfig->storyplayer->phases->userAbort,
+            $this->injectables->activeConfig->getData('storyplayer.phases.userAbort'),
             null
         );
 

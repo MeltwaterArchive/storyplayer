@@ -202,7 +202,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         // NOTE: any code that adds groups to tables by hand does NOT
         //       get this guarantee
         $activeConfig = $st->getTestEnvironment();
-        $activeConfig->$tableName = $tables->$tableName->$group;
+        $activeConfig->setData($tableName, $tables->$tableName->$group);
 
         // save the updated runtime config
         $log->addStep("saving runtime config to disk", function() use ($st){
