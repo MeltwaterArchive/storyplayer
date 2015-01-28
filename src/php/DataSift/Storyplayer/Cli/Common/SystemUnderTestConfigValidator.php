@@ -51,7 +51,7 @@ class Common_SystemUnderTestConfigValidator implements Validator
     const MSG_NOTVALIDSUT = "Unknown system-under-test '%value%'";
 
     /**
-     * @var DataSift\Storyplayer\ConfigLib\SystemsUnderTestList;
+     * @var DataSift\Storyplayer\ConfigLib\SystemsUnderTestList
      */
     protected $sutList;
 
@@ -61,7 +61,7 @@ class Common_SystemUnderTestConfigValidator implements Validator
     protected $defaultValue;
 
     /**
-     * @param array $sutList
+     * @param DataSift\Storyplayer\ConfigLib\SystemsUnderTestList $sutList
      * @param string $defaultValue
      */
     public function __construct($sutList, $defaultValue)

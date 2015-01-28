@@ -67,7 +67,7 @@ class FromTestEnvironment extends Prose
 		$log = $st->startAction("get $setting from test environment");
 		// get the details
 		$testEnv = $st->getTestEnvironment();
-		$value   = $testEnv->getData($value);
+		$value   = $testEnv->getData($setting);
 
 		// log the settings
 		$printer  = new DataPrinter();
@@ -96,6 +96,7 @@ class FromTestEnvironment extends Prose
 		$return    = $convertor->convertToArray($testEnv->getExpandedData($st->getConfig()));
 
 		// all done
+		$log->endAction();
 		return $return;
 	}
 }
