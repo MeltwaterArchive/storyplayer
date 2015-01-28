@@ -326,7 +326,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanSetDataInsideAnArray()
 	{
@@ -355,7 +355,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanSetDataInsideAnObject()
 	{
@@ -383,7 +383,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanSetDataByExtendingTheConfig()
 	{
@@ -420,7 +420,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanReplaceTopLevelUsingSetData()
 	{
@@ -447,7 +447,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
 	 */
 	public function testCannotSetDataByExtendingAScalar()
@@ -466,7 +466,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
 	 */
 	public function testCannotSetDataByOverExtendingAScalar()
@@ -485,7 +485,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeAnObject()
 	{
@@ -517,7 +517,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeAnArray()
 	{
@@ -551,7 +551,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeAnArrayIntoAnObject()
 	{
@@ -584,7 +584,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeAScalar()
 	{
@@ -615,7 +615,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeIntoTopLevel()
 	{
@@ -647,7 +647,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
 	 */
 	public function testCannotMergeDataByExtendingAScalar()
@@ -669,7 +669,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::createPath()
+	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
 	 */
 	public function testCannotMergeDataByOverExtendingAScalar()

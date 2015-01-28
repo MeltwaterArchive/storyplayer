@@ -134,11 +134,8 @@ class WrappedConfig extends BaseObject
             return;
         }
 
-        // walk down the path
-        $parts = explode(".", $path);
-
         // get to where we need to be
-        $leaf =& $this->createPath(implode(".", $parts));
+        $leaf =& $this->getPath($path, true);
 
         // if we get here, then we know where we are adding the new
         // data
@@ -149,7 +146,7 @@ class WrappedConfig extends BaseObject
             $leaf = array_merge($leaf, $dataToMerge);
         }
         else {
-            throw new E4xx_ConfigPathCannotBeExtended($path, implode(".", $parts), gettype($leaf));
+            throw new E4xx_ConfigPathCannotBeExtended($path, $path, gettype($leaf));
         }
 
         // all done
@@ -263,12 +260,15 @@ class WrappedConfig extends BaseObject
             return $this->config;
         }
 
-        // walk down the path
-        $parts = explode(".", $path);
-
         // this is where we start from
         $retval = $this->config;
 
+        // this is where we have been so far, for error-reporting
+        // purposes
+        $pathSoFar = [];
+
+        // walk down the path
+        $parts = explode(".", $path);
         foreach ($parts as $part)
         {
             if (is_object($retval)) {
@@ -277,7 +277,7 @@ class WrappedConfig extends BaseObject
                 }
                 else if ($expandPath) {
                     $retval->$part = new BaseObject;
-                    $retval = $retval->$part;
+                    $retval = &$retval->$part;
                 }
                 else {
                     throw new E4xx_ConfigPathNotFound($path);
@@ -289,7 +289,7 @@ class WrappedConfig extends BaseObject
                 }
                 else if ($expandPath) {
                     $retval[$part] = new BaseObject;
-                    $retval = $retval[$part];
+                    $retval = &$retval[$part];
                 }
                 else {
                     throw new E4xx_ConfigPathNotFound($path);
@@ -297,8 +297,17 @@ class WrappedConfig extends BaseObject
             }
             else {
                 // we can go no further
-                throw new E4xx_ConfigPathNotFound($path);
+                if ($expandPath) {
+                    throw new E4xx_ConfigPathCannotBeExtended($path, implode('.', $pathSoFar), gettype($retval));
+                }
+                else {
+                    throw new E4xx_ConfigPathNotFound($path);
+                }
             }
+
+            // remember where we have been, in case we need to report
+            // and error soon
+            $pathSoFar[] = $part;
         }
 
         // if we get here, we have walked the whole path
@@ -316,19 +325,13 @@ class WrappedConfig extends BaseObject
      */
     public function getArray($path)
     {
-        $retval = $this->getData($path);
+        $retval = $this->getPath($path);
 
-        // special case - assoc arrays get converted to objects by
-        // $this->getExpandedData()
-        //
-        // give the caller the benefit of the doubt, and assume that
-        // this was originally an array
-        if (is_object($retval)) {
-            $retval = (array)$retval;
-        }
-        else if (!is_array($retval)) {
+        if (!is_array($retval)) {
             throw new E4xx_ConfigDataNotAnArray($path);
         }
+
+        $retval = (array)$this->expandData($retval);
 
         return $retval;
     }
@@ -344,10 +347,13 @@ class WrappedConfig extends BaseObject
      */
     public function getObject($path)
     {
-        $retval = $this->getData($path);
+        $retval = $this->getPath($path);
+
         if (!is_object($retval)) {
             throw new E4xx_ConfigDataNotAnObject($path);
         }
+
+        $retval = $this->expandData($retval);
 
         return $retval;
     }
@@ -423,7 +429,7 @@ class WrappedConfig extends BaseObject
         $parts = array_slice($parts, 0, count($parts) - 1);
 
         // create the path
-        $leaf =& $this->createPath(implode(".", $parts));
+        $leaf =& $this->getPath(implode(".", $parts), true);
 
         // if we get here, then we know where we are adding the new
         // data
@@ -457,31 +463,7 @@ class WrappedConfig extends BaseObject
         $parts = array_slice($parts, 0, count($parts) - 1);
 
         // this is where we start from
-        $retval = $this->config;
-
-        foreach ($parts as $part)
-        {
-            if (is_object($retval)) {
-                if (isset($retval->$part)) {
-                    $retval = &$retval->$part;
-                }
-                else {
-                    throw new E4xx_ConfigPathNotFound($path);
-                }
-            }
-            else if (is_array($retval)) {
-                if (isset($retval[$part])) {
-                    $retval = &$retval[$part];
-                }
-                else {
-                    throw new E4xx_ConfigPathNotFound($path);
-                }
-            }
-            else {
-                // we can go no further
-                throw new E4xx_ConfigPathNotFound($path);
-            }
-        }
+        $retval =& $this->getPath(implode(".", $parts));
 
         // if we get here, we have walked the whole path, and are ready
         // to unset the value
@@ -504,78 +486,6 @@ class WrappedConfig extends BaseObject
         else {
             throw new E4xx_ConfigPathNotFound($path);
         }
-    }
-
-    /**
-     * extend the config (if required) to ensure that a dot.notation.path
-     * exists
-     *
-     * @param  string $pathToCreate
-     *         the dot.notation.path.to.create
-     * @return array|object
-     *         whatever is at the end of the path
-     */
-    protected function &createPath($pathToCreate)
-    {
-        // this is where we walk from
-        $config = $this->getConfig();
-
-        // we need to track this for error reporting
-        $pathSoFar = "";
-
-        // split things up
-        $parts = explode(".", $pathToCreate);
-
-        // walk down the path
-        foreach ($parts as $part) {
-            // special case - ignore '..' in the path
-            //
-            // also ignore empty paths
-            if (empty($part)) {
-                continue;
-            }
-
-            // what are we looking at?
-            if (is_object($config)) {
-                // are we extending the config tree?
-                if (!isset($config->$part)) {
-                    // yes we are
-                    $config->$part = new BaseObject;
-                }
-
-                if (is_array($config->$part)) {
-                    $config = &$config->$part;
-                }
-                else {
-                    $config = $config->$part;
-                }
-            }
-            else if (is_array($config)) {
-                // we are extending the config tree?
-                if (!isset($config[$part])) {
-                    // yes we are
-                    //
-                    // assume that we want an object here, and not
-                    // an array
-                    $config[$part] = new BaseObject;
-                }
-
-                $config = &$config[$part];
-            }
-            else {
-                // we can go no further
-                throw new E4xx_ConfigPathCannotBeExtended($pathToCreate, $pathSoFar, gettype($config));
-            }
-
-            // keep track of where we have been, for error reporting
-            if (strlen($pathSoFar) > 0) {
-                $pathSoFar = $pathSoFar . ".";
-            }
-            $pathSoFar = $pathSoFar . $part;
-        }
-
-        // if we get here, then we have extended the path as required
-        return $config;
     }
 
     /**
