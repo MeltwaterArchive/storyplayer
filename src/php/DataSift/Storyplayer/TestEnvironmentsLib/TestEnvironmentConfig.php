@@ -112,19 +112,23 @@ class TestEnvironmentConfig extends WrappedConfig
 
 	public function mergeSystemUnderTestConfig($sutConfig)
 	{
-        if (!isset($sutConfig->roles)) {
+        // do we have anything to merge?
+        if (!$sutConfig->hasData('roles')) {
             // nothing to merge
             return;
         }
 
-        foreach ($activeSut->roles as $sutDetails) {
-            foreach ($this as $envDetails) {
+        // get the list of roles
+        $sutRoles = $sutConfig->getData('roles');
+
+        foreach ($sutRoles as $sutRole) {
+            foreach ($this->getData() as $envDetails) {
                 foreach ($envDetails->details->machines as $machine) {
-                    if (in_array($sutDetails->role, $machine->roles) || in_array('*', $machine->roles)) {
+                    if (in_array($sutRole->role, $machine->roles) || in_array('*', $machine->roles)) {
                         if (!isset($machine->params)) {
                             $machine->params = new BaseObject;
                         }
-                        $machine->params->mergeFrom($sutDetails->params);
+                        $machine->params->mergeFrom($sutRole->params);
                     }
                 }
             }

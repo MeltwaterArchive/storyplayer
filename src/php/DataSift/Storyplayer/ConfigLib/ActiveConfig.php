@@ -112,12 +112,12 @@ class ActiveConfig extends WrappedConfig
 
 	public function mergeSystemUnderTestConfig($sutConfig)
 	{
-		if (isset($sutConfig->appSettings)) {
-			$this->mergeIntoPath('storyplayer.appSettings', $config->appSettings);
+		if ($sutConfig->hasData('appSettings')) {
+			$this->mergeData('storyplayer.appSettings', $sutConfig->getData('appSettings'));
 		}
 
-		if (isset($sutConfig->moduleSettings)) {
-			$this->mergeIntoPath('storyplayer.moduleSettings', $config->moduleSettings);
+		if ($sutConfig->hasData('moduleSettings')) {
+			$this->mergeData('storyplayer.moduleSettings', $sutConfig->getData('moduleSettings'));
 		}
 	}
 
