@@ -43,10 +43,11 @@
 
 namespace DataSift\Storyplayer\SystemsUnderTestLib;
 
-use DataSift\Storyplayer\ConfigLib\WrappedConfig;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * the class for the config that represents a single system under test
+ * Exception thrown when a 'role' in a system-under-test has a name, but
+ * it isn't a string
  *
  * @category  Libraries
  * @package   Storyplayer/SystemsUnderTestLib
@@ -55,72 +56,11 @@ use DataSift\Storyplayer\ConfigLib\WrappedConfig;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class SystemUnderTestConfig extends WrappedConfig
+class E4xx_E4xx_SystemUnderTestRoleNameMustBeString extends E4xx_SystemUnderTestConfigError
 {
-	public function validateConfig()
+	public function __construct($filename, $index)
 	{
-		// the config we are checking
-		$config = $this->getConfig();
-
-		// make sure it is an object, and not an array
-		if (!is_object($config)) {
-			throw new E4xx_SystemUnderTestConfigMustBeAnObject($this->getFilename());
-		}
-
-		$this->validateAppSettings();
-		$this->validateRoles();
-	}
-
-	protected function validateAppSettings()
-	{
-		// do we have any app settings to validate?
-		if (!$this->hasData('appSettings')) {
-			// nothing to see here, move along
-			return;
-		}
-
-		$appSettings = $this->getData('appSettings');
-		if (!is_object($appSettings)) {
-			throw new E4xx_SystemUnderTestAppSettingsMustBeAnObject($this->getFilename());
-		}
-
-		// we don't care what (if anything) is inside the appSettings
-		// section
-		//
-		// all done
-	}
-
-	protected function validateRoles()
-	{
-		// do we have any roles to validate?
-		if (!$this->hasData('roles')) {
-			// nothing to see here, move along
-			return;
-		}
-
-		// roles is meant to be an array of objects
-		$roles = $this->getData('roles');
-		if (!is_array($roles)) {
-			throw new E4xx_SystemUnderTestRolesMustBeAnArray($this->getFilename());
-		}
-
-		// make sure each role in the list fits what we want
-		foreach ($roles as $index => $roleObj) {
-			if (!is_object($roleObj)) {
-				throw new E4xx_SystemUnderTestRoleMustBeAnObject($this->getFilename(), $index);
-			}
-			if (!isset($roleObj->role)) {
-				throw new E4xx_SystemUnderTestRoleMustSayWhichRoleItIs($this->getFilename(), $index);
-			}
-			if (!is_string($roleObj->role)) {
-				throw new E4xx_SystemUnderTestRoleNameMustBeString($this->getFilename(), $index);
-			}
-			if (!isset($roleObj->params)) {
-				throw new E4xx_SystemUnderTestRoleMustHaveParams($this->getFilename(), $index);
-			}
-			if (!is_object($roleObj->params)) {
-				throw new E4xx_SystemUnderTestRoleParamsMustBeAnObject($this->getFilename(), $index);
-			}
-		}
+		$msg = "Config file '{$filename}': 'roles[{$index}].role' must be a string";
+		parent::__construct(400, $msg, $msg);
 	}
 }
