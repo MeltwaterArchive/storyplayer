@@ -1,8 +1,8 @@
 ---
 layout: v2/using-test-environments
 title: Creating Test Environments On Physical Hosts
-prev: '<a href="../environments/ec2.html">Prev: Creating Test Environments On Amazon EC2</a>'
-next: '<a href="../environments/vagrant.html">Next: Creating Test Environments Using Vagrant</a>'
+prev: '<a href="../../using/test-environments/ec2.html">Prev: Creating Test Environments On Amazon EC2</a>'
+next: '<a href="../../using/test-environments/vagrant.html">Next: Creating Test Environments Using Vagrant</a>'
 ---
 
 # Creating Test Environments On Physical Hosts

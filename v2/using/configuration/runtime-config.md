@@ -1,8 +1,8 @@
 ---
 layout: v2/using-configuration
 title: The Runtime Configuration
-prev: '<a href="../configuration/prose-namespaces.html">Prev: Prose Namespaces</a>'
-next: '<a href="../using/stories/index.html">Next: Introducing Stories</a>'
+prev: '<a href="../../using/configuration/prose-namespaces.html">Prev: Prose Namespaces</a>'
+next: '<a href="../../using/stories/index.html">Next: Introducing Stories</a>'
 ---
 
 # The Runtime Configuration

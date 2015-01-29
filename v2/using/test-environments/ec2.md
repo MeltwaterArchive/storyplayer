@@ -1,8 +1,8 @@
 ---
 layout: v2/using-test-environments
 title: Creating Test Environments On Amazon EC2
-prev: '<a href="../environments/multiple-environments.html">Prev: Testing Against Multiple Environments</a>'
-next: '<a href="../environments/physical-hosts.html">Next: Creating Test Environments On Physical Hosts</a>'
+prev: '<a href="../../using/test-environments/multiple-environments.html">Prev: Testing Against Multiple Environments</a>'
+next: '<a href="../../using/test-environments/physical-hosts.html">Next: Creating Test Environments On Physical Hosts</a>'
 ---
 
 # Creating Test Environments On Amazon EC2

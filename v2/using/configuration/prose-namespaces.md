@@ -1,8 +1,8 @@
 ---
 layout: v2/using-configuration
 title: Prose Namespaces
-prev: '<a href="../configuration/user-config.html">Prev: Per-User Configuration</a>'
-next: '<a href="../configuration/runtime-config.html">Next: The Runtime Configuration</a>'
+prev: '<a href="../../using/configuration/user-config.html">Prev: Per-User Configuration</a>'
+next: '<a href="../../using/configuration/runtime-config.html">Next: The Runtime Configuration</a>'
 ---
 # Prose Namespaces
 

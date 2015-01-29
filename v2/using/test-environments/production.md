@@ -1,8 +1,8 @@
 ---
 layout: v2/using-test-environments
 title: Testing Against Production
-prev: '<a href="../environments/dedicated.html">Prev: Testing Against Dedicated Environments</a>'
-next: '<a href="../environments/multiple-environments.html">Next: Testing Against Multiple Environments</a>'
+prev: '<a href="../../using/test-environments/dedicated.html">Prev: Testing Against Dedicated Environments</a>'
+next: '<a href="../../using/test-environments/multiple-environments.html">Next: Testing Against Multiple Environments</a>'
 ---
 
 # Testing Against Your Production Environment

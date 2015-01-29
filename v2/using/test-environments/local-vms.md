@@ -1,8 +1,8 @@
 ---
 layout: v2/using-test-environments
 title: Testing Against Local Virtual Machines
-prev: '<a href="../environments/your-machine.html">Prev: Testing On Your Machine</a>'
-next: '<a href="../environments/dedicated.html">Next: Testing Against Dedicated Environments</a>'
+prev: '<a href="../../using/test-environments/your-machine.html">Prev: Testing On Your Machine</a>'
+next: '<a href="../../using/test-environments/dedicated.html">Next: Testing Against Dedicated Environments</a>'
 ---
 
 # Testing Against Local Virtual Machines

@@ -1,8 +1,8 @@
 ---
 layout: v2/using-configuration
 title: Per-User Configuration
-prev: '<a href="../configuration/device-config.html">Prev: Per-Device Configuration</a>'
-next: '<a href="../configuration/prose-namespaces.html">Next: Prose Namespaces</a>'
+prev: '<a href="../../using/configuration/device-config.html">Prev: Per-Device Configuration</a>'
+next: '<a href="../../using/configuration/prose-namespaces.html">Next: Prose Namespaces</a>'
 ---
 
 # Per-User Configuration

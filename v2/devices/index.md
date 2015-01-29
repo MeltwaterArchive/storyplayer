@@ -1,7 +1,7 @@
 ---
 layout: v2/devices
 title: Testing With Different Devices
-prev: '<a href="../environments/safeguarding.html">Prev: Safeguarding Environments</a>'
+prev: '<a href="../using/test-environments/safeguarding.html">Prev: Safeguarding Environments</a>'
 next: '<a href="../devices/how-it-works.html">Next: How We Control Web Browsers</a>'
 ---
 

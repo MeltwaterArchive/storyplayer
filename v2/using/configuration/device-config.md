@@ -1,8 +1,8 @@
 ---
 layout: v2/using-configuration
 title: Per-Device Configuration
-prev: '<a href="../configuration/environment-config.html">Prev: Per-Environment Configuration</a>'
-next: '<a href="../configuration/user-config.html">Next: Per-User Configuration</a>'
+prev: '<a href="../../using/configuration/system-under-test-config.html">Prev: System Under Test Configuration</a>'
+next: '<a href="../../using/configuration/user-config.html">Next: Per-User Configuration</a>'
 ---
 
 # Per-Device Configuration
