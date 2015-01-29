@@ -1,7 +1,7 @@
 ---
 layout: v2/learn-fundamentals
 title: User Stories
-prev: '<a href="../../learn/fundamentals/understanding-test-environments.html">Prev: Understanding Test Environments</a>'
+prev: '<a href="../../learn/fundamentals/understanding-stories.html">Prev: Understanding Stories</a>'
 next: '<a href="../../learn/fundamentals/service-stories.html">Next: Service Stories</a>'
 ---
 
@@ -68,6 +68,6 @@ They don't need _interpretation_: everyone in your organisation can understand t
 
 ## Further Reading
 
-User stories originate from Kent Beck's book _[Extreme Programming Explained: Embrace Change](http://bit.ly/pUMx8J)_.  In the current edition, you'll find _Stories_ is listed as one of the _Primary Practices_ of Extreme Programming.
-
-But the definitive work on the subject is Mike Cohn's _[User Stories Applied: For Agile Software Development](http://bit.ly/byqR4X)_, and this is the book that you should read if you plan on placing user stories at the heart of your software development process.
+* User stories originate from Kent Beck's book _[Extreme Programming Explained: Embrace Change](http://bit.ly/pUMx8J)_.  In the current edition, you'll find _Stories_ is listed as one of the _Primary Practices_ of Extreme Programming.
+* The definitive work on the subject is Mike Cohn's _[User Stories Applied: For Agile Software Development](http://bit.ly/byqR4X)_. This is the book that you should read if you plan on placing user stories at the heart of your software development process.
+* [The Guide To Testing Your Platform](../test-your-platform/index.html) shows you how to create user story tests using Storyplayer.

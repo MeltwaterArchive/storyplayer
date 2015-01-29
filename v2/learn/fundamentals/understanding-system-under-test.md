@@ -1,14 +1,14 @@
 ---
 layout: v2/learn-fundamentals
 title: Understanding The System Under Test
-prev: '<a href="../../learn/fundamentals/understanding-stories.html">Prev: Understanding Stories</a>'
+prev: '<a href="../../learn/fundamentals/service-stories.html">Prev: Service Stories</a>'
 next: '<a href="../../learn/fundamentals/understanding-test-environments.html">Next: Understanding Test Environments</a>'
 ---
 # Understanding The System Under Test
 
 Storyplayer runs [stories](understanding-stories.html) that test a specific [system under test](understanding-system-under-test.html) running inside a specific [test environment](understanding-test-environments.html).
 
-Support for _systems under test_ is a new feature for Storyplayer v2.0.
+Support for _systems under test_ is a new feature for Storyplayer v2.0. You can now write tests for different versions of your system under test, so that you don't lose the ability to test older versions as time goes on.
 
 ## What Is A System Under Test?
 

@@ -2,7 +2,7 @@
 layout: v2/learn-fundamentals
 title: Service Stories
 prev: '<a href="../../learn/fundamentals/user-stories.html">Prev: User Stories</a>'
-next: '<a href="../../learn/fundamentals/belt-and-braces-testing.html">Next: Belt and Braces Testing</a>'
+next: '<a href="../../learn/fundamentals/understanding-system-under-test.html">Next: Understanding The System Under Test</a>'
 ---
 
 # Service Stories
@@ -19,7 +19,7 @@ A _service story_ is a user story, except that it describes the behaviour of you
 
 There's no _user_ in that story - we've replaced it with the _service_ instead, but everything else about a user story applies. It's still written in plain English, and as a high-level requirement. It should still be accompanied with the _conversation_ to capture any detailed decisions that have been made. And it should still be accompanied with an (incomplete) list of acceptance tests to help everyone decide when the story's implementation is complete.
 
-Service stories still satisfy [the INVEST checklist](user-stories.html#invest_in_your_stories).
+Service stories still satisfy [the INVEST checklist](user-stories.html#invest-in-your-stories).
 
 ## Service Stories Help With Planning User Stories
 
@@ -36,6 +36,4 @@ A library of service stories gives you a clear list of all the things that any o
 
 ## Further Reading
 
-I'm afraid that you won't find much out there about _service stories_, sorry. To the best of my knowledge, this is a term that we've invented.
-
-Most of the advice on testing that exists today is focused either on _user story testing_ or _unit testing_.  Service stories fall into a middle ground that people currently don't talk about (perhaps because it was too expensive to do well before Storyplayer came along?)  With the release of Storyplayer, we're hoping to change that.
+* [The Guide To Testing Your Code](../test-your-code/index.html) shows you how to create service story tests using Storyplayer.

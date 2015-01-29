@@ -2,7 +2,7 @@
 layout: v2/learn-fundamentals
 title: Understanding Stories
 prev: '<a href="../../learn/fundamentals/running-storyplayer.html">Prev: Running Storyplayer</a>'
-next: '<a href="../../learn/fundamentals/understanding-system-under-test.html">Next: Understanding The System Under Test</a>'
+next: '<a href="../../learn/fundamentals/user-stories.html">Next: User Stories</a>'
 ---
 
 # Understanding Stories
