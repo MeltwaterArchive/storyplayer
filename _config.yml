@@ -1,5 +1,7 @@
 safe: true
-pygments: true
 url: http://datasift.github.io/storyplayer
 baseurl: /storyplayer
 markdown: kramdown
+
+kramdown:
+  input: GFM
