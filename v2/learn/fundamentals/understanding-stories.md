@@ -145,11 +145,24 @@ If you've [set your computer up](../getting-setup/index.html) correctly and [ins
 
     SUCCESS - 3 PASSED, 0 SKIPPED. Time taken: 11.05 secs
 
-## Additional Phases
+## Doing More In Stories
 
 In this example, we've shown you a very simple story to get you started. Your own stories will probably also have a [Test Setup](../using/stories/test-setup-teardown.html) and a [Test Teardown](../using/stories/test-setup-teardown.html) phase to create the test conditions and to clean up afterwards.
 
 There are other phases too, but they're rarely used. Full details can be found in the [Stories](../../using/stories/index.html) section of the manual.
+
+## Two Types Of Story
+
+The stories you write will either [test your code](../test-your-code/index.html) or [test your platform](../test-your-platform/index.html).
+
+* __Component tests__: Stories that test your code will be designed to thoroughly test a single app or service. They'll use the app's documented interfaces, and they'll also check log files, databases, and anything else where the app makes changes. These stories normally live in the same code repository as the source code for what they are testing. You'll normally deploy your code into a one-off virtual machine to run this test, to prove that your app or service works as intended.
+* __End-to-end tests__: Stories that test your platform will automate the actions that your end-users can do. They'll only use the same APIs and interfaces that your end-users can use, and they'll never attempt to access anything that your end-user isn't allowed to access. These stories normally live in their own code repository. You'll normally run these stories against your test, staging and production platforms, to prove that your product or service works in that environment.
+
+If you're fortunate enough to have a dedicated QA / Test team, we recommend that your QA team starts writing the end-to-end tests and your developers write the component tests as well as the unit tests they already write. That way, your developers are handing over tested apps / services for final end-to-end testing.
+
+It's very useful to keep these two types of tests separate, even if your platform is just a single app. Component tests are intrusive, and normally involve setting up databases with specific content before running the tests. They're normally not safe to run on a platform with real users on it - and if your firewalls and other security measures are working properly, the component tests shouldn't be able to access your database anyway!
+
+Equally, the whole point of platform tests is to prove that your service works on the platform that you're testing. They don't just prove that your code works, but also that you've deployed everything correctly. They help you prove that everything is working after an upgrade, so that you're confident that your end-users aren't in for a nasty surprise.
 
 ## Further Reading
 
