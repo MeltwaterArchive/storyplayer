@@ -7,6 +7,10 @@ next: '<a href="../../learn/fundamentals/understanding-system-under-test.html">N
 
 # Understanding Stories
 
+Storyplayer runs [stories](understanding-stories.html) that test a specific [system under test](understanding-system-under-test.html) running inside a specific [test environment](understanding-test-environments.html).
+
+## What Is A Story?
+
 Storyplayer's job is to execute a suite of functional tests.  Each of these tests is typically a [user story](user-stories.html) (when end-to-end testing), or a [service story](service-stories.html) (when functionally testing a single app).
 
 ## Writing A Story
@@ -19,31 +23,33 @@ You can put the PHP file anywhere you want.  It must end in `Story.php`, otherwi
 
 Here's a very simple story which checks that a web page has the expected title:
 
-    <?php
+{% highlight php linenos %}
+<?php
 
-    // create a new story
-    $story = newStoryFor("Storyplayer")
-          ->inGroup("Web Pages")
-          ->called("Can Get Title Of A Web Page");
+// create a new story
+$story = newStoryFor("Storyplayer")
+      ->inGroup("Web Pages")
+      ->called("Can Get Title Of A Web Page");
 
-    // compatibility: Storyplayer v2
-    $story->requiresStoryplayerVersion(2);
+// compatibility: Storyplayer v2
+$story->requiresStoryplayerVersion(2);
 
-    // the Action phase
-    $story->addAction(function($st) {
-        $checkpoint = $st->getCheckpoint();
+// the Action phase
+$story->addAction(function($st) {
+    $checkpoint = $st->getCheckpoint();
 
-        $st->usingBrowser()->gotoPage("http://php.net");
-        $checkpoint->title = $st->fromBrowser()->getTitle();
-    });
+    $st->usingBrowser()->gotoPage("http://php.net");
+    $checkpoint->title = $st->fromBrowser()->getTitle();
+});
 
-    // the PostTestInspection phase
-    $story->addPostTestInspection(function($st) {
-        $checkpoint = $st->getCheckpoint();
+// the PostTestInspection phase
+$story->addPostTestInspection(function($st) {
+    $checkpoint = $st->getCheckpoint();
 
-        $st->assertsObject($checkpoint)->hasAttribute("title");
-        $st->assertsString($checkpoint->title)->equals("PHP: Hypertext Preprocessor");
-    });
+    $st->assertsObject($checkpoint)->hasAttribute("title");
+    $st->assertsString($checkpoint->title)->equals("PHP: Hypertext Preprocessor");
+});
+{% endhighlight %}
 
 Let's break this down into its parts.
 
@@ -51,13 +57,15 @@ Let's break this down into its parts.
 
 The first line of every story is:
 
-    <?php
+{% highlight php %}
+<?php
+{% endhighlight %}
 
 This is a marker to tell PHP that the file contains PHP code.  If you forget to add this, PHP will print your file on the screen, and then Storyplayer will exit with a fatal error.
 
 The first part of the story creates a PHP variable called `$story`:
 
-{% highlight php %}
+{% highlight php startinline %}
 // create a new story
 $story = newStoryFor("Storyplayer")
       ->inGroup("Web Pages")
@@ -72,7 +80,7 @@ You have to call this variable `$story`. If you call it anything else, Storyplay
 
 The next line of our story is mandatory. It tells Storyplayer which version of Storyplayer your test is written for.  You'll be writing stories for Storyplayer v2:
 
-{% highlight php %}
+{% highlight php startinline %}
 // compatibility: Storyplayer v2
 $story->requiresStoryplayerVersion(2);
 {% endhighlight %}
@@ -81,7 +89,7 @@ $story->requiresStoryplayerVersion(2);
 
 The _Action_ is where Storyplayer tries to perform the actions of your user story:
 
-{% highlight php %}
+{% highlight php startinline %}
 // the Action phase
 $story->addAction(function($st) {
     $checkpoint = $st->getCheckpoint();
@@ -105,7 +113,7 @@ You might find it odd at first to have to use the _checkpoint_, but it's an impo
 
 The _PostTestInspection_ is where Storyplayer checks to see if the _Action_ actually did what it was supposed to. This is part of the [belt and braces](belt-and-braces-testing.html) testing approach that Storyplayer strongly encourages.
 
-{% highlight php %}
+{% highlight php startinline %}
 // the PostTestInspection phase
 $story->addPostTestInspection(function($st) {
     $checkpoint = $st->getCheckpoint();
