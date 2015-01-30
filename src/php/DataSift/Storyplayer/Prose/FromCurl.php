@@ -35,7 +35,7 @@
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
- * @author    Michael Heap <michael.heap@datasift.com>
+ * @author    Michael Heap <michael.heap@datasift.com>, Michael Pitidis <michael.pitidis@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -71,14 +71,29 @@ class FromCurl extends Prose
 	 */
 	public function get($url, $params = array(), $headers = array())
 	{
+		return $this->request($url, $params, $headers);
+	}
 
+	public function post($url, $data, $params = array(), $headers = array())
+	{
+		return $this->request($url, $params, $headers, 'POST', array(
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => $data,
+		));
+	}
+
+	public function delete($url, $params = array(), $headers = array())
+	{
+		return $this->request($url, $params, $headers, 'DELETE', array(
+			CURLOPT_CUSTOMREQUEST => "DELETE",
+		));
+	}
+
+	protected function request($url, $params = array(), $headers = array(), $method = 'GET', $options = array()) {
 		if (count($headers)){
 			// "FromCurl does not support headers yet"
 			throw new E5xx_NotImplemented(__METHOD__);
 		}
-
-		// shorthand
-		$st = $this->st;
 
 		// create the full URL
 		if (count($params) > 0) {
@@ -86,7 +101,7 @@ class FromCurl extends Prose
 		}
 
 		// what are we doing?
-		$log = $st->startAction("HTTP GET '${url}'");
+		$log = $this->st->startAction("HTTP $method '${url}'");
 
 		// create a new cURL resource
 		$ch = curl_init();
@@ -95,6 +110,9 @@ class FromCurl extends Prose
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
+		foreach ($options as $key => $val) {
+			curl_setopt($ch, $key, $val);
+		}
 
 		// grab URL and pass it to the browser
 		$response = curl_exec($ch);
