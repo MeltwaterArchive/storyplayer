@@ -125,11 +125,13 @@ class DsbuildProvisioner extends Provisioner
 			}
 		}
 
-		// add in the IP address of where Storyplayer is running
+		// add in all the config settings that we know about
 		$dsbuildParams->storyplayer_ipv4Address = $st->fromConfig()->get('storyplayer.ipAddress');
+		$dsbuildParams->mergeFrom($this->flattenData($st->getActiveConfig()->getData('')));
 
 		// write them out
-		$this->writeDsbuildParamsFile((array)$dsbuildParams);
+		$this->writeDsbuildParamsShellFile((array)$dsbuildParams);
+		$this->writeDsbuildParamsYamlFile((array)$dsbuildParams);
 
 		// at this point, we are ready to attempt provisioning
 		//
@@ -171,21 +173,75 @@ class DsbuildProvisioner extends Provisioner
 	/**
 	 * @param string $inventoryFolder
 	 */
-	protected function writeDsbuildParamsFile($vars)
+	protected function writeDsbuildParamsYamlFile($vars)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("write dsbuild.yml");
+		$log = $st->startAction("write dsbuildparams.yml");
 
 		// what is the path to the file?
-		$filename = "dsbuild.yml";
+		$filename = "dsbuildparams.yml";
 
 		// write the data
 		$st->usingYamlFile($filename)->writeDataToFile($vars);
 
 		// all done
 		$log->endAction();
+	}
+
+	/**
+	 * @param string $inventoryFolder
+	 */
+	protected function writeDsbuildParamsShellFile($vars)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("write dsbuildparams.sh");
+
+		// what is the path to the file?
+		$filename = "dsbuildparams.sh";
+
+		// build the data to write
+		$output = "";
+		foreach ($vars as $name => $value) {
+			$output .= strtoupper($name) . "='" . $value . "';" . PHP_EOL;
+		}
+
+		// write the data
+		file_put_contents($filename, $output);
+
+		// all done
+		$log->endAction();
+	}
+
+	/**
+	 * converts a tree of data into underscore_notation
+	 *
+	 * @param  mixed $inputData
+	 *         the data to flatten
+	 * @param  string $prefix
+	 *         the path to the parent of the inputData
+	 * @return array
+	 *         the flattened data
+	 */
+	protected function flattenData($inputData, $prefix="")
+	{
+		$retval = [];
+
+		foreach ($inputData as $name => $dataToFlatten)
+		{
+			if (is_object($dataToFlatten) || is_array($dataToFlatten)) {
+				$retval = array_merge($retval, $this->flattenData($dataToFlatten, $prefix . $name . "_"));
+			}
+			else {
+				$retval[$prefix . $name] = $dataToFlatten;
+			}
+		}
+
+		return $retval;
 	}
 }
