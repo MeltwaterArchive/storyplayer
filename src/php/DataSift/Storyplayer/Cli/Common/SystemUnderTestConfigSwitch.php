@@ -98,7 +98,7 @@ class Common_SystemUnderTestConfigSwitch extends CliSwitch
 
 		// what is the required argument?
 		$requiredArgMsg = "the system-under-test to test; one of:" . PHP_EOL . PHP_EOL;
-		foreach($sutList as $sutName) {
+		foreach($sutList->getEntryNames() as $sutName) {
 			$requiredArgMsg .= "* $sutName" . PHP_EOL;
 		}
 		if ($defaultSutName) {

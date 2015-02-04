@@ -70,22 +70,12 @@ trait ActiveDeviceSupport
 	public function initActiveDevice($deviceName, $injectables)
 	{
         // does the device exist?
-        if (!isset($injectables->knownDevices->$deviceName)) {
+        if (!$injectables->knownDevicesList->hasEntry($deviceName)) {
             throw new E4xx_NoSuchDevice($deviceName);
         }
 
-        // a helper to load the config
-        $staticConfigManager = $injectables->staticConfigManager;
-
-        // load the device that we want
-        if (is_string($injectables->knownDevices->$deviceName)) {
-	        $this->activeDevice = $staticConfigManager->loadConfigFile(
-	        	$injectables->knownDevices->$deviceName
-	        );
-        }
-        else {
-        	$this->activeDevice = $injectables->knownDevices->$deviceName;
-        }
+        // yes it does
+    	$this->activeDevice = $injectables->knownDevicesList->getEntry($deviceName)->getConfig();
 
         // remember the device name
         $this->activeDeviceName = $deviceName;

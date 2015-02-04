@@ -51,7 +51,7 @@ class Common_TestEnvironmentConfigValidator implements Validator
     const MSG_NOTVALIDENVIRONMENT = "Unknown test environment '%value%'";
 
     /**
-     * @var array
+     * @var DataSift\Storyplayer\ConfigLib\TestEnvironmentsList
      */
     protected $envList;
 
@@ -61,7 +61,7 @@ class Common_TestEnvironmentConfigValidator implements Validator
     protected $defaultValue;
 
     /**
-     * @param array $envList
+     * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
      * @param string $defaultValue
      */
     public function __construct($envList, $defaultValue)
@@ -89,7 +89,7 @@ class Common_TestEnvironmentConfigValidator implements Validator
 
         // the $value must be a valid environment name, but it's ok if it doesn't
         // exist if it's the default env as we might not have created it yet
-        if (!in_array($value, $this->envList) && $value !== $this->defaultValue) {
+        if (!$this->envList->hasEntry($value)) {
             $result->addError(static::MSG_NOTVALIDENVIRONMENT);
             return $result;
         }

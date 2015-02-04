@@ -51,7 +51,7 @@ class Common_SystemUnderTestConfigValidator implements Validator
     const MSG_NOTVALIDSUT = "Unknown system-under-test '%value%'";
 
     /**
-     * @var array
+     * @var DataSift\Storyplayer\ConfigLib\SystemsUnderTestList
      */
     protected $sutList;
 
@@ -61,7 +61,7 @@ class Common_SystemUnderTestConfigValidator implements Validator
     protected $defaultValue;
 
     /**
-     * @param array $sutList
+     * @param DataSift\Storyplayer\ConfigLib\SystemsUnderTestList $sutList
      * @param string $defaultValue
      */
     public function __construct($sutList, $defaultValue)
@@ -86,7 +86,7 @@ class Common_SystemUnderTestConfigValidator implements Validator
         $value = basename($value, ".json");
 
         // the $value must be a valid system-under-test name
-        if (!in_array($value, $this->sutList)) {
+        if (!$this->sutList->hasEntry($value)) {
             $result->addError(static::MSG_NOTVALIDSUT);
             return $result;
         }

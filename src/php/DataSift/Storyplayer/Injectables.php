@@ -49,7 +49,6 @@ use DataSift\Storyplayer\Injectables\ActiveConfigSupport;
 use DataSift\Storyplayer\Injectables\ActiveDeviceSupport;
 use DataSift\Storyplayer\Injectables\ActiveSystemUnderTestConfigSupport;
 use DataSift\Storyplayer\Injectables\ActiveTestEnvironmentConfigSupport;
-use DataSift\Storyplayer\Injectables\AdditionalConfigsSupport;
 use DataSift\Storyplayer\Injectables\CodeParserSupport;
 use DataSift\Storyplayer\Injectables\DataFormatterSupport;
 use DataSift\Storyplayer\Injectables\DefaultCommandLineSupport;
@@ -67,7 +66,6 @@ use DataSift\Storyplayer\Injectables\RuntimeConfigSupport;
 use DataSift\Storyplayer\Injectables\StaticConfigManagerSupport;
 use DataSift\Storyplayer\Injectables\StoryplayerConfigFilenameSupport;
 use DataSift\Storyplayer\Injectables\StoryplayerConfigSupport;
-use DataSift\Storyplayer\Injectables\TemplateEngineSupport;
 
 /**
  * a container for common services and data, to avoid making them global
@@ -85,7 +83,6 @@ class Injectables extends BaseInjectables
 	use ActiveDeviceSupport;
 	use ActiveSystemUnderTestConfigSupport;
 	use ActiveTestEnvironmentConfigSupport;
-	use AdditionalConfigsSupport;
 	use CodeParserSupport;
 	use DataFormatterSupport;
 	use DefaultCommandLineSupport;
@@ -103,5 +100,4 @@ class Injectables extends BaseInjectables
 	use StaticConfigManagerSupport;
 	use StoryplayerConfigFilenameSupport;
 	use StoryplayerConfigSupport;
-	use TemplateEngineSupport;
 }

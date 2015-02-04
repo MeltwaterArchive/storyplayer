@@ -37,6 +37,13 @@ use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\ShowTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
+use DataSift\Storyplayer\ConfigLib\DevicesList;
+use DataSift\Storyplayer\DeviceLib\HardCodedDevices;
+use DataSift\Storyplayer\ConfigLib\SystemsUnderTestList;
+use DataSift\Storyplayer\SystemsUnderTestLib\HardCodedSystemsUnderTest;
+use DataSift\Storyplayer\ConfigLib\TestEnvironmentsList;
+use DataSift\Storyplayer\TestEnvironmentsLib\HardCodedTestEnvironments;
+
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 
@@ -45,6 +52,9 @@ define('APP_BINDIR', __DIR__);
 
 // enable signal handling
 declare(ticks=1);
+
+// we want all the memory
+ini_set('memory_limit', -1);
 
 /**
  * can we safely load this file?
@@ -182,9 +192,6 @@ function main($argv)
 	// activate support for printing to the user
 	$output = $injectables->initOutputSupport();
 
-	// activate support for rendering templates of any kind
-	$injectables->initTemplateEngineSupport();
-
 	// activate support for parsing code
 	$injectables->initCodeParserSupport();
 
@@ -207,20 +214,24 @@ function main($argv)
 		$runtimeConfigManager = $injectables->initRuntimeConfigSupport($injectables);
 		$runtimeConfig        = $injectables->runtimeConfig;
 
-		// a list of the additional files that we will only merge
-		// on-demand
-		$additionalConfigs = [];
-		foreach ($defaultConfig->configs as $name => $dirs)
-		{
-			$additionalConfigs[$name] = $staticConfigManager->getListOfConfigFiles($dirs);
-		}
-		$injectables->initAdditionalConfigsSupport($additionalConfigs);
+		// a list of the additional files that the user can select from
+		$sutList = new SystemsUnderTestList();
+		$sutList->addHardCodedList(new HardCodedSystemsUnderTest);
+		$sutList->findConfigs();
+
+		$envList = new TestEnvironmentsList();
+		$envList->addHardCodedList(new HardCodedTestEnvironments);
+		$envList->findConfigs();
+
+		$deviceList = new DevicesList();
+		$deviceList->addHardCodedList(new HardCodedDevices);
+		$deviceList->findConfigs();
 
 		// put all of that into something we can give to the CliEngine
-		$injectables->initKnownDevicesSupport($additionalConfigs['devices']);
-		$injectables->initKnownTestEnvironmentsSupport($additionalConfigs['testEnvironments']);
+		$injectables->initKnownDevicesSupport($deviceList);
+		$injectables->initKnownTestEnvironmentsSupport($envList);
 		$injectables->initDefaultTestEnvironmentName($injectables);
-		$injectables->initKnownSystemsUnderTestSupport($additionalConfigs['systemsUnderTest']);
+		$injectables->initKnownSystemsUnderTestSupport($sutList);
 		$injectables->initDefaultSystemUnderTestName($injectables);
 
 		// do we have any command-line defaults set in the config?
@@ -261,7 +272,7 @@ function main($argv)
 	$engine->addEngineSwitch(new VersionSwitch);
 	$engine->addEngineSwitch(new KillProcesses_Switch);
 	$engine->addEngineSwitch(new ListProcesses_Switch);
-	$engine->addEngineSwitch(new ListSystems_Switch($injectables->knownSystemsUnderTestList));
+	$engine->addEngineSwitch(new ListSystems_Switch($injectables->knownSystemsUnderTestFilenames));
 	$engine->addEngineSwitch(new ListTargets_Switch($injectables->knownTestEnvironmentsList));
 	$engine->addEngineSwitch(new LongHelpSwitch);
 	$engine->addEngineSwitch(new ShortHelpSwitch);

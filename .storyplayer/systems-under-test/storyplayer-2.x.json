@@ -1,2 +1,8 @@
-[
-]
+{
+	"appSettings": {
+		"testData": {
+			"name": "storyplayer",
+			"version": "2.x"
+		}
+	}
+}

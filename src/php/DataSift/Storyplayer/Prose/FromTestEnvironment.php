@@ -66,9 +66,8 @@ class FromTestEnvironment extends Prose
 		// what are we doing?
 		$log = $st->startAction("get $setting from test environment");
 		// get the details
-		$testEnv        = $st->getTestEnvironment();
-		$templateEngine = $st->getTemplateEngine();
-		$value          = json_decode($templateEngine->render('{{ ' . $setting . '|json_encode|raw }}', json_decode(json_encode($testEnv), true)));
+		$testEnv = $st->getTestEnvironment();
+		$value   = $testEnv->getData($setting);
 
 		// log the settings
 		$printer  = new DataPrinter();
@@ -94,9 +93,10 @@ class FromTestEnvironment extends Prose
 
 		// convert into dot notation
 		$convertor = new DotNotationConvertor();
-		$return    = $convertor->convertToArray($testEnv);
+		$return    = $convertor->convertToArray($testEnv->getExpandedData($st->getConfig()));
 
 		// all done
+		$log->endAction();
 		return $return;
 	}
 }

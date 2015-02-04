@@ -63,7 +63,7 @@ trait DefaultTestEnvironmentName
 		$searchList = [];
 
 		// do we have any defaults in the storyplayer.json file?
-		$config = json_decode($injectables->storyplayerConfig);
+		$config = $injectables->storyplayerConfig;
 		if (isset($config->defaults, $config->defaults->target)) {
 			$searchList[] = $config->defaults->target;
 		}
@@ -76,7 +76,7 @@ trait DefaultTestEnvironmentName
 
 		// do any of these environments exist?
 		foreach ($searchList as $testEnvName) {
-			if (isset($injectables->knownTestEnvironments->$testEnvName)) {
+			if ($injectables->knownTestEnvironmentsList->hasEntry($testEnvName)) {
 				$this->defaultTestEnvironmentName = $testEnvName;
 				// all done
 				return;

@@ -45,15 +45,11 @@ namespace DataSift\Storyplayer\Injectables;
 
 use Exception;
 use DataSift\Storyplayer\Injectables;
+use DataSift\Storyplayer\ConfigLib\ActiveConfig;
 
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Stone\ObjectLib\BaseObject;
-
-use Datasift\Os;
-use Datasift\IfconfigParser;
-use Datasift\netifaces;
-use Datasift\netifaces\NetifacesException;
 
 /**
  * support for working with Storyplayer's config file
@@ -71,118 +67,16 @@ trait ActiveConfigSupport
 
 	public function initActiveConfigSupport(Injectables $injectables)
 	{
-		// start with what we know about where storyplayer is running
-		//
-		// this gives us an initial set of variables that can be supported
-		// in the storyplayer.json config file
-		$this->activeConfig = new BaseObject;
-		$this->activeConfig->storyplayer = new BaseObject;
-        $this->activeConfig->storyplayer->ipAddress  = $this->getHostIpAddress();
-        $this->activeConfig->storyplayer->currentDir = getcwd();
-        $this->activeConfig->storyplayer->user = new BaseObject;
-        $this->activeConfig->storyplayer->user->home = getenv('HOME');
+        $this->activeConfig = new ActiveConfig;
+        $this->activeConfig->init($injectables);
 
-		// add in what we know from the default config
-		$this->activeConfig->storyplayer->mergeFrom($injectables->defaultConfig);
-
-		// add in the storyplayer config file
-		$config = json_decode($injectables->templateEngine->render(
-			$injectables->storyplayerConfig,
-			json_decode(json_encode($this->activeConfig), true)
-		));
-		$this->activeConfig->storyplayer->mergeFrom($config);
-
-        // we need to link the hostsTable and rolesTable for this
-        // test environment into the activeConfig
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
-        $testEnvName          = $injectables->activeTestEnvironmentName;
-
-		$hostsTable = $runtimeConfigManager->getTable($runtimeConfig, 'hosts');
-        if (!isset($hostsTable->$testEnvName)) {
-            $hostsTable->$testEnvName = new BaseObject;
-        }
-        $this->activeConfig->hosts = $hostsTable->$testEnvName;
-
-		$rolesTable = $runtimeConfigManager->getTable($runtimeConfig, 'roles');
-        if (!isset($rolesTable->$testEnvName)) {
-            $rolesTable->$testEnvName = new BaseObject;
-        }
-        $this->activeConfig->roles = $rolesTable->$testEnvName;
+        $this->activeConfig->mergeStoryplayerConfig($injectables->storyplayerConfig);
+        $this->activeConfig->mergeSystemUnderTestConfig($injectables->activeSystemUnderTestConfig);
+        $this->activeConfig->mergeTestEnvironmentConfig($injectables->activeTestEnvironmentConfig);
 
 		// all done
 		return $this->activeConfig;
 	}
 
-    protected function getHostIpAddress()
-    {
-        // step 1 - how many adapters do we have on this box?
-        // @todo Maybe we want to move this somewhere more central later?
-        $os = Os::getOs();
-        $parser = IfconfigParser::fromDistributions($os->getPossibleClassNames());
-        $netifaces = new netifaces($os, $parser);
 
-        $adapters = $netifaces->listAdapters();
-        if (empty($adapters)) {
-            throw new Exception("unable to parse host machine network adapters list");
-        }
-
-        // step 2 - find an adapter that is most likely to have the IP address
-        // that we want
-        //
-        // our algorithm is simple:
-        //
-        // * we return the first non-loopback adapter that has an IP address
-        // * if that fails, we return the first loopback adapter that has
-        //   an IP address
-        //
-        // and if that fails, we give up
-
-        try {
-            // special case - when loopback is our only adapter
-            $loopback = null;
-
-            // loop over the adapters
-            foreach ($adapters as $adapterToTest) {
-                // does the adapter have an IP address?
-                try {
-                    $ipAddress = $netifaces->getIpAddress($adapterToTest);
-                } catch(NetifacesException $e){
-                    // We couldn't get an IP address
-                    $ipAddress = null;
-                }
-
-                // did we get back a valid IP address?
-                $parts = explode('.', $ipAddress);
-                if (count($parts) == 4) {
-                    // success!
-                    //
-                    // but wait - is it actually the loopback interface?
-                    if (in_array($adapterToTest, ['lo0', 'lo']) && ($loopback == null)) {
-                        $loopback = $ipAddress;
-                    }
-                    else {
-                        return $ipAddress;
-                    }
-                }
-            }
-
-            // we didn't find any adapters with an IP address
-            //
-            // but is the loopback up and running?
-            if ($loopback != null) {
-                // this is better than throwing an error
-                return $loopback;
-            }
-
-            // if we get here, we could not determine the IP address of our
-            // host :(
-            //
-            // this sucks
-            throw new NetifacesException("Unable to determine IP address");
-
-        } catch (NetifacesException $e){
-            throw new Exception("could not determine IP address of host machine");
-        }
-    }
 }

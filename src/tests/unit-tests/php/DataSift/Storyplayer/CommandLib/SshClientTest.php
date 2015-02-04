@@ -134,6 +134,12 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         $i->initRuntimeConfigSupport($i);
         $st = new StoryTeller($i);
 
+        // our expected results
+        $expectedOptions = [
+            "-o StrictHostKeyChecking=no",
+            "-n"
+        ];
+
         // our test subject
         $obj = new SshClient($st);
 
@@ -145,7 +151,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals([ '-n'], $actualOptions);
+        $this->assertEquals($expectedOptions, $actualOptions);
     }
 
     /**
@@ -513,7 +519,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         $command = "ls /tmp";
 
         // the full SSH command should be ...
-        $fullCommand = 'ssh -o StrictHostKeyChecking=no '
+        $fullCommand = 'ssh   -o StrictHostKeyChecking=no'
             . ' -n '
             . $username . '@' . $ipAddress
             . ' "' . $command . '"';
@@ -535,7 +541,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         $output->shouldReceive('logPhaseActivity');
 
         // our fake injectables container
-        $injectables = new stdClass;
+        $injectables = new Injectables;
         $injectables->dataFormatter = new DataFormatter;
         $injectables->dataFormatter->setIsVerbose(true);
         $injectables->output = $output;
@@ -587,7 +593,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         $output->shouldReceive('logPhaseActivity');
 
         // our fake injectables container
-        $injectables = new stdClass;
+        $injectables = new Injectables;
         $injectables->dataFormatter = new DataFormatter;
         $injectables->dataFormatter->setIsVerbose(true);
         $injectables->output = $output;
@@ -638,7 +644,7 @@ class SshClientTest extends PHPUnit_Framework_TestCase
         $output->shouldReceive('logPhaseActivity');
 
         // our fake injectables container
-        $injectables = new stdClass;
+        $injectables = new Injectables;
         $injectables->dataFormatter = new DataFormatter;
         $injectables->dataFormatter->setIsVerbose(true);
         $injectables->output = $output;

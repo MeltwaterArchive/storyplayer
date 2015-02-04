@@ -209,9 +209,6 @@ class StoryTeller
 	// story / template params
 	private $defines = [];
 
-	// our template engine, used to expand $testEnv
-	private $templateEngine = null;
-
 	// our repository of parsed code, for printing code statements
 	private $codeParser = null;
 
@@ -222,9 +219,6 @@ class StoryTeller
 	{
 		// remember our output object
 		$this->setOutput($injectables->output);
-
-        // our template engine
-        $this->setTemplateEngine($injectables->templateEngine);
 
         // our code parser
         $this->setCodeParser($injectables->codeParser);
@@ -488,16 +482,6 @@ class StoryTeller
 		$this->output = $output;
 	}
 
-	public function getTemplateEngine()
-	{
-		return $this->templateEngine;
-	}
-
-	public function setTemplateEngine($templateEngine)
-	{
-		$this->templateEngine = $templateEngine;
-	}
-
 	public function getCodeParser()
 	{
 		return $this->codeParser;
@@ -522,13 +506,15 @@ class StoryTeller
 	public function getConfig()
 	{
 		// get our config
-		$return = clone $this->config;
-
-		// now, apply all of the defines that we know about
-		// TBD
+		$return = $this->config->getExpandedConfig();
 
 		// all done
 		return $return;
+	}
+
+	public function getActiveConfig()
+	{
+		return $this->config;
 	}
 
 	public function setConfig($config)
@@ -543,20 +529,7 @@ class StoryTeller
 
 	public function getTestEnvironmentConfig()
 	{
-		// expand the config, filling in any template vars that we
-		// can
-		$config = json_decode($this->templateEngine->render(
-			$this->testEnvConfig,
-			json_decode(json_encode($this->config), true)
-		));
-
-		// convert the config to our BaseObject, so that the caller can
-		// take advantage of what it adds
-		$return = new BaseObject;
-		$return->mergeFrom($config);
-
-		// all done
-		return $return;
+		return $this->testEnvConfig->getExpandedConfig();
 	}
 
 	/**

@@ -34,47 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Injectables
+ * @package   Storyplayer/SystemsUnderTestLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Injectables;
+namespace DataSift\Storyplayer\SystemsUnderTestLib;
 
-use Twig_Environment;
-use Twig_Loader_String;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * support for rendering templates of any kind
+ * Exception thrown when a 'role' in a system-under-test has a name, but
+ * it isn't a string
  *
  * @category  Libraries
- * @package   Storyplayer/Injectables
+ * @package   Storyplayer/SystemsUnderTestLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait TemplateEngineSupport
+class E4xx_E4xx_SystemUnderTestRoleNameMustBeString extends E4xx_SystemUnderTestConfigError
 {
-	/**
-	 * an engine any part of Storyplayer can use to expand templates,
-	 * such as config files
-	 *
-	 * @var \Twig_Environment
-	 */
-	public $templateEngine;
-
-	/**
-	 *
-	 * @return void
-	 */
-	public function initTemplateEngineSupport()
+	public function __construct($filename, $index)
 	{
-        // we're going to expose this environment through Twig, to give
-        // us template support
-        $loader = new Twig_Loader_String();
-        $this->templateEngine   = new Twig_Environment($loader);
+		$msg = "Config file '{$filename}': 'roles[{$index}].role' must be a string";
+		parent::__construct(400, $msg, $msg);
 	}
 }

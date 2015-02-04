@@ -61,7 +61,7 @@ use Phix_Project\CliEngine\CliSwitch;
 class Common_TestEnvironmentConfigSwitch extends CliSwitch
 {
 	/**
-	 * @param array $envList
+	 * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
 	 * @param string $defaultEnvName
 	 */
 	public function __construct($envList, $defaultEnvName)
@@ -94,7 +94,7 @@ class Common_TestEnvironmentConfigSwitch extends CliSwitch
 
 		// what is the required argument?
 		$requiredArgMsg = "the environment to test against; one of:" . PHP_EOL . PHP_EOL;
-		foreach($envList as $envName) {
+		foreach($envList->getEntryNames() as $envName) {
 			$requiredArgMsg .= "* $envName" . PHP_EOL;
 		}
 		$requiredArgMsg .= PHP_EOL. ' ';

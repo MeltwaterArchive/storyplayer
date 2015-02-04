@@ -91,11 +91,6 @@ class StaticConfigManager extends ConfigManagerBase
 		// all done
 	}
 
-	public function loadAdditionalConfig($config, $filename)
-	{
-		$this->configHelper->loadConfigFile($config, $filename);
-	}
-
 	/**
 	 *
 	 * @return array<string>

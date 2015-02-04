@@ -1,0 +1,17 @@
+{
+	"storyplayer": {
+		"ipAddress": "127.0.0.1",
+		"appSettings": {},
+		"moduleSettings": {},
+		"roles": [
+			{
+				"cli": "localhost"
+			}
+		],
+		"user": {
+			"name": "test-user",
+			"id": 500
+		},
+		"dirs": []
+	}
+}

@@ -34,32 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Injectables
+ * @package   Storyplayer/TestEnvironmentsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Injectables;
+namespace DataSift\Storyplayer\TestEnvironmentsLib;
 
 /**
- * support for remembering the additional config files that are available
- * if the user selects them
+ * Exception thrown when a machine in a test environment group has no
+ * roles defined
  *
  * @category  Libraries
- * @package   Storyplayer/Injectables
+ * @package   Storyplayer/TestEnvironmentsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait AdditionalConfigsSupport
+class E4xx_TestEnvironmentMachineNeedsARole extends E4xx_TestEnvironmentConfigError
 {
-	public $additionalConfigs;
-
-	public function initAdditionalConfigsSupport($additionalConfigs)
+	public function __construct($groupIndex, $name)
 	{
-		$this->additionalConfigs = $additionalConfigs;
+		$msg = "machine '{$name}' in environment group #{$groupIndex} must define at least one role";
+		parent::__construct(400, $msg, $msg);
 	}
 }

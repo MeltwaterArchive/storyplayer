@@ -1,0 +1,6 @@
+{
+	"defaults": [
+		"-s", "storyplayer-2.0",
+		false
+	]
+}
