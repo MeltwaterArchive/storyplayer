@@ -140,7 +140,9 @@ class DsbuildProvisioner extends Provisioner
 			// which dsbuildfile are we going to run?
 			$dsbuildFilename = "";
 			$candidateFilenames = [
+				"dsbuildfile-" . $hostName . '.sh',
 				"dsbuildfile-" . $hostName,
+				"dsbuildfile.sh",
 				"dsbuildfile",
 			];
 			foreach ($candidateFilenames as $candidateFilename) {
