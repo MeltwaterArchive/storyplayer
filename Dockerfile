@@ -53,7 +53,7 @@
 #     sudo service docker.io restart
 #
 # To create the container execute:
-#     docker build --tag="datasift:storyplayer" .
+#     docker build --tag="datasift/storyplayer:latest" .
 #
 # To log into the newly created container:
 #     docker run -t -i datasift:storyplayer /bin/bash
@@ -76,11 +76,15 @@ MAINTAINER nicola.asuni@datasift.com
 
 RUN apt-get update
 RUN apt-get -y dist-upgrade
-RUN apt-get -y install build-essential git screen ansible vagrant python php5 php5-cli php5-common php5-curl php5-json php-pear libyaml-dev php5-dev
+RUN apt-get -y install build-essential git screen ansible vagrant python php5 php5-cli php5-common php5-curl php5-json php-pear libyaml-dev php5-dev ruby-dev
 RUN yes '' | pecl install -f yaml-beta
 RUN echo "extension=yaml.so" >> /etc/php5/cli/php.ini
 RUN echo "extension=yaml.so" >> /etc/php5/apache2/php.ini
+
+# install vagrant provider plugins
 RUN vagrant plugin install vagrant-omnibus
+RUN vagrant plugin install vagrant-openstack-plugin
+RUN vagrant plugin install vagrant-aws
 
 # configure ssh to disable strict host checking
 RUN mkdir /root/.ssh
