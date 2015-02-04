@@ -348,3 +348,30 @@ img.panel {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.masthead > h1 {
+  font-size: 60px;
+}
+
+.subheading > h2 {
+  font-size: 40px;
+}
+
+.subheading > p {
+  font-size: 20px;
+}
+
+.features {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.features > p {
+  font-size: 15px;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
