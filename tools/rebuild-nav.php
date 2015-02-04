@@ -198,7 +198,7 @@ function buildSidebarList($toc)
 	// this will hold our list of sidebars to build
 	$sidebars = array();
 
-	// trun the contents list into a list of sidebars
+	// turn the contents list into a list of sidebars
 	foreach ($toc->contents as $filename) {
 		// convert the filename into a sidebar name
 		$parts = explode("/", $filename);
@@ -216,14 +216,18 @@ function buildSidebarList($toc)
 		}
 
 		$sidebars[$sidebarName]["contents"][] = $filename;
-	}
 
-	// now we need to build up the sections list for each sidebar
-	/*
-	foreach ($sidebars as $sidebarName => $sidebarDetails) {
-
+		// add ourselves to our parent sidebar too
+		if (basename($filename) == 'index') {
+			if (count($parts) > 1) {
+				$parentParts = array_slice($parts, 0, count($parts) - 1);
+				$sidebars[implode("-", $parentParts)]['contents'][] = $filename;
+			}
+			else {
+				$sidebars['top-level']['contents'][] = $filename;
+			}
+		}
 	}
-	*/
 
 	// all done
 	return $sidebars;
