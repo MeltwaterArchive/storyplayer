@@ -128,6 +128,11 @@ class TestEnvironmentConfig extends WrappedConfig
                         if (!isset($machine->params)) {
                             $machine->params = new BaseObject;
                         }
+                        else if (! $machine->params instanceof BaseObject) {
+                            $tmp = new BaseObject;
+                            $tmp->mergeFrom($machine->params);
+                            $machine->params = $tmp;
+                        }
                         $machine->params->mergeFrom($sutRole->params);
                     }
                 }
