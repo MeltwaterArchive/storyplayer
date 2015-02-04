@@ -103,6 +103,10 @@ class ActiveConfig extends WrappedConfig
             $rolesTable->$testEnvName = new BaseObject;
         }
         $activeConfig->roles = $rolesTable->$testEnvName;
+
+        // we want to remember the name of the system-under-test
+        $activeConfig->systemundertest = new BaseObject;
+        $activeConfig->systemundertest->name = $injectables->activeSystemUnderTestName;
 	}
 
 	public function mergeStoryplayerConfig($spConf)
@@ -113,11 +117,11 @@ class ActiveConfig extends WrappedConfig
 	public function mergeSystemUnderTestConfig($sutConfig)
 	{
 		if ($sutConfig->hasData('appSettings')) {
-			$this->mergeData('storyplayer.appSettings', $sutConfig->getData('appSettings'));
+			$this->mergeData('systemundertest.appSettings', $sutConfig->getData('appSettings'));
 		}
 
 		if ($sutConfig->hasData('moduleSettings')) {
-			$this->mergeData('storyplayer.moduleSettings', $sutConfig->getData('moduleSettings'));
+			$this->mergeData('systemundertest.moduleSettings', $sutConfig->getData('moduleSettings'));
 		}
 	}
 
