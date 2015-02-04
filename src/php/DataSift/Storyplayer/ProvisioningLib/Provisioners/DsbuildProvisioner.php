@@ -208,6 +208,7 @@ class DsbuildProvisioner extends Provisioner
 		// build the data to write
 		$output = "";
 		foreach ($vars as $name => $value) {
+			$name = str_replace("-", "_", $name);
 			$output .= strtoupper($name) . "='" . $value . "';" . PHP_EOL;
 		}
 
