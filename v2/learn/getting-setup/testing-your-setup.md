@@ -16,6 +16,7 @@ The best way to test that everything is installed is to run Storyplayer's own te
     cd Projects
     git clone https://github.com/datasift/storyplayer.git
     cd storyplayer
+    composer.phar install
     src/bin/storyplayer install
     vendor/bin/browsermob-proxy.sh start
     vendor/bin/selenium-server.sh start
