@@ -233,4 +233,77 @@ class ExpectsHost extends HostBase
 		return true;
 	}
 
+	public function hasFileWithPermissions($filename, $owner, $group, $mode)
+	{
+		// shorthand
+		$st = $this->st;
+		$octMode = decoct($mode);
+
+		// what are we doing?
+		$log = $st->startAction("make sure file '{$filename}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// get the file details
+		$details = $st->fromHost($hostDetails->name)->getFileDetails($filename);
+
+		// validate the details
+		if ($details === null) {
+			throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' exists", "'{$filename}' does not exist");
+		}
+
+		if ($details->type != 'file') {
+			throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' is a file", "'{$filename}' is type '{$details->type}'");
+		}
+
+		if ($details->mode != $mode) {
+			$theirOctMode = decoct($details->mode);
+			throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' has permissions '{$octMode}'", "'{$filename}' has permissions '{$theirOctMode}'");
+		}
+
+		if ($details->user != $owner || $details->group != $group) {
+			throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' has ownership '{$owner}:{$group}'", "'{$filename}' has ownership '{$details->user}:{$details->group}'");
+		}
+
+		// if we get here, then all is good
+		$log->endAction();
+	}
+
+	public function hasFolderWithPermissions($folder, $owner, $group, $mode)
+	{
+		// shorthand
+		$st = $this->st;
+		$octMode = decoct($mode);
+
+		// what are we doing?
+		$log = $st->startAction("make sure folder '{$folder}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// get the file details
+		$details = $st->fromHost($hostDetails->name)->getFileDetails($folder);
+
+		// validate the details
+		if ($details === null) {
+			throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' exists", "'{$folder}' does not exist");
+		}
+
+		if ($details->type != 'dir') {
+			throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' is a file", "'{$folder}' is type '{$details->type}'");
+		}
+
+		if ($details->mode != $mode) {
+			$theirOctMode = decoct($details->mode);
+			throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' has permissions '{$octMode}'", "'{$folder}' has permissions '{$theirOctMode}'");
+		}
+
+		if ($details->user != $owner || $details->group != $group) {
+			throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' has ownership '{$owner}:{$group}'", "'{$folder}' has ownership '{$details->user}:{$details->group}'");
+		}
+
+		// if we get here, then all is good
+		$log->endAction();
+	}
 }
