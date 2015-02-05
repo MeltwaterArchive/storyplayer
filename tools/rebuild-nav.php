@@ -161,8 +161,17 @@ function buildSidebar($sidebar, $toc, $pages)
 		}
 		$page = $pages["indexed"][$filename];
 
+		// build the href for the link
+		$parts = explode("/", $page['name']);
+		if (count($parts) > 1) {
+			$href = implode("/", array_slice($parts, 1));
+		}
+		else {
+			$href = $page['name'];
+		}
+
 		// add the links into the sidebar
-		$sidebarHtml .= '<li><a href="' . basename($page['name']) . '.html">' . $page['title'] . "</a></li>\n";
+		$sidebarHtml .= '<li><a href="' . $href . '.html">' . $page['title'] . "</a></li>\n";
 		// echo $page['title'] . "\n";
 
 		if (isset($page['h2']))
@@ -170,7 +179,7 @@ function buildSidebar($sidebar, $toc, $pages)
 			$sidebarHtml .="<ul>\n";
 			foreach ($page['h2'] as $h2)
 			{
-				$sidebarHtml .= '<li><a href="' . basename($page['name']) . '.html#' . $h2['id'] . '">' . $h2['text'] . "</a></li>\n";
+				$sidebarHtml .= '<li><a href="' . $href . '.html#' . $h2['id'] . '">' . $h2['text'] . "</a></li>\n";
 				// echo "- " . $h2["text"] . "\n";
 			}
 
