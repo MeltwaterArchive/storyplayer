@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\OsLib;
 
+use stdClass;
 use DataSift\Storyplayer\CommandLib\CommandClient;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
@@ -146,5 +147,29 @@ abstract class OsBase implements SupportedOs
 
 		// attempt the upload
 		return $client->uploadFile($sourceFilename, $destFilename);
+	}
+
+	public function getFileDetails($hostDetails, $filename)
+	{
+		// get a client
+		$client = $this->getClient($this->st, $hostDetails);
+
+		// upload our Python script to help us out here
+		$rand = rand(0, 999999);
+		$destFilename = "/tmp/st-{$rand}.py";
+		$client->uploadFile(__DIR__ . "/path_helper.py", $destFilename);
+
+		// run the script to inspect the filename
+		$statCommand = "python {$destFilename} {$filename}";
+		$result = $client->runCommand($statCommand);
+
+		// did it work?
+		if ($result->returnCode != 0) {
+			return null;
+		}
+		$retval = json_decode($result->output);
+
+		// all done
+		return $retval;
 	}
 }

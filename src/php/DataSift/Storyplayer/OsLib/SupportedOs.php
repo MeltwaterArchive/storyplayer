@@ -123,4 +123,15 @@ interface SupportedOs
 	 * @return void
 	 */
 	public function uploadFile($hostDetails, $sourceFilename, $destFilename);
+
+	/**
+	 * get details about a filesystem entry
+	 *
+	 * @param  HostDetails $hostDetails
+	 *         the details of the host to query
+	 * @param  string $filename
+	 *         path to the file/folder to query
+	 * @return stdClass
+	 */
+	public function getFileDetails($hostDetails, $filename);
 }
