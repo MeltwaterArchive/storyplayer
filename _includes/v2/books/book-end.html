@@ -48,26 +48,6 @@
         var dropdown=document.getElementById('all_versions')
         window.location.href=dropdown.options[dropdown.selectedIndex].value
       }
-
-      // set the dropdown to the current page
-      var dropdown=document.getElementById('all_chapters');
-      var location_len = window.location.href.length;
-
-      for (var i = 0; i < dropdown.options.length; i++) {
-        // skip disabled options
-        if (dropdown.options[i].disabled) {
-          continue;
-        }
-        var option_len = dropdown.options[i].value.length;
-        var location_bit = window.location.href.substring(location_len - option_len);
-        console.log(location_bit);
-        console.log(dropdown.options[i].value);
-        console.log('--');
-        if (dropdown.options[i].value == location_bit) {
-          dropdown.selectedIndex = i;
-          break;
-        }
-      }
     </script>
 
     <script>hljs.initHighlightingOnLoad();</script>
