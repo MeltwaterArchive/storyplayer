@@ -431,4 +431,25 @@ class FromHost extends HostBase
 		return $result;
 	}
 
+	public function getFileDetails($filename)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get details for '{$filename}' on host '{$this->args[0]}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// get an object to talk to this host
+		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+
+		// get the details
+		$details = $host->getFileDetails($hostDetails, $filename);
+
+		// all done
+		$log->endAction();
+		return $details;
+	}
 }
