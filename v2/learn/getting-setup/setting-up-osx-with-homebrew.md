@@ -52,6 +52,10 @@ Storyplayer will work equally well with both, but if you're not sure which one t
         [opcache]
         zend_extension=/usr/local/Cellar/php56/5.6.4/lib/php/extensions/no-debug-non-zts-20131226/opcache.so
 
+1. Download and install [Composer](https://getcomposer.org/download/)
+
+   Composer is the modern package manager for PHP libraries. You'll use Composer to install Storyplayer into your projects.
+
 ## Other CLI Tools
 
 1. Run this command in Terminal to install GNU Screen:
@@ -75,10 +79,6 @@ Storyplayer will work equally well with both, but if you're not sure which one t
 1. Download and install [a Java VM for OSX](http://www.java.com).
 
    Storyplayer uses [Selenium v2 aka WebDriver](http://www.seleniumhq.org) to control real web browsers. Selenium is written in Java.
-
-1. Download and install [Composer](https://getcomposer.org/download/)
-
-   Composer is the modern package manager for PHP libraries. You'll use Composer to install Storyplayer into your projects.
 
 1. Download and install [Google Chrome](https://www.google.com/chrome/) and [Mozilla Firefox](https://www.mozilla.org).
 
