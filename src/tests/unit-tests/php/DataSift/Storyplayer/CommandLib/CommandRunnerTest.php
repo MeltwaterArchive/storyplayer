@@ -127,7 +127,7 @@ class CommandRunnerTest extends PHPUnit_Framework_TestCase
 	    foreach ($helperCmds as $helperCmd) {
 	    	try {
 		    	$caughtException = false;
-		    	$obj->runSilently($st, $cmd);
+		    	$obj->runSilently($st, $helperCmd);
 		    }
 		    catch (Exception $e) {
 		    	$caughtException = true;

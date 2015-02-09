@@ -43,10 +43,12 @@
 
 namespace DataSift\Storyplayer\Injectables;
 
+use Exception;
 use DataSift\Storyplayer\Injectables;
 use DataSift\Storyplayer\ConfigLib\StoryplayerConfig;
 use DataSift\Storyplayer\ConfigLib\E4xx_ConfigFileNotFound;
 use DataSift\Storyplayer\ConfigLib\E4xx_ConfigFileContainsInvalidJson;
+use DataSift\Storyplayer\ConfigLib\E4xx_StoryplayerConfigInvalid;
 use DataSift\Storyplayer\ConfigLib\E4xx_StoryplayerConfigMustBeAnObject;
 use DataSift\Storyplayer\ConfigLib\E4xx_StoryplayerDefaultsMustBeStrings;
 use DataSift\Storyplayer\ConfigLib\E4xx_StoryplayerDefaultsSectionMustBeAnArray;

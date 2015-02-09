@@ -144,7 +144,6 @@ class UsingPDODB extends Prose
 
 			// all done
 			$log->endAction();
-			return $stmt;
 		}
 		catch (Exception $e)
 		{
@@ -166,7 +165,6 @@ class UsingPDODB extends Prose
 
 			// all done
 			$log->endAction();
-			return $stmt;
 		}
 		catch (Exception $e)
 		{
@@ -188,7 +186,6 @@ class UsingPDODB extends Prose
 
 			// all done
 			$log->endAction();
-			return $stmt;
 		}
 		catch (Exception $e)
 		{

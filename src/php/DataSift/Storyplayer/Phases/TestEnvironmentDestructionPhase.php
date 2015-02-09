@@ -62,7 +62,7 @@ use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 
 class TestEnvironmentDestructionPhase extends InfrastructurePhase
 {
-	public function doPhase()
+	public function doPhase($thingBeingPlayed = null)
 	{
 		// shorthand
 		$st    = $this->st;

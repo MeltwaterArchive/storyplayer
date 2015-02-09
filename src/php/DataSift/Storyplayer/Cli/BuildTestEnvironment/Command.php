@@ -58,7 +58,6 @@ use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
 use DataSift\Storyplayer\PlayerLib\PhaseGroup_Player;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\Story_Context;
 use DataSift\Storyplayer\PlayerLib\Story_Player;
 use DataSift\Storyplayer\PlayerLib\TestEnvironment_Player;
 use DataSift\Storyplayer\Console\DevModeConsole;
@@ -137,7 +136,7 @@ class BuildTestEnvironment_Command extends BaseCommand
      *
      * @param  CliEngine $engine
      * @param  array     $params
-     * @param  Injectables $injectables
+     * @param  Injectables|null $injectables
      * @return integer
      */
     public function processCommand(CliEngine $engine, $params = array(), $injectables = null)

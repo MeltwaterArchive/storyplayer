@@ -273,7 +273,7 @@ class Story
 
 	/**
 	 * what happened to this story?
-	 * @var DataSift\PlayerLib\Story_Result
+	 * @var \DataSift\Storyplayer\PlayerLib\Story_Result
 	 */
 	protected $storyResult = null;
 

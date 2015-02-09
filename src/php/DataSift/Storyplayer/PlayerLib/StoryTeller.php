@@ -91,6 +91,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @method DataSift\Storyplayer\Prose\FromCurl fromCurl()
  * @method DataSift\Storyplayer\Prose\FromEc2 fromEc2()
  * @method DataSift\Storyplayer\Prose\FromEc2Instance fromEc2Instance(string $hostname)
+ * @method DataSift\Storyplayer\Prose\FromEnvironment fromEnvironment()
  * @method DataSift\Storyplayer\Prose\FromFacebook fromFacebook()
  * @method DataSift\Storyplayer\Prose\FromFile fromFile()
  * @method DataSift\Storyplayer\Prose\FromForm fromForm(string $formId)
@@ -104,6 +105,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @method DataSift\Storyplayer\Prose\FromRuntimeTable fromRuntimeTable(string $tableName)
  * @method DataSift\Storyplayer\Prose\FromSauceLabs fromSauceLabs()
  * @method DataSift\Storyplayer\Prose\FromShell fromShell()
+ * @method DataSift\Storyplayer\Prose\FromSupervisor fromSupervisor()
  * @method DataSift\Storyplayer\Prose\FromTargetsTable fromTargetsTable()
  * @method DataSift\Storyplayer\Prose\FromTestEnvironment fromTestEnvironment()
  * @method DataSift\Storyplayer\Prose\FromUuid fromUuid()
@@ -183,13 +185,13 @@ class StoryTeller
 
 	/**
 	 *
-	 * @var Datasift\Storyplayer\PlayerLib\Action_LogItem
+	 * @var \Datasift\Storyplayer\PlayerLib\Action_LogItem
 	 */
 	private $actionLogger;
 
 	/**
 	 * which of the steps is currently being executed?
-	 * @var DataSift\Storyplayer\Phases\Phase
+	 * @var \DataSift\Storyplayer\Phases\Phase
 	 */
 	private $currentPhase = null;
 

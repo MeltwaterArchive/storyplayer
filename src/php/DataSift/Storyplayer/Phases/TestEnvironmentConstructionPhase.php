@@ -63,7 +63,7 @@ use DataSift\Storyplayer\ProvisioningLib;
 
 class TestEnvironmentConstructionPhase extends InfrastructurePhase
 {
-	public function doPhase()
+	public function doPhase($thingBeingPlayed = null)
 	{
 		// shorthand
 		$st = $this->st;

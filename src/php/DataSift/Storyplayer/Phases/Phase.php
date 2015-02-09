@@ -145,4 +145,6 @@ abstract class Phase
 	}
 
 	abstract public function getPhaseType();
+
+	abstract public function doPhase($thingBeingPlayed);
 }

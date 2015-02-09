@@ -58,7 +58,7 @@ class Story_Checkpoint
 	/**
 	 * the StoryTeller object
 	 *
-	 * @var DataSift\Storyplayer\PlayerLib\StoryTeller
+	 * @var \DataSift\Storyplayer\PlayerLib\StoryTeller
 	 */
 	private $st;
 

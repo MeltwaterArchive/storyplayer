@@ -478,6 +478,7 @@ class FromBrowser extends Prose
 
 		// extract the contents
 		$row = 0;
+		$column = 0;
 		$trElements = $tableElement->getElements('xpath', 'descendant::tbody/tr');
 		foreach ($trElements as $trElement) {
 			$column = 0;

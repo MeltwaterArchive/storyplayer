@@ -202,7 +202,7 @@ class VagrantVm implements SupportedHost
 		// yes it did!!
 		//
 		// we need to know which SSH key to use
-		$vmDetails->sshKeyFile = $this->determinePrivateKey();
+		$vmDetails->sshKeyFile = $this->determinePrivateKey($vmDetails);
 
 		// now, we need its IP address, which may have changed
 		$ipAddress = $this->determineIpAddress($vmDetails);

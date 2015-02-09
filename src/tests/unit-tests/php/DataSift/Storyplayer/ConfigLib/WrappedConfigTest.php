@@ -1087,7 +1087,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $actual = $obj->unsetData("storyplayer.roles.1");
+	    $obj->unsetData("storyplayer.roles.1");
 	}
 
 	/**

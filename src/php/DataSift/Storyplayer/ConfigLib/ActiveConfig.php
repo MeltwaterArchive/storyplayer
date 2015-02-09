@@ -113,7 +113,8 @@ class ActiveConfig extends WrappedConfig
 	public function mergeSystemUnderTestConfig($injectables, SystemUnderTestConfig $sutConfig = null)
 	{
         // do we have a system under test?
-        if (!isset($injectables->activeSystemUnderTestName)) {
+        if (!isset($injectables->activeSystemUnderTestName) || $sutConfig === null) {
+            $this->setData('systemundertest', null);
             return;
         }
 
@@ -127,7 +128,7 @@ class ActiveConfig extends WrappedConfig
 	public function mergeTestEnvironmentConfig($injectables, TestEnvironmentConfig $envConfig = null)
 	{
         // do we have a test environment?
-        if (!isset($injectables->activeTestEnvironmentName)) {
+        if (!isset($injectables->activeTestEnvironmentName) || $envConfig === null) {
             $this->setData('target', null);
             return;
         }

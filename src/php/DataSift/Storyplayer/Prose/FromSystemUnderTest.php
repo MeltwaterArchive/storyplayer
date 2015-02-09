@@ -78,7 +78,7 @@ class FromSystemUnderTest extends Prose
 		// log the settings
 		$printer  = new DataPrinter();
 		$logValue = $printer->convertToString($value);
-		$log->endAction("$setting for '{$app}' is '{$logValue}'");
+		$log->endAction("setting for '{$path}' is '{$logValue}'");
 
 		// all done
 		return $value;
@@ -134,7 +134,7 @@ class FromSystemUnderTest extends Prose
 		// log the settings
 		$printer  = new DataPrinter();
 		$logValue = $printer->convertToString($value);
-		$log->endAction("$setting for '{$module}' is '{$logValue}'");
+		$log->endAction("setting for '{$path}' is '{$logValue}'");
 
 		// all done
 		return $value;

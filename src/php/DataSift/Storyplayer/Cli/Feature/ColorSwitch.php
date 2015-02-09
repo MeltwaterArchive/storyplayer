@@ -63,7 +63,7 @@ class Feature_ColorSwitch extends CliSwitch
 	const ALWAYS_COLOR = 1;
 	const AUTO_COLOR = 2;
 
-    static $supportedValues = [
+    static public $supportedValues = [
         "none" => 0,
         "false" => 0,
         "no" => 0,

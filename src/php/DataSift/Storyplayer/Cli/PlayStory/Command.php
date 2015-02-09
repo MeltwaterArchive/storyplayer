@@ -58,7 +58,6 @@ use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
 use DataSift\Storyplayer\PlayerLib\PhaseGroup_Player;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\Story_Context;
 use DataSift\Storyplayer\PlayerLib\Story_Player;
 use DataSift\Storyplayer\PlayerLib\Tale_Player;
 use DataSift\Storyplayer\PlayerLib\TestEnvironment_Player;

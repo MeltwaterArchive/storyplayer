@@ -61,9 +61,18 @@ use DataSift\Storyplayer\Injectables;
  */
 interface Feature
 {
+	/**
+	 * @return void
+	 */
     public function addSwitches(CliCommand $command, $additionalContext);
 
+	/**
+	 * @return void
+	 */
     public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables);
 
+	/**
+	 * @return void
+	 */
     public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables);
 }

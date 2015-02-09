@@ -276,7 +276,7 @@ class UsingHost extends HostBase
 
 		// yes it is, so stop it
 		// send a TERM signal to the screen session
-		$log->addStep("send SIGTERM to process '{$pid}'", function() use ($pid) {
+		$log->addStep("send SIGTERM to process '{$pid}'", function() use ($st, $pid) {
 			if ($this->getIsLocalhost()) {
 				posix_kill($pid, SIGTERM);
 			}
@@ -296,12 +296,12 @@ class UsingHost extends HostBase
 		});
 
 		if (posix_kill($pid, 0)) {
-			$log->addStep("send SIGKILL to process '{$pid}'", function() use($pid) {
+			$log->addStep("send SIGKILL to process '{$pid}'", function() use($st, $pid) {
 				if ($this->getIsLocalhost()) {
 					posix_kill($pid, SIGKILL);
 				}
 				else {
-					$this->usingHost($this->args[0])->runCommand("kill -9 {$pid}");
+					$st->usingHost($this->args[0])->runCommand("kill -9 {$pid}");
 				}
 				sleep(1);
 			});
