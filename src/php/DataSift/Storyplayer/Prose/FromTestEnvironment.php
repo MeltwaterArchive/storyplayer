@@ -78,6 +78,34 @@ class FromTestEnvironment extends Prose
 		return $value;
 	}
 
+	public function getModuleSetting($setting)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get '{$setting}' from test environment's module settings");
+
+		// get the details
+		$fullPath = 'moduleSettings.' . $setting;
+		$testEnv  = $st->getTestEnvironmentConfig();
+
+		$value = null;
+		foreach ($testEnv as $config) {
+			if ($config->hasData($fullPath)) {
+				$value = $config->getData($fullPath);
+			}
+		}
+
+		// log the settings
+		$printer = new DataPrinter();
+		$logValue = $printer->convertToString($value);
+		$log->endAction("setting is: '{$logValue}'");
+
+		// all done
+		return $value;
+	}
+
 	public function getAllSettings()
 	{
 		// shorthand

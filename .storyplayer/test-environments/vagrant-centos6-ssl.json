@@ -6,17 +6,23 @@
 				"default": {
 					"osName": "centos6",
 					"roles": [
-						"upload_target"
+						"upload_target",
+						"ssl_target"
 					],
 					"appSettings": {
+						"http": {
+							"homepage": "https://storyplayer.test/"
+						},
 						"user": {
 							"username": "vagrant",
 							"group": "vagrant"
 						}
 					}
 				}
-			},
-			"moduleSettings": {
+			}
+		},
+		"moduleSettings": {
+			"http": {
 				"validateSsl": false
 			}
 		},

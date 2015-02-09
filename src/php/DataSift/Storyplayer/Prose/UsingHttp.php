@@ -119,6 +119,17 @@ class UsingHttp extends Prose
             $request->setPayload($body);
         }
 
+        // special case - do we validate SSL certificates in this
+        // test environment?
+        $validateSsl = $st->fromTestEnvironment()->getModuleSetting("http.validateSsl");
+        if (null === $validateSsl) {
+        	// default to TRUE if no setting present
+        	$validateSsl = true;
+        }
+        if (!$validateSsl) {
+        	$request->disableSslCertificateValidation();
+        }
+
 		// make the call
 		$client = new HttpClient();
 		$response = $client->newRequest($request);
