@@ -3,7 +3,7 @@ chromedriver.log
 composer.lock
 composer.phar
 dist
-dsbuild.yml
+dsbuildparams.*
 etc
 .tmp
 nbproject
