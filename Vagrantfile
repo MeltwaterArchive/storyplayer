@@ -2,8 +2,8 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
-  config.vm.box = "centos-6.3-20140826-1333"
-  config.vm.box_url = "https://s3-eu-west-1.amazonaws.com/ds-vagrant-images/centos-6.3-20140826-1333.box"
+  config.vm.box = "centos-6.3-20141201"
+  config.vm.box_url = "https://s3-eu-west-1.amazonaws.com/ds-vagrant-images/centos-6.3-20141201.box"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   config.vm.boot_mode = :gui
