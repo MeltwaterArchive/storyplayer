@@ -112,6 +112,7 @@ class FromTestEnvironment extends Prose
 		$fullPath = 'target.moduleSettings.' . $setting;
 		$config  = $st->getConfig();
 
+		$value = null;
 		if ($config->hasData($fullPath)) {
 			$value = $config->getData($fullPath);
 		}

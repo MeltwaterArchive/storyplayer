@@ -56,7 +56,7 @@ namespace DataSift\Storyplayer\TestEnvironmentsLib;
  */
 class E4xx_TestEnvironmentNeedsGroups extends E4xx_TestEnvironmentConfigError
 {
-	public function __construct($groupIndex)
+	public function __construct()
 	{
 		$msg = "environment has no 'groups' array";
 		parent::__construct(400, $msg, $msg);

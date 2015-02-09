@@ -127,7 +127,6 @@ class Feature_PersistReuseTargetSupport implements Feature
 
             // if we get here, then we do not need to create the test environment
             $injectables->activeConfig->setData('storyplayer.phases.testEnvStartup.TestEnvironmentConstruction', false);
-            $this->reuseTarget = true;
         }
         else
         {
