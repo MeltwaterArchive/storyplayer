@@ -71,6 +71,7 @@ use DataSift\Storyplayer\Cli\Feature\ConsoleSupport;
 use DataSift\Storyplayer\Cli\Feature\DefinesSupport;
 use DataSift\Storyplayer\Cli\Feature\DeviceSupport;
 use DataSift\Storyplayer\Cli\Feature\LocalhostSupport;
+use DataSift\Storyplayer\Cli\Feature\PersistReuseTargetSupport;
 use DataSift\Storyplayer\Cli\Feature\PhaseLoaderSupport;
 use DataSift\Storyplayer\Cli\Feature\ProseLoaderSupport;
 use DataSift\Storyplayer\Cli\Feature\SystemUnderTestSupport;
@@ -137,9 +138,6 @@ class PlayStory_Command extends BaseCommand
      */
     protected $envName;
 
-    // common features
-    use CommonFunctionalitySupport;
-
     public function __construct($injectables)
     {
         // call our parent
@@ -160,8 +158,6 @@ class PlayStory_Command extends BaseCommand
         $this->setSwitches(array(
             new PlayStory_PersistDeviceSwitch(),
             new PlayStory_PersistProcessesSwitch(),
-            new PlayStory_PersistTargetSwitch(),
-            new PlayStory_ReuseTargetSwitch(),
             new PlayStory_LogJsonSwitch(),
             new PlayStory_LogJUnitSwitch(),
             new PlayStory_LogTapSwitch(),
@@ -179,6 +175,7 @@ class PlayStory_Command extends BaseCommand
         $this->addFeature(new Feature_DefinesSupport);
         $this->addFeature(new Feature_PhaseLoaderSupport);
         $this->addFeature(new Feature_ProseLoaderSupport);
+        $this->addFeature(new Feature_PersistReuseTargetSupport);
 
         // now setup all of the switches that we support
         $this->addFeatureSwitches();
@@ -282,9 +279,6 @@ class PlayStory_Command extends BaseCommand
 
         // initialise process persistence
         $this->initProcessPersistence($st, $engine, $injectables);
-
-        // initialise target persistence / reuse
-        $this->initTargetPersistence($st, $engine, $injectables);
 
         // are we persisting the test device?
         if ($this->persistDevice) {
@@ -573,73 +567,6 @@ class PlayStory_Command extends BaseCommand
         // are we persisting processes?
         if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
             $this->persistProcesses = true;
-        }
-    }
-
-    protected function initTargetPersistence(StoryTeller $st, CliEngine $engine, Injectables $injectables)
-    {
-        // are we keeping the test environment hanging around afterwards?
-        if (isset($engine->options->persistTarget) && $engine->options->persistTarget)
-        {
-            $injectables->activeConfig->setData('storyplayer.phases.testEnvShutdown.TestEnvironmentDestruction', false);
-            $injectables->activeConfig->unsetData('storyplayer.phases.userAbort.TestEnvironmentDestruction');
-            $this->persistTarget = true;
-        }
-
-        // are we trying to use a test environment that has previously
-        // been persisted?
-        if (isset($engine->options->reuseTarget) && $engine->options->reuseTarget)
-        {
-            // does the target exist to be reused?
-            $this->output->setSilentMode();
-            $hasTarget = $st->fromTargetsTable()->hasCurrentTestEnvironment();
-            $this->output->resetSilentMode();
-
-            if (!$hasTarget) {
-                $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' does not exist; ignoring --reuse-target switch");
-                return;
-            }
-
-            // okay, so we have the test environment in the targets table,
-            // but has the test environment been changed at all?
-            $this->output->setSilentMode();
-            $origSig = $st->fromTargetsTable()->getCurrentTestEnvironmentSignature();
-            $currentSig = $st->getTestEnvironmentSignature();
-            $this->output->resetSilentMode();
-
-            if ($origSig != $currentSig) {
-                // our test environment entry isn't valid, so remove it
-                $this->output->setSilentMode();
-                $st->usingTargetsTable()->removeCurrentTestEnvironment();
-                $this->output->resetSilentMode();
-
-                $this->output->logCliWarning("target environment '" . $st->getTestEnvironmentName() . "' has changed; ignoring --reuse-target switch");
-                return;
-            }
-
-            // if we get here, then we do not need to create the test environment
-            $injectables->activeConfig->setData('storyplayer.phases.testEnvStartup.TestEnvironmentConstruction', false);
-            $this->reuseTarget = true;
-        }
-        else
-        {
-            // do we already have this target?
-            //
-            // this can happen when the test environment was previously
-            // persisted, and this time we're being run without the
-            // --reuse-target flag
-
-            // does the target exist to be reused?
-            $this->output->setSilentMode();
-            $hasTarget = $st->fromTargetsTable()->hasCurrentTestEnvironment();
-            $this->output->resetSilentMode();
-
-            if ($hasTarget) {
-                // remove this target from the table
-                $this->output->setSilentMode();
-                $st->usingTargetsTable()->removeCurrentTestEnvironment();
-                $this->output->resetSilentMode();
-            }
         }
     }
 

@@ -52,7 +52,8 @@ use Phix_Project\CliEngine\CliSwitch;
 use Phix_Project\ValidationLib4\Type_MustBeString;
 
 /**
- * Tell Storyplayer not to kill any test environment that we build
+ * Tell Storyplayer not to rebuild any test environment that we previously
+ * built
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -61,26 +62,26 @@ use Phix_Project\ValidationLib4\Type_MustBeString;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PlayStory_PersistTargetSwitch extends CliSwitch
+class Feature_ReuseTargetSwitch extends CliSwitch
 {
 	public function __construct()
 	{
 		// define our name, and our description
-		$this->setName('persisttarget');
-		$this->setShortDescription('do not destroy the test environment after the test');
+		$this->setName('reusetarget');
+		$this->setShortDescription('do not rebuild the test environment that we previously persisted');
 		$this->setLongDesc(
 			"Use this switch if you want the test environment to continue to exist "
 			."after Storyplayer has finished running."
 			. PHP_EOL . PHP_EOL
-			."Use the --reuse-target switch on subsequent runs to avoid rebuilding the "
-			."test environment."
+			."Use the --persist-target switch on the previous run to leave the "
+			."test environment behind, so that you can then use this switch."
 		);
 
 		// what are the short switches?
-		$this->addShortSwitch('P');
+		$this->addShortSwitch('R');
 
 		// what are the long switches?
-		$this->addLongSwitch('persist-target');
+		$this->addLongSwitch('reuse-target');
 
 		// all done
 	}
@@ -88,7 +89,7 @@ class PlayStory_PersistTargetSwitch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->persistTarget = true;
+		$engine->options->reuseTarget = true;
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);
