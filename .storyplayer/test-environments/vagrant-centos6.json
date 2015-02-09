@@ -18,7 +18,8 @@
 			}
 		},
 		"provisioning": {
-			"engine": "dsbuild"
+			"engine": "dsbuild",
+			"execute": "dsbuild/vagrant-centos6.sh"
 		}
 	}
 ]

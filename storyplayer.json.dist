@@ -1,7 +1,7 @@
 {
     "defaults": [
         "--system-under-test", "storyplayer-2.x",
-        "--target", "dsbuild-centos6",
+        "--target", "vagrant-centos6",
         "play-story", "src/tests/stories/"
     ]
 }
