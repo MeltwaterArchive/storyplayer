@@ -263,7 +263,6 @@ class DsbuildProvisioner extends Provisioner
 		];
 
 		foreach ($candidateFilenames as $candidateFilename) {
-			var_dump($candidateFilename);
 			if (file_exists($candidateFilename)) {
 				return $candidateFilename;
 			}
