@@ -203,8 +203,6 @@ class StoryTeller
 	private $config = null;
 
 	// the environment we are testing
-	private $testEnv = null;
-	private $testEnvName = null;
 	private $persistTestEnvironment = false;
 
 	// story / template params
@@ -254,9 +252,6 @@ class StoryTeller
         // our runtime config
         $this->setRuntimeConfig($injectables->runtimeConfig);
         $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
-
-        // our test environment
-        $this->setTestEnvironment($injectables->activeTestEnvironmentName, $injectables->activeTestEnvironmentConfig);
 	}
 
 	// ==================================================================
@@ -557,37 +552,36 @@ class StoryTeller
 
 	// ==================================================================
 	//
+	// System under test support
+	//
+	// ------------------------------------------------------------------
+
+	public function getSystemUnderTestConfig()
+	{
+		return $this->config->getExpandedConfig('systemundertest');
+	}
+
+	// ==================================================================
+	//
 	// Test environment support
 	//
 	// ------------------------------------------------------------------
 
-	public function getTestEnvironment()
-	{
-		return $this->config;
-	}
-
 	public function getTestEnvironmentConfig()
 	{
-		return $this->testEnvConfig->getExpandedConfig();
+		$retval = $this->config->getExpandedConfig();
+		return $retval->target;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getTestEnvironmentName()
 	{
-		return $this->testEnvName;
+		$envConfig = $this->getTestEnvironmentConfig();
+		return $envConfig->name;
 	}
 
 	public function getTestEnvironmentSignature()
 	{
 		return md5(json_encode($this->getTestEnvironmentConfig()));
-	}
-
-	public function setTestEnvironment($envName, $envConfig)
-	{
-		$this->testEnvName   = $envName;
-		$this->testEnvConfig = $envConfig;
 	}
 
 	public function getPersistTestEnvironment()

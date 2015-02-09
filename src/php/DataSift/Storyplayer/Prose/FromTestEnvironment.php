@@ -58,16 +58,38 @@ use DataSift\Stone\DataLib\DotNotationConvertor;
  */
 class FromTestEnvironment extends Prose
 {
-	public function getSetting($setting)
+	public function getName()
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get $setting from test environment");
+		$log = $st->startAction("get current test environment name");
+
 		// get the details
-		$testEnv = $st->getTestEnvironment();
-		$value   = $testEnv->getData($setting);
+		$config = $st->getConfig();
+		$value   = $config->getData('target.name');
+
+		// all done
+		$log->endAction($value);
+		return $value;
+	}
+
+	public function getOption($optionName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get option '{$optionName}' from test environment");
+
+		// get the details
+		$config = $st->getConfig();
+		$fullPath = 'target.options.' . $optionName;
+		$value = null;
+		if ($config->hasData($fullPath)) {
+			$value = $config->getData($fullPath);
+		}
 
 		// log the settings
 		$printer  = new DataPrinter();
@@ -87,14 +109,11 @@ class FromTestEnvironment extends Prose
 		$log = $st->startAction("get '{$setting}' from test environment's module settings");
 
 		// get the details
-		$fullPath = 'moduleSettings.' . $setting;
-		$testEnv  = $st->getTestEnvironmentConfig();
+		$fullPath = 'target.moduleSettings.' . $setting;
+		$config  = $st->getConfig();
 
-		$value = null;
-		foreach ($testEnv as $config) {
-			if ($config->hasData($fullPath)) {
-				$value = $config->getData($fullPath);
-			}
+		if ($config->hasData($fullPath)) {
+			$value = $config->getData($fullPath);
 		}
 
 		// log the settings
@@ -115,7 +134,7 @@ class FromTestEnvironment extends Prose
 		$log = $st->startAction("get all settings from the test environment");
 
 		// get the details
-		$testEnv = $st->getTestEnvironment();
+		$testEnv = $st->getTestEnvironmentConfig();
 
 		// var_dump($testEnv);
 

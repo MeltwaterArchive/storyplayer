@@ -61,7 +61,7 @@ class CheckBlacklistedPhase extends InternalPrePhase
 		// shorthand
 		$st          = $this->st;
 		$storyResult = $story->getResult();
-		$testEnv     = $st->getTestEnvironment();
+		$testEnv     = $st->getTestEnvironmentConfig();
 		$testEnvName = $st->getTestEnvironmentName();
 
 		// our result object
@@ -69,7 +69,7 @@ class CheckBlacklistedPhase extends InternalPrePhase
 
 		// is this story allowed to run on the current environment?
 		$blacklistedEnvironment = false;
-		if (isset($testEnv->settings, $testEnv->settings->mustBeWhitelisted) && $testEnv->settings->mustBeWhitelisted) {
+		if ($testEnv->hasData('options.mustBeWhiteListed') && $testEnv->getData('options.mustBeWhiteListed')) {
 			// by default, stories are not allowed to run on this environment
 			$blacklistedEnvironment = true;
 

@@ -71,7 +71,7 @@ class TestEnvironmentDestructionPhase extends InfrastructurePhase
 		$phaseResult = $this->getNewPhaseResult();
 
 		// find out what we need to be doing
-		$testEnvironmentConfig = (array)$st->getTestEnvironmentConfig();
+		$testEnvironmentConfig = $st->getTestEnvironmentConfig();
 
 		// are there any machines to destroy?
 		if (empty($testEnvironmentConfig)) {
@@ -82,7 +82,7 @@ class TestEnvironmentDestructionPhase extends InfrastructurePhase
 
 		// destroy the environments
 		try {
-			foreach ($testEnvironmentConfig as $env) {
+			foreach ($testEnvironmentConfig->groups as $env) {
 				// destroy the machine(s) in this environment, including:
 				//
 				// * destroying any virtual machines

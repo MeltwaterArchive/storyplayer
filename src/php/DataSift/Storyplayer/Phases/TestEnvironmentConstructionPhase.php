@@ -72,7 +72,7 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 		$phaseResult = $this->getNewPhaseResult();
 
 		// find out what we need to be doing
-		$testEnvironmentConfig = (array)$st->getTestEnvironmentConfig();
+		$testEnvironmentConfig = $st->getTestEnvironmentConfig();
 
 		// are there any machines to create?
 		if (empty($testEnvironmentConfig)) {
@@ -83,7 +83,7 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 
 		// create the environments
 		try {
-			foreach ($testEnvironmentConfig as $env) {
+			foreach ($testEnvironmentConfig->groups as $env) {
 				// create the machine(s) in this environment, including:
 				//
 				// * building any virtual machines

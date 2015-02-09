@@ -67,7 +67,7 @@ class TestEnvironmentConfig extends WrappedConfig
     {
         // do we have any config?
         $config = $this->getConfig();
-        if (count($config) == 0) {
+        if (is_array($config) && count($config) == 0) {
             // at the moment, an empty test environment is not considered
             // to be an error
             //
@@ -75,7 +75,26 @@ class TestEnvironmentConfig extends WrappedConfig
             return;
         }
 
-        foreach ($config as $index => $group) {
+        // backwards-compatibility with 2.0.0-pre releases
+        if (is_array($config)) {
+            // convert to an object
+            //
+            // this is the documented format
+            //
+            // 2.0.0-pre had this file as an array of groups. we don't
+            // want to break that for DataSift, who are actively using
+            // it
+            $tmp = new BaseObject;
+            $tmp->groups = $config;
+            $config = $tmp;
+            $this->setData('', $config);
+        }
+
+        // do we have any defined groups?
+        if (!isset($config->groups)) {
+            throw new E4xx_TestEnvironmentNeedsGroups();
+        }
+        foreach ($config->groups as $index => $group) {
             // what type of machines does this group define?
             if (!isset($group->type)) {
                 throw new E4xx_TestEnvironmentGroupNeedsAType($index);

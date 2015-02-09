@@ -208,8 +208,8 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
         //
         // NOTE: any code that adds groups to tables by hand does NOT
         //       get this guarantee
-        $activeConfig = $st->getTestEnvironment();
-        $activeConfig->setData($tableName . '.' . $targetEnv, $tables->$tableName->$targetEnv->$group);
+        $activeConfig = $st->getActiveConfig();
+        $activeConfig->setData($tableName, $tables->$tableName);
 
         // save the updated runtime config
         $log->addStep("saving runtime config to disk", function() use ($st){

@@ -103,31 +103,40 @@ class ActiveConfig extends WrappedConfig
             $rolesTable->$testEnvName = new BaseObject;
         }
         $activeConfig->roles = $rolesTable->$testEnvName;
-
-        // we want to remember the name of the system-under-test
-        $activeConfig->systemundertest = new BaseObject;
-        $activeConfig->systemundertest->name = $injectables->activeSystemUnderTestName;
 	}
 
-	public function mergeStoryplayerConfig($spConf)
+	public function mergeStoryplayerConfig($injectables, $spConf)
 	{
 		$this->mergeData('storyplayer', $spConf);
 	}
 
-	public function mergeSystemUnderTestConfig($sutConfig)
+	public function mergeSystemUnderTestConfig($injectables, SystemUnderTestConfig $sutConfig = null)
 	{
-		if ($sutConfig->hasData('appSettings')) {
-			$this->mergeData('systemundertest.appSettings', $sutConfig->getData('appSettings'));
-		}
+        // do we have a system under test?
+        if (!isset($injectables->activeSystemUnderTestName)) {
+            return;
+        }
 
-		if ($sutConfig->hasData('moduleSettings')) {
-			$this->mergeData('systemundertest.moduleSettings', $sutConfig->getData('moduleSettings'));
-		}
+        // we want to remember the name of the system-under-test
+        $this->setData('systemundertest.name', $injectables->activeSystemUnderTestName);
+
+        // merge in the loaded config
+        $this->mergeData('systemundertest', $sutConfig->getConfig());
 	}
 
-	public function mergeTestEnvironmentConfig($envConfig)
+	public function mergeTestEnvironmentConfig($injectables, TestEnvironmentConfig $envConfig = null)
 	{
-		$this->mergeData('target', $envConfig);
+        // do we have a test environment?
+        if (!isset($injectables->activeTestEnvironmentName)) {
+            $this->setData('target', null);
+            return;
+        }
+
+        // we want to remember the name of the test environment
+        $this->setData('target.name', $injectables->activeTestEnvironmentName);
+
+        // merge in the loaded config
+		$this->mergeData('target', $envConfig->getConfig());
 	}
 
     protected function getHostIpAddress()

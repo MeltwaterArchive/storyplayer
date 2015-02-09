@@ -1,25 +1,31 @@
-[
-	{
-		"type": "LocalVagrantVms",
-		"details": {
-			"machines": {
-				"default": {
-					"osName": "centos6",
-					"roles": [
-						"upload_target"
-					],
-					"appSettings": {
-						"user": {
-							"username": "vagrant",
-							"group": "vagrant"
+{
+	"groups":
+	[
+		{
+			"type": "LocalVagrantVms",
+			"details": {
+				"machines": {
+					"default": {
+						"osName": "centos6",
+						"roles": [
+							"upload_target"
+						],
+						"appSettings": {
+							"user": {
+								"username": "vagrant",
+								"group": "vagrant"
+							}
 						}
 					}
 				}
+			},
+			"provisioning": {
+				"engine": "dsbuild",
+				"execute": "dsbuild/vagrant-centos6.sh"
 			}
-		},
-		"provisioning": {
-			"engine": "dsbuild",
-			"execute": "dsbuild/vagrant-centos6.sh"
 		}
+	],
+	"options": {
+		"mustBeWhitelisted": false
 	}
-]
+}
