@@ -23,6 +23,7 @@ use Phix_Project\CliEngine\Commands\HelpCommand;
 use DataSift\Storyplayer\Injectables;
 
 use DataSift\Storyplayer\Cli\Automate_Command;
+use DataSift\Storyplayer\Cli\BuildTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\CreateStory_Command;
 use DataSift\Storyplayer\Cli\DeviceListHelper;
 use DataSift\Storyplayer\Cli\ExtraConfigHelper;
@@ -286,6 +287,7 @@ function main($argv)
 	// note - if we add no additional commands, the default command is implied
 	//        and the user does not have to type it on the command line
 	$engine->addCommand(new Automate_Command($injectables));
+	$engine->addCommand(new BuildTestEnvironment_Command($injectables));
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new CreateStory_Command);
 	$engine->addCommand(new Install_Command);
