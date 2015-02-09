@@ -44,20 +44,18 @@
 namespace DataSift\Storyplayer\Cli;
 
 use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RecursiveRegexIterator;
+use RegexIterator;
 use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
 use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
 use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * Common support for the console
+ * Base class for Storyplayer commands
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -66,32 +64,53 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_ConsoleSupport implements Common_Functionality
+abstract class BaseCommand extends CliCommand
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
+    /**
+     * a list of the features that we've added to this command
+     * @var array
+     */
+    protected $features = [];
+
+    // we need to track this for handling CTRL-C
+    protected $st;
+
+    // we track this for convenience
+    protected $output;
+
+    // our list of players to execute
+    protected $playerList;
+
+    // our injected data / services
+    // needed for when user presses CTRL+C
+    protected $injectables;
+
+    public function __construct($injectables)
     {
-        $command->addSwitches([
-            new Common_DevModeSwitch
-        ]);
+        // remember our DI container
+        $this->injectables = $injectables;
     }
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    public function addFeature(Feature $feature)
     {
-        // shorthand
-        $output = $injectables->output;
+        $this->features[] = $feature;
+    }
 
-        // we also want to create storyplayer.log every time
-        $devModeConsole = new DevModeConsole();
-        $devModeConsole->addOutputToFile('storyplayer.log');
-
-        // switch output plugins first, before we do anything else at all
-        if (isset($engine->options->dev) && $engine->options->dev) {
-            // switch our main output to 'dev mode'
-            $output->usePluginAsConsole($devModeConsole);
-            $devModeConsole->addOutputToStdout();
+    public function initFeatureSwitches()
+    {
+        foreach ($this->features as $feature) {
+            if (method_exists($feature, "addSwitches")) {
+                $feature->addSwitches($this, $this->injectables);
+            }
         }
-        else {
-            $output->usePluginInSlot($devModeConsole, 'logfile');
+    }
+
+    public function processFeatureSwitches(CliEngine $engine)
+    {
+        foreach ($this->features as $feature) {
+            if (method_exists($feature, "processSwitches")) {
+                $feature->processSwitches($engine, $this, $this->injectables);
+            }
         }
     }
 }

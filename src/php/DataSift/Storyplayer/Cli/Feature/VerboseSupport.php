@@ -43,44 +43,36 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\ValidationLib4\Validator;
-use Phix_Project\ValidationLib4\ValidationResult;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
 
-class Common_ColorValidator implements Validator
+/**
+ * Support for enabling verbosity in output
+ *
+ * @category  Libraries
+ * @package   Storyplayer/Cli
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+class Feature_VerboseSupport implements Feature
 {
-    const MSG_UNKNOWNCOLORLEVEL = "Unknown color option '%value%'";
-
-    protected $supportedValues = array(
-        "none" => 0,
-        "false" => 0,
-        "no" => 0,
-        "n" => 0,
-        "always" => 1,
-        "yes" => 1,
-        "true" => 1,
-        "y" => 1,
-        "auto" => 2
-    );
-
-    /**
-     *
-     * @param  mixed $value
-     * @param  ValidationResult $result
-     * @return ValidationResult
-     */
-    public function validate($value, ValidationResult $result = null)
+    public function addSwitches(CliCommand $command, $additionalContext)
     {
-        if ($result === null) {
-            $result = new ValidationResult($value);
-        }
+        $command->addSwitches([
+            new Feature_VerboseSwitch
+        ]);
+    }
 
-        // the $value must be one that we support
-        $value = strtolower($value);
-        if (!isset($this->supportedValues[$value])) {
-            $result->addError(static::MSG_UNKNOWNCOLORLEVEL);
-            return $result;
+    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
+    {
+        // have we been asked to increase verbosity?
+        if (!isset($engine->options->verbose) || !$engine->options->verbose) {
+            $injectables->dataFormatter->setIsVerbose(false);
         }
-
-        return $result;
+        else {
+            $injectables->dataFormatter->setIsVerbose(true);
+        }
     }
 }

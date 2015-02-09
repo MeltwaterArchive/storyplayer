@@ -43,8 +43,14 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use stdClass;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
+use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
+
 /**
- * Helper for understanding the Dev Mode
+ * Override the settings defined in your story
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -53,33 +59,74 @@ namespace DataSift\Storyplayer\Cli;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DevModeHelper
+class Feature_DefineSwitch extends CliSwitch
 {
-    /**
-     *
-     * @var array
-     */
-    static protected $supportedValues = array(
-        'on' => true,
-        'off' => false,
-        'true' => true,
-        'false' => false,
-        'yes' => true,
-        'no' => false
-    );
+	public function __construct()
+	{
+		// define our name, and our description
+		$this->setName('define');
+		$this->setShortDescription('override a setting in your story');
 
-    /**
-     * @param string $input
-     * @return boolean|null
-     */
-    static public function stringToValue($input)
-    {
-        // do we understand the input string?
-        if (isset(self::$supportedValues[$input])) {
-            return self::$supportedValues[$input];
-        }
+		// what are the short switches?
+		$this->addShortSwitch('D');
 
-        // no match
-        return null;
-    }
+		// what is the required argument?
+		$this->setRequiredArg('<key=value>', "the setting you want to set in your story");
+		$this->setArgValidator(new Type_MustBeKeyValuePair);
+
+		// this argument is repeatable
+		$this->setSwitchIsRepeatable();
+
+		// all done
+	}
+
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
+	 * @param  array     $params
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
+	 */
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		if (!isset($engine->options->defines)) {
+			$engine->options->defines = new stdClass;
+		}
+
+		foreach ($params as $param)
+		{
+			// split up the setting
+			$parts = explode('=', $param);
+			$key   = array_shift($parts);
+			$value = implode('=', $parts);
+
+			// do we want to convert the type of $value?
+			$lowerValue = strtolower($value);
+			if ($lowerValue == 'false') {
+				$value = false;
+			}
+			else if ($lowerValue == 'true') {
+				$value = true;
+			}
+			else if ($lowerValue == 'null') {
+				$value = null;
+			}
+
+			// expand dot notation
+			$parts = explode('.', $key);
+			$currentLevel = $engine->options->defines;
+			$lastPart = array_pop($parts);
+
+			foreach ($parts as $part) {
+				$currentLevel->$part = new stdClass;
+				$currentLevel = $currentLevel->$part;
+			}
+			// store the value into the tree
+			$currentLevel->$lastPart = $value;
+		}
+
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }

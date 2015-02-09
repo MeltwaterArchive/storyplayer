@@ -43,13 +43,12 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Stone\ObjectLib\BaseObject;
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Common support for registering 'localhost' as a host you can interact
- * with
+ * Tell Storyplayer when to print longer strings to the log file
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -58,48 +57,49 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_LocalhostSupport implements Common_Functionality
+class Feature_VerboseSwitch extends CliSwitch
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
-    {
-        // nothing to do - localhost is always enabled
-    }
+	public function __construct()
+	{
+		// define our name, and our description
+		$this->setName('verbose');
+		$this->setShortDescription('increase the amount of raw data written to storyplayer.log');
+		$this->setLongDesc(
+			"Both storyplayer.log and --dev mode capture raw data, to help make it easier to see "
+			. "exactly what your test is sending and receiving from the system-under-test. Feedback "
+			. "from users has been that can make it more difficult to read the --dev mode output "
+			. "when all data is displayed. As a result, by default, Storyplayer only logs some "
+			. "of the data that it sees, and will truncate long strings too."
+			. PHP_EOL . PHP_EOL
+			. "Unfortunately, that does make it hard to see why your test has failed without adding "
+			. "more output and then running your test again."
+			. PHP_EOL . PHP_EOL
+			. "Use this switch to tell Storyplayer to log *all* data to storyplayer.log (and to the "
+			. "console if you're using --dev mode). This is *highly recommended* when running your tests "
+			. "using a CI solution."
+		);
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
-    {
-        // create a definition for localhost
-        $host = new BaseObject();
-        $host->name        = "localhost";
-        $host->osName      = $this->detectOs();
-        $host->type        = "PhysicalHost";
-        $host->ipAddress   = "127.0.0.1";
-        $host->provisioned = true;
+		// what are the switches?
+		$this->addShortSwitch('V');
+		$this->addLongSwitch('verbose');
 
-        // we need to make sure it's registered in the hosts table
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
-        $hostsTable = $runtimeConfigManager->getTable($injectables->runtimeConfig, 'hosts');
-        $testEnv = $injectables->activeTestEnvironmentName;
+		// all done
+	}
 
-        if (!isset($hostsTable->$testEnv)) {
-            $hostsTable->$testEnv = new BaseObject();
-        }
-        $hostsTable->$testEnv->localhost = $host;
-    }
+	/**
+	 *
+	 * @param  CliEngine $engine
+	 * @param  integer   $invokes
+	 * @param  array     $params
+	 * @param  boolean   $isDefaultParam
+	 * @return CliResult
+	 */
+	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+	{
+		// remember the setting
+		$engine->options->verbose = true;
 
-    protected function detectOs()
-    {
-        if (stristr(PHP_OS, 'DAR')) {
-            return "Localhost_OSX";
-        }
-        else if (stristr(PHP_OS, 'WIN')) {
-            return "Localhost_Windows";
-        }
-        else if (stristr(PHP_OS, 'LINUX')) {
-            // @TODO: detect the different types of Linux here
-            return "Localhost_Unix";
-        }
-        else {
-            return "Localhost_Unix";
-        }
-    }
+		// tell the engine that it is done
+		return new CliResult(CliResult::PROCESS_CONTINUE);
+	}
 }

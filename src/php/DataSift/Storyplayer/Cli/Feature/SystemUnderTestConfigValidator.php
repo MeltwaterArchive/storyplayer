@@ -43,50 +43,54 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Exception;
-use stdClass;
-use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliCommand;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
-use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
-use DataSift\Storyplayer\Console\DevModeConsole;
+use Phix_Project\ValidationLib4\Validator;
+use Phix_Project\ValidationLib4\ValidationResult;
 
-/**
- * Common support for selecting the system-under-test to test
- *
- * @category  Libraries
- * @package   Storyplayer/Cli
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class Common_SystemUnderTestConfigSupport implements Common_Functionality
+class Feature_SystemUnderTestConfigValidator implements Validator
 {
-    public function addSwitches(CliCommand $command, $injectables)
+    const MSG_NOTVALIDSUT = "Unknown system-under-test '%value%'";
+
+    /**
+     * @var DataSift\Storyplayer\ConfigLib\SystemsUnderTestList
+     */
+    protected $sutList;
+
+    /**
+     * @var string
+     */
+    protected $defaultValue;
+
+    /**
+     * @param DataSift\Storyplayer\ConfigLib\SystemsUnderTestList $sutList
+     * @param string $defaultValue
+     */
+    public function __construct($sutList, $defaultValue)
     {
-        $command->addSwitches([
-            new Common_SystemUnderTestConfigSwitch(
-            	$injectables->knownSystemsUnderTestList,
-            	$injectables->defaultSystemUnderTestName
-            )
-        ]);
+        $this->sutList = $sutList;
+        $this->defaultValue = $defaultValue;
     }
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    /**
+     *
+     * @param  mixed $value
+     * @param  ValidationResult $result
+     * @return ValidationResult
+     */
+    public function validate($value, ValidationResult $result = null)
     {
-        if (empty($engine->options->sutName)) {
-            throw new E4xx_NoSystemUnderTestSpecified();
+        if ($result === null) {
+            $result = new ValidationResult($value);
         }
 
-    	$injectables->initActiveSystemUnderTestConfigSupport(
-            $engine->options->sutName,
-            $injectables
-        );
+        // strip off .json if it is there
+        $value = basename($value, ".json");
+
+        // the $value must be a valid system-under-test name
+        if (!$this->sutList->hasEntry($value)) {
+            $result->addError(static::MSG_NOTVALIDSUT);
+            return $result;
+        }
+
+        return $result;
     }
 }

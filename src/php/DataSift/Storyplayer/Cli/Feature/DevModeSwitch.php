@@ -48,8 +48,7 @@ use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Tell Storyplayer which test environment to test against; for when there
- * is more than one test environment defined
+ * Tell Storyplayer to run in 'dev' mode
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -58,49 +57,23 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_TestEnvironmentConfigSwitch extends CliSwitch
+class Feature_DevModeSwitch extends CliSwitch
 {
-	/**
-	 * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
-	 * @param string $defaultEnvName
-	 */
-	public function __construct($envList, $defaultEnvName)
+	public function __construct()
 	{
 		// define our name, and our description
-		$this->setName('target');
-		$this->setShortDescription('set the environment to test against');
+		$this->setName('dev');
+		$this->setShortDescription('enable story development mode');
 		$this->setLongDesc(
-			"If you have multiple test environments listed in your configuration files, "
-			. "you can use this switch to choose which test environment to run the test(s) "
-			. "against. If you omit this switch, Storyplayer will default to using your "
-			. "computer's hostname as the value for <environment>."
-			. PHP_EOL
-			. PHP_EOL
-			. "If you only have one test environment listed, then this switch has no "
-			. "effect when used, and Storyplayer will always use the test environment "
-			. "from your configuration file."
-			. PHP_EOL
-			. PHP_EOL
-			. "See http://datasift.github.io/storyplayer/ "
-			. "for how to configure and use multiple test environments."
+			"'dev' mode currently does the following:"
+			. PHP_EOL . PHP_EOL
+			. "* displays the full story log on stdout"
+			. PHP_EOL . PHP_EOL
+			. "The full story log is also available in storyplayer.log."
 		);
 
-		// what are the short switches?
-		$this->addShortSwitch('t');
-
 		// what are the long switches?
-		$this->addLongSwitch('target');
-		$this->addLongSwitch('test-environment');
-
-		// what is the required argument?
-		$requiredArgMsg = "the environment to test against; one of:" . PHP_EOL . PHP_EOL;
-		foreach($envList->getEntryNames() as $envName) {
-			$requiredArgMsg .= "* $envName" . PHP_EOL;
-		}
-		$requiredArgMsg .= PHP_EOL. ' ';
-		$this->setRequiredArg('<environment>', $requiredArgMsg);
-		$this->setArgValidator(new Common_TestEnvironmentConfigValidator($envList, $defaultEnvName));
-		$this->setArgHasDefaultValueOf($defaultEnvName);
+		$this->addLongSwitch('dev');
 
 		// all done
 	}
@@ -115,11 +88,8 @@ class Common_TestEnvironmentConfigSwitch extends CliSwitch
 	 */
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		// strip off .json if it is there
-		$params[0] = basename($params[0], '.json');
-
 		// remember the setting
-		$engine->options->testEnvironmentName = $params[0];
+		$engine->options->dev = true;
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

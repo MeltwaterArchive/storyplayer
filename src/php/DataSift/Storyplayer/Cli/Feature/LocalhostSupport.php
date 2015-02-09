@@ -43,12 +43,13 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use DataSift\Stone\ObjectLib\BaseObject;
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliResult;
-use Phix_Project\CliEngine\CliSwitch;
+use Phix_Project\CliEngine\CliCommand;
 
 /**
- * Tell Storyplayer to run in 'dev' mode
+ * Support for registering 'localhost' as a host you can interact
+ * with
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,41 +58,48 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DevModeSwitch extends CliSwitch
+class Feature_LocalhostSupport implements Feature
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('dev');
-		$this->setShortDescription('enable story development mode');
-		$this->setLongDesc(
-			"'dev' mode currently does the following:"
-			. PHP_EOL . PHP_EOL
-			. "* displays the full story log on stdout"
-			. PHP_EOL . PHP_EOL
-			. "The full story log is also available in storyplayer.log."
-		);
+    public function addSwitches(CliCommand $command, $additionalContext)
+    {
+        // nothing to do - localhost is always enabled
+    }
 
-		// what are the long switches?
-		$this->addLongSwitch('dev');
+    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
+    {
+        // create a definition for localhost
+        $host = new BaseObject();
+        $host->name        = "localhost";
+        $host->osName      = $this->detectOs();
+        $host->type        = "PhysicalHost";
+        $host->ipAddress   = "127.0.0.1";
+        $host->provisioned = true;
 
-		// all done
-	}
+        // we need to make sure it's registered in the hosts table
+        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $hostsTable = $runtimeConfigManager->getTable($injectables->runtimeConfig, 'hosts');
+        $testEnv = $injectables->activeTestEnvironmentName;
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->dev = true;
+        if (!isset($hostsTable->$testEnv)) {
+            $hostsTable->$testEnv = new BaseObject();
+        }
+        $hostsTable->$testEnv->localhost = $host;
+    }
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+    protected function detectOs()
+    {
+        if (stristr(PHP_OS, 'DAR')) {
+            return "Localhost_OSX";
+        }
+        else if (stristr(PHP_OS, 'WIN')) {
+            return "Localhost_Windows";
+        }
+        else if (stristr(PHP_OS, 'LINUX')) {
+            // @TODO: detect the different types of Linux here
+            return "Localhost_Unix";
+        }
+        else {
+            return "Localhost_Unix";
+        }
+    }
 }

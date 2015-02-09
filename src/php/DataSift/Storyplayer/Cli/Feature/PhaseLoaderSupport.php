@@ -57,7 +57,7 @@ use DataSift\Storyplayer\PlayerLib\TalePlayer;
 use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * Common support for loading Phase modules
+ * Support for loading Phase modules
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -66,14 +66,14 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_PhaseLoaderSupport implements Common_Functionality
+class Feature_PhaseLoaderSupport implements Feature
 {
     public function addSwitches(CliCommand $command, $injectables)
     {
     	// no-op
     }
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
     {
     	$injectables->initPhaseLoaderSupport($injectables);
     }

@@ -43,14 +43,21 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use DataSift\Storyplayer\Injectables;
-
 use Exception;
+use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * support for functionality that all commands are expected to support
+ * Support for selecting the target environment to test against
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -59,48 +66,23 @@ use Phix_Project\CliEngine\CliCommand;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait CommonFunctionalitySupport
+class Feature_TestEnvironmentConfigSupport implements Feature
 {
-	public $commonFunctionality = [];
+    public function addSwitches(CliCommand $command, $injectables)
+    {
+        $command->addSwitches([
+            new Feature_TestEnvironmentConfigSwitch(
+            	$injectables->knownTestEnvironmentsList,
+            	$injectables->defaultTestEnvironmentName
+            )
+        ]);
+    }
 
-	public function initCommonFunctionalitySupport(CliCommand $command, $additionalContext, $options = null)
-	{
-		// make sure we have a list functionality to enable
-		if (!$options) {
-			$options = new DefaultCommonFunctionality;
-		}
-
-		// create the objects for each piece of functionality
-		//
-		// the order here determines the order that we process things in
-		// after parsing the command line
-		//
-		// it is perfectly safe for anything in this list to rely on anything
-		// that comes before it in the list
-		foreach ($options->classes as $className) {
-			$fullClassname = "DataSift\\Storyplayer\\Cli\\" . $className;
-			$this->commonFunctionality[] = new $fullClassname;
-		}
-
-		// let each object register any switches that they need
-		foreach ($this->commonFunctionality as $obj) {
-			$obj->addSwitches($command, $additionalContext);
-		}
-	}
-
-	public function applyCommonFunctionalitySupport(CliEngine $engine, CliCommand $command, Injectables $injectables)
-	{
-		try {
-			// let's process the results of the CLI parsing that has already
-			// happened
-			foreach ($this->commonFunctionality as $obj) {
-				$obj->initFunctionality($engine, $command, $injectables);
-			}
-		}
-		catch (Exception $e) {
-			// no matter what has gone wrong, we cannot continue
-			$injectables->output->logCliErrorWithException($e->getMessage(), $e);
-			exit(1);
-		}
-	}
+    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
+    {
+    	$injectables->initActiveTestEnvironmentConfigSupport(
+            $engine->options->testEnvironmentName,
+            $injectables
+        );
+    }
 }

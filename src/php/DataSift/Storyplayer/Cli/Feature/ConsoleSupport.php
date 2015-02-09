@@ -43,43 +43,55 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\ValidationLib4\Validator;
-use Phix_Project\ValidationLib4\ValidationResult;
+use Exception;
+use stdClass;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\Console\DevModeConsole;
 
-class Common_DeviceValidator implements Validator
+/**
+ * Support for the console
+ *
+ * @category  Libraries
+ * @package   Storyplayer/Cli
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+class Feature_ConsoleSupport implements Feature
 {
-    protected $deviceList;
-
-    const MSG_NOTVALIDDEVICE = "Unknown device '%value%'";
-
-    /**
-     *
-     * @param stdClass $deviceList
-     */
-    public function __construct($deviceList)
+    public function addSwitches(CliCommand $command, $additionalContext)
     {
-        $this->deviceList = $deviceList;
+        $command->addSwitches([
+            new Feature_DevModeSwitch
+        ]);
     }
 
-    /**
-     *
-     * @param  mixed $value
-     * @param  ValidationResult $result
-     * @return ValidationResult
-     */
-    public function validate($value, ValidationResult $result = null)
+    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
     {
-        if ($result === null) {
-            $result = new ValidationResult($value);
-        }
+        // shorthand
+        $output = $injectables->output;
 
-        // the $value must be a valid environment name, but it's ok if it doesn't
-        // exist if it's the default env as we might not have created it yet
-        if (!$this->deviceList->hasEntry($value)) {
-            $result->addError(static::MSG_NOTVALIDDEVICE);
-            return $result;
-        }
+        // we also want to create storyplayer.log every time
+        $devModeConsole = new DevModeConsole();
+        $devModeConsole->addOutputToFile('storyplayer.log');
 
-        return $result;
+        // switch output plugins first, before we do anything else at all
+        if (isset($engine->options->dev) && $engine->options->dev) {
+            // switch our main output to 'dev mode'
+            $output->usePluginAsConsole($devModeConsole);
+            $devModeConsole->addOutputToStdout();
+        }
+        else {
+            $output->usePluginInSlot($devModeConsole, 'logfile');
+        }
     }
 }

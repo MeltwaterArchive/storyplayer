@@ -57,7 +57,7 @@ use DataSift\Storyplayer\PlayerLib\TalePlayer;
 use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * Common support for enabling / disabling colour
+ * Support for selecting the system-under-test to test
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -66,30 +66,27 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_ColorSupport implements Common_Functionality
+class Feature_SystemUnderTestConfigSupport implements Feature
 {
-    public function addSwitches(CliCommand $command, $additionalContext)
+    public function addSwitches(CliCommand $command, $injectables)
     {
         $command->addSwitches([
-            new Common_ColorSwitch
+            new Feature_SystemUnderTestConfigSwitch(
+            	$injectables->knownSystemsUnderTestList,
+            	$injectables->defaultSystemUnderTestName
+            )
         ]);
     }
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
     {
-    	// which colour mode are we in?
-    	switch ($engine->options->color) {
-    		case Common_ColorSwitch::NO_COLOR:
-    			$injectables->output->disableColourSupport();
-    			break;
+        if (empty($engine->options->sutName)) {
+            throw new E4xx_NoSystemUnderTestSpecified();
+        }
 
-    		case Common_ColorSwitch::ALWAYS_COLOR:
-    			$injectables->output->enforceColourSupport();
-    			break;
-
-    		case Common_ColorSwitch::AUTO_COLOR:
-    			$injectables->output->enableColourSupport();
-    			break;
-    	}
+    	$injectables->initActiveSystemUnderTestConfigSupport(
+            $engine->options->sutName,
+            $injectables
+        );
     }
 }

@@ -57,7 +57,7 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_SystemUnderTestConfigSwitch extends CliSwitch
+class Feature_SystemUnderTestConfigSwitch extends CliSwitch
 {
 	/**
 	 * @param array $envList
@@ -105,7 +105,7 @@ class Common_SystemUnderTestConfigSwitch extends CliSwitch
 			$requiredArgMsg .= PHP_EOL. ' ';
 		}
 		$this->setRequiredArg('<system-under-test>', $requiredArgMsg);
-		$this->setArgValidator(new Common_SystemUnderTestConfigValidator($sutList, $defaultSutName));
+		$this->setArgValidator(new Feature_SystemUnderTestConfigValidator($sutList, $defaultSutName));
 		if ($defaultSutName) {
 			$this->setArgHasDefaultValueOf($defaultSutName);
 		}

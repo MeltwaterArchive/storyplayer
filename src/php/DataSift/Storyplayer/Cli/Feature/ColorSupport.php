@@ -43,54 +43,53 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use Phix_Project\ValidationLib4\Validator;
-use Phix_Project\ValidationLib4\ValidationResult;
+use Exception;
+use stdClass;
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\TalePlayer;
+use DataSift\Storyplayer\Console\DevModeConsole;
 
-class Common_SystemUnderTestConfigValidator implements Validator
+/**
+ * Support for enabling / disabling colour
+ *
+ * @category  Libraries
+ * @package   Storyplayer/Cli
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @link      http://datasift.github.io/storyplayer
+ */
+class Feature_ColorSupport implements Feature
 {
-    const MSG_NOTVALIDSUT = "Unknown system-under-test '%value%'";
-
-    /**
-     * @var DataSift\Storyplayer\ConfigLib\SystemsUnderTestList
-     */
-    protected $sutList;
-
-    /**
-     * @var string
-     */
-    protected $defaultValue;
-
-    /**
-     * @param DataSift\Storyplayer\ConfigLib\SystemsUnderTestList $sutList
-     * @param string $defaultValue
-     */
-    public function __construct($sutList, $defaultValue)
+    public function addSwitches(CliCommand $command, $additionalContext)
     {
-        $this->sutList = $sutList;
-        $this->defaultValue = $defaultValue;
+        $command->addSwitches([
+            new Feature_ColorSwitch
+        ]);
     }
 
-    /**
-     *
-     * @param  mixed $value
-     * @param  ValidationResult $result
-     * @return ValidationResult
-     */
-    public function validate($value, ValidationResult $result = null)
+    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
     {
-        if ($result === null) {
-            $result = new ValidationResult($value);
-        }
+    	// which colour mode are we in?
+    	switch ($engine->options->color) {
+    		case Feature_ColorSwitch::NO_COLOR:
+    			$injectables->output->disableColourSupport();
+    			break;
 
-        // strip off .json if it is there
-        $value = basename($value, ".json");
+    		case Feature_ColorSwitch::ALWAYS_COLOR:
+    			$injectables->output->enforceColourSupport();
+    			break;
 
-        // the $value must be a valid system-under-test name
-        if (!$this->sutList->hasEntry($value)) {
-            $result->addError(static::MSG_NOTVALIDSUT);
-            return $result;
-        }
-
-        return $result;
+    		case Feature_ColorSwitch::AUTO_COLOR:
+    			$injectables->output->enableColourSupport();
+    			break;
+    	}
     }
 }

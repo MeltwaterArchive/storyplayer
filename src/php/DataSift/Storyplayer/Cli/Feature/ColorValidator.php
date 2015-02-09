@@ -46,9 +46,21 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\ValidationLib4\Validator;
 use Phix_Project\ValidationLib4\ValidationResult;
 
-class Common_DevModeValidator implements Validator
+class Feature_ColorValidator implements Validator
 {
-    const MSG_UNKNOWNOPTION = "Unknown dev mode option '%value%'";
+    const MSG_UNKNOWNCOLORLEVEL = "Unknown color option '%value%'";
+
+    protected $supportedValues = array(
+        "none" => 0,
+        "false" => 0,
+        "no" => 0,
+        "n" => 0,
+        "always" => 1,
+        "yes" => 1,
+        "true" => 1,
+        "y" => 1,
+        "auto" => 2
+    );
 
     /**
      *
@@ -64,8 +76,8 @@ class Common_DevModeValidator implements Validator
 
         // the $value must be one that we support
         $value = strtolower($value);
-        if (Common_DevModeHelper::stringToValue($value) === null) {
-            $result->addError(static::MSG_UNKNOWNOPTION);
+        if (!isset($this->supportedValues[$value])) {
+            $result->addError(static::MSG_UNKNOWNCOLORLEVEL);
             return $result;
         }
 

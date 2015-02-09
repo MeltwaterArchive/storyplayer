@@ -65,6 +65,18 @@ use DataSift\Storyplayer\PlayerLib\TestEnvironment_Player;
 use DataSift\Storyplayer\Console\DevModeConsole;
 use DataSift\Storyplayer\Injectables;
 
+use DataSift\Storyplayer\Cli\Feature\ActiveConfigSupport;
+use DataSift\Storyplayer\Cli\Feature\ColorSupport;
+use DataSift\Storyplayer\Cli\Feature\ConsoleSupport;
+use DataSift\Storyplayer\Cli\Feature\DefinesSupport;
+use DataSift\Storyplayer\Cli\Feature\DeviceSupport;
+use DataSift\Storyplayer\Cli\Feature\LocalhostSupport;
+use DataSift\Storyplayer\Cli\Feature\PhaseLoaderSupport;
+use DataSift\Storyplayer\Cli\Feature\ProseLoaderSupport;
+use DataSift\Storyplayer\Cli\Feature\SystemUnderTestSupport;
+use DataSift\Storyplayer\Cli\Feature\TestEnvironmentSupport;
+use DataSift\Storyplayer\Cli\Feature\VerboseSupport;
+
 /**
  * A command to play a story, or a list of stories
  *
@@ -75,7 +87,7 @@ use DataSift\Storyplayer\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PlayStory_Command extends CliCommand
+class PlayStory_Command extends BaseCommand
 {
     /**
      * should we let the test device (ie the web browser) survive between
@@ -130,6 +142,9 @@ class PlayStory_Command extends CliCommand
 
     public function __construct($injectables)
     {
+        // call our parent
+        parent::__construct($injectables);
+
         // define the command
         $this->setName('play-story');
         $this->setShortDescription('play a story, or a list of stories');
@@ -152,8 +167,21 @@ class PlayStory_Command extends CliCommand
             new PlayStory_LogTapSwitch(),
         ));
 
-        // add in the common features
-        $this->initCommonFunctionalitySupport($this, $injectables);
+        // add in the features that this command relies on
+        $this->addFeature(new Feature_VerboseSupport);
+        $this->addFeature(new Feature_ConsoleSupport);
+        $this->addFeature(new Feature_ColorSupport);
+        $this->addFeature(new Feature_DeviceSupport);
+        $this->addFeature(new Feature_TestEnvironmentConfigSupport);
+        $this->addFeature(new Feature_SystemUnderTestConfigSupport);
+        $this->addFeature(new Feature_LocalhostSupport);
+        $this->addFeature(new Feature_ActiveConfigSupport);
+        $this->addFeature(new Feature_DefinesSupport);
+        $this->addFeature(new Feature_PhaseLoaderSupport);
+        $this->addFeature(new Feature_ProseLoaderSupport);
+
+        // now setup all of the switches that we support
+        $this->initFeatureSwitches();
     }
 
     /**
@@ -219,7 +247,7 @@ class PlayStory_Command extends CliCommand
         //    b. report-to-file plugins
 
         // process the common functionality
-        $this->applyCommonFunctionalitySupport($engine, $this, $injectables);
+        $this->processFeatureSwitches($engine);
 
         // now it is safe to create our shorthand
         $runtimeConfig        = $injectables->runtimeConfig;

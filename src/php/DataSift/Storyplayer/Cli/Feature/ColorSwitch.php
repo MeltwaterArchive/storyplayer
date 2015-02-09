@@ -48,7 +48,7 @@ use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * Tell Storyplayer which browser / app config to use with testing
+ * Tell Storyplayer when to use color output
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -57,51 +57,48 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DeviceSwitch extends CliSwitch
+class Feature_ColorSwitch extends CliSwitch
 {
-	public function __construct($deviceList)
+	const NO_COLOR = 0;
+	const ALWAYS_COLOR = 1;
+	const AUTO_COLOR = 2;
+
+    static $supportedValues = [
+        "none" => 0,
+        "false" => 0,
+        "no" => 0,
+        "n" => 0,
+        "always" => 1,
+        "yes" => 1,
+        "true" => 1,
+        "y" => 1,
+        "auto" => 2
+    ];
+
+	public function __construct()
 	{
 		// define our name, and our description
-		$this->setName('device');
-		$this->setShortDescription('set the device (e.g. browser) to test with');
+		$this->setName('color');
+		$this->setShortDescription('set when to use color in the output');
 		$this->setLongDesc(
-			"If you have multiple devices listed in your configuration files, "
-			. "you can use this switch to choose which device to use when your test "
-			. "runs. If you omit this switch, Storyplayer will default to using "
-			. "your local copy of Google Chrome as the default device."
-			. PHP_EOL
-			. PHP_EOL
-			. "See http://datasift.github.io/storyplayer/ "
-			. "for how to configure and use multiple devices."
+			"Storyplayer can use color to make it easier to understand the output at a glance. "
+			. "By default, Storyplayer will use color when stdout / stderr are connected to a terminal. "
+			. "You can use this switch to override the default behaviour (for example, when piping the "
+			. "output into less(1)."
+			. PHP_EOL . PHP_EOL
+			. "The default behaviour relies on PHP's posix_isatty() function. This should be built into "
+			. "your copy of PHP, but your operating system may require you to install an additional "
+			. "package to get it (grrr)."
 		);
 
-		// what are the short switches?
-		$this->addShortSwitch('d');
-		$this->addShortSwitch('b');
-
 		// what are the long switches?
-		$this->addLongSwitch('device');
-		$this->addLongSwitch('webbrowser');
-
-		// do we have any devices defined?
-		$msg = "the device to test with";
-		$deviceNames = $deviceList->getEntryNames();
-		if (count($deviceNames)) {
-			$msg .= "; one of: " . implode(", ", $deviceNames);
-		}
-		else {
-			// no devices found
-			$msg .= ". You current have no devices listed in your config files.";
-		}
+		$this->addLongSwitch('color');
+		$this->addLongSwitch('colour');
 
 		// what is the required argument?
-		$this->setRequiredArg('<device>', $msg);
-
-		// how do we validate this argument?
-		$this->setArgValidator(new Common_DeviceValidator($deviceList));
-
-		// chrome is our default device
-		$this->setArgHasDefaultValueOf('chrome');
+		$this->setRequiredArg('<when>', "when to use colour; possible values are 'none', 'always' and 'auto'");
+		$this->setArgValidator(new Feature_ColorValidator());
+		$this->setArgHasDefaultValueOf('auto');
 
 		// all done
 	}
@@ -117,7 +114,7 @@ class Common_DeviceSwitch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
 		// remember the setting
-		$engine->options->device = $params[0];
+		$engine->options->color = self::$supportedValues[strtolower($params[0])];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

@@ -43,14 +43,13 @@
 
 namespace DataSift\Storyplayer\Cli;
 
-use stdClass;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliResult;
 use Phix_Project\CliEngine\CliSwitch;
-use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
 
 /**
- * Override the settings defined in your story
+ * Tell Storyplayer which test environment to test against; for when there
+ * is more than one test environment defined
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -59,23 +58,49 @@ use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_DefineSwitch extends CliSwitch
+class Feature_TestEnvironmentConfigSwitch extends CliSwitch
 {
-	public function __construct()
+	/**
+	 * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
+	 * @param string $defaultEnvName
+	 */
+	public function __construct($envList, $defaultEnvName)
 	{
 		// define our name, and our description
-		$this->setName('define');
-		$this->setShortDescription('override a setting in your story');
+		$this->setName('target');
+		$this->setShortDescription('set the environment to test against');
+		$this->setLongDesc(
+			"If you have multiple test environments listed in your configuration files, "
+			. "you can use this switch to choose which test environment to run the test(s) "
+			. "against. If you omit this switch, Storyplayer will default to using your "
+			. "computer's hostname as the value for <environment>."
+			. PHP_EOL
+			. PHP_EOL
+			. "If you only have one test environment listed, then this switch has no "
+			. "effect when used, and Storyplayer will always use the test environment "
+			. "from your configuration file."
+			. PHP_EOL
+			. PHP_EOL
+			. "See http://datasift.github.io/storyplayer/ "
+			. "for how to configure and use multiple test environments."
+		);
 
 		// what are the short switches?
-		$this->addShortSwitch('D');
+		$this->addShortSwitch('t');
+
+		// what are the long switches?
+		$this->addLongSwitch('target');
+		$this->addLongSwitch('test-environment');
 
 		// what is the required argument?
-		$this->setRequiredArg('<key=value>', "the setting you want to set in your story");
-		$this->setArgValidator(new Type_MustBeKeyValuePair);
-
-		// this argument is repeatable
-		$this->setSwitchIsRepeatable();
+		$requiredArgMsg = "the environment to test against; one of:" . PHP_EOL . PHP_EOL;
+		foreach($envList->getEntryNames() as $envName) {
+			$requiredArgMsg .= "* $envName" . PHP_EOL;
+		}
+		$requiredArgMsg .= PHP_EOL. ' ';
+		$this->setRequiredArg('<environment>', $requiredArgMsg);
+		$this->setArgValidator(new Feature_TestEnvironmentConfigValidator($envList, $defaultEnvName));
+		$this->setArgHasDefaultValueOf($defaultEnvName);
 
 		// all done
 	}
@@ -90,41 +115,11 @@ class Common_DefineSwitch extends CliSwitch
 	 */
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
 	{
-		if (!isset($engine->options->defines)) {
-			$engine->options->defines = new stdClass;
-		}
+		// strip off .json if it is there
+		$params[0] = basename($params[0], '.json');
 
-		foreach ($params as $param)
-		{
-			// split up the setting
-			$parts = explode('=', $param);
-			$key   = array_shift($parts);
-			$value = implode('=', $parts);
-
-			// do we want to convert the type of $value?
-			$lowerValue = strtolower($value);
-			if ($lowerValue == 'false') {
-				$value = false;
-			}
-			else if ($lowerValue == 'true') {
-				$value = true;
-			}
-			else if ($lowerValue == 'null') {
-				$value = null;
-			}
-
-			// expand dot notation
-			$parts = explode('.', $key);
-			$currentLevel = $engine->options->defines;
-			$lastPart = array_pop($parts);
-
-			foreach ($parts as $part) {
-				$currentLevel->$part = new stdClass;
-				$currentLevel = $currentLevel->$part;
-			}
-			// store the value into the tree
-			$currentLevel->$lastPart = $value;
-		}
+		// remember the setting
+		$engine->options->testEnvironmentName = $params[0];
 
 		// tell the engine that it is done
 		return new CliResult(CliResult::PROCESS_CONTINUE);

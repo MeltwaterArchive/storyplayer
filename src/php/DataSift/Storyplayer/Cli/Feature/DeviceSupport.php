@@ -57,7 +57,7 @@ use DataSift\Storyplayer\PlayerLib\TalePlayer;
 use DataSift\Storyplayer\Console\DevModeConsole;
 
 /**
- * Common support for loading Prose modules
+ * Support for selecting a device
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -66,15 +66,24 @@ use DataSift\Storyplayer\Console\DevModeConsole;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Common_ProseLoaderSupport implements Common_Functionality
+class Feature_DeviceSupport implements Feature
 {
     public function addSwitches(CliCommand $command, $injectables)
     {
-    	// no-op
+        $command->addSwitches([
+            new Feature_DeviceSwitch($injectables->knownDevicesList)
+        ]);
     }
 
-    public function initFunctionality(CliEngine $engine, CliCommand $command, $injectables = null)
+    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
     {
-    	$injectables->initProseLoaderSupport($injectables);
+        // do we have a device to load?
+        if (!isset($engine->options->device)) {
+            // nothing to do
+            return;
+        }
+
+        $deviceName = $engine->options->device;
+        $injectables->initActiveDevice($deviceName, $injectables);
     }
 }
