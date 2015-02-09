@@ -71,6 +71,7 @@ use DataSift\Storyplayer\Cli\Feature\ConsoleSupport;
 use DataSift\Storyplayer\Cli\Feature\DefinesSupport;
 use DataSift\Storyplayer\Cli\Feature\DeviceSupport;
 use DataSift\Storyplayer\Cli\Feature\LocalhostSupport;
+use DataSift\Storyplayer\Cli\Feature\PersistDeviceSupport;
 use DataSift\Storyplayer\Cli\Feature\PersistReuseTargetSupport;
 use DataSift\Storyplayer\Cli\Feature\PhaseLoaderSupport;
 use DataSift\Storyplayer\Cli\Feature\ProseLoaderSupport;
@@ -91,32 +92,10 @@ use DataSift\Storyplayer\Cli\Feature\VerboseSupport;
 class PlayStory_Command extends BaseCommand
 {
     /**
-     * should we let the test device (ie the web browser) survive between
-     * phases?
-     *
-     * @var boolean
-     */
-    protected $persistDevice = false;
-
-    /**
      * should we let background processes survive when we shutdown?
      * @var boolean
      */
     protected $persistProcesses = false;
-
-    /**
-     * should we skip the TestEnvironmentDestruction phase?
-     *
-     * @var boolean
-     */
-    protected $persistTarget = false;
-
-    /**
-     * should we skip the TestEnvironmentConstruction phase?
-     *
-     * @var boolean
-     */
-    protected $reuseTarget = false;
 
     // we need to track this for handling CTRL-C
     protected $st;
@@ -156,7 +135,6 @@ class PlayStory_Command extends BaseCommand
 
         // the switches that this command supports
         $this->setSwitches(array(
-            new PlayStory_PersistDeviceSwitch(),
             new PlayStory_PersistProcessesSwitch(),
             new PlayStory_LogJsonSwitch(),
             new PlayStory_LogJUnitSwitch(),
@@ -176,6 +154,7 @@ class PlayStory_Command extends BaseCommand
         $this->addFeature(new Feature_PhaseLoaderSupport);
         $this->addFeature(new Feature_ProseLoaderSupport);
         $this->addFeature(new Feature_PersistReuseTargetSupport);
+        $this->addFeature(new Feature_PersistDeviceSupport);
 
         // now setup all of the switches that we support
         $this->addFeatureSwitches();
@@ -274,26 +253,8 @@ class PlayStory_Command extends BaseCommand
         // wants to use our modules
         $this->initFeaturesAfterModulesAvailable($st, $engine, $injectables);
 
-        // initialise device persistence
-        $this->initDevicePersistence($st, $engine, $injectables);
-
         // initialise process persistence
         $this->initProcessPersistence($st, $engine, $injectables);
-
-        // are we persisting the test device?
-        if ($this->persistDevice) {
-            $st->setPersistDevice();
-        }
-
-        // are we persisting the test environment?
-        // if ($this->persistTarget) {
-        //     $st->setPersistTarget();
-        // }
-
-        // are we reusing the test environment?
-        // if ($this->reuseTarget) {
-        //     $st->setReuseTarget();
-        // }
 
         // install signal handling, now that $this->st is defined
         //
@@ -534,24 +495,6 @@ class PlayStory_Command extends BaseCommand
     // Phase-related initialisation
     //
     // ------------------------------------------------------------------
-
-    /**
-     *
-     * @param  CliEngine   $engine
-     * @param  Injectables $injectables
-     * @return void
-     */
-    protected function initDevicePersistence(StoryTeller $st, CliEngine $engine, Injectables $injectables)
-    {
-        // by default, no persistence
-        $this->persistDevice = false;
-
-        // are we persisting the device?
-        if (isset($engine->options->persistDevice) && $engine->options->persistDevice) {
-            $this->persistDevice = true;
-            $st->setPersistDevice();
-        }
-    }
 
     /**
      *

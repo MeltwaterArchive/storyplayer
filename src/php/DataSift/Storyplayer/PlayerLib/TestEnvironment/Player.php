@@ -109,9 +109,6 @@ class TestEnvironment_Player
             //
             // this is normally a story
             $wrappedPlayer->play($st, $injectables);
-
-            // make sure the test device has stopped after each story
-            $st->stopDevice();
         }
 
         // announce what we're doing

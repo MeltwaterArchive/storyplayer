@@ -43,16 +43,21 @@
 
 namespace DataSift\Storyplayer\Cli;
 
+use Exception;
 use stdClass;
-
 use Phix_Project\CliEngine;
-use Phix_Project\CliEngine\CliResult;
-use Phix_Project\CliEngine\CliSwitch;
-
-use Phix_Project\ValidationLib4\Type_MustBeString;
+use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
+use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
+use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
+use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
+use DataSift\Storyplayer\Console\DevModeConsole;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Injectables;
 
 /**
- * Tell Storyplayer not to kill any background processes we have started
+ * Support for keeping the test environment around
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -61,34 +66,25 @@ use Phix_Project\ValidationLib4\Type_MustBeString;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PlayStory_PersistDeviceSwitch extends CliSwitch
+class Feature_PersistDeviceSupport implements Feature
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('persistdevice');
-		$this->setShortDescription('do not auto-kill the test device between phases');
-		$this->setLongDesc(
-			"Use this switch if you want the test device (such as a web browser) to remain open "
-			."between your test phases."
-			. PHP_EOL . PHP_EOL
-			."Be aware that if the test device times out and shuts itself down during one of "
-			."your phases, your test *is* going to fail, because Storyplayer has no way to "
-			."detect that your test device has gone away by itself."
-		);
+    public function addSwitches(CliCommand $command, $injectables)
+    {
+    	$command->addSwitches([
+    		new Feature_PersistDeviceSwitch,
+    	]);
+    }
 
-		// what are the long switches?
-		$this->addLongSwitch('persist-device');
+    public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables)
+    {
+    	// no-op
+    }
 
-		// all done
-	}
-
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->persistDevice = true;
-
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+    public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
+    {
+        // are we persisting the device?
+        if (isset($engine->options->persistDevice) && $engine->options->persistDevice) {
+            $st->setPersistDevice();
+        }
+    }
 }
