@@ -52,9 +52,10 @@ use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\TalePlayer;
 use DataSift\Storyplayer\Console\DevModeConsole;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Injectables;
 
 /**
  * Support for selecting a device
@@ -75,7 +76,7 @@ class Feature_DeviceSupport implements Feature
         ]);
     }
 
-    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
+    public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables)
     {
         // do we have a device to load?
         if (!isset($engine->options->device)) {
@@ -85,5 +86,10 @@ class Feature_DeviceSupport implements Feature
 
         $deviceName = $engine->options->device;
         $injectables->initActiveDevice($deviceName, $injectables);
+    }
+
+    public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
+    {
+        // no-op
     }
 }

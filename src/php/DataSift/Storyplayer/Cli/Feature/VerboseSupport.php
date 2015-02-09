@@ -46,6 +46,9 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
 
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Injectables;
+
 /**
  * Support for enabling verbosity in output
  *
@@ -65,7 +68,7 @@ class Feature_VerboseSupport implements Feature
         ]);
     }
 
-    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
+    public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables)
     {
         // have we been asked to increase verbosity?
         if (!isset($engine->options->verbose) || !$engine->options->verbose) {
@@ -74,5 +77,10 @@ class Feature_VerboseSupport implements Feature
         else {
             $injectables->dataFormatter->setIsVerbose(true);
         }
+    }
+
+    public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
+    {
+        // no-op
     }
 }

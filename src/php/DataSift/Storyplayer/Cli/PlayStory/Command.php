@@ -181,7 +181,7 @@ class PlayStory_Command extends BaseCommand
         $this->addFeature(new Feature_ProseLoaderSupport);
 
         // now setup all of the switches that we support
-        $this->initFeatureSwitches();
+        $this->addFeatureSwitches();
     }
 
     /**
@@ -247,7 +247,7 @@ class PlayStory_Command extends BaseCommand
         //    b. report-to-file plugins
 
         // process the common functionality
-        $this->processFeatureSwitches($engine);
+        $this->initFeaturesBeforeModulesAvailable($engine);
 
         // now it is safe to create our shorthand
         $runtimeConfig        = $injectables->runtimeConfig;
@@ -272,6 +272,10 @@ class PlayStory_Command extends BaseCommand
         // remember our $st object, as we'll need it for our
         // shutdown function
         $this->st = $st;
+
+        // now that we have $st, we can initialise any feature that
+        // wants to use our modules
+        $this->initFeaturesAfterModulesAvailable($st, $engine, $injectables);
 
         // initialise device persistence
         $this->initDevicePersistence($st, $engine, $injectables);

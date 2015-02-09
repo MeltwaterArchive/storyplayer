@@ -46,6 +46,8 @@ namespace DataSift\Storyplayer\Cli;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Injectables;
 
 /**
  * Support for registering 'localhost' as a host you can interact
@@ -65,7 +67,7 @@ class Feature_LocalhostSupport implements Feature
         // nothing to do - localhost is always enabled
     }
 
-    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
+    public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables)
     {
         // create a definition for localhost
         $host = new BaseObject();
@@ -101,5 +103,10 @@ class Feature_LocalhostSupport implements Feature
         else {
             return "Localhost_Unix";
         }
+    }
+
+    public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
+    {
+        // no-op
     }
 }

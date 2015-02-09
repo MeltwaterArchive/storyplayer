@@ -54,6 +54,9 @@ use Phix_Project\CliEngine\CliCommand;
 use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
 use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Injectables;
+
 /**
  * Base class for Storyplayer commands
  *
@@ -96,21 +99,24 @@ abstract class BaseCommand extends CliCommand
         $this->features[] = $feature;
     }
 
-    public function initFeatureSwitches()
+    public function addFeatureSwitches()
     {
         foreach ($this->features as $feature) {
-            if (method_exists($feature, "addSwitches")) {
-                $feature->addSwitches($this, $this->injectables);
-            }
+            $feature->addSwitches($this, $this->injectables);
         }
     }
 
-    public function processFeatureSwitches(CliEngine $engine)
+    public function initFeaturesBeforeModulesAvailable(CliEngine $engine)
     {
         foreach ($this->features as $feature) {
-            if (method_exists($feature, "processSwitches")) {
-                $feature->processSwitches($engine, $this, $this->injectables);
-            }
+            $feature->initBeforeModulesAvailable($engine, $this, $this->injectables);
+        }
+    }
+
+    public function initFeaturesAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
+    {
+        foreach ($this->features as $feature) {
+            $feature->initAfterModulesAvailable($st, $engine, $injectables);
         }
     }
 }

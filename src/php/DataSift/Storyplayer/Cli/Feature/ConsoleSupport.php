@@ -53,8 +53,8 @@ use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\TalePlayer;
 use DataSift\Storyplayer\Console\DevModeConsole;
+use DataSift\Storyplayer\Injectables;
 
 /**
  * Support for the console
@@ -75,7 +75,7 @@ class Feature_ConsoleSupport implements Feature
         ]);
     }
 
-    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null)
+    public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables)
     {
         // shorthand
         $output = $injectables->output;
@@ -93,5 +93,10 @@ class Feature_ConsoleSupport implements Feature
         else {
             $output->usePluginInSlot($devModeConsole, 'logfile');
         }
+    }
+
+    public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
+    {
+        // no-op
     }
 }

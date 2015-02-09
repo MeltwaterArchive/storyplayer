@@ -46,6 +46,9 @@ namespace DataSift\Storyplayer\Cli;
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
 
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Injectables;
+
 /**
  * the standard interface that all features must implement
  *
@@ -60,5 +63,7 @@ interface Feature
 {
     public function addSwitches(CliCommand $command, $additionalContext);
 
-    public function processSwitches(CliEngine $engine, CliCommand $command, $injectables = null);
+    public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables);
+
+    public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables);
 }
