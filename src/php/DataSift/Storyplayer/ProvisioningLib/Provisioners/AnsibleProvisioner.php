@@ -101,7 +101,7 @@ class AnsibleProvisioner extends Provisioner
 		return $provDef;
 	}
 
-	public function provisionHosts(ProvisioningDefinition $hosts)
+	public function provisionHosts(ProvisioningDefinition $hosts, $provConf)
 	{
 		// shorthand
 		$st = $this->st;

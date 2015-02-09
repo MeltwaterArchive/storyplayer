@@ -102,7 +102,7 @@ class DsbuildProvisioner extends Provisioner
 		return $provDef;
 	}
 
-	public function provisionHosts(ProvisioningDefinition $hosts)
+	public function provisionHosts(ProvisioningDefinition $hosts, $provConfig)
 	{
 		// shorthand
 		$st = $this->st;
@@ -138,20 +138,8 @@ class DsbuildProvisioner extends Provisioner
 		// provision each host in the order that they're listed
 		foreach($hosts as $hostName => $hostProps) {
 			// which dsbuildfile are we going to run?
-			$dsbuildFilename = "";
-			$candidateFilenames = [
-				"dsbuildfile-" . $hostName . '.sh',
-				"dsbuildfile-" . $hostName,
-				"dsbuildfile.sh",
-				"dsbuildfile",
-			];
-			foreach ($candidateFilenames as $candidateFilename) {
-				if (file_exists($candidateFilename)) {
-					$dsbuildFilename = $candidateFilename;
-					break;
-				}
-			}
-			if ($dsbuildFilename == "") {
+			$dsbuildFilename = $this->getDsbuildFilename($provConfig, $hostName);
+			if ($dsbuildFilename === null) {
 				// there is no dsbuildfile at all to run
 				$log->endAction("cannot find dsbuildfile to run :(");
 				throw new E5xx_ActionFailed(__METHOD__, "no dsbuildfile to run");
@@ -246,5 +234,42 @@ class DsbuildProvisioner extends Provisioner
 		}
 
 		return $retval;
+	}
+
+	/**
+	 * find the provisioning script to run for a given hostname
+	 *
+	 * @param  BaseObject $provConfig
+	 *         the "provisioning" section from the test environment config
+	 * @param  string $hostName
+	 *         the name of the host that we are provisioning
+	 * @return string
+	 *         path to the file to execute
+	 */
+	protected function getDsbuildFilename($provConfig, $hostName)
+	{
+		if (isset($provConfig->execute)) {
+			$basename = dirname($provConfig->execute) . "/" . basename($provConfig->execute, '.sh');
+		}
+		else {
+			$basename = "dsbuildfile";
+		}
+
+		$candidateFilenames = [
+			$basename . "-" . $hostName . '.sh',
+			$basename . "-" . $hostName,
+			$basename . ".sh",
+			$basename,
+		];
+
+		foreach ($candidateFilenames as $candidateFilename) {
+			var_dump($candidateFilename);
+			if (file_exists($candidateFilename)) {
+				return $candidateFilename;
+			}
+		}
+
+		// no file found
+		return null;
 	}
 }

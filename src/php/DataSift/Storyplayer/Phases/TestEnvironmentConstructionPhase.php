@@ -98,7 +98,7 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 					$provAdapter = ProvisioningLib::getProvisioner($st, $env->provisioning->engine);
 					$provDef = $provAdapter->buildDefinitionFor($env);
 
-					$provAdapter->provisionHosts($provDef);
+					$provAdapter->provisionHosts($provDef, $env->provisioning);
 				}
 			}
 

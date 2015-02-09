@@ -61,5 +61,5 @@ abstract class Provisioner
 	protected $st;
 
 	abstract public function __construct(StoryTeller $st);
-	abstract public function provisionHosts(ProvisioningDefinition $hosts);
+	abstract public function provisionHosts(ProvisioningDefinition $hosts, $provConf);
 }
