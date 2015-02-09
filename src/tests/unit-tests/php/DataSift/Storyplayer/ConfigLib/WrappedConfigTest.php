@@ -326,7 +326,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanSetDataInsideAnArray()
 	{
@@ -355,7 +354,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanSetDataInsideAnObject()
 	{
@@ -383,7 +381,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanSetDataByExtendingTheConfig()
 	{
@@ -420,7 +417,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanReplaceTopLevelUsingSetData()
 	{
@@ -447,8 +443,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathCannotBeExtended
 	 */
 	public function testCannotSetDataByExtendingAScalar()
 	{
@@ -466,8 +461,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::setData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathCannotBeExtended
 	 */
 	public function testCannotSetDataByOverExtendingAScalar()
 	{
@@ -485,7 +479,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeAnObject()
 	{
@@ -517,7 +510,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeAnArray()
 	{
@@ -551,7 +543,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeAnArrayIntoAnObject()
 	{
@@ -584,7 +575,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeAScalar()
 	{
@@ -615,7 +605,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
 	 */
 	public function testCanMergeIntoTopLevel()
 	{
@@ -647,8 +636,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathCannotBeExtended
 	 */
 	public function testCannotMergeDataByExtendingAScalar()
 	{
@@ -669,8 +657,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::mergeData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathCannotBeExtended
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathCannotBeExtended
 	 */
 	public function testCannotMergeDataByOverExtendingAScalar()
 	{
@@ -713,8 +700,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetDataFromAnObject()
 	{
@@ -742,8 +727,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetDataFromAnArray()
 	{
@@ -768,8 +751,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetTopLevelData()
 	{
@@ -794,8 +775,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAnObject()
 	{
@@ -814,8 +794,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAnArray()
 	{
@@ -834,8 +813,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testGetDataThrowsExceptionWhenConfigPathNotFoundInAScalar()
 	{
@@ -854,8 +832,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getObject()
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetAnObjectFromAnObject()
 	{
@@ -880,9 +856,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getObject()
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigDataNotAnObject
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PropertyNotAnObject
 	 */
 	public function testGetObjectThrowsExceptionWhenNonObjectRetrieved()
 	{
@@ -901,8 +875,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getArray()
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetArrayFromAnArray()
 	{
@@ -927,8 +899,6 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getArray()
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getData()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getPath()
-	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::expandData()
 	 */
 	public function testCanGetArrayFromAnAssocArray()
 	{
@@ -977,7 +947,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::getArray()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigDataNotAnArray
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PropertyNotAnArray
 	 */
 	public function testGetArrayThrowsExceptionWhenNonObjectRetrieved()
 	{
@@ -1068,7 +1038,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundInAnObject()
 	{
@@ -1086,7 +1056,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundDeepInAnObject()
 	{
@@ -1104,7 +1074,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundInAnArray()
 	{
@@ -1122,7 +1092,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundDeepInAnArray()
 	{
@@ -1140,7 +1110,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundInAScalar()
 	{
@@ -1158,7 +1128,7 @@ class WrappedConfigTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @covers DataSift\Storyplayer\ConfigLib\WrappedConfig::unsetData()
-	 * @expectedException DataSift\Storyplayer\ConfigLib\E4xx_ConfigPathNotFound
+	 * @expectedException DataSift\Stone\ObjectLib\E4xx_PathNotFound
 	 */
 	public function testUnsetDataThrowsExceptionWhenConfigPathNotFoundDeepInAScalar()
 	{
