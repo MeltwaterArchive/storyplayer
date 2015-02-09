@@ -57,7 +57,7 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PlayStory_PersistProcessesSwitch extends CliSwitch
+class Feature_PersistProcessesSwitch extends CliSwitch
 {
 	public function __construct()
 	{

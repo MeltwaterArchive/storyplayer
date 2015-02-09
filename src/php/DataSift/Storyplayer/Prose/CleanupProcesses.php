@@ -75,6 +75,11 @@ class CleanupProcesses extends BaseCleanup
         // shorthand
         $st = $this->st;
 
+        // should the processes persist?
+        if ($st->getPersistProcesses()) {
+            return;
+        }
+
         // get the processes table, if we have one
         $table = $this->getTable();
         if (!$table) {

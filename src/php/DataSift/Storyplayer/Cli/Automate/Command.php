@@ -103,9 +103,6 @@ class Automate_Command extends CliCommand
         ));
 
         // the switches that this command supports
-        $this->setSwitches(array(
-            new PlayStory_PersistProcessesSwitch(),
-        ));
     }
 
     /**

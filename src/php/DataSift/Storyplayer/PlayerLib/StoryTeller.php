@@ -215,6 +215,9 @@ class StoryTeller
 	// our data formatter
 	private $dataFormatter = null;
 
+	// process support
+	private $persistProcesses = false;
+
 	public function __construct(Injectables $injectables)
 	{
 		// remember our output object
@@ -808,6 +811,22 @@ class StoryTeller
 
 		// all done
 		$log->endAction();
+	}
+
+	// ==================================================================
+	//
+	// Processes support
+	//
+	// ------------------------------------------------------------------
+
+	public function getPersistProcesses()
+	{
+		return $this->persistProcesses;
+	}
+
+	public function setPersistProcesses()
+	{
+		$this->persistProcesses = true;
 	}
 
 	// ==================================================================

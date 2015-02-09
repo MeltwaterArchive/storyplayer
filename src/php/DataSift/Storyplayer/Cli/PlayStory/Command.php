@@ -72,6 +72,7 @@ use DataSift\Storyplayer\Cli\Feature\DefinesSupport;
 use DataSift\Storyplayer\Cli\Feature\DeviceSupport;
 use DataSift\Storyplayer\Cli\Feature\LocalhostSupport;
 use DataSift\Storyplayer\Cli\Feature\PersistDeviceSupport;
+use DataSift\Storyplayer\Cli\Feature\PersistProcessesSupport;
 use DataSift\Storyplayer\Cli\Feature\PersistReuseTargetSupport;
 use DataSift\Storyplayer\Cli\Feature\PhaseLoaderSupport;
 use DataSift\Storyplayer\Cli\Feature\ProseLoaderSupport;
@@ -135,7 +136,6 @@ class PlayStory_Command extends BaseCommand
 
         // the switches that this command supports
         $this->setSwitches(array(
-            new PlayStory_PersistProcessesSwitch(),
             new PlayStory_LogJsonSwitch(),
             new PlayStory_LogJUnitSwitch(),
             new PlayStory_LogTapSwitch(),
@@ -155,6 +155,7 @@ class PlayStory_Command extends BaseCommand
         $this->addFeature(new Feature_ProseLoaderSupport);
         $this->addFeature(new Feature_PersistReuseTargetSupport);
         $this->addFeature(new Feature_PersistDeviceSupport);
+        $this->addFeature(new Feature_PersistProcessesSupport);
 
         // now setup all of the switches that we support
         $this->addFeatureSwitches();
@@ -252,9 +253,6 @@ class PlayStory_Command extends BaseCommand
         // now that we have $st, we can initialise any feature that
         // wants to use our modules
         $this->initFeaturesAfterModulesAvailable($st, $engine, $injectables);
-
-        // initialise process persistence
-        $this->initProcessPersistence($st, $engine, $injectables);
 
         // install signal handling, now that $this->st is defined
         //
@@ -488,29 +486,6 @@ class PlayStory_Command extends BaseCommand
 
         // all done
         return $filenames;
-    }
-
-    // ==================================================================
-    //
-    // Phase-related initialisation
-    //
-    // ------------------------------------------------------------------
-
-    /**
-     *
-     * @param  CliEngine   $engine
-     * @param  Injectables $injectables
-     * @return void
-     */
-    protected function initProcessPersistence(StoryTeller $st, CliEngine $engine, Injectables $injectables)
-    {
-        // by default, no persistence
-        $this->persistProcesses = false;
-
-        // are we persisting processes?
-        if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
-            $this->persistProcesses = true;
-        }
     }
 
     // ==================================================================
