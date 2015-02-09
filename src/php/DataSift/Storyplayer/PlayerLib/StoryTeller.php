@@ -205,6 +205,7 @@ class StoryTeller
 	// the environment we are testing
 	private $testEnv = null;
 	private $testEnvName = null;
+	private $persistTestEnvironment = false;
 
 	// story / template params
 	private $defines = [];
@@ -525,6 +526,41 @@ class StoryTeller
 		$this->config = $config;
 	}
 
+
+	public function getRuntimeConfig()
+	{
+		return $this->runtimeConfig;
+	}
+
+	public function setRuntimeConfig($runtimeConfig)
+	{
+		$this->runtimeConfig = $runtimeConfig;
+	}
+
+	public function saveRuntimeConfig()
+	{
+		if (!isset($this->runtimeConfigManager)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no runtimeConfigManager available");
+		}
+
+		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig, $this->output);
+	}
+
+	/**
+	 *
+	 * @return DataSift\Storyplayer\UserLib\User
+	 */
+	public function getUser()
+	{
+		return $this->storyContext->user;
+	}
+
+	// ==================================================================
+	//
+	// Test environment support
+	//
+	// ------------------------------------------------------------------
+
 	public function getTestEnvironment()
 	{
 		return $this->config;
@@ -554,32 +590,14 @@ class StoryTeller
 		$this->testEnvConfig = $envConfig;
 	}
 
-	public function getRuntimeConfig()
+	public function getPersistTestEnvironment()
 	{
-		return $this->runtimeConfig;
+		return $this->persistTestEnvironment;
 	}
 
-	public function setRuntimeConfig($runtimeConfig)
+	public function setPersistTestEnvironment()
 	{
-		$this->runtimeConfig = $runtimeConfig;
-	}
-
-	public function saveRuntimeConfig()
-	{
-		if (!isset($this->runtimeConfigManager)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no runtimeConfigManager available");
-		}
-
-		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig, $this->output);
-	}
-
-	/**
-	 *
-	 * @return DataSift\Storyplayer\UserLib\User
-	 */
-	public function getUser()
-	{
-		return $this->storyContext->user;
+		$this->persistTestEnvironment = true;
 	}
 
 	// ==================================================================

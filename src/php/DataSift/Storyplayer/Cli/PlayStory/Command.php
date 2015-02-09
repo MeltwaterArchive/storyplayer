@@ -507,7 +507,7 @@ class PlayStory_Command extends BaseCommand
         echo "USER ABORT!!" . PHP_EOL;
 
         // do we skip destroying the test environment?
-        if ($this->persistTarget) {
+        if ($this->st->persistTestEnvironment()) {
             echo PHP_EOL . "* Warning: NOT destroying test environment" . PHP_EOL
                  .         "           --reuse-target flag is set" . PHP_EOL;
         }

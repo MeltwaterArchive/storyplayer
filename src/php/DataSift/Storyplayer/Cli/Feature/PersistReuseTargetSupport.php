@@ -91,7 +91,7 @@ class Feature_PersistReuseTargetSupport implements Feature
         {
             $injectables->activeConfig->setData('storyplayer.phases.testEnvShutdown.TestEnvironmentDestruction', false);
             $injectables->activeConfig->unsetData('storyplayer.phases.userAbort.TestEnvironmentDestruction');
-            $this->persistTarget = true;
+            $st->setPersistTestEnvironment();
         }
 
         // are we trying to use a test environment that has previously
