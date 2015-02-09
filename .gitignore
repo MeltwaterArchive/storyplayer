@@ -9,6 +9,7 @@ etc
 nbproject
 review
 sauce_connect.log*
+.storyplayer/runtime*
 storyplayer.log
 vendor
 .idea
