@@ -89,9 +89,6 @@ class Automate_Command extends CliCommand
     // needed for when user presses CTRL+C
     protected $injectables;
 
-    // common features
-    use CommonFunctionalitySupport;
-
     public function __construct($injectables)
     {
         // define the command
@@ -109,11 +106,6 @@ class Automate_Command extends CliCommand
         $this->setSwitches(array(
             new PlayStory_PersistProcessesSwitch(),
         ));
-
-        // add in the common features
-        $commonFunctionality = new DefaultCommonFunctionality;
-        $commonFunctionality->disableFunctionality("Common_SystemUnderTestConfigSupport");
-        $this->initCommonFunctionalitySupport($this, $injectables, $commonFunctionality);
     }
 
     /**
