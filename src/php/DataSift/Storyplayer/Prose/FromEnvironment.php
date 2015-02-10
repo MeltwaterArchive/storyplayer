@@ -76,6 +76,7 @@ class FromEnvironment extends Prose
 
 		// if we get here, then we have what we want
 		$value = $appSettings->$appName;
+		$printer  = new DataPrinter();
 		$logValue = $printer->convertToString($value);
 		$log->endAction("setting for '{$appName}' is '{$logValue}'");
 

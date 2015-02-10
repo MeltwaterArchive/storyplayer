@@ -189,6 +189,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
+	   	$actualHosts = [];
 	    foreach (hostWithRole($st, 'test') as $hostname) {
 	    	$actualHosts[] = $hostname;
 	    }

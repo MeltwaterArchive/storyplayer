@@ -103,6 +103,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @method DataSift\Storyplayer\Prose\FromProcessesTable fromProcessesTable()
  * @method DataSift\Storyplayer\Prose\FromRolesTable fromRolesTable()
  * @method DataSift\Storyplayer\Prose\FromRuntimeTable fromRuntimeTable(string $tableName)
+ * @method DataSift\Storyplayer\Prose\FromRuntimeTableForTargetEnvironment fromRuntimeTableForTargetEnvironment()
  * @method DataSift\Storyplayer\Prose\FromSauceLabs fromSauceLabs()
  * @method DataSift\Storyplayer\Prose\FromShell fromShell()
  * @method DataSift\Storyplayer\Prose\FromSupervisor fromSupervisor()
@@ -130,6 +131,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @method DataSift\Storyplayer\Prose\UsingReporting usingReporting()
  * @method DataSift\Storyplayer\Prose\UsingRolesTable usingRolesTable()
  * @method DataSift\Storyplayer\Prose\UsingRuntimeTable usingRuntimeTable(string $tableName)
+ * @method DataSift\Storyplayer\Prose\UsingRuntimeTableForTargetEnvironment usingRuntimeTableForTargetEnvironment()
  * @method DataSift\Storyplayer\Prose\UsingSauceLabs usingSauceLabs()
  * @method DataSift\Storyplayer\Prose\UsingSavageD usingSavageD()
  * @method DataSift\Storyplayer\Prose\UsingShell usingShell()
@@ -185,7 +187,7 @@ class StoryTeller
 
 	/**
 	 *
-	 * @var \Datasift\Storyplayer\PlayerLib\Action_LogItem
+	 * @var \Datasift\Storyplayer\PlayerLib\Action_Logger
 	 */
 	private $actionLogger;
 
