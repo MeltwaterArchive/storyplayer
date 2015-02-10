@@ -1,8 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -21,7 +18,7 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
     // nothing to do
 });
 
@@ -31,10 +28,10 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
-    $appSettings = $st->fromSystemUnderTest()->getAppSettings('testData');
+$story->addPostTestInspection(function() {
+    $appSettings = fromSystemUnderTest()->getAppSettings('testData');
 
-    $st->assertsObject($appSettings)->isNotNull();
-    $st->assertsObject($appSettings)->hasAttribute('name');
-    $st->assertsObject($appSettings)->hasAttribute('version');
+    assertsObject($appSettings)->isNotNull();
+    assertsObject($appSettings)->hasAttribute('name');
+    assertsObject($appSettings)->hasAttribute('version');
 });

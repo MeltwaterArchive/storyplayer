@@ -18,18 +18,18 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addTestSetup(function($st) {
+$story->addTestSetup(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
+    foreach (hostWithRole('upload_target') as $hostname) {
+        usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
     }
 });
 
-$story->addTestTeardown(function($st) {
+$story->addTestTeardown(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
+    foreach (hostWithRole('upload_target') as $hostname) {
         // remove the file from the test environment
-        $st->usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
+        usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
 
         // remove the file from our computer too
         $filename = '/tmp/testfile-' . $hostname . '.txt';
@@ -45,9 +45,9 @@ $story->addTestTeardown(function($st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function($st) {
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->fromHost($hostname)->downloadFile('testfile.txt', "/tmp/testfile-{$hostname}.txt");
+$story->addAction(function() {
+    foreach (hostWithRole('upload_target') as $hostname) {
+        fromHost($hostname)->downloadFile('testfile.txt', "/tmp/testfile-{$hostname}.txt");
     }
 });
 
@@ -57,13 +57,13 @@ $story->addAction(function($st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function($st) {
+$story->addPostTestInspection(function() {
     // we should have a file for each host in the configuration
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
+    foreach (hostWithRole('upload_target') as $hostname) {
         $filename = '/tmp/testfile-' . $hostname . '.txt';
         if (!file_exists($filename)) {
-            $st->usingLog()->writeToLog("file not downloaded from host '$hostname'");
-            $st->usingErrors()->throwException("file '{$filename}' not downloaded");
+            usingLog()->writeToLog("file not downloaded from host '$hostname'");
+            usingErrors()->throwException("file '{$filename}' not downloaded");
         }
     }
 });
