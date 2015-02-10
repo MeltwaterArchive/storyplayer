@@ -76,16 +76,22 @@ function first($arrayToSearch)
 /**
  * iterate over all hosts that match the given role
  *
- * @param  StoryTeller $st
- *         our ubiquitous $st object
  * @param  string $roleName
  *         The role that we want
  *
  * @return string
  *         a hostname that matches the role
  */
-function hostWithRole(StoryTeller $st, $roleName)
+function hostWithRole($roleName)
 {
+	// special case
+	if ($roleName instanceof StoryTeller) {
+		throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
+	}
+
+	// shorthand
+	$st = StoryTeller::instance();
+
 	$listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
 	if (!count(get_object_vars($listOfHosts))) {
 		throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
