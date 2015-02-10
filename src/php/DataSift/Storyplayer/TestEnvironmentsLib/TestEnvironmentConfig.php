@@ -67,16 +67,9 @@ class TestEnvironmentConfig extends WrappedConfig
     {
         // do we have any config?
         $config = $this->getConfig();
-        if (is_array($config) && count($config) == 0) {
-            // at the moment, an empty test environment is not considered
-            // to be an error
-            //
-            // perhaps it should be one day?
-            return;
-        }
 
         // backwards-compatibility with 2.0.0-pre releases
-        if (is_array($config)) {
+        if (isset($config->{'0'})) {
             // convert to an object
             //
             // this is the documented format
