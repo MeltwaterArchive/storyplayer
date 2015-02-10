@@ -15,6 +15,9 @@
 								"username": "vagrant",
 								"group": "vagrant"
 							}
+						},
+						"params": {
+							"filename": "params-merge-failed.txt"
 						}
 					}
 				}
