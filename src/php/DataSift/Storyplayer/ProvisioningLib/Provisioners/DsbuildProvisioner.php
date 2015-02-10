@@ -90,7 +90,7 @@ class DsbuildProvisioner extends Provisioner
 			if (isset($machine->params)) {
 				$params = [];
 				foreach ($machine->params as $paramName => $paramValue) {
-					$params[$paramName]  = $st->fromConfig()->getSetting('hosts.' . $name . '.params.'.$paramName);
+					$params[$paramName]  = $st->fromConfig()->get('hosts.' . $name . '.params.'.$paramName);
 				}
 				if (count($params)) {
 					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($name);
