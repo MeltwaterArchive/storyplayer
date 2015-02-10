@@ -190,7 +190,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
 	    // perform the change
 
 	   	$actualHosts = [];
-	    foreach (hostWithRole($st, 'test') as $hostname) {
+	    foreach (hostWithRole('test') as $hostname) {
 	    	$actualHosts[] = $hostname;
 	    }
 
@@ -231,7 +231,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
 
     	$caughtException = false;
     	try {
-		    foreach (hostWithRole($st, 'test') as $hostname) {
+		    foreach (hostWithRole('test') as $hostname) {
 		    	$actualHosts[] = $hostname;
 	    	}
 	    }

@@ -266,7 +266,7 @@ class StoryTeller
         self::$self = $this;
 	}
 
-	static public function instance()
+	public static function instance()
 	{
 		return self::$self;
 	}

@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Prose;
 
 use Exception;
 use Predis\Client as PredisClient;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
  * work with a Redis datastore
