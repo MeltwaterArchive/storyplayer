@@ -122,8 +122,8 @@ class TestEnvironmentConfig extends WrappedConfig
         }
     }
 
-	public function mergeSystemUnderTestConfig($sutConfig)
-	{
+    public function mergeSystemUnderTestConfig($sutConfig)
+    {
         // do we have anything to merge?
         if (!$sutConfig->hasData('roles')) {
             // nothing to merge
@@ -133,8 +133,11 @@ class TestEnvironmentConfig extends WrappedConfig
         // get the list of roles
         $sutRoles = $sutConfig->getData('roles');
 
+        // get our config
+        $envConfig = $this->getConfig();
+
         foreach ($sutRoles as $sutRole) {
-            foreach ($this->getConfig() as $envDetails) {
+            foreach ($envConfig->groups as $envDetails) {
                 foreach ($envDetails->details->machines as $machine) {
                     if (in_array($sutRole->role, $machine->roles) || in_array('*', $machine->roles)) {
                         if (!isset($machine->params)) {
@@ -150,5 +153,5 @@ class TestEnvironmentConfig extends WrappedConfig
                 }
             }
         }
-	}
+    }
 }
