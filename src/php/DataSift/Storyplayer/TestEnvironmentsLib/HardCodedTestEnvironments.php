@@ -74,10 +74,11 @@ class HardCodedTestEnvironments extends HardCodedList
         $rolesConfig->roles = [ '*' ];
 
         $config = &$this->newConfig('localhost')->getConfig();
-        $config[0] = new BaseObject;
-        $config[0]->type = "Blackboxes";
-        $config[0]->details = new BaseObject;
-        $config[0]->details->machines = [ $rolesConfig ];
+        $config->groups = new BaseObject;
+        $config->groups->{'0'} = new BaseObject;
+        $config->groups->{'0'}->type = "Blackboxes";
+        $config->groups->{'0'}->details = new BaseObject;
+        $config->groups->{'0'}->details->machines = [ $rolesConfig ];
 
         // all done
     }

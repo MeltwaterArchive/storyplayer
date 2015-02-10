@@ -131,7 +131,7 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 		catch (Exception $e) {
 			$phaseResult->setPlayingFailed(
 				$phaseResult::ERROR,
-				$e->getMessage(),
+				$e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString(),
 				$e
 			);
 		}

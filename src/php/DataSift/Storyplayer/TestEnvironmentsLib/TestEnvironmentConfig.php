@@ -60,7 +60,7 @@ class TestEnvironmentConfig extends WrappedConfig
 {
     public function __construct()
     {
-        parent::__construct(self::ROOT_IS_ARRAY);
+        parent::__construct(self::ROOT_IS_OBJECT);
     }
 
     public function validateConfig()

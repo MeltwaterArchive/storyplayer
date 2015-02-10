@@ -72,6 +72,7 @@ class KnownSystemsUnderTest extends BaseObject
     {
         // defaults for the local computer
         $this->localhost = new BaseObject;
+        $this->localhost->groups = new BaseObject;
 
         // all done
     }
