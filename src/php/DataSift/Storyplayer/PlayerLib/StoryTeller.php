@@ -152,6 +152,12 @@ use DataSift\Stone\ObjectLib\BaseObject;
 class StoryTeller
 {
 	/**
+	 * singleton instance of StoryTeller
+	 * @var StoryTeller
+	 */
+	static protected $self = null;
+
+	/**
 	 * the story that is being played
 	 * @var Story
 	 */
@@ -256,6 +262,13 @@ class StoryTeller
         // our runtime config
         $this->setRuntimeConfig($injectables->runtimeConfig);
         $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
+
+        self::$self = $this;
+	}
+
+	static public function instance()
+	{
+		return self::$self;
 	}
 
 	// ==================================================================
