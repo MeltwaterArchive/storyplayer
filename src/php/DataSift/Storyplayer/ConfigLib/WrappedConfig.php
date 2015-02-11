@@ -126,7 +126,7 @@ class WrappedConfig
         }
 
         $raw = @file_get_contents($pathToFile);
-        if (FALSE === $raw) {
+        if (false === $raw) {
             throw new E4xx_ConfigFileNotFound($pathToFile);
         }
 
@@ -206,7 +206,7 @@ class WrappedConfig
     /**
      * expand any variables in $this
      *
-     * @param  array|object $baseConfig
+     * @param  array|object|null $baseConfig
      *         the config to use for expanding variables (optional)
      * @return array|object
      *         a copy of the config stored in $this, with any Twig
