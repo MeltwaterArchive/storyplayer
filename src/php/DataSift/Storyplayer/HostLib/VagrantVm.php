@@ -123,10 +123,10 @@ class VagrantVm implements SupportedHost
 		});
 
 		// remove any existing hosts table entry
-		$st->usingHostsTable()->removeHost($vmDetails->name);
+		$st->usingHostsTable()->removeHost($vmDetails->hostId);
 
 		// remove any roles
-		$st->usingRolesTable()->removeHostFromAllRoles($vmDetails->name);
+		$st->usingRolesTable()->removeHostFromAllRoles($vmDetails->hostId);
 
 		// let's start the VM
 		$command = "vagrant up";
@@ -154,12 +154,12 @@ class VagrantVm implements SupportedHost
 		$vmDetails->provisioned = true;
 
 		// remember this vm, now that it is running
-		$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
+		$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
 
 		// now, let's get this VM into our SSH known_hosts file, to avoid
 		// prompting people when we try and provision this VM
 		$log->addStep("get the VM into the SSH known_hosts file", function() use($st, $vmDetails) {
-			$st->usingHost($vmDetails->name)->runCommand("ls");
+			$st->usingHost($vmDetails->hostId)->runCommand("ls");
 		});
 
 		// all done
@@ -332,10 +332,10 @@ class VagrantVm implements SupportedHost
 		}
 
 		// if we get here, we need to forget about this VM
-		$st->usingHostsTable()->removeHost($vmDetails->name);
+		$st->usingHostsTable()->removeHost($vmDetails->hostId);
 
 		// remove any roles
-		$st->usingRolesTable()->removeHostFromAllRoles($vmDetails->name);
+		$st->usingRolesTable()->removeHostFromAllRoles($vmDetails->hostId);
 
 		// all done
 		$log->endAction();
@@ -404,7 +404,7 @@ class VagrantVm implements SupportedHost
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine status of Vagrant VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine status of Vagrant VM '{$vmDetails->hostId}'");
 
 		// if the box is running, it should have a status of 'running'
 		$command = "vagrant status | grep default | head -n 1 | awk '{print \$2'}";
@@ -433,7 +433,7 @@ class VagrantVm implements SupportedHost
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
 		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
@@ -452,7 +452,7 @@ class VagrantVm implements SupportedHost
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
 		// the key will be in one of two places, in this order:
 		//
@@ -461,7 +461,7 @@ class VagrantVm implements SupportedHost
 		//
 		// we use the first that we can find
 		$keyFilenames = [
-			getcwd() . "/.vagrant/machines/{$vmDetails->name}/virtualbox/private_key",
+			getcwd() . "/.vagrant/machines/{$vmDetails->hostId}/virtualbox/private_key",
 			getenv("HOME") . "/.vagrant.d/insecure_private_key"
 		];
 

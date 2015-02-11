@@ -103,7 +103,7 @@ class ListHostsTable_Command extends CliCommand
 					continue;
 				}
 
-				echo "{$envName}:{$details->name}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
+				echo "{$envName}:{$details->id}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
 			}
 		}
 

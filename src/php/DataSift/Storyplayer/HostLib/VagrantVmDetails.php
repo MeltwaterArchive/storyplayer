@@ -55,7 +55,7 @@ namespace DataSift\Storyplayer\HostLib;
  */
 class VagrantVmDetails extends HostDetails
 {
-	public $name;
+	public $hostId;
 	public $osName;
 	public $homeFolder;
 	public $dir;

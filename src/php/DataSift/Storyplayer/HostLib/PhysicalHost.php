@@ -177,7 +177,7 @@ class PhysicalHost implements SupportedHost
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine IP address of physical host '{$vmDetails->name}'");
+		$log = $st->startAction("determine IP address of physical host '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
 		$host = OsLib::getHostAdapter($st, $vmDetails->osName);

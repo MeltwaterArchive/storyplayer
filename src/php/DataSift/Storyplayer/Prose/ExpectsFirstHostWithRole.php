@@ -74,8 +74,8 @@ class ExpectsFirstHostWithRole extends ExpectsHost
 		// get the hosts details
 		$hostDetails = $this->retrieveFirstHost($this->args[0]);
 
-		// we only need to remember the name
-		$this->args[0] = $hostDetails->name;
+		// we only need to remember the hostId
+		$this->args[0] = $hostDetails->hostId;
 
 		// all done
 		$log->endAction("selected host '{$this->args[0]}'");

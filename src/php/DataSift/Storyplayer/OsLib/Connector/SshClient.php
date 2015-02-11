@@ -64,12 +64,12 @@ trait Connector_SshClient
 	public function getClient($st, $hostDetails)
 	{
 		// shorthand
-		$name = $hostDetails->name;
+		$hostId = $hostDetails->hostId;
 
 		// do we already have a client?
-		if (isset($this->sshClients[$name])) {
+		if (isset($this->sshClients[$hostId])) {
 			// yes - reuse it
-			return $this->sshClients[$name];
+			return $this->sshClients[$hostId];
 		}
 
 		// if we get here, we need to make a new client
@@ -82,7 +82,7 @@ trait Connector_SshClient
 		}
 
 		// all done
-		$this->sshClients[$name] = $sshClient;
+		$this->sshClients[$hostId] = $sshClient;
 		return $sshClient;
 	}
 }

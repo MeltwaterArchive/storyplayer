@@ -79,7 +79,7 @@ class UsingRolesTable extends Prose
 	{
 		// shorthand
 		$st = $this->st;
-		$hostId = $hostDetails->name;
+		$hostId = $hostDetails->hostId;
 
 		// what are we doing?
 		$log = $st->startAction("add host '{$hostId}' to role '{$roleName}'");

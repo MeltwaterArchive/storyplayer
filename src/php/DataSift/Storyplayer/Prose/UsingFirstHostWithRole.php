@@ -75,7 +75,7 @@ class UsingFirstHostWithRole extends UsingHost
 		$hostDetails = $this->retrieveFirstHost($this->args[0]);
 
 		// we only need to remember the name
-		$this->args[0] = $hostDetails->name;
+		$this->args[0] = $hostDetails->hostId;
 
 		// all done
 		$log->endAction("selected host '{$this->args[0]}'");

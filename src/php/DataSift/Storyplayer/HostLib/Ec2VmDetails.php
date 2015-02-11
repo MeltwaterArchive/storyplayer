@@ -59,7 +59,7 @@ class Ec2VmDetails extends HostDetails
 	public $environment;
 	public $osName;
 	public $securityGroup;
-	public $name;
+	public $hostId;
 	public $amiId;
 	public $keyPairName;
 	public $instanceType;

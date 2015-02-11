@@ -74,7 +74,7 @@ class UsingSupervisor extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// start the program
-		$result = $st->usingHost($hostDetails->name)->runCommand("sudo supervisorctl start '{$programName}'");
+		$result = $st->usingHost($hostDetails->hostId)->runCommand("sudo supervisorctl start '{$programName}'");
 
 		// did the command succeed?
 		if ($result->didCommandFail()) {
@@ -98,7 +98,7 @@ class UsingSupervisor extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// stop the program
-		$result = $st->usingHost($hostDetails->name)->runCommand("sudo supervisorctl stop '{$programName}'");
+		$result = $st->usingHost($hostDetails->hostId)->runCommand("sudo supervisorctl stop '{$programName}'");
 
 		// did the command succeed?
 		if ($result->didCommandFail()) {

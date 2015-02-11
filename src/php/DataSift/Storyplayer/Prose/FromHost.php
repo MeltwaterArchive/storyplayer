@@ -72,7 +72,7 @@ class FromHost extends HostBase
 
 		// we already have details - are they valid?
 		if (isset($hostDetails->invalidHost) && $hostDetails->invalidHost) {
-			$msg = "there are no details about host '{$hostDetails->name}'";
+			$msg = "there are no details about host '{$hostDetails->hostId}'";
 			$log->endAction($msg);
 			throw new E5xx_ActionFailed(__METHOD__, $msg);
 		}

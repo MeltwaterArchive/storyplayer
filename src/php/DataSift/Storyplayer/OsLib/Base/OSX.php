@@ -93,7 +93,7 @@ abstract class Base_OSX extends OsBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("is process '{$processName}' running on OSX '{$hostDetails->name}'?");
+		$log = $st->startAction("is process '{$processName}' running on OSX '{$hostDetails->hostId}'?");
 
 		// SSH in and have a look
 		$command   = "ps -ef | awk '{ print \$8 }' | grep '[" . $processName{0} . "]" . substr($processName, 1) . "'";
@@ -122,7 +122,7 @@ abstract class Base_OSX extends OsBase
 		$st = $this->st;
 
 		// log some info to the user
-		$log = $st->startAction("get pid for process '{$processName}' running on OSX machine '{$hostDetails->name}'");
+		$log = $st->startAction("get pid for process '{$processName}' running on OSX machine '{$hostDetails->hostId}'");
 
 		// run the command to get the process id
 		$command   = "ps -ef | grep '[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \$2}'";
@@ -161,7 +161,7 @@ abstract class Base_OSX extends OsBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("is process PID '{$pid}' running on OSX '{$hostDetails->name}'?");
+		$log = $st->startAction("is process PID '{$pid}' running on OSX '{$hostDetails->hostId}'?");
 
 		// SSH in and have a look
 		$command   = "ps -ef | awk '{ print \$2 }' | grep '[" . $pid{0} . "]" . substr($pid, 1) . "'";

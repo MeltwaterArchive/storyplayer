@@ -79,20 +79,20 @@ class AnsibleProvisioner extends Provisioner
 		$log = $st->startAction("build Ansible provisioning definition");
 
 		// add in each machine in the environment
-		foreach ($env->details->machines as $name => $machine) {
-			$st->usingProvisioningDefinition($provDef)->addHost($name);
+		foreach ($env->details->machines as $hostId => $machine) {
+			$st->usingProvisioningDefinition($provDef)->addHost($hostId);
 
 			foreach ($machine->roles as $role) {
-				$st->usingProvisioningDefinition($provDef)->addRole($role)->toHost($name);
+				$st->usingProvisioningDefinition($provDef)->addRole($role)->toHost($hostId);
 			}
 
 			if (isset($machine->params)) {
 				$params = [];
 				foreach ($machine->params as $paramName => $paramValue) {
-					$params[$paramName]  = $st->fromTestEnvironment()->getSetting('hosts.' . $name . '.params.'.$paramName);
+					$params[$paramName]  = $st->fromTestEnvironment()->getSetting('hosts.' . $hostId . '.params.'.$paramName);
 				}
 				if (count($params)) {
-					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($name);
+					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($hostId);
 				}
 			}
 		}

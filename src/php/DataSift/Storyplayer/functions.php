@@ -101,7 +101,7 @@ function hostWithRole($roleName)
 	$log = $st->startAction("for each host with role '{$roleName}' ... ");
 
 	foreach ($listOfHosts as $hostDetails) {
-		yield($hostDetails->name);
+		yield($hostDetails->hostId);
 	}
 
 	// all done

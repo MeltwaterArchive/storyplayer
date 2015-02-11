@@ -102,13 +102,13 @@ class VagrantVms implements SupportedHost
 		if (empty($envDetails->machines)) {
 			throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
 		}
-		foreach($envDetails->machines as $name => $machine) {
+		foreach($envDetails->machines as $hostId => $machine) {
 			// TODO: it would be great to autodetect this one day
 			if (!isset($machine->osName)) {
-				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$name']->osName");
+				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->osName");
 			}
 			if (!isset($machine->roles)) {
-				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$name']->roles");
+				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->roles");
 			}
 		}
 
@@ -129,11 +129,11 @@ class VagrantVms implements SupportedHost
 		});
 
 		// remove any existing hosts table entry
-		foreach ($envDetails->machines as $name => $machine) {
-			$st->usingHostsTable()->removeHost($name);
+		foreach ($envDetails->machines as $hostId => $machine) {
+			$st->usingHostsTable()->removeHost($hostId);
 
 			// remove any roles
-			$st->usingRolesTable()->removeHostFromAllRoles($name);
+			$st->usingRolesTable()->removeHostFromAllRoles($hostId);
 		}
 
 		// work out which network interface to use
@@ -155,7 +155,7 @@ class VagrantVms implements SupportedHost
 		// yes it did!!
 
 		// store the details
-		foreach($envDetails->machines as $name => $machine)
+		foreach($envDetails->machines as $hostId => $machine)
 		{
 			// we want all the details from the config file
 			$vmDetails = clone $machine;
@@ -168,7 +168,7 @@ class VagrantVms implements SupportedHost
 			//
 			// when provisioning a folder of vagrant vms, we now use
 			// the same name for the VM that vagrant uses
-			$vmDetails->name        = $name;
+			$vmDetails->hostId      = $hostId;
 
 			// remember where the machine lives
 			$vmDetails->dir         = $pathToHomeFolder;
@@ -196,7 +196,7 @@ class VagrantVms implements SupportedHost
 			$vmDetails->provisioned = true;
 
 			// remember this vm, now that it is running
-			$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
+			$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
 			foreach ($vmDetails->roles as $role) {
 				$st->usingRolesTable()->addHostToRole($vmDetails, $role);
 			}
@@ -204,7 +204,7 @@ class VagrantVms implements SupportedHost
 			// now, let's get this VM into our SSH known_hosts file, to avoid
 			// prompting people when we try and provision this VM
 			$log->addStep("get the VM into the SSH known_hosts file", function() use($st, $vmDetails) {
-				$st->usingHost($vmDetails->name)->runCommand("ls");
+				$st->usingHost($vmDetails->hostId)->runCommand("ls");
 			});
 		}
 
@@ -274,17 +274,17 @@ class VagrantVms implements SupportedHost
 		$log = $st->startAction("destroy VM(s)");
 
 		// stop all the VMs, one by one
-		foreach ($envDetails->machines as $name => $machine) {
+		foreach ($envDetails->machines as $hostId => $machine) {
 			// get the machine details
-			$vmDetails = $st->fromHostsTable()->getDetailsForHost($name);
+			$vmDetails = $st->fromHostsTable()->getDetailsForHost($hostId);
 			if ($vmDetails) {
 				// is the VM actually running?
-				if ($st->fromHost($name)->getHostIsRunning()) {
+				if ($st->fromHost($hostId)->getHostIsRunning()) {
 					// delete the VM from disk
 					//
 					// this will also deregister the host from the
 					// HostsTable and RolesTable
-					$st->usingVagrant()->destroyVm($name);
+					$st->usingVagrant()->destroyVm($hostId);
 				}
 			}
 		}
@@ -366,7 +366,7 @@ class VagrantVms implements SupportedHost
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
 		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
@@ -420,7 +420,7 @@ class VagrantVms implements SupportedHost
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
 		// the key will be in one of two places, in this order:
 		//
@@ -429,7 +429,7 @@ class VagrantVms implements SupportedHost
 		//
 		// we use the first that we can find
 		$keyFilenames = [
-			getcwd() . "/.vagrant/machines/{$vmDetails->name}/virtualbox/private_key",
+			getcwd() . "/.vagrant/machines/{$vmDetails->hostId}/virtualbox/private_key",
 			getenv("HOME") . "/.vagrant.d/insecure_private_key"
 		];
 

@@ -101,14 +101,14 @@ class TestEnvironmentConfig extends WrappedConfig
             }
 
             // are the machines valid?
-            foreach ($group->details->machines as $name => $machine) {
+            foreach ($group->details->machines as $hostId => $machine) {
                 // does each machine have a role?
                 if (!isset($machine->roles)) {
-                    throw new E4xx_TestEnvironmentMachineNeedsARole($index, $name);
+                    throw new E4xx_TestEnvironmentMachineNeedsARole($index, $hostId);
                 }
                 // is the roles an array?
                 if (!is_array($machine->roles)) {
-                    throw new E4xx_TestEnvironmentMachineRolesMustBeArray($index, $name, gettype($machine->roles));
+                    throw new E4xx_TestEnvironmentMachineRolesMustBeArray($index, $hostId, gettype($machine->roles));
                 }
             }
         }

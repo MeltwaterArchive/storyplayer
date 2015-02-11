@@ -71,10 +71,11 @@ class Feature_LocalhostSupport implements Feature
     {
         // create a definition for localhost
         $host = new BaseObject();
-        $host->name        = "localhost";
+        $host->hostId      = "localhost";
         $host->osName      = $this->detectOs();
         $host->type        = "PhysicalHost";
         $host->ipAddress   = "127.0.0.1";
+        $host->hostname    = "localhost";
         $host->provisioned = true;
 
         // we need to make sure it's registered in the hosts table

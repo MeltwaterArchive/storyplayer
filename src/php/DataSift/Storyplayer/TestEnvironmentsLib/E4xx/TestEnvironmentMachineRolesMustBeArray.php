@@ -56,9 +56,9 @@ namespace DataSift\Storyplayer\TestEnvironmentsLib;
  */
 class E4xx_TestEnvironmentMachineRolesMustBeArray extends E4xx_TestEnvironmentConfigError
 {
-	public function __construct($groupIndex, $name, $foundType)
+	public function __construct($groupIndex, $hostId, $foundType)
 	{
-		$msg = "machine '{$name}' in environment group #{$groupIndex} must define an array of roles; $foundType found instead of an array";
+		$msg = "machine '{$hostId}' in environment group #{$groupIndex} must define an array of roles; $foundType found instead of an array";
 		parent::__construct(400, $msg, $msg);
 	}
 }

@@ -104,7 +104,7 @@ abstract class Base_Centos5 extends Base_Unix
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->name}'");
+		$log = $st->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
 
 		// get the details
 		$command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";
