@@ -109,6 +109,27 @@ class FromHost extends HostBase
 		return true;
 	}
 
+	public function getHostname()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get the hostname of host ID '{$this->args[0]}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// do we have a hostname?
+		if (!isset($hostDetails->hostname)) {
+			throw new E5xx_ActionFailed(__METHOD__, "no hostname found for host ID '{$this->args[0]}'");
+		}
+
+		// all done
+		$log->endAction("hostname is '{$hostDetails->hostname}'");
+		return $hostDetails->hostname;
+	}
+
 	public function getIpAddress()
 	{
 		// shorthand

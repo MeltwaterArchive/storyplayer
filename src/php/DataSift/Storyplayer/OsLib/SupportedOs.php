@@ -68,6 +68,14 @@ interface SupportedOs
 	public function determineIpAddress($hostDetails, SupportedHost $vm);
 
 	/**
+	 *
+	 * @param  HostDetails   $hostDetails
+	 * @param  SupportedHost $vm
+	 * @return string
+	 */
+	public function determineHostname($hostDetails, SupportedHost $vm);
+
+	/**
 	 * @param HostDetails $hostDetails
 	 * @param string $packageName
 	 * @return stdClass

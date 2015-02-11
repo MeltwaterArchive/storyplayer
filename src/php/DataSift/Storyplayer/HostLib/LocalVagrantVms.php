@@ -176,6 +176,7 @@ class LocalVagrantVms implements SupportedHost
 
 			// remember how to connect to the machine via the network
 			$vmDetails->ipAddress   = $this->determineIpAddress($vmDetails);
+			$vmDetails->hostname    = $this->determineHostname($vmDetails);
 
 			// mark the box as provisioned
 			// we will use this in stopBox() to avoid destroying VMs that failed
@@ -364,6 +365,39 @@ class LocalVagrantVms implements SupportedHost
 		// all done
 		$log->endAction("IP address is '{$ipAddress}'");
 		return $ipAddress;
+	}
+
+	/**
+	 *
+	 * @param  stdClass $vmDetails
+	 * @return string
+	 */
+	public function determineHostname($vmDetails)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
+
+		// create an adapter to talk to the host operating system
+		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+
+		// get the hostname
+		$hostname = $host->determineHostname($vmDetails, $this);
+
+		// are we happy with the hostname?
+		if ("localhost" == substr($hostname, 0, 9) && $vmDetails->ipAddress != "127.0.0.1") {
+			// "localhost" is where Storyplayer is running
+			// cannot be this VM
+			//
+			// substitute the IP address
+			$hostname = $vmDetails->ipAddress;
+		}
+
+		// all done
+		$log->endAction("hostname is '{$hostname}'");
+		return $hostname;
 	}
 
 	public function determineBridgedInterface()

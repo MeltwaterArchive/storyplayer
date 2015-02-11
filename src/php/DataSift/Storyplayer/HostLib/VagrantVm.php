@@ -142,11 +142,9 @@ class VagrantVm implements SupportedHost
 
 		// yes it did!!
 		//
-		// now, we need its IP address
-		$ipAddress = $this->determineIpAddress($vmDetails);
-
-		// store the IP address for future use
-		$vmDetails->ipAddress = $ipAddress;
+		// now, we need to know how to contact this VM
+		$vmDetails->ipAddress = $this->determineIpAddress($vmDetails);
+		$vmDetails->hostname  = $this->determineHostname($vmDetails);
 
 		// mark the box as provisioned
 		// we will use this in stopBox() to avoid destroying VMs that failed
@@ -163,7 +161,7 @@ class VagrantVm implements SupportedHost
 		});
 
 		// all done
-		$log->endAction("VM successfully started; IP address is {$ipAddress}");
+		$log->endAction("VM successfully started; IP address is {$vmDetails->ipAddress}");
 	}
 
 	/**
@@ -204,14 +202,12 @@ class VagrantVm implements SupportedHost
 		// we need to know which SSH key to use
 		$vmDetails->sshKeyFile = $this->determinePrivateKey($vmDetails);
 
-		// now, we need its IP address, which may have changed
-		$ipAddress = $this->determineIpAddress($vmDetails);
-
-		// store the IP address for future use
-		$vmDetails->ipAddress = $ipAddress;
+		// now, we need to know how to contact this machine
+		$vmDetails->ipAddress = $this->determineIpAddress($vmDetails);
+		$vmDetails->hostname  = $this->determineHostname($vmDetails);
 
 		// all done
-		$log->endAction("VM successfully started; IP address is {$ipAddress}");
+		$log->endAction("VM successfully started; IP address is {$vmDetails->ipAddress}");
 	}
 
 	/**
@@ -444,6 +440,39 @@ class VagrantVm implements SupportedHost
 		// all done
 		$log->endAction("IP address is '{$ipAddress}'");
 		return $ipAddress;
+	}
+
+	/**
+	 *
+	 * @param  VagrantVmDetails $vmDetails
+	 * @return string
+	 */
+	public function determineHostname($vmDetails)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
+
+		// create an adapter to talk to the host operating system
+		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+
+		// get the hostname
+		$hostname = $host->determineHostname($vmDetails, $this);
+
+		// are we happy with the hostname?
+		if ("localhost" == substr($hostname, 0, 9) && $vmDetails->ipAddress != "127.0.0.1") {
+			// "localhost" is where Storyplayer is running
+			// cannot be this VM
+			//
+			// substitute the IP address
+			$hostname = $vmDetails->ipAddress;
+		}
+
+		// all done
+		$log->endAction("hostname is '{$hostname}'");
+		return $hostname;
 	}
 
 	public function determinePrivateKey($vmDetails)
