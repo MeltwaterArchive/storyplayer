@@ -82,6 +82,11 @@ class FromHost extends HostBase
 		return $hostDetails;
 	}
 
+	/**
+	 * is a host up and running?
+	 *
+	 * @return boolean
+	 */
 	public function getHostIsRunning()
 	{
 		// shorthand
@@ -109,6 +114,16 @@ class FromHost extends HostBase
 		return true;
 	}
 
+	/**
+	 * get the hostname for a host
+	 *
+	 * the returned hostname is suitable for use in HTTP/HTTPS URLs
+	 *
+	 * if we have been unable to determine the hostname for the host,
+	 * this will return the host's IP address instead
+	 *
+	 * @return string
+	 */
 	public function getHostname()
 	{
 		// shorthand
@@ -130,6 +145,11 @@ class FromHost extends HostBase
 		return $hostDetails->hostname;
 	}
 
+	/**
+	 * get the IP address for a host
+	 *
+	 * @return string
+	 */
 	public function getIpAddress()
 	{
 		// shorthand
