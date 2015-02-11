@@ -92,6 +92,41 @@ abstract class Base_Unix extends OsBase
 	/**
 	 *
 	 * @param  HostDetails $hostDetails
+	 * @param  SupportedHost $host
+	 * @return string
+	 */
+	public function determineHostname($hostDetails, SupportedHost $host)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("query " . basename(__CLASS__) . " for hostname");
+
+		// how do we do this?
+		if (isset($hostDetails->hostname)) {
+			$log->endAction(["hostname is", $hostDetails->hostname]);
+			return $hostDetails->hostname;
+		}
+
+		$command = "hostname";
+		$result  = $this->runCommand($hostDetails, $command);
+		if ($result->didCommandSucceed()) {
+			$lines = explode("\n", $result->output);
+			$hostname = trim($lines[0]);
+			$log->endAction(["hostname is", $hostname]);
+			return $hostname;
+		}
+
+		// if we get here, we do not know what the hostname is
+		$msg = "could not determine hostname";
+		$log->endAction($msg);
+		throw new E5xx_ActionFailed(__METHOD__, $msg);
+	}
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
 	 * @param  string $packageName
 	 * @return BaseObject
 	 */
