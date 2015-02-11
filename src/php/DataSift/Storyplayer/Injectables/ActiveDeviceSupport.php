@@ -63,7 +63,7 @@ trait ActiveDeviceSupport
 	/**
 	 * @param  string $deviceName
 	 *         the name of the device to make active
-	 * @param  Injectables $injectables
+	 * @param  \DataSift\Storyplayer\Injectables $injectables
 	 *         our DI container, which contains the list of known devices
 	 * @return void
 	 */

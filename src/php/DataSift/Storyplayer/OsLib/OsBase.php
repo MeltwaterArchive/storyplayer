@@ -108,9 +108,9 @@ abstract class OsBase implements SupportedOs
 
 	/**
 	 *
-	 * @param  Storyteller $st
+	 * @param  \DataSift\Storyplayer\PlayerLib\Storyteller $st
 	 *         our module loader
-	 * @param  HostDetails $hostDetails
+	 * @param  \DataSift\Storyplayer\HostLib\HostDetails $hostDetails
 	 *         the details for the host we want a client for
 	 * @return CommandClient
 	 */

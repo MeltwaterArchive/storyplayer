@@ -294,6 +294,8 @@ class WrappedConfig
      *        the path to assign to
      * @param mixed $data
      *        the data to assign
+     *
+     * @return void
      */
     public function setData($path, $data)
     {
@@ -304,7 +306,7 @@ class WrappedConfig
         }
 
         // general case
-        return $this->config->setData($path, $data);
+        $this->config->setData($path, $data);
     }
 
     /**
