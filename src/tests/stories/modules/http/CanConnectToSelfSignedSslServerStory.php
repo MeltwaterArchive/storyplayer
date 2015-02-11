@@ -20,7 +20,7 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
     foreach (hostWithRole('ssl_target') as $hostname) {
-        $url = fromHost($hostname)->getAppSetting("http", "homepage");
+        $url = "https://" . fromHost($hostname)->getHostname();
         fromHttp()->get($url);
     }
 });
