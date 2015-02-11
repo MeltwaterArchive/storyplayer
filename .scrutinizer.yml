@@ -1,0 +1,161 @@
+imports:
+    - php
+
+inherit: true
+
+filter:
+    excluded_paths:
+        - 'vendor/*'
+        - 'src/tests/*'
+
+checks:
+    php:
+        verify_access_scope_valid: true
+        variable_existence: true
+        useless_calls: true
+        use_statement_alias_conflict: true
+        uppercase_constants: true
+        require_scope_for_properties: true
+        return_doc_comment_if_not_inferrable: true
+        require_scope_for_methods: true
+        require_braces_around_control_structures: true
+        property_assignments: true
+        properties_in_camelcaps: true
+        php5_style_constructor: true
+        parameters_in_camelcaps: true
+        parameter_non_unique: true
+        parameter_doc_comments: true
+        param_doc_comment_if_not_inferrable: true
+        optional_parameters_at_the_end: true
+        one_class_per_file: true
+        non_commented_empty_catch_block: true
+        no_unnecessary_if: true
+        no_unnecessary_function_call_in_for_loop: true
+        no_unnecessary_final_modifier: true
+        no_underscore_prefix_in_properties: true
+        no_underscore_prefix_in_methods: true
+        no_short_open_tag: true
+        no_property_on_interface: true
+        no_non_implemented_abstract_methods: true
+        no_debug_code: true
+        missing_arguments: true
+        method_calls_on_non_object: true
+        lowercase_php_keywords: true
+        lowercase_basic_constants: true
+        function_body_start_on_new_line: true
+        ensure_lower_case_builtin_functions: true
+        deprecated_code_usage: true
+        code_rating: true
+        closure_use_not_conflicting: true
+        closure_use_modifiable: true
+        catch_class_exists: true
+        avoid_unnecessary_concatenation: true
+        avoid_tab_indentation: true
+        avoid_multiple_statements_on_same_line: true
+        assignment_of_null_return: true
+        argument_type_checks: true
+        return_doc_comments: true
+        precedence_in_conditions: true
+        precedence_mistakes: true
+        avoid_conflicting_incrementers: true
+        avoid_corrupting_byteorder_marks: true
+        function_in_camel_caps: true
+
+coding_style:
+    php:
+        indentation:
+            general:
+                use_tabs: false
+                size: 4
+            switch:
+                indent_case: true
+        spaces:
+            before_parentheses:
+                function_declaration: false
+                closure_definition: false
+                function_call: false
+                if: true
+                for: true
+                while: true
+                switch: true
+                catch: true
+                array_initializer: false
+            around_operators:
+                assignment: true
+                logical: true
+                equality: true
+                relational: true
+                bitwise: true
+                additive: true
+                multiplicative: true
+                shift: false
+                unary_additive: false
+                concatenation: true
+                negation: false
+            before_left_brace:
+                class: true
+                function: true
+                if: true
+                else: true
+                for: true
+                while: true
+                do: true
+                switch: true
+                try: true
+                catch: true
+                finally: true
+            before_keywords:
+                else: true
+                while: true
+                catch: true
+                finally: true
+            within:
+                brackets: false
+                array_initializer: false
+                grouping: false
+                function_call: false
+                function_declaration: false
+                if: false
+                for: false
+                while: false
+                switch: false
+                catch: false
+                type_cast: false
+            ternary_operator:
+                before_condition: true
+                after_condition: true
+                before_alternative: true
+                after_alternative: true
+                in_short_version: false
+            other:
+                before_comma: false
+                after_comma: true
+                before_semicolon: false
+                after_semicolon: true
+                after_type_cast: false
+        braces:
+            classes_functions:
+                class: new-line
+                function: new-line
+                closure: end-of-line
+            if:
+                opening: new-line
+                always: true
+                else_on_new_line: true
+            for:
+                opening: end-of-line
+                always: true
+            while:
+                opening: end-of-line
+                always: true
+            do_while:
+                opening: end-of-line
+                always: true
+                while_on_new_line: false
+            switch:
+                opening: new-line
+            try:
+                opening: end-of-line
+                catch_on_new_line: true
+                finally_on_new_line: true
+

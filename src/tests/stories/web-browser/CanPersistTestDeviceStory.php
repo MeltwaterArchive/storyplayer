@@ -1,7 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -41,9 +39,9 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
     // load our test page
-    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
 });
 
 // ========================================================================
@@ -52,11 +50,14 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// if this feature is working, the browser should already be open
 	// and we can just grab the title
-	$title = $st->fromBrowser()->getTitle();
+	$title = fromBrowser()->getTitle();
 
 	// do we have the title we expected?
-	$st->assertsString($title)->equals("Storyplayer: Welcome To The Tests!");
+	assertsString($title)->equals("Storyplayer: Welcome To The Tests!");
+
+	// all done - shut down the browser
+	stopDevice();
 });

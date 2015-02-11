@@ -38,15 +38,15 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
     // load our test page
-    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithForms.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithForms.html');
 
     // get a field from a form
-    $checkpoint->field1 = $st->fromForm("test_form")->getValue()->fieldLabelled('Page Name');
+    $checkpoint->field1 = fromForm("test_form")->getValue()->fieldLabelled('Page Name');
 });
 
 // ========================================================================
@@ -55,11 +55,11 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// do we have the title we expected?
-	$st->assertsObject($checkpoint)->hasAttribute('field1');
-	$st->assertsString($checkpoint->field1)->equals("Storyplayer: Working With Forms");
+	assertsObject($checkpoint)->hasAttribute('field1');
+	assertsString($checkpoint->field1)->equals("Storyplayer: Working With Forms");
 });

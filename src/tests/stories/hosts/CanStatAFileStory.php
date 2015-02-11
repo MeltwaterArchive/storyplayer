@@ -18,18 +18,18 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addTestSetup(function($st) {
+$story->addTestSetup(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
+    foreach (hostWithRole('upload_target') as $hostname) {
+        usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
     }
 });
 
-$story->addTestTeardown(function($st) {
+$story->addTestTeardown(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
+    foreach (hostWithRole('upload_target') as $hostname) {
         // remove the file from the test environment
-        $st->usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
+        usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
     }
 });
 
@@ -39,21 +39,21 @@ $story->addTestTeardown(function($st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function($st) {
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
+$story->addAction(function() {
+    foreach (hostWithRole('upload_target') as $hostname) {
         // get the default user details for this test environment
-        $hostUser = $st->fromHost($hostname)->getAppSetting("user", "username");
-        $hostGroup = $st->fromHost($hostname)->getAppSetting("user", "group");
+        $hostUser  = fromHost($hostname)->getAppSetting("user", "username");
+        $hostGroup = fromHost($hostname)->getAppSetting("user", "group");
 
         // get the details for this file
-        $details = $st->fromHost($hostname)->getFileDetails('testfile.txt');
+        $details = fromHost($hostname)->getFileDetails('testfile.txt');
 
         // make sure we have the details that we expect
-        $st->assertsObject($details)->isNotNull();
-        $st->assertsObject($details)->hasAttribute("user");
-        $st->assertsString($details->user)->equals($hostUser);
-        $st->assertsObject($details)->hasAttribute("group");
-        $st->assertsString($details->group)->equals($hostGroup);
+        assertsObject($details)->isNotNull();
+        assertsObject($details)->hasAttribute("user");
+        assertsString($details->user)->equals($hostUser);
+        assertsObject($details)->hasAttribute("group");
+        assertsString($details->group)->equals($hostGroup);
     }
 });
 
@@ -63,13 +63,13 @@ $story->addAction(function($st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function($st) {
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
+$story->addPostTestInspection(function() {
+    foreach (hostWithRole('upload_target') as $hostname) {
         // get the default user details for this test environment
-        $hostUser = $st->fromHost($hostname)->getAppSetting("user", "username");
-        $hostGroup = $st->fromHost($hostname)->getAppSetting("user", "group");
+        $hostUser  = fromHost($hostname)->getAppSetting("user", "username");
+        $hostGroup = fromHost($hostname)->getAppSetting("user", "group");
 
         // get the details for this file
-        $details = $st->expectsHost($hostname)->hasFileWithPermissions('testfile.txt', $hostUser, $hostGroup, 0644);
+        $details = expectsHost($hostname)->hasFileWithPermissions('testfile.txt', $hostUser, $hostGroup, 0644);
     }
 });

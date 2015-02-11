@@ -1,8 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -21,10 +18,10 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addTestTeardown(function(StoryTeller $st) {
+$story->addTestTeardown(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
+    foreach (hostWithRole('upload_target') as $hostname) {
+        usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
     }
 });
 
@@ -50,9 +47,9 @@ $story->addTestTeardown(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
+$story->addAction(function() {
+    foreach (hostWithRole('upload_target') as $hostname) {
+        usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
     }
 });
 
@@ -62,9 +59,9 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $result = $st->usingHost($hostname)->runCommand('ls testfile.txt');
+$story->addPostTestInspection(function() {
+    foreach (hostWithRole('upload_target') as $hostname) {
+        $result = usingHost($hostname)->runCommand('ls testfile.txt');
         $fileFound = false;
         $lines = explode("\n", $result->output);
         foreach ($lines as $line) {
@@ -74,8 +71,9 @@ $story->addPostTestInspection(function(StoryTeller $st) {
         }
 
         if (!$fileFound) {
-            $st->usingLog()->writeToLog("file not found on host '$hostname'");
-            throw new E5xx_ActionFailed(__METHOD__);
+            $msg = "file not found on host '$hostname'";
+            usingLog()->writeToLog($msg);
+            usingErrors()->throwException($msg);
         }
     }
 });

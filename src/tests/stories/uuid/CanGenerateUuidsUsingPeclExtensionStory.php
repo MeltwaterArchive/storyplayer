@@ -1,7 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -24,9 +22,9 @@ $story = newStoryFor('Storyplayer Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->addPreTestPrediction(function(StoryTeller $st) {
+$story->addPreTestPrediction(function() {
 	// do we have the UUID extension installed?
-	$st->expectsUuid()->requirementsAreMet();
+	expectsUuid()->requirementsAreMet();
 });
 
 // ========================================================================
@@ -41,12 +39,12 @@ $story->addPreTestPrediction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// create a UUID
-	$checkpoint->uuid = $st->fromUuid()->generateUuid();
+	$checkpoint->uuid = fromUuid()->generateUuid();
 });
 
 // ========================================================================
@@ -55,11 +53,11 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// do we have the content we expected?
-	$st->assertsObject($checkpoint)->hasAttribute('uuid');
-	$st->assertsString($checkpoint->uuid)->isUuid();
+	assertsObject($checkpoint)->hasAttribute('uuid');
+	assertsString($checkpoint->uuid)->isUuid();
 });

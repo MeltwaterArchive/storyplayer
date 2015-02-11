@@ -45,4 +45,8 @@ namespace DataSift\Storyplayer\Phases;
 
 class ExampleStoryPhase extends StoryPhase
 {
+	public function doPhase($story)
+	{
+		// no-op for now
+	}
 }

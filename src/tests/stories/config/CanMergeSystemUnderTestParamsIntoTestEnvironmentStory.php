@@ -1,8 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -21,7 +18,7 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
     // nothing to do
 });
 
@@ -31,9 +28,9 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
-    $expected = $st->fromConfig()->get("systemundertest.roles.0.params.filename");
-    $actual   = $st->fromConfig()->get("target.groups.0.details.machines.default.params.filename");
+$story->addPostTestInspection(function() {
+    $expected = fromConfig()->get("systemundertest.roles.0.params.filename");
+    $actual   = fromConfig()->get("target.groups.0.details.machines.default.params.filename");
 
-    $st->assertsString($actual)->equals($expected);
+    assertsString($actual)->equals($expected);
 });

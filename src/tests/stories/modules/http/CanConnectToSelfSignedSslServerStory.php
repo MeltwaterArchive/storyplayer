@@ -18,10 +18,10 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function($st) {
-    foreach (hostWithRole($st, 'ssl_target') as $hostname) {
-        $url = $st->fromHost($hostname)->getAppSetting("http", "homepage");
-        $st->fromHttp()->get($url);
+$story->addAction(function() {
+    foreach (hostWithRole('ssl_target') as $hostname) {
+        $url = fromHost($hostname)->getAppSetting("http", "homepage");
+        fromHttp()->get($url);
     }
 });
 
