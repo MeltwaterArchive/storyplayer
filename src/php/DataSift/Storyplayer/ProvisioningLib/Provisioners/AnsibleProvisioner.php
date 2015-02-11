@@ -116,9 +116,9 @@ class AnsibleProvisioner extends Provisioner
 		$rolesToHosts = array();
 
 		// build up the list of roles
-		foreach($hosts as $hostName => $hostProps) {
+		foreach($hosts as $hostId => $hostProps) {
 			// what is the host's IP address?
-			$ipAddress   = $st->fromHost($hostName)->getIpAddress();
+			$ipAddress   = $st->fromHost($hostId)->getIpAddress();
 
 			// add the host to the required roles
 			if (isset($hostProps->roles)) {
@@ -155,11 +155,11 @@ class AnsibleProvisioner extends Provisioner
 		$inventoryFolder = dirname($inventoryFile);
 
 		// now we need to write out the host files
-		foreach($hosts as $hostName => $hostProps) {
+		foreach($hosts as $hostId => $hostProps) {
 			// what is the host's IP address?
-			$ipAddress   = $st->fromHost($hostName)->getIpAddress();
-			$sshUsername = $st->fromHost($hostName)->getSshUsername();
-			$sshKeyFile  = $st->fromHost($hostName)->getSshKeyFile();
+			$ipAddress   = $st->fromHost($hostId)->getIpAddress();
+			$sshUsername = $st->fromHost($hostId)->getSshUsername();
+			$sshKeyFile  = $st->fromHost($hostId)->getSshKeyFile();
 
 			// do we have any vars to write?
 			if (!isset($hostProps->params) || $hostProps->params === null || (is_array($hostProps) && count($hostProps) == 0)) {
@@ -280,13 +280,13 @@ class AnsibleProvisioner extends Provisioner
 	/**
 	 * @param string $inventoryFolder
 	 */
-	protected function getHostVarsFilename($inventoryFolder, $hostName)
+	protected function getHostVarsFilename($inventoryFolder, $hostId)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine host_vars filename for '{$hostName}'");
+		$log = $st->startAction("determine host_vars filename for host '{$hostId}'");
 
 		// get our ansible settings
 		$ansibleSettings = $st->fromTestEnvironment()->getSetting('storyplayer.modules.ansible');
@@ -295,7 +295,7 @@ class AnsibleProvisioner extends Provisioner
 		$invFolder = $this->getInventoryFolder($ansibleSettings, $inventoryFolder);
 
 		// what is the path to the file?
-		$filename = $invFolder . DIRECTORY_SEPARATOR . 'host_vars' . DIRECTORY_SEPARATOR . $hostName;
+		$filename = $invFolder . DIRECTORY_SEPARATOR . 'host_vars' . DIRECTORY_SEPARATOR . $hostId;
 
 		// all done
 		$log->endAction("filename is: " . $filename);

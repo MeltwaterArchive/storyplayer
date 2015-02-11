@@ -73,17 +73,17 @@ class DelayedProvisioningDefinitionAction
 		$this->action = $callback;
 	}
 
-	public function toHost($hostName)
+	public function toHost($hostId)
 	{
 		// our embedded action does all the work
 		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		$action($this->st, $this->def, $hostId);
 	}
 
-	public function forHost($hostName)
+	public function forHost($hostId)
 	{
 		// our embedded action does all the work
 		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		$action($this->st, $this->def, $hostId);
 	}
 }

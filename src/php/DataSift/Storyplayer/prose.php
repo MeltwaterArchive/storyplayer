@@ -240,9 +240,9 @@ function expectsGraphite()
 	return new ExpectsGraphite(StoryTeller::instance());
 }
 
-function expectsHost($hostname)
+function expectsHost($hostId)
 {
-	return new ExpectsHost(StoryTeller::instance(), [$hostname]);
+	return new ExpectsHost(StoryTeller::instance(), [$hostId]);
 }
 
 function expectsHostsTable()
@@ -275,9 +275,9 @@ function expectsShell()
 	return new ExpectsShell(StoryTeller::instance());
 }
 
-function expectsSupervisor($hostname)
+function expectsSupervisor($hostId)
 {
-	return new ExpectsSupervisor(StoryTeller::instance(), [$hostname]);
+	return new ExpectsSupervisor(StoryTeller::instance(), [$hostId]);
 }
 
 function expectsUuid()
@@ -359,9 +359,9 @@ function fromGraphite()
 	return new FromGraphite(StoryTeller::instance());
 }
 
-function fromHost($hostName)
+function fromHost($hostId)
 {
-	return new FromHost(StoryTeller::instance(), [$hostName]);
+	return new FromHost(StoryTeller::instance(), [$hostId]);
 }
 
 function fromHostsTable()
@@ -414,9 +414,9 @@ function fromShell()
 	return new FromShell(StoryTeller::instance());
 }
 
-function fromSupervisor($hostName)
+function fromSupervisor($hostId)
 {
-	return new FromSupervisor(StoryTeller::instance());
+	return new FromSupervisor(StoryTeller::instance(),[$hostId]);
 }
 
 function fromSystemUnderTest()
@@ -484,9 +484,9 @@ function usingForm($formId)
 	return new UsingForm(StoryTeller::instance(), [$formId]);
 }
 
-function usingHost($hostName)
+function usingHost($hostId)
 {
-	return new UsingHost(StoryTeller::instance(), [$hostName]);
+	return new UsingHost(StoryTeller::instance(), [$hostId]);
 }
 
 function usingHostsTable()
@@ -579,9 +579,9 @@ function usingShell()
 	return new UsingShell(StoryTeller::instance());
 }
 
-function usingSupervisor($hostName)
+function usingSupervisor($hostId)
 {
-	return new UsingSupervisor(StoryTeller::instance(), [$hostName]);
+	return new UsingSupervisor(StoryTeller::instance(), [$hostId]);
 }
 
 function usingTargetsTable()

@@ -97,7 +97,7 @@ class ListHostsTable_Command extends CliCommand
 
 		// let's walk through the table
 		foreach ($runtimeConfig->storyplayer->tables->hosts as $envName => $hosts) {
-			foreach ($hosts as $hostName => $details) {
+			foreach ($hosts as $hostid => $details) {
 				// is this in the list we are filtering against?
 				if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
 					continue;

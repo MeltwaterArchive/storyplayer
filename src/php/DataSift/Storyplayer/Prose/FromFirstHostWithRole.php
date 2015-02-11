@@ -65,7 +65,7 @@ class FromFirstHostWithRole extends FromHost
 		parent::__construct($st, $args);
 
 		// $args[0] contains the rolename
-		// we need to replace this with the hostname for FromHost() to
+		// we need to replace this with the hostId for FromHost() to
 		// function correctly
 
 		// what are we doing?

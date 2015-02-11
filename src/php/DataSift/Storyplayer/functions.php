@@ -80,7 +80,7 @@ function first($arrayToSearch)
  *         The role that we want
  *
  * @return string
- *         a hostname that matches the role
+ *         a hostid that matches the role
  */
 function hostWithRole($roleName)
 {

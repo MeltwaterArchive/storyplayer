@@ -183,7 +183,7 @@ class UsingHost extends HostBase
 		$processDetails = new BaseObject();
 
 		// remember where we are running this
-		$processDetails->hostname = $hostDetails->name;
+		$processDetails->hostId = $hostDetails->name;
 
 		// remember how users will refer to this
 		$processDetails->processName = $processName;

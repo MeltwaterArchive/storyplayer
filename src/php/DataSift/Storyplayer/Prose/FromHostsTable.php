@@ -92,23 +92,25 @@ class FromHostsTable extends Prose
 	/**
 	 * getDetailsForHost
 	 *
-	 * @param string $hostName The host we're looking for
+	 * @param string $hostId
+	 *        The host we're looking for
 	 *
-	 * @return object Details about $hostName
+	 * @return object
+	 *         Details about $hostId
 	 */
-	public function getDetailsForHost($hostName)
+	public function getDetailsForHost($hostId)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get details for host '{$hostName}' from the current test environment");
+		$log = $st->startAction("get details for host '{$hostId}' from the current test environment");
 
 		// which test environment are we working with?
 		$testEnvName = $st->getTestEnvironmentName();
 
 		// get the details
-		$hostDetails = $st->fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostName);
+		$hostDetails = $st->fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostId);
 
 		// all done
 		$log->endAction();

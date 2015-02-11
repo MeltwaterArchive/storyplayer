@@ -58,9 +58,9 @@ class ExpectsHostsTable extends Prose
 {
 
 	/**
-	 * entryKey 
+	 * entryKey
 	 * The key that this table interacts with in the RuntimeConfig
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $entryKey = "hosts";
@@ -68,24 +68,26 @@ class ExpectsHostsTable extends Prose
 	/**
 	 * hasEntryForHost
 	 *
-	 * @param string $hostName The host we're looking for
+	 * @param string $hostId
+	 *        The host we're looking for
 	 *
 	 * @return void
 	 */
-	public function hasEntryForHost($hostName)
+	public function hasEntryForHost($hostId)
 	{
-		$this->st->expectsRuntimeTable($this->entryKey)->hasEntry($hostName);
+		$this->st->expectsRuntimeTable($this->entryKey)->hasEntry($hostId);
 	}
 
 	/**
 	 * hasNoEntryForHost
 	 *
-	 * @param string $hostName The host we're looking for
+	 * @param string $hostId
+	 *        The host we're looking for
 	 *
 	 * @return void
 	 */
-	public function hasNoEntryForHost($hostName)
+	public function hasNoEntryForHost($hostId)
 	{
-		$this->st->expectsRuntimeTable($this->entryKey)->hasNoEntry($hostName);
+		$this->st->expectsRuntimeTable($this->entryKey)->hasNoEntry($hostId);
 	}
 }

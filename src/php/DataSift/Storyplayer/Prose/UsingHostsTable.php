@@ -66,21 +66,23 @@ class UsingHostsTable extends Prose
 	/**
 	 * addHost
 	 *
-	 * @param string $hostName Host name to add
-	 * @param string $hostDetails Details about this host
+	 * @param string $hostId
+	 *        ID of the host to add to the table
+	 * @param string $hostDetails
+	 *        Details about this host
 	 *
 	 * @return void
 	 */
-	public function addHost($hostName, $hostDetails)
+	public function addHost($hostId, $hostDetails)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to current test environment hosts table");
+		$log = $st->startAction("add host '{$hostId}' to current test environment hosts table");
 
 		// add it
-		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->addItem($hostName, $hostDetails);
+		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->addItem($hostId, $hostDetails);
 
 		// all done
 		$log->endAction();
@@ -89,20 +91,21 @@ class UsingHostsTable extends Prose
 	/**
 	 * removeHost
 	 *
-	 * @param string $hostName Host name to remove
+	 * @param string $hostId
+	 *        ID of the host to remove
 	 *
 	 * @return void
 	 */
-	public function removeHost($hostName)
+	public function removeHost($hostId)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostName}' from current test environment hosts table");
+		$log = $st->startAction("remove host '{$hostId}' from current test environment hosts table");
 
 		// remove it
-		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItem($hostName);
+		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItem($hostId);
 
 		// all done
 		$log->endAction();
