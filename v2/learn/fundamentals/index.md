@@ -16,6 +16,7 @@ In this guide, we'll show you the fundamentals you need to know to start using S
 ## How Storyplayer Works
 
 * [Understanding The Stories](understanding-stories.html) that Storyplayer runs
+* [Understanding The Modules](understanding-storyplayer-modules.html) that Storyplayer ships with
 * [Understanding The System Under Test](understanding-system-under-test.html) that your stories are testing
 * [Understanding Test Environments](understanding-test-environments.html) where your system-under-test runs
 

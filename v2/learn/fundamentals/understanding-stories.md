@@ -2,7 +2,7 @@
 layout: v2/learn-fundamentals
 title: Understanding Stories
 prev: '<a href="../../learn/fundamentals/running-storyplayer.html">Prev: Running Storyplayer</a>'
-next: '<a href="../../learn/fundamentals/user-stories.html">Next: User Stories</a>'
+next: '<a href="../../learn/fundamentals/understanding-storyplayer-modules.html">Next: Understanding Storyplayer Modules</a>'
 ---
 
 # Understanding Stories
@@ -35,19 +35,19 @@ $story = newStoryFor("Storyplayer")
 $story->requiresStoryplayerVersion(2);
 
 // the Action phase
-$story->addAction(function($st) {
-    $checkpoint = $st->getCheckpoint();
+$story->addAction(function() {
+    $checkpoint = getCheckpoint();
 
-    $st->usingBrowser()->gotoPage("http://php.net");
-    $checkpoint->title = $st->fromBrowser()->getTitle();
+    usingBrowser()->gotoPage("http://php.net");
+    $checkpoint->title = fromBrowser()->getTitle();
 });
 
 // the PostTestInspection phase
-$story->addPostTestInspection(function($st) {
-    $checkpoint = $st->getCheckpoint();
+$story->addPostTestInspection(function() {
+    $checkpoint = getCheckpoint();
 
-    $st->assertsObject($checkpoint)->hasAttribute("title");
-    $st->assertsString($checkpoint->title)->equals("PHP: Hypertext Preprocessor");
+    assertsObject($checkpoint)->hasAttribute("title");
+    assertsString($checkpoint->title)->equals("PHP: Hypertext Preprocessor");
 });
 {% endhighlight %}
 
@@ -92,16 +92,16 @@ The _Action_ is where Storyplayer tries to perform the actions of your user stor
 {% highlight php startinline %}
 // the Action phase
 $story->addAction(function($st) {
-    $checkpoint = $st->getCheckpoint();
+    $checkpoint = getCheckpoint();
 
-    $st->usingBrowser()->gotoPage("http://php.net");
-    $checkpoint->title = $st->fromBrowser()->getTitle();
+    usingBrowser()->gotoPage("http://php.net");
+    $checkpoint->title = fromBrowser()->getTitle();
 });
 {% endhighlight %}
 
 In this story, we use a web browser to visit the [PHP.net website](http://php.net) to grab the title of the web page. We then store that title in the _checkpoint_ for later inspection.
 
-The _Action_ is just PHP code. The special variable `$st` is passed into your code. You use `$st` to call any of Storyplayer's modules. But there's nothing stopping you from writing any PHP code that you want to get the job done.
+The _Action_ is normal PHP code. It calls [Storyplayer's modules](../../modules/index.html) to get the job done as quickly as possible. But there's nothing stopping you from writing any PHP code that you want to.
 
 You'll notice that there's no error checking in the story. All of Storyplayer's modules throw an exception if something goes wrong. Storyplayer catches those exceptions for you.
 
@@ -115,15 +115,15 @@ The _PostTestInspection_ is where Storyplayer checks to see if the _Action_ actu
 
 {% highlight php startinline %}
 // the PostTestInspection phase
-$story->addPostTestInspection(function($st) {
-    $checkpoint = $st->getCheckpoint();
+$story->addPostTestInspection(function() {
+    $checkpoint = getCheckpoint();
 
-    $st->assertsObject($checkpoint)->hasAttribute("title");
-    $st->assertsString($checkpoint->title)->equals("PHP: Hypertext Preprocessor");
+    assertsObject($checkpoint)->hasAttribute("title");
+    assertsString($checkpoint->title)->equals("PHP: Hypertext Preprocessor");
 });
 {% endhighlight %}
 
-In this story, we get the _checkpoint_, and then use the [assertions module](../../modules/assertions/index.html) to make sure that we have the data that we want.
+In this story, we get the _checkpoint_, and then use the [Assertions module](../../modules/assertions/index.html) to make sure that we have the data that we want.
 
 Once again, there's no error checking. If we don't have the expected data, the assertions module will throw an exception. Storyplayer will catch the exception, and assume that the _PostTestInspection_ has failed.
 

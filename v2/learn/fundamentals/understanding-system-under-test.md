@@ -66,9 +66,9 @@ Use application settings to avoid hard-coding variables into your stories.
 For example, if your system-under-test is a web application, it will have URLs for landing pages such as registration, logging in, the user's account page, the backend admin page, and so on.  You could just hard code this into your story:
 
 {% highlight php startinline %}
-$story->addAction(function($st) {
-	$hostname = $st->fromFirstHostWithRole('web-server')->getHostname();
-	$st->usingBrowser()->gotoPage("http://{$hostname}/users/login/")
+$story->addAction(function() {
+    $hostname = fromFirstHostWithRole('web-server')->getHostname();
+    usingBrowser()->gotoPage("http://{$hostname}/users/login/")
 });
 {% endhighlight %}
 
@@ -76,26 +76,26 @@ But what happens if the URL moves in a later version of your app? If you put the
 
 {% highlight json %}
 {
-	"appSettings": {
-		"storyplanner": {
-			"loginPage": "/login/"
-		}
-	}
+    "appSettings": {
+        "storyplanner": {
+            "loginPage": "/login/"
+        }
+    }
 }
 {% endhighlight %}
 
 ... you can then get these settings using the [Config()](../../modules/config/index.html) module. You can get a single setting like this:
 
 {% highlight php startinline %}
-$loginPage = $st->fromConfig()->getAppSetting("storyplanner.loginPage");
-$st->usingBrowser()->gotoPage("http://{$hostname}{$loginPage}");
+$loginPage = fromSystemUnderTest()->getAppSetting("storyplanner.loginPage");
+usingBrowser()->gotoPage("http://{$hostname}{$loginPage}");
 {% endhighlight %}
 
 or you can get all of the settings like this:
 
 {% highlight php startinline %}
-$storyplannerSettings = $st->fromConfig()->getAppSettings("storyplanner");
-$st->usingBrowser()->gotoPage("http://{$hostname}{$storyplannerSettings->loginPage}");
+$storyplannerSettings = fromSystemUnderTest()->getAppSettings("storyplanner");
+usingBrowser()->gotoPage("http://{$hostname}{$storyplannerSettings->loginPage}");
 {% endhighlight %}
 
 This helps your stories become independent of which version of your app that you're testing.
