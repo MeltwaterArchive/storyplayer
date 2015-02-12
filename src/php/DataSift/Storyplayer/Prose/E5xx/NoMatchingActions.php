@@ -44,8 +44,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 /**
- * Exception thrown when the StoryTeller class cannot find any suitable
- * Prose to load and execute
+ * Placeholder for backwards compatibility.
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -54,10 +53,6 @@ namespace DataSift\Storyplayer\Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_NoMatchingActions extends E5xx_ProseException
+class E5xx_NoMatchingActions extends \Prose\E5xx_NoMatchingActions
 {
-	public function __construct($methodName) {
-		$msg = "Cannot find a suitable class for actions of type '$methodName'";
-		parent::__construct(500, $msg, $msg);
-	}
 }

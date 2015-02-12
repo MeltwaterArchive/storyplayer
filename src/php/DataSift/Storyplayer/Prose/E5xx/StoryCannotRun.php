@@ -43,13 +43,8 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
-
 /**
- * Exception that stories can throw if they cannot run.
- *
- * Can only be thrown inside the TestCanRunCheck. Throw it from anywhere
- * else, and we will treat it as an error!
+ * Placeholder for backwards compatibility.
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -58,14 +53,6 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_StoryCannotRun extends Exxx_Exception
+class E5xx_StoryCannotRun extends \Prose\E5xx_StoryCannotRun
 {
-    /**
-     * @param string $storyName
-     */
-    public function __construct($msg)
-    {
-    	$msg = "story cannot run: " . $msg;
-        parent::__construct(500, $msg, $msg);
-    }
 }

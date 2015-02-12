@@ -47,8 +47,8 @@ use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
+use Prose\E5xx_ActionFailed;
 
 /**
  * support for provisioning via dsbuild

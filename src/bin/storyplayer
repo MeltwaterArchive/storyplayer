@@ -174,9 +174,6 @@ foreach ($localSrcDirs as $localSrcDir){
 // load our list of helper functions
 require __DIR__.'/../php/DataSift/Storyplayer/functions.php';
 
-// load our list of Prose modules
-require __DIR__ . '/../php/DataSift/Storyplayer/prose.php';
-
 /**
  * it all happens here, baby
  *

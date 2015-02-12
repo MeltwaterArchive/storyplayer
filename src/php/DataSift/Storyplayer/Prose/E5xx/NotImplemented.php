@@ -44,9 +44,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 /**
- * Exception thrown when StoryTeller *does* find the Prose class to load,
- * but that class *doesn't* contain the method that the story is trying
- * to use
+ * Placeholder for backwards compatibility.
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -55,10 +53,6 @@ namespace DataSift\Storyplayer\Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_NotImplemented extends E5xx_ProseException
+class E5xx_NotImplemented extends \Prose\E5xx_NotImplemented
 {
-	public function __construct($methodName) {
-		$msg = "Method '{$methodName}' has not been implemented yet";
-		parent::__construct(500, $msg, $msg);
-	}
 }

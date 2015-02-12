@@ -43,8 +43,8 @@
 
 use DataSift\Storyplayer\PlayerLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\E5xx_ProseException;
+use Prose\E5xx_ActionFailed;
+use Prose\E5xx_ProseException;
 
 /**
  * return the first element in an array

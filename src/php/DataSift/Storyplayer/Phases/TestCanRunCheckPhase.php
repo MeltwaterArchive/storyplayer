@@ -44,10 +44,10 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
-use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
-use DataSift\Storyplayer\Prose\E5xx_StoryCannotRun;
+use Prose\E5xx_ActionFailed;
+use Prose\E5xx_ExpectFailed;
+use Prose\E5xx_NotImplemented;
+use Prose\E5xx_StoryCannotRun;
 
 /**
  * the TestShouldRun phase

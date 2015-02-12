@@ -45,10 +45,10 @@ namespace DataSift\Storyplayer\Phases;
 
 use Exception;
 use DataSift\Storyplayer\HostLib;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\E5xx_ExpectFailed;
-use DataSift\Storyplayer\Prose\E5xx_NotImplemented;
 use DataSift\Storyplayer\ProvisioningLib;
+use Prose\E5xx_ActionFailed;
+use Prose\E5xx_ExpectFailed;
+use Prose\E5xx_NotImplemented;
 
 /**
  * the TestEnvironmentConstruction phase

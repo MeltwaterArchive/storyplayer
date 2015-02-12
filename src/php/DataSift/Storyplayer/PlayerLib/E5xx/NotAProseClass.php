@@ -62,7 +62,7 @@ class E5xx_NotAProseClass extends Exxx_Exception
 	 * @param string $className
 	 */
 	public function __construct($className) {
-		$msg = "Class '{$className}' does not inherit from DataSift\\Storyplayer\\Prose\\Prose";
+		$msg = "Class '{$className}' does not inherit from Prose\\Prose";
 		parent::__construct(500, $msg, $msg);
 	}
 }
