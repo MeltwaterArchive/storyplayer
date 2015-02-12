@@ -43,8 +43,9 @@
  */
 
 use DataSift\Storyplayer\PlayerLib\Story;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\E5xx_ProseException;
+use Prose\E5xx_ActionFailed;
+use Prose\E5xx_ProseException;
+
 // load our global functions, used for defining stories
 if (!function_exists("newStoryFor")) {
 	require APP_TOPDIR . "/DataSift/Storyplayer/functions.php";

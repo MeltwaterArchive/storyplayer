@@ -45,7 +45,7 @@ namespace DataSift\Storyplayer\HostLib;
 
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use Prose\E5xx_ActionFailed;
 
 /**
  * the things you can do / learn about a physical host

@@ -44,7 +44,7 @@
 namespace DataSift\Storyplayer\Phases;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_NoMatchingActions;
+use Prose\E5xx_NoMatchingActions;
 
 /**
  * a helper for phases that cleanup our persistent tables

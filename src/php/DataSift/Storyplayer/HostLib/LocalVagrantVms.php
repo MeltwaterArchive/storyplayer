@@ -47,8 +47,8 @@ use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Stone\ObjectLib\BaseObject;
+use Prose\E5xx_ActionFailed;
 
 /**
  * the things you can do / learn about a group of Vagrant virtual machines

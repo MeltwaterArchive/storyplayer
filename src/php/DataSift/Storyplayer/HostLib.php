@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use Prose\E5xx_ActionFailed;
 
 /**
  * host adapter factory
