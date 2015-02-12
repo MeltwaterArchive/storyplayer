@@ -73,6 +73,12 @@ abstract class Phase
 		$this->st = $st;
 	}
 
+
+	/**
+	 * get the name of this phase
+	 *
+	 * @return string
+	 */
 	public function getPhaseName()
 	{
 		static $phaseName = null;
@@ -85,6 +91,11 @@ abstract class Phase
 		return $phaseName;
 	}
 
+	/**
+	 * what number is assigned to this phase?
+	 *
+	 * @return int|null
+	 */
 	public function getPhaseSequenceNo()
 	{
 		return $this->sequenceNo;
@@ -144,7 +155,18 @@ abstract class Phase
 		// all done
 	}
 
+	/**
+	 * @return int
+	 */
 	abstract public function getPhaseType();
 
+	/**
+	 * execute a phase, and return the results for further analysis
+	 *
+	 * @param  mixed $thingBeingPlayed
+	 *         what is the phase executing against?
+	 *
+	 * @return DataSift\Storyplayer\PlayerLib\PhaseGroup_Result
+	 */
 	abstract public function doPhase($thingBeingPlayed);
 }

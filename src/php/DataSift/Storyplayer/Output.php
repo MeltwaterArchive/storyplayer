@@ -539,7 +539,8 @@ class Output extends OutputPlugin
 	 *
 	 * @param  string $msg
 	 *         the error message to show the user
-	 *
+	 * @param  \Exception $e
+	 *         the exception that caused the error
 	 * @return void
 	 */
 	public function logCliErrorWithException($msg, $e)

@@ -84,6 +84,81 @@ abstract class OsBase implements SupportedOs
 
 	/**
 	 *
+	 * @param  HostDetails   $hostDetails
+	 * @param  SupportedHost $vm
+	 * @return string
+	 */
+	abstract public function determineHostname($hostDetails, SupportedHost $vm);
+
+	/**
+	 * check a given hostname to make sure it is safe to use
+	 *
+	 * @param  HostDetails $hostDetails
+	 *         the known facts about the host
+	 * @param  string $hostname
+	 *         the hostname we want to check
+	 * @return string
+	 *         the hostname that can be added to the hostDetails data
+	 */
+	protected function runHostnameSafeguards($hostDetails, $hostname)
+	{
+		// special case - hostname is already set in hostDetails
+		//
+		// we assume that it was set in the test environment config file
+		// by someone who knows what they are doing
+		if (isset($hostDetails->hostname)) {
+			return $hostDetails->hostname;
+		}
+
+		// special case - no IP address for the host
+		//
+		// we need the host's IP address to perform our checks
+		if (!isset($hostDetails->ipAddress)) {
+			return $hostname;
+		}
+
+		// check for machines calling themselves 'localhost' in some form
+		// or another
+		//
+		// this can happen when there is no working dynamic DNS
+		$parts = explode(".", $hostname);
+		if ($parts[0] == 'localhost') {
+			// this is only valid *if* the host's IP address is recognised
+			// as a valid loopback address
+			//
+			// most of the world uses 127.0.0.1
+			// ubuntu uses 127.0.1.1 (no idea why)
+			$validIps = [ '127.0.0.1', '127.0.1.1' ];
+			if (!in_array($hostDetails->ipAddress, $validIps)) {
+				// this hostname is *not* safe
+				//
+				// the best we can do is return the host's IP address
+				return $hostDetails->ipAddress;
+			}
+		}
+
+		// check if the machine's hostname resolves to the detected IP
+		// address or not
+		$resolvedIp = gethostbyname($hostname);
+		if ($resolvedIp != $hostDetails->ipAddress) {
+			// no good
+			//
+			// possibilities include:
+			//
+			// * no DNS entry for $hostname
+			// * no /etc/hosts entry for $hostname
+			//
+			// the best we can do is return the host's IP address
+			return $hostDetails->ipAddress;
+		}
+
+		// *if* we get here, then we believe that $hostname is safe to
+		// use in your stories
+		return $hostname;
+	}
+
+	/**
+	 *
 	 * @param  HostDetails $hostDetails
 	 * @param  string $packageName
 	 * @return BaseObject
@@ -108,9 +183,9 @@ abstract class OsBase implements SupportedOs
 
 	/**
 	 *
-	 * @param  Storyteller $st
+	 * @param  \DataSift\Storyplayer\PlayerLib\Storyteller $st
 	 *         our module loader
-	 * @param  HostDetails $hostDetails
+	 * @param  \DataSift\Storyplayer\HostLib\HostDetails $hostDetails
 	 *         the details for the host we want a client for
 	 * @return CommandClient
 	 */

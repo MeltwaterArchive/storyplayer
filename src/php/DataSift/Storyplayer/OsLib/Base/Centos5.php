@@ -92,6 +92,32 @@ abstract class Base_Centos5 extends Base_Unix
 		throw new E5xx_ActionFailed(__METHOD__, $msg);
 	}
 
+	public function determineHostname($hostDetails, SupportedHost $host)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("query " . basename(__CLASS__) . " for hostname");
+
+		// how do we do this?
+		$command = "hostname --fqdn";
+		$result = $host->runCommandViaHostManager($hostDetails, $command);
+
+		if ($result->didCommandSucceed()) {
+			$lines = explode("\n", $result->output);
+			$hostname = trim($lines[0]);
+			$hostname = $this->runHostnameSafeguards($hostDetails, $hostname);
+			$log->endAction("hostname is '{$hostname}'");
+			return $hostname;
+		}
+
+		// if we get here, we do not know what the hostname is
+		$msg = "could not determine hostname";
+		$log->endAction($msg);
+		throw new E5xx_ActionFailed(__METHOD__, $msg);
+	}
+
 	/**
 	 *
 	 * @param  HostDetails $hostDetails
@@ -104,7 +130,7 @@ abstract class Base_Centos5 extends Base_Unix
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->name}'");
+		$log = $st->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
 
 		// get the details
 		$command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";

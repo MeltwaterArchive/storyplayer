@@ -65,7 +65,7 @@ class UsingFirstHostWithRole extends UsingHost
 		parent::__construct($st, $args);
 
 		// $args[0] contains the rolename
-		// we need to replace this with the hostname for FromHost() to
+		// we need to replace this with the hostId for FromHost() to
 		// function correctly
 
 		// what are we doing?
@@ -75,7 +75,7 @@ class UsingFirstHostWithRole extends UsingHost
 		$hostDetails = $this->retrieveFirstHost($this->args[0]);
 
 		// we only need to remember the name
-		$this->args[0] = $hostDetails->name;
+		$this->args[0] = $hostDetails->hostId;
 
 		// all done
 		$log->endAction("selected host '{$this->args[0]}'");

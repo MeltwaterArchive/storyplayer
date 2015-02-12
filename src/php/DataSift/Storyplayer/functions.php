@@ -80,7 +80,7 @@ function first($arrayToSearch)
  *         The role that we want
  *
  * @return string
- *         a hostname that matches the role
+ *         a hostid that matches the role
  */
 function hostWithRole($roleName)
 {
@@ -101,7 +101,7 @@ function hostWithRole($roleName)
 	$log = $st->startAction("for each host with role '{$roleName}' ... ");
 
 	foreach ($listOfHosts as $hostDetails) {
-		yield($hostDetails->name);
+		yield($hostDetails->hostId);
 	}
 
 	// all done

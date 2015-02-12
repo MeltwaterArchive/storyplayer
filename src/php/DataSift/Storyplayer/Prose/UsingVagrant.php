@@ -75,7 +75,7 @@ class UsingVagrant extends VmActionsBase
 
 		// put the details into an array
 		$vmDetails = new BaseObject();
-		$vmDetails->name        = $vmName;
+		$vmDetails->hostId      = $vmName;
 		$vmDetails->osName      = $osName;
 		$vmDetails->homeFolder  = $homeFolder;
 		$vmDetails->type        = 'VagrantVm';
@@ -108,7 +108,7 @@ class UsingVagrant extends VmActionsBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
 		// the key will be in one of two places, in this order:
 		//
@@ -117,7 +117,7 @@ class UsingVagrant extends VmActionsBase
 		//
 		// we use the first that we can find
 		$keyFilenames = [
-			getcwd() . "/.vagrant/machines/{$vmDetails->name}/virtualbox/private_key",
+			getcwd() . "/.vagrant/machines/{$vmDetails->hostId}/virtualbox/private_key",
 			getenv("HOME") . "/.vagrant.d/insecure_private_key"
 		];
 

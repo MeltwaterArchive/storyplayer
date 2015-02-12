@@ -72,17 +72,17 @@ class UsingProvisioningDefinition extends Prose
 		}
 	}
 
-	public function addHost($hostName)
+	public function addHost($hostId)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostName}' to provisioning definition");
+		$log = $st->startAction("add host '{$hostId}' to provisioning definition");
 
 		// create the host
-		if (!isset($this->args[0]->$hostName)) {
-			$this->args[0]->$hostName = new BaseObject();
+		if (!isset($this->args[0]->$hostId)) {
+			$this->args[0]->$hostId = new BaseObject();
 		}
 
 		// all done
@@ -92,22 +92,22 @@ class UsingProvisioningDefinition extends Prose
 	public function addRole($roleName)
 	{
 		// build our callable
-		$action = function($st, $def, $hostName) use($roleName) {
+		$action = function($st, $def, $hostId) use($roleName) {
 			// what are we doing?
-			$log = $st->startAction("add role '{$roleName}' to host '{$hostName}'");
+			$log = $st->startAction("add role '{$roleName}' to host '{$hostId}'");
 
 			// make sure we have an entry for this host
-			if (!isset($def->$hostName)) {
-				$def->$hostName = new BaseObject();
+			if (!isset($def->$hostId)) {
+				$def->$hostId = new BaseObject();
 			}
 
 			// create our list of roles if we don't have one
-			if (!isset($def->$hostName->roles)) {
-				$def->$hostName->roles = array();
+			if (!isset($def->$hostId->roles)) {
+				$def->$hostId->roles = array();
 			}
 
 			// add the role
-			$def->$hostName->roles[] = $roleName;
+			$def->$hostId->roles[] = $roleName;
 
 			// all done
 			$log->endAction();
@@ -127,21 +127,21 @@ class UsingProvisioningDefinition extends Prose
 	public function addParams($params)
 	{
 		// build our callable
-		$action = function($st, $def, $hostName) use($params) {
+		$action = function($st, $def, $hostId) use($params) {
 			// convert the params into something we can log
 			$printer = new DataPrinter();
 			$logParams = $printer->convertToString($params);
 
 			// what are we doing?
-			$log = $st->startAction("add params '{$logParams}' to host '{$hostName}'");
+			$log = $st->startAction("add params '{$logParams}' to host '{$hostId}'");
 
 			// make sure we have an entry for this host
-			if (!isset($def->$hostName)) {
-				$def->$hostName = new BaseObject();
+			if (!isset($def->$hostId)) {
+				$def->$hostId = new BaseObject();
 			}
 
 			// add our params
-			$def->$hostName->params = $params;
+			$def->$hostId->params = $params;
 
 			// all done
 			$log->endAction();
@@ -161,17 +161,17 @@ class UsingProvisioningDefinition extends Prose
 	public function usePlaybook($playbookName)
 	{
 		// build our callable
-		$action = function($st, $def, $hostName) use($playbookName) {
+		$action = function($st, $def, $hostId) use($playbookName) {
 			// what are we doing?
-			$log = $st->startAction("use top-level playbook '{$playbookName}' to host '{$hostName}'");
+			$log = $st->startAction("use top-level playbook '{$playbookName}' to host '{$hostId}'");
 
 			// make sure we have an entry for this host
-			if (!isset($def->$hostName)) {
-				$def->$hostName = new BaseObject();
+			if (!isset($def->$hostId)) {
+				$def->$hostId = new BaseObject();
 			}
 
 			// add the playbook
-			$def->$hostName->playbook = $playbookName;
+			$def->$hostId->playbook = $playbookName;
 
 			// all done
 			$log->endAction();

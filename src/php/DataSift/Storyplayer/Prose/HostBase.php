@@ -74,20 +74,20 @@ class HostBase extends Prose
 	protected function getHostDetails()
 	{
 		// shorthand
-		$st   = $this->st;
-		$name = $this->args[0];
+		$st     = $this->st;
+		$hostId = $this->args[0];
 
 		// do we know anything about this host?
 		$hostsTable = $st->fromHostsTable()->getHostsTable();
-		if (!isset($hostsTable->$name)) {
+		if (!isset($hostsTable->$hostId)) {
 			$hostDetails = new BaseObject();
-			$hostDetails->name = $name;
+			$hostDetails->hostId = $hostId;
 			$hostDetails->osName = "unknown";
-			$hostDetails->nameInHostsTable = $name;
+			$hostDetails->nameInHostsTable = $hostId;
 			$hostDetails->invalidHost = true;
 		}
 		else {
-			$hostDetails = $hostsTable->$name;
+			$hostDetails = $hostsTable->$hostId;
 		}
 
 		return $hostDetails;

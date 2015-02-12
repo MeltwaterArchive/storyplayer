@@ -80,20 +80,20 @@ class DsbuildProvisioner extends Provisioner
 		$log = $st->startAction("build dsbuild provisioning definition");
 
 		// add in each machine in the environment
-		foreach ($env->details->machines as $name => $machine) {
-			$st->usingProvisioningDefinition($provDef)->addHost($name);
+		foreach ($env->details->machines as $hostId => $machine) {
+			$st->usingProvisioningDefinition($provDef)->addHost($hostId);
 
 			foreach ($machine->roles as $role) {
-				$st->usingProvisioningDefinition($provDef)->addRole($role)->toHost($name);
+				$st->usingProvisioningDefinition($provDef)->addRole($role)->toHost($hostId);
 			}
 
 			if (isset($machine->params)) {
 				$params = [];
 				foreach ($machine->params as $paramName => $paramValue) {
-					$params[$paramName]  = $st->fromConfig()->get('hosts.' . $name . '.params.'.$paramName);
+					$params[$paramName]  = $st->fromConfig()->get('hosts.' . $hostId . '.params.'.$paramName);
 				}
 				if (count($params)) {
-					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($name);
+					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($hostId);
 				}
 			}
 		}
@@ -114,11 +114,11 @@ class DsbuildProvisioner extends Provisioner
 		$dsbuildParams = new BaseObject;
 
 		// build up the list of settings to write out
-		foreach($hosts as $hostName => $hostProps) {
+		foreach($hosts as $hostId => $hostProps) {
 			// what is the host's IP address?
-			$ipAddress = $st->fromHost($hostName)->getIpAddress();
+			$ipAddress = $st->fromHost($hostId)->getIpAddress();
 
-			$propName = $hostName . '_ipv4Address';
+			$propName = $hostId . '_ipv4Address';
 			$dsbuildParams->$propName = $ipAddress;
 			if (isset($hostProps->params)) {
 				$dsbuildParams->mergeFrom($hostProps->params);
@@ -136,9 +136,9 @@ class DsbuildProvisioner extends Provisioner
 		// at this point, we are ready to attempt provisioning
 		//
 		// provision each host in the order that they're listed
-		foreach($hosts as $hostName => $hostProps) {
+		foreach($hosts as $hostId => $hostProps) {
 			// which dsbuildfile are we going to run?
-			$dsbuildFilename = $this->getDsbuildFilename($provConfig, $hostName);
+			$dsbuildFilename = $this->getDsbuildFilename($provConfig, $hostId);
 			if ($dsbuildFilename === null) {
 				// there is no dsbuildfile at all to run
 				$log->endAction("cannot find dsbuildfile to run :(");
@@ -147,7 +147,7 @@ class DsbuildProvisioner extends Provisioner
 
 			// at this point, we are ready to provision
 			$commandRunner = new CommandRunner();
-			$command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '" "' . $hostName . '"';
+			$command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '" "' . $hostId . '"';
 			$result = $commandRunner->runSilently($st, $command);
 
 			// what happened?
@@ -237,16 +237,16 @@ class DsbuildProvisioner extends Provisioner
 	}
 
 	/**
-	 * find the provisioning script to run for a given hostname
+	 * find the provisioning script to run for a given hostId
 	 *
 	 * @param  BaseObject $provConfig
 	 *         the "provisioning" section from the test environment config
-	 * @param  string $hostName
-	 *         the name of the host that we are provisioning
+	 * @param  string $hostId
+	 *         the ID of the host that we are provisioning
 	 * @return string
 	 *         path to the file to execute
 	 */
-	protected function getDsbuildFilename($provConfig, $hostName)
+	protected function getDsbuildFilename($provConfig, $hostId)
 	{
 		if (isset($provConfig->execute)) {
 			$basename = dirname($provConfig->execute) . "/" . basename($provConfig->execute, '.sh');
@@ -256,8 +256,8 @@ class DsbuildProvisioner extends Provisioner
 		}
 
 		$candidateFilenames = [
-			$basename . "-" . $hostName . '.sh',
-			$basename . "-" . $hostName,
+			$basename . "-" . $hostId . '.sh',
+			$basename . "-" . $hostId,
 			$basename . ".sh",
 			$basename,
 		];

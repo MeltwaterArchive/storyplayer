@@ -101,21 +101,21 @@ class Ec2Vm implements SupportedHost
 		}
 
 		// because EC2 is a shared resource, our VMs need namespacing
-		$vmDetails->ec2Name = $vmDetails->environment . '.' . $vmDetails->name;
+		$vmDetails->ec2Name = $vmDetails->environment . '.' . $vmDetails->hostId;
 
 		// get our Ec2 client from the SDK
 		$client = $st->fromAws()->getEc2Client();
 
 		// make sure the VM is stopped, if it is running
 		$log->addStep("stop EC2 VM '{$vmDetails->ec2Name}' if already running", function() use($st, $vmDetails, $client) {
-			if ($st->fromEc2Instance($vmDetails->name)->getInstanceisRunning()) {
+			if ($st->fromEc2Instance($vmDetails->hostId)->getInstanceisRunning()) {
 				// stop the host
-				$st->usingEc2()->destroyVm($vmDetails->name);
+				$st->usingEc2()->destroyVm($vmDetails->hostId);
 			}
 		});
 
 		// remove any existing hosts table entry
-		$st->usingHostsTable()->removeHost($vmDetails->name);
+		$st->usingHostsTable()->removeHost($vmDetails->hostId);
 
 		// let's start the VM
 		$response = null;
@@ -176,7 +176,7 @@ class Ec2Vm implements SupportedHost
 		// yes it did!!
 		//
 		// remember this vm, now that it is running
-		$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
+		$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
 
 		// now, we need its IP address
 		$ipAddress = $this->determineIpAddress($vmDetails);
@@ -397,7 +397,7 @@ class Ec2Vm implements SupportedHost
 		}
 
 		// if we get here, we need to forget about this VM
-		$st->usingHostsTable()->removeHost($vmDetails->name);
+		$st->usingHostsTable()->removeHost($vmDetails->hostId);
 
 		// all done
 		$log->endAction();
@@ -436,10 +436,10 @@ class Ec2Vm implements SupportedHost
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine status of EC2 VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine status of EC2 VM '{$vmDetails->hostId}'");
 
 		// get the instance data
-		$instance = $st->fromEc2()->getInstance($vmDetails->name);
+		$instance = $st->fromEc2()->getInstance($vmDetails->hostId);
 		if (!$instance) {
 			$log->endAction("no such instance");
 			return false;
@@ -466,10 +466,10 @@ class Ec2Vm implements SupportedHost
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine IP address of EC2 VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine IP address of EC2 VM '{$vmDetails->hostId}'");
 
 		// we need to get a fresh copy of the instance details
-		$dnsName = $st->fromEc2Instance($vmDetails->name)->getPublicDnsName();
+		$dnsName = $st->fromEc2Instance($vmDetails->hostId)->getPublicDnsName();
 
 		// do we have a DNS name?
 		if (!$dnsName) {

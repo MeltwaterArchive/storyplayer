@@ -67,26 +67,32 @@ class UsingProcessesTable extends Prose
 	/**
 	 * addProcess
 	 *
-	 * @param object $processDetails Details about the process we're working with
+	 * @param string $hostId
+	 *        ID of the host where the process is running
+	 * @param object $processDetails
+	 *        Details about the process we're working with
 	 *
 	 * @return void
 	 */
-	public function addProcess($hostname, $processDetails)
+	public function addProcess($hostId, $processDetails)
 	{
-		$key = $hostname . ":" . $processDetails->pid;
+		$key = $hostId . ":" . $processDetails->pid;
 		$this->st->usingRuntimeTable($this->tableName)->addItem($key, $processDetails);
 	}
 
 	/**
 	 * removeProcess
 	 *
-	 * @param mixed $pid The pid we're working with
+	 * @param string $hostId
+	 *        ID of the host where the process was running
+	 * @param int $pid
+	 *        The process ID we're working with
 	 *
 	 * @return void
 	 */
-	public function removeProcess($hostname, $processDetails)
+	public function removeProcess($hostId, $processDetails)
 	{
-		$key = $hostname . ":" . $processDetails->pid;
+		$key = $hostId . ":" . $processDetails->pid;
 		$this->st->usingRuntimeTable($this->tableName)->removeItem($key);
 	}
 }

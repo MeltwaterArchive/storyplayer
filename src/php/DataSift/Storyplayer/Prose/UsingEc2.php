@@ -78,7 +78,7 @@ class UsingEc2 extends VmActionsBase
 
 		// put the details into an array
 		$vmDetails = new Ec2VmDetails;
-		$vmDetails->name          = $vmName;
+		$vmDetails->hostId        = $vmName;
 		$vmDetails->environment   = $st->getTestEnvironmentName();
 		$vmDetails->osName        = $osName;
 		$vmDetails->amiId         = $amiId;

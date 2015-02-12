@@ -72,7 +72,7 @@ class FromSupervisor extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		//run the supervisorctl command
-		$result = $st->usingHost($hostDetails->name)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \\$2}'");
+		$result = $st->usingHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \\$2}'");
 
 		// did the command succeed?
 		if ($result->didCommandFail()) {

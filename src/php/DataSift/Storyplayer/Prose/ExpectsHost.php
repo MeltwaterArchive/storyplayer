@@ -68,7 +68,7 @@ class ExpectsHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// is it running?
-		$running = $st->fromHost($hostDetails->name)->getHostIsRunning();
+		$running = $st->fromHost($hostDetails->hostId)->getHostIsRunning();
 		if (!$running) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, 'host is running', 'host is not running');
@@ -90,7 +90,7 @@ class ExpectsHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// is it running?
-		$running = $st->fromHost($hostDetails->name)->getHostIsRunning();
+		$running = $st->fromHost($hostDetails->hostId)->getHostIsRunning();
 		if ($running) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, 'host is not running', 'host is running');
@@ -112,7 +112,7 @@ class ExpectsHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// is it installed?
-		$details = $st->fromHost($hostDetails->name)->getInstalledPackageDetails($packageName);
+		$details = $st->fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
 		if (!isset($details->version)) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
@@ -134,7 +134,7 @@ class ExpectsHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// is it installed?
-		$details = $st->fromHost($hostDetails->name)->getInstalledPackageDetails($packageName);
+		$details = $st->fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
 
 		if (isset($details->version)) {
 			$log->endAction();
@@ -157,7 +157,7 @@ class ExpectsHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// is the process running?
-		$isRunning = $st->fromHost($hostDetails->name)->getProcessIsRunning($processName);
+		$isRunning = $st->fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
 
 		if (!$isRunning) {
 			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' running", "process '{$processName}' is not running");
@@ -179,7 +179,7 @@ class ExpectsHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// is the process running?
-		$isRunning = $st->fromHost($hostDetails->name)->getProcessIsRunning($processName);
+		$isRunning = $st->fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
 
 		if ($isRunning) {
 			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");
@@ -246,7 +246,7 @@ class ExpectsHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// get the file details
-		$details = $st->fromHost($hostDetails->name)->getFileDetails($filename);
+		$details = $st->fromHost($hostDetails->hostId)->getFileDetails($filename);
 
 		// validate the details
 		if ($details === null) {
@@ -283,7 +283,7 @@ class ExpectsHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// get the file details
-		$details = $st->fromHost($hostDetails->name)->getFileDetails($folder);
+		$details = $st->fromHost($hostDetails->hostId)->getFileDetails($folder);
 
 		// validate the details
 		if ($details === null) {

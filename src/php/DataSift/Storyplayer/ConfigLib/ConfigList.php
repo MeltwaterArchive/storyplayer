@@ -114,7 +114,7 @@ class ConfigList
     /**
      * find a list of config files in a folder, and load them
      *
-     * @return array
+     * @return void
      */
     public function findConfigs()
     {

@@ -99,22 +99,22 @@ class PhysicalHosts implements SupportedHost
 		if (empty($envDetails->machines)) {
 			throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
 		}
-		foreach($envDetails->machines as $name => $machine) {
+		foreach($envDetails->machines as $hostId => $machine) {
 			// TODO: it would be great to autodetect this one day
 			if (!isset($machine->roles)) {
-				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$name']->roles");
+				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->roles");
 			}
 			if (!isset($machine->ipAddress)) {
-				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$name']->ipAddress");
+				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->ipAddress");
 			}
 		}
 
 		// remove any existing hosts table entry
-		foreach ($envDetails->machines as $name => $machine) {
-			$st->usingHostsTable()->removeHost($name);
+		foreach ($envDetails->machines as $hostId => $machine) {
+			$st->usingHostsTable()->removeHost($hostId);
 
 			// remove any roles
-			$st->usingRolesTable()->removeHostFromAllRoles($name);
+			$st->usingRolesTable()->removeHostFromAllRoles($hostId);
 		}
 
 		// there's nothing to start ... we assume that each host is
@@ -123,7 +123,7 @@ class PhysicalHosts implements SupportedHost
 		// if it is not, that is NOT our responsibility
 
 		// store the details
-		foreach($envDetails->machines as $name => $machine)
+		foreach($envDetails->machines as $hostId => $machine)
 		{
 			// we want all the details from the config file
 			$vmDetails = clone $machine;
@@ -135,7 +135,7 @@ class PhysicalHosts implements SupportedHost
 			$vmDetails->type        = 'PhysicalHost';
 
 			// remember the name of this machine
-			$vmDetails->name        = $name;
+			$vmDetails->hostId      = $hostId;
 
 			// mark the box as provisioned
 			//
@@ -144,7 +144,7 @@ class PhysicalHosts implements SupportedHost
 			$vmDetails->provisioned = true;
 
 			// remember this blackbox
-			$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
+			$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
 			foreach ($vmDetails->roles as $role) {
 				$st->usingRolesTable()->addHostToRole($vmDetails, $role);
 			}
@@ -208,12 +208,12 @@ class PhysicalHosts implements SupportedHost
 		$log = $st->startAction("de-register blackbox(es)");
 
 		// de-register all the hosts
-		foreach ($envDetails->machines as $name => $machine)
+		foreach ($envDetails->machines as $hostId => $machine)
 		{
 			foreach ($machine->roles as $role) {
-				$st->usingRolesTable()->removeHostFromAllRoles($name);
+				$st->usingRolesTable()->removeHostFromAllRoles($hostId);
 			}
-			$st->usingHostsTable()->removeHost($name);
+			$st->usingHostsTable()->removeHost($hostId);
 		}
 
 		// all done

@@ -87,8 +87,8 @@ class CleanupProcesses extends BaseCleanup
         }
 
         foreach ($table as $key => $details) {
-            list($hostname, $pid) = explode(":", $key);
-            if ($hostname != "localhost") {
+            list($hostId, $pid) = explode(":", $key);
+            if ($hostId != "localhost") {
                 continue;
             }
 
