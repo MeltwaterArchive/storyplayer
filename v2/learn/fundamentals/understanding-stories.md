@@ -17,7 +17,7 @@ Storyplayer's job is to execute a suite of functional tests.  Each of these test
 
 A story is a PHP file that is executed by Storyplayer.  In this file, Storyplayer expects you to create a `$story` variable, and expects you to add some code that tells Storyplayer what to do and how to check the results.
 
-You write your tests in plain old PHP. There's no domain-specific language (DSL) to learn. There's just a helper variable that you can use to access all of [Storyplayer's built-in modules](../../modules/index.html) plus any modules of your own that you create. Once you get the hang of writing Storyplayer tests, you'll find that it's incredibly quick to automate any test that you want.
+You write your tests in plain old PHP. There's no domain-specific language (DSL) to learn. You've got immediate access to all of [Storyplayer's built-in modules](../../modules/index.html) plus any modules of your own that you create. Once you get the hang of writing Storyplayer tests, you'll find that it's incredibly quick to automate any test that you want.
 
 You can put the PHP file anywhere you want.  It must end in `Story.php`, otherwise Storyplayer will not run it.
 
