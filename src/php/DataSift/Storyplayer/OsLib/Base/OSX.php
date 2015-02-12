@@ -85,6 +85,7 @@ abstract class Base_OSX extends OsBase
 		if ($result->didCommandSucceed()) {
 			$lines = explode("\n", $result->output);
 			$hostname = trim($lines[0]);
+			$hostname = $this->runHostnameSafeguards($hostDetails, $hostname);
 			$log->endAction("hostname is '{$hostname}'");
 			return $hostname;
 		}

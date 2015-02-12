@@ -399,15 +399,6 @@ class VagrantVms implements SupportedHost
 		// get the hostname
 		$hostname = $host->determineHostname($vmDetails, $this);
 
-		// are we happy with the hostname?
-		if ("localhost" == substr($hostname, 0, 9) && $vmDetails->ipAddress != "127.0.0.1") {
-			// "localhost" is where Storyplayer is running
-			// cannot be this VM
-			//
-			// substitute the IP address
-			$hostname = $vmDetails->ipAddress;
-		}
-
 		// all done
 		$log->endAction("hostname is '{$hostname}'");
 		return $hostname;
