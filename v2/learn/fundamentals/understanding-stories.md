@@ -145,6 +145,14 @@ If you've [set your computer up](../getting-setup/index.html) correctly and [ins
 
     SUCCESS - 3 PASSED, 0 SKIPPED. Time taken: 11.05 secs
 
+<div class="callout info" markdown="1">
+#### Terminals And Colour
+
+If you're running Storyplayer from a terminal, Storyplayer will use different colours to make it easier to read the output. You can switch this off by using the switch `--color=no`.
+
+Storyplayer assumes that your terminal is using the standard UNIX colours: a black background, and white / light-grey text. If you're using a different terminal theme, this might clash with Storyplayer's colours. If that happens, just switch off colour output.
+</div>
+
 ## Doing More In Stories
 
 In this example, we've shown you a very simple story to get you started. Your own stories will probably also have a [Test Setup](../using/stories/test-setup-teardown.html) and a [Test Teardown](../using/stories/test-setup-teardown.html) phase to create the test conditions and to clean up afterwards.
