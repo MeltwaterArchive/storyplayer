@@ -580,11 +580,39 @@ class StoryTeller
 	//
 	// ------------------------------------------------------------------
 
+	/**
+	 * have we loaded test users off disk at all?
+	 *
+	 * @var boolean
+	 */
 	private $hasTestUsers = false;
+
+	/**
+	 * our list of test users
+	 *
+	 * @var null|\DataSift\Stone\ObjectLib\BaseObject
+	 */
 	private $testUsers = null;
+
+	/**
+	 * should we treat the file we loaded test users from as read-only?
+	 *
+	 * @var boolean
+	 */
 	private $testUsersFileIsReadOnly = false;
+
+	/**
+	 * which file did we load the test users from?
+	 *
+	 * @var string
+	 */
 	private $testUsersFilename = null;
 
+	/**
+	 * return the list of test users
+	 *
+	 * @return \DataSift\Stone\ObjectLib\BaseObject
+	 */
 	public function getTestUsers()
 	{
 		// make sure we have an object to return
@@ -595,32 +623,85 @@ class StoryTeller
 		return $this->testUsers;
 	}
 
+	/**
+	 * have we loaded any test users from disk?
+	 *
+	 * @return boolean
+	 *         TRUE if we have
+	 */
 	public function hasTestUsers()
 	{
 		return $this->hasTestUsers;
 	}
 
+	/**
+	 * remember the test users that we have
+	 *
+	 * @param \stdClass $users
+	 *        our test users
+	 */
 	public function setTestUsers($users)
 	{
 		$this->testUsers = $users;
 		$this->hasTestUsers = true;
 	}
 
+	/**
+	 * retrieve the filename we loaded test users from
+	 *
+	 * @return string
+	 */
 	public function getTestUsersFilename()
 	{
 		return $this->testUsersFilename;
 	}
 
+	/**
+	 * remember the filename we loaded test users from
+	 *
+	 * we'll re-use this filename later on when it is time to save
+	 * the test users back to disk
+	 *
+	 * @param string $filename
+	 *        the filename to remember
+	 */
 	public function setTestUsersFilename($filename)
 	{
 		$this->testUsersFilename = $filename;
 	}
 
+	/**
+	 * should we treat the file on disk where we loaded test user
+	 * data from as read-only?
+	 *
+	 * NOTE:
+	 *
+	 * we never treat the loaded data as read-only. Stories are
+	 * free to change this data, and these changes will persist
+	 * between stories. We just won't save any changes back to
+	 * disk if this method call returns TRUE.
+	 *
+	 * @return boolean
+	 */
 	public function getTestUsersFileIsReadOnly()
 	{
 		return $this->testUsersFileIsReadOnly;
 	}
 
+	/**
+	 * set whether or not we treat the file on disk were we loaded
+	 * test user data from as read-only
+	 *
+	 * NOTE:
+	 *
+	 * we never treat the loaded data as read-only. Stories are
+	 * free to change this data, and these changes will persist
+	 * between stories. We just won't save any changes back to
+	 * disk if you set this to TRUE.
+	 *
+	 * @param boolean $readOnly
+	 *        TRUE if we should not save data back to this file
+	 */
 	public function setTestUsersFileIsReadOnly($readOnly = true)
 	{
 		$this->testUsersFileIsReadOnly = $readOnly;
