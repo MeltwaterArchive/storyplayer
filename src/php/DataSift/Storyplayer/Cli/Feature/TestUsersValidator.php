@@ -34,69 +34,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Phases;
+namespace DataSift\Storyplayer\Cli;
 
-use Exception;
+use Phix_Project\ValidationLib4\ValidationResult;
+use Phix_Project\ValidationLib4\File_MustBeValidFile;
 
-/**
- * the Action phase
- *
- * @category  Libraries
- * @package   Storyplayer/Phases
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-
-class ApplyRoleChangesPhase extends InternalPostPhase
+class Feature_TestUsersValidator extends File_MustBeValidFile
 {
-	public function doPhase($story)
-	{
-		// shorthand
-		$st = $this->st;
+    const MSG_EMPTYFILE = "File '%value%' appears to be empty";
+    const MSG_INVALIDJSON = "File '%value%' contains invalid JSON";
+    const MSG_NOUSERS = "File '%value%' does not contain any users";
 
-		// our results object
-		$phaseResult = $this->getNewPhaseResult();
+    /**
+     *
+     * @param  mixed $value
+     * @param  ValidationResult|null $result
+     * @return ValidationResult
+     */
+    public function validate($value, ValidationResult $result = null)
+    {
+        // make sure we have a file first
+        $result = parent::validate($value, $result);
+        if ($result->hasErrors()) {
+            return $result;
+        }
 
-		// are there any role changes to apply?
-		if (!$story->hasRoleChanges()) {
-			// nothing to see ... move along, move along
-			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no role changes to apply"
-			);
-			return $phaseResult;
-		}
+        // is the file valid JSON?
+        $contents = file_get_contents($value);
+        if (empty($contents)) {
+            $result->addError(static::MSG_EMPTYFILE);
+            return $result;
+        }
+        $data = @json_decode($contents);
+        if ($data === null) {
+            $result->addError(static::MSG_INVALIDJSON);
+            return $result;
+        }
 
-		// get the actions to call
-		$callbacks = $story->getRoleChanges();
+        // does the file contain any users?
+        if (!is_object($data)) {
+            $result->addError(static::MSG_NOUSERS);
+            return $result;
+        }
 
-		try {
-			foreach ($callbacks as $callback) {
-				call_user_func($callback, $st);
-			}
-
-			// all is good
-			$phaseResult->setContinuePlaying();
-		}
-		catch (Exception $e) {
-			// we treat any failures here as a total failure
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-		}
-
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $result;
+    }
 }

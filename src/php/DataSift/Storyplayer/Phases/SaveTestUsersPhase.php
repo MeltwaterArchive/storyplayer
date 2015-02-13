@@ -34,82 +34,64 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Phases;
 
-use DataSift\Storyplayer\Injectables;
-use DataSift\Storyplayer\UserLib\ConfigUserLoader;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\ObjectLib\E5xx_NoSuchProperty;
 use Exception;
 
 /**
- * a sanitised & dynamically enhanced version of the config that has been
- * loaded for this test run
- *
- * I expect to delete this completely from Storyplayer before v2.0.0
- * is released
+ * save our test users to disk
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Phases
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Story_Context extends BaseObject
+
+class SaveTestUsersPhase extends InternalPostPhase
 {
-	/**
-	 * the details about the user that has been chosen
-	 *
-	 * @var DataSift\Storyplayer\UserLib\User
-	 */
-	public $user;
+    public function doPhase($story)
+    {
+        // shorthand
+        $st = $this->st;
+        $output = $st->getOutput();
 
-	// ==================================================================
-	//
-	// initialise all the things
-	//
-	// ------------------------------------------------------------------
+        // our results object
+        $phaseResult = $this->getNewPhaseResult();
 
-	/**
-	 * build the config for this story run, from the config we've loaded
-	 *
-	 * we rebuild this for each story to ensure that each story runs
-	 * with an identical config
-	 *
-	 * @param Injectables $injectables
-	 */
-	public function __construct(Injectables $injectables)
-	{
-		$this->user = new BaseObject;
-	}
+        // do we have any test users?
+        if (!$st->hasTestUsers()) {
+            $phaseResult->setContinuePlaying();
+            return $phaseResult;
+        }
 
-	public function initUser(StoryTeller $st)
-	{
-		// shorthand
-		$config = $st->getConfig();
+        // are the test users read-only?
+        if ($st->getTestUsersFileIsReadOnly()) {
+            // nothing to do
+            $phaseResult->setContinuePlaying();
+            return $phaseResult;
+        }
 
-		// our default provider of users
-		$className = "DataSift\\Storyplayer\\UserLib\\GenericUserGenerator";
+        // save the file
+        try {
+            $filename = $st->getTestUsersFilename();
+            usingUsers()->saveUsersToFile($st->getTestUsers(), $filename);
+        }
+        catch (Exception $e) {
+            // warn the user, but do not abort Storyplayer
+            $output->logCliWarning("unable to save test users file; error is: " . $e->getMessage());
+        }
 
-		// do we have a specific generator to load?
-		if (isset($config->users, $config->users->generator)) {
-			$className = $config->users->generator;
-		}
-
-		// create the generator
-		$generator = new ConfigUserLoader(new $className());
-
-		// get a user from the generator
-		$this->user = $generator->getUser($st);
-
-		// all done
-	}
+        // all done
+        $phaseResult->setContinuePlaying();
+        return $phaseResult;
+    }
 }

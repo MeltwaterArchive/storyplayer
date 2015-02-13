@@ -34,59 +34,77 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace DataSift\Storyplayer\Cli;
+
+use Phix_Project\CliEngine;
+use Phix_Project\CliEngine\CliResult;
+use Phix_Project\CliEngine\CliSwitch;
 
 /**
- * test the current user object
+ * Tell Storyplayer which file to use to load/save test user credentials to
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Cli
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsUser extends Prose
+class Feature_TestUsersSwitch extends CliSwitch
 {
-	// ====================================================================
-	//
-	// Common preflight checks
-	//
-	// --------------------------------------------------------------------
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('users');
+        $this->setShortDescription('choose a file for loading/saving test users from');
+        $this->setLongDesc(
+            "If you're testing a web-based application or an API, your tests will probably"
+            . " need to be given details about test users to create or re-use."
+            . PHP_EOL . PHP_EOL
+            . "Use this switch to tell Storyplayer which JSON file has the details of your "
+            . "test users. Storyplayer will load this file on startup and make the users "
+            . "available through the built-in Users module."
+            . PHP_EOL . PHP_EOL
+            . "Any changes will be saved back to the file when the story terminates. You can "
+            . "tell Storyplayer to treat the file as read-only using the --read-only-users "
+            . "switch"
+        );
 
-	public function isValidForStory()
-	{
-		// shorthand
-		$st = $this->st;
+        // what are the short switches?
+        $this->addShortSwitch('u');
 
-		// what are we doing?
-		$log = $st->startAction("make sure the user valid for this story");
+        // what are the long switches?
+        $this->addLongSwitch('users');
 
-		// get the story that we're playing
-		$story = $st->getStory();
+        // what is the required argument?
+        $requiredArgMsg = "the JSON file containing the users";
+        $this->setRequiredArg('<users-file>', $requiredArgMsg);
+        $this->setArgValidator(new Feature_TestUsersValidator);
 
-		// get the user to examine
-		$user = $st->getUser();
+        // all done
+    }
 
-		// we need to check the user that has been picked against the
-		// story that is to be told
-		foreach ($user->roles as $role)
-		{
-			if ($story->hasRole($role))
-			{
-				$log->endAction("yes - has role '{$role}'");
-				return true;
-			}
-		}
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->testUsersFile = $params[0];
 
-		// if we get there, then there are no matches
-		throw new E5xx_ActionFailed(__METHOD__);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

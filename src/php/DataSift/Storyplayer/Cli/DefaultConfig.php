@@ -119,7 +119,7 @@ class DefaultConfig extends BaseObject
         ];
         $phases->afterStory = [
             'TestTeardown' => true,
-            'ApplyRoleChanges' => true,
+            'SaveTestUsers' => true,
             'ShutdownHandlers' => true,
         ];
         $phases->testEnvStartup = [
@@ -135,6 +135,7 @@ class DefaultConfig extends BaseObject
 
         // what to do when a user presses CTRL+C
         $phases->userAbort = [
+            'SaveTestUsers' => true,
             'ShutdownHandlers' => true,
             'TestEnvironmentDestruction' => true,
         ];

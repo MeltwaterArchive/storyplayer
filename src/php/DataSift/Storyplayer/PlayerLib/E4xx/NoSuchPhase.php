@@ -34,54 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace DataSift\Storyplayer\PlayerLib;
+
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * change a user's role(s)
- *
- * this needs moving and refactoring
+ * Exception thrown when we attempt to load a phase that does not exist
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/PlayerLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ChangesUser extends Prose
+class E4xx_NoSuchPhase extends Exxx_Exception
 {
-	public function addsRole($role)
-	{
-		// shorthand
-		$st = $this->st;
-		$user = $st->getUser();
-
-		$user->addRole($role);
-	}
-
-	public function creates($role)
-	{
-		// shorthand
-		$st = $this->st;
-		$user = $st->getUser();
-
-		$user->removeAllRoles();
-		$user->addRole($role);
-	}
-
-	public function removesRole($role)
-	{
-		// shorthand
-		$st = $this->st;
-		$user = $st->getUser();
-
-		$user->removeRole($role);
-	}
+    public function __construct($phaseName)
+    {
+        $msg = "Unknown phase '{$phaseName}'; we can find no matching PHP class for it";
+        parent::__construct(400, $msg, $msg);
+    }
 }
