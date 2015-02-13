@@ -58,6 +58,10 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class Prose
 {
+	/**
+	 * the one object that knows how to get to everything
+	 * @var \DataSift\Storyplayer\PlayerLib\StoryTeller
+	 */
 	protected $st = null;
 	protected $args = array();
 	protected $topElement = null;
