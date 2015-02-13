@@ -83,7 +83,7 @@ class SaveTestUsersPhase extends InternalPostPhase
 		// save the file
 		try {
 			$filename = $st->getTestUsersFilename();
-			usingUsers()->saveUsersToFile($filename);
+			usingUsers()->saveUsersToFile($st->getTestUsers(), $filename);
 		}
 		catch (Exception $e) {
 			// warn the user, but do not abort Storyplayer

@@ -92,7 +92,9 @@ class Feature_TestUsersSupport implements Feature
 
         // load the test file
         try {
-            usingUsers()->loadUsersFromFile($engine->options->testUsersFile);
+            $users = usingUsers()->loadUsersFromFile($engine->options->testUsersFile);
+            $st->setTestUsers($users);
+            $st->setTestUsersFilename($engine->options->testUsersFile);
         }
         catch (Exception $e) {
             $output->logCliErrorWithException("could not load test users file '{$engine->testUsersFile}'", $e);

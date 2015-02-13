@@ -62,7 +62,7 @@ class FromUsers extends Prose
 	 *
 	 * @param  string $userId
 	 *         the ID of the user to retrieve
-	 * @return \stdClass
+	 * @return \DataSift\Stone\ObjectLib\BaseObject
 	 */
 	public function getUser($userId)
 	{
