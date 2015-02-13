@@ -43,6 +43,8 @@
 
 namespace Prose;
 
+use DataSift\Stone\PasswordLib\BasicGenerator;
+
 /**
  * work with the library of test users
  *
@@ -74,5 +76,20 @@ class FromUsers extends Prose
 		// all done
 		$log->endAction($users->$userId);
 		return $users->$userId;
+	}
+
+	/**
+	 * generates a random password of the requested length
+	 *
+	 * @param  integer $minLength
+	 *         minimum number of characters to include
+	 * @param  integer $maxLength
+	 *         maximum number of characters to include
+	 * @return string
+	 *         the generated password
+	 */
+	public function generateNewPassword($minLength = 8, $maxLength = 20)
+	{
+		return BasicGenerator::generatePassword($minLength, $maxLength);
 	}
 }
