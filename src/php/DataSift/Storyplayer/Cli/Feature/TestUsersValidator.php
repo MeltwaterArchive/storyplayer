@@ -55,7 +55,7 @@ class Feature_TestUsersValidator extends File_MustBeValidFile
     /**
      *
      * @param  mixed $value
-     * @param  ValidationResult $result
+     * @param  ValidationResult|null $result
      * @return ValidationResult
      */
     public function validate($value, ValidationResult $result = null)

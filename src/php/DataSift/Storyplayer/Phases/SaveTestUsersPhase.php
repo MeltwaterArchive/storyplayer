@@ -62,6 +62,7 @@ class SaveTestUsersPhase extends InternalPostPhase
 	{
 		// shorthand
 		$st = $this->st;
+		$output = $st->getOutput();
 
 		// our results object
 		$phaseResult = $this->getNewPhaseResult();
@@ -86,7 +87,7 @@ class SaveTestUsersPhase extends InternalPostPhase
 		}
 		catch (Exception $e) {
 			// warn the user, but do not abort Storyplayer
-			$st->output->logCliWarning("unable to save test users file; error is: " . $e->getMessage());
+			$output->logCliWarning("unable to save test users file; error is: " . $e->getMessage());
 		}
 
 		// all done
