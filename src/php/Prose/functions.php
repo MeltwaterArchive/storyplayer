@@ -116,6 +116,7 @@ use Prose\FromSupervisor;
 use Prose\FromSystemUnderTest;
 use Prose\FromTargetsTable;
 use Prose\FromTestEnvironment;
+use Prose\FromUsers;
 use Prose\FromUuid;
 use Prose\UsingBrowser;
 use Prose\UsingCheckpoint;
@@ -150,6 +151,7 @@ use Prose\UsingShell;
 use Prose\UsingSupervisor;
 use Prose\UsingTargetsTable;
 use Prose\UsingTimer;
+use Prose\UsingUsers;
 use Prose\UsingVagrant;
 use Prose\UsingYamlFile;
 use Prose\UsingZmq;
@@ -434,6 +436,16 @@ function fromTestEnvironment()
 	return new FromTestEnvironment(StoryTeller::instance());
 }
 
+/**
+ * returns the FromUsers module
+ *
+ * @return \Prose\FromUsers
+ */
+function fromUsers()
+{
+	return new FromUsers(StoryTeller::instance());
+}
+
 function fromUuid()
 {
 	return new FromUuid(StoryTeller::instance());
@@ -592,6 +604,16 @@ function usingTargetsTable()
 function usingTimer()
 {
 	return new UsingTimer(StoryTeller::instance());
+}
+
+/**
+ * returns the UsingUsers module
+ *
+ * @return \Prose\UsingUsers
+ */
+function usingUsers()
+{
+	return new UsingUsers(StoryTeller::instance());
 }
 
 function usingVagrant()

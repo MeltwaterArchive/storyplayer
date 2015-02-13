@@ -613,6 +613,58 @@ class StoryTeller
 
 	// ==================================================================
 	//
+	// Test user support
+	//
+	// ------------------------------------------------------------------
+
+	private $hasTestUsers = false;
+	private $testUsers = null;
+	private $testUsersFileIsReadOnly = false;
+	private $testUsersFilename = null;
+
+	public function getTestUsers()
+	{
+		// make sure we have an object to return
+		if (!isset($this->testUsers)) {
+			$this->testUsers = new BaseObject;
+		}
+
+		return $this->testUsers;
+	}
+
+	public function hasTestUsers()
+	{
+		return $this->hasTestUsers;
+	}
+
+	public function setTestUsers($users)
+	{
+		$this->testUsers = $users;
+		$this->hasTestUsers = true;
+	}
+
+	public function getTestUsersFilename()
+	{
+		return $this->testUsersFilename;
+	}
+
+	public function setTestUsersFilename($filename)
+	{
+		$this->testUsersFilename = $filename;
+	}
+
+	public function getTestUsersFileIsReadOnly()
+	{
+		return $this->testUsersFileIsReadOnly;
+	}
+
+	public function setTestUsersFileIsReadOnly($readOnly = true)
+	{
+		$this->testUsersFileIsReadOnly = $readOnly;
+	}
+
+	// ==================================================================
+	//
 	// Per-story parameter support
 	//
 	// ------------------------------------------------------------------
