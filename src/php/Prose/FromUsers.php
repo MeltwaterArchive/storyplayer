@@ -57,6 +57,13 @@ use DataSift\Stone\PasswordLib\BasicGenerator;
  */
 class FromUsers extends Prose
 {
+	/**
+	 * return a user from the test users file
+	 *
+	 * @param  string $userId
+	 *         the ID of the user to retrieve
+	 * @return \stdClass
+	 */
 	public function getUser($userId)
 	{
 		// shorthand
