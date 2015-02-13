@@ -6,7 +6,11 @@ inherit: true
 filter:
     excluded_paths:
         - 'vendor/*'
-        - 'src/tests/*'
+        - 'tests/*'
+        - 'app/*'
+        - 'bin/*'
+        - 'library/*'        
+        - 'src/tests/stories/*'
 
 checks:
     php:
@@ -139,7 +143,7 @@ coding_style:
                 function: new-line
                 closure: end-of-line
             if:
-                opening: new-line
+                opening: end-of-line
                 always: true
                 else_on_new_line: true
             for:
@@ -153,9 +157,10 @@ coding_style:
                 always: true
                 while_on_new_line: false
             switch:
-                opening: new-line
+                opening: end-of-line
             try:
                 opening: end-of-line
                 catch_on_new_line: true
                 finally_on_new_line: true
+
 
