@@ -64,21 +64,6 @@ use DataSift\Storyplayer\PlayerLib\TestEnvironment_Player;
 use DataSift\Storyplayer\Console\DevModeConsole;
 use DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\Cli\Feature\ActiveConfigSupport;
-use DataSift\Storyplayer\Cli\Feature\ColorSupport;
-use DataSift\Storyplayer\Cli\Feature\ConsoleSupport;
-use DataSift\Storyplayer\Cli\Feature\DefinesSupport;
-use DataSift\Storyplayer\Cli\Feature\DeviceSupport;
-use DataSift\Storyplayer\Cli\Feature\LocalhostSupport;
-use DataSift\Storyplayer\Cli\Feature\PersistDeviceSupport;
-use DataSift\Storyplayer\Cli\Feature\PersistProcessesSupport;
-use DataSift\Storyplayer\Cli\Feature\PersistReuseTargetSupport;
-use DataSift\Storyplayer\Cli\Feature\PhaseLoaderSupport;
-use DataSift\Storyplayer\Cli\Feature\ProseLoaderSupport;
-use DataSift\Storyplayer\Cli\Feature\SystemUnderTestSupport;
-use DataSift\Storyplayer\Cli\Feature\TestEnvironmentSupport;
-use DataSift\Storyplayer\Cli\Feature\VerboseSupport;
-
 /**
  * A command to play a story, or a list of stories
  *
@@ -155,6 +140,7 @@ class PlayStory_Command extends BaseCommand
         $this->addFeature(new Feature_PersistReuseTargetSupport);
         $this->addFeature(new Feature_PersistDeviceSupport);
         $this->addFeature(new Feature_PersistProcessesSupport);
+        $this->addFeature(new Feature_TestUsersSupport);
 
         // now setup all of the switches that we support
         $this->addFeatureSwitches();
