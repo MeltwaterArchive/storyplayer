@@ -163,7 +163,6 @@ class StoryTeller
 	 */
 	private $story = null;
 
-	private $storyContext = null;
 	private $pageContext = null;
 	private $checkpoint = null;
 
@@ -386,31 +385,6 @@ class StoryTeller
 	/**
 	 *
 	 *
-	 * @return Story_Context
-	 */
-	public function getStoryContext()
-	{
-	    return $this->storyContext;
-	}
-
-	/**
-	 *
-	 *
-	 * @param Story_Context $storyContext
-	 * @return StoryTeller
-	 */
-	public function setStoryContext(Story_Context $storyContext)
-	{
-		// remember the story context
-	    $this->storyContext = $storyContext;
-
-	    // all done
-	    return $this;
-	}
-
-	/**
-	 *
-	 *
 	 * @return RuntimeConfigManager
 	 */
 	public function getRuntimeConfigManager() {
@@ -556,15 +530,6 @@ class StoryTeller
 		}
 
 		$this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig, $this->output);
-	}
-
-	/**
-	 *
-	 * @return DataSift\Storyplayer\UserLib\User
-	 */
-	public function getUser()
-	{
-		return $this->storyContext->user;
 	}
 
 	// ==================================================================

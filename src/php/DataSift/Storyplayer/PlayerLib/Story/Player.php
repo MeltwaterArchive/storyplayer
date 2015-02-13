@@ -113,10 +113,6 @@ class Story_Player
         	$st->setPersistDevice();
         }
 
-        // initialise the user
-        //$context = $st->getStoryContext();
-        //$context->initUser($st);
-
 		// set default callbacks up
 		$story->setDefaultCallbacks();
 
