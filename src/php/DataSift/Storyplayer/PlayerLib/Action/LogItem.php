@@ -212,6 +212,8 @@ class Action_LogItem
 	 *        the message to write
 	 * @param callback $callable
 	 *        the function / lambda to call
+	 * @return mixed
+	 *         the return value from $callable
 	 */
 	public function addStep($text, $callable)
 	{
@@ -280,6 +282,11 @@ class Action_LogItem
 	//
 	// ------------------------------------------------------------------
 
+	/**
+	 * get the deepest nested open action
+	 *
+	 * @return Action_LogItem|null
+	 */
 	public function getOpenAction()
 	{
 		// do we have an active nested action?

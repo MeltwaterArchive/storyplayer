@@ -61,7 +61,7 @@ trait OutputSupport
 
 	/**
 	 *
-	 * @return void
+	 * @return \DataSift\Storyplayer\Output
 	 */
 	public function initOutputSupport()
 	{

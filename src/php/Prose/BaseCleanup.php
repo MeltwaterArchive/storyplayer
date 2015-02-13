@@ -67,7 +67,7 @@ abstract class BaseCleanup extends Prose
      *
      * The actual table that we're working with
      *
-     * @var BaseObject
+     * @var \DataSift\Stone\ObjectLib\BaseObject
      */
     protected $table;
 
@@ -101,11 +101,15 @@ abstract class BaseCleanup extends Prose
      *
      * The function to run after stories are run
      *
-     *
      * @return void
      */
     abstract public function shutdown();
 
+    /**
+     * return the table that our subclass needs to clean up
+     *
+     * @return null|\DataSift\Stone\ObjectLib\BaseObject
+     */
     protected function getTable()
     {
         // shorthand
@@ -127,7 +131,6 @@ abstract class BaseCleanup extends Prose
      * removeTableIfEmpty
      *
      * Remove an entry in the runtime config if it is empty
-     *
      *
      * @return void
      */

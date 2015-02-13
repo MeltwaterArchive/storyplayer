@@ -79,7 +79,7 @@ function first($arrayToSearch)
  * @param  string $roleName
  *         The role that we want
  *
- * @return string
+ * @return Iterator
  *         a hostid that matches the role
  */
 function hostWithRole($roleName)

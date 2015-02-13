@@ -85,7 +85,7 @@ class BaseRuntimeTable extends Prose
      * Return our tables config that we can use for
      * in place editing
      *
-     * @return BaseObject
+     * @return \DataSift\Storyplayer\PlayerLib\BaseObject
      */
     public function getAllTables()
     {

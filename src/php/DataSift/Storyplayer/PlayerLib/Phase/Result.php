@@ -68,6 +68,11 @@ use Exception;
 
 class Phase_Result
 {
+	/**
+	 * this phase's name
+	 *
+	 * @var string
+	 */
 	protected $phaseName;
 	protected $message;
 	protected $nextAction;
@@ -106,6 +111,11 @@ class Phase_Result
 		$this->phaseName = $phaseName;
 	}
 
+	/**
+	 * return the name of this phase
+	 *
+	 * @return string
+	 */
 	public function getPhaseName()
 	{
 		return $this->phaseName;
@@ -135,6 +145,11 @@ class Phase_Result
 		return $this->result;
 	}
 
+	/**
+	 * interpret our result into a 'PASS|FAIL|WHATEVER' string
+	 *
+	 * @return string
+	 */
 	public function getPhaseResultString()
 	{
 		if (isset($this->RESULT_STRING[$this->result])) {
@@ -216,6 +231,13 @@ class Phase_Result
 		return false;
 	}
 
+	/**
+	 * what should happen next?
+	 *
+	 * will be one of the PhaseGroup_Player::NEXT_* constants
+	 *
+	 * @return integer
+	 */
 	public function getNextAction()
 	{
 		return $this->nextAction;
@@ -223,8 +245,8 @@ class Phase_Result
 
 	/**
 	 * @param integer $result
-	 * @param string $msg
-	 * @param Exception $e
+	 * @param string|null $msg
+	 * @param Exception|null $e
 	 */
 	public function setContinuePlaying($result = 1, $msg = null, $e = null)
 	{
@@ -237,7 +259,7 @@ class Phase_Result
 	/**
 	 * @param integer $result
 	 * @param string $msg
-	 * @param Exception $e
+	 * @param Exception|null $e
 	 */
 	public function setPlayingFailed($result, $msg, $e = null)
 	{
@@ -250,6 +272,7 @@ class Phase_Result
 	/**
 	 * @param integer $result
 	 * @param string $msg
+	 * @param Exception|null $e
 	 */
 	public function setSkipPlaying($result, $msg, $e = null)
 	{

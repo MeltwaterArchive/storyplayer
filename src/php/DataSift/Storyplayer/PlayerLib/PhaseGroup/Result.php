@@ -226,6 +226,11 @@ class PhaseGroup_Result
 		return $this->durationTime;
 	}
 
+	/**
+	 * turn our result into a 'PASS|FAIL|WHATEVER'-type string
+	 *
+	 * @return string
+	 */
 	public function getResultString()
 	{
 		if (isset($this->resultStrings[$this->resultCode])) {

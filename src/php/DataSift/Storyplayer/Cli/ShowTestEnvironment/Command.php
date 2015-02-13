@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Cli;
 
 use Phix_Project\CliEngine;
 use Phix_Project\CliEngine\CliCommand;
+use Phix_Project\CliEngine\CliResult;
 
 /**
  * Command to list the current default environment, suitable for use
@@ -77,11 +78,14 @@ class ShowTestEnvironment_Command extends CliCommand
 	 * @param  CliEngine $engine
 	 * @param  array     $params
 	 * @param  mixed     $additionalContext
-	 * @return Phix_Project\CliEngine\CliResult
+	 * @return integer
 	 */
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// output the default environment name
 		echo $additionalContext->defaultTestEnvironmentName . PHP_EOL;
+
+		// all done
+		return 0;
 	}
 }

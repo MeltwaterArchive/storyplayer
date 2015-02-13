@@ -217,11 +217,32 @@ abstract class OutputPlugin
 	 */
 	abstract public function endStoryplayer($duration);
 
+	/**
+	 * @return void
+	 */
 	abstract public function resetSilentMode();
+
+	/**
+	 * @return void
+	 */
 	abstract public function setSilentMode();
 
+	/**
+	 * @param  string $activity
+	 *         what is being done (e.g. 'Creating test environment')
+	 * @param  string $name
+	 *         what the activity is being applied to (e.g. 'vagrant-centos6')
+	 * @return void
+	 */
 	abstract public function startPhaseGroup($activity, $name);
-	abstract public function endPhaseGroup($result);
+
+	/**
+	 *
+	 * @param  DataSift\Storyplayer\PlayerLib\PhaseGroup_Result $result
+	 *         a record of what happened
+	 * @return void
+	 */
+	abstract public function endPhaseGroup(PhaseGroup_Result $result);
 
 	/**
 	 * @return void
