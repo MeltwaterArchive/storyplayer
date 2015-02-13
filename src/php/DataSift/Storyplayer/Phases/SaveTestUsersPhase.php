@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Phases;
 use Exception;
 
 /**
- * the Action phase
+ * save our test users to disk
  *
  * @category  Libraries
  * @package   Storyplayer/Phases
@@ -56,7 +56,7 @@ use Exception;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class ApplyRoleChangesPhase extends InternalPostPhase
+class SaveTestUsersPhase extends InternalPostPhase
 {
 	public function doPhase($story)
 	{
@@ -66,37 +66,31 @@ class ApplyRoleChangesPhase extends InternalPostPhase
 		// our results object
 		$phaseResult = $this->getNewPhaseResult();
 
-		// are there any role changes to apply?
-		if (!$story->hasRoleChanges()) {
-			// nothing to see ... move along, move along
-			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no role changes to apply"
-			);
+		// do we have any test users?
+		if (!$st->hasTestUsers()) {
+			$phaseResult->setContinuePlaying();
 			return $phaseResult;
 		}
 
-		// get the actions to call
-		$callbacks = $story->getRoleChanges();
-
-		try {
-			foreach ($callbacks as $callback) {
-				call_user_func($callback, $st);
-			}
-
-			// all is good
+		// are the test users read-only?
+		if ($st->getTestUsersFileIsReadOnly()) {
+			// nothing to do
 			$phaseResult->setContinuePlaying();
+			return $phaseResult;
+		}
+
+		// save the file
+		try {
+			$filename = $st->getTestUsersFilename();
+			usingUsers()->saveUsersToFile($filename);
 		}
 		catch (Exception $e) {
-			// we treat any failures here as a total failure
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
+			// warn the user, but do not abort Storyplayer
+			$st->output->logCliWarning("unable to save test users file; error is: " . $e->getMessage());
 		}
 
 		// all done
+		$phaseResult->setContinuePlaying();
 		return $phaseResult;
 	}
 }
