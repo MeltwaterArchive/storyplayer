@@ -453,7 +453,7 @@ function expectsRuntimeTable()
 /**
  * use a UNIX shell to check that a given condition is met
  *
- * @return \Expects\Shell
+ * @return \Prose\ExpectsShell
  */
 function expectsShell()
 {
@@ -874,7 +874,7 @@ function usingBrowser()
 /**
  * do something to the checkpoint object
  *
- * @return \Prose\Checkpoint
+ * @return \Prose\UsingCheckpoint
  */
 function usingCheckpoint()
 {
@@ -1084,6 +1084,12 @@ function usingReporting()
 }
 */
 
+/**
+ * do something to Storyplayer's internal table that tracks the active
+ * roles in your test environment
+ *
+ * @return \Prose\UsingRolesTable
+ */
 function usingRolesTable()
 {
     return new UsingRolesTable(StoryTeller::instance());
@@ -1096,7 +1102,7 @@ function usingRolesTable()
  */
 function usingRuntimeTable()
 {
-    return new UsingRolesTable(StoryTeller::instance());
+    return new UsingRuntimeTable(StoryTeller::instance());
 }
 
 /**
