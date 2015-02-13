@@ -59,50 +59,50 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Feature_ReadOnlyTestUsersSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('read-only-users');
-		$this->setShortDescription('do not save changes to test users');
-		$this->setLongDesc(
-			"If you're using the --users switch to load a list of test users, Storyplayer's "
-			. "default behaviour is to save any changed test user data back to this file "
-			. "when the tests have finished running"
-			. PHP_EOL . PHP_EOL
-			. "Use this switch to tell Storyplayer that it should never save data back to your "
-			. " test users file."
-			. PHP_EOL . PHP_EOL
-			. "This is useful if your tests are running against an on-demand test environment, "
-			. "where users are created at the start of your tests and destroyed before the tests "
-			. "are repeated."
-			. PHP_EOL . PHP_EOL
-			. "You can also set this in your test environment config, using the 'users.readOnlyTestUsers' "
-			. "module setting."
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('read-only-users');
+        $this->setShortDescription('do not save changes to test users');
+        $this->setLongDesc(
+            "If you're using the --users switch to load a list of test users, Storyplayer's "
+            . "default behaviour is to save any changed test user data back to this file "
+            . "when the tests have finished running"
+            . PHP_EOL . PHP_EOL
+            . "Use this switch to tell Storyplayer that it should never save data back to your "
+            . " test users file."
+            . PHP_EOL . PHP_EOL
+            . "This is useful if your tests are running against an on-demand test environment, "
+            . "where users are created at the start of your tests and destroyed before the tests "
+            . "are repeated."
+            . PHP_EOL . PHP_EOL
+            . "You can also set this in your test environment config, using the 'users.readOnlyTestUsers' "
+            . "module setting."
+        );
 
-		// what are the short switches?
-		// there are none
+        // what are the short switches?
+        // there are none
 
-		// what are the long switches?
-		$this->addLongSwitch('read-only-users');
+        // what are the long switches?
+        $this->addLongSwitch('read-only-users');
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->readOnlyTestUsers = true;
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->readOnlyTestUsers = true;
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

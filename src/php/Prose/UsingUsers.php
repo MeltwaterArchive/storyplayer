@@ -57,112 +57,112 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingUsers extends Prose
 {
-	/**
-	 * load test users from the given filename
-	 *
-	 * NOTES:
-	 *
-	 * - Storyplayer calls this for you when you use the --users switch
-	 *
-	 * - it is safe to call this yourself from a story if you want to load
-	 *   additional users for any reason. however, Storyplayer will not manage
-	 *   saving these users for you - you WILL have to do that yourself
-	 *
-	 * @param  string $filename
-	 *         the JSON file to load users from
-	 * @return \DataSift\Stone\ObjectLib\BaseObject
-	 */
-	public function loadUsersFromFile($filename)
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * load test users from the given filename
+     *
+     * NOTES:
+     *
+     * - Storyplayer calls this for you when you use the --users switch
+     *
+     * - it is safe to call this yourself from a story if you want to load
+     *   additional users for any reason. however, Storyplayer will not manage
+     *   saving these users for you - you WILL have to do that yourself
+     *
+     * @param  string $filename
+     *         the JSON file to load users from
+     * @return \DataSift\Stone\ObjectLib\BaseObject
+     */
+    public function loadUsersFromFile($filename)
+    {
+        // shorthand
+        $st = $this->st;
 
-		// what are we doing?
-		$log = $st->startAction("load test users from '{$filename}'");
+        // what are we doing?
+        $log = $st->startAction("load test users from '{$filename}'");
 
-		// load the file
-		$raw = @file_get_contents($filename);
-		if (!$raw || empty($raw)) {
-			throw new E5xx_ActionFailed(__METHOD__, "cannot open file '{$filename}' or file is empty");
-		}
-		$plainUsers = @json_decode($raw);
-		if (!$plainUsers) {
-			throw new E5xx_ActionFailed(__METHOD__, "file '{$filename}' contains invalid JSON");
-		}
-		if (!is_object($plainUsers)) {
-			throw new E5xx_ActionFailed(__METHOD__, "file '{$filename}' contains no test users");
-		}
+        // load the file
+        $raw = @file_get_contents($filename);
+        if (!$raw || empty($raw)) {
+            throw new E5xx_ActionFailed(__METHOD__, "cannot open file '{$filename}' or file is empty");
+        }
+        $plainUsers = @json_decode($raw);
+        if (!$plainUsers) {
+            throw new E5xx_ActionFailed(__METHOD__, "file '{$filename}' contains invalid JSON");
+        }
+        if (!is_object($plainUsers)) {
+            throw new E5xx_ActionFailed(__METHOD__, "file '{$filename}' contains no test users");
+        }
 
-		// merge these in with any users we have already loaded
-		$users = new BaseObject;
-		$users->mergeFrom($plainUsers);
+        // merge these in with any users we have already loaded
+        $users = new BaseObject;
+        $users->mergeFrom($plainUsers);
 
-		// remember what we've loaded
-		$st->setTestUsers($users);
+        // remember what we've loaded
+        $st->setTestUsers($users);
 
-		// all done
-		$count = count(get_object_vars($users));
-		$log->endAction("loaded {$count} test user(s)");
-		return $users;
-	}
+        // all done
+        $count = count(get_object_vars($users));
+        $log->endAction("loaded {$count} test user(s)");
+        return $users;
+    }
 
-	/**
-	 * save test users to disk
-	 *
-	 * NOTES:
-	 *
-	 * - Storyplayer calls this for you when all tests have completed
-	 *
-	 * - if you've loaded test users yourself inside your test, you'll need
-	 *   to call this method to save those test users
-	 *
-	 * @param  \DataSift\Stone\ObjectLib\BaseObject $users
-	 *         the test users to save to disk
-	 * @param  string $filename
-	 *         the filename to save to
-	 * @return void
-	 */
-	public function saveUsersToFile($users, $filename)
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * save test users to disk
+     *
+     * NOTES:
+     *
+     * - Storyplayer calls this for you when all tests have completed
+     *
+     * - if you've loaded test users yourself inside your test, you'll need
+     *   to call this method to save those test users
+     *
+     * @param  \DataSift\Stone\ObjectLib\BaseObject $users
+     *         the test users to save to disk
+     * @param  string $filename
+     *         the filename to save to
+     * @return void
+     */
+    public function saveUsersToFile($users, $filename)
+    {
+        // shorthand
+        $st = $this->st;
 
-		// what are we doing?
-		$log = $st->startAction("save test users to file '{$filename}'");
+        // what are we doing?
+        $log = $st->startAction("save test users to file '{$filename}'");
 
-		// save the contents
-		$users = $st->getTestUsers();
-		file_put_contents($filename, json_encode($users));
+        // save the contents
+        $users = $st->getTestUsers();
+        file_put_contents($filename, json_encode($users));
 
-		// all done
-		$count = count(get_object_vars($users));
-		$log->endAction("saved {$count} test user(s)");
-	}
+        // all done
+        $count = count(get_object_vars($users));
+        $log->endAction("saved {$count} test user(s)");
+    }
 
-	/**
-	 * tell Storyplayer that test users loaded via the --users switch must
-	 * not be saved back to disk when the stories are over
-	 *
-	 * NOTES:
-	 *
-	 * - Storyplayer calls this for you if you use the --read-only-users
-	 *   switch, or put 'moduleSettings.users.readOnly' in your test
-	 *   environment config
-	 *
-	 * - this setting has no effect if you call saveUsersToFile() manually
-	 */
-	public function setUsersFileIsReadOnly()
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * tell Storyplayer that test users loaded via the --users switch must
+     * not be saved back to disk when the stories are over
+     *
+     * NOTES:
+     *
+     * - Storyplayer calls this for you if you use the --read-only-users
+     *   switch, or put 'moduleSettings.users.readOnly' in your test
+     *   environment config
+     *
+     * - this setting has no effect if you call saveUsersToFile() manually
+     */
+    public function setUsersFileIsReadOnly()
+    {
+        // shorthand
+        $st = $this->st;
 
-		// what are we doing?
-		$log = $st->startAction("mark test users file as read-only");
+        // what are we doing?
+        $log = $st->startAction("mark test users file as read-only");
 
-		// track the state change
-		$st->setTestUsersFileIsReadOnly(true);
+        // track the state change
+        $st->setTestUsersFileIsReadOnly(true);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

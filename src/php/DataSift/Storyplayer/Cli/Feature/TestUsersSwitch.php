@@ -59,52 +59,52 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Feature_TestUsersSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('users');
-		$this->setShortDescription('choose a file for loading/saving test users from');
-		$this->setLongDesc(
-			"If you're testing a web-based application or an API, your tests will probably"
-			. " need to be given details about test users to create or re-use."
-			. PHP_EOL . PHP_EOL
-			. "Use this switch to tell Storyplayer which JSON file has the details of your "
-			. "test users. Storyplayer will load this file on startup and make the users "
-			. "available through the built-in Users module."
-			. PHP_EOL . PHP_EOL
-			. "Any changes will be saved back to the file when the story terminates. You can "
-			. "tell Storyplayer to treat the file as read-only using the --read-only-users "
-			. "switch"
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('users');
+        $this->setShortDescription('choose a file for loading/saving test users from');
+        $this->setLongDesc(
+            "If you're testing a web-based application or an API, your tests will probably"
+            . " need to be given details about test users to create or re-use."
+            . PHP_EOL . PHP_EOL
+            . "Use this switch to tell Storyplayer which JSON file has the details of your "
+            . "test users. Storyplayer will load this file on startup and make the users "
+            . "available through the built-in Users module."
+            . PHP_EOL . PHP_EOL
+            . "Any changes will be saved back to the file when the story terminates. You can "
+            . "tell Storyplayer to treat the file as read-only using the --read-only-users "
+            . "switch"
+        );
 
-		// what are the short switches?
-		$this->addShortSwitch('u');
+        // what are the short switches?
+        $this->addShortSwitch('u');
 
-		// what are the long switches?
-		$this->addLongSwitch('users');
+        // what are the long switches?
+        $this->addLongSwitch('users');
 
-		// what is the required argument?
-		$requiredArgMsg = "the JSON file containing the users";
-		$this->setRequiredArg('<users-file>', $requiredArgMsg);
-		$this->setArgValidator(new Feature_TestUsersValidator);
+        // what is the required argument?
+        $requiredArgMsg = "the JSON file containing the users";
+        $this->setRequiredArg('<users-file>', $requiredArgMsg);
+        $this->setArgValidator(new Feature_TestUsersValidator);
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->testUsersFile = $params[0];
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->testUsersFile = $params[0];
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

@@ -58,40 +58,40 @@ use Exception;
 
 class SaveTestUsersPhase extends InternalPostPhase
 {
-	public function doPhase($story)
-	{
-		// shorthand
-		$st = $this->st;
-		$output = $st->getOutput();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st = $this->st;
+        $output = $st->getOutput();
 
-		// our results object
-		$phaseResult = $this->getNewPhaseResult();
+        // our results object
+        $phaseResult = $this->getNewPhaseResult();
 
-		// do we have any test users?
-		if (!$st->hasTestUsers()) {
-			$phaseResult->setContinuePlaying();
-			return $phaseResult;
-		}
+        // do we have any test users?
+        if (!$st->hasTestUsers()) {
+            $phaseResult->setContinuePlaying();
+            return $phaseResult;
+        }
 
-		// are the test users read-only?
-		if ($st->getTestUsersFileIsReadOnly()) {
-			// nothing to do
-			$phaseResult->setContinuePlaying();
-			return $phaseResult;
-		}
+        // are the test users read-only?
+        if ($st->getTestUsersFileIsReadOnly()) {
+            // nothing to do
+            $phaseResult->setContinuePlaying();
+            return $phaseResult;
+        }
 
-		// save the file
-		try {
-			$filename = $st->getTestUsersFilename();
-			usingUsers()->saveUsersToFile($st->getTestUsers(), $filename);
-		}
-		catch (Exception $e) {
-			// warn the user, but do not abort Storyplayer
-			$output->logCliWarning("unable to save test users file; error is: " . $e->getMessage());
-		}
+        // save the file
+        try {
+            $filename = $st->getTestUsersFilename();
+            usingUsers()->saveUsersToFile($st->getTestUsers(), $filename);
+        }
+        catch (Exception $e) {
+            // warn the user, but do not abort Storyplayer
+            $output->logCliWarning("unable to save test users file; error is: " . $e->getMessage());
+        }
 
-		// all done
-		$phaseResult->setContinuePlaying();
-		return $phaseResult;
-	}
+        // all done
+        $phaseResult->setContinuePlaying();
+        return $phaseResult;
+    }
 }

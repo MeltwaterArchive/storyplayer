@@ -57,46 +57,46 @@ use DataSift\Stone\PasswordLib\BasicGenerator;
  */
 class FromUsers extends Prose
 {
-	/**
-	 * return a user from the test users file
-	 *
-	 * @param  string $userId
-	 *         the ID of the user to retrieve
-	 * @return \DataSift\Stone\ObjectLib\BaseObject
-	 */
-	public function getUser($userId)
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * return a user from the test users file
+     *
+     * @param  string $userId
+     *         the ID of the user to retrieve
+     * @return \DataSift\Stone\ObjectLib\BaseObject
+     */
+    public function getUser($userId)
+    {
+        // shorthand
+        $st = $this->st;
 
-		// what are we doing?
-		$log = $st->startAction("get user ID '{$userId}'");
+        // what are we doing?
+        $log = $st->startAction("get user ID '{$userId}'");
 
-		// do we have this user?
-		$users = $st->getTestUsers();
-		if (!isset($users->$userId)) {
-			$msg = "user ID '{$userId}' not found";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed($msg);
-		}
+        // do we have this user?
+        $users = $st->getTestUsers();
+        if (!isset($users->$userId)) {
+            $msg = "user ID '{$userId}' not found";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed($msg);
+        }
 
-		// all done
-		$log->endAction($users->$userId);
-		return $users->$userId;
-	}
+        // all done
+        $log->endAction($users->$userId);
+        return $users->$userId;
+    }
 
-	/**
-	 * generates a random password of the requested length
-	 *
-	 * @param  integer $minLength
-	 *         minimum number of characters to include
-	 * @param  integer $maxLength
-	 *         maximum number of characters to include
-	 * @return string
-	 *         the generated password
-	 */
-	public function generateNewPassword($minLength = 8, $maxLength = 20)
-	{
-		return BasicGenerator::generatePassword($minLength, $maxLength);
-	}
+    /**
+     * generates a random password of the requested length
+     *
+     * @param  integer $minLength
+     *         minimum number of characters to include
+     * @param  integer $maxLength
+     *         maximum number of characters to include
+     * @return string
+     *         the generated password
+     */
+    public function generateNewPassword($minLength = 8, $maxLength = 20)
+    {
+        return BasicGenerator::generatePassword($minLength, $maxLength);
+    }
 }

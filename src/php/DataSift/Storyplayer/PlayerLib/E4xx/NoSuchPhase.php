@@ -59,7 +59,7 @@ class E4xx_NoSuchPhase extends Exxx_Exception
 {
     public function __construct($phaseName)
     {
-    	$msg = "Unknown phase '{$phaseName}'; we can find no matching PHP class for it";
+        $msg = "Unknown phase '{$phaseName}'; we can find no matching PHP class for it";
         parent::__construct(400, $msg, $msg);
     }
 }

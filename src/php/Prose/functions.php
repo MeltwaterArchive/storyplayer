@@ -163,276 +163,276 @@ use Prose\UsingZookeeper;
  */
 function assertsArray($expected)
 {
-	return new AssertsArray(StoryTeller::instance(), [$expected]);
+    return new AssertsArray(StoryTeller::instance(), [$expected]);
 }
 
 function assertsBoolean($expected)
 {
-	return new AssertsBoolean(StoryTeller::instance(), [$expected]);
+    return new AssertsBoolean(StoryTeller::instance(), [$expected]);
 }
 
 function assertsDouble($expected)
 {
-	return new AssertsDouble(StoryTeller::instance(), [$expected]);
+    return new AssertsDouble(StoryTeller::instance(), [$expected]);
 }
 
 function assertsInteger($expected)
 {
-	return new AssertsInteger(StoryTeller::instance(), [$expected]);
+    return new AssertsInteger(StoryTeller::instance(), [$expected]);
 }
 
 function assertsObject($expected)
 {
-	return new AssertsObject(StoryTeller::instance(), [$expected]);
+    return new AssertsObject(StoryTeller::instance(), [$expected]);
 }
 
 function assertsString($expected)
 {
-	return new AssertsString(StoryTeller::instance(), [$expected]);
+    return new AssertsString(StoryTeller::instance(), [$expected]);
 }
 
 function cleanupHosts($key)
 {
-	return new CleanupHosts(StoryTeller::instance(), [$key]);
+    return new CleanupHosts(StoryTeller::instance(), [$key]);
 }
 
 function cleanupProcesses($key)
 {
-	return new CleanupProcesses(StoryTeller::instance(), [$key]);
+    return new CleanupProcesses(StoryTeller::instance(), [$key]);
 }
 
 function cleanupRoles($key)
 {
-	return new CleanupRoles(StoryTeller::instance(), [$key]);
+    return new CleanupRoles(StoryTeller::instance(), [$key]);
 }
 
 function cleanupTargets($key)
 {
-	return new CleanupTargets(StoryTeller::instance(), [$key]);
+    return new CleanupTargets(StoryTeller::instance(), [$key]);
 }
 
 function expectsBrowser()
 {
-	return new ExpectsBrowser(StoryTeller::instance());
+    return new ExpectsBrowser(StoryTeller::instance());
 }
 
 function expectsEc2Image($amiId)
 {
-	return new ExpectsEc2Image(StoryTeller::instance(), [$amiId]);
+    return new ExpectsEc2Image(StoryTeller::instance(), [$amiId]);
 }
 
 function expectsFailure()
 {
-	return new ExpectsFailure(StoryTeller::instance());
+    return new ExpectsFailure(StoryTeller::instance());
 }
 
 function expectsFirstHostWithRole($role)
 {
-	return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$role]);
+    return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$role]);
 }
 
 function expectsForm($formId)
 {
-	return new ExpectsForm(StoryTeller::instance(), [$formId]);
+    return new ExpectsForm(StoryTeller::instance(), [$formId]);
 }
 
 function expectsGraphite()
 {
-	return new ExpectsGraphite(StoryTeller::instance());
+    return new ExpectsGraphite(StoryTeller::instance());
 }
 
 function expectsHost($hostId)
 {
-	return new ExpectsHost(StoryTeller::instance(), [$hostId]);
+    return new ExpectsHost(StoryTeller::instance(), [$hostId]);
 }
 
 function expectsHostsTable()
 {
-	return new ExpectsHostsTable(StoryTeller::instance());
+    return new ExpectsHostsTable(StoryTeller::instance());
 }
 
 function expectsHttpResponse(HttpClientResponse $httpResponse)
 {
-	return new ExpectsHttpResponse(StoryTeller::instance(), [$httpResponse]);
+    return new ExpectsHttpResponse(StoryTeller::instance(), [$httpResponse]);
 }
 
 function expectsProcessesTable()
 {
-	return new ExpectsProcessesTable(StoryTeller::instance());
+    return new ExpectsProcessesTable(StoryTeller::instance());
 }
 
 function expectsRolesTable()
 {
-	return new ExpectsRolesTable(StoryTeller::instance());
+    return new ExpectsRolesTable(StoryTeller::instance());
 }
 
 function expectsRuntimeTable()
 {
-	return new ExpectsRuntimeTable(StoryTeller::instance());
+    return new ExpectsRuntimeTable(StoryTeller::instance());
 }
 
 function expectsShell()
 {
-	return new ExpectsShell(StoryTeller::instance());
+    return new ExpectsShell(StoryTeller::instance());
 }
 
 function expectsSupervisor($hostId)
 {
-	return new ExpectsSupervisor(StoryTeller::instance(), [$hostId]);
+    return new ExpectsSupervisor(StoryTeller::instance(), [$hostId]);
 }
 
 function expectsUuid()
 {
-	return new ExpectsUuid(StoryTeller::instance());
+    return new ExpectsUuid(StoryTeller::instance());
 }
 
 function expectsZmq()
 {
-	return new ExpectsZmq(StoryTeller::instance());
+    return new ExpectsZmq(StoryTeller::instance());
 }
 function foreachHostWithRole($roleName)
 {
-	return new ForeachHostWithRole(StoryTeller::instance(), [$roleName]);
+    return new ForeachHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
 function fromAws()
 {
-	return new FromAws(StoryTeller::instance());
+    return new FromAws(StoryTeller::instance());
 }
 
 function fromBrowser()
 {
-	return new FromBrowser(StoryTeller::instance());
+    return new FromBrowser(StoryTeller::instance());
 }
 
 function fromCheckpoint()
 {
-	return new FromCheckpoint(StoryTeller::instance());
+    return new FromCheckpoint(StoryTeller::instance());
 }
 
 function fromConfig()
 {
-	return new FromConfig(StoryTeller::instance());
+    return new FromConfig(StoryTeller::instance());
 }
 
 function fromCurl()
 {
-	return new FromCurl(StoryTeller::instance());
+    return new FromCurl(StoryTeller::instance());
 }
 
 function fromEc2()
 {
-	return new FromEc2(StoryTeller::instance());
+    return new FromEc2(StoryTeller::instance());
 }
 
 function fromEc2Instance($amiId)
 {
-	return new FromEc2Instance(StoryTeller::instance(), [$amiId]);
+    return new FromEc2Instance(StoryTeller::instance(), [$amiId]);
 }
 
 function fromEnvironment()
 {
-	return new FromEnvironment(StoryTeller::instance());
+    return new FromEnvironment(StoryTeller::instance());
 }
 
 function fromFacebook()
 {
-	return new FromFacebook(StoryTeller::instance());
+    return new FromFacebook(StoryTeller::instance());
 }
 
 function fromFile()
 {
-	return new FromFile(StoryTeller::instance());
+    return new FromFile(StoryTeller::instance());
 }
 
 function fromFirstHostWithRole($roleName)
 {
-	return new FromFirstHostWithRole(StoryTeller::instance(), [$roleName]);
+    return new FromFirstHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
 function fromForm($formId)
 {
-	return new FromForm(StoryTeller::instance(), [$formId]);
+    return new FromForm(StoryTeller::instance(), [$formId]);
 }
 
 function fromGraphite()
 {
-	return new FromGraphite(StoryTeller::instance());
+    return new FromGraphite(StoryTeller::instance());
 }
 
 function fromHost($hostId)
 {
-	return new FromHost(StoryTeller::instance(), [$hostId]);
+    return new FromHost(StoryTeller::instance(), [$hostId]);
 }
 
 function fromHostsTable()
 {
-	return new FromHostsTable(StoryTeller::instance());
+    return new FromHostsTable(StoryTeller::instance());
 }
 
 function fromHttp()
 {
-	return new FromHttp(StoryTeller::instance());
+    return new FromHttp(StoryTeller::instance());
 }
 
 function fromPDOStatement(PDOStatement $stmt)
 {
-	return new FromPDOStatement(StoryTeller::instance(), [$stmt]);
+    return new FromPDOStatement(StoryTeller::instance(), [$stmt]);
 }
 
 function fromProcessesTable()
 {
-	return new FromProcessesTable(StoryTeller::instance());
+    return new FromProcessesTable(StoryTeller::instance());
 }
 
 function fromRedisConn(PredisClient $client)
 {
-	return new FromRedisConn(StoryTeller::instance(), [$client]);
+    return new FromRedisConn(StoryTeller::instance(), [$client]);
 }
 
 function fromRolesTable()
 {
-	return new FromRolesTable(StoryTeller::instance());
+    return new FromRolesTable(StoryTeller::instance());
 }
 
 function fromRuntimeTable()
 {
-	return new FromRuntimeTable(StoryTeller::instance());
+    return new FromRuntimeTable(StoryTeller::instance());
 }
 
 function fromRuntimeTableForTargetEnvironment()
 {
-	return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance());
+    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance());
 }
 
 function fromSauceLabs()
 {
-	return new FromSauceLabs(StoryTeller::instance());
+    return new FromSauceLabs(StoryTeller::instance());
 }
 
 function fromShell()
 {
-	return new FromShell(StoryTeller::instance());
+    return new FromShell(StoryTeller::instance());
 }
 
 function fromSupervisor($hostId)
 {
-	return new FromSupervisor(StoryTeller::instance(),[$hostId]);
+    return new FromSupervisor(StoryTeller::instance(),[$hostId]);
 }
 
 function fromSystemUnderTest()
 {
-	return new FromSystemUnderTest(StoryTeller::instance());
+    return new FromSystemUnderTest(StoryTeller::instance());
 }
 
 function fromTargetsTable()
 {
-	return new FromTargetsTable(StoryTeller::instance());
+    return new FromTargetsTable(StoryTeller::instance());
 }
 
 function fromTestEnvironment()
 {
-	return new FromTestEnvironment(StoryTeller::instance());
+    return new FromTestEnvironment(StoryTeller::instance());
 }
 
 /**
@@ -442,167 +442,167 @@ function fromTestEnvironment()
  */
 function fromUsers()
 {
-	return new FromUsers(StoryTeller::instance());
+    return new FromUsers(StoryTeller::instance());
 }
 
 function fromUuid()
 {
-	return new FromUuid(StoryTeller::instance());
+    return new FromUuid(StoryTeller::instance());
 }
 
 function getCheckpoint()
 {
-	return StoryTeller::instance()->getCheckpoint();
+    return StoryTeller::instance()->getCheckpoint();
 }
 
 function stopDevice()
 {
-	return StoryTeller::instance()->stopDevice();
+    return StoryTeller::instance()->stopDevice();
 }
 
 function usingBrowser()
 {
-	return new UsingBrowser(StoryTeller::instance());
+    return new UsingBrowser(StoryTeller::instance());
 }
 
 function usingCheckpoint()
 {
-	return new UsingCheckpoint(StoryTeller::instance());
+    return new UsingCheckpoint(StoryTeller::instance());
 }
 
 function usingEc2()
 {
-	return new UsingEc2(StoryTeller::instance());
+    return new UsingEc2(StoryTeller::instance());
 }
 
 function usingEc2Instance($amiId)
 {
-	return new UsingEc2Instance(StoryTeller::instance());
+    return new UsingEc2Instance(StoryTeller::instance());
 }
 
 function usingFile()
 {
-	return new UsingFile(StoryTeller::instance());
+    return new UsingFile(StoryTeller::instance());
 }
 
 function usingFirstHostWithRole($roleName)
 {
-	return new UsingFirstHostWithRole(StoryTeller::instance(), [$roleName]);
+    return new UsingFirstHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
 function usingForm($formId)
 {
-	return new UsingForm(StoryTeller::instance(), [$formId]);
+    return new UsingForm(StoryTeller::instance(), [$formId]);
 }
 
 function usingHost($hostId)
 {
-	return new UsingHost(StoryTeller::instance(), [$hostId]);
+    return new UsingHost(StoryTeller::instance(), [$hostId]);
 }
 
 function usingHostsTable()
 {
-	return new UsingHostsTable(StoryTeller::instance());
+    return new UsingHostsTable(StoryTeller::instance());
 }
 
 function usingHttp()
 {
-	return new UsingHttp(StoryTeller::instance());
+    return new UsingHttp(StoryTeller::instance());
 }
 
 function usingLog()
 {
-	return new UsingLog(StoryTeller::instance());
+    return new UsingLog(StoryTeller::instance());
 }
 
 function usingPDO()
 {
-	return new UsingPDO(StoryTeller::instance());
+    return new UsingPDO(StoryTeller::instance());
 }
 
 function usingPDODB(PDO $db)
 {
-	return new UsingPDODB(StoryTeller::instance(), [$db]);
+    return new UsingPDODB(StoryTeller::instance(), [$db]);
 }
 
 function usingProcessesTable()
 {
-	return new UsingProcessesTable(StoryTeller::instance());
+    return new UsingProcessesTable(StoryTeller::instance());
 }
 
 function usingProvisioning()
 {
-	return new UsingProvisioning(StoryTeller::instance());
+    return new UsingProvisioning(StoryTeller::instance());
 }
 
 function usingProvisioningDefinition(ProvisioningDefinition $def)
 {
-	return new UsingProvisioningDefinition(StoryTeller::instance(), [$def]);
+    return new UsingProvisioningDefinition(StoryTeller::instance(), [$def]);
 }
 
 function usingProvisioningEngine($engine)
 {
-	return new UsingProvisioningEngine(StoryTeller::instance(), [$engine]);
+    return new UsingProvisioningEngine(StoryTeller::instance(), [$engine]);
 }
 
 function usingRedis()
 {
-	return new UsingRedis(StoryTeller::instance());
+    return new UsingRedis(StoryTeller::instance());
 }
 
 function usingRedisConn(PredisClient $client)
 {
-	return new UsingRedisConn(StoryTeller::instance(), [$client]);
+    return new UsingRedisConn(StoryTeller::instance(), [$client]);
 }
 
 function usingReporting()
 {
-	return new UsingReporting(StoryTeller::instance());
+    return new UsingReporting(StoryTeller::instance());
 }
 
 function usingRolesTable()
 {
-	return new UsingRolesTable(StoryTeller::instance());
+    return new UsingRolesTable(StoryTeller::instance());
 }
 
 function usingRuntimeTable()
 {
-	return new UsingRolesTable(StoryTeller::instance());
+    return new UsingRolesTable(StoryTeller::instance());
 }
 
 function usingRuntimeTableForTargetEnvironment()
 {
-	return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance());
+    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance());
 }
 
 function usingSauceLabs()
 {
-	return new UsingSauceLabs(StoryTeller::instance());
+    return new UsingSauceLabs(StoryTeller::instance());
 }
 
 function usingSavageD()
 {
-	return new UsingSavageD(StoryTeller::instance());
+    return new UsingSavageD(StoryTeller::instance());
 }
 
 function usingShell()
 {
-	return new UsingShell(StoryTeller::instance());
+    return new UsingShell(StoryTeller::instance());
 }
 
 function usingSupervisor($hostId)
 {
-	return new UsingSupervisor(StoryTeller::instance(), [$hostId]);
+    return new UsingSupervisor(StoryTeller::instance(), [$hostId]);
 }
 
 function usingTargetsTable()
 {
-	return new UsingTargetsTable(StoryTeller::instance());
+    return new UsingTargetsTable(StoryTeller::instance());
 }
 
 function usingTimer()
 {
-	return new UsingTimer(StoryTeller::instance());
+    return new UsingTimer(StoryTeller::instance());
 }
 
 /**
@@ -612,20 +612,20 @@ function usingTimer()
  */
 function usingUsers()
 {
-	return new UsingUsers(StoryTeller::instance());
+    return new UsingUsers(StoryTeller::instance());
 }
 
 function usingVagrant()
 {
-	return new UsingVagrant(StoryTeller::instance());
+    return new UsingVagrant(StoryTeller::instance());
 }
 
 function usingYamlFile($filename)
 {
-	return new UsingYamlFile(StoryTeller::instance(), [$filename]);
+    return new UsingYamlFile(StoryTeller::instance(), [$filename]);
 }
 
 function usingZmq()
 {
-	return new UsingZmq(StoryTeller::instance());
+    return new UsingZmq(StoryTeller::instance());
 }
