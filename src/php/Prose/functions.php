@@ -83,7 +83,6 @@ use Prose\ExpectsRolesTable;
 use Prose\ExpectsRuntimeTable;
 use Prose\ExpectsShell;
 use Prose\ExpectsSupervisor;
-use Prose\ExpectsUser;
 use Prose\ExpectsUuid;
 use Prose\ExpectsZmq;
 use Prose\ForeachHostWithRole;

@@ -76,19 +76,6 @@ class Story
 	protected $name;
 
 	/**
-	 * A list of the users who should be allowed to perform this story
-	 *
-	 * Many stories are only valid for a subset of all potential users.
-	 * This is a list of all user _roles_ that the story is written for.
-	 *
-	 * This is basically a special kind of hint that Storyplayer uses
-	 * when picking the next story to play.
-	 *
-	 * @var array(string)
-	 */
-	protected $validRoles = array();
-
-	/**
 	 * the function that provides hints about how this story changes
 	 * the state of the system or user
 	 *
@@ -569,27 +556,23 @@ class Story
 
 	/**
 	 * get the role changes callback
-	 *
-	 * @return callback
 	 */
 	public function getRoleChanges()
 	{
-	    return $this->roleChangesCallback;
+		throw new E4xx_DeprecatedFeature('user roles in stories have been removed from Storyplayer v2.');
 	}
 
 	/**
 	 * has the role changes callback been set?
-	 *
-	 * @return boolean true if the callback has been set
 	 */
 	public function hasRoleChanges()
 	{
-		return count($this->roleChangesCallback) > 0;
+		throw new E4xx_DeprecatedFeature('user roles in stories have been removed from Storyplayer v2.');
 	}
 
 	public function setRoleChanges($newCallback)
 	{
-		$this->roleChangesCallback = array($newCallback);
+		throw new E4xx_DeprecatedFeature('user roles in stories have been removed from Storyplayer v2.');
 	}
 
 	// ====================================================================
