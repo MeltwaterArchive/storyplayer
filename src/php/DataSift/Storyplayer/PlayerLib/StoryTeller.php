@@ -637,7 +637,7 @@ class StoryTeller
 	/**
 	 * remember the test users that we have
 	 *
-	 * @param \stdClass $users
+	 * @param \DataSift\Stone\ObjectLib\BaseObject $users
 	 *        our test users
 	 */
 	public function setTestUsers($users)
