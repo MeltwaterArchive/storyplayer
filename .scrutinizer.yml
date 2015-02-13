@@ -9,8 +9,8 @@ filter:
         - 'tests/*'
         - 'app/*'
         - 'bin/*'
-        - 'library/*'        
-        - 'src/tests/stories/*'
+        - 'library/*'
+        - 'src/tests/unit-tests'
 
 checks:
     php:
