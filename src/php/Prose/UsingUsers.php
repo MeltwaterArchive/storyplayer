@@ -110,7 +110,7 @@ class UsingUsers extends Prose
 		$log = $st->startAction("mark test users file as read-only");
 
 		// track the state change
-		$st->setUsersFileIsReadOnly(true);
+		$st->setTestUsersFileIsReadOnly(true);
 
 		// all done
 		$log->endAction();
