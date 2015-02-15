@@ -406,7 +406,48 @@ class FromHost extends HostBase
 		return $value;
 	}
 
-	public function getAppSetting($appName, $settingName)
+	public function getAppSetting($path, $settingName = null)
+	{
+		// are we operating in legacy mode (for DataSift), or are we using
+		// the new dot.notation.support that we want everywhere in v2?
+		$parts = explode(".", $path);
+		if (count($parts) == 1 && $settingName != null) {
+			return $this->getLegacyAppSetting($path, $settingName);
+		}
+
+		// if we get here, then we are using the new dot.notation.support
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get appSetting '{$path}' from host '{$this->args[0]}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// do we have any app settings?
+		if (!isset($hostDetails->appSettings)) {
+			$msg = "host has no appSettings at all";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
+		}
+
+		// do we have the setting that we want?
+		if (!$hostDetails->appSettings->hasData($path)) {
+			$msg = "host does not have appSetting '{$path}'";
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
+		}
+
+		// success
+		$data = $hostDetails->appSettings->getData($path);
+
+		// all done
+		$log->endAction([ "setting is", $data ]);
+		return $data;
+	}
+
+	protected function getLegacyAppSetting($appName, $settingName)
 	{
 		// shorthand
 		$st = $this->st;

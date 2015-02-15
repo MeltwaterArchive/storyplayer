@@ -8,10 +8,14 @@
 					"default": {
 						"osName": "centos6",
 						"roles": [
+							"host_target",
 							"upload_target",
 							"ssl_target"
 						],
 						"appSettings": {
+							"host": {
+								"expected": "successfully retrieved this appSetting :)"
+							},
 							"http": {
 								"homepage": "https://storyplayer.test/"
 							},
