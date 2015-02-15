@@ -132,8 +132,13 @@ class RuntimeConfigManager extends ConfigManagerBase
 			exit(1);
 		}
 
+		// we need to convert the loaded config into our more powerful config
+		// (at least for now)
+		$enhancedConfig = new BaseObject;
+		$enhancedConfig->mergeFrom($config);
+
 		// all done
-		return $config;
+		return $enhancedConfig;
 	}
 
 	/**
