@@ -1,0 +1,16 @@
+{
+	"appSettings": {
+		"testData": {
+			"name": "storyplayer",
+			"version": "2.x"
+		}
+	},
+	"roles": [
+		{
+			"role": "upload_target",
+			"params": {
+				"filename": "testfile.txt"
+			}
+		}
+	]
+}

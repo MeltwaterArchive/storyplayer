@@ -43,9 +43,11 @@
 
 namespace DataSift\Storyplayer\OsLib;
 
-use DataSift\Storyplayer\CommandLib\SshClient;
+use stdClass;
+use DataSift\Storyplayer\CommandLib\CommandClient;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * the things you can do / learn about a machine running one of our
@@ -60,7 +62,11 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 abstract class OsBase implements SupportedOs
 {
-	protected $sshClients;
+	/**
+	 *
+	 * @var DataSift\Storyplayer\PlayerLib\StoryTeller;
+	 */
+	protected $st;
 
 	public function __construct(StoryTeller $st)
 	{
@@ -68,42 +74,177 @@ abstract class OsBase implements SupportedOs
 		$this->st = $st;
 	}
 
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  SupportedHost $host
+	 * @return string
+	 */
 	abstract public function determineIpAddress($hostDetails, SupportedHost $host);
-	abstract public function getInstalledPackageDetails($hostDetails, $packageName);
-	abstract public function getProcessIsRunning($hostDetails, $processName);
-	abstract public function getPid($hostDetails, $processName);
 
-	public function runCommand($hostDetails, $command, $params = array())
+	/**
+	 *
+	 * @param  HostDetails   $hostDetails
+	 * @param  SupportedHost $vm
+	 * @return string
+	 */
+	abstract public function determineHostname($hostDetails, SupportedHost $vm);
+
+	/**
+	 * check a given hostname to make sure it is safe to use
+	 *
+	 * @param  HostDetails $hostDetails
+	 *         the known facts about the host
+	 * @param  string $hostname
+	 *         the hostname we want to check
+	 * @return string
+	 *         the hostname that can be added to the hostDetails data
+	 */
+	protected function runHostnameSafeguards($hostDetails, $hostname)
 	{
-		// get an SSH client
-		$sshClient = $this->getSshClient($hostDetails);
+		// special case - hostname is already set in hostDetails
+		//
+		// we assume that it was set in the test environment config file
+		// by someone who knows what they are doing
+		if (isset($hostDetails->hostname)) {
+			return $hostDetails->hostname;
+		}
 
-		// run the command
-		return $sshClient->runCommand($command, $params);
+		// special case - no IP address for the host
+		//
+		// we need the host's IP address to perform our checks
+		if (!isset($hostDetails->ipAddress)) {
+			return $hostname;
+		}
+
+		// check for machines calling themselves 'localhost' in some form
+		// or another
+		//
+		// this can happen when there is no working dynamic DNS
+		$parts = explode(".", $hostname);
+		if ($parts[0] == 'localhost') {
+			// this is only valid *if* the host's IP address is recognised
+			// as a valid loopback address
+			//
+			// most of the world uses 127.0.0.1
+			// ubuntu uses 127.0.1.1 (no idea why)
+			$validIps = [ '127.0.0.1', '127.0.1.1' ];
+			if (!in_array($hostDetails->ipAddress, $validIps)) {
+				// this hostname is *not* safe
+				//
+				// the best we can do is return the host's IP address
+				return $hostDetails->ipAddress;
+			}
+		}
+
+		// check if the machine's hostname resolves to the detected IP
+		// address or not
+		$resolvedIp = gethostbyname($hostname);
+		if ($resolvedIp != $hostDetails->ipAddress) {
+			// no good
+			//
+			// possibilities include:
+			//
+			// * no DNS entry for $hostname
+			// * no /etc/hosts entry for $hostname
+			//
+			// the best we can do is return the host's IP address
+			return $hostDetails->ipAddress;
+		}
+
+		// *if* we get here, then we believe that $hostname is safe to
+		// use in your stories
+		return $hostname;
 	}
 
-	protected function getSshClient($hostDetails)
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $packageName
+	 * @return BaseObject
+	 */
+	abstract public function getInstalledPackageDetails($hostDetails, $packageName);
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return boolean
+	 */
+	abstract public function getProcessIsRunning($hostDetails, $processName);
+
+	/**
+	 *
+	 * @param  HostDetails $hostDetails
+	 * @param  string $processName
+	 * @return integer
+	 */
+	abstract public function getPid($hostDetails, $processName);
+
+	/**
+	 *
+	 * @param  \DataSift\Storyplayer\PlayerLib\Storyteller $st
+	 *         our module loader
+	 * @param  \DataSift\Storyplayer\HostLib\HostDetails $hostDetails
+	 *         the details for the host we want a client for
+	 * @return CommandClient
+	 */
+	abstract public function getClient($st, $hostDetails);
+
+	/**
+	 * @param HostDetails $hostDetails
+	 * @param string $command
+	 *
+	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
+	 */
+	public function runCommand($hostDetails, $command)
 	{
-		// shorthand
-		$name = $hostDetails->name;
+		// get an SSH client
+		$client = $this->getClient($this->st, $hostDetails);
 
-		// do we already have a client?
-		if (isset($this->sshClients[$name])) {
-			// yes - reuse it
-			return $this->sshClients[$name];
+		// run the command
+		return $client->runCommand($command);
+	}
+
+	public function downloadFile($hostDetails, $sourceFilename, $destFilename)
+	{
+		// get a client
+		$client = $this->getClient($this->st, $hostDetails);
+
+		// attempt the upload
+		return $client->downloadFile($sourceFilename, $destFilename);
+	}
+
+	public function uploadFile($hostDetails, $sourceFilename, $destFilename)
+	{
+		// get a client
+		$client = $this->getClient($this->st, $hostDetails);
+
+		// attempt the upload
+		return $client->uploadFile($sourceFilename, $destFilename);
+	}
+
+	public function getFileDetails($hostDetails, $filename)
+	{
+		// get a client
+		$client = $this->getClient($this->st, $hostDetails);
+
+		// upload our Python script to help us out here
+		$rand = rand(0, 999999);
+		$destFilename = "/tmp/st-{$rand}.py";
+		$client->uploadFile(__DIR__ . "/path_helper.py", $destFilename);
+
+		// run the script to inspect the filename
+		$statCommand = "python {$destFilename} {$filename}";
+		$result = $client->runCommand($statCommand);
+
+		// did it work?
+		if ($result->returnCode != 0) {
+			return null;
 		}
-
-		// if we get here, we need to make a new client
-		$sshClient = new SshClient($this->st, $hostDetails->sshOptions);
-		$sshClient->setIpAddress($hostDetails->ipAddress);
-		$sshClient->setSshUsername($hostDetails->sshUsername);
-
-		if (isset($hostDetails->sshKey)) {
-			$sshClient->setSshKey($hostDetails->sshKey);
-		}
+		$retval = json_decode($result->output);
 
 		// all done
-		$this->sshClients[$name] = $sshClient;
-		return $sshClient;
+		return $retval;
 	}
 }

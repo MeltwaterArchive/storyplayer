@@ -43,10 +43,8 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
-
 /**
- * Exception thrown when a required argument is not provided
+ * Placeholder for backwards compatibility.
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -55,13 +53,6 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_MissingArgument extends Exxx_Exception
+class E4xx_MissingArgument extends \Prose\E4xx_MissingArgument
 {
-	public function __construct($method, $reason = '', $params = array()) {
-		$msg = "Missing argument in '$method'";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
-		}
-		parent::__construct(400, $msg, $msg);
-	}
 }

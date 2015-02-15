@@ -1,7 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -12,11 +10,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Pages')
          ->called('Can retrieve a heading by ID');
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -42,15 +36,15 @@ $story = newStoryFor('Storyplayer Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
     // load our test page
-    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
 
     // get a h2 by its ID
-    $checkpoint->content = $st->fromBrowser()->getText()->fromHeadingWithId('self_test_website');
+    $checkpoint->content = fromBrowser()->getText()->fromHeadingWithId('self_test_website');
 });
 
 // ========================================================================
@@ -59,11 +53,11 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// do we have the content we expected?
-	$st->assertsObject($checkpoint)->hasAttribute('content');
-	$st->assertsString($checkpoint->content)->equals("Self-Test Website");
+	assertsObject($checkpoint)->hasAttribute('content');
+	assertsString($checkpoint->content)->equals("Self-Test Website");
 });

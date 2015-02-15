@@ -1,7 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -12,11 +10,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Pages')
          ->called('Can see inside iFrames');
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -42,21 +36,21 @@ $story = newStoryFor('Storyplayer Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
     // load our test page
-    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithIFrames.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithIFrames.html');
 
     // get a h1
-    $checkpoint->mainHeader = $st->fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
+    $checkpoint->mainHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
 
     // switch to the iFrame
-    $st->usingBrowser()->switchToIframe('iframe1');
+    usingBrowser()->switchToIframe('iframe1');
 
     // get the h1 now
-    $checkpoint->iFrameHeader = $st->fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
+    $checkpoint->iFrameHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
 });
 
 // ========================================================================
@@ -65,14 +59,14 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// do we have the content we expected?
-	$st->assertsObject($checkpoint)->hasAttribute('mainHeader');
-	$st->assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With IFrames");
+	assertsObject($checkpoint)->hasAttribute('mainHeader');
+	assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With IFrames");
 
-	$st->assertsObject($checkpoint)->hasAttribute('iFrameHeader');
-	$st->assertsString($checkpoint->iFrameHeader)->equals("IFrame Content");
+	assertsObject($checkpoint)->hasAttribute('iFrameHeader');
+	assertsString($checkpoint->iFrameHeader)->equals("IFrame Content");
 });

@@ -43,9 +43,11 @@
 
 namespace DataSift\Storyplayer\ProvisioningLib\Provisioners;
 
+use DataSift\Storyplayer\CommandLib\CommandResult;
+use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
+use Prose\E5xx_ActionFailed;
 
 /**
  * support for provisioning via Ansible
@@ -65,7 +67,41 @@ class AnsibleProvisioner extends Provisioner
 		$this->st = $st;
 	}
 
-	public function provisionHosts(ProvisioningDefinition $hosts)
+	public function buildDefinitionFor($env)
+	{
+		// our return value
+		$provDef = new ProvisioningDefinition;
+
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("build Ansible provisioning definition");
+
+		// add in each machine in the environment
+		foreach ($env->details->machines as $hostId => $machine) {
+			$st->usingProvisioningDefinition($provDef)->addHost($hostId);
+
+			foreach ($machine->roles as $role) {
+				$st->usingProvisioningDefinition($provDef)->addRole($role)->toHost($hostId);
+			}
+
+			if (isset($machine->params)) {
+				$params = [];
+				foreach ($machine->params as $paramName => $paramValue) {
+					$params[$paramName]  = $st->fromTestEnvironment()->getSetting('hosts.' . $hostId . '.params.'.$paramName);
+				}
+				if (count($params)) {
+					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($hostId);
+				}
+			}
+		}
+
+		// all done
+		return $provDef;
+	}
+
+	public function provisionHosts(ProvisioningDefinition $hosts, $provConf)
 	{
 		// shorthand
 		$st = $this->st;
@@ -74,15 +110,15 @@ class AnsibleProvisioner extends Provisioner
 		$log = $st->startAction("use Ansible to provision host(s)");
 
 		// get our ansible configuration
-		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
+		$ansibleSettings = $st->fromTestEnvironment()->getSetting('storyplayer.modules.ansible');
 
 		// our reverse list of roles => hosts
 		$rolesToHosts = array();
 
 		// build up the list of roles
-		foreach($hosts as $hostName => $hostProps) {
+		foreach($hosts as $hostId => $hostProps) {
 			// what is the host's IP address?
-			$ipAddress   = $st->fromHost($hostName)->getIpAddress();
+			$ipAddress   = $st->fromHost($hostId)->getIpAddress();
 
 			// add the host to the required roles
 			if (isset($hostProps->roles)) {
@@ -119,11 +155,11 @@ class AnsibleProvisioner extends Provisioner
 		$inventoryFolder = dirname($inventoryFile);
 
 		// now we need to write out the host files
-		foreach($hosts as $hostName => $hostProps) {
+		foreach($hosts as $hostId => $hostProps) {
 			// what is the host's IP address?
-			$ipAddress   = $st->fromHost($hostName)->getIpAddress();
-			$sshUsername = $st->fromHost($hostName)->getSshUsername();
-			$sshKeyFile  = $st->fromHost($hostName)->getSshKeyFile();
+			$ipAddress   = $st->fromHost($hostId)->getIpAddress();
+			$sshUsername = $st->fromHost($hostId)->getSshUsername();
+			$sshKeyFile  = $st->fromHost($hostId)->getSshKeyFile();
 
 			// do we have any vars to write?
 			if (!isset($hostProps->params) || $hostProps->params === null || (is_array($hostProps) && count($hostProps) == 0)) {
@@ -151,7 +187,8 @@ class AnsibleProvisioner extends Provisioner
 		// if there's an ansible.cfg in the root of the playbook :(
 		$cwd = getcwd();
 		chdir($ansibleSettings->dir);
-		$result = $st->usingShell()->runCommand($command);
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($st, $command);
 		chdir($cwd);
 
 		// what happened?
@@ -163,6 +200,9 @@ class AnsibleProvisioner extends Provisioner
 		$log->endAction();
 	}
 
+	/**
+	 * @param string $inventoryFolder
+	 */
 	protected function removeHostVarsFile($inventoryFolder, $ipAddress)
 	{
 		// shorthand
@@ -186,6 +226,9 @@ class AnsibleProvisioner extends Provisioner
 		// all done
 	}
 
+	/**
+	 * @param string $inventoryFolder
+	 */
 	protected function writeHostVarsFile($inventoryFolder, $ipAddress, $vars)
 	{
 		// shorthand
@@ -210,6 +253,11 @@ class AnsibleProvisioner extends Provisioner
 		$log->endAction("written to file '{$filename}'");
 	}
 
+	/**
+	 * @param string $inventory
+	 *
+	 * @return string
+	 */
 	protected function writeInventoryFile($inventory)
 	{
 		// shorthand
@@ -229,33 +277,36 @@ class AnsibleProvisioner extends Provisioner
 		return $filename;
 	}
 
-	protected function getHostVarsFilename($inventoryFolder, $hostName)
+	/**
+	 * @param string $inventoryFolder
+	 */
+	protected function getHostVarsFilename($inventoryFolder, $hostId)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine host_vars filename for '{$hostName}'");
+		$log = $st->startAction("determine host_vars filename for host '{$hostId}'");
 
 		// get our ansible settings
-		$ansibleSettings = $st->fromEnvironment()->getAppSettings('ansible');
+		$ansibleSettings = $st->fromTestEnvironment()->getSetting('storyplayer.modules.ansible');
 
 		// get our inventory folder
 		$invFolder = $this->getInventoryFolder($ansibleSettings, $inventoryFolder);
 
 		// what is the path to the file?
-		$filename = $invFolder . DIRECTORY_SEPARATOR . 'host_vars' . DIRECTORY_SEPARATOR . $hostName;
+		$filename = $invFolder . DIRECTORY_SEPARATOR . 'host_vars' . DIRECTORY_SEPARATOR . $hostId;
 
 		// all done
 		$log->endAction("filename is: " . $filename);
 		return $filename;
 	}
 
+	/**
+	 * @param string $inventoryFolder
+	 */
 	protected function getInventoryFolder($ansibleSettings, $inventoryFolder)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// is there an Ansible.cfg file?
 		$cfgFile = $ansibleSettings->dir . DIRECTORY_SEPARATOR . 'ansible.cfg';
 

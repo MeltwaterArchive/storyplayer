@@ -1,7 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -12,11 +10,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Pages')
          ->called('Can open remote web page');
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -42,15 +36,15 @@ $story = newStoryFor('Storyplayer Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
     // load our test page
-    $st->usingBrowser()->gotoPage("http://news.bbc.co.uk");
+    usingBrowser()->gotoPage("http://news.bbc.co.uk");
 
     // get the title of the test page
-    $checkpoint->title = $st->fromBrowser()->getTitle();
+    $checkpoint->title = fromBrowser()->getTitle();
 });
 
 // ========================================================================
@@ -59,11 +53,11 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// do we have the title we expected?
-	$st->assertsObject($checkpoint)->hasAttribute('title');
-	$st->assertsString($checkpoint->title)->equals("BBC News - Home");
+	assertsObject($checkpoint)->hasAttribute('title');
+	assertsString($checkpoint->title)->equals("BBC News - Home");
 });

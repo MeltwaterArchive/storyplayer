@@ -43,10 +43,12 @@
 
 namespace DataSift\Storyplayer\Prose;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Prose\Prose as BaseProse;
 
 /**
- * base class for all Prose classes
+ * left here for backwards-compatibility
+ *
+ * all new Prose modules should extend 'Prose/Prose' directly
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -55,109 +57,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Prose
+class Prose extends BaseProse
 {
-	protected $st = null;
-	protected $args = array();
-	protected $topElement = null;
-	protected $topXpath   = null;
-	protected $device     = null;
 
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// save the StoryTeller object; we're going to need it!
-		$this->st = $st;
-
-		// save any arguments that have been passed into the constructor
-		// our child classes may be interested in them
-		if (!is_array($args)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$this->args = $args;
-
-		// setup the page context
-		$this->initPageContext();
-
-		// run any context-specific setup that we need
-		$this->initActions();
-	}
-
-	protected function initPageContext()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// make sure we are looking at the right part of the page
-		$pageContext = $st->getPageContext();
-		$pageContext->switchToContext($st);
-	}
-
-	/**
-	 * override this method if required (for example, for web browsers)
-	 *
-	 * @return void
-	 */
-	protected function initActions()
-	{
-	}
-
-	protected function initDevice()
-	{
-		// start the test device
-		$this->device = $this->st->getRunningDevice();
-
-		// set our top XPATH node
-		//
-		// for the moment, we are assuming that the test device is
-		// a web browser, because historically this has always been
-		// the case
-		//
-		// when this assumption is no longer valid, we will need to
-		// revisit this code
-		$this->setTopXpath("//html");
-
-		// set our top element
-		//
-		// we cannot assume that the browser has any DOM loaded at all
-		$this->setTopElement($this->device);
-	}
-
-	public function __call($methodName, $params)
-	{
-		// this only gets called if there's no matching method
-		throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
-	}
-
-	public function getTopElement()
-	{
-		return $this->topElement;
-	}
-
-	public function setTopElement($element)
-	{
-		$this->topElement = $element;
-	}
-
-	protected function getTopXpath()
-	{
-		return $this->topXpath;
-	}
-
-	protected function setTopXpath($xpath)
-	{
-		$this->topXpath = $xpath;
-	}
-
-	// ====================================================================
-	//
-	// Convertors go here
-	//
-	// --------------------------------------------------------------------
-
-	public function toNum($string)
-	{
-		$final = str_replace(array(',', '$', ' '), '', $string);
-
-		return (double)$final;
-	}
 }

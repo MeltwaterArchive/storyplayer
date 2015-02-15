@@ -1,7 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -11,12 +9,6 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('UUID')
          ->called('Can generate UUIDs using PECL extension');
-
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
 
 // ========================================================================
 //
@@ -30,9 +22,9 @@ $story = newStoryFor('Storyplayer Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->setPreTestPrediction(function(StoryTeller $st) {
+$story->addPreTestPrediction(function() {
 	// do we have the UUID extension installed?
-	$st->expectsUuid()->requirementsAreMet();
+	expectsUuid()->requirementsAreMet();
 });
 
 // ========================================================================
@@ -47,12 +39,12 @@ $story->setPreTestPrediction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// create a UUID
-	$checkpoint->uuid = $st->fromUuid()->generateUuid();
+	$checkpoint->uuid = fromUuid()->generateUuid();
 });
 
 // ========================================================================
@@ -61,11 +53,11 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// do we have the content we expected?
-	$st->assertsObject($checkpoint)->hasAttribute('uuid');
-	$st->assertsString($checkpoint->uuid)->isUuid();
+	assertsObject($checkpoint)->hasAttribute('uuid');
+	assertsString($checkpoint->uuid)->isUuid();
 });

@@ -48,8 +48,8 @@ use Exception;
 use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 use DataSift\Stone\ObjectLib\BaseObject;
+use Prose\E5xx_ActionFailed;
 
 /**
  * the things you can do / learn about EC2 virtual machine
@@ -63,14 +63,28 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class Ec2Vm implements SupportedHost
 {
+	/**
+	 *
+	 * @var StoryTeller
+	 */
 	protected $st;
 
+	/**
+	 *
+	 * @param StoryTeller $st
+	 */
 	public function __construct(StoryTeller $st)
 	{
 		// remember
 		$this->st = $st;
 	}
 
+	/**
+	 *
+	 * @param  Ev2VmDetails $vmDetails
+	 * @param  array        $provisioningVars
+	 * @return void
+	 */
 	public function createHost($vmDetails, $provisioningVars = array())
 	{
 		// shorthand
@@ -87,21 +101,21 @@ class Ec2Vm implements SupportedHost
 		}
 
 		// because EC2 is a shared resource, our VMs need namespacing
-		$vmDetails->ec2Name = $vmDetails->environment . '.' . $vmDetails->name;
+		$vmDetails->ec2Name = $vmDetails->environment . '.' . $vmDetails->hostId;
 
 		// get our Ec2 client from the SDK
 		$client = $st->fromAws()->getEc2Client();
 
 		// make sure the VM is stopped, if it is running
 		$log->addStep("stop EC2 VM '{$vmDetails->ec2Name}' if already running", function() use($st, $vmDetails, $client) {
-			if ($st->fromEc2Instance($vmDetails->name)->getInstanceisRunning()) {
+			if ($st->fromEc2Instance($vmDetails->hostId)->getInstanceisRunning()) {
 				// stop the host
-				$st->usingEc2()->destroyVm($vmDetails->name);
+				$st->usingEc2()->destroyVm($vmDetails->hostId);
 			}
 		});
 
 		// remove any existing hosts table entry
-		$st->usingHostsTable()->removeHost($vmDetails->name);
+		$st->usingHostsTable()->removeHost($vmDetails->hostId);
 
 		// let's start the VM
 		$response = null;
@@ -162,7 +176,7 @@ class Ec2Vm implements SupportedHost
 		// yes it did!!
 		//
 		// remember this vm, now that it is running
-		$st->usingHostsTable()->addHost($vmDetails->name, $vmDetails);
+		$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
 
 		// now, we need its IP address
 		$ipAddress = $this->determineIpAddress($vmDetails);
@@ -179,6 +193,11 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function startHost($vmDetails)
 	{
 		// shorthand
@@ -242,6 +261,11 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully started; IP address is {$ipAddress}");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function stopHost($vmDetails)
 	{
 		// shorthand
@@ -295,6 +319,11 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully stopped");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function restartHost($vmDetails)
 	{
 		// shorthand
@@ -311,6 +340,11 @@ class Ec2Vm implements SupportedHost
 		$log->endAction("VM successfully restarted");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function powerOffHost($vmDetails)
 	{
 		// sadly, not supported by EC2
@@ -319,6 +353,11 @@ class Ec2Vm implements SupportedHost
 		return $this->stopHost($vmDetails);
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return void
+	 */
 	public function destroyHost($vmDetails)
 	{
 		// shorthand
@@ -358,35 +397,49 @@ class Ec2Vm implements SupportedHost
 		}
 
 		// if we get here, we need to forget about this VM
-		$st->usingHostsTable()->removeHost($vmDetails->name);
+		$st->usingHostsTable()->removeHost($vmDetails->hostId);
 
 		// all done
 		$log->endAction();
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @param  string $command
+	 * @return void
+	 */
 	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @param  string $command
+	 * @return void
+	 */
 	public function runCommandViaHostManager($vmDetails, $command)
 	{
 		throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return boolean
+	 */
 	public function isRunning($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine status of EC2 VM '{$vmDetails->name}'");
-
-		// get our Ec2 client from the SDK
-		$client = $st->fromAws()->getEc2Client();
+		$log = $st->startAction("determine status of EC2 VM '{$vmDetails->hostId}'");
 
 		// get the instance data
-		$instance = $st->fromEc2()->getInstance($vmDetails->name);
+		$instance = $st->fromEc2()->getInstance($vmDetails->hostId);
 		if (!$instance) {
 			$log->endAction("no such instance");
 			return false;
@@ -402,16 +455,21 @@ class Ec2Vm implements SupportedHost
 		return true;
 	}
 
+	/**
+	 *
+	 * @param  Ec2VmDetails $vmDetails
+	 * @return string
+	 */
 	public function determineIpAddress($vmDetails)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("determine IP address of EC2 VM '{$vmDetails->name}'");
+		$log = $st->startAction("determine IP address of EC2 VM '{$vmDetails->hostId}'");
 
 		// we need to get a fresh copy of the instance details
-		$dnsName = $st->fromEc2Instance($vmDetails->name)->getPublicDnsName();
+		$dnsName = $st->fromEc2Instance($vmDetails->hostId)->getPublicDnsName();
 
 		// do we have a DNS name?
 		if (!$dnsName) {

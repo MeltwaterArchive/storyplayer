@@ -43,18 +43,21 @@
 
 namespace DataSift\Storyplayer\OsLib;
 
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\HostLib\SupportedHost;
+
 /**
- * work with CentOS 6.x guest operating system
+ * support for Storyplayer testing against Centos6
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/OsLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Centos6 extends Centos5
+class Centos6 extends Remote_Centos6
 {
 
 }

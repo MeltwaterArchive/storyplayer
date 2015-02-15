@@ -3,11 +3,15 @@ chromedriver.log
 composer.lock
 composer.phar
 dist
+dsbuildparams.*
 etc
 .tmp
 nbproject
 review
 sauce_connect.log*
+.storyplayer/runtime*
+storyplayer.log
 vendor
 .idea
 *.iml
+.vagrant

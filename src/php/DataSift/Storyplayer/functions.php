@@ -41,8 +41,72 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-use DataSift\Storyplayer\StoryLib\Story;
-use DataSift\Storyplayer\Prose\E5xx_ProseException;
+use DataSift\Storyplayer\PlayerLib\Story;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Prose\E5xx_ActionFailed;
+use Prose\E5xx_ProseException;
+
+/**
+ * return the first element in an array
+ *
+ * this function avoids reset()ing the array, so it will not mess with
+ * any iteration that you may currently be part-way through
+ *
+ * @param  array $arrayToSearch
+ *         the array to get the first element of
+ * @return mixed
+ *         the first element of $array, or NULL if the array is empty
+ */
+function first($arrayToSearch)
+{
+	if (!is_array($arrayToSearch)) {
+		return null;
+	}
+
+	if (count($arrayToSearch) == 0) {
+		return null;
+	}
+
+	$keys = array_keys($arrayToSearch);
+	$key = reset($keys);
+
+	return $arrayToSearch[$key];
+}
+
+/**
+ * iterate over all hosts that match the given role
+ *
+ * @param  string $roleName
+ *         The role that we want
+ *
+ * @return string
+ *         a hostid that matches the role
+ */
+function hostWithRole($roleName)
+{
+	// special case
+	if ($roleName instanceof StoryTeller) {
+		throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
+	}
+
+	// shorthand
+	$st = StoryTeller::instance();
+
+	$listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+	if (!count(get_object_vars($listOfHosts))) {
+		throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+	}
+
+	// what are we doing?
+	$log = $st->startAction("for each host with role '{$roleName}' ... ");
+
+	foreach ($listOfHosts as $hostDetails) {
+		yield($hostDetails->hostId);
+	}
+
+	// all done
+	$log->endAction();
+}
 
 /**
  * Create a new story object
@@ -54,6 +118,10 @@ function newStoryFor($category)
 {
 	$story = new Story();
 	$story->setCategory($category);
+
+	// our output reports may need to know which file the story itself
+	// is defined in
+	$story->determineStoryFilename();
 
 	return $story;
 }

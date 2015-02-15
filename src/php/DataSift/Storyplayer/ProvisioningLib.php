@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use Prose\E5xx_ActionFailed;
 
 /**
  * provisioning adapter factory
@@ -57,6 +57,9 @@ use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
  */
 class ProvisioningLib
 {
+	/**
+	 * @param PlayerLib\StoryTeller $st
+	 */
 	static public function getProvisioner($st, $type)
 	{
 		// what are we looking for?

@@ -43,12 +43,8 @@
 
 namespace DataSift\Storyplayer\ProvisioningLib;
 
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\Prose\Prose;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\DataLib\DataPrinter;
-use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * Helper for creating provisioning definitions
@@ -62,6 +58,13 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class DelayedProvisioningDefinitionAction
 {
+	protected $st;
+	protected $def;
+	protected $action;
+
+	/**
+	 * @param \Closure $callback
+	 */
 	public function __construct(StoryTeller $st, ProvisioningDefinition $def, $callback)
 	{
 		// remember for later
@@ -70,17 +73,17 @@ class DelayedProvisioningDefinitionAction
 		$this->action = $callback;
 	}
 
-	public function toHost($hostName)
+	public function toHost($hostId)
 	{
 		// our embedded action does all the work
 		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		$action($this->st, $this->def, $hostId);
 	}
 
-	public function forHost($hostName)
+	public function forHost($hostId)
 	{
 		// our embedded action does all the work
 		$action = $this->action;
-		$action($this->st, $this->def, $hostName);
+		$action($this->st, $this->def, $hostId);
 	}
 }

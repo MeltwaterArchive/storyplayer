@@ -1,7 +1,5 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 // ========================================================================
 //
 // STORY DETAILS
@@ -12,11 +10,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Pages')
          ->called('Can switch between browser windows');
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -42,32 +36,31 @@ $story = newStoryFor('Storyplayer Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
     // load our test page
-    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithWindows.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithWindows.html');
 
     // get the h1
-    $checkpoint->mainHeader = $st->fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_windows');
+    $checkpoint->mainHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_windows');
 
     // open the second window
-    $st->usingBrowser()->click()->linkWithText('open a second window');
+    usingBrowser()->click()->linkWithText('open a second window');
 
     // switch to the second window
-    $st->usingBrowser()->switchToWindow("Storyplayer: Second Window");
+    usingBrowser()->switchToWindow("Storyplayer: Second Window");
 
     // get the h1
-    $checkpoint->secondHeader = $st->fromBrowser()->getText()->fromHeadingWithId('storyplayer_second_window');
+    $checkpoint->secondHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_second_window');
 
     // close the second window
     // this leaves the browser in a bit of a state
-    $st->usingBrowser()->closeCurrentWindow();
+    usingBrowser()->closeCurrentWindow();
 
     // switch back to the first window
-    $st->usingBrowser()->switchToWindow("Storyplayer: Working With Windows");
-    var_dump($st->fromBrowser()->getPageSource());
+    usingBrowser()->switchToWindow("Storyplayer: Working With Windows");
 });
 
 // ========================================================================
@@ -76,14 +69,14 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// do we have the content we expected?
-	$st->assertsObject($checkpoint)->hasAttribute('mainHeader');
-	$st->assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With Windows");
+	assertsObject($checkpoint)->hasAttribute('mainHeader');
+	assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With Windows");
 
-	$st->assertsObject($checkpoint)->hasAttribute('secondHeader');
-	$st->assertsString($checkpoint->secondHeader)->equals("Storyplayer: Second Window");
+	assertsObject($checkpoint)->hasAttribute('secondHeader');
+	assertsString($checkpoint->secondHeader)->equals("Storyplayer: Second Window");
 });

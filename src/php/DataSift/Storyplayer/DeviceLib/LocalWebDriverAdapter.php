@@ -61,27 +61,42 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 {
+	/**
+	 *
+	 * @param  StoryTeller $st
+	 * @return void
+	 */
 	public function start(StoryTeller $st)
 	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('enhancedReplies');
+		try {
+			$httpProxy = new BrowserMobProxyClient();
+			$httpProxy->enableFeature('enhancedReplies');
 
-		$this->proxySession = $httpProxy->createProxy();
+			$this->proxySession = $httpProxy->createProxy();
 
-		// start recording
-		$this->proxySession->startHAR();
+			// start recording
+			$this->proxySession->startHAR();
 
-		// create the browser session
-		$webDriver = new WebDriverClient();
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			array(
-				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			) + $this->browserDetails->desiredCapabilities
+			// create the browser session
+			$webDriver = new WebDriverClient();
+			$this->browserSession = $webDriver->newSession(
+				$this->browserDetails->browser,
+				array(
+					'proxy' => $this->proxySession->getWebDriverProxyConfig()
+				) + $this->browserDetails->desiredCapabilities
 
-		);
+			);
+		}
+		catch (Exception $e) {
+			// something went wrong
+			throw new E5xx_CannotStartDevice();
+		}
 	}
 
+	/**
+	 *
+	 * @return void
+	 */
 	public function stop()
 	{
 		// stop the web browser
@@ -104,6 +119,12 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 		}
 	}
 
+	/**
+	 *
+	 * @param  string $hostname
+	 * @param  string $url
+	 * @return string
+	 */
 	public function applyHttpBasicAuthForHost($hostname, $url)
 	{
 		// get the auth credentials

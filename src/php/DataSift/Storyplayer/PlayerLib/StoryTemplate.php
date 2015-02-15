@@ -42,7 +42,7 @@
  */
 namespace DataSift\Storyplayer\PlayerLib;
 
-use DataSift\Storyplayer\StoryLib\Story;
+use ReflectionObject;
 
 /**
  * Base class for reusable test environment setup/teardown instructions
@@ -84,9 +84,9 @@ class StoryTemplate
 	 * Helper methods to keep the Templates API in line with the phases
 	 */
 
-	public function hasTestEnvironmentSetup()
+	public function hasTestCanRunCheck()
 	{
-		return method_exists($this, 'testEnvironmentSetup');
+		return method_exists($this, 'testCanRunCheck');
 	}
 
 	public function hasTestSetup()
@@ -144,16 +144,9 @@ class StoryTemplate
 		return method_exists($this, 'testTeardown');
 	}
 
-	public function hasTestEnvironmentTeardown()
+	public function getTestCanRunCheck()
 	{
-		return method_exists($this, 'testEnvironmentTeardown');
-	}
-
-
-
-	public function getTestEnvironmentSetup()
-	{
-		return array($this, 'testEnvironmentSetup');
+		return array($this, 'testCanRunCheck');
 	}
 
 	public function getTestSetup()
@@ -211,9 +204,9 @@ class StoryTemplate
 		return array($this, 'testTeardown');
 	}
 
-	public function getTestEnvironmentTeardown()
-	{
-		return array($this, 'testEnvironmentTeardown');
-	}
-
+    public function getSourceFilename()
+    {
+        $refObj = new ReflectionObject($this);
+    	return $refObj->getFileName();
+    }
 }

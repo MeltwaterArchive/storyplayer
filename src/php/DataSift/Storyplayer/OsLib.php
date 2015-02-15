@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
-use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+use Prose\E5xx_ActionFailed;
 
 /**
  * host adapter factory
@@ -57,10 +57,21 @@ use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
  */
 class OsLib
 {
+	/**
+	 * @param PlayerLib\StoryTeller $st
+	 */
 	static public function getHostAdapter($st, $osName)
 	{
+
+		// Make sure that osName is capitalised correctly
+		$osNameFixed = array();
+		foreach (explode("_", $osName) as $part) {
+			$osNameFixed[] = ucfirst(strtolower($part));
+		}
+		$osName = implode("_", $osNameFixed);
+
 		// what are we looking for?
-		$className = 'DataSift\Storyplayer\OsLib\\' . ucfirst(strtolower($osName));
+		$className = 'DataSift\Storyplayer\OsLib\\' . $osName;
 
 		// does it exist?
 		if (!class_exists($className)) {

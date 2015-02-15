@@ -12,11 +12,7 @@ $story = newStoryFor('Storyplayer Service Stories')
          ->inGroup('Web Browsing')
          ->called('Can resize the web browser');
 
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
+$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -36,9 +32,9 @@ $story = newStoryFor('Storyplayer Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->addPreTestInspection(function(StoryTeller $st) {
+$story->addPreTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// what size do we expect?
 	$checkpoint->expectedDimensions = array(
@@ -53,24 +49,24 @@ $story->addPreTestInspection(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
     // load our test page
-    $st->usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
 
     // resize the window
-    $st->usingBrowser()->resizeCurrentWindow(
+    usingBrowser()->resizeCurrentWindow(
     	$checkpoint->expectedDimensions['width'],
     	$checkpoint->expectedDimensions['height']
     );
 
     // remember the new size for later
-    $checkpoint->actualDimensions = $st->fromBrowser()->getCurrentWindowSize();
+    $checkpoint->actualDimensions = fromBrowser()->getCurrentWindowSize();
 
     // did the browser change size?
-    $st->expectsBrowser()->currentWindowSizeIs(
+    expectsBrowser()->currentWindowSizeIs(
     	$checkpoint->expectedDimensions['width'],
     	$checkpoint->expectedDimensions['height']
     );
@@ -82,14 +78,14 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->setPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 
 	// do we have the dimensions at all?
-	$st->assertsObject($checkpoint)->hasAttribute('expectedDimensions');
-	$st->assertsObject($checkpoint)->hasAttribute('actualDimensions');
+	assertsObject($checkpoint)->hasAttribute('expectedDimensions');
+	assertsObject($checkpoint)->hasAttribute('actualDimensions');
 
 	// do they match?
-	$st->assertsArray($checkpoint->actualDimensions)->equals($checkpoint->expectedDimensions);
+	assertsArray($checkpoint->actualDimensions)->equals($checkpoint->expectedDimensions);
 });

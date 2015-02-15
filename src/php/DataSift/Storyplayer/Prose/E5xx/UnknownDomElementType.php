@@ -43,8 +43,7 @@
 namespace DataSift\Storyplayer\Prose;
 
 /**
- * Exception thrown when we can't work out what kind of DOM element you
- * want us to find
+ * Placeholder for backwards compatibility.
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -53,10 +52,6 @@ namespace DataSift\Storyplayer\Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_UnknownDomElementType extends E5xx_ProseException
+class E5xx_UnknownDomElementType extends \Prose\E5xx_UnknownDomElementType
 {
-	public function __construct($elementType) {
-		$msg = "Unknown DOM element type '{$elementType}'";
-		parent::__construct(500, $msg, $msg);
-	}
 }
