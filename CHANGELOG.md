@@ -1,9 +1,22 @@
 # Changelog
 
-## 2.1.0 - develop branch
+New features and non-urgent bug fixes will go into the `develop` branch. The `develop` branch will become the next minor release of Storyplayer.
+
+the `develop` branch will become:
+
+* v2.1.0
+* v2.2.0
+* v2.3.0
+
+... and so on.
+
+Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
+
+## 2.1.0 - `develop` branch
 
 ### New features:
-* Tests
+
+* None yet
 
 ### Fixes:
 
