@@ -114,6 +114,24 @@ class AssertionsBase extends Prose
 		throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
 	}
 
+	public function isSameAs(&$expected)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("check data isSameAs");
+
+		$result = $this->comparitor->isSameAs($expected);
+		if ($result->hasPassed()) {
+			$log->endAction();
+			return true;
+		}
+
+		// if we get here, then the comparison failed
+		throw new E5xx_ExpectFailed(__CLASS__ . "::isSameAs", $result->getExpected(), $result->getActual());
+	}
+
 	public function getComparitor()
 	{
 		return $this->comparitor;
