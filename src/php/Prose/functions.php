@@ -161,7 +161,7 @@ use Prose\UsingZookeeper;
  * @param  [type] $expected [description]
  * @return [type]           [description]
  */
-function assertsArray($expected)
+function assertsArray(&$expected)
 {
     return new AssertsArray(StoryTeller::instance(), [$expected]);
 }
