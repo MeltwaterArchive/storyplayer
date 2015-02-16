@@ -80,7 +80,7 @@ class UsingHttp extends Prose
 	/**
 	 * @param string $verb
 	 */
-	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array())
+	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array(), $timeout = null)
 	{
 		// shorthand
 		$st = $this->st;
@@ -129,6 +129,10 @@ class UsingHttp extends Prose
         if (!$validateSsl) {
         	$request->disableSslCertificateValidation();
         }
+
+	if ($timeout !== null) {
+		$request->setTimeout($timeout);
+	}
 
 		// make the call
 		$client = new HttpClient();
