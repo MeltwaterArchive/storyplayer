@@ -65,7 +65,7 @@ class Story
 
     /**
      * the group that this story belongs to
-     * @var string
+     * @var array<string>
      */
     protected $group;
 
@@ -270,8 +270,20 @@ class Story
     //
     // --------------------------------------------------------------------
 
+    /**
+     * which group of tests does this story belong to?
+     *
+     * @param  array|string $groupName
+     *         the group to use
+     * @return Story
+     *         $this for fluent interface
+     */
     public function inGroup($groupName)
     {
+        if (!is_array($groupName)) {
+            $parts = explode(" > ", $groupName);
+            $groupName = $parts;
+        }
         $this->setGroup($groupName);
 
         return $this;
@@ -363,11 +375,21 @@ class Story
      * The 'group' is the specific group _inside_ the category that the
      * user story belongs to.  The groups are specific to the category.
      *
-     * @return string the group that this story belongs to
+     * @return array<string> the group that this story belongs to
      */
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * return the story's group as a printable string
+     *
+     * @return string
+     */
+    public function getGroupAsString()
+    {
+        return implode(" > ", $this->group);
     }
 
     /**
@@ -391,6 +413,7 @@ class Story
      * The 'group' is the specific group _inside_ the category that the
      * user story belongs to.  The groups are specific to the category.
      *
+     * @param  array<string> $newGroup
      * @return Story  $this
      */
     public function setGroup($newGroup)
@@ -1161,7 +1184,7 @@ class Story
      */
     public function __toString()
     {
-        return $this->getCategory() . ' :: ' . $this->getGroup() . ' :: ' . $this->getName();
+        return $this->getCategory() . ' :: ' . $this->getGroupAsString() . ' :: ' . $this->getName();
     }
 
     // ==================================================================
