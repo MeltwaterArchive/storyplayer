@@ -16,7 +16,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 ### New features:
 
-* None yet
+* $story->inGroup() now supports an array, or a string using ' > ' as the delimiter
 
 ### Fixes:
 
