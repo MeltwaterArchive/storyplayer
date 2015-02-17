@@ -116,6 +116,9 @@ class Story_Player
 		// set default callbacks up
 		$story->setDefaultCallbacks();
 
+		// make sure we start with a brand new checkpoint
+		$st->setCheckpoint(new Story_Checkpoint($st));
+
 		// tell the outside world what we're doing
 		$activity = "Running story";
 		$name     = $story->getCategory() . ' > ' . $story->getGroup() . ' > ' . $story->getName();
