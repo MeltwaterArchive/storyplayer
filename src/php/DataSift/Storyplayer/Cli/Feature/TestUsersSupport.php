@@ -150,7 +150,7 @@ class Feature_TestUsersSupport implements Feature
             $st->setTestUsersFilename($filename);
         }
         catch (Exception $e) {
-            $output->logCliErrorWithException("could not load test users file '{$engine->testUsersFile}'", $e);
+            $output->logCliErrorWithException("could not load test users file '{$filename}'", $e);
             exit(1);
         }
     }
