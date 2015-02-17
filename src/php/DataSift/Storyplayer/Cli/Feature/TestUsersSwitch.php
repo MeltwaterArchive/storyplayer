@@ -86,7 +86,6 @@ class Feature_TestUsersSwitch extends CliSwitch
         // what is the required argument?
         $requiredArgMsg = "the JSON file containing the users";
         $this->setRequiredArg('<users-file>', $requiredArgMsg);
-        $this->setArgValidator(new Feature_TestUsersValidator);
 
         // all done
     }

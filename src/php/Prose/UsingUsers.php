@@ -85,12 +85,12 @@ class UsingUsers extends Prose
         if (!$raw || empty($raw)) {
             throw new E5xx_ActionFailed(__METHOD__, "cannot open file '{$filename}' or file is empty");
         }
-        $plainUsers = @json_decode($raw);
-        if (!$plainUsers) {
+        $plainUsers = json_decode($raw);
+        if ($plainUsers === null) {
             throw new E5xx_ActionFailed(__METHOD__, "file '{$filename}' contains invalid JSON");
         }
         if (!is_object($plainUsers)) {
-            throw new E5xx_ActionFailed(__METHOD__, "file '{$filename}' contains no test users");
+            throw new E5xx_ActionFailed(__METHOD__, "file '{$filename}' must contain a JSON object");
         }
 
         // merge these in with any users we have already loaded
