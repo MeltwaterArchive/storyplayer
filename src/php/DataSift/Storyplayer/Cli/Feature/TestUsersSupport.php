@@ -57,6 +57,7 @@ use DataSift\Storyplayer\Console\DevModeConsole;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\Injectables;
 use usingUsers;
+use Prose\E5xx_ActionFailed;
 
 /**
  * Support for loading / saving test user data from/to a config file
@@ -148,6 +149,11 @@ class Feature_TestUsersSupport implements Feature
         try {
             usingUsers()->loadUsersFromFile($filename);
             $st->setTestUsersFilename($filename);
+        }
+        catch (E5xx_ActionFailed $e) {
+            $output->logCliError("could not load test users file '{$filename}'");
+            $output->logCliError($e->getMessage());
+            exit(1);
         }
         catch (Exception $e) {
             $output->logCliErrorWithException("could not load test users file '{$filename}'", $e);
