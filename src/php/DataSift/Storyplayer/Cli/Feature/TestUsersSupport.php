@@ -129,11 +129,15 @@ class Feature_TestUsersSupport implements Feature
         // special case - file does not exist
         if (!file_exists($filename)) {
             $output->logCliWarning("test users file '{$filename}' not found");
+
+            // special case
             if ($isReadOnly) {
                 $output->logCliWarning("--read-only-users used; Storyplayer will NOT create this file on exit");
                 return;
             }
 
+            // general case
+            $output->logCliWarning("Storyplayer will create this file when it exits");
             $st->setTestUsersFilename($filename);
             return;
         }
