@@ -26,7 +26,8 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 Stories:
 
-* assertsArray() now covered
+* assertsArray() module now covered
+* assertsBoolean() module now covered
 
 Unit tests:
 
