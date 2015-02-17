@@ -31,6 +31,12 @@ Stories:
 
 Unit tests:
 
+## 2.0.1 - Tue 17th Feb, 2015
+
+### Fixes
+
+* Checkpoint: make sure each story starts with an empty checkpoint
+
 ## 2.0.0 - Sun 15th Feb, 2015
 
 Considered feature-complete / stable.
