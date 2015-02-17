@@ -51,11 +51,13 @@ use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
 use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
+use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\PlayerLib\E4xx_NoSuchReport;
 use DataSift\Storyplayer\Console\DevModeConsole;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\Injectables;
 use usingUsers;
+use Prose\E5xx_ActionFailed;
 
 /**
  * Support for loading / saving test user data from/to a config file
@@ -87,19 +89,24 @@ class Feature_TestUsersSupport implements Feature
         // shorthand
         $output = $injectables->output;
 
+        // do we *have* any users to load?
+        if (!isset($engine->options->testUsersFile)) {
+            // do nothing
+            return;
+        }
+
+        // understand what we are about to do
+        $filename = $engine->options->testUsersFile;
+        $isReadOnly = false;
+        if (isset($engine->options->readOnlyTestUsers) && $engine->options->readOnlyTestUsers) {
+            $isReadOnly = true;
+        }
+
         // go silent
         $output->setSilentMode();
 
-        // load the test file
-        try {
-            $users = usingUsers()->loadUsersFromFile($engine->options->testUsersFile);
-            $st->setTestUsers($users);
-            $st->setTestUsersFilename($engine->options->testUsersFile);
-        }
-        catch (Exception $e) {
-            $output->logCliErrorWithException("could not load test users file '{$engine->testUsersFile}'", $e);
-            exit(1);
-        }
+        // load the users
+        $this->loadTestFile($st, $output, $filename, $isReadOnly);
 
         // are we read-only?
         if (isset($engine->options->readOnlyTestUsers) && $engine->options->readOnlyTestUsers) {
@@ -115,5 +122,46 @@ class Feature_TestUsersSupport implements Feature
 
         // all done
         $output->resetSilentMode();
+    }
+
+    private function loadTestFile($st, $output, $filename, $isReadOnly)
+    {
+        // special case - file does not exist
+        if (!file_exists($filename)) {
+            $output->logCliWarning("test users file '{$filename}' not found");
+
+            // special case
+            if ($isReadOnly) {
+                $output->logCliWarning("--read-only-users used; Storyplayer will NOT create this file on exit");
+                return;
+            }
+
+            // general case
+            $output->logCliWarning("Storyplayer will create this file when it exits");
+            $st->setTestUsersFilename($filename);
+            return;
+        }
+
+        // special case - file is empty
+        if (filesize($filename) == 0) {
+            $output->logCliWarning("test users file '{$filename}' is empty");
+            $st->setTestUsersFilename($filename);
+            return;
+        }
+
+        // if we get here, we want to try and load the file
+        try {
+            usingUsers()->loadUsersFromFile($filename);
+            $st->setTestUsersFilename($filename);
+        }
+        catch (E5xx_ActionFailed $e) {
+            $output->logCliError("could not load test users file '{$filename}'");
+            $output->logCliError($e->getMessage());
+            exit(1);
+        }
+        catch (Exception $e) {
+            $output->logCliErrorWithException("could not load test users file '{$filename}'", $e);
+            exit(1);
+        }
     }
 }
