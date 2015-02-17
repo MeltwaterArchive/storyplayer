@@ -31,6 +31,17 @@ Stories:
 
 Unit tests:
 
+## 2.0.2 - Tue 17th Feb, 2015
+
+### Fixes
+
+The --users switch introduced in 2.0.0 should now work as originally intended.
+
+* no more fatal errors if --users switch not used
+* --users switch will create file if it does not exist
+* --users switch will accept an empty file
+* better warning and error messages around --users problems
+
 ## 2.0.1 - Tue 17th Feb, 2015
 
 ### Fixes
