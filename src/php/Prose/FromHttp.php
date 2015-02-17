@@ -98,7 +98,7 @@ class FromHttp extends Prose
 	}
 
 	if ($timeout !== null) {
-		$request->setTimeout($timeout);
+		$request->setReadTimeout($timeout);
 	}
 
 		// make the call
