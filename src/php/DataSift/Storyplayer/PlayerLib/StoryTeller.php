@@ -668,6 +668,7 @@ class StoryTeller
     public function setTestUsersFilename($filename)
     {
         $this->testUsersFilename = $filename;
+        $this->hasTestUsers = true;
     }
 
     /**
