@@ -141,6 +141,7 @@ class Feature_TestUsersSupport implements Feature
         if (filesize($filename) == 0) {
             $output->logCliWarning("test users file '{$filename}' is empty");
             $st->setTestUsersFilename($filename);
+            return;
         }
 
         // if we get here, we want to try and load the file
