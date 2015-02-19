@@ -39,6 +39,10 @@ where:
 
 You'll find our docs at [http://datasift.github.io/storyplayer](http://datasift.github.io/storyplayer/). They're currently a work-in-progress.
 
+## Community
+
+* [Storyplayer-dev group / mailing list](https://groups.google.com/d/forum/storyplayer-dev)
+
 ## Contributing
 
 Contributions are most welcome.
