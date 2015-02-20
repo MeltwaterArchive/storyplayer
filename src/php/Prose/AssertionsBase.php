@@ -98,6 +98,7 @@ class AssertionsBase extends Prose
 
 		// is the user trying to call a method that exists in our comparitor?
 		if (!method_exists($this->comparitor, $methodName)) {
+			$log->endAction("unsupported comparison '{$methodName}'");
 			throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
 		}
 
@@ -106,11 +107,12 @@ class AssertionsBase extends Prose
 
 		// was the comparison successful?
 		if ($result->hasPassed()) {
-			$log->endAction();
+			$log->endAction("assertion passed!");
 			return true;
 		}
 
 		// if we get here, then the comparison failed
+		$log->endAction("expected: " . $result->getExpected() . '; actual: ' . $result->getActual());
 		throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
 	}
 
