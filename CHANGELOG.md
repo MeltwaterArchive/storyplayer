@@ -21,6 +21,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 ### Fixes:
 
 * assertsDouble() now works (required fix in datasift/stone-1.9.6)
+* much better log messages from the Asserts module, especially when assertions fail
 
 ### Test coverage:
 
@@ -29,6 +30,7 @@ Stories:
 * assertsArray() module now covered
 * assertsBoolean() module now covered
 * assertsDouble() module now covered
+* assertsInteger() module now covered
 
 Unit tests:
 
