@@ -132,7 +132,7 @@ class UsingUsers extends Prose
 
         // save the contents
         $users = $st->getTestUsers();
-        file_put_contents($filename, json_encode($users));
+        file_put_contents($filename, json_encode($users, JSON_PRETTY_PRINT));
 
         // all done
         $count = count(get_object_vars($users));

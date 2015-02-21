@@ -20,8 +20,14 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 ### Fixes:
 
+Asserts Module:
+
 * assertsDouble() now works (required fix in datasift/stone-1.9.6)
 * much better log messages from the Asserts module, especially when assertions fail
+
+Users Module:
+
+* usingUsers::saveUsersToFile() now pretty-prints the JSON for easier maintenance
 
 ### Test coverage:
 
