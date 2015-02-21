@@ -26,6 +26,7 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
 	$checkpoint = getCheckpoint();
+	$checkpoint->test2Passed = false;
 
 	// this should pass
 	$goodData1 = true;

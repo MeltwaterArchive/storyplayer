@@ -26,6 +26,8 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
 	$checkpoint = getCheckpoint();
+	$checkpoint->test2Passed = false;
+	$checkpoint->test3Passed = false;
 
 	// this should pass
 	$testData1 = null;
