@@ -8,7 +8,7 @@
 
 $story = newStoryFor('Storyplayer')
          ->inGroup(['Modules', 'AssertsObject'])
-         ->called('Can check that two objects are equal');
+         ->called('Can check that two simple objects are equal');
 
 $story->requiresStoryplayerVersion(2);
 
