@@ -157,13 +157,15 @@ use Prose\UsingZmq;
 use Prose\UsingZookeeper;
 
 /**
- * [assertsArray description]
- * @param  [type] $expected [description]
- * @return [type]           [description]
+ * returns the AssertsArray module
+ *
+ * @param  array $actual
+ *         the array to be tested
+ * @return \Prose\AssertsArray
  */
-function assertsArray(&$expected)
+function assertsArray($actual)
 {
-    return new AssertsArray(StoryTeller::instance(), [$expected]);
+    return new AssertsArray(StoryTeller::instance(), [$actual]);
 }
 
 function assertsBoolean($expected)
