@@ -39,7 +39,7 @@ $story->addAction(function() {
 	// and these should fail
 	try {
 		$expectedData3 = 1;
-		assertsDouble($actualData)->isLessThanOrEqual2($expectedData3);
+		assertsDouble($actualData)->isLessThanOrEqualTo($expectedData3);
 	}
 	catch (Exception $e) {
 		$checkpoint->test3Passed = true;
