@@ -107,12 +107,12 @@ class AssertionsBase extends Prose
 
 		// was the comparison successful?
 		if ($result->hasPassed()) {
-			$log->endAction("assertion passed!");
+			$log->endAction("assertion passed! actual is " . $this->comparitor->getValueForLogMessage());
 			return true;
 		}
 
 		// if we get here, then the comparison failed
-		$log->endAction("expected: " . $result->getExpected() . '; actual: ' . $result->getActual());
+		$log->endAction("failed! expected: " . $result->getExpected() . '; actual: ' . $this->comparitor->getValueForLogMessage());
 		throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
 	}
 

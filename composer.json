@@ -25,7 +25,7 @@
 		"phix/autoloader": "4.*",
 		"phix/cliengine": ">=1.3.0",
 		"phix/validationlib": ">=4.2.0",
-		"datasift/stone": ">=1.9.6",
+		"datasift/stone": ">=1.9.7, <2.0.0",
 		"datasift/webdriver": ">=1.5.0",
 		"aws/aws-sdk-php": "2.*",
 		"datasift/netifaces": "*",
