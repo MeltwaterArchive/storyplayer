@@ -49,6 +49,24 @@ use DataSift\Stone\ComparisonLib\StringComparitor;
 /**
  * Assertions about the nature of, and contents of, strings
  *
+ * @method void isString()
+ * @method void endsWith(string $expected)
+ * @method void doesNotEndWith(string $expected)
+ * @method void isHash()
+ * @method void isUuid()
+ * @method void isValidJson()
+ * @method void isNotValidJson()
+ * @method void matchesRegex()
+ * @method void doesNotMatchRegex()
+ * @method void startsWith(string $expected)
+ * @method void doesNotStartWith(string $expected)
+ * @method void isIn(array $haystack)
+ * @method void equals(boolean $expected)
+ * @method void doesNotEqual(boolean $expected)
+ * @method void isEmpty()
+ * @method void isNull()
+ * @method void isNotNull()
+ *
  * @category  Libraries
  * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>

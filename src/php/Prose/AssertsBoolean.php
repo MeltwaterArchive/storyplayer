@@ -49,6 +49,15 @@ use DataSift\Stone\ComparisonLib\BooleanComparitor;
 /**
  * Assertions about the nature of, and contents of, booleans
  *
+ * @method void isBoolean()
+ * @method void isTrue()
+ * @method void isFalse()
+ * @method void equals(boolean $expected)
+ * @method void doesNotEqual(boolean $expected)
+ * @method void isEmpty()
+ * @method void isNull()
+ * @method void isNotNull()
+ *
  * @category  Libraries
  * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>

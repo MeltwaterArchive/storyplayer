@@ -49,6 +49,23 @@ use DataSift\Stone\ComparisonLib\ObjectComparitor;
 /**
  * Assertions about the nature of, and contents of, objects
  *
+ * @method void isObject()
+ * @method void hasAttribute(mixed $name)
+ * @method void hasAttributeWithValue(mixed $name, mixed $value)
+ * @method void doesNotHaveAttribute(mixed $name)
+ * @method void doesNotHaveAttributeWithValue(mixed $name, mixed $value)
+ * @method void isSameAs(object $expected)
+ * @method void isNotSameAs(object $expected)
+ * @method void hasMethod(string $methodName)
+ * @method void doesNotHaveMethod(string $methodName)
+ * @method void isInstanceOf(string $className)
+ * @method void isNotInstanceOf(string $className)
+ * @method void equals(boolean $expected)
+ * @method void doesNotEqual(boolean $expected)
+ * @method void isEmpty()
+ * @method void isNull()
+ * @method void isNotNull()
+ *
  * @category  Libraries
  * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
