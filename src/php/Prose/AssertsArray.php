@@ -49,7 +49,7 @@ use DataSift\Stone\ComparisonLib\ArrayComparitor;
 /**
  * Assertions about the nature of, and contents of, arrays
  *
- * @method void isArray(mixed $expected)
+ * @method void isArray()
  * @method void containsValue(mixed $value)
  * @method void doesNotContainValue(mixed $key)
  * @method void doesNotEqual(array $expected)
