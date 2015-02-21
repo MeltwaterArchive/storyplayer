@@ -389,4 +389,14 @@ class Story_Checkpoint
         // return the array that we've built
         return $return;
     }
+
+    /**
+     * get all the data held inside the checkpoint
+     *
+     * @return \stdClass
+     */
+    public function getData()
+    {
+        return (object)$this->data;
+    }
 }
