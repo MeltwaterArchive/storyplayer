@@ -107,17 +107,12 @@ class AssertionsBase extends Prose
 		$words = TextHelper::convertCamelCaseToWords($className);
 		if (isset($words[1])) {
 			$msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
-			if (isset($expected)) {
-				if (is_string($expected)) {
-					$msg .= " '" . $expected . "'";
-				}
-				else if (is_scalar($expected)) {
-					$msg .= ' ' . $expected;
-				}
-				else {
-					$printer = new DataPrinter;
-					$msg .= ' ' . $printer->convertToString($expected);
-				}
+			if (is_string($expected)) {
+				$msg .= " '" . $expected . "'";
+			}
+			else {
+				$printer = new DataPrinter;
+				$msg .= ' ' . $printer->convertToString($expected);
 			}
 		}
 		else {
