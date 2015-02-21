@@ -44,6 +44,8 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\Story_Checkpoint;
+use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\TextLib\TextHelper;
 
 /**
@@ -74,26 +76,7 @@ class AssertionsBase extends Prose
 		// what are we doing?
 		//
 		// let's try and make it a bit more useful to the reader
-		$className = get_class($this);
-		$className = preg_replace('/^.*[\\\\_]([A-Za-z0-9]+)$/', "$1", get_class($this));
-		$words = TextHelper::convertCamelCaseToWords($className);
-		if (isset($words[1])) {
-			$msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
-			if (isset($params[0])) {
-				if (is_string($params[0])) {
-					$msg .= " '" . $params[0] . "'";
-				}
-				else if (is_scalar($params[0])) {
-					$msg .= ' ' . $params[0];
-				}
-				else {
-					$msg .= ' ' . $st->convertDataForOutput($params[0]);
-				}
-			}
-		}
-		else {
-			$msg = "check data using $className::$methodName";
-		}
+		$msg = $this->getStartLogMessage($methodName, $params[0]);
 		$log = $st->startAction($msg);
 
 		// is the user trying to call a method that exists in our comparitor?
@@ -104,16 +87,61 @@ class AssertionsBase extends Prose
 
 		// if we get here, then there's a comparitor we can call
 		$result = call_user_func_array(array($this->comparitor, $methodName), $params);
+		$actualLogMsg = $this->getEndActualLogMessage();
 
 		// was the comparison successful?
 		if ($result->hasPassed()) {
-			$log->endAction("assertion passed! actual is " . $this->comparitor->getValueForLogMessage());
+			$log->endAction("assertion passed! actual is " . $actualLogMsg);
 			return true;
 		}
 
 		// if we get here, then the comparison failed
-		$log->endAction("failed! expected: " . $result->getExpected() . '; actual: ' . $this->comparitor->getValueForLogMessage());
+		$log->endAction("failed! expected: " . $result->getExpected() . '; actual: ' . $actualLogMsg);
 		throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
+	}
+
+	protected function getStartLogMessage($methodName, &$expected)
+	{
+		$className = get_class($this);
+		$className = preg_replace('/^.*[\\\\_]([A-Za-z0-9]+)$/', "$1", get_class($this));
+		$words = TextHelper::convertCamelCaseToWords($className);
+		if (isset($words[1])) {
+			$msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
+			if (isset($expected)) {
+				if (is_string($expected)) {
+					$msg .= " '" . $expected . "'";
+				}
+				else if (is_scalar($expected)) {
+					$msg .= ' ' . $expected;
+				}
+				else {
+					$printer = new DataPrinter;
+					$msg .= ' ' . $printer->convertToString($expected);
+				}
+			}
+		}
+		else {
+			$msg = "check data using $className::$methodName";
+		}
+
+		// all done
+		return $msg;
+	}
+
+	protected function getEndActualLogMessage()
+	{
+		// special case - our checkpoint object is a 'fake' object
+		$actual = $this->comparitor->getValue();
+
+		if ($actual instanceof Story_Checkpoint) {
+			$printer = new DataPrinter;
+			$actualLogMsg = $printer->convertToStringWithTypeInformation($actual->getData());
+		}
+		else {
+			$actualLogMsg = $this->comparitor->getValueForLogMessage();
+		}
+
+		return $actualLogMsg;
 	}
 
 	public function isSameAs(&$expected)
@@ -122,15 +150,19 @@ class AssertionsBase extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("check data isSameAs");
+		$log = $st->startAction($this->getStartLogMessage('isSameAs', $expected));
 
 		$result = $this->comparitor->isSameAs($expected);
+		$actualLogMsg = $this->getEndActualLogMessage();
+
+		// was the comparison successful?
 		if ($result->hasPassed()) {
-			$log->endAction();
+			$log->endAction("assertion passed! actual is " . $actualLogMsg);
 			return true;
 		}
 
 		// if we get here, then the comparison failed
+		$log->endAction("failed! expected: " . $result->getExpected() . '; actual: ' . $actualLogMsg);
 		throw new E5xx_ExpectFailed(__CLASS__ . "::isSameAs", $result->getExpected(), $result->getActual());
 	}
 
@@ -140,15 +172,19 @@ class AssertionsBase extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("check data isNotSameAs");
+		$log = $st->startAction($this->getStartLogMessage("isNotSameAs", $expected));
 
 		$result = $this->comparitor->isNotSameAs($expected);
+		$actualLogMsg = $this->getEndActualLogMessage();
+
+		// was the comparison successful?
 		if ($result->hasPassed()) {
-			$log->endAction();
+			$log->endAction("assertion passed! actual is " . $actualLogMsg);
 			return true;
 		}
 
 		// if we get here, then the comparison failed
+		$log->endAction("failed! expected: " . $result->getExpected() . '; actual: ' . $actualLogMsg);
 		throw new E5xx_ExpectFailed(__CLASS__ . "::isNotSameAs", $result->getExpected(), $result->getActual());
 	}
 
