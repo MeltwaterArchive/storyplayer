@@ -144,50 +144,6 @@ class AssertionsBase extends Prose
 		return $actualLogMsg;
 	}
 
-	public function isSameAs(&$expected)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction($this->getStartLogMessage('isSameAs', $expected));
-
-		$result = $this->comparitor->isSameAs($expected);
-		$actualLogMsg = $this->getEndActualLogMessage();
-
-		// was the comparison successful?
-		if ($result->hasPassed()) {
-			$log->endAction("assertion passed! actual is " . $actualLogMsg);
-			return true;
-		}
-
-		// if we get here, then the comparison failed
-		$log->endAction("failed! expected: " . $result->getExpected() . '; actual: ' . $actualLogMsg);
-		throw new E5xx_ExpectFailed(__CLASS__ . "::isSameAs", $result->getExpected(), $result->getActual());
-	}
-
-	public function isNotSameAs(&$expected)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction($this->getStartLogMessage("isNotSameAs", $expected));
-
-		$result = $this->comparitor->isNotSameAs($expected);
-		$actualLogMsg = $this->getEndActualLogMessage();
-
-		// was the comparison successful?
-		if ($result->hasPassed()) {
-			$log->endAction("assertion passed! actual is " . $actualLogMsg);
-			return true;
-		}
-
-		// if we get here, then the comparison failed
-		$log->endAction("failed! expected: " . $result->getExpected() . '; actual: ' . $actualLogMsg);
-		throw new E5xx_ExpectFailed(__CLASS__ . "::isNotSameAs", $result->getExpected(), $result->getActual());
-	}
-
 	public function getComparitor()
 	{
 		return $this->comparitor;
