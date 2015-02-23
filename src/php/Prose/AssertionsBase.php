@@ -76,8 +76,10 @@ class AssertionsBase extends Prose
 		// what are we doing?
 		//
 		// let's try and make it a bit more useful to the reader
-		$msg = $this->getStartLogMessage($methodName, $params[0]);
+		$msg = $this->getStartLogMessage($methodName, $params);
 		$log = $st->startAction($msg);
+		$actual4Log = $this->getActualDataForLog();
+		usingLog()->writeToLog("checking data: " . $actual4Log);
 
 		// is the user trying to call a method that exists in our comparitor?
 		if (!method_exists($this->comparitor, $methodName)) {
@@ -87,43 +89,46 @@ class AssertionsBase extends Prose
 
 		// if we get here, then there's a comparitor we can call
 		$result = call_user_func_array(array($this->comparitor, $methodName), $params);
-		$actualLogMsg = $this->getEndActualLogMessage();
 
 		// was the comparison successful?
 		if ($result->hasPassed()) {
-			$log->endAction("assertion passed! actual is " . $actualLogMsg);
+			$log->endAction("assertion passed!");
 			return true;
 		}
 
 		// if we get here, then the comparison failed
-		$log->endAction("failed! expected: " . $result->getExpected() . '; actual: ' . $actualLogMsg);
+		usingLog()->writeToLog("expected outcome: " . $result->getExpected());
+		usingLog()->writeToLog("actual   outcome: " . $result->getActual());
+		$log->endAction("assertion failed!");
 		throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
 	}
 
-	protected function getStartLogMessage($methodName, &$expected)
+	protected function getStartLogMessage($methodName, $params)
 	{
-		$className = get_class($this);
 		$className = preg_replace('/^.*[\\\\_]([A-Za-z0-9]+)$/', "$1", get_class($this));
 		$words = TextHelper::convertCamelCaseToWords($className);
 		if (isset($words[1])) {
 			$msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
+		}
+		else {
+			$msg = "check data using $className::$methodName";
+		}
+
+		foreach ($params as $expected) {
 			if (is_string($expected)) {
 				$msg .= " '" . $expected . "'";
 			}
 			else {
 				$printer = new DataPrinter;
-				$msg .= ' ' . $printer->convertToString($expected);
+				$msg .= ' ' . $printer->convertToStringWithTypeInformation($expected);
 			}
-		}
-		else {
-			$msg = "check data using $className::$methodName";
 		}
 
 		// all done
 		return $msg;
 	}
 
-	protected function getEndActualLogMessage()
+	protected function getActualDataForLog()
 	{
 		// special case - our checkpoint object is a 'fake' object
 		$actual = $this->comparitor->getValue();
