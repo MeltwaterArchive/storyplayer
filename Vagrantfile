@@ -9,11 +9,15 @@ Vagrant::Config.run do |config|
   config.vm.boot_mode = :gui
 
   # enable bridged networking
-  config.vm.network :bridged, :bridge=>ENV["VIRTUALBOX_BRIDGE_ADAPTER"]
+  #config.vm.network :bridged, :bridge=>ENV["VIRTUALBOX_BRIDGE_ADAPTER"]
+
 end
 
 # provider-specfic configuration
 Vagrant.configure("2") do |config|
+  # enable private networking
+  config.vm.network "private_network", type: "dhcp"
+
   config.vm.provider :virtualbox do |vb|
     # enable 4 CPUs by default
   	vb.customize ["modifyvm", :id, "--cpus", "2", "--memory", "2048"]
