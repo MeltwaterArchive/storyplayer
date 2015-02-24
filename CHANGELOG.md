@@ -23,6 +23,8 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 Asserts Module:
 
 * assertsDouble() now works (required fix in datasift/stone-1.9.6)
+* assertsObject() now works with IteratorAggregate objects
+* assertsString() no longer throws fatal errors when fed arrays or objects
 * much better log messages from the Asserts module, especially when assertions fail
 
 Users Module:
@@ -37,6 +39,8 @@ Stories:
 * assertsBoolean() module now covered
 * assertsDouble() module now covered
 * assertsInteger() module now covered
+* assertsObject() module now covered
+* assertsString() module now covered
 
 Unit tests:
 
