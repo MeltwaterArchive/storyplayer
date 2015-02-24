@@ -44,6 +44,7 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\Story_Checkpoint;
 use DataSift\Stone\ComparisonLib\ObjectComparitor;
 
 /**
