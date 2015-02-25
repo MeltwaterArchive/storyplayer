@@ -487,11 +487,36 @@ function fromUuid()
     return new FromUuid(StoryTeller::instance());
 }
 
+
+/**
+ * return the Checkpoint object
+ *
+ * The Checkpoint is a 'data bag' - an object that you can store anything
+ * you like it. It's the only way for you to share any data or variables
+ * between the different phases of your story.
+ *
+ * Once you have the checkpoint, simply get and set properties on the object.
+ *
+ * You can also use the Asserts module on the checkpoint.
+ *
+ * @return \DataSift\Storyplayer\PlayerLib\Story_Checkpoint
+ */
 function getCheckpoint()
 {
     return StoryTeller::instance()->getCheckpoint();
 }
 
+/**
+ * shut down the running test device / web browser
+ *
+ * This function tells Storyplayer to shutdown your chosen web browser
+ * (chosen using the --device command-line switch).
+ *
+ * Storyplayer will normally shut down the test device for you. You should
+ * not need to call this from your own stories.
+ *
+ * @return void
+ */
 function stopDevice()
 {
     return StoryTeller::instance()->stopDevice();
