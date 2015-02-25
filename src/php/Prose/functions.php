@@ -497,146 +497,510 @@ function stopDevice()
     return StoryTeller::instance()->stopDevice();
 }
 
+/**
+ * returns the UsingBrowser module
+ *
+ * This module (along with the FromBrowser module) allows you to control a
+ * real web browser from your story.
+ *
+ * Internally, this module interacts with your chosen browser (you chose by
+ * using the --device command-line switch) using the Selenium WebDriver API.
+ *
+ * We've added a lot of helpful methods you can use to make it both quick
+ * and natural to control the web browser.
+ *
+ * @return \Prose\UsingBrowser
+ */
 function usingBrowser()
 {
     return new UsingBrowser(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingCheckpoint module
+ *
+ * This module is old SPv1 functionality. In practice, you'll want to call
+ * getCheckpoint() to retrieve the checkpoint, and then interact with that
+ * directly.
+ *
+ * This module will probably be removed in SPv3.
+ *
+ * @return \Prose\UsingCheckpoint
+ */
 function usingCheckpoint()
 {
     return new UsingCheckpoint(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingEc2 module
+ *
+ * This module provides support for creating, destroying, starting and
+ * stopping virtual machines on Amazon EC2. Once the machine has been started,
+ * you can interact with it using the FromHost() / UsingHost() module as
+ * normal.
+ *
+ * @return \Prose\UsingEc2
+ */
 function usingEc2()
 {
     return new UsingEc2(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingEc2Instance module
+ *
+ * This module provides support for making changes to an Amazon EC2 AMI.
+ * You can do the basics such as creating an AMI and editing its configuration.
+ *
+ * We hope to expand on what this module can do in a future release.
+ *
+ * If you're looking to start and stop EC2 instances, use a combination of
+ * UsingEc2 and UsingHost modules.
+ *
+ * @param  string $amiId
+ *         the AMI ID to work with
+ * @return \Prose\UsingEc2Instance
+ */
 function usingEc2Instance($amiId)
 {
     return new UsingEc2Instance(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingFile module
+ *
+ * This is an old SPv1 module that doesn't really do a lot. We'll shortly
+ * be introducing a new 'UsingFS' module that's much more capable. We'll
+ * probably remove the 'UsingFile' module in SPv3.
+ *
+ * @return \Prose\UsingFile
+ */
 function usingFile()
 {
     return new UsingFile(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingHost module, with its hostId already set to the first
+ * host in your test environment config file that has the given role.
+ *
+ * This module provides support for making your tests work on multiple
+ * test environments. Instead of hard-coding hostIds into your stories,
+ * use this module to find a host by its assigned role. That way, it doesn't
+ * matter how many hosts are in different environments, or if their hostIds
+ * are different.
+ *
+ * This module is normally used for testing write requests via APIs. You
+ * should be able to write once, and then read from all hosts to prove
+ * that the data was correctly written (and that there are no caching errors).
+ *
+ * To read from all hosts, you would use:
+ *
+ *     foreach(hostWithRole($roleName) as $hostId) { ... }
+ *
+ * @param  string $roleName
+ *         the assigned role you're looking for
+ * @return \Prose\UsingHost
+ */
 function usingFirstHostWithRole($roleName)
 {
     return new UsingFirstHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
+/**
+ * returns the UsingForm module
+ *
+ * This module provides support for working with a given form on a HTML page
+ * that's open in your browser. To use it, the form must have an 'id'
+ * attribute set. Targetting a form with an 'id' helps make your test more
+ * robust, especially if there are multiple forms on the same HTML page.
+ *
+ * Use the UsingBrowser module first to open the HTML page where the form is.
+ *
+ * @param  string $formId
+ *         the 'id' attribute of the HTML form to use
+ * @return \Prose\UsingForm
+ */
 function usingForm($formId)
 {
     return new UsingForm(StoryTeller::instance(), [$formId]);
 }
 
+/**
+ * returns the UsingHost module
+ *
+ * This module provides support for running commands on a computer in your
+ * test environment - basically for doing anything that's likely to change
+ * the state of that computer.
+ *
+ * In SPv1, it was common to call this module directly from your own stories.
+ * In SPv2, you're much more likely to use one of our multi-host modules or
+ * helpers (such as usingFirstHostWithRole) so that your stories are as
+ * test-environment-independent as possible.
+ *
+ * @param  string $hostId
+ *         the ID of the host to use
+ * @return \Prose\UsingHost
+ */
 function usingHost($hostId)
 {
     return new UsingHost(StoryTeller::instance(), [$hostId]);
 }
 
+/**
+ * returns the UsingHostsTable module
+ *
+ * This module provides access to Storyplayer's internal list of computers
+ * that are running in your test environment.
+ *
+ * This module is intended for internal use by Storyplayer. You should not
+ * need to call this module from your own stories.
+ *
+ * @return \Prose\UsingHostsTable
+ */
 function usingHostsTable()
 {
     return new UsingHostsTable(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingHttp module
+ *
+ * This module provides support for making PUT, POST and DELETE requests
+ * over HTTP (basically, any HTTP verb that should change state at the other
+ * end).
+ *
+ * SSL/TLS is fully supported.
+ *
+ * If you are using self-signed certificates, you will need to set
+ * 'moduleSettings.http.validateSsl = false' in your test environment's
+ * config file first.
+ *
+ * To make GET requests, use the FromHttp module.
+ *
+ * @return \Prose\UsingHttp
+ */
 function usingHttp()
 {
     return new UsingHttp(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingLog module
+ *
+ * This module provides support for writing to the storyplayer.log. You can
+ * use this in your own stories whenever you to need to add an extra log
+ * message, for example to make it really clear what is happening.
+ *
+ * @return \Prose\UsingLog
+ */
 function usingLog()
 {
     return new UsingLog(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingPDO module
+ *
+ * This module provides support for opening a PDO connection to a database
+ * such as MySQL. PDO is PHP's preferred way of working with SQL databases.
+ * Once you have an open connection, use the UsingPDODB module to execute
+ * SQL statements.
+ *
+ * @return \Prose\UsingPDO
+ */
 function usingPDO()
 {
     return new UsingPDO(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingPDODB module
+ *
+ * This module provides support for using an open PDO connection. PDO is
+ * PHP's preferred way of working with SQL databases such as MySQL. To open
+ * a connection, use the UsingPDO module first.
+ *
+ * @param  \PDO    $db
+ *         a PDO connection created by UsingPDO
+ * @return \Prose\UsingPDODB
+ */
 function usingPDODB(PDO $db)
 {
     return new UsingPDODB(StoryTeller::instance(), [$db]);
 }
 
+/**
+ * returns the UsingProcessesTable module
+ *
+ * This module provides access to Storyplayer's internal table of which
+ * child processes are currently running.  Storyplayer uses this table to
+ * make sure that these processes are terminated when a test run ends.
+ *
+ * This module is for internal use by Storyplayer. You shouldn't need to call
+ * this from your own stories.
+ *
+ * @return \Prose\UsingProcessesTable
+ */
 function usingProcessesTable()
 {
     return new UsingProcessesTable(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingProvisioning module
+ *
+ * This module provides support for creating a new provisioning definition,
+ * for use with the UsingProvisioningDefinition module.
+ *
+ * In SPv1, stories had to directly manage the provisioning of test
+ * environments. In SPv2, this is managed for you through the --targets
+ * switch.
+ *
+ * You shouldn't need to call this module directly from your stories, but
+ * we're leaving this functionality in just in case.
+ *
+ * It's likely that a future SPv2 release will add support for passing a
+ * PHP file to the --targets switch. I think this will be easier to use
+ * than the current JSON-based approach.
+ *
+ * @return \Prose\UsingProvisioning
+ */
 function usingProvisioning()
 {
     return new UsingProvisioning(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingProvisioningDefinition module
+ *
+ * This module provides support for building up a description of what needs
+ * provisioning onto which computer(s) in your test environment.
+ *
+ * In SPv1, stories had to build up this definition directly. In SPv2, this
+ * is managed for you through the --targets switch.
+ *
+ * You shouldn't need to call this module directly from your stories, but
+ * we're leaving this functionality in just in case.
+ *
+ * @param  ProvisioningDefinition $def
+ *         a provisioning definition created by UsingProvisioning
+ * @return \Prose\UsingProvisioningDefinition
+ */
 function usingProvisioningDefinition(ProvisioningDefinition $def)
 {
     return new UsingProvisioningDefinition(StoryTeller::instance(), [$def]);
 }
 
+/**
+ * returns the UsingProvisioningEngine module
+ *
+ * This module provides support for invoking a supported provisioning
+ * engine.
+ *
+ * Provisioning engines are used to install software into a test environment.
+ * In SPv1, stories had to control this directly. In SPv2, this is managed
+ * for you through the --targets switch.
+ *
+ * You shouldn't need to call this module directly from your stories, but
+ * we're leaving this functionality in just in case.
+ *
+ * @param  string $engine
+ *         the name of a supported provisioning engine
+ * @return \Prose\UsingProvisioningEngine
+ */
 function usingProvisioningEngine($engine)
 {
     return new UsingProvisioningEngine(StoryTeller::instance(), [$engine]);
 }
 
+/**
+ * returns the UsingRedis module
+ *
+ * This module provides support for opening connections to a Redis server.
+ * Once the connection is open, you can then use the UsingRedisConn module
+ * to work with the Redis server.
+ *
+ * Redis is a very popular key/value store (and a whole lot more) - it's a
+ * bit like Memcached on steroids :)
+ *
+ * @return \Prose\UsingRedis
+ */
 function usingRedis()
 {
     return new UsingRedis(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingRedisConn module
+ *
+ * This module provides support for working with a Redis server. Redis is
+ * a very popular key/value store (and a whole lot more) - it's a bit like
+ * Memcached on steroids :)
+ *
+ * To make a connection to Redis, use the UsingRedis module first.
+ *
+ * @param  PredisClient $client
+ *         a Redis client created by the UsingRedis module
+ * @return \Prose\UsingRedisConn
+ */
 function usingRedisConn(PredisClient $client)
 {
     return new UsingRedisConn(StoryTeller::instance(), [$client]);
 }
 
+/**
+ * returns the UsingReporting module
+ *
+ * This module was originally added to SPv1 as a way of logging that a
+ * particular Story phase was deliberately empty. In practice, it was rarely
+ * used. It will be removed in SPv3.
+ *
+ * @deprecated 2.1.0 old SPv1 functionality that isn't really needed
+ * @return \Prose\UsingReporting
+ */
 function usingReporting()
 {
     return new UsingReporting(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingRolesTable module
+ *
+ * This module provides access to Storyplayer's table of active roles in
+ * your test environment.
+ *
+ * This module is for internal use inside Storyplayer. You shouldn't need to
+ * use it from your own stories.
+ *
+ * @return \Prose\UsingRolesTable
+ */
 function usingRolesTable()
 {
     return new UsingRolesTable(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingRuntimeTable module
+ *
+ * This module provides access to Storyplayer's internal state, also known
+ * as the table of tables.
+ *
+ * This module is for internal use inside Storyplayer. You shouldn't need to
+ * use it from your own stories.
+ *
+ * @return \Prose\UsingRuntimeTable
+ */
 function usingRuntimeTable()
 {
     return new UsingRolesTable(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingRuntimeTableForTargetEnvironment module
+ *
+ * this module is for internal use inside Storyplayer
+ * you shouldn't need to use it from your own stories
+ *
+ * @return \Prose\UsingRuntimeTableForTargetEnvironment
+ */
 function usingRuntimeTableForTargetEnvironment()
 {
     return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingSauceLabs module
+ *
+ * At the moment, this module is a placeholder. We hope to add full support
+ * for the SauceLabs API soon.
+ *
+ * You can use the --device switch to run your tests using SauceLabs'
+ * platform today. Supported devices start with the prefix 'sl_'.
+ *
+ * @return \Prose\UsingSauceLabs
+ */
 function usingSauceLabs()
 {
     return new UsingSauceLabs(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingSavageD module
+ *
+ * This module provides support for controlling the SavageD data-gathering
+ * daemon via its REST API. SavageD is a great tool for realtime (to the
+ * second) monitoring of processes and memory in your test environment. It
+ * was originally built to help load test the DataSift platform.
+ *
+ * @return \Prose\UsingSavageD
+ */
 function usingSavageD()
 {
     return new UsingSavageD(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingShell module
+ *
+ * This module provides support for running commands via the UNIX shell.
+ * These commands will run on the same computer where Storyplayer is running.
+ *
+ * If you want to run commands on a computer in your test environment, you
+ * need the UsingHost module.
+ *
+ * @return \Prose\UsingShell
+ */
 function usingShell()
 {
     return new UsingShell(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingSupervisor module
+ *
+ * This module provides support for working the the Supervisor daemon on
+ * a host in your test environment. Supervisor is an increasingly popular
+ * solution for looking after network daemons.
+ *
+ * @param  string $hostId
+ *         the ID of the host you want to use Supervisor on
+ * @return \Prose\UsingSupervisor
+ */
 function usingSupervisor($hostId)
 {
     return new UsingSupervisor(StoryTeller::instance(), [$hostId]);
 }
 
+/**
+ * returns the UsingTargetsTable module
+ *
+ * This module provides access to Storyplayer's internal table of active
+ * test environments. It's intended for internal use by Storyplayer.
+ *
+ * You shouldn't need to call this module from your own stories.
+ *
+ * @return \Prose\UsingTargetsTable
+ */
 function usingTargetsTable()
 {
     return new UsingTargetsTable(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingTimer module
+ *
+ * This module provides useful helpers for when your story needs to pause
+ * or wait for something to happen. If you use these helpers in your stories,
+ * you'll get entries in storyplayer.log (and on the --dev console) telling
+ * you about these pauses and wait states.
+ *
+ * You don't get these log messages if you call PHP's sleep() directly from
+ * your story.
+ *
+ * @return \Prose\UsingTimer
+ */
 function usingTimer()
 {
     return new UsingTimer(StoryTeller::instance());
@@ -645,6 +1009,13 @@ function usingTimer()
 /**
  * returns the UsingUsers module
  *
+ * This module provides support for working with the test users loaded via
+ * the --users switch.
+ *
+ * Storyplayer uses this module internally to load and save the test users
+ * file. You can also load your own files directly from your stories if you
+ * need to.
+ *
  * @return \Prose\UsingUsers
  */
 function usingUsers()
@@ -652,16 +1023,46 @@ function usingUsers()
     return new UsingUsers(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingVagrant module
+ *
+ * This module provides support for working with Vagrant, the CLI tool for
+ * managing virtual machines locally and (increasingly) in the cloud
+ *
+ * A big change in Storyplayer v2 was to move responsibility for creating
+ * and destroying test environments out of stories, and into their own
+ * configuration files. As a result, it's unlikely you'll need to call this
+ * module from your own stories.
+ *
+ * @return \Prose\UsingVagrant
+ */
 function usingVagrant()
 {
     return new UsingVagrant(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingYamlFile module
+ *
+ * This module provides support for working with YAML format files.
+ *
+ * @param  string $filename
+ *         the filename to work with
+ * @return \Prose\UsingYamlFile
+ */
 function usingYamlFile($filename)
 {
     return new UsingYamlFile(StoryTeller::instance(), [$filename]);
 }
 
+/**
+ * returns the UsingZmq module
+ *
+ * This module provides support for working with ZeroMQ, the no-broker
+ * inter-process queuing library.
+ *
+ * @return \Prose\UsingZmq
+ */
 function usingZmq()
 {
     return new UsingZmq(StoryTeller::instance());
