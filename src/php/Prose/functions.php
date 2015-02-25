@@ -168,29 +168,64 @@ function assertsArray($actual)
     return new AssertsArray(StoryTeller::instance(), [$actual]);
 }
 
-function assertsBoolean($expected)
+/**
+ * returns the AssertsBoolean module
+ *
+ * @param  boolean $actual
+ *         the data to be tested
+ * @return \Prose\AssertsBoolean
+ */
+function assertsBoolean($actual)
 {
-    return new AssertsBoolean(StoryTeller::instance(), [$expected]);
+    return new AssertsBoolean(StoryTeller::instance(), [$actual]);
 }
 
-function assertsDouble($expected)
+/**
+ * returns the AssertsDouble module
+ *
+ * @param  double $actual
+ *         the data to be tested
+ * @return \Prose\AssertsDouble
+ */
+function assertsDouble($actual)
 {
-    return new AssertsDouble(StoryTeller::instance(), [$expected]);
+    return new AssertsDouble(StoryTeller::instance(), [$actual]);
 }
 
-function assertsInteger($expected)
+/**
+ * returns the AssertsInteger module
+ *
+ * @param  int $actual
+ *         the data to be tested
+ * @return \Prose\AssertsInteger
+ */
+function assertsInteger($actual)
 {
-    return new AssertsInteger(StoryTeller::instance(), [$expected]);
+    return new AssertsInteger(StoryTeller::instance(), [$actual]);
 }
 
-function assertsObject($expected)
+/**
+ * returns the AssertsObject module
+ *
+ * @param  object $actual
+ *         the data to be tested
+ * @return \Prose\AssertsObject
+ */
+function assertsObject($actual)
 {
-    return new AssertsObject(StoryTeller::instance(), [$expected]);
+    return new AssertsObject(StoryTeller::instance(), [$actual]);
 }
 
-function assertsString($expected)
+/**
+ * returns the AssertsString module
+ *
+ * @param  string $actual
+ *         the data to be tested
+ * @return \Prose\AssertsString
+ */
+function assertsString($actual)
 {
-    return new AssertsString(StoryTeller::instance(), [$expected]);
+    return new AssertsString(StoryTeller::instance(), [$actual]);
 }
 
 function cleanupHosts($key)
