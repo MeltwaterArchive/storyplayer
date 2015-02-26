@@ -332,141 +332,497 @@ function foreachHostWithRole($roleName)
     return new ForeachHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
+/**
+ * returns the FromAws module
+ *
+ * This module is used internally by Storyplayer to connect the Amazon EC2
+ * API, using the official Amazon SDK.
+ *
+ * If you're writing your own modules for working with EC2, then you should
+ * always create your EC2 client using this module.
+ *
+ * You shouldn't need to call this module from your stories.
+ *
+ * @return \Prose\FromAws
+ */
 function fromAws()
 {
     return new FromAws(StoryTeller::instance());
 }
 
+/**
+ * returns the FromBrowser module
+ *
+ * This module (along with the UsingBrowser module) allows you to control a
+ * real web browser from your story.
+ *
+ * Internally, this module interacts with your chosen browser (you chose by
+ * using the --device command-line switch) using the Selenium WebDriver API.
+ *
+ * We've added a lot of helpful methods you can use to make it both quick
+ * and natural to retrieve information from the HTML page that's currently
+ * open in the web browser.
+ *
+ * @return \Prose\FromBrowser
+ */
 function fromBrowser()
 {
     return new FromBrowser(StoryTeller::instance());
 }
 
+/**
+ * returns the FromCheckpoint module
+ *
+ * This module is old SPv1 functionality. In practice, you'll want to call
+ * getCheckpoint() to retrieve the checkpoint, and then interact with that
+ * directly.
+ *
+ * This module will probably be removed in SPv3.
+ *
+ * @return \Prose\FromCheckpoint
+ */
 function fromCheckpoint()
 {
     return new FromCheckpoint(StoryTeller::instance());
 }
 
+/**
+ * returns the FromConfig module
+ *
+ * This module provides access to Storyplayer's loaded config. This is a
+ * combination of your storyplayer.json[.dist] file and additional information
+ * about Storyplayer (such as the local computer's IP address) that are
+ * detected at runtime.
+ *
+ * @return \Prose\FromConfig
+ */
 function fromConfig()
 {
     return new FromConfig(StoryTeller::instance());
 }
 
+/**
+ * returns the FromCurl module
+ *
+ * This module provides support for making requests using cURL. cURL is the
+ * de facto standard library across all major languages for talking to HTTP
+ * servers.
+ *
+ * @return \Prose\FromCurl
+ */
 function fromCurl()
 {
     return new FromCurl(StoryTeller::instance());
 }
 
+/**
+ * returns the FromEc2 module
+ *
+ * This module provides support for querying Amazon's EC2.
+ *
+ * To start an EC2 virtual machine, call usingEc2().
+ *
+ * @return \Prose\FromEc2
+ */
 function fromEc2()
 {
     return new FromEc2(StoryTeller::instance());
 }
 
+/**
+ * returns the FromEc2Instance module
+ *
+ * This module provides support for querying an Amazon EC2 VM.
+ *
+ * To start an EC2 VM, call usingEc2() first.
+ *
+ * @param  string $amiId
+ *         the AMI ID that you want to work with
+ * @return \Prose\FromEnvironment
+ */
 function fromEc2Instance($amiId)
 {
     return new FromEc2Instance(StoryTeller::instance(), [$amiId]);
 }
 
+/**
+ * returns the FromEnvironment module
+ *
+ * This module is here to help you port any SPv1 stories to run under SPv2.
+ *
+ * In SPv1, we didn't have the concept that Storyplayer, systems-under-test
+ * and test environments were separate things in their own right. We had a
+ * single combined 'environment' where all configs were lumped together.
+ *
+ * @deprecated 2.0.0 Use fromStoryplayerConfig(), fromSystemUnderTestConfig() or fromTestEnvironmentConfig() instead
+ *
+ * @return \Prose\FromEnvironment
+ */
 function fromEnvironment()
 {
     return new FromEnvironment(StoryTeller::instance());
 }
 
+/**
+ * returns the FromFacebook module
+ *
+ * This module provides support for querying the Facebook API.
+ *
+ * It is currently unmaintained.
+ *
+ * @return \Prose\FromFacebook
+ */
 function fromFacebook()
 {
     return new FromFacebook(StoryTeller::instance());
 }
 
+/**
+ * returns the FromFile module
+ *
+ * This is an old SPv1 module that doesn't really do a lot. We'll shortly
+ * be introducing a new 'FromFS' module that's much more capable. We'll
+ * probably remove the 'FromFile' module in SPv3.
+ *
+ * @return \Prose\FromFile
+ */
 function fromFile()
 {
     return new FromFile(StoryTeller::instance());
 }
 
+/**
+ * returns the FromHost module, with its hostId already set to the first
+ * host in your test environment config file that has the given role.
+ *
+ * This module provides support for making your tests work on multiple
+ * test environments. Instead of hard-coding hostIds into your stories,
+ * use this module to find a host by its assigned role. That way, it doesn't
+ * matter how many hosts are in different environments, or if their hostIds
+ * are different.
+ *
+ * This module is normally used for testing read requests via APIs. You
+ * should be able to write once, and then read from all hosts to prove
+ * that the data was correctly written (and that there are no caching errors).
+ *
+ * To read from all hosts, you would use:
+ *
+ *     foreach(hostWithRole($roleName) as $hostId) { ... }
+ *
+ * @param  string $roleName
+ *         the assigned role you're looking for
+ * @return \Prose\FromHost
+ */
 function fromFirstHostWithRole($roleName)
 {
     return new FromFirstHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
+/**
+ * returns the FromForm module
+ *
+ * This module provides support for working with a given form on a HTML page
+ * that's open in your browser. To use it, the form must have an 'id'
+ * attribute set. Targetting a form with an 'id' helps make your test more
+ * robust, especially if there are multiple forms on the same HTML page.
+ *
+ * Use the UsingBrowser module first to open the HTML page where the form is.
+ *
+ * @param  string $formId
+ *         the 'id' attribute of the HTML form to use
+ * @return \Prose\FromForm
+ */
 function fromForm($formId)
 {
     return new FromForm(StoryTeller::instance(), [$formId]);
 }
 
+/**
+ * returns the FromGraphite module
+ *
+ * This module provides support for retrieving data from Graphite. Graphite
+ * is a round-robin database for capturing time-based series of data to be
+ * displayed in graphs.
+ *
+ * You can use SavageD in your test environment to monitor the CPU and
+ * memory usage of your system under test, logging the data to Graphite.
+ * You can then use this module to make sure that your system under test
+ * hasn't used too much CPU or RAM.
+ *
+ * @return \Prose\FromGraphite
+ */
 function fromGraphite()
 {
     return new FromGraphite(StoryTeller::instance());
 }
 
+/**
+ * returns the FromHost module
+ *
+ * This module provides support for running commands on a computer in your
+ * test environment - basically for doing anything that's likely to change
+ * the state of that computer.
+ *
+ * In SPv1, it was common to call this module directly from your own stories.
+ * In SPv2, you're much more likely to use one of our multi-host modules or
+ * helpers (such as usingFirstHostWithRole) so that your stories are as
+ * test-environment-independent as possible.
+ *
+ * @param  string $hostId
+ *         the ID of the host to use
+ * @return \Prose\FromHost
+ */
 function fromHost($hostId)
 {
     return new FromHost(StoryTeller::instance(), [$hostId]);
 }
 
+/**
+ * returns the FromHostsTable module
+ *
+ * This module provides access to Storyplayer's internal list of computers
+ * that are running in your test environment.
+ *
+ * This module is intended for internal use by Storyplayer. You should not
+ * need to call this module from your own stories.
+ *
+ * @return \Prose\UsingHostsTable
+ */
 function fromHostsTable()
 {
     return new FromHostsTable(StoryTeller::instance());
 }
 
+/**
+ * returns the FromHttp module
+ *
+ * This module provides support for making GET requests over HTTP.
+ *
+ * SSL/TLS is fully supported.
+ *
+ * If you are using self-signed certificates, you will need to set
+ * 'moduleSettings.http.validateSsl = false' in your test environment's
+ * config file first.
+ *
+ * To make PUT, POST and DELETE requests, use the UsingHttp module.
+ *
+ * @return \Prose\FromHttp
+ */
 function fromHttp()
 {
     return new FromHttp(StoryTeller::instance());
 }
 
+/**
+ * returns the FromPDOStatement module
+ *
+ * This module provides support for retrieving data from a PDO prepared
+ * statement after you've executed it.  You can use it in your stories to
+ * retrieve the results of SQL queries.
+ *
+ * To create and run a PDO query, use the UsingPDO and UsingPDOStatement
+ * modules.
+ *
+ * @param  PDOStatement $stmt
+ *         the prepared statement used to run an SQL query
+ * @return \Prose\FromPDOStatement
+ */
 function fromPDOStatement(PDOStatement $stmt)
 {
     return new FromPDOStatement(StoryTeller::instance(), [$stmt]);
 }
 
+/**
+ * returns the FromProcessesTable module
+ *
+ * This module provides access to Storyplayer's internal table of running
+ * child processes. Storyplayer uses this table to make sure that these
+ * processes are terminated when a test run ends.
+ *
+ * This module is intended for internal use by Storyplayer. You shouldn't
+ * need to call this module from your stories.
+ *
+ * @return \Prose\FromProcessesTable
+ */
 function fromProcessesTable()
 {
     return new FromProcessesTable(StoryTeller::instance());
 }
 
+/**
+ * returns the FromRedisConn module
+ *
+ * This module provides support for retrieving data from a Redis server.
+ * Redis is a very popular key/value store (and a whole lot more) - it's a
+ * bit like Memcached on steroids :)
+ *
+ * To make a connection to Redis, use the UsingRedis module first.
+ *
+ * @param  PredisClient $client
+ *         the Redis connection opened with UsingRedis
+ * @return \Prose\FromRedisConn
+ */
 function fromRedisConn(PredisClient $client)
 {
     return new FromRedisConn(StoryTeller::instance(), [$client]);
 }
 
+/**
+ * returns the FromRolesTable module
+ *
+ * This module provides access to Storyplayer's table of active roles in
+ * your test environment.
+ *
+ * This module is for internal use inside Storyplayer. You shouldn't need to
+ * use it from your own stories.
+ *
+ * @return \Prose\FromRolesTable
+ */
 function fromRolesTable()
 {
     return new FromRolesTable(StoryTeller::instance());
 }
 
+/**
+ * returns the FromRuntimeTable module
+ *
+ * The 'runtime table' is Storyplayer's internal table of tables - how it
+ * keeps track of what is happening during a test run.
+ *
+ * This module is intended for internal use only. You shouldn't need to call
+ * this module from your own stories.
+ *
+ * @return \Prose\FromRuntimeTable
+ */
 function fromRuntimeTable()
 {
     return new FromRuntimeTable(StoryTeller::instance());
 }
 
+/**
+ * returns the FromRuntimeTableForTargetEnvironment module
+ *
+ * This module provides access to Storyplayer's internal table that tracks
+ * the state of the current test environment.
+ *
+ * This module is intended for internal use only. You shouldn't need to call
+ * this module from your own stories.
+ *
+ * @return \Prose\FromRuntimeTableForTargetEnvironment
+ */
 function fromRuntimeTableForTargetEnvironment()
 {
     return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance());
 }
 
+/**
+ * returns the FromSauceLabs module
+ *
+ * At the moment, this module is a placeholder. We hope to add full support
+ * for the SauceLabs API soon.
+ *
+ * You can use the --device switch to run your tests using SauceLabs'
+ * platform today. Supported devices start with the prefix 'sl_'.
+ *
+ * @return \Prose\FromSauceLabs
+ */
 function fromSauceLabs()
 {
     return new FromSauceLabs(StoryTeller::instance());
 }
 
+/**
+ * returns the FromShell module
+ *
+ * This module provides support for running commands via the UNIX shell.
+ * These commands will run on the same computer where Storyplayer is running.
+ *
+ * The commands available via this module are for looking up information.
+ * They do not make any changes to your computer at all.
+ *
+ * If you want to run commands on a computer in your test environment, you
+ * need the FromHost module.
+ *
+ * @return \Prose\FromShell
+ */
 function fromShell()
 {
     return new FromShell(StoryTeller::instance());
 }
 
+/**
+ * returns the FromSupervisor module
+ *
+ * This module provides support for querying Supervisor to discover whether
+ * an app is running or not. Supervisor is an increasingly popular
+ * solution for looking after network daemons.
+ *
+ * @param  string $hostId
+ *         the ID of the host you want to use Supervisor on
+ * @return \Prose\FromSupervisor
+ */
 function fromSupervisor($hostId)
 {
     return new FromSupervisor(StoryTeller::instance(),[$hostId]);
 }
 
+/**
+ * returns the FromSystemUnderTest module
+ *
+ * This module provides access to the configuration for your chosen
+ * system-under-test. You can call this from your stories to get access
+ * to any 'appSettings' sections that you have added to your system-under-test
+ * config file.
+ *
+ * The system-under-test config file is an important part of making your
+ * stories run against different versions of whatever it is you want to test.
+ * Instead of hard-coding app-specific settings in your stories (and then
+ * having to use 'if' statements to conditionally interact with the app that
+ * you're testing), you can simply add these settings to your
+ * system-under-test config files, and load the settings into your stories.
+ *
+ * @return \Prose\FromSystemUnderTest
+ */
 function fromSystemUnderTest()
 {
     return new FromSystemUnderTest(StoryTeller::instance());
 }
 
+/**
+ * returns the FromTargetsTable module
+ *
+ * This module provides access to Storyplayer's internal table of active test
+ * environments. It's intended for internal use by Storyplayer.
+ *
+ * You shouldn't need to call this module from your own stories.
+ *
+ * @return \Prose\FromTargetsTable
+ */
 function fromTargetsTable()
 {
     return new FromTargetsTable(StoryTeller::instance());
 }
 
+/**
+ * returns the FromTestEnvironment module
+ *
+ * This module provides you with access to the configuration for the
+ * active test environment.
+ *
+ * You can use this in your stories to retrieve any 'appSettings' that
+ * you've added to your test environment config.
+ *
+ * 'appSettings' are an important part of making your stories work against
+ * multiple test environments. You want all of your end-to-end tests to
+ * work against all of your test environments. That way, you can run them
+ * in development to prove that new features work, and you can run them in
+ * production to prove that your deployment has been successful.
+ *
+ * You can also use this from any custom modules to retrieve any
+ * 'moduleSettings' that have been set in the test environment config.
+ *
+ * @return \Prose\FromTestEnvironment
+ */
 function fromTestEnvironment()
 {
     return new FromTestEnvironment(StoryTeller::instance());
@@ -475,6 +831,14 @@ function fromTestEnvironment()
 /**
  * returns the FromUsers module
  *
+ * This module allows you to retrieve specific user(s) from the test users
+ * you loaded with the --users command-line switch. Each user is a plain
+ * PHP object created using json_decode().
+ *
+ * Any changes you make to these users will be saved back to disk when
+ * Storyplayer finishes the current test run. You can prevent this by using
+ * the --readonly-users command-line switch.
+ *
  * @return \Prose\FromUsers
  */
 function fromUsers()
@@ -482,11 +846,18 @@ function fromUsers()
     return new FromUsers(StoryTeller::instance());
 }
 
+/**
+ * returns the FromUuid module
+ *
+ * This module adds support for inspecting a universally-unique-ID. To use it,
+ * you need to have PHP's UUID extension installed.
+ *
+ * @return \Prose\FromUuid
+ */
 function fromUuid()
 {
     return new FromUuid(StoryTeller::instance());
 }
-
 
 /**
  * return the Checkpoint object
