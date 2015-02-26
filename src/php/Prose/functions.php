@@ -228,21 +228,69 @@ function assertsString($actual)
     return new AssertsString(StoryTeller::instance(), [$actual]);
 }
 
+/**
+ * returns the CleanupHosts module
+ *
+ * This module is used internally when Storyplayer shuts down to cleanup any
+ * remaining entries in the internal 'hosts' table.
+ *
+ * You will never need to call this module from your stories.
+ *
+ * @param  string $key
+ *         the name of the hosts table in the runtime table
+ * @return \Prose\CleanupHosts
+ */
 function cleanupHosts($key)
 {
     return new CleanupHosts(StoryTeller::instance(), [$key]);
 }
 
+/**
+ * returns the CleanupProcesses module
+ *
+ * This module is used internally when Storyplayer shuts down to cleanup any
+ * remaining entries in the internal 'processes' table.
+ *
+ * You will never need to call this module from your stories.
+ *
+ * @param  string $key
+ *         the name of the processes table in the runtime table
+ * @return \Prose\CleanupProcesses
+ */
 function cleanupProcesses($key)
 {
     return new CleanupProcesses(StoryTeller::instance(), [$key]);
 }
 
+/**
+ * returns the CleanupRoles module
+ *
+ * This module is used internally when Storyplayer shuts down to cleanup any
+ * remaining entries in the internal 'roles' table.
+ *
+ * You will never need to call this module from your stories.
+ *
+ * @param  string $key
+ *         the name of the roles table in the runtime table
+ * @return \Prose\CleanupRoles
+ */
 function cleanupRoles($key)
 {
     return new CleanupRoles(StoryTeller::instance(), [$key]);
 }
 
+/**
+ * returns the CleanupTargets module
+ *
+ * This module is used internally when Storyplayer shuts down to cleanup any
+ * remaining entries in the internal 'targets' table.
+ *
+ * You will never need to call this module from your stories.
+ *
+ * @param  string $key
+ *         the name of the targets table in the runtime table
+ * @return \Prose\CleanupTargets
+ */
 function cleanupTargets($key)
 {
     return new CleanupTargets(StoryTeller::instance(), [$key]);
