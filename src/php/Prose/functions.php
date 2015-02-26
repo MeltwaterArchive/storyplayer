@@ -327,6 +327,35 @@ function expectsZmq()
 {
     return new ExpectsZmq(StoryTeller::instance());
 }
+
+/**
+ * iterates over each host in your test environment that has been assigned
+ * the given role
+ *
+ * This helper gives you a way to run any host-aware module across every
+ * computer in your test environment that has the role you ask for.
+ *
+ * For example, if you want to get a table of IP addresses, you can do this:
+ *
+ *     $ipAddresses = foreachHostWithRole('web-server')->fromHost()->getIpAddress();
+ *
+ * or, if you wanted to reboot machines, you could do this:
+ *
+ *     foreachHostWithRole('web-server')->usingHost()->restartHost();
+ *
+ * This iterator will automatically provide the $hostId parameter to the module
+ * you tell it to call, and will collate all return values into an array.
+ *
+ * Alternatively, you can use a normal PHP foreach() loop:
+ *
+ *     foreach(hostWithRole('web-server') as $hostId) {
+ *         usingHost($hostId)->restartHost();
+ *     }
+ *
+ * @param  string $roleName
+ *         the role that you want to work with
+ * @return \Prose\DelayedHostsModuleIterator
+ */
 function foreachHostWithRole($roleName)
 {
     return new ForeachHostWithRole(StoryTeller::instance(), [$roleName]);
