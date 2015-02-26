@@ -248,81 +248,290 @@ function cleanupTargets($key)
     return new CleanupTargets(StoryTeller::instance(), [$key]);
 }
 
+/**
+ * returns the ExpectsBrowser module
+ *
+ * This module provides support for checking the content of your web browser.
+ *
+ * Internally, this module interacts with your chosen browser (you chose by
+ * using the --device command-line switch) using the Selenium WebDriver API.
+ *
+ * We've added a lot of helpful methods you can use to make it both quick
+ * and natural to check the contents of the HTML page that's currently
+ * open in the web browser.
+ *
+ * If the check fails, this module throws an exception.
+ *
+ * @return \Prose\ExpectsBrowser
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsBrowser()
 {
     return new ExpectsBrowser(StoryTeller::instance());
 }
 
+/**
+ * returns the ExpectsEc2Image module
+ *
+ * This module provides support for testing the current state / condition
+ * of an Amazon EC2 AMI. If the check fails, then this module will throw
+ * an exception.
+ *
+ * @param  string $amiId
+ *         the AMI ID that you want to check on
+ * @return \Prose\ExpectsEc2Image
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsEc2Image($amiId)
 {
     return new ExpectsEc2Image(StoryTeller::instance(), [$amiId]);
 }
 
+/**
+ * returns the ExpectsFailure module
+ *
+ * Use this module to wrap operations that should not succeed, so that when
+ * they do fail, they do not cause your story to fail. If the operations
+ * actually end up succeeding, then this module will throw an exception.
+ *
+ * @return \Prose\ExpectsFailure
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsFailure()
 {
     return new ExpectsFailure(StoryTeller::instance());
 }
 
+/**
+ * returns the ExpectsHost module, with its hostId already set to the first
+ * host in your test environment config file that has the given role.
+ *
+ * This module provides support for making your tests work on multiple
+ * test environments. Instead of hard-coding hostIds into your stories,
+ * use this module to find a host by its assigned role. That way, it doesn't
+ * matter how many hosts are in different environments, or if their hostIds
+ * are different.
+ *
+ * This module is normally used for testing the status of a host, such as if
+ * a given process is currently running. If the check fails, this module
+ * will throw an exception.
+ *
+ * @param  string $roleName
+ *         the assigned role you're looking for
+ * @return \Prose\ExpectsHost
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsFirstHostWithRole($role)
 {
     return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$role]);
 }
 
+/**
+ * returns the ExpectsForm module
+ *
+ * This module provides support for working with a given form on a HTML page
+ * that's open in your browser. To use it, the form must have an 'id'
+ * attribute set. Targetting a form with an 'id' helps make your test more
+ * robust, especially if there are multiple forms on the same HTML page.
+ *
+ * Use the UsingBrowser module first to open the HTML page where the form is.
+ *
+ * @param  string $formId
+ *         the 'id' attribute of the HTML form to use
+ * @return \Prose\ExpectsForm
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsForm($formId)
 {
     return new ExpectsForm(StoryTeller::instance(), [$formId]);
 }
 
+/**
+ * returns the ExpectsGraphite module
+ *
+ * This module provides support for retrieving data from Graphite. Graphite
+ * is a round-robin database for capturing time-based series of data to be
+ * displayed in graphs.
+ *
+ * You can use SavageD in your test environment to monitor the CPU and
+ * memory usage of your system under test, logging the data to Graphite.
+ * You can then use this module to make sure that your system under test
+ * hasn't used too much CPU or RAM.
+ *
+ * @return \Prose\ExpectsGraphite
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsGraphite()
 {
     return new ExpectsGraphite(StoryTeller::instance());
 }
 
+/**
+ * returns the ExpectsHost module
+ *
+ * This module provides support for checking on something on a computer in
+ * your test environment. If the check fails, an exception is thrown for you.
+ *
+ * In SPv1, it was common to call this module directly from your own stories.
+ * In SPv2, you're much more likely to use one of our multi-host modules or
+ * helpers (such as usingFirstHostWithRole) so that your stories are as
+ * test-environment-independent as possible.
+ *
+ * @param  string $hostId
+ *         the ID of the host to use
+ * @return \Prose\UsingHost
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsHost($hostId)
 {
     return new ExpectsHost(StoryTeller::instance(), [$hostId]);
 }
 
+/**
+ * returns the ExpectsHostsTable module
+ *
+ * This module provides access to Storyplayer's internal list of computers
+ * that are running in your test environment.
+ *
+ * This module is intended for internal use by Storyplayer. You should not
+ * need to call this module from your own stories.
+ *
+ * @return \Prose\ExpectsHostsTable
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsHostsTable()
 {
     return new ExpectsHostsTable(StoryTeller::instance());
 }
 
+/**
+ * returns the ExpectsHttpResponse module
+ *
+ * This module provides a great way to test that you got the response that
+ * you expected from your usingHttp() / fromHttp() call.
+ *
+ * If the response doesn't meet your expectations, an exception will be
+ * thrown.
+ *
+ * @param  HttpClientResponse $httpResponse
+ *         the return value from usingHttp()->post() et al
+ * @return \Prose\ExpectsHttpResponse
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsHttpResponse(HttpClientResponse $httpResponse)
 {
     return new ExpectsHttpResponse(StoryTeller::instance(), [$httpResponse]);
 }
 
+/**
+ * returns the ExpectsProcessesTable module
+ *
+ * This module provides access to Storyplayer's internal table of which
+ * child processes are currently running.  Storyplayer uses this table to
+ * make sure that these processes are terminated when a test run ends.
+ *
+ * This module is for internal use by Storyplayer. You shouldn't need to call
+ * this from your own stories.
+ *
+ * @return \Prose\ExpectsProcessesTable
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsProcessesTable()
 {
     return new ExpectsProcessesTable(StoryTeller::instance());
 }
 
+/**
+ * returns the ExpectsRolesTable module
+ *
+ * This module provides access to Storyplayer's table of active roles in
+ * your test environment.
+ *
+ * This module is for internal use inside Storyplayer. You shouldn't need to
+ * use it from your own stories.
+ *
+ * @return \Prose\ExpectsRolesTable
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsRolesTable()
 {
     return new ExpectsRolesTable(StoryTeller::instance());
 }
 
+/**
+ * returns the ExpectsRuntimeTable module
+ *
+ * This module provides access to Storyplayer's internal state, also known
+ * as the table of tables.
+ *
+ * This module is for internal use inside Storyplayer. You shouldn't need to
+ * use it from your own stories.
+ *
+ * @return \Prose\ExpectsRuntimeTable
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsRuntimeTable()
 {
     return new ExpectsRuntimeTable(StoryTeller::instance());
 }
 
+/**
+ * returns the FromShell module
+ *
+ * This module provides support for running commands via the UNIX shell.
+ * These commands will run on the same computer where Storyplayer is running.
+ *
+ * If you want to run commands on a computer in your test environment, you
+ * need the UsingHost module.
+ *
+ * @return \Prose\ExpectsShell
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsShell()
 {
     return new ExpectsShell(StoryTeller::instance());
 }
 
+/**
+ * returns the ExpectsSupervisor module
+ *
+ * This module provides support for working the the Supervisor daemon on
+ * a host in your test environment. Supervisor is an increasingly popular
+ * solution for looking after network daemons.
+ *
+ * @param  string $hostId
+ *         the ID of the host you want to use Supervisor on
+ * @return \Prose\ExpectsSupervisor
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsSupervisor($hostId)
 {
     return new ExpectsSupervisor(StoryTeller::instance(), [$hostId]);
 }
 
+/**
+ * returns the ExpectsUuid module
+ *
+ * This module adds support for inspecting a universally-unique-ID. To use it,
+ * you need to have PHP's UUID extension installed.
+ *
+ * @return \Prose\ExpectsUuid
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsUuid()
 {
     return new ExpectsUuid(StoryTeller::instance());
 }
 
+/**
+ * returns the ExpectsZmq module
+ *
+ * This module provides support for working with ZeroMQ, the no-broker
+ * inter-process queuing library.
+ *
+ * @return \Prose\ExpectsZmq
+ * @throws \Prose\E5xx_ExpectFailed
+ */
 function expectsZmq()
 {
     return new ExpectsZmq(StoryTeller::instance());
