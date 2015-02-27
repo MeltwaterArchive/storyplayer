@@ -73,12 +73,18 @@ abstract class Base_Centos5 extends Base_Unix
 		// what are we doing?
 		$log = $st->startAction("query " . basename(__CLASS__) . " for IP address");
 
+		if (empty($hostDetails->ifaces)) {
+			// set defaul tnetwork interfaces
+			$hostDetails->ifaces = array('docker0', 'eth1', 'eth0');
+		}
+
 		// how do we do this?
-		foreach (array('eth1', 'eth0') as $iface) {
+		foreach ($hostDetails->ifaces as $iface) {
 			$command = "/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'";
 			$result = $host->runCommandViaHostManager($hostDetails, $command);
 
-			if ($result->didCommandSucceed()) {
+			// NOTE: the above command will return the exit code 0 even if the interface is not found
+			if ($result->didCommandSucceed() && (strpos($result->output, 'error') === false)) {
 				$lines = explode("\n", $result->output);
 				$ipAddress = trim($lines[0]);
 				$log->endAction("IP address is '{$ipAddress}'");
