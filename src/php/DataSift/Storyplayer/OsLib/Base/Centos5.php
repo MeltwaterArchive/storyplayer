@@ -74,7 +74,7 @@ abstract class Base_Centos5 extends Base_Unix
 		$log = $st->startAction("query " . basename(__CLASS__) . " for IP address");
 
 		if (empty($hostDetails->ifaces)) {
-			// set defaul tnetwork interfaces
+			// set default network interfaces
 			$hostDetails->ifaces = array('eth1', 'eth0');
 		}
 
