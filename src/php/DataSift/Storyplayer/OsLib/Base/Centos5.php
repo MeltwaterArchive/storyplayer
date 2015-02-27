@@ -75,7 +75,7 @@ abstract class Base_Centos5 extends Base_Unix
 
 		if (empty($hostDetails->ifaces)) {
 			// set defaul tnetwork interfaces
-			$hostDetails->ifaces = array('docker0', 'eth1', 'eth0');
+			$hostDetails->ifaces = array('eth1', 'eth0');
 		}
 
 		// how do we do this?
