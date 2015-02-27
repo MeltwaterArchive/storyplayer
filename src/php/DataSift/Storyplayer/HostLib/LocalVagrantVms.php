@@ -123,9 +123,8 @@ class LocalVagrantVms implements SupportedHost
 			$st->usingRolesTable()->removeHostFromAllRoles($hostId);
 		}
 
-		// work out which network interface to use
-		$bridgedIface = $this->determineBridgedInterface();
-		putenv('VIRTUALBOX_BRIDGE_ADAPTER=' . $bridgedIface);
+		// work out which network interface to use in case VirtualBox is installed
+		$this->setVirtualBoxBridgedAdapter();
 
 		// let's start the VM
 		$command = "vagrant up";
@@ -198,6 +197,21 @@ class LocalVagrantVms implements SupportedHost
 
 		// all done
 		$log->endAction();
+	}
+
+	/**
+	 * Set the VIRTUALBOX_BRIDGE_ADAPTER environment variable only if VirtualBox is installed
+	 */
+	public function setVirtualBoxBridgedAdapter()
+	{
+		// check if VirtualBox (VBoxManage) is installed 
+		$command = 'which VBoxManage';
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($this->st, $command);
+		if ($result->returnCode === 0) {
+			$bridgedIface = $this->determineBridgedInterface();
+			putenv('VIRTUALBOX_BRIDGE_ADAPTER=' . $bridgedIface);
+		}
 	}
 
 	/**
