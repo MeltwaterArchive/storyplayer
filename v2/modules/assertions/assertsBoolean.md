@@ -9,7 +9,7 @@ next: '<a href="../../modules/assertions/assertsDouble.html">Next: Double Assert
 
 _assertsBoolean()_ allows you to test a PHP boolean, and to compare it against another PHP boolean.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsBoolean_.
+The source code for these actions can be found in the class `Prose\AssertsBoolean`.
 
 ## Behaviour And Return Codes
 
@@ -55,8 +55,16 @@ assertsBoolean($data)->isBoolean();
 
 This is most often used in the [post-test inspection phase](../../stories/post-test-inspection.html) to validate the data in the [checkpoint](../../stories/the-checkpoint.html):
 
-{%highlight php %}
-$story->addPostTestInspection(function(StoryTeller $st) {
+{% highlight php startinline %}
+$story->addAction(function() {
+    // get the checkpoint
+    $checkpoint = getCheckpoint();
+
+    // set the 'Remember Me' flag
+    $checkpoint->remember_me = true;
+});
+
+$story->addPostTestInspection(function() {
     // get the checkpoint
     $checkpoint = getCheckpoint();
 
@@ -69,25 +77,25 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 ## isFalse()
 
-Use `assertsBoolean()->isFalse()` to make sure that the PHP variable is FALSE.
+Use `assertsBoolean()->isFalse()` to make sure that the PHP variable is `FALSE`.
 
 {% highlight php startinline %}
 $data = false;
 assertsBoolean($data)->isFalse();
 {% endhighlight %}
 
-See _[isTrue()](#istrue)_ for a discussion on what TRUE and FALSE means to this module.
+See _[isTrue()](#istrue)_ for a discussion on what `TRUE` and `FALSE` means to this module.
 
 ## isNull()
 
-Use `assertsBoolean()->isNull()` to make sure that the PHP variable is actually NULL, rather than a boolean.
+Use `assertsBoolean()->isNull()` to make sure that the PHP variable is actually `NULL`, rather than a boolean.
 
 {% highlight php startinline %}
 $data = null;
 assertsBoolean($data)->isNull()
 {% endhighlight %}
 
-This has been added for completeness; we'd always recommend using _[isBoolean()](#isboolean)_ instead of testing for NULL.
+This has been added for completeness; we'd always recommend using _[isBoolean()](#isboolean)_ instead of testing for `NULL`.
 
 ## isNotNull()
 
@@ -98,30 +106,4 @@ $data = true;
 assertsBoolean($data)->isNotNull();
 {% endhighlight %}
 
-This has been added for completeness; we'd always recommend using _[isBoolean()](#isboolean)_ instead of testing for NULL.
-
-## isNotSameAs()
-
-Use `assertsBoolean()->isNotSameAs()` to make sure that two PHP booleans are not references to each other.
-
-{% highlight php startinline %}
-$data1 = true;
-$data2 = true;
-
-assertsBoolean($data1)->isNotSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[doesNotEqual()](#doesnotequal)_ instead.
-
-## isSameAs()
-
-Use `assertsBoolean()->isSameAs()` to make sure that two PHP booleans are references to each other.
-
-{% highlight php startinline %}
-$data1 = true;
-$data2 = &$data1;
-
-assertsBoolean($data1)->isSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[equals()](#equals)_ instead.
+This has been added for completeness; we'd always recommend using _[isBoolean()](#isboolean)_ instead of testing for `NULL`.
