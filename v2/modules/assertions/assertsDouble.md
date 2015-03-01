@@ -47,6 +47,14 @@ assertsDouble($data)->isDouble();
 This is most often used in the [post-test inspection phase](../../stories/post-test-inspection.html) to validate the data in the [checkpoint](../../stories/the-checkpoint.html):
 
 {% highlight php startinline %}
+$story->addAction(function() {
+    // get the checkpoint
+    $checkpoint = getCheckpoint();
+
+    // store the final balance for checking later
+    $checkpoint->balance = 99.99;
+});
+
 $story->addPostTestInspection(function() {
     // get the checkpoint
     $checkpoint = getCheckpoint();
@@ -133,29 +141,3 @@ assertsDouble($data)->isNotNull();
 {% endhighlight %}
 
 This has been added for completeness; we'd always recommend using _[isDouble()](#isdouble)_ instead of testing for NULL.
-
-## isNotSameAs()
-
-Use `assertsDouble()->isNotSameAs()` to make sure that two PHP floating point numbers are not references to each other.
-
-{% highlight php startinline %}
-$data1 = 1.1;
-$data2 = 1.1;
-
-assertsDouble($data1)->isNotSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[doesNotEqual()](#doesnotequal)_ instead.
-
-## isSameAs()
-
-Use `assertsDouble()->isSameAs()` to make sure that two PHP floating point numbers are references to each other.
-
-{% highlight php startinline %}
-$data1 = 1.1;
-$data2 = &$data1;
-
-assertsDouble($data1)->isSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[equals()](#equals)_ instead.
