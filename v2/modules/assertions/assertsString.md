@@ -9,7 +9,7 @@ next: '<a href="../../modules/browser/index.html">Next: The Browser Module</a>'
 
 _assertsString()_ allows you to test a PHP string, and to compare it against another PHP string.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsString_.
+The source code for these actions can be found in the class `Prose\AssertsString`.
 
 ## doesNotEndWith()
 
@@ -117,19 +117,6 @@ assertsString($data)->isNotNull();
 
 This has been added for completeness; we'd always recommend using _[isString()](#isstring)_ instead of testing for NULL.
 
-## isNotSameAs()
-
-Use `assertsString()->isNotSameAs()` to make sure that two PHP strings are not references to each other.
-
-{% highlight php startinline %}
-$data1 = "hello, world!";
-$data2 = "hello, world";
-
-assertsString($data1)->isNotSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[doesNotEqual()](#doesnotequal)_ instead.
-
 ## isNotValidJson()
 
 Use `assertsString()->isNotValidJson()` to make sure that a string is not JSON-encoded data.
@@ -138,19 +125,6 @@ Use `assertsString()->isNotValidJson()` to make sure that a string is not JSON-e
 $data = "hello, world!";
 assertsString($data)->isNotValidJson();
 {% endhighlight %}
-
-## isSameAs()
-
-Use `assertsString()->isSameAs()` to make sure that two PHP strings are references to each other.
-
-{% highlight php startinline %}
-$data1 = "hello, world!";
-$data2 = &$data1;
-
-assertsString($data1)->isSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[equals()](#equals)_ instead.
 
 ## isString()
 
@@ -163,7 +137,7 @@ assertsString($data)->isString();
 
 This is most often used in the [post-test inspection phase](../../stories/post-test-inspection.html) to validate the data in the [checkpoint](../../stories/the-checkpoint.html):
 
-{%highlight php %}
+{% highlight php startinline %}
 $story->addPostTestInspection(function() {
     // get the checkpoint
     $checkpoint = getCheckpoint();
@@ -191,7 +165,7 @@ A UUID is a 32 character hexadecimal string (with four '-' characters at various
 Use `assertsString()->isValidJson()` to make sure that a string contains valid JSON-encoded data.
 
 {% highlight php startinline %}
-$response = usingHttp()->get("http://api.example.com/balance");
+$response = fromHttp()->get("http://api.example.com/balance");
 assertsString($response->body)->isValidJson();
 {% endhighlight %}
 
