@@ -158,7 +158,7 @@ $story = newStoryFor('EC2')
 //
 // ------------------------------------------------------------------------
 
-$story->addTestTeardown(function(StoryTeller $st) {
+$story->addTestTeardown(function() {
     // get the checkpoint
     $checkpoint = getCheckpoint();
 
@@ -201,7 +201,7 @@ $story->addTestTeardown(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
     // we're going to store some information in here
     $checkpoint = getCheckpoint();
 
@@ -247,7 +247,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
     // the information to guide our checks is in the checkpoint
     $checkpoint = getCheckpoint();
 

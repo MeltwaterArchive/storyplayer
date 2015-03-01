@@ -78,7 +78,7 @@ The other thing to remember is to keep the copy of Storyplayer on your test netw
 You can use the [Hosts Table module](../modules/hoststable/index.html) to tell Storyplayer about your test hardware:
 
 ```php
-$story->addTestEnvironmentSetup(function(Storyteller $st) {
+$story->addTestEnvironmentSetup(function() {
 	// set our params
 	$st->setParams(array(
 		'platform' => 'vagrant-centos6'

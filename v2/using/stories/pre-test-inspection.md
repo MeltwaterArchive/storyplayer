@@ -31,7 +31,7 @@ The `PreTestInspection()` happens once the test conditions have been setup, and 
 To make a pre-test inspection, add a `PreTestInspection()` function to your story:
 
 {% highlight php startinline %}
-$story->addPreTestInspection(function(StoryTeller $st) {
+$story->addPreTestInspection(function() {
 	// get the checkpoint
 	// we are going to store the state in here
 	$checkpoint = $st->getCheckpoint();

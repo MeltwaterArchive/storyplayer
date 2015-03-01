@@ -31,7 +31,7 @@ The `PostTestInspection()` happens after the story's `Action()` phase has comple
 To make a post-test inspection, add a `PostTestInspection()` function to your story:
 
 {% highlight php startinline %}
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
 	// get the checkpoint
 	// we are going compare against the state stored in here
 	$checkpoint = $st->getCheckpoint();

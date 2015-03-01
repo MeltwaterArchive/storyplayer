@@ -29,7 +29,7 @@ Creating and destroying test environments are the first and last phases of a sto
 To create your test environment, add a _TestEnvironmentSetup_ function to your story:
 
 {% highlight php startinline %}
-$story->addTestEnvironmentSetup(function(StoryTeller $st) {
+$story->addTestEnvironmentSetup(function() {
     // steps go here
 });
 {% endhighlight %}
@@ -48,7 +48,7 @@ The [Environments section](../environments/index.html) of this manual looks at t
 If your test creates a test environment, add a _TestEnvironmentTeardown_ function to your story to undo everything you created in the _TestEnvironmentSetup_ function:
 
 {% highlight php startinline %}
-$story->addTestEnvironmentTeardown(function(StoryTeller $st) {
+$story->addTestEnvironmentTeardown(function() {
     // steps go here
 });
 {% endhighlight %}
@@ -88,7 +88,7 @@ You may need to run the exact same test against multiple types of environments, 
 You can do this by adding a simple `switch` statement to your _TestEnvironmentSetup_ function:
 
 {% highlight php startinline %}
-$st->addTestEnvironmentSetup(function(StoryTeller $st) {
+$st->addTestEnvironmentSetup(function() {
     // set the defaults for this story / template
     $st->setParams(array(
         'platform' => 'vagrant'
@@ -132,7 +132,7 @@ You might want to run your tests against environments that Storyplayer does not 
 * Or, if you need to deploy an environment some of the time, take advantage of the `-P` switch.  Simply add a setting to your [per-environment config file](../configuration/environment-config.html) to tell Storyplayer what the default platform should be for your environment, and make one of the platforms a no-operation:
 
 ```php
-$st->addTestEnvironmentSetup(function(StoryTeller $st) {
+$st->addTestEnvironmentSetup(function() {
     // get the settings for this environment
     $settings = $st->fromEnvironment()->getAppSettings('testEnvSetup');
 

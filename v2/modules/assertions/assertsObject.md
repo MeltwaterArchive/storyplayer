@@ -69,7 +69,7 @@ assertsObject($obj)->hasAttribute("count");
 This is most often used in the [post-test inspection phase](../../stories/post-test-inspection.html) to validate the data in the [checkpoint](../../stories/the-checkpoint.html):
 
 {%highlight php %}
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
     // get the checkpoint
     $checkpoint = getCheckpoint();
 
@@ -175,7 +175,7 @@ assertsObject($data)->isObject();
 This is most often used in the [post-test inspection phase](../../stories/post-test-inspection.html) to validate the data in the [checkpoint](../../stories/the-checkpoint.html):
 
 {%highlight php %}
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
     // get the checkpoint
     $checkpoint = getCheckpoint();
 

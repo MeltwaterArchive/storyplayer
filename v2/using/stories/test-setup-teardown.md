@@ -29,7 +29,7 @@ Test conditions are created after the test environment has been created, and the
 To setup your test conditions, add a `TestSetup()` function to your story:
 
 {% highlight php startinline %}
-$story->addTestSetup(function(StoryTeller $st) {
+$story->addTestSetup(function() {
 	// steps go here
 });
 {% endhighlight %}
@@ -39,7 +39,7 @@ $story->addTestSetup(function(StoryTeller $st) {
 Once your test has finished, add a `TestTeardown()` function to put your test environment back to how it was before your `TestSetup()` function ran:
 
 {% highlight php startinline %}
-$story->addTestTeardown(function(StoryTeller $st) {
+$story->addTestTeardown(function() {
 	// steps go here
 });
 {% endhighlight %}

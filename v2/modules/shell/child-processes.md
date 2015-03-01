@@ -66,7 +66,7 @@ $story = newStoryFor('Ogre Service Stories')
 //
 // ------------------------------------------------------------------------
 
-$story->addTestEnvironmentSetup(function(StoryTeller $st) {
+$story->addTestEnvironmentSetup(function() {
     // create the parameters to inject into our test VM
     $vmParams = array();
 
@@ -78,7 +78,7 @@ $story->addTestEnvironmentSetup(function(StoryTeller $st) {
     expectsVagrant()->processIsRunning('ogre', 'ogre');
 });
 
-$story->addTestEnvironmentTeardown(function(StoryTeller $st) {
+$story->addTestEnvironmentTeardown(function() {
     // stop the VM, and ignore any errors
     tryTo(function() use($st) {
         usingVagrant()->stopBox('ogre');
@@ -91,7 +91,7 @@ $story->addTestEnvironmentTeardown(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addTestSetup(function(StoryTeller $st) {
+$story->addTestSetup(function() {
     // what is the VM's ipAddress?
     $ipAddress = fromVagrant()->getIpAddress('ogre');
 
@@ -100,7 +100,7 @@ $story->addTestSetup(function(StoryTeller $st) {
     usingDatasiftCppDaemon()->startMonitoringStats('ogre', "http://{$ipAddress}:{$httpPort}/stats");
 });
 
-$story->addTestTeardown(function(StoryTeller $st) {
+$story->addTestTeardown(function() {
     // stop any screen services that might be running
     tryTo(function() use($st) {
         usingShell()->stopAllScreens();
@@ -125,7 +125,7 @@ $story->addTestTeardown(function(StoryTeller $st) {
 // ------------------------------------------------------------------------
 
 // we need to remember the value of the counters before our test
-$story->addPreTestInspection(function(StoryTeller $st) {
+$story->addPreTestInspection(function() {
     // get our checkpoint ... we're going to store values in here
     $checkpoint = getCheckpoint();
 
@@ -145,7 +145,7 @@ $story->addPreTestInspection(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
     // we're going to store some information in here
     $checkpoint = getCheckpoint();
 
@@ -207,7 +207,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
     // the information to guide our checks is in the checkpoint
     $checkpoint = getCheckpoint();
 

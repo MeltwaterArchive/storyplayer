@@ -48,7 +48,7 @@ Here's an example:
 // make it explicit that we're using a class from the global namespace
 use ZMQ;
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
 	// get the ports that Ogre uses
 	$appDetails = fromEnvironment()->getAppSettings('ogre');
 

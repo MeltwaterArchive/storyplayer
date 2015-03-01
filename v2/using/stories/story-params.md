@@ -19,7 +19,7 @@ Call `$st->setParams()` in your stories and / or `$this->setParams()` in your st
 // inside a story
 //
 
-$story->addTestEnvironmentSetup(function(StoryTeller $st) {
+$story->addTestEnvironmentSetup(function() {
 	// build up the list of settings
 	//
 	// these can be overridden from the command-line
@@ -56,7 +56,7 @@ class MyTemplate extends StoryTemplate
 When you want to get the definitive list of parameters for your story, call `$st->getParams()`:
 
 {% highlight php startinline %}
-$story->addTestEnvironmentSetup(function(StoryTeller $st) {
+$story->addTestEnvironmentSetup(function() {
 	// build up the list of settings
 	//
 	// these can be overridden from the command-line

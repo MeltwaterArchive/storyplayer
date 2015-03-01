@@ -46,11 +46,11 @@ $story = newStoryFor(<story category>)
 //
 // ------------------------------------------------------------------------
 
-$story->addTestEnvironmentSetup(function(StoryTeller $st) {
+$story->addTestEnvironmentSetup(function() {
     // add steps here to create the test environment
 });
 
-$story->addTestEnvironmentTeardown(function(StoryTeller $st) {
+$story->addTestEnvironmentTeardown(function() {
     // add steps here to destroy the test environment
 });
 
@@ -60,14 +60,14 @@ $story->addTestEnvironmentTeardown(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addTestSetup(function(StoryTeller $st) {
+$story->addTestSetup(function() {
     // inject test data
     // start any service mocks
     //
     // do anything else that's unique to this test
 });
 
-$story->setTestTeardown(function(StoryTeller $st) {
+$story->setTestTeardown(function() {
     // stop any service mocks
     //
     // undo anything else that you did in addTestSetup()
@@ -79,7 +79,7 @@ $story->setTestTeardown(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPreTestPrediction(function(StoryTeller $st) {
+$story->addPreTestPrediction(function() {
     // do anything that will spot if this test should fail
 });
 
@@ -89,7 +89,7 @@ $story->addPreTestPrediction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPreTestInspection(function(StoryTeller $st) {
+$story->addPreTestInspection(function() {
     // get the checkpoint
     $checkpoint = $st->getCheckpoint();
 
@@ -102,7 +102,7 @@ $story->addPreTestInspection(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function(StoryTeller $st) {
+$story->addAction(function() {
     // do what the user would do in the user or service story
 });
 
@@ -112,7 +112,7 @@ $story->addAction(function(StoryTeller $st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function(StoryTeller $st) {
+$story->addPostTestInspection(function() {
     // look at anything that should have changed, and make sure that it
     // really did change
 });
