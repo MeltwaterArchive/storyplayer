@@ -9,7 +9,7 @@ next: '<a href="../../modules/assertions/assertsObject.html">Next: Object Assert
 
 _assertsInteger()_ allows you to test a PHP integer, and to compare it against another PHP integer.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\AssertsInteger_.
+The source code for these actions can be found in the class `Prose\AssertsInteger`.
 
 ## doesNotEqual()
 
@@ -74,6 +74,14 @@ assertsInteger($data)->isInteger();
 This is most often used in the [post-test inspection phase](../../stories/post-test-inspection.html) to validate the data in the [checkpoint](../../stories/the-checkpoint.html):
 
 {% highlight php startinline %}
+$story->addAction(function() {
+    // get the checkpoint
+    $checkpoint = getCheckpoint();
+
+    // remember the quantity for latest checking
+    $checkpoint->quantity = 5;
+});
+
 $story->addPostTestInspection(function() {
     // get the checkpoint
     $checkpoint = getCheckpoint();
@@ -133,29 +141,3 @@ assertsInteger($data)->isNotNull();
 {% endhighlight %}
 
 This has been added for completeness; we'd always recommend using _[isInteger()](#isinteger)_ instead of testing for NULL.
-
-## isNotSameAs()
-
-Use `assertsInteger()->isNotSameAs()` to make sure that two PHP integer numbers are not references to each other.
-
-{% highlight php startinline %}
-$data1 = 1;
-$data2 = 1;
-
-assertsInteger($data1)->isNotSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[doesNotEqual()](#doesnotequal)_ instead.
-
-## isSameAs()
-
-Use `assertsInteger()->isSameAs()` to make sure that two PHP integer numbers are references to each other.
-
-{% highlight php startinline %}
-$data1 = 1;
-$data2 = &$data1;
-
-assertsInteger($data1)->isSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[equals()](#equals)_ instead.
