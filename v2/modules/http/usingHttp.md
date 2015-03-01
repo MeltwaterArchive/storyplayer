@@ -2,7 +2,7 @@
 layout: v2/modules-http
 title: usingHttp()
 prev: '<a href="../../modules/http/fromHttp.html">Prev: fromHttp()</a>'
-next: '<a href="../../modules/log/index.html">Next: The Log Module</a>'
+next: '<a href="../../modules/iterators/index.html">Next: Iterators</a>'
 ---
 
 # usingHttp()

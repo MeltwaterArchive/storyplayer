@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-log
 title: The Log Module
-prev: '<a href="../../modules/http/usingHttp.html">Prev: usingHttp()</a>'
+prev: '<a href="../../modules/iterators/index.html">Prev: Iterators</a>'
 next: '<a href="../../modules/log/usingLog.html">Next: usingLog()</a>'
 ---
 

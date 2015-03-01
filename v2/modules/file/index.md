@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-file
 title: The File Module
-prev: '<a href="../../modules/environment/fromEnvironment.html">Prev: fromEnvironment()</a>'
+prev: '<a href="../../modules/failure/index.html">Prev: The Failure Module</a>'
 next: '<a href="../../modules/file/fromFile.html">Next: fromFile()</a>'
 ---
 

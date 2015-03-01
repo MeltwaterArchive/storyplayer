@@ -2,7 +2,7 @@
 layout: v2/modules-supervisor
 title: usingSupervisor()
 prev: '<a href="../../modules/supervisor/expectsSupervisor.html">Prev: expectsSupervisor()</a>'
-next: '<a href="../../modules/uuid/index.html">Next: The UUID Module</a>'
+next: '<a href="../../modules/systemundertest/index.html">Next: The SystemUnderTest Module</a>'
 ---
 
 # usingSupervisor()
