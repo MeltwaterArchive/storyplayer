@@ -22,10 +22,10 @@ Write your story as if every test must pass.
 
 ## hasEntryForHost()
 
-Use `$st->expectsHostsTable()->hasEntryForHost()` to ensure that a host has an entry in the hosts table.
+Use `expectsHostsTable()->hasEntryForHost()` to ensure that a host has an entry in the hosts table.
 
 {% highlight php %}
-$st->expectsHostsTable()->hasEntryForHost($hostName);
+expectsHostsTable()->hasEntryForHost($hostName);
 {% endhighlight %}
 
 where:

@@ -17,8 +17,8 @@ Every action returns either a value on success, or `NULL` on failure.  None of t
 
 ## getTmpFileName()
 
-Use `$st->fromFile()->getTmpFileName()` generate a unique temporary filename for use with other modules.
+Use `fromFile()->getTmpFileName()` generate a unique temporary filename for use with other modules.
 
 {% highlight php %}
-$tmpName = $st->fromFile()->getTmpFileName();
+$tmpName = fromFile()->getTmpFileName();
 {% endhighlight %}

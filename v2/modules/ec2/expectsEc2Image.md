@@ -22,10 +22,10 @@ Write your story as if every test must pass.
 
 ## hasFailed()
 
-Use `$st->expectsEc2Image()->hasFailed()` to make sure that an AMI you previously registered failed to build.
+Use `expectsEc2Image()->hasFailed()` to make sure that an AMI you previously registered failed to build.
 
 {% highlight php %}
-$st->expectsEc2Image($amiID)->hasFailed();
+expectsEc2Image($amiID)->hasFailed();
 {% endhighlight %}
 
 where:
@@ -34,10 +34,10 @@ where:
 
 ## isAvailable()
 
-Use `$st->expectsEc2Image()->isAvailable()` to make sure that an AMI you previously registered is ready for use.
+Use `expectsEc2Image()->isAvailable()` to make sure that an AMI you previously registered is ready for use.
 
 {% highlight php %}
-$st->expectsEc2Image($amiID)->isAvailable();
+expectsEc2Image($amiID)->isAvailable();
 {% endhighlight %}
 
 where:
@@ -46,10 +46,10 @@ where:
 
 ## isPending()
 
-Use `$st->expectsEc2Image()->isPending()` to make sure that an AMI you previously registered is currently being built.
+Use `expectsEc2Image()->isPending()` to make sure that an AMI you previously registered is currently being built.
 
 {% highlight php %}
-$st->expectsEc2Image($amiID)->isPending();
+expectsEc2Image($amiID)->isPending();
 {% endhighlight %}
 
 where:

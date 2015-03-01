@@ -23,10 +23,10 @@ Write your story as if every test must pass.
 
 ## writeToLog()
 
-Use `$st->usingLog()->writeToLog()` to write a message to the log file from your story.
+Use `usingLog()->writeToLog()` to write a message to the log file from your story.
 
 {% highlight php %}
-$st->usingLog()->writeToLog($msg);
+usingLog()->writeToLog($msg);
 {% endhighlight %}
 
 where:
@@ -36,4 +36,4 @@ where:
 __NOTES:__
 
 * Only use this module from inside your story's phases.
-* Prose modules should create a `$log` object via `$st->startAction()`.
+* Prose modules should create a `$log` object via `startAction()`.

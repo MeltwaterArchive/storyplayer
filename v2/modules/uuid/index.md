@@ -36,7 +36,7 @@ If the install is successful, you should see information about the UUID extensio
 The basic format of an action is:
 
 {% highlight php %}
-$st->MODULE()->ACTION()
+MODULE()->ACTION()
 {% endhighlight %}
 
 where __module__ is one of:

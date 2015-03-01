@@ -17,10 +17,10 @@ Every action returns either a value on success, or `NULL` on failure.  These act
 
 ## getDetails()
 
-Use `$st->fromHost()->getDetails()` to retrieve the host's entry in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html).
+Use `fromHost()->getDetails()` to retrieve the host's entry in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html).
 
 {% highlight php %}
-$details = $st->fromHost($hostName)->getDetails();
+$details = fromHost($hostName)->getDetails();
 {% endhighlight %}
 
 where:
@@ -34,10 +34,10 @@ __NOTE__
 
 ## getHostIsRunning()
 
-Use `$st->fromHost()->getHostIsRunning()` to determine if the specified host is currently running or not.
+Use `fromHost()->getHostIsRunning()` to determine if the specified host is currently running or not.
 
 {% highlight php %}
-$isRunning = $st->fromHost($hostName)->getHostIsRunning();
+$isRunning = fromHost($hostName)->getHostIsRunning();
 {% endhighlight %}
 
 where:
@@ -49,10 +49,10 @@ If the host is not running, this could be because your test has stopped the host
 
 ## getInstalledPackageDetails()
 
-Use `$st->fromHost()->getInstalledPackageDetails()` to get information about an installed package from the guest operating system's inventory.
+Use `fromHost()->getInstalledPackageDetails()` to get information about an installed package from the guest operating system's inventory.
 
 {% highlight php %}
-$details = $st->fromHost($hostName)->getInstalledPackageDetails($packageName);
+$details = fromHost($hostName)->getInstalledPackageDetails($packageName);
 {% endhighlight %}
 
 where:
@@ -68,10 +68,10 @@ __NOTE__
 
 ## getIpAddress()
 
-Use `$st->fromHost()->getIpAddress()` to get the host's current IP address.
+Use `fromHost()->getIpAddress()` to get the host's current IP address.
 
 {% highlight php %}
-$ipAddress = $st->fromHost($hostName)->getIpAddress();
+$ipAddress = fromHost($hostName)->getIpAddress();
 {% endhighlight %}
 
 where:
@@ -85,10 +85,10 @@ __NOTE__
 
 ## getPid()
 
-Use `$st->fromHost()->getPid()` to get the process ID of a running process.
+Use `fromHost()->getPid()` to get the process ID of a running process.
 
 {% highlight php %}
-$pid = $st->fromHost($hostName)->getPid($processName);
+$pid = fromHost($hostName)->getPid($processName);
 {% endhighlight %}
 
 where:
@@ -103,10 +103,10 @@ __NOTE__
 
 ## getProcessIsRunning()
 
-Use `$st->fromHost()->getProcessIsRunning()` to determine if a process is currently running or not.
+Use `fromHost()->getProcessIsRunning()` to determine if a process is currently running or not.
 
 {% highlight php %}
-$isRunning = $st->fromHost($hostName)->getProcessIsRunning($processName);
+$isRunning = fromHost($hostName)->getProcessIsRunning($processName);
 {% endhighlight %}
 
 where:
@@ -117,10 +117,10 @@ where:
 
 ## getSshUsername()
 
-Use `$st->fromHost()->getSshUsername()` to get the default username used for SSH'ing into the host.
+Use `fromHost()->getSshUsername()` to get the default username used for SSH'ing into the host.
 
 {% highlight php %}
-$sshUsername = $st->fromHost($hostName)->getSshUsername();
+$sshUsername = fromHost($hostName)->getSshUsername();
 {% endhighlight %}
 
 where:
@@ -130,10 +130,10 @@ where:
 
 ## getSshKeyFile()
 
-Use `$st->fromHost()->getSshKeyFile()` to get the path to the SSH private key file that Storyplayer will use in _[$st->usingHost()->runCommand()](usingHost.html#runcommand)_ et al.
+Use `fromHost()->getSshKeyFile()` to get the path to the SSH private key file that Storyplayer will use in _[usingHost()->runCommand()](usingHost.html#runcommand)_ et al.
 
 {% highlight php %}
-$sshKeyFile = $st->fromHost($hostName)->getSshKeyFile();
+$sshKeyFile = fromHost($hostName)->getSshKeyFile();
 {% endhighlight %}
 
 where:
@@ -141,4 +141,4 @@ where:
 * `$hostName` is the name you set when you created the host
 * `$sshKeyFile` is the default SSH key file for that host
 
-The SSH private key file is set when the host is originally created (e.g. when _[$st->usingVagrant()->createVm()](../vagrant/usingVagrant.html#createvm)_ is called).
+The SSH private key file is set when the host is originally created (e.g. when _[usingVagrant()->createVm()](../vagrant/usingVagrant.html#createvm)_ is called).

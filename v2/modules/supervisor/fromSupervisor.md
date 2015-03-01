@@ -17,10 +17,10 @@ Every action either returns a value on success, or `NULL` on failure. None of th
 
 ## getProgramIsRunning()
 
-Use `$st->fromSupervisor()->getProgramIsRunning()` to see if a program managed by Supervisor is running.
+Use `fromSupervisor()->getProgramIsRunning()` to see if a program managed by Supervisor is running.
 
 {% highlight php %}
-$isRunning = $st->fromSupervisor()->getProgramIsRunning($programName);
+$isRunning = fromSupervisor()->getProgramIsRunning($programName);
 {% endhighlight %}
 
 where:
@@ -31,10 +31,10 @@ where:
 
 ## getProgramIsNotRunning()
 
-Use `$st->fromSupervisor()->getProgramIsNotRunning()` to see if a program managed by Supervisor is not running.
+Use `fromSupervisor()->getProgramIsNotRunning()` to see if a program managed by Supervisor is not running.
 
 {% highlight php %}
-$isRunning = $st->fromSupervisor()->getProgramIsNotRunning($programName);
+$isRunning = fromSupervisor()->getProgramIsNotRunning($programName);
 {% endhighlight %}
 
 where:

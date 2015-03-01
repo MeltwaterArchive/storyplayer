@@ -110,7 +110,7 @@ where:
 The basic format of an action is:
 
 {% highlight php %}
-$st->MODULE()->ACTION();
+MODULE()->ACTION();
 {% endhighlight %}
 
 where __module__ is:
@@ -147,7 +147,7 @@ $story = newStoryFor('Ogre Service Stories')
 $story->addTestEnvironmentTeardown(function(StoryTeller $st) {
     // stop the VM
     tryTo(function() use($st) {
-        $st->usingVagrant()->destroyVm('ogre');
+        usingVagrant()->destroyVm('ogre');
     });
 });
 
@@ -182,7 +182,7 @@ $story->addAction(function(StoryTeller $st) {
     $vmParams = array();
 
     // we need a real Ogre
-    $st->usingVagrant()->createVm('ogre', 'centos6', 'qa/ogre-centos-6.3', $vmParams);
+    usingVagrant()->createVm('ogre', 'centos6', 'qa/ogre-centos-6.3', $vmParams);
 
     // at this point, Ogre should be ready to work with
 });
@@ -195,10 +195,10 @@ $story->addAction(function(StoryTeller $st) {
 
 $story->addPostTestInspection(function(StoryTeller $st) {
     // make sure the VM is running
-    $st->expectsHost('ogre')->hostIsRunning();
+    expectsHost('ogre')->hostIsRunning();
 
     // make sure that ogre is installed, and running
-    $st->expectsHost('ogre')->packageIsInstalled('ms-service-ogre');
-    $st->expectsHost('ogre')->processIsRunning('ogre');
+    expectsHost('ogre')->packageIsInstalled('ms-service-ogre');
+    expectsHost('ogre')->processIsRunning('ogre');
 });
 {% endhighlight %}

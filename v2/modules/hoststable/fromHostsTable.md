@@ -17,10 +17,10 @@ Every action returns either a value on success, or `NULL` on failure.  These act
 
 ## getDetailsForHost()
 
-Use `$st->fromHostsTable()->getDetailsForHost()` to retrieve the host's entry in Storyplayer's [hosts table](how-hosts-are-remembered.html).
+Use `fromHostsTable()->getDetailsForHost()` to retrieve the host's entry in Storyplayer's [hosts table](how-hosts-are-remembered.html).
 
 {% highlight php %}
-$details = $st->fromHostsTable()->getDetailsForHost($hostName);
+$details = fromHostsTable()->getDetailsForHost($hostName);
 {% endhighlight %}
 
 where:
@@ -34,10 +34,10 @@ __NOTE__
 
 ## getHostsTable()
 
-Use `$st->fromHostsTable()->getHostsTable()` to retrieve Storyplayer's [hosts table](how-hosts-are-remembered.html).
+Use `fromHostsTable()->getHostsTable()` to retrieve Storyplayer's [hosts table](how-hosts-are-remembered.html).
 
 {% highlight php %}
-$table = $st->fromHostsTable()->getHostsTable();
+$table = fromHostsTable()->getHostsTable();
 {% endhighlight %}
 
 where:

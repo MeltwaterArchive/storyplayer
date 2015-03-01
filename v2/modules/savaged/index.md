@@ -59,7 +59,7 @@ If this setting is missing from your environments section, you'll see an excepti
 The basic format of an action is:
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->ACTION();
+usingSavageD($ipAddress)->ACTION();
 {% endhighlight %}
 
 where:

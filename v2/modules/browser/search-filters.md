@@ -16,7 +16,7 @@ Use the _WithAltText_ search filter to find DOM elements that have a matching _a
 Example:
 
 {% highlight php %}
-$st->click()->elementWithAltText("Login Button");
+click()->elementWithAltText("Login Button");
 {% endhighlight %}
 
 This search filter normally gets used for clicking on images.
@@ -28,8 +28,8 @@ Use the _WithClass_ search filter to find DOM elements that have a matching CSS 
 Examples:
 
 {% highlight php %}
-$invoices = $st->fromBrowser()->get()->cellsWithClass("invoice-number");
-$errors = $st->fromBrowser()->get()->fieldsWithClass("input-errors");
+$invoices = fromBrowser()->get()->cellsWithClass("invoice-number");
+$errors = fromBrowser()->get()->fieldsWithClass("input-errors");
 {% endhighlight %}
 
 This search filter is very useful for extracting DOM elements (or their contents) where there's no label or fixed text to search for.
@@ -41,7 +41,7 @@ Use the _WithId_ search filter to find DOM elements with a matching _id_ attribu
 Example:
 
 {% highlight php %}
-$st->usingBrowser()->click()->buttonWithId('submit_payment');
+usingBrowser()->click()->buttonWithId('submit_payment');
 {% endhighlight %}
 
 In general, you should use the [WithLabel / Labelled](#withlabel__labelled) or [WithText](#withtext) search filters wherever possible (because they search for things that your end-users should be able to see), and only fall back to using this search filter when an ID is all that you have to work with.
@@ -58,7 +58,7 @@ Use the _WithLabel_ or _Labelled_ search filter (they're identical) to find DOM 
 Example:
 
 {% highlight php %}
-$st->usingBrowser()->type('storyplayer is great!')->intoFieldLabelled('Feedback');
+usingBrowser()->type('storyplayer is great!')->intoFieldLabelled('Feedback');
 {% endhighlight %}
 
 Along with the [WithText](#withtext) search filter, this is one of the search filters to use as much as possible in your tests, because it searches for what your end-user should be able to see on the page.
@@ -81,7 +81,7 @@ Use the _WithName_ or _Named_ search filter (they're identical) to find DOM elem
 Example:
 
 {% highlight php %}
-$st->usingBrowser()->type('1111222233334444')->intoBoxNamed('cc_number');
+usingBrowser()->type('1111222233334444')->intoBoxNamed('cc_number');
 {% endhighlight %}
 
 In general, you should use the [WithLabel / Labelled](#withlabel__labelled) or [WithText](#withtext) search filters wherever possible (because they search for things that your end-users should be able to see), and only fall back to using this search filter when a name is all that you have to work with.  If you're constantly changing the text inside buttons and links, then you might need to use this search filter to avoid changing your tests a lot.
@@ -97,7 +97,7 @@ Use The _WithPlaceholder_ search filter to find DOM elements that have a matchin
 Example:
 
 {% highlight php %}
-$st->type('stuart')->intoBoxWithPlaceholder("Username ...");
+type('stuart')->intoBoxWithPlaceholder("Username ...");
 {% endhighlight %}
 
 This search filter is handy for testing that the placeholder (a visual clue) is present in the DOM.  Just be aware that it doesn't prove that the end-user can actually see the text.
@@ -109,8 +109,8 @@ Use the _WithText_ search filter to find DOM elements that contain matching text
 Examples:
 
 {% highlight php %}
-$st->expectsBrowser()->has()->fieldWithText('Login');
-$st->usingBrowser()->click()->buttonWithText('Register');
+expectsBrowser()->has()->fieldWithText('Login');
+usingBrowser()->click()->buttonWithText('Register');
 {% endhighlight %}
 
 Along with the [WithLabel / Labelled](#withlabel__labelled) search filter, this is one of the search filters to use as much as possible in your tests, because it searches for what your end-user should be able to see on the page.
@@ -122,7 +122,7 @@ Use the _WithTitle_ search filter to find DOM elements that have a matching _tit
 Example:
 
 {% highlight php %}
-$st->click()->fieldWithTitle("Next Page");
+click()->fieldWithTitle("Next Page");
 {% endhighlight %}
 
 This search filter normally gets used for clicking on images.  An alternative is the [WithAltText](#withalttext) filter.

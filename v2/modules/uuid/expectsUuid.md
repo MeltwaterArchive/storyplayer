@@ -22,10 +22,10 @@ Write your story as if every test must pass.
 
 ## requirementsAreMet()
 
-Use `$st->expectsUuid()->requirementsAreMet()` to make sure that any calls to the UUID module will work.
+Use `expectsUuid()->requirementsAreMet()` to make sure that any calls to the UUID module will work.
 
 {% highlight php %}
-$st->expectsUuid()->requirementsAreMet();
+expectsUuid()->requirementsAreMet();
 {% endhighlight %}
 
 This will throw an exception if any of the required dependencies are not available.

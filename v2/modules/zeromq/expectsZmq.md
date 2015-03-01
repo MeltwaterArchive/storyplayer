@@ -22,10 +22,10 @@ Write your story as if every test must pass.
 
 ## canSendmultiNonBlocking()
 
-Use `$st->expectsZmq()->canSendmultiNonBlocking()` to make sure that the ZMQ socket's sending message buffer isn't currently full.
+Use `expectsZmq()->canSendmultiNonBlocking()` to make sure that the ZMQ socket's sending message buffer isn't currently full.
 
 {% highlight php %}
-$st->expectsZmq()->canSendmultiNonBlocking($socket, $message);
+expectsZmq()->canSendmultiNonBlocking($socket, $message);
 {% endhighlight %}
 
 where:

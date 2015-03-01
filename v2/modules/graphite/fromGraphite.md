@@ -16,11 +16,11 @@ Every action returns either a value on success, or `NULL` on failure. None of th
 
 ## getDataFor()
 
-Use `$st->fromGraphite()->getDataFor()` to retrieve data from Graphite for a given metric, between two given times.
+Use `fromGraphite()->getDataFor()` to retrieve data from Graphite for a given metric, between two given times.
 
 {% highlight php %}
 $now = time();
-$data = $st->fromGraphite()->getDataFor('qa.ogre.memory.VmRSS', $now - 300, $now);
+$data = fromGraphite()->getDataFor('qa.ogre.memory.VmRSS', $now - 300, $now);
 {% endhighlight %}
 
 _getDataFor()_ takes three parameters:

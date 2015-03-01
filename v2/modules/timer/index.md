@@ -22,13 +22,13 @@ This module relies on [DataSift's Stone library](http://github.com/datasift/Ston
 The basic format of an action is either:
 
 {% highlight php %}
-$st->usingTimer()->ACTION($callback, $timeout);
+usingTimer()->ACTION($callback, $timeout);
 {% endhighlight %}
 
 or
 
 {% highlight php %}
-$st->usingTimer()->ACTION($timeout);
+usingTimer()->ACTION($timeout);
 {% endhighlight %}
 
 where:
@@ -42,17 +42,17 @@ Many of the Timer module's actions take a `$callback` parameter.  This is a [PHP
 
 The callback function should throw an exception if whatever you're waiting for hasn't happened yet.
 
-For example, here's how _[$st->usingBrowser()->waitForTitle()](../browser/usingBrowser.html#waitfortitle)_ is implemented, using _[waitFor()](usingTimer.html#waitfor)_:
+For example, here's how _[usingBrowser()->waitForTitle()](../browser/usingBrowser.html#waitfortitle)_ is implemented, using _[waitFor()](usingTimer.html#waitfor)_:
 
 {% highlight php %}
 $title = "Welcome To Example.com!";
 $timeout = 'PT2S';
-$st->usingTimer()->waitFor(function($st) use($title) {
-	$st->expectsBrowser()->hasTitle($title);
+usingTimer()->waitFor(function($st) use($title) {
+	expectsBrowser()->hasTitle($title);
 }, $timeout);
 {% endhighlight %}
 
-The callback function uses `$st->expectsBrowser()`, which will throw an exception for you if the current HTML page has the wrong title.  Internally, the Timer module catches this exception as long as the timeout hasn't been reached yet.
+The callback function uses `expectsBrowser()`, which will throw an exception for you if the current HTML page has the wrong title.  Internally, the Timer module catches this exception as long as the timeout hasn't been reached yet.
 
 After 2 seconds (the value of `$timeout` in the example), if the HTML page in the browser doesn't have the title 'Welcome To Example.com', _waitFor()_ stops polling and throws an exception.
 

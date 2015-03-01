@@ -22,10 +22,10 @@ Write your story as if every test must pass.
 
 ## programIsRunning()
 
-Use `$st->expectsSupervisor()->programIsRunning()` to make sure that a program managed by Supervisor is running.
+Use `expectsSupervisor()->programIsRunning()` to make sure that a program managed by Supervisor is running.
 
 {% highlight php %}
-$st->expectsSupervisor($hostname)->programIsRunning($programName);
+expectsSupervisor($hostname)->programIsRunning($programName);
 {% endhighlight %}
 
 where:
@@ -35,10 +35,10 @@ where:
 
 ## programIsNotRunning()
 
-Use `$st->expectsSupervisor()->programIsNotRunning()` to make sure that a program managed by Supervisor is not running.
+Use `expectsSupervisor()->programIsNotRunning()` to make sure that a program managed by Supervisor is not running.
 
 {% highlight php %}
-$st->expectsSupervisor($hostname)->programIsNotRunning($programName);
+expectsSupervisor($hostname)->programIsNotRunning($programName);
 {% endhighlight %}
 
 where:

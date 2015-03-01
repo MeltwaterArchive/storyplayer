@@ -7,7 +7,7 @@ next: '<a href="../../modules/vagrant/fromVagrant.html">Next: fromVagrant()</a>'
 
 # usingVagrant()
 
-_usingVagrant()_ allows you to start and stop virtual machines using the popular [Vagrant](http://www.vagrantup.com) command-line tool.  Once the virtual machine has started, you can then use _[$st->usingHost()](../host/usingHost.html)_ to perform actions inside the virtual machine.
+_usingVagrant()_ allows you to start and stop virtual machines using the popular [Vagrant](http://www.vagrantup.com) command-line tool.  Once the virtual machine has started, you can then use _[usingHost()](../host/usingHost.html)_ to perform actions inside the virtual machine.
 
 The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingVagrant_.
 
@@ -22,10 +22,10 @@ Write your story as if every action will be successful.
 
 ## createVm()
 
-Use `$st->usingVagrant()->createVm()` to start a new virtual machine using Vagrant.
+Use `usingVagrant()->createVm()` to start a new virtual machine using Vagrant.
 
 {% highlight php %}
-$st->usingVagrant()->createVm($vmName, $osName, $homeFolder);
+usingVagrant()->createVm($vmName, $osName, $homeFolder);
 {% endhighlight %}
 
 where:
@@ -42,10 +42,10 @@ If the virtual machine starts successfully, we create an entry in Storyplayer's 
 
 ## destroyVm()
 
-Use `$st->usingVagrant()->destroyVm()` to shutdown and delete a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `usingVagrant()->destroyVm()` to shutdown and delete a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
-$st->usingVagrant->destroyVm($vmName);
+usingVagrant->destroyVm($vmName);
 {% endhighlight %}
 
 where:
@@ -58,10 +58,10 @@ Once this is done, we remove the virtual machine's entry from Storyplayer's [hos
 
 ## startVm()
 
-Use `$st->usingVagrant()->startVm()` to start a virtual machine that was previous stopped using _[stopVm()](#stopvm)_ or _[powerOffVm()](#poweroffvm)_.
+Use `usingVagrant()->startVm()` to start a virtual machine that was previous stopped using _[stopVm()](#stopvm)_ or _[powerOffVm()](#poweroffvm)_.
 
 {% highlight php %}
-$st->usingVagrant()->startVm($vmName);
+usingVagrant()->startVm($vmName);
 {% endhighlight %}
 
 where:
@@ -77,10 +77,10 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 ## stopVm()
 
-Use `$st->usingVagrant()->stopVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `usingVagrant()->stopVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
-$st->usingVagrant()->stopVm($vmName);
+usingVagrant()->stopVm($vmName);
 {% endhighlight %}
 
 where:
@@ -93,10 +93,10 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 ## restartVm()
 
-Use `$st->usingVagrant()->restartVm()` to reboot a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `usingVagrant()->restartVm()` to reboot a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
-$st->usingVagrant()->restartVm($vmName);
+usingVagrant()->restartVm($vmName);
 {% endhighlight %}
 
 where:
@@ -109,10 +109,10 @@ Please note that Vagrant will re-run any provisioning plugin that you have liste
 
 ## powerOffVm()
 
-Use `$st->usingVagrant()->powerOffVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `usingVagrant()->powerOffVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
-$st->usingVagrant()->powerOffVm($vmName);
+usingVagrant()->powerOffVm($vmName);
 {% endhighlight %}
 
 where:
@@ -125,10 +125,10 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 ## runVagrantCommand()
 
-Use `$st->usingVagrant()->runVagrantCommand()` to call the `vagrant` command line tool directly from your stories.
+Use `usingVagrant()->runVagrantCommand()` to call the `vagrant` command line tool directly from your stories.
 
 {% highlight php %}
-$result = $st->usingVagrant()->runVagrantCommand($vmName, $command);
+$result = usingVagrant()->runVagrantCommand($vmName, $command);
 {% endhighlight %}
 
 where:
@@ -139,4 +139,4 @@ where:
 
 This action temporarily changes the current working directory to be the folder where the virtual machine's Vagrantfile is stored, and then executes `$command`.  You'll need to include the `vagrant` command at the front of `$command`; it isn't prepended for you.
 
-If you want to run commands inside the virtual machine, you'd normally use _[$st->usingHost()->runCommand()](../host/usingHost.html#runcommand)_.
+If you want to run commands inside the virtual machine, you'd normally use _[usingHost()->runCommand()](../host/usingHost.html#runcommand)_.

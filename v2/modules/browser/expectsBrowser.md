@@ -22,43 +22,43 @@ Write your story as if every test must pass.
 
 ## doesntHave()
 
-Use `$st->expectsBrowser()->doesntHave()` to ensure that the currently loaded HTML page _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[$st->expectsBrowser()->has()](#has)_.
+Use `expectsBrowser()->doesntHave()` to ensure that the currently loaded HTML page _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[expectsBrowser()->has()](#has)_.
 
 {% highlight php %}
-$st->expectsBrowser()->doesntHave()->linkWithText("Login");
-$st->expectsBrowser()->doesntHave()->fieldsWithClass("invoice");
+expectsBrowser()->doesntHave()->linkWithText("Login");
+expectsBrowser()->doesntHave()->fieldsWithClass("invoice");
 {% endhighlight %}
 
 See _[has()](#has)_ below for a longer discussion.
 
 ## has()
 
-Use `$st->expectsBrowser()->has()` to ensure that the currently loaded HTML page contains a specified DOM element or elements.
+Use `expectsBrowser()->has()` to ensure that the currently loaded HTML page contains a specified DOM element or elements.
 
 {% highlight php %}
-$st->expectsBrowser()->has()->formWithId("registration");
-$st->expectsBrowser()->has()->linkWithText("Login");
-$st->expectsBrowser()->has()->fieldsWithClass("invoice");
+expectsBrowser()->has()->formWithId("registration");
+expectsBrowser()->has()->linkWithText("Login");
+expectsBrowser()->has()->fieldsWithClass("invoice");
 {% endhighlight %}
 
 Some web-based applications can show different content on the same URL, depending on whether the end-user is logged into the app or not.  You often see this on website home pages.  By checking for the presence (using _has()_) or absence (using _doesntHave()_) of elements on the page, you can work out what state the app currently is in.
 
 ## hasTitle()
 
-Use `$st->expectsBrowser()->hasTitle()` to ensure that the currently loaded HTML page has the _&lt;title&gt;_ that you expect.
+Use `expectsBrowser()->hasTitle()` to ensure that the currently loaded HTML page has the _&lt;title&gt;_ that you expect.
 
 {% highlight php %}
-$st->expectsBrowser()->hasTitle("Dashboard");
+expectsBrowser()->hasTitle("Dashboard");
 {% endhighlight %}
 
 This is very commonly used after submitting a form, clicking on a link, or telling the browser to go to a specific URL, to make sure that the browser is looking at the page that you expect.
 
 ## hasTitles()
 
-Use `$st->expectsBrowser()->hasTitles()` to ensure that the currently loaded HTML page's _&lt;title&gt;_ matches one of the titles in your list.
+Use `expectsBrowser()->hasTitles()` to ensure that the currently loaded HTML page's _&lt;title&gt;_ matches one of the titles in your list.
 
 {% highlight php %}
-$st->expectsBrowser()->hasTitles(array("Home", "Dashboard"));
+expectsBrowser()->hasTitles(array("Home", "Dashboard"));
 {% endhighlight %}
 
 Sometimes, when you click on a link or submit a form, your web-based application may not take you to the same page every time.  For example, in a payment wizard, your app might have a step called "Personal Details" which only appears when some of the details are missing.  In these situations, this action makes it very easy to make sure that the browser has (after redirects) ended up on a page that you expect - and not one that you don't.

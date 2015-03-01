@@ -36,10 +36,10 @@ The key things here are:
 
 ## deleteStatsPrefix()
 
-Use `$st->usingSavageD()->deleteStatsPrefix()` to tell SavageD to stop using any previously-given prefix when writing stats into Graphite.
+Use `usingSavageD()->deleteStatsPrefix()` to tell SavageD to stop using any previously-given prefix when writing stats into Graphite.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->deleteStatsPrefix()l
+usingSavageD($ipAddress)->deleteStatsPrefix()l
 {% endhighlight %}
 
 Normally, you only need to use this if you're writing stories to run against a production environment where SavageD has been installed.
@@ -48,10 +48,10 @@ See _[setStatsPrefix()](#setstatsprefix)_ for a discussion about the stats prefi
 
 ## setStatsPrefix()
 
-Use `$st->usingSavageD()->setStatsPrefix()` to tell SavageD to use the prefix of your choice when writing stats into Graphite.
+Use `usingSavageD()->setStatsPrefix()` to tell SavageD to use the prefix of your choice when writing stats into Graphite.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->setStatsPrefix('qa.test1');
+usingSavageD($ipAddress)->setStatsPrefix('qa.test1');
 {% endhighlight %}
 
 This will tell SavageD to make all stats written into statsd to start with 'qa.test1.';
@@ -60,26 +60,26 @@ At the moment, SavageD's stats prefix is global; that is, SavageD can't log some
 
 ## startMonitoring()
 
-Use `$st->usingSavageD()->startMonitoring()` to tell SavageD to start writing stats to Graphite via statsd.
+Use `usingSavageD()->startMonitoring()` to tell SavageD to start writing stats to Graphite via statsd.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->startMonitoring();
+usingSavageD($ipAddress)->startMonitoring();
 {% endhighlight %}
 
 ## stopMonitoring()
 
-Use `$st->usingSavageD()->stopMonitoring()` to tell SavageD to stop writing stats to Graphite via statsd.
+Use `usingSavageD()->stopMonitoring()` to tell SavageD to stop writing stats to Graphite via statsd.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->stopMonitoring();
+usingSavageD($ipAddress)->stopMonitoring();
 {% endhighlight %}
 
 ## stopWatchingProcess()
 
-Use `$st->usingSavageD()->stopWatchingProcess()` to tell SavageD to stop writing stats about a specific process.
+Use `usingSavageD()->stopWatchingProcess()` to tell SavageD to stop writing stats about a specific process.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->stopWatchingProcess($alias);
+usingSavageD($ipAddress)->stopWatchingProcess($alias);
 {% endhighlight %}
 
 where:
@@ -92,10 +92,10 @@ It's always a good idea to call _stopWatchingProcess()_ in your [test teardown p
 
 ## stopWatchingProcessCpu()
 
-Use `$st->usingSavageD()->stopWatchingProcessCpu()` to tell SavageD to stop writing CPU-related stats about a specific process.
+Use `usingSavageD()->stopWatchingProcessCpu()` to tell SavageD to stop writing CPU-related stats about a specific process.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->stopWatchingProcessCpu($alias);
+usingSavageD($ipAddress)->stopWatchingProcessCpu($alias);
 {% endhighlight %}
 
 where:
@@ -106,10 +106,10 @@ Normally, you'd call _stopWatchingProcess()_ in your [test teardown phase](../..
 
 ## stopWatchingProcessMemory()
 
-Use `$st->usingSavageD()->stopWatchingProcessMemory()` to tell SavageD to stop writing memory-related stats about a specific process.
+Use `usingSavageD()->stopWatchingProcessMemory()` to tell SavageD to stop writing memory-related stats about a specific process.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->stopWatchingProcessMemory($alias);
+usingSavageD($ipAddress)->stopWatchingProcessMemory($alias);
 {% endhighlight %}
 
 where:
@@ -120,26 +120,26 @@ Normally, you'd call _stopWatchingProcess()_ in your [test teardown phase](../..
 
 ## stopWatchingServerCpu()
 
-Use `$st->usingSavageD()->stopWatchingServerCpu()` to tell SavageD to stop writing CPU-related stats about the server that SavageD is running on.
+Use `usingSavageD()->stopWatchingServerCpu()` to tell SavageD to stop writing CPU-related stats about the server that SavageD is running on.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->stopWatchingServerCpu();
+usingSavageD($ipAddress)->stopWatchingServerCpu();
 {% endhighlight %}
 
 ## stopWatchingServerLoadavg()
 
-Use `$st->usingSavageD()->stopWatchingServerLoadavg()` to tell SavageD to stop writing load-average related stats about the server that SavageD is running on.
+Use `usingSavageD()->stopWatchingServerLoadavg()` to tell SavageD to stop writing load-average related stats about the server that SavageD is running on.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->stopWatchingServerLoadavg();
+usingSavageD($ipAddress)->stopWatchingServerLoadavg();
 {% endhighlight %}
 
 ## watchProcess()
 
-Use `$st->usingSavageD()->watchProcess()` to tell SavageD that you want to monitor a specific process.  The process must be running on the same machine as SavageD.
+Use `usingSavageD()->watchProcess()` to tell SavageD that you want to monitor a specific process.  The process must be running on the same machine as SavageD.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->watchProcess($alias, $pid);
+usingSavageD($ipAddress)->watchProcess($alias, $pid);
 {% endhighlight %}
 
 where:
@@ -149,10 +149,10 @@ where:
 For example:
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->setStatsPrefix('qa.test1');
-$st->usingSavageD($ipAddress)->watchProcess('queue-server', 10056);
-$st->usingSavageD($ipAddress)->watchProcessCpu('queue-server');
-$st->usingSavageD($ipAddress)->startMonitoring();
+usingSavageD($ipAddress)->setStatsPrefix('qa.test1');
+usingSavageD($ipAddress)->watchProcess('queue-server', 10056);
+usingSavageD($ipAddress)->watchProcessCpu('queue-server');
+usingSavageD($ipAddress)->startMonitoring();
 {% endhighlight %}
 
 tells SavageD to log CPU-related information about process ID 10056 to Graphite.  These stats will begin with the string 'qa.test1.queue-server'.
@@ -161,10 +161,10 @@ _Be aware that statsd normally adds its own prefix onto the stats that are writt
 
 ## watchProcessCpu()
 
-Use `$st->usingSavageD()->watchProcessCpu()` to tell SavageD to write CPU-related stats for a given process.  You must first call _[watchProcess()](#watchprocess)_ before calling this method, and no stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
+Use `usingSavageD()->watchProcessCpu()` to tell SavageD to write CPU-related stats for a given process.  You must first call _[watchProcess()](#watchprocess)_ before calling this method, and no stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->watchProcessCpu($alias);
+usingSavageD($ipAddress)->watchProcessCpu($alias);
 {% endhighlight %}
 
 The stats will appear as _$prefix.$alias.cpu.\*_ in Graphite, giving you the %CPU usage for each of the per-process CPU counters that your Linux kernel tracks.  100% CPU usage is the equivalent of using all of a single CPU core.  If your computer has multiple CPU cores, and your process is multi-threaded, it's possible for a process to use more than 100% CPU.
@@ -173,10 +173,10 @@ _Be aware that the kernel itself does not report CPU usage in percentages. Savag
 
 ## watchProcessMemory()
 
-Use `$st->usingSavageD()->watchProcessMemory()` to tell SavageD to write memory-related stats for a given process.  You must first call _[watchProcess()](#watchprocess)_ before calling this method, and no stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
+Use `usingSavageD()->watchProcessMemory()` to tell SavageD to write memory-related stats for a given process.  You must first call _[watchProcess()](#watchprocess)_ before calling this method, and no stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->watchProcessMemory($alias);
+usingSavageD($ipAddress)->watchProcessMemory($alias);
 {% endhighlight %}
 
 The stats will appear as _$prefix.$alias.memory.\*_ in Graphite, giving you the usage amount in bytes.
@@ -185,10 +185,10 @@ _Be aware that the Linux kernel's memory counters are not additive, which can be
 
 ## watchServerCpu()
 
-Use `$st->usingSavageD()->watchServerCpu()` to tell SavageD to write CPU-related stats about the server that SavageD is running on. No stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
+Use `usingSavageD()->watchServerCpu()` to tell SavageD to write CPU-related stats about the server that SavageD is running on. No stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->watchServerCpu($alias);
+usingSavageD($ipAddress)->watchServerCpu($alias);
 {% endhighlight %}
 
 The stats will appear as _$prefix.$alias.cpu.\*_ in Graphite, giving you the %CPU usage for each of the per-CPU counters that your Linux kernel tracks.  100% CPU usage is the equivalent of using all of a single CPU core.  If your computer has multiple CPU cores, the total CPU usage will be 100% * no of cores.
@@ -197,10 +197,10 @@ _Be aware that the kernel itself does not report CPU usage in percentages. Savag
 
 ## watchServerLoadavg()
 
-Use `$st->usingSavageD()->watchServerLoadavg()` to tell SavageD to write load-average related stats about the server that SavageD is running on. No stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
+Use `usingSavageD()->watchServerLoadavg()` to tell SavageD to write load-average related stats about the server that SavageD is running on. No stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
 
 {% highlight php %}
-$st->usingSavageD($ipAddress)->watchServerLoadavg($alias);
+usingSavageD($ipAddress)->watchServerLoadavg($alias);
 {% endhighlight %}
 
 The stats will appear as _$prefix.$alias.loadavg.\*_ in Graphite, giving you the load average figures for 1 minute, 5 minutes and 15 minutes.

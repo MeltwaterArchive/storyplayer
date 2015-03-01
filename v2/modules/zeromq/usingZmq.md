@@ -20,10 +20,10 @@ Write your story as if every test must pass.
 
 ## bind()
 
-Use `$st->usingZmq()->bind()` to create a new ZeroMQ socket, and to bind it to a URI to listen for incoming connections.
+Use `usingZmq()->bind()` to create a new ZeroMQ socket, and to bind it to a URI to listen for incoming connections.
 
 {% highlight php %}
-$sock = $st->usingZmq()->bind($address, $socketType);
+$sock = usingZmq()->bind($address, $socketType);
 {% endhighlight %}
 
 where:
@@ -38,10 +38,10 @@ __TIPS:__
 
 ## connect()
 
-Use `$st->usingZmq()->connect()` to create a new ZeroMQ socket, and to connect it to a (possibly remote) URI to send and receive ZeroMQ messages.
+Use `usingZmq()->connect()` to create a new ZeroMQ socket, and to connect it to a (possibly remote) URI to send and receive ZeroMQ messages.
 
 {% highlight php %}
-$sock = $st->usingZmq()->connect($address, $socketType, [$sendHwm = 100, [$recvHwm = 100]]);
+$sock = usingZmq()->connect($address, $socketType, [$sendHwm = 100, [$recvHwm = 100]]);
 {% endhighlight %}
 
 where:
@@ -58,10 +58,10 @@ __TIPS:__
 
 ## recv()
 
-Use `$st->usingZmq()->recv()` to receive a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
+Use `usingZmq()->recv()` to receive a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
 
 {% highlight php %}
-$message = $st->usingZmq()->recv($socket);
+$message = usingZmq()->recv($socket);
 {% endhighlight %}
 
 where:
@@ -79,10 +79,10 @@ and it will work.  The reason we recommend using _usingZmq()->recv()_ et al inst
 
 ## recvMulti()
 
-Use `$st->usingZmq()->recvMulti()` to receive a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
+Use `usingZmq()->recvMulti()` to receive a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
 
 {% highlight php %}
-$message = $st->usingZmq()->recvMulti($socket);
+$message = usingZmq()->recvMulti($socket);
 {% endhighlight %}
 
 where:
@@ -94,10 +94,10 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 ## recvMultiNonBlocking()
 
-Use `$st->usingZmq()->recvMultiNonBlocking()` to receive a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, `NULL` is returned to the caller.
+Use `usingZmq()->recvMultiNonBlocking()` to receive a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, `NULL` is returned to the caller.
 
 {% highlight php %}
-$message = $st->usingZmq()->recvMultiNonBlocking($socket);
+$message = usingZmq()->recvMultiNonBlocking($socket);
 {% endhighlight %}
 
 where:
@@ -109,10 +109,10 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 ## recvNonBlocking()
 
-Use `$st->usingZmq()->recvNonBlocking()` to receive a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, `NULL` is returned to the caller.
+Use `usingZmq()->recvNonBlocking()` to receive a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, `NULL` is returned to the caller.
 
 {% highlight php %}
-$message = $st->usingZmq()->recvNonBlocking($socket);
+$message = usingZmq()->recvNonBlocking($socket);
 {% endhighlight %}
 
 where:
@@ -124,10 +124,10 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 ## send()
 
-Use `$st->usingZmq()->send()` to send a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
+Use `usingZmq()->send()` to send a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
 
 {% highlight php %}
-$st->usingZmq()->send($socket, $message);
+usingZmq()->send($socket, $message);
 {% endhighlight %}
 
 where:
@@ -139,10 +139,10 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 ## sendMulti()
 
-Use `$st->usingZmq()->send()` to send a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
+Use `usingZmq()->send()` to send a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
 
 {% highlight php %}
-$st->usingZmq()->sendMulti($socket, $message);
+usingZmq()->sendMulti($socket, $message);
 {% endhighlight %}
 
 where:

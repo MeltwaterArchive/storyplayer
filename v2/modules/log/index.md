@@ -18,7 +18,7 @@ The source code for this Prose module can be found in this PHP class:
 The basic format of an action is:
 
 {% highlight php %}
-$st->usingLog()->ACTION();
+usingLog()->ACTION();
 {% endhighlight %}
 
 where __action__ is one of the documented methods available.

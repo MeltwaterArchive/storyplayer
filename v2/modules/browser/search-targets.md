@@ -16,7 +16,7 @@ Use _box_ or _boxes_ to only search for _&lt;input&gt;_ tags in the DOM.
 Example:
 
 {% highlight php %}
-$st->usingBrowser()->type('hello!')->intoBoxWithLabel("First Name");
+usingBrowser()->type('hello!')->intoBoxWithLabel("First Name");
 {% endhighlight %}
 
 ## button / buttons
@@ -26,8 +26,8 @@ Use _button_ or _buttons_ to only search for _&lt;input&gt;_ tags in the DOM.
 Examples:
 
 {% highlight php %}
-$st->usingBrowser()->click()->buttonWithText("Login");
-$st->expectsBrowser()->has()->buttonsWithClass("button");
+usingBrowser()->click()->buttonWithText("Login");
+expectsBrowser()->has()->buttonsWithClass("button");
 {% endhighlight %}
 
 ## cell / cells
@@ -37,7 +37,7 @@ Use _cell_ or _cells_ to only search for _&lt;td&gt;_ tags in the DOM.
 Example:
 
 {% highlight php %}
-$value = $st->fromBrowser()->getText()->fromCellWithId('cell_1_1');
+$value = fromBrowser()->getText()->fromCellWithId('cell_1_1');
 {% endhighlight %}
 
 ## dropdown / dropdowns
@@ -47,7 +47,7 @@ Use _dropdown_ or _dropdowns_ to only search for _&lt;select&gt;_ tags in the DO
 Example:
 
 {% highlight php %}
-$value = $st->fromBrowser()->getOptions()->fromDropdownWithLabel('Country');
+$value = fromBrowser()->getOptions()->fromDropdownWithLabel('Country');
 {% endhighlight %}
 
 ## element / elements
@@ -61,7 +61,7 @@ Search against all elements in the DOM.  Use this when you don't want to limit t
 This is often useful for faux buttons - an element that _looks_ like a button to the user, but underneath could be a real button (an &lt;input&gt; tag) or a false one (an &lt;a&gt; tag):
 
 {% highlight php %}
-$value = $st->fromBrowser()->click()->fieldWithText('Login');
+$value = fromBrowser()->click()->fieldWithText('Login');
 {% endhighlight %}
 
 If you use _field_ as the search term, then you're safe no matter what your front-end developer is using for a button.
@@ -73,7 +73,7 @@ Use _heading_ to only search for _&lt;h1&gt;-&lt;h6&gt;_ tags in the DOM.
 Example:
 
 {% highlight php %}
-$text = $st->fromBrowser()->getText()->fromHeadingWithId('introduction');
+$text = fromBrowser()->getText()->fromHeadingWithId('introduction');
 {% endhighlight %}
 
 ## link / links
@@ -83,7 +83,7 @@ Use _link_ or _links_ to only search for _&lt;a&gt;_ tags in the DOM.
 Example:
 
 {% highlight php %}
-$value = $st->fromBrowser()->click()->linkWithText('Login');
+$value = fromBrowser()->click()->linkWithText('Login');
 {% endhighlight %}
 
 ## orderedlist
@@ -93,7 +93,7 @@ Use _orderedlist_ to only search for _&lt;ol&gt;_ tags in the DOM.
 Example:
 
 {% highlight php %}
-$list = $st->fromBrowser()->get()->orderedlistWithId('priorities');
+$list = fromBrowser()->get()->orderedlistWithId('priorities');
 {% endhighlight %}
 
 ## span
@@ -103,7 +103,7 @@ Use _span_ to only search for _&lt;span&gt;_ tags in the DOM.
 Example:
 
 {% highlight php %}
-$amount = $st->fromBrowser()->getText()->fromSpanWithClass('payment_total');
+$amount = fromBrowser()->getText()->fromSpanWithClass('payment_total');
 {% endhighlight %}
 
 ## unorderedlist
@@ -113,7 +113,7 @@ Use _unorderedlist_ to only search for _&lt;ul&gt;_ tags in the DOM.
 Example:
 
 {% highlight php %}
-$list = $st->fromBrowser()->get()->unorderedlistWithId('tasks');
+$list = fromBrowser()->get()->unorderedlistWithId('tasks');
 {% endhighlight %}
 
 ## Default Search Target

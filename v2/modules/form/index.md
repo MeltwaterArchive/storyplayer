@@ -34,7 +34,7 @@ This module relies on the [Browser module](../browser/index.html). See [its list
 The basic format of an action is:
 
 {% highlight php %}
-$st->MODULE($formId)->ACTION();
+MODULE($formId)->ACTION();
 {% endhighlight %}
 
 where __formId__ is the _id_ attribute of the form you wish to work with; __module__ is one of:

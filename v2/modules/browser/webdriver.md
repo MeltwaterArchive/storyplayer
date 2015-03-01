@@ -22,11 +22,11 @@ For a full list of supported browsers, please [see the Devices section](../../de
 
 Most of the actions defined by the _Browser_ module ultimately get turned into [XPath](http://www.w3.org/TR/xpath/) queries against the loaded DOM.  If you need to extract data that the _Browser_ module has no suitable [search term](searching-the-dom.html) for, you'll have to write your own XPath queries.  Teaching you how to write XPath is beyond the scope of this manual.
 
-To run your XPath query, you need a _WebDriverElement_ object to run it against.  You can get one of these using _[$st->fromBrowser()->getTopElement()](fromBrowser.html#gettopelement)_:
+To run your XPath query, you need a _WebDriverElement_ object to run it against.  You can get one of these using _[fromBrowser()->getTopElement()](fromBrowser.html#gettopelement)_:
 
 {% highlight php %}
 $xpath = 'descendant::div/div/table/tr/*';
-$topElement = $st->fromBrowser()->getTopElement();
+$topElement = fromBrowser()->getTopElement();
 $elements = $topElement->getElements('xpath', $xpath);
 {% endhighlight %}
 
@@ -52,7 +52,7 @@ Facebook's original WebDriver client library acts as a thin facade to the Json W
 The _DataSift\WebDriver\WebDriverSession_ represents a single running instance of a web browser.  You can get the current session from the `$st` object:
 
 {% highlight php %}
-$session = $st->getRunningWebBrowser();
+$session = getRunningWebBrowser();
 {% endhighlight %}
 
 The session provides a lot of useful functionality, including opening web pages, working with multiple browser windows, working with cookies, and much more.  We hope to add support for most of this functionality to the _Browser_ module over time.
@@ -62,7 +62,7 @@ The session provides a lot of useful functionality, including opening web pages,
 The _DataSift\WebDriver\WebDriverElement_ represents a single DOM element inside the web browser.
 
 {% highlight php %}
-$session = $st->getRunningWebBrowser();
+$session = getRunningWebBrowser();
 $body = $session->getElement('tag name', 'body');
 {% endhighlight %}
 

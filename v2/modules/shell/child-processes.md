@@ -71,17 +71,17 @@ $story->addTestEnvironmentSetup(function(StoryTeller $st) {
     $vmParams = array();
 
     // start a real Ogre
-    $st->usingVagrant()->createBox('ogre', 'qa/ogre-centos-6.3', $vmParams);
+    usingVagrant()->createBox('ogre', 'qa/ogre-centos-6.3', $vmParams);
 
     // make sure that ogre is installed, and running
-    $st->expectsVagrant()->packageIsInstalled('ogre', 'ms-service-ogre');
-    $st->expectsVagrant()->processIsRunning('ogre', 'ogre');
+    expectsVagrant()->packageIsInstalled('ogre', 'ms-service-ogre');
+    expectsVagrant()->processIsRunning('ogre', 'ogre');
 });
 
 $story->addTestEnvironmentTeardown(function(StoryTeller $st) {
     // stop the VM, and ignore any errors
     tryTo(function() use($st) {
-        $st->usingVagrant()->stopBox('ogre');
+        usingVagrant()->stopBox('ogre');
     });
 });
 
@@ -93,22 +93,22 @@ $story->addTestEnvironmentTeardown(function(StoryTeller $st) {
 
 $story->addTestSetup(function(StoryTeller $st) {
     // what is the VM's ipAddress?
-    $ipAddress = $st->fromVagrant()->getIpAddress('ogre');
+    $ipAddress = fromVagrant()->getIpAddress('ogre');
 
     // start monitoring the daemon's reported stats
-    $httpPort = $st->fromEnvironment()->getAppSetting('ogre', 'httpPort');
-    $st->usingDatasiftCppDaemon()->startMonitoringStats('ogre', "http://{$ipAddress}:{$httpPort}/stats");
+    $httpPort = fromEnvironment()->getAppSetting('ogre', 'httpPort');
+    usingDatasiftCppDaemon()->startMonitoringStats('ogre', "http://{$ipAddress}:{$httpPort}/stats");
 });
 
 $story->addTestTeardown(function(StoryTeller $st) {
     // stop any screen services that might be running
     tryTo(function() use($st) {
-        $st->usingShell()->stopAllScreens();
+        usingShell()->stopAllScreens();
     });
 
     // stop monitoring the stats
     tryTo(function() use ($st) {
-        $st->usingDatasiftCppDaemon()->stopMonitoringStats('ogre');
+        usingDatasiftCppDaemon()->stopMonitoringStats('ogre');
     });
 });
 
@@ -127,16 +127,16 @@ $story->addTestTeardown(function(StoryTeller $st) {
 // we need to remember the value of the counters before our test
 $story->addPreTestInspection(function(StoryTeller $st) {
     // get our checkpoint ... we're going to store values in here
-    $checkpoint = $st->getCheckpoint();
+    $checkpoint = getCheckpoint();
 
     // get the stats from Ogre's HTTP page
-    $ipAddress = $st->fromVagrant()->getIpAddress('ogre');
-    $httpPort  = $st->fromEnvironment()->getAppSetting('ogre', 'httpPort');
-    $stats     = $st->fromDaemonStatsPage()->getCurrentStats("http://{$ipAddress}:{$httpPort}/stats");
+    $ipAddress = fromVagrant()->getIpAddress('ogre');
+    $httpPort  = fromEnvironment()->getAppSetting('ogre', 'httpPort');
+    $stats     = fromDaemonStatsPage()->getCurrentStats("http://{$ipAddress}:{$httpPort}/stats");
     $checkpoint->stats = $stats;
 
     // make sure we have some valid stats
-    $st->assertsObject($checkpoint->stats)->hasAttribute('counters');
+    assertsObject($checkpoint->stats)->hasAttribute('counters');
 });
 
 // ========================================================================
@@ -147,30 +147,30 @@ $story->addPreTestInspection(function(StoryTeller $st) {
 
 $story->addAction(function(StoryTeller $st) {
     // we're going to store some information in here
-    $checkpoint = $st->getCheckpoint();
+    $checkpoint = getCheckpoint();
 
     // we need to remember when we started testing
     $checkpoint->startTime = time();
 
     // we need a temporary file to store the messages in
-    $checkpoint->tmpFile = $st->fromFile()->getTmpFileName();
+    $checkpoint->tmpFile = fromFile()->getTmpFileName();
 
     // how many messages are we going to send?
     $checkpoint->sendCount = 5000000;
 
     // what is the VM's ipAddress?
-    $ipAddress = $st->fromVagrant()->getIpAddress('ogre');
+    $ipAddress = fromVagrant()->getIpAddress('ogre');
 
     // what is our stats server's host details?
-    $statsdHost = $st->fromEnvironment()->getStatsdHost();
+    $statsdHost = fromEnvironment()->getStatsdHost();
 
     // start retrieving messages from the queue
-    $zmqReadPort = $st->fromEnvironment()->getAppSetting('ogre', 'zmqReadPort');
-    $st->usingShell()->startInScreen("pull", "./bin/zmq-pull 'tcp://{$ipAddress}:{$zmqReadPort}' {$checkpoint->sendCount} '{$statsdHost}' 'qa.ogre' > {$checkpoint->tmpFile}");
+    $zmqReadPort = fromEnvironment()->getAppSetting('ogre', 'zmqReadPort');
+    usingShell()->startInScreen("pull", "./bin/zmq-pull 'tcp://{$ipAddress}:{$zmqReadPort}' {$checkpoint->sendCount} '{$statsdHost}' 'qa.ogre' > {$checkpoint->tmpFile}");
 
     // then, start writing messages to Ogre
-    $zmqWritePort = $st->fromEnvironment()->getAppSetting('ogre', 'zmqWritePort');
-    $st->usingHornet()->startHornetDrone("push", array(
+    $zmqWritePort = fromEnvironment()->getAppSetting('ogre', 'zmqWritePort');
+    usingHornet()->startHornetDrone("push", array(
         "integration",
         "AclTestClient",
         "tcp://{$ipAddress}:{$zmqWritePort}",
@@ -185,20 +185,20 @@ $story->addAction(function(StoryTeller $st) {
     $timeout = ($checkpoint->sendCount / 15000) + 10;
 
     // wait for all the messages to pass through
-    $st->usingTimer()->waitWhile(function() use($st) {
-        $st->expectsShell()->isRunningInScreen("push");
+    usingTimer()->waitWhile(function() use($st) {
+        expectsShell()->isRunningInScreen("push");
     }, $timeout);
 
     // we're done writing messages
-    $st->usingShell()->stopInScreen("push");
+    usingShell()->stopInScreen("push");
 
     // wait for all the messages to be retrieved
-    $st->usingTimer()->waitWhile(function() use($st) {
-        $st->expectsShell()->isRunningInScreen("pull");
+    usingTimer()->waitWhile(function() use($st) {
+        expectsShell()->isRunningInScreen("pull");
     }, $timeout);
 
     // all done
-    $st->usingShell()->stopInScreen("pull");
+    usingShell()->stopInScreen("pull");
 });
 
 // ========================================================================
@@ -209,37 +209,37 @@ $story->addAction(function(StoryTeller $st) {
 
 $story->addPostTestInspection(function(StoryTeller $st) {
     // the information to guide our checks is in the checkpoint
-    $checkpoint = $st->getCheckpoint();
+    $checkpoint = getCheckpoint();
 
     // get the old stats from the checkpoint
     $oldStats = $checkpoint->stats;
 
     // get the latest stats from the VM
-    $ipAddress = $st->fromVagrant()->getIpAddress('ogre');
-    $httpPort  = $st->fromEnvironment()->getAppSetting('ogre', 'httpPort');
-    $newStats  = $st->fromDaemonStatsPage()->getCurrentStats("http://{$ipAddress}:{$httpPort}/stats");
+    $ipAddress = fromVagrant()->getIpAddress('ogre');
+    $httpPort  = fromEnvironment()->getAppSetting('ogre', 'httpPort');
+    $newStats  = fromDaemonStatsPage()->getCurrentStats("http://{$ipAddress}:{$httpPort}/stats");
 
     // make sure *something* has been received
-    $st->assertsObject($newStats)->hasAttribute('counters');
-    $st->assertsObject($newStats->counters)->hasAttribute('id_ogre_items_received');
-    $st->assertsInteger($newStats->counters->id_ogre_items_received)->isInteger();
+    assertsObject($newStats)->hasAttribute('counters');
+    assertsObject($newStats->counters)->hasAttribute('id_ogre_items_received');
+    assertsInteger($newStats->counters->id_ogre_items_received)->isInteger();
 
     // the number of items ogre thinks it delivered should have increased by $checkpoint->sendCount
     if (!isset($oldStats->counters->id_ogre_items_received)) {
-        $st->assertsInteger($newStats->counters->id_ogre_items_received)->equals($checkpoint->sendCount);
+        assertsInteger($newStats->counters->id_ogre_items_received)->equals($checkpoint->sendCount);
     }
     else {
-        $st->assertsInteger($newStats->counters->id_ogre_items_received)->equals($oldStats->counters->id_ogre_items_received + $checkpoint->sendCount);
+        assertsInteger($newStats->counters->id_ogre_items_received)->equals($oldStats->counters->id_ogre_items_received + $checkpoint->sendCount);
     }
 
     // the number of items zmqPublisher sent should be $checkpoint->sendCount
-    $st->expectsGraphite()->metricSumIs("stats.qa.ogre.zmqPublisher.sent", $checkpoint->sendCount, $checkpoint->startTime, time());
+    expectsGraphite()->metricSumIs("stats.qa.ogre.zmqPublisher.sent", $checkpoint->sendCount, $checkpoint->startTime, time());
 
     // the number of items zmq-pull received should be $checkpoint->sendCount
-    $st->expectsGraphite()->metricSumIs("stats.qa.ogre.zmq-pull.received", $checkpoint->sendCount, $checkpoint->startTime, time());
+    expectsGraphite()->metricSumIs("stats.qa.ogre.zmq-pull.received", $checkpoint->sendCount, $checkpoint->startTime, time());
 
     // did we get all of the messages back from ogre?
     // if we did not, there will be a sequence error logged in graphite
-    $st->expectsGraphite()->metricIsAlwaysZero("stats.qa.ogre.zmq-pull.sequence-errors", $checkpoint->startTime, time());
+    expectsGraphite()->metricIsAlwaysZero("stats.qa.ogre.zmq-pull.sequence-errors", $checkpoint->startTime, time());
 });
 {% endhighlight %}

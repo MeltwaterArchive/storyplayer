@@ -22,50 +22,50 @@ Write your story as if every action will be successful.
 
 ## check()
 
-Use `$st->usingForm()->check()` to tick a checkbox.
+Use `usingForm()->check()` to tick a checkbox.
 
 {% highlight php %}
-$st->usingForm('registration')->check()->boxWithLabel("T's & C's");
+usingForm('registration')->check()->boxWithLabel("T's & C's");
 {% endhighlight %}
 
 ## clear()
 
-Use `$st->usingForm()->clear()` to clear out any values inside a form's input box.
+Use `usingForm()->clear()` to clear out any values inside a form's input box.
 
 {% highlight php %}
-$st->usingForm('login')->clear()->fieldWithLabel("Username");
+usingForm('login')->clear()->fieldWithLabel("Username");
 {% endhighlight %}
 
 This is commonly used to remove any browser-supplied auto-complete data when filling out forms.
 
 __See Also:__
 
-* _[$st->usingForm()->fillOutFormFields()](#fillOutFormFields)_
+* _[usingForm()->fillOutFormFields()](#fillOutFormFields)_
 
 ## click()
 
-Use `$st->usingForm()->click()` to click on a button, link, or other element on the page.
+Use `usingForm()->click()` to click on a button, link, or other element on the page.
 
 {% highlight php %}
-$st->usingForm('login')->click()->linkWithText("Login");
+usingForm('login')->click()->linkWithText("Login");
 {% endhighlight %}
 
 ## select()
 
-Use `$st->usingForm()->select()` to pick an option in a dropdown list.
+Use `usingForm()->select()` to pick an option in a dropdown list.
 
 {% highlight php %}
-$st->usingForm('registration')->select("United Kingdom")->fromDropdownWithLabel("Country");
+usingForm('registration')->select("United Kingdom")->fromDropdownWithLabel("Country");
 {% endhighlight %}
 
 _select()_ takes one parameter - the text of the option that you want to select.
 
 ## type()
 
-Use `$st->usingForm()->type()` to send a string of text to a selected DOM element.
+Use `usingForm()->type()` to send a string of text to a selected DOM element.
 
 {% highlight php %}
-$st->usingForm('feedback')->type("Storyplayer lives!")->intoFieldWithLabel("comments");
+usingForm('feedback')->type("Storyplayer lives!")->intoFieldWithLabel("comments");
 {% endhighlight %}
 
 You can also use _type()_ to send a mixture of normal text and non-printing keys, using the constants defined in _DataSift\WebDriver\WebDriverKeys_.  For a full discussion of how that works, please see _[usingBrowser()->type()](../browser/usingBrowser.md#type)_.

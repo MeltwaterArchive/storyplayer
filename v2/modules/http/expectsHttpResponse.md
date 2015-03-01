@@ -24,21 +24,21 @@ Write your story as if every test must pass.
 
 ## hasStatusCode()
 
-Use `$st->expectsHttpResponse()->hasStatusCode()` to make sure that a received _HttpClientResponse_ has the expected HTTP status code in the response.
+Use `expectsHttpResponse()->hasStatusCode()` to make sure that a received _HttpClientResponse_ has the expected HTTP status code in the response.
 
 {% highlight php %}
-$response = $st->usingHttp()->get('http://api.datasift.com/balance');
-$st->expectsHttpResponse($response)->hasStatusCode('200');
+$response = usingHttp()->get('http://api.datasift.com/balance');
+expectsHttpResponse($response)->hasStatusCode('200');
 {% endhighlight %}
 
 ## hasBody()
 
-Use `$st->expectsHttpResponse()->hasBody()` to make sure that a received _HttpClientResponse_ has the content you expect in the body.
+Use `expectsHttpResponse()->hasBody()` to make sure that a received _HttpClientResponse_ has the content you expect in the body.
 
 {% highlight php %}
 $expectedBody = '{"status": "okay", "balance": 200}';
-$response = $st->usingHttp()->get('http://api.datasift.com/balance');
-$st->expectsHttpResponse($response)->hasBody($expectedBody);
+$response = usingHttp()->get('http://api.datasift.com/balance');
+expectsHttpResponse($response)->hasBody($expectedBody);
 {% endhighlight %}
 
 This is very handy when testing APIs that return a JSON-encoded response as the body.

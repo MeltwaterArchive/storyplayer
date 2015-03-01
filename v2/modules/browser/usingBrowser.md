@@ -22,32 +22,32 @@ Write your story as if every action will be successful.
 
 ## check()
 
-Use `$st->usingBrowser()->check()` to tick a checkbox.
+Use `usingBrowser()->check()` to tick a checkbox.
 
 {% highlight php %}
-$st->usingBrowser()->check()->boxWithLabel("T's & C's");
+usingBrowser()->check()->boxWithLabel("T's & C's");
 {% endhighlight %}
 
 ## clear()
 
-Use `$st->usingBrowser()->clear()` to clear out any values inside a form's input box.
+Use `usingBrowser()->clear()` to clear out any values inside a form's input box.
 
 {% highlight php %}
-$st->usingBrowser()->clear()->fieldWithLabel("Username");
+usingBrowser()->clear()->fieldWithLabel("Username");
 {% endhighlight %}
 
 This is commonly used to remove any browser-supplied auto-complete data when filling out forms.
 
 __See Also:__
 
-* _[$st->usingForm()->fillOutFormFields()](../form/usingForm.html#fillOutFormFields)_
+* _[usingForm()->fillOutFormFields()](../form/usingForm.html#fillOutFormFields)_
 
 ## click()
 
-Use `$st->usingBrowser()->click()` to click on a button, link, or other element on the page.
+Use `usingBrowser()->click()` to click on a button, link, or other element on the page.
 
 {% highlight php %}
-$st->usingBrowser()->click()->linkWithText("Login");
+usingBrowser()->click()->linkWithText("Login");
 {% endhighlight %}
 
 As well as being used to submit forms, we recommend that you use _click()_ to navigate around your website inside your tests.  Although it's tempting to use _gotoPage()_ all the time to jump to exactly the right spot on your website, that isn't how end-users typically get from A to B; they get there by clicking through the links on your app's pages.
@@ -56,11 +56,11 @@ If using _click()_ to get around is too slow or too much like hard work for you,
 
 ## gotoPage()
 
-Use `$st->usingBrowser()->gotoPage()` to load a new page into the web browser:
+Use `usingBrowser()->gotoPage()` to load a new page into the web browser:
 
 {% highlight php %}
-$st->usingBrowser()->gotoPage("http://datasift.com");
-$st->usingBrowser()->waitForTitle(2, "Welcome To DataSift!");
+usingBrowser()->gotoPage("http://datasift.com");
+usingBrowser()->waitForTitle(2, "Welcome To DataSift!");
 {% endhighlight %}
 
 _gotoPage()_ doesn't wait for the page to finish loading - there's no sure-fire way to detect that via WebDriver at this time.  We've found that waiting for the page's title to change is reliable.
@@ -69,22 +69,22 @@ We recommend that you use _gotoPage()_ the first time your story needs to load a
 
 ## select()
 
-Use `$st->usingBrowser()->select()` to pick an option in a dropdown list.
+Use `usingBrowser()->select()` to pick an option in a dropdown list.
 
 {% highlight php %}
-$st->usingBrowser()->select("United Kingdom")->fromDropdownWithLabel("Country");
+usingBrowser()->select("United Kingdom")->fromDropdownWithLabel("Country");
 {% endhighlight %}
 
 _select()_ takes one parameter - the text of the option that you want to select.
 
-In general, we recommend using _[$st->usingForm()->select()](../form/usingForm.html#select)_ instead, because the Form module restricts its operations to an identified form.  This can avoid problems on pages where there are multiple versions of a form (e.g. a combined registration / login page where each form is on a different tab).
+In general, we recommend using _[usingForm()->select()](../form/usingForm.html#select)_ instead, because the Form module restricts its operations to an identified form.  This can avoid problems on pages where there are multiple versions of a form (e.g. a combined registration / login page where each form is on a different tab).
 
 ## type()
 
-Use `$st->usingBrowser()->type()` to send a string of text to a selected DOM element.
+Use `usingBrowser()->type()` to send a string of text to a selected DOM element.
 
 {% highlight php %}
-$st->usingBrowser()->type("Storyplayer lives!")->intoFieldWithLabel("progress");
+usingBrowser()->type("Storyplayer lives!")->intoFieldWithLabel("progress");
 {% endhighlight %}
 
 You can also use _type()_ to send a mixture of normal text and non-printing keys, using the constants defined in _DataSift\WebDriver\WebDriverKeys_:
@@ -92,7 +92,7 @@ You can also use _type()_ to send a mixture of normal text and non-printing keys
 {% highlight php %}
 use DataSift\WebDriver\WebDriverKeys;
 
-$st->usingBrowser()->type(
+usingBrowser()->type(
 	"class ExampleClass {"
 	. WebDriverKeys::RETURN_KEY
 	. WebDriverKeys::TAB_KEY
@@ -166,10 +166,10 @@ After all of the keys have been typed into the browser, the modifier keys are re
 
 ## waitForOverlay()
 
-Use `$st->usingBrowser()->waitForOverlay()` to wait for an overlay (such as an image lightbox) to appear on the current page in the web browser.
+Use `usingBrowser()->waitForOverlay()` to wait for an overlay (such as an image lightbox) to appear on the current page in the web browser.
 
 {% highlight php %}
-$st->usingBrowser()->waitForOverlay(2, 'lightbox');
+usingBrowser()->waitForOverlay(2, 'lightbox');
 {% endhighlight php %}
 
 _waitForOverlay()_ takes two parameters:
@@ -179,11 +179,11 @@ _waitForOverlay()_ takes two parameters:
 
 ## waitForTitle()
 
-Use `$st->usingBrowser()->waitForTitle()` to wait for the page title to change.
+Use `usingBrowser()->waitForTitle()` to wait for the page title to change.
 
 {% highlight php %}
-$st->usingBrowser()->gotoPage("http://datasift.com");
-$st->usingBrowser()->waitForTitle(2, "Welcome To DataSift!");
+usingBrowser()->gotoPage("http://datasift.com");
+usingBrowser()->waitForTitle(2, "Welcome To DataSift!");
 {% endhighlight %}
 
 _waitForTitle()_ takes two parameters:
@@ -195,11 +195,11 @@ See _[gotoPage()](#gotopage)_ for a fuller discussion.
 
 ## waitForTitles()
 
-Use `$st->usingBrowser()->waitForTitles()` to wait for the page title to change.
+Use `usingBrowser()->waitForTitles()` to wait for the page title to change.
 
 {% highlight php %}
-$st->usingBrowser()->gotoPage("http://datasift.com");
-$st->usingBrowser()->waitForTitles(2, array(
+usingBrowser()->gotoPage("http://datasift.com");
+usingBrowser()->waitForTitles(2, array(
 	"Personal Details",
 	"Payment Amount"
 ));

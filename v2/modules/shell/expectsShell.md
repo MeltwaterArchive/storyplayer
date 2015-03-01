@@ -22,10 +22,10 @@ Write your story as if every test must pass.
 
 ## isRunningInScreen()
 
-Use `$st->expectsShell()->isRunningInScreen()` to make sure that a process you previously started is still running.
+Use `expectsShell()->isRunningInScreen()` to make sure that a process you previously started is still running.
 
 {% highlight php %}
-$st->expectsShell()->isRunningIsScreen($screenName);
+expectsShell()->isRunningIsScreen($screenName);
 {% endhighlight %}
 
 where:
@@ -34,10 +34,10 @@ where:
 
 ## isNotRunningInScreen()
 
-Use `$st->expectsShell()->isRunningInScreen()` to make sure that a process you previously started is no longer running.
+Use `expectsShell()->isRunningInScreen()` to make sure that a process you previously started is no longer running.
 
 {% highlight php %}
-$st->expectsShell()->isNotRunningIsScreen($screenName);
+expectsShell()->isNotRunningIsScreen($screenName);
 {% endhighlight %}
 
 where:

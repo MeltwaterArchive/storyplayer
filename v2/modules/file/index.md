@@ -27,7 +27,7 @@ This module has no dependencies.
 The basic format of an action is:
 
 {% highlight php %}
-$st->MODULE()->ACTION();
+MODULE()->ACTION();
 {% endhighlight %}
 
 where __module__ is one of:
@@ -40,9 +40,9 @@ and __action__ is one of the methods available on the __module__ you choose.
 Here are some examples:
 
 {% highlight php %}
-$tmpName = $st->fromFile()->getTmpFileName();
+$tmpName = fromFile()->getTmpFileName();
 {% endhighlight %}
 
 {% highlight php %}
-$st->usingFile()->removeFile($tmpName);
+usingFile()->removeFile($tmpName);
 {% endhighlight %}

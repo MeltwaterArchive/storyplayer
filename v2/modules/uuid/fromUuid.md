@@ -17,19 +17,19 @@ Every action either returns a value on success, or `NULL` on failure.  None of t
 
 ## generateUuid()
 
-Use `$st->fromUuid()->generateUuid()` to generate a new UUID.
+Use `fromUuid()->generateUuid()` to generate a new UUID.
 
 {% highlight php %}
-$uuid = $st->fromUuid()->generateUuid();
+$uuid = fromUuid()->generateUuid();
 {% endhighlight %}
 
 where:
 
 * `$uuid` is a new Version 4 UUID string
 
-You can use _[$st->expectsString()->isUuid()](../assertions/assertsString.html#isuuid)_ to test `$uuid` and make sure that it is a valud UUID string:
+You can use _[expectsString()->isUuid()](../assertions/assertsString.html#isuuid)_ to test `$uuid` and make sure that it is a valud UUID string:
 
 {% highlight php %}
-$uuid = $st->fromUuid()->generateUuid();
-$st->expectsString($uuid)->isUuid();
+$uuid = fromUuid()->generateUuid();
+expectsString($uuid)->isUuid();
 {% endhighlight %}

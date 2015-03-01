@@ -22,22 +22,22 @@ Write your story as if every test must pass.
 
 ## doesntHave()
 
-Use `$st->expectsForm()->doesntHave()` to ensure that the specified form _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[$st->expectsForm()->has()](#has)_.
+Use `expectsForm()->doesntHave()` to ensure that the specified form _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[expectsForm()->has()](#has)_.
 
 {% highlight php %}
-$st->expectsForm('registration')->doesntHave()->linkWithText("Login");
-$st->expectsForm('credit_card')->doesntHave()->fieldsWithClass("invoice");
+expectsForm('registration')->doesntHave()->linkWithText("Login");
+expectsForm('credit_card')->doesntHave()->fieldsWithClass("invoice");
 {% endhighlight %}
 
 See _[has()](#has)_ below for a longer discussion.
 
 ## has()
 
-Use `$st->expectsForm()->has()` to ensure that the specified form contains a specified DOM element or elements.
+Use `expectsForm()->has()` to ensure that the specified form contains a specified DOM element or elements.
 
 {% highlight php %}
-$st->expectsForm('registration')->has()->linkWithText("Sign Up!");
-$st->expectsForm('login')->has()->linkWithText("Login");
+expectsForm('registration')->has()->linkWithText("Sign Up!");
+expectsForm('login')->has()->linkWithText("Login");
 {% endhighlight %}
 
 Some web-based applications can show different content on the same URL, depending on whether the end-user is logged into the app or not.  You often see this on website home pages.  Using the _Form_ module, you can safely work with just the form that you want to, and not worry if there are fields duplicated in the other form.

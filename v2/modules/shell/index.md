@@ -36,7 +36,7 @@ _bash_ is probably already installed on your computer. _screen_ may not be insta
 The basic format of an action is:
 
 {% highlight php %}
-$st->MODULE()->ACTION();
+MODULE()->ACTION();
 {% endhighlight %}
 
 where __module__ is one of:
@@ -50,7 +50,7 @@ and __action__ is one of the documented actions available from __module__.
 Here are some examples:
 
 {% highlight php %}
-$sessions = $st->usingShell()->getAllScreenSessions();
-$st->expectsShell()->isRunningInScreen("zmq-pull");
-$st->usingShell()->startInScreen('zmq-pull', BIN_DIR . '/zmq-pull');
+$sessions = usingShell()->getAllScreenSessions();
+expectsShell()->isRunningInScreen("zmq-pull");
+usingShell()->startInScreen('zmq-pull', BIN_DIR . '/zmq-pull');
 {% endhighlight %}

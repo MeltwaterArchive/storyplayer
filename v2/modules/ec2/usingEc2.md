@@ -7,7 +7,7 @@ next: '<a href="../../modules/ec2/usingEc2Instance.html">Next: usingEc2Instance(
 
 # usingEc2()
 
-_usingEc2()_ allows you to start and stop virtual machines (known as _images_) on [Amazon's Elastic Compute Cloud](http://aws.amazon.com/ec2/).  Once the virtual machine has started, you can then use _[$st->usingHost()](../host/usingHost.html)_ to perform actions inside the virtual machine.
+_usingEc2()_ allows you to start and stop virtual machines (known as _images_) on [Amazon's Elastic Compute Cloud](http://aws.amazon.com/ec2/).  Once the virtual machine has started, you can then use _[usingHost()](../host/usingHost.html)_ to perform actions inside the virtual machine.
 
 The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingEc2_.
 
@@ -22,10 +22,10 @@ Write your story as if every action will be successful.
 
 ## createVm()
 
-Use `$st->usingEc2()->createVm()` to start a new virtual machine running on EC2.
+Use `usingEc2()->createVm()` to start a new virtual machine running on EC2.
 
 {% highlight php %}
-$st->usingEc2()->createVm($vmName, $osName, $amiId, $instanceType, $securityGroup);
+usingEc2()->createVm($vmName, $osName, $amiId, $instanceType, $securityGroup);
 {% endhighlight %}
 
 where:
@@ -44,10 +44,10 @@ If the virtual machine starts successfully, we create an entry in Storyplayer's 
 
 ## destroyVm()
 
-Use `$st->usingEc2()->destroyVm()` to shutdown and delete a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `usingEc2()->destroyVm()` to shutdown and delete a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
-$st->usingEc2->destroyVm($vmName);
+usingEc2->destroyVm($vmName);
 {% endhighlight %}
 
 where:
@@ -64,10 +64,10 @@ __NOTE__
 
 ## startVm()
 
-Use `$st->usingEc2()->startVm()` to start a virtual machine that was previous stopped using _[stopVm()](#stopvm)_.
+Use `usingEc2()->startVm()` to start a virtual machine that was previous stopped using _[stopVm()](#stopvm)_.
 
 {% highlight php %}
-$st->usingEc2()->startVm($vmName);
+usingEc2()->startVm($vmName);
 {% endhighlight %}
 
 where:
@@ -80,10 +80,10 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 ## stopVm()
 
-Use `$st->usingEc2()->stopVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `usingEc2()->stopVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
-$st->usingEc2()->stopVm($vmName);
+usingEc2()->stopVm($vmName);
 {% endhighlight %}
 
 where:
@@ -96,10 +96,10 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 ## restartVm()
 
-Use `$st->usingEc2()->restartVm()` to reboot a virtual machine that was previously started using _[createVm()](#createvm)_.
+Use `usingEc2()->restartVm()` to reboot a virtual machine that was previously started using _[createVm()](#createvm)_.
 
 {% highlight php %}
-$st->usingEc2()->restartVm($vmName);
+usingEc2()->restartVm($vmName);
 {% endhighlight %}
 
 where:

@@ -17,39 +17,39 @@ Every action returns either a value on success, or `NULL` on failure.  These act
 
 ## getInstanceIsRunning()
 
-Use `$st->fromEc2Instance()->getInstanceIsRunning()` to determine if the named instance is up and running or not.
+Use `fromEc2Instance()->getInstanceIsRunning()` to determine if the named instance is up and running or not.
 
 {% highlight php %}
-$isRunning = $st->fromEc2Instance($vmName)->getInstanceIsRunning();
+$isRunning = fromEc2Instance($vmName)->getInstanceIsRunning();
 {% endhighlight php %}
 
 where:
 
-* `$vmName` is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
+* `$vmName` is the name of the virtual machine that you created earlier using _[usingEc2()->createVm()](usingEc2.html#createvm)_.
 * `$isRunning` is _TRUE_ if the EC2 instance is in the running state, or _FALSE_ otherwise.
 
 ## getInstanceVolumes()
 
-Use `$st->fromEc2Instance()->getInstanceVolumes()` to get a list of the storage volumes attached to the named instance.
+Use `fromEc2Instance()->getInstanceVolumes()` to get a list of the storage volumes attached to the named instance.
 
 {% highlight php %}
-$volumes = $st->fromEc2Instance($vmName)->getInstanceVolumes();
+$volumes = fromEc2Instance($vmName)->getInstanceVolumes();
 {% endhighlight php %}
 
 where:
 
-* `$vmName` is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
+* `$vmName` is the name of the virtual machine that you created earlier using _[usingEc2()->createVm()](usingEc2.html#createvm)_.
 * `$volumes` is an array of block devices that are attached to the EC2 instance.
 
 ## getPublicDnsName()
 
-Use `$st->fromEc2Instance()->getPublicDnsName()` to get the fully-qualified domain name to use to access an EC2 instance.
+Use `fromEc2Instance()->getPublicDnsName()` to get the fully-qualified domain name to use to access an EC2 instance.
 
 {% highlight php %}
-$fqdn = $st->fromEc2Instance($vmName)->getPublicDnsName();
+$fqdn = fromEc2Instance($vmName)->getPublicDnsName();
 {% endhighlight php %}
 
 where:
 
-* `$vmName` is the name of the virtual machine that you created earlier using _[$st->usingEc2()->createVm()](usingEc2.html#createvm)_.
+* `$vmName` is the name of the virtual machine that you created earlier using _[usingEc2()->createVm()](usingEc2.html#createvm)_.
 * `$fqdn` is the public hostname of the EC2 instance

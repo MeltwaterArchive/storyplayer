@@ -22,10 +22,10 @@ Write your story as if every action must succeed.
 
 ## startProgram()
 
-Use `$st->usingSupervisor()->startProgram()` to start a program that is managed by Supervisor.
+Use `usingSupervisor()->startProgram()` to start a program that is managed by Supervisor.
 
 {% highlight php %}
-$st->usingSupervisor($hostname)->startProgram($programName);
+usingSupervisor($hostname)->startProgram($programName);
 {% endhighlight %}
 
 where:
@@ -35,10 +35,10 @@ where:
 
 ## stopProgram()
 
-Use `$st->usingSupervisor()->stopProgram()` to stop a program that is managed by Supervisor.
+Use `usingSupervisor()->stopProgram()` to stop a program that is managed by Supervisor.
 
 {% highlight php %}
-$st->usingSupervisor($hostname)->startProgram($programName);
+usingSupervisor($hostname)->startProgram($programName);
 {% endhighlight %}
 
 where:

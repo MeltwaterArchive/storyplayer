@@ -21,11 +21,11 @@ Write your story as if every test must pass.
 
 ## metricIsAlwaysZero()
 
-Use `$st->expectsGraphite()->metricIsAlwaysZero()` to ensure that data in Graphite for a given metric, between two given times, is always zero.
+Use `expectsGraphite()->metricIsAlwaysZero()` to ensure that data in Graphite for a given metric, between two given times, is always zero.
 
 {% highlight php %}
 $now = time();
-$data = $st->expectsGraphite()->metricIsAlwaysZero('qa.api.http.500', $now - 300, $now);
+$data = expectsGraphite()->metricIsAlwaysZero('qa.api.http.500', $now - 300, $now);
 {% endhighlight %}
 
 _metricIsAlwaysZero()_ takes three parameters:
@@ -40,11 +40,11 @@ Missing data is treated as having a value of zero, for this test.
 
 ## metricSumIs()
 
-Use `$st->expectsGraphite()->metricSumIs()` to ensure that data in Graphite for a given metric, between two given times, adds up to the value you expect.
+Use `expectsGraphite()->metricSumIs()` to ensure that data in Graphite for a given metric, between two given times, adds up to the value you expect.
 
 {% highlight php %}
 $now = time();
-$data = $st->expectsGraphite()->metricSumIs('qa.api.http.200', 10000, $now - 300, $now);
+$data = expectsGraphite()->metricSumIs('qa.api.http.200', 10000, $now - 300, $now);
 {% endhighlight %}
 
 _metricSumIs()_ takes four parameters:
@@ -58,11 +58,11 @@ If the data between `$startTime` and `$endTime` is less than, or greater than, `
 
 ## metricNeverExceeds()
 
-Use `$st->expectsGraphite()->metricNeverExceeds()` to ensure that data in Graphite for a given metric, between two given times, never has a value higher than a given amount.
+Use `expectsGraphite()->metricNeverExceeds()` to ensure that data in Graphite for a given metric, between two given times, never has a value higher than a given amount.
 
 {% highlight php %}
 $now = time();
-$data = $st->expectsGraphite()->metricNeverExceeds('qa.api.latency', 150, $now - 300, $now);
+$data = expectsGraphite()->metricNeverExceeds('qa.api.latency', 150, $now - 300, $now);
 {% endhighlight %}
 
 _metricNeverExceeds()_ takes four parameters:
@@ -76,13 +76,13 @@ If any of the data between `$startTime` and `$endTime` is greater than `$expecte
 
 ## metricAverageDoesntExceed()
 
-Use `$st->expectsGraphite()->metricAverageDoesntExceed()` to ensure that the average of all the data in Graphite for a given metric, between two given times, doesn't has a value higher than a given amount.
+Use `expectsGraphite()->metricAverageDoesntExceed()` to ensure that the average of all the data in Graphite for a given metric, between two given times, doesn't has a value higher than a given amount.
 
 This test uses the [arithmetic mean](http://en.wikipedia.org/wiki/Arithmetic_mean) for the average of the data.
 
 {% highlight php %}
 $now = time();
-$data = $st->expectsGraphite()->metricAverageDoesntExceed('qa.api.latency', 100, $now - 300, $now);
+$data = expectsGraphite()->metricAverageDoesntExceed('qa.api.latency', 100, $now - 300, $now);
 {% endhighlight %}
 
 _metricAverageDoesntExceed()_ takes four parameters:

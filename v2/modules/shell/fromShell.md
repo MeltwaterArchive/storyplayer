@@ -17,10 +17,10 @@ Every action either returns a value on success, or `NULL` on failure. None of th
 
 ## getIsScreenRunning()
 
-Use `$st->fromShell()->getIsScreenRunning()` to see if a process you previously started is still running.
+Use `fromShell()->getIsScreenRunning()` to see if a process you previously started is still running.
 
 {% highlight php %}
-$isRunning = $st->fromShell()->getIsScreenRunning($screenName);
+$isRunning = fromShell()->getIsScreenRunning($screenName);
 {% endhighlight %}
 
 where:
@@ -34,10 +34,10 @@ __See Also__:
 
 ## getIsProcessRunning()
 
-Use `$st->fromShell()->getIsProcessRunning()` to see if a process you previously started is still running.
+Use `fromShell()->getIsProcessRunning()` to see if a process you previously started is still running.
 
 {% highlight php %}
-$isRunning = $st->fromShell()->getIsProcessRunning($pid);
+$isRunning = fromShell()->getIsProcessRunning($pid);
 {% endhighlight %}
 
 where:
@@ -49,10 +49,10 @@ This call is used internally by _getIsScreenRunning()_.
 
 ## getScreenSessionDetails()
 
-Use `$st->fromShell()->getScreenSessionDetails()` to get back all the details currently available for a process you previously started.
+Use `fromShell()->getScreenSessionDetails()` to get back all the details currently available for a process you previously started.
 
 {% highlight php %}
-$details = $st->fromShell()->getScreenSessionDetails($screenName);
+$details = fromShell()->getScreenSessionDetails($screenName);
 {% endhighlight %}
 
 where:
@@ -74,10 +74,10 @@ __Notes__:
 
 ## getAllScreenSessions()
 
-Use `$st->fromShell()->getAllScreenSessions()` to get back all of the details for all of the processes that you have previously started.
+Use `fromShell()->getAllScreenSessions()` to get back all of the details for all of the processes that you have previously started.
 
 {% highlight php %}
-$list = $st->fromShell()->getAllScreenSessions();
+$list = fromShell()->getAllScreenSessions();
 {% endhighlight %}
 
 where:
@@ -87,10 +87,10 @@ where:
 You can iterate over the list safely:
 
 {% highlight php %}
-$list = $st->fromShell()->getAllScreenSessions();
+$list = fromShell()->getAllScreenSessions();
 foreach ($list as $screenName => $details)
 {
-	$st->usingShell()->stopProcess($details->pid);
+	usingShell()->stopProcess($details->pid);
 }
 {% endhighlight %}
 

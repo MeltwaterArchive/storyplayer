@@ -32,7 +32,7 @@ Additionally, this module uses the standard UNIX `diff` tool for some of its act
 The basic format of an action is:
 
 {% highlight php %}
-$st->MODULE($actualData)->COMPARISON($expectedData);
+MODULE($actualData)->COMPARISON($expectedData);
 {% endhighlight %}
 
 where __module__ is one of:
@@ -50,13 +50,13 @@ Here are some examples:
 {% highlight php %}
 // array comparison
 $expectedCountries = array ("United Kingdom", "United States");
-$actualCountries = $st->fromBrowser()->getOptions()->fromDropdownLabelled("Countries");
-$st->expectsArray($actualCountries)->equals($expectedCountries);
+$actualCountries = fromBrowser()->getOptions()->fromDropdownLabelled("Countries");
+expectsArray($actualCountries)->equals($expectedCountries);
 {% endhighlight %}
 
 {% highlight php %}
 // string comparison
 $expectedTitle = "Welcome To Storyplayer";
-$actualTitle = $st->fromBrowser()->getTitle();
-$st->expectsString($actualTitle)->equals($expectedTitle);
+$actualTitle = fromBrowser()->getTitle();
+expectsString($actualTitle)->equals($expectedTitle);
 {% endhighlight %}

@@ -20,8 +20,8 @@ When users create and build up a [provisioning definition](provisioning-definiti
 For example:
 
 {% highlight php %}
-$st->usingProvisioningDefinition($def)->addVars($params)->toHost($hostName);
-$st->usingProvisioningDefinition($def)->addVars($params)->toGroup($groupName);
+usingProvisioningDefinition($def)->addVars($params)->toHost($hostName);
+usingProvisioningDefinition($def)->addVars($params)->toGroup($groupName);
 {% endhighlight %}
 
 is natural to someone using Ansible, because Ansible users should be familiar with the concept of both *host\_vars* and *group\_vars*.  These terms, however, might not mean anything to someone who is working with a different provisioning engine.

@@ -50,23 +50,23 @@ use ZMQ;
 
 $story->addAction(function(StoryTeller $st) {
 	// get the ports that Ogre uses
-	$appDetails = $st->fromEnvironment()->getAppSettings('ogre');
+	$appDetails = fromEnvironment()->getAppSettings('ogre');
 
 	// create our sending socket
-	$sendSock = $st->usingZmq()->connect($appDetails->command_socket, ZMQ::SOCKET_PUSH);
+	$sendSock = usingZmq()->connect($appDetails->command_socket, ZMQ::SOCKET_PUSH);
 
 	// send a command to Ogre
 	// $message is an array to send as a multipart message
-	$st->usingZmq()->sendMulti($sendSock, $message);
+	usingZmq()->sendMulti($sendSock, $message);
 
 	// create our receiving socket
-	$recvSock = $st->usingZmq()->connect($appDetails->response_socket, ZMQ::SOCKET_PULL);
+	$recvSock = usingZmq()->connect($appDetails->response_socket, ZMQ::SOCKET_PULL);
 
 	// get the response back from Ogre
-	$response = $st->usingZmq()->recvMulti($recvSocket);
+	$response = usingZmq()->recvMulti($recvSocket);
 
 	// store the response for later inspection
-	$checkpoint = $st->getCheckpoint();
+	$checkpoint = getCheckpoint();
 	$checkpoint->response = $response;
 });
 {% endhighlight %}

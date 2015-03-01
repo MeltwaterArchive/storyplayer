@@ -17,17 +17,17 @@ Every action returns either a value on success, or `NULL` on failure.  None of t
 
 ## get()
 
-Use `$st->fromCheckpoint()->get()` to retrieve data stored in the checkpoint.
+Use `fromCheckpoint()->get()` to retrieve data stored in the checkpoint.
 
 {% highlight php %}
-$balance = $st->fromCheckpoint()->get('balance');
+$balance = fromCheckpoint()->get('balance');
 {% endhighlight %}
 
 This is the same as doing:
 
 {% highlight php %}
 // get the checkpoint
-$checkpoint = $st->getCheckpoint();
+$checkpoint = getCheckpoint();
 
 // copy the balance from the checkpoint
 $balance = $checkpoint->balance;

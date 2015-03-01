@@ -116,7 +116,7 @@ where:
 The basic format of an action is:
 
 {% highlight php %}
-$st->MODULE()->ACTION();
+MODULE()->ACTION();
 {% endhighlight %}
 
 where __module__ is one of:
@@ -160,25 +160,25 @@ $story = newStoryFor('EC2')
 
 $story->addTestTeardown(function(StoryTeller $st) {
     // get the checkpoint
-    $checkpoint = $st->getCheckpoint();
+    $checkpoint = getCheckpoint();
 
     // destroy the instance we created
     if (isset($checkpoint->instanceName)) {
         // do we have a test VM to destroy?
-        $hostDetails = $st->fromHostsTable()->getDetailsForHost($checkpoint->instanceName);
+        $hostDetails = fromHostsTable()->getDetailsForHost($checkpoint->instanceName);
         if ($hostDetails !== null) {
             // destroy this host
-            $st->usingEc2()->destroyVm($checkpoint->instanceName);
+            usingEc2()->destroyVm($checkpoint->instanceName);
         }
     }
 
     // destroy the image that we booted to test
     if (isset($checkpoint->imageName)) {
         // do we have a test VM to destroy?
-        $hostDetails = $st->fromHostsTable()->getDetailsForHost($checkpoint->imageName);
+        $hostDetails = fromHostsTable()->getDetailsForHost($checkpoint->imageName);
         if ($hostDetails !== null) {
             // destroy this host
-            $st->usingEc2()->destroyVm($checkpoint->imageName);
+            usingEc2()->destroyVm($checkpoint->imageName);
         }
     }
 });
@@ -203,22 +203,22 @@ $story->addTestTeardown(function(StoryTeller $st) {
 
 $story->addAction(function(StoryTeller $st) {
     // we're going to store some information in here
-    $checkpoint = $st->getCheckpoint();
+    $checkpoint = getCheckpoint();
 
     // what are we calling this host?
     $checkpoint->instanceName = 'centos-6-box';
 
     // create the VM, based on the official CentOS AMI
-    $st->usingEc2()->createVm($checkpoint->instanceName, "centos6", "ami-75190b01", 't1.micro', "default");
+    usingEc2()->createVm($checkpoint->instanceName, "centos6", "ami-75190b01", 't1.micro', "default");
 
     // we need to make sure the root filesystem is destroyed on termination
-    $st->usingEc2Instance($checkpoint->instanceName)->markAllVolumesAsDeleteOnTermination();
+    usingEc2Instance($checkpoint->instanceName)->markAllVolumesAsDeleteOnTermination();
 
     // we need to wait for a bit to allow EC2 to catch up :(
-    $st->usingTimer()->waitFor(function($st) use($checkpoint) {
+    usingTimer()->waitFor(function($st) use($checkpoint) {
         // we need to run a command (any command) on the host, to get it added
         // to SSH's known_hosts file
-        $st->usingHost($checkpoint->instanceName)->runCommandAsUser("ls", "root");
+        usingHost($checkpoint->instanceName)->runCommandAsUser("ls", "root");
     }, 'PT5M');
 
     // run our bootstrap script against the host
@@ -226,18 +226,18 @@ $story->addAction(function(StoryTeller $st) {
     // this script creates the default user we are going to use, and then
     // runs our standard 'prep' Ansible playbook to bring the image up
     // to our base line
-    $ipAddress  = $st->fromHost($checkpoint->instanceName)->getIpAddress();
-    $anSettings = $st->fromEnvironment()->getAppSettings('ansible');
+    $ipAddress  = fromHost($checkpoint->instanceName)->getIpAddress();
+    $anSettings = fromEnvironment()->getAppSettings('ansible');
     $command    = "cd '{$anSettings->dir}' && scripts/provision-box.sh '{$ipAddress}' 'root' ./prep-centos-6.3.yml";
-    $st->usingShell()->runCommand($command);
+    usingShell()->runCommand($command);
 
     // turn the image into an AMI
     $checkpoint->imageName = 'centos-6-template-' . date('YMD-His');
-    $checkpoint->amiId = $st->usingEc2Instance($checkpoint->instanceName)->createImage($checkpoint->imageName);
+    $checkpoint->amiId = usingEc2Instance($checkpoint->instanceName)->createImage($checkpoint->imageName);
 
     // wait for the AMI to be available
-    $st->usingTimer()->waitFor(function($st) use($checkpoint) {
-        $st->expectsEc2Image($checkpoint->amiId)->isAvailable();
+    usingTimer()->waitFor(function($st) use($checkpoint) {
+        expectsEc2Image($checkpoint->amiId)->isAvailable();
     }, 'PT5M');
 });
 
@@ -249,18 +249,18 @@ $story->addAction(function(StoryTeller $st) {
 
 $story->addPostTestInspection(function(StoryTeller $st) {
     // the information to guide our checks is in the checkpoint
-    $checkpoint = $st->getCheckpoint();
+    $checkpoint = getCheckpoint();
 
     // this is the ID of the AMI we just created
     $amiId = $checkpoint->amiId;
 
     // let's create a VM using our new image
-    $st->usingEc2()->createVm($checkpoint->imageName, 'centos6', $amiId, 't1.micro', "default");
+    usingEc2()->createVm($checkpoint->imageName, 'centos6', $amiId, 't1.micro', "default");
 
     // let's run a command against the VM
     //
     // this proves that our preferred user has been created
-    $st->usingHost($checkpoint->imageName)->runCommand("ls");
+    usingHost($checkpoint->imageName)->runCommand("ls");
 });
 {% endhighlight %}
 
@@ -286,7 +286,7 @@ storyplayer -e stu-office stories/ec2/CanCreateEc2InstanceStory.php
 and that story includes:
 
 {% highlight php %}
-$st->usingEc2()->createVm('instance-test');
+usingEc2()->createVm('instance-test');
 {% endhighlight %}
 
 then the EC2 instance will be called __stu-office.instance-test__.

@@ -22,10 +22,10 @@ Write your story as if every action must succeed.
 
 ## runCommand()
 
-Use `$st->usingShell()->runCommand()` to run an arbitrary command on the same computer that Storyplayer is running on.
+Use `usingShell()->runCommand()` to run an arbitrary command on the same computer that Storyplayer is running on.
 
 {%highlight php %}
-$result = $st->usingShell()->runCommand($command);
+$result = usingShell()->runCommand($command);
 {% endhighlight %}
 
 where:
@@ -37,10 +37,10 @@ This command is mostly for use by other modules (such as the _[Provisioning](../
 
 ## startInScreen()
 
-Use `$st->usingShell()->startInScreen()` to start a process on the same computer that Storyplayer is running on.
+Use `usingShell()->startInScreen()` to start a process on the same computer that Storyplayer is running on.
 
 {% highlight php %}
-$st->usingShell()->startInScreen($screenName, $commandLine);
+usingShell()->startInScreen($screenName, $commandLine);
 {% endhighlight %}
 
 where:
@@ -58,10 +58,10 @@ In the background, Storyplayer starts a new `screen` session, and inside that se
 
 ## stopInScreen()
 
-Use `$st->usingShell()->stopInScreen()` to stop a process that was originally started using _[usingShell()->startInScreen()](#startinscreen)_:
+Use `usingShell()->stopInScreen()` to stop a process that was originally started using _[usingShell()->startInScreen()](#startinscreen)_:
 
 {% highlight php %}
-$st->usingShell()->stopInScreen($screenName);
+usingShell()->stopInScreen($screenName);
 {% endhighlight %}
 
 where:
@@ -70,20 +70,20 @@ where:
 
 ## stopAllScreens()
 
-Use `$st->stopAllScreens()` to stop all processes that have been started using _[usingShell()->startInScreen()](#startinscreen)_:
+Use `stopAllScreens()` to stop all processes that have been started using _[usingShell()->startInScreen()](#startinscreen)_:
 
 {% highlight php %}
-$st->usingShell()->stopAllScreens();
+usingShell()->stopAllScreens();
 {% endhighlight %}
 
 If there are no processes running, no error is thrown.
 
 ## stopProcess()
 
-Use `$st->stopProcess()` to stop process that is running on the same computer that Storyplayer is running on.
+Use `stopProcess()` to stop process that is running on the same computer that Storyplayer is running on.
 
 {% highlight php %}
-$st->usingShell()->stopProcess($pid);
+usingShell()->stopProcess($pid);
 {% endhighlight %}
 
 where:

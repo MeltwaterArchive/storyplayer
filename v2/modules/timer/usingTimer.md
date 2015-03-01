@@ -21,10 +21,10 @@ Write your story as if every test must pass.
 
 ## waitFor()
 
-Use `$st->usingTimer()->waitFor()` to wait for something to happen
+Use `usingTimer()->waitFor()` to wait for something to happen
 
 {% highlight php %}
-$st->usingTimer()->waitFor($callback, $timeout);
+usingTimer()->waitFor($callback, $timeout);
 {% endhighlight %}
 
 where:
@@ -36,17 +36,17 @@ For example:
 
 {% highlight php %}
 // assumes the current page title is not "Welcome to Example.com!"
-$st->usingTimer()->waitFor(function($st) {
-	$st->expectsBrowser()->hasTitle("Welcome to Example.com!");
+usingTimer()->waitFor(function($st) {
+	expectsBrowser()->hasTitle("Welcome to Example.com!");
 }, 'PT5S');
 {% endhighlight %}
 
 ## waitWhile()
 
-Use `$st->usingTimer()->waitFor()` to wait for something to change
+Use `usingTimer()->waitFor()` to wait for something to change
 
 {% highlight php %}
-$st->usingTimer()->waitFor($callback, $timeout);
+usingTimer()->waitFor($callback, $timeout);
 {% endhighlight %}
 
 where:
@@ -58,17 +58,17 @@ For example:
 
 {% highlight php %}
 // assumes the current page title is "Login"
-$st->usingTimer()->waitWhile(function($st) {
-	$st->expectsBrowser()->hasTitle("Login");
+usingTimer()->waitWhile(function($st) {
+	expectsBrowser()->hasTitle("Login");
 }, 'PT5S');
 {% endhighlight %}
 
 ## wait()
 
-Use `$st->usingTimer()->wait()` to add a pause to your test.
+Use `usingTimer()->wait()` to add a pause to your test.
 
 {% highlight php %}
-$st->usingTimer()->wait($timeout, $reason);
+usingTimer()->wait($timeout, $reason);
 {% endhighlight %}
 
 where:

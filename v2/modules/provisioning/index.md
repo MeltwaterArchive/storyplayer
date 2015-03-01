@@ -63,7 +63,7 @@ Here's a `testEnvironmentSetup()` method from one of our internal [story templat
         $params = $this->getParams();
 
         // what is our public IP address?
-        $ourIpAddress = $st->getEnvironment()->host->ipAddress;
+        $ourIpAddress = getEnvironment()->host->ipAddress;
 
         // create the parameters to inject into the test box
         $vmParams = array (
@@ -81,18 +81,18 @@ Here's a `testEnvironmentSetup()` method from one of our internal [story templat
         );
 
         // we need a VM to host a real ACL
-        $st->usingVagrant()->createVm('pickle-node', $params['platform'], $params['vagrantDir']);
+        usingVagrant()->createVm('pickle-node', $params['platform'], $params['vagrantDir']);
 
         // build up the provisioning definition
-        $def = $st->usingProvisioning()->createDefinition();
-        $st->usingProvisioningDefinition($def)->addRole('qa-pickle-node')->toHost('pickle-node');
-        $st->usingProvisioningDefinition($def)->addParams($vmParams)->toHost('pickle-node');
+        $def = usingProvisioning()->createDefinition();
+        usingProvisioningDefinition($def)->addRole('qa-pickle-node')->toHost('pickle-node');
+        usingProvisioningDefinition($def)->addParams($vmParams)->toHost('pickle-node');
 
         // provision our VM
-        $st->usingProvisioner('ansible')->provisionHosts($def);
+        usingProvisioner('ansible')->provisionHosts($def);
 
         // make sure the ACL is installed and running
-        $st->expectsHost('pickle-node')->packageIsInstalled('ms-service-picklenode');
-        $st->expectsHost('pickle-node')->processIsRunning('pickle-node');
+        expectsHost('pickle-node')->packageIsInstalled('ms-service-picklenode');
+        expectsHost('pickle-node')->processIsRunning('pickle-node');
     }
 {% endhighlight %}

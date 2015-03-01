@@ -21,10 +21,10 @@ Write your story as if every test must pass.
 
 ## runCommand()
 
-Use `$st->usingHost()->runCommand()` to run a command on the host.
+Use `usingHost()->runCommand()` to run a command on the host.
 
 {% highlight php %}
-$result = $st->usingHost($hostName)->runCommand($command);
+$result = usingHost($hostName)->runCommand($command);
 {% endhighlight %}
 
 where:
@@ -39,10 +39,10 @@ If the return code from running `$command` is not zero, the command is assumed t
 
 ## runCommandAndIgnoreErrors()
 
-Use `$st->usingHost()->runCommandAndIgnoreErrors()` to run a command on the host.
+Use `usingHost()->runCommandAndIgnoreErrors()` to run a command on the host.
 
 {% highlight php %}
-$result = $st->usingHost($hostName)->runCommandAndIgnoreErrors($command);
+$result = usingHost($hostName)->runCommandAndIgnoreErrors($command);
 {% endhighlight %}
 
 where:
@@ -57,10 +57,10 @@ This action does not throw an exception if the return code from running `$comman
 
 ## runCommandAsUser()
 
-Use `$st->usingHost()->runCommandAsUser()` to run a command on the host as a specific user.
+Use `usingHost()->runCommandAsUser()` to run a command on the host as a specific user.
 
 {% highlight php %}
-$result = $st->usingHost($hostName)->runCommandAsUser($command, $user);
+$result = usingHost($hostName)->runCommandAsUser($command, $user);
 {% endhighlight %}
 
 where:
@@ -78,10 +78,10 @@ If the return code from running `$command` is not zero, the command is assumed t
 
 ## runCommandAsUserAndIgnoreErrors()
 
-Use `$st->usingHost()->runCommandAsUserAndIgnoreErrors()` to run a command on the host as a specific user.
+Use `usingHost()->runCommandAsUserAndIgnoreErrors()` to run a command on the host as a specific user.
 
 {% highlight php %}
-$result = $st->usingHost($hostName)->runCommandAsUser($command, $user);
+$result = usingHost($hostName)->runCommandAsUser($command, $user);
 {% endhighlight %}
 
 where:

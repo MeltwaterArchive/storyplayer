@@ -22,16 +22,16 @@ Write your story as if every action will be successful.
 
 ## set()
 
-Use `$st->usingCheckpoint()->set()` to store data in the checkpoint.
+Use `usingCheckpoint()->set()` to store data in the checkpoint.
 
 {% highlight php %}
-$st->usingCheckpoint()->set('balance', 10);
+usingCheckpoint()->set('balance', 10);
 {% endhighlight %}
 
 This is the same as doing:
 
 {% highlight php %}
-$checkpoint = $st->getCheckpoint();
+$checkpoint = getCheckpoint();
 $checkpoint->balance = 10;
 {% endhighlight %}
 

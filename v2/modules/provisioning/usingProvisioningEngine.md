@@ -20,10 +20,10 @@ Write your story as if every test must pass.
 
 ## provisionHosts()
 
-Use `$st->usingProvisioningEngine()->provisionHosts()` to apply a provisioning definition.
+Use `usingProvisioningEngine()->provisionHosts()` to apply a provisioning definition.
 
 {% highlight php %}
-$st->usingProvisioningEngine($engineName)->provisionHosts($def);
+usingProvisioningEngine($engineName)->provisionHosts($def);
 {% endhighlight %}
 
 where:

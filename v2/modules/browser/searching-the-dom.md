@@ -30,9 +30,9 @@ You can use any combination of search target and filter with all of the operatio
 Here are some examples:
 
 {% highlight php %}
-$st->usingBrowser()->click()->buttonWithText("Login");
-$st->usingBrowser()->type('storyplayer is great!')->intoBoxWithLabel("Feedback");
-$contents = $st->fromBrowser()->getText()->fromFieldWithClass("important");
+usingBrowser()->click()->buttonWithText("Login");
+usingBrowser()->type('storyplayer is great!')->intoBoxWithLabel("Feedback");
+$contents = fromBrowser()->getText()->fromFieldWithClass("important");
 {% endhighlight %}
 
 Search terms are (effectively) map reduce jobs that we run inside the browser:

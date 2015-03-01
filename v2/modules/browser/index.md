@@ -42,7 +42,7 @@ Additionally, to use this module, you need to run Storyplayer on a machine with 
 The basic format of an action is:
 
 {% highlight php %}
-$st->MODULE()->ACTION()->SEARCHTERM()
+MODULE()->ACTION()->SEARCHTERM()
 {% endhighlight %}
 
 where __module__ is one of:
@@ -56,7 +56,7 @@ __action__ is one of the documented actions available from that module, and __se
 Here are some examples:
 
 {% highlight php %}
-$st->usingBrowser()->gotoPage('http://datasift.com');
-$title = $st->fromBrowser()->getTitle();
-$st->expectsBrowser()->has()->linkWithText('Login');
+usingBrowser()->gotoPage('http://datasift.com');
+$title = fromBrowser()->getTitle();
+expectsBrowser()->has()->linkWithText('Login');
 {% endhighlight %}

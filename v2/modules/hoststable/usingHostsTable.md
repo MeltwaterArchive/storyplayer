@@ -21,10 +21,10 @@ Write your story as if every test must pass.
 
 ## addHost()
 
-Use `$st->usingHostsTable()->addHost()` to inject a new host into the hosts table.
+Use `usingHostsTable()->addHost()` to inject a new host into the hosts table.
 
 {% highlight php %}
-$st->usingHostsTable()->addHost($hostName, $hostDetails);
+usingHostsTable()->addHost($hostName, $hostDetails);
 {% endhighlight %}
 
 where:
@@ -36,10 +36,10 @@ This has been added
 
 ## removeHost()
 
-Use `$st->usingHostsTable()->removeHost()` to delete a host from the hosts table.
+Use `usingHostsTable()->removeHost()` to delete a host from the hosts table.
 
 {% highlight php %}
-$st->usingHostsTable()->removeHost($hostName, $hostDetails);
+usingHostsTable()->removeHost($hostName, $hostDetails);
 {% endhighlight %}
 
 where:
