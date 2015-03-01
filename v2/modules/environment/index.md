@@ -12,7 +12,7 @@ The __Environment__ module allows you to pull information about the _environment
 
 The source code for this Prose module can be found in this PHP class:
 
-* DataSift\Storyplayer\Prose\FromEnvironment
+* `Prose\FromEnvironment`
 
 ## What Is The Environment?
 

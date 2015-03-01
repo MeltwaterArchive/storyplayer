@@ -13,9 +13,9 @@ The __Form__ module allows you to isolate and work with a specific form on a HTM
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\ExpectsForm
-* DataSift\Storyplayer\Prose\FromForm
-* DataSift\Storyplayer\Prose\UsingForm
+* `Prose\ExpectsForm`
+* `Prose\FromForm`
+* `Prose\UsingForm`
 
 ## Why A Separate Form Module?
 

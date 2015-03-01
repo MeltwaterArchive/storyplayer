@@ -11,9 +11,9 @@ The __Supervisor__ module allows you to start and stop processes that are being 
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\ExpectsSupervisor
-* DataSift\Storyplayer\Prose\FromSupervisor
-* DataSift\Storyplayer\Prose\UsingSupervisor
+* `Prose\ExpectsSupervisor`
+* `Prose\FromSupervisor`
+* `Prose\UsingSupervisor`
 
 ## Dependencies
 

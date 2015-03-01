@@ -11,9 +11,9 @@ The __HostsTable__ module allows you to interact with Storyplayer's internal lis
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\ExpectsHostsTable
-* DataSift\Storyplayer\Prose\FromHostsTable
-* DataSift\Storyplayer\Prose\UsingHostsTable
+* `Prose\ExpectsHostsTable`
+* `Prose\FromHostsTable`
+* `Prose\UsingHostsTable`
 
 <div class="callout warning" markdown="1">
 #### Internal Module

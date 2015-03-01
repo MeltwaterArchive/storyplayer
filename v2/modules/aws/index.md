@@ -11,7 +11,7 @@ The __AWS__ module allows you to obtain Amazon Web Service client objects from t
 
 The source code for this Prose module can be found in this PHP class:
 
-* DataSift\Storyplayer\Prose\FromAws
+* `Prose\FromAws`
 
 ## Using The Official Amazon SDK
 

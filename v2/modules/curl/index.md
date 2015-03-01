@@ -21,5 +21,5 @@ TBD.
 
 The source code for this module can be found in this class:
 
-* `Prose\FromCurl.php`
-* `Prose\UsingCurl.php`
+* `Prose\FromCurl`
+* `Prose\UsingCurl`

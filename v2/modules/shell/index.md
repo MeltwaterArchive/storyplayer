@@ -11,9 +11,9 @@ The __UNIX Shell__ module allows you to start and stop child processes that run 
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\ExpectsShell
-* DataSift\Storyplayer\Prose\FromShell
-* DataSift\Storyplayer\Prose\UsingShell
+* `Prose\ExpectsShell`
+* `Prose\FromShell`
+* `Prose\UsingShell`
 
 ## Everything Is Screened
 

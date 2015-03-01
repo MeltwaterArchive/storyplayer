@@ -11,7 +11,8 @@ The __UUID__ module allows you to generate new (and possibly salted) hashes to t
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\FromUuid
+* `Prose\ExpectsUuid`
+* `Prose\FromUuid`
 
 ## What Are UUIDs?
 

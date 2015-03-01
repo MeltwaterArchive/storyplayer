@@ -13,11 +13,11 @@ The __Assertions__ module allows you to test data that you've obtained from othe
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\AssertsArray
-* DataSift\Storyplayer\Prose\AssertsDouble
-* DataSift\Storyplayer\Prose\AssertsInteger
-* DataSift\Storyplayer\Prose\AssertsObject
-* DataSift\Storyplayer\Prose\AssertsString
+* `Prose\AssertsArray`
+* `Prose\AssertsDouble`
+* `Prose\AssertsInteger`
+* `Prose\AssertsObject`
+* `Prose\AssertsString`
 
 ## Dependencies
 
@@ -25,7 +25,7 @@ These dependencies are automatically installed when you install Storyplayer:
 
 * [Stone](https://github.com/datasift/Stone) - DataSift's QA toolkit
 
-Additionally, this module uses the standard UNIX _diff_ tool for some of its actions.
+Additionally, this module uses the standard UNIX `diff` tool for some of its actions.
 
 ## Using The Assertions Module
 

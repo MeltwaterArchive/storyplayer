@@ -21,4 +21,4 @@ TBD.
 
 The source code for this module can be found in this class:
 
-* `Prose\FromConfig.php`
+* `Prose\FromConfig`

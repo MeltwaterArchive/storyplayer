@@ -9,7 +9,9 @@ next: '<a href="../../modules/processestable/index.html">Next: The Processes Tab
 
 _usingLog()_ allows you to write a message into Storyplayer's output log.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingLog_.
+The source code for these actions can be found in this class:
+
+* `Prose\UsingLog`.
 
 ## Behaviour And Return Codes
 

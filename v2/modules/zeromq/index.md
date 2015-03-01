@@ -11,8 +11,8 @@ The __ZeroMQ__ module allows you to send and receive messages via the lightweigh
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storypayer\Prose\ExpectsZmq
-* DataSift\Storypayer\Prose\UsingZmq
+* `Prose\ExpectsZmq`
+* `Prose\UsingZmq`
 
 ## Sometimes An External Messaging Tool Is Best
 

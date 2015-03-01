@@ -11,9 +11,9 @@ The __Host__ module allows you to inspect and run commands on other computers, s
 
 The source code for this Prose module can be found in these PHP classes:
 
-* DataSift\Storyplayer\Prose\ExpectsHost
-* DataSift\Storyplayer\Prose\FromHost
-* DataSift\Storyplayer\Prose\UsingHost
+* `Prose\ExpectsHost`
+* `Prose\FromHost`
+* `Prose\UsingHost`
 
 ## Dependencies
 
