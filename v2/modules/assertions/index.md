@@ -49,7 +49,7 @@ Here are some examples:
 
 {% highlight php startinline %}
 // array comparison
-$expectedCountries = array ("United Kingdom", "United States");
+$expectedCountries = [ "United Kingdom", "United States" ];
 $actualCountries = fromBrowser()->getOptions()->fromDropdownLabelled("Countries");
 expectsArray($actualCountries)->equals($expectedCountries);
 {% endhighlight %}
@@ -60,3 +60,9 @@ $expectedTitle = "Welcome To Storyplayer";
 $actualTitle = fromBrowser()->getTitle();
 expectsString($actualTitle)->equals($expectedTitle);
 {% endhighlight %}
+
+## On Failure
+
+If an assertion fails, each module throws an exception.  __Do not catch this exception in your story.__ Storyplayer will catch the exception for you, and use it to work out whether or not your story has passed or failed.
+
+Write your stories as if every line of code will succeed.
