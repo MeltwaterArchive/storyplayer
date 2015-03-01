@@ -11,31 +11,33 @@ next: '<a href="../modules/aws/index.html">Next: The Amazon AWS Module</a>'
 
 Storyplayer ships with over 20 modules that are ready to use straight away.
 
-* [Amazon AWS](aws/index.html)
-* [Amazon EC2](ec2/index.html)
-* [Asserts](asserts/index.html)
-* [Browser](browser/index.html)
-* [Checkpoint](checkpoint/index.html)
-* [Config](config/index.html)
-* [cURL](curl/index.html)
-* [Environment](environment/index.html)
-* [Failure](failure/index.html)
-* [File](file/index.html)
-* [Form](form/index.html)
-* [Graphite](graphite/index.html)
-* [Host](host/index.html)
-* [HTTP](http/index.html)
-* [Log](log/index.html)
-* [Provisioning](provisioning/index.html)
-* [SavageD](savaged/index.html)
-* [Supervisor](supervisor/index.html)
-* [System Under Test](systemundertest/index.html)
-* [Test Environment](testenvironment/index.html)
-* [Timer](timer/index.html)
-* [UNIX Shell](shell/index.html)
-* [UUID](uuid/index.html)
-* [Vagrant](vagrant/index.html)
-* [ZeroMQ](zeromq/index.html)
+Module | Use To ...
+-------|------------
+[Amazon AWS](aws/index.html) |
+[Amazon EC2](ec2/index.html) |
+[Assertions](asserts/index.html) | test data that you've obtained from other modules.
+[Browser](browser/index.html) |
+[Checkpoint](checkpoint/index.html) |
+[Config](config/index.html) |
+[cURL](curl/index.html) |
+[Environment](environment/index.html) |
+[Failure](failure/index.html) |
+[File](file/index.html) |
+[Form](form/index.html) |
+[Graphite](graphite/index.html) |
+[Host](host/index.html) |
+[HTTP](http/index.html) |
+[Log](log/index.html) |
+[Provisioning](provisioning/index.html) |
+[SavageD](savaged/index.html) |
+[Supervisor](supervisor/index.html) |
+[System Under Test](systemundertest/index.html) |
+[Test Environment](testenvironment/index.html) |
+[Timer](timer/index.html) |
+[UNIX Shell](shell/index.html) |
+[UUID](uuid/index.html) |
+[Vagrant](vagrant/index.html) |
+[ZeroMQ](zeromq/index.html) |
 
 ## Iterators
 
