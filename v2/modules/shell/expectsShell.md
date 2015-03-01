@@ -24,7 +24,7 @@ Write your story as if every test must pass.
 
 Use `expectsShell()->isRunningInScreen()` to make sure that a process you previously started is still running.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsShell()->isRunningIsScreen($screenName);
 {% endhighlight %}
 
@@ -36,7 +36,7 @@ where:
 
 Use `expectsShell()->isRunningInScreen()` to make sure that a process you previously started is no longer running.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsShell()->isNotRunningIsScreen($screenName);
 {% endhighlight %}
 

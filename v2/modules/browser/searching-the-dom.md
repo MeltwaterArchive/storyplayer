@@ -13,7 +13,7 @@ Most of the Browser module's operations need a DOM element to work on.  You tell
 
 An element search term looks like this:
 
-{% highlight php %}
+{% highlight php startinline %}
 [from|into]ButtonWithId('your-id');
 {% endhighlight %}
 
@@ -29,7 +29,7 @@ You can use any combination of search target and filter with all of the operatio
 
 Here are some examples:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->click()->buttonWithText("Login");
 usingBrowser()->type('storyplayer is great!')->intoBoxWithLabel("Feedback");
 $contents = fromBrowser()->getText()->fromFieldWithClass("important");

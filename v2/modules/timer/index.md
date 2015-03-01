@@ -21,13 +21,13 @@ This module relies on [DataSift's Stone library](http://github.com/datasift/Ston
 
 The basic format of an action is either:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingTimer()->ACTION($callback, $timeout);
 {% endhighlight %}
 
 or
 
-{% highlight php %}
+{% highlight php startinline %}
 usingTimer()->ACTION($timeout);
 {% endhighlight %}
 
@@ -44,7 +44,7 @@ The callback function should throw an exception if whatever you're waiting for h
 
 For example, here's how _[usingBrowser()->waitForTitle()](../browser/usingBrowser.html#waitfortitle)_ is implemented, using _[waitFor()](usingTimer.html#waitfor)_:
 
-{% highlight php %}
+{% highlight php startinline %}
 $title = "Welcome To Example.com!";
 $timeout = 'PT2S';
 usingTimer()->waitFor(function($st) use($title) {

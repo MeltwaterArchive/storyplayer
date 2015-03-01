@@ -28,7 +28,7 @@ Test conditions are created after the test environment has been created, and the
 
 To setup your test conditions, add a `TestSetup()` function to your story:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addTestSetup(function(StoryTeller $st) {
 	// steps go here
 });
@@ -38,7 +38,7 @@ $story->addTestSetup(function(StoryTeller $st) {
 
 Once your test has finished, add a `TestTeardown()` function to put your test environment back to how it was before your `TestSetup()` function ran:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addTestTeardown(function(StoryTeller $st) {
 	// steps go here
 });

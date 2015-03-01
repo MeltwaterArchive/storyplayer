@@ -41,7 +41,7 @@ Additionally, to use this module, you need to run Storyplayer on a machine with 
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION()->SEARCHTERM()
 {% endhighlight %}
 
@@ -55,7 +55,7 @@ __action__ is one of the documented actions available from that module, and __se
 
 Here are some examples:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->gotoPage('http://datasift.com');
 $title = fromBrowser()->getTitle();
 expectsBrowser()->has()->linkWithText('Login');

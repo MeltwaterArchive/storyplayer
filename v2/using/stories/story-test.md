@@ -23,7 +23,7 @@ A story test:
 
 Here's what an empty story test looks like.  This is what we start from whenever we're writing a new story test.
 
-{% highlight php %}
+{% highlight php startinline %}
 <?php
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;

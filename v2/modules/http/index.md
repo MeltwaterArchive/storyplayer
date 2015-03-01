@@ -45,7 +45,7 @@ This module relies on [DataSift's Stone library](http://github.com/datasift/Ston
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION();
 {% endhighlight %}
 

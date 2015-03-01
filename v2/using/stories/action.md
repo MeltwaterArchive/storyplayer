@@ -28,7 +28,7 @@ The `Action()` happens after everything has been setup, and after any prediction
 
 You will need to add an `Action()` function to your story:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addAction(function(StoryTeller $st) {
     // steps go here
 });

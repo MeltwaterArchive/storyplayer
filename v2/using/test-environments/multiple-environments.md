@@ -40,7 +40,7 @@ Anything that's likely to be different between environments (such as URLs) shoul
 
 and then retrieved in your stories using _[$st->fromEnvironment()->getAppSettings()](../modules/environment/fromEnvironment.html#getappsettings)_:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addAction(function($st) {
 	// where is our app?
 	$wwwSettings = $st->fromEnvironment()->getAppSettings('website');
@@ -56,7 +56,7 @@ Storyplayer makes sure that _[$st->fromEnvironment()->getAppSettings()](../modul
 
 When you build a virtual machine, it's quite likely that the virtual machine will be allocated a dynamic IP address.  If you ever need to get the IP address of the virtual machine, use _[$st->fromHost()->getIpAddress()](../modules/host/fromHost.html#getipaddress)_:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addAction(function($st) {
 	// where is our app installed?
 	$ipAddress = $st->fromHost('myhost')->getIpAddress();
@@ -67,7 +67,7 @@ $story->addAction(function($st) {
 
 If you need to test against more than one operating system, take advantage of [story parameters](../stories/story-params.html) and use the `-P` / `--platform` switch:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addTestEnvironmentSetup(function($st) {
 	// set our default params
 	//

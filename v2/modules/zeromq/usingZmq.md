@@ -22,7 +22,7 @@ Write your story as if every test must pass.
 
 Use `usingZmq()->bind()` to create a new ZeroMQ socket, and to bind it to a URI to listen for incoming connections.
 
-{% highlight php %}
+{% highlight php startinline %}
 $sock = usingZmq()->bind($address, $socketType);
 {% endhighlight %}
 
@@ -40,7 +40,7 @@ __TIPS:__
 
 Use `usingZmq()->connect()` to create a new ZeroMQ socket, and to connect it to a (possibly remote) URI to send and receive ZeroMQ messages.
 
-{% highlight php %}
+{% highlight php startinline %}
 $sock = usingZmq()->connect($address, $socketType, [$sendHwm = 100, [$recvHwm = 100]]);
 {% endhighlight %}
 
@@ -60,7 +60,7 @@ __TIPS:__
 
 Use `usingZmq()->recv()` to receive a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 $message = usingZmq()->recv($socket);
 {% endhighlight %}
 
@@ -71,7 +71,7 @@ where:
 
 As `$socket` is a genuine `ZMQ_Socket`, you could simply _recv()_ directly on the socket like this:
 
-{% highlight php %}
+{% highlight php startinline %}
 $message = $socket->recv();
 {% endhighlight %}
 
@@ -81,7 +81,7 @@ and it will work.  The reason we recommend using _usingZmq()->recv()_ et al inst
 
 Use `usingZmq()->recvMulti()` to receive a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 $message = usingZmq()->recvMulti($socket);
 {% endhighlight %}
 
@@ -96,7 +96,7 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 Use `usingZmq()->recvMultiNonBlocking()` to receive a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, `NULL` is returned to the caller.
 
-{% highlight php %}
+{% highlight php startinline %}
 $message = usingZmq()->recvMultiNonBlocking($socket);
 {% endhighlight %}
 
@@ -111,7 +111,7 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 Use `usingZmq()->recvNonBlocking()` to receive a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.  If the socket would have blocked, `NULL` is returned to the caller.
 
-{% highlight php %}
+{% highlight php startinline %}
 $message = usingZmq()->recvNonBlocking($socket);
 {% endhighlight %}
 
@@ -126,7 +126,7 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 Use `usingZmq()->send()` to send a single-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingZmq()->send($socket, $message);
 {% endhighlight %}
 
@@ -141,7 +141,7 @@ See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using 
 
 Use `usingZmq()->send()` to send a multi-part message via a ZeroMQ socket previously created using _[bind()](#bind)_ or _[connect()](#connect)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingZmq()->sendMulti($socket, $message);
 {% endhighlight %}
 

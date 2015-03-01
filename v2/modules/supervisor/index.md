@@ -23,7 +23,7 @@ See the [Host module](../host/index.html) for dependencies.
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION();
 {% endhighlight %}
 

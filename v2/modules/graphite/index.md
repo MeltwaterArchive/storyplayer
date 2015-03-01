@@ -68,7 +68,7 @@ Once you have Graphite (and optionally statsd) installed, you'll need to update 
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION();
 {% endhighlight %}
 

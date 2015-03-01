@@ -24,7 +24,7 @@ Most of the actions defined by the _Browser_ module ultimately get turned into [
 
 To run your XPath query, you need a _WebDriverElement_ object to run it against.  You can get one of these using _[fromBrowser()->getTopElement()](fromBrowser.html#gettopelement)_:
 
-{% highlight php %}
+{% highlight php startinline %}
 $xpath = 'descendant::div/div/table/tr/*';
 $topElement = fromBrowser()->getTopElement();
 $elements = $topElement->getElements('xpath', $xpath);
@@ -51,7 +51,7 @@ Facebook's original WebDriver client library acts as a thin facade to the Json W
 
 The _DataSift\WebDriver\WebDriverSession_ represents a single running instance of a web browser.  You can get the current session from the `$st` object:
 
-{% highlight php %}
+{% highlight php startinline %}
 $session = getRunningWebBrowser();
 {% endhighlight %}
 
@@ -61,7 +61,7 @@ The session provides a lot of useful functionality, including opening web pages,
 
 The _DataSift\WebDriver\WebDriverElement_ represents a single DOM element inside the web browser.
 
-{% highlight php %}
+{% highlight php startinline %}
 $session = getRunningWebBrowser();
 $body = $session->getElement('tag name', 'body');
 {% endhighlight %}

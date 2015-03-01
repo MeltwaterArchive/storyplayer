@@ -26,7 +26,7 @@ However, there are times when you need to share data between the phases of your 
 
 The _checkpoint_ is a plain old PHP object that's created at the start of every story.  It starts as an empty object, and it's available for you to store data into, or read data from, in any phase of your story:
 
-{% highlight php %}
+{% highlight php startinline %}
 $checkpoint = $st->getCheckpoint();
 $checkpoint->stats = $st->fromStusCustomModule()->getCurrentUsageStats();
 {% endhighlight php %}

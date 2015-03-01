@@ -33,7 +33,7 @@ You can (and should) override these settings from time to time:
 
 You can access your app settings using _[$st->fromEnvironment()->getAppSettings()](../modules/environment/fromEnvironment.html#getappsettings)_ in your tests:
 
-{% highlight php %}
+{% highlight php startinline %}
 $settings = $st->fromEnvironment->getAppSettings('ogre');
 {% endhighlight %}
 

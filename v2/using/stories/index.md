@@ -43,7 +43,7 @@ Unlike other tools, Storyplayer's story tests aren't written in a DSL of any kin
 
 might translate into the following PHP code:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addAction(function($st) {
 	# login as a subscription user
 	$st->usingBrowser()->gotoPage('/login');
@@ -73,7 +73,7 @@ Stories tend to be grouped, and this will be reflected in your library of story 
 
 might be part of a library of tests around invoicing, that shares a common template:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story = newStoryFor('Billing User Stories')
          ->inGroup('Invoices')
          ->called('Can See All Invoices')

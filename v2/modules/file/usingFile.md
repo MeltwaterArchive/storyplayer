@@ -24,7 +24,7 @@ Write your story as if every action will be successful.
 
 Use `usingFile()->removeFile()` to delete a file off disk.
 
-{% highlight php %}
+{% highlight php startinline %}
 $tmpName = usingFile()->getTmpFileName();
 // do something with the temporary file here
 usingFile()->removeFile($tmpName);

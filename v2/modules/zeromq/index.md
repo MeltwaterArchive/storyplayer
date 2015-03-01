@@ -44,7 +44,7 @@ Note that we don't close the socket afterwards ... at the time of writing, the P
 
 Here's an example:
 
-{% highlight php %}
+{% highlight php startinline %}
 // make it explicit that we're using a class from the global namespace
 use ZMQ;
 

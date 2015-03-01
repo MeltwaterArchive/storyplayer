@@ -25,7 +25,7 @@ Write your story as if every test must pass.
 
 Use `usingLog()->writeToLog()` to write a message to the log file from your story.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingLog()->writeToLog($msg);
 {% endhighlight %}
 

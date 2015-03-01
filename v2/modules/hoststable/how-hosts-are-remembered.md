@@ -15,7 +15,7 @@ When Storyplayer learns about a new host (for example, [when a new Vagrant virtu
 
 To see the hosts table, you can use the following code inside one of your stories:
 
-{% highlight php %}
+{% highlight php startinline %}
 var_dump(fromHostsTable()->getHostsTable());
 {% endhighlight %}
 
@@ -23,7 +23,7 @@ The hosts table is a PHP object.  It contains an attribute for every host that w
 
 Here's an example *var_dump()* of the hosts table:
 
-{% highlight php %}
+{% highlight php startinline %}
 class DataSift\Stone\ObjectLib\BaseObject#21 (1) {
   public $ogre =>
   class DataSift\Stone\ObjectLib\BaseObject#94 (9) {

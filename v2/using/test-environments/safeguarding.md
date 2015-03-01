@@ -27,7 +27,7 @@ All stories are automatically barred from running against any environment with t
 
 To mark a story as safe to run against a safeguarded environment, use `$story->runsOn()`:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->runsOn("production")
       ->andOn("sales-demo");
 {% endhighlight %}

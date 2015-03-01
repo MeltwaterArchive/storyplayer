@@ -13,7 +13,7 @@ Story parameters are configuration that are defined by your story (and / or by y
 
 Call `$st->setParams()` in your stories and / or `$this->setParams()` in your story templates to set the parameters for your story:
 
-{% highlight php %}
+{% highlight php startinline %}
 //
 // example of how to set story parameters from
 // inside a story
@@ -29,7 +29,7 @@ $story->addTestEnvironmentSetup(function(StoryTeller $st) {
 });
 {% endhighlight %}
 
-{% highlight php %}
+{% highlight php startinline %}
 //
 // example of how to set story parameters from
 // inside a story template
@@ -55,7 +55,7 @@ class MyTemplate extends StoryTemplate
 
 When you want to get the definitive list of parameters for your story, call `$st->getParams()`:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addTestEnvironmentSetup(function(StoryTeller $st) {
 	// build up the list of settings
 	//
@@ -98,7 +98,7 @@ vendor/bin/storyplayer -D platform=ec2-centos6
 
 Many of our stories support deploying our code onto several alternative platforms, such as CentOS 5 using Vagrant, CentOS 6 using Vagrant, and CentOS 6 on Amazon EC2.  We add support for all of these platforms in our `TestEnvironmentSetup()` functions, and use story parameters to set which platform we want to use:
 
-{% highlight php %}
+{% highlight php startinline %}
 class DeployableServiceTemplate extends StoryTemplate
 {
 	public function testEnvironmentSetup(StoryTeller $st)

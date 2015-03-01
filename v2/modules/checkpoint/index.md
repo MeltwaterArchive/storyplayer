@@ -26,7 +26,7 @@ This module has no dependencies.
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION();
 {% endhighlight %}
 
@@ -39,10 +39,10 @@ and __action__ is one of the methods available on the __module__ you choose.
 
 Here are some examples:
 
-{% highlight php %}
+{% highlight php startinline %}
 $balance = fromCheckpoint()->get('balance');
 {% endhighlight %}
 
-{% highlight php %}
+{% highlight php startinline %}
 usingCheckpoint()->set('balance', 100);
 {% endhighlight %}

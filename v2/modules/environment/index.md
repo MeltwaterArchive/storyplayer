@@ -34,7 +34,7 @@ This module has no additional dependencies.
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION();
 {% endhighlight %}
 

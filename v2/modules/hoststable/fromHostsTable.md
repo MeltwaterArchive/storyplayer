@@ -19,7 +19,7 @@ Every action returns either a value on success, or `NULL` on failure.  These act
 
 Use `fromHostsTable()->getDetailsForHost()` to retrieve the host's entry in Storyplayer's [hosts table](how-hosts-are-remembered.html).
 
-{% highlight php %}
+{% highlight php startinline %}
 $details = fromHostsTable()->getDetailsForHost($hostName);
 {% endhighlight %}
 
@@ -36,7 +36,7 @@ __NOTE__
 
 Use `fromHostsTable()->getHostsTable()` to retrieve Storyplayer's [hosts table](how-hosts-are-remembered.html).
 
-{% highlight php %}
+{% highlight php startinline %}
 $table = fromHostsTable()->getHostsTable();
 {% endhighlight %}
 

@@ -19,7 +19,7 @@ When users create and build up a [provisioning definition](provisioning-definiti
 
 For example:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingProvisioningDefinition($def)->addVars($params)->toHost($hostName);
 usingProvisioningDefinition($def)->addVars($params)->toGroup($groupName);
 {% endhighlight %}
@@ -34,7 +34,7 @@ Each supported provisioning engine needs a class inside the _DataSift\Storyplaye
 
 Storyplayer loads these classes dynamically, based on the `$engineName` parameter passed to _[usingProvisioningEngine()](usingProvisioningEngine.html)_:
 
-{% highlight php %}
+{% highlight php startinline %}
 $className = ucfirst($engineName) . "Provisioner";
 $fqClassName = 'DataSift\Storyplayer\ProvisioningLib\Provisioners\\' . $className;
 

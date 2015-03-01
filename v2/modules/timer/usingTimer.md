@@ -23,7 +23,7 @@ Write your story as if every test must pass.
 
 Use `usingTimer()->waitFor()` to wait for something to happen
 
-{% highlight php %}
+{% highlight php startinline %}
 usingTimer()->waitFor($callback, $timeout);
 {% endhighlight %}
 
@@ -34,7 +34,7 @@ where:
 
 For example:
 
-{% highlight php %}
+{% highlight php startinline %}
 // assumes the current page title is not "Welcome to Example.com!"
 usingTimer()->waitFor(function($st) {
 	expectsBrowser()->hasTitle("Welcome to Example.com!");
@@ -45,7 +45,7 @@ usingTimer()->waitFor(function($st) {
 
 Use `usingTimer()->waitFor()` to wait for something to change
 
-{% highlight php %}
+{% highlight php startinline %}
 usingTimer()->waitFor($callback, $timeout);
 {% endhighlight %}
 
@@ -56,7 +56,7 @@ where:
 
 For example:
 
-{% highlight php %}
+{% highlight php startinline %}
 // assumes the current page title is "Login"
 usingTimer()->waitWhile(function($st) {
 	expectsBrowser()->hasTitle("Login");
@@ -67,7 +67,7 @@ usingTimer()->waitWhile(function($st) {
 
 Use `usingTimer()->wait()` to add a pause to your test.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingTimer()->wait($timeout, $reason);
 {% endhighlight %}
 

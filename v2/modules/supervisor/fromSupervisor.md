@@ -19,7 +19,7 @@ Every action either returns a value on success, or `NULL` on failure. None of th
 
 Use `fromSupervisor()->getProgramIsRunning()` to see if a program managed by Supervisor is running.
 
-{% highlight php %}
+{% highlight php startinline %}
 $isRunning = fromSupervisor()->getProgramIsRunning($programName);
 {% endhighlight %}
 
@@ -33,7 +33,7 @@ where:
 
 Use `fromSupervisor()->getProgramIsNotRunning()` to see if a program managed by Supervisor is not running.
 
-{% highlight php %}
+{% highlight php startinline %}
 $isRunning = fromSupervisor()->getProgramIsNotRunning($programName);
 {% endhighlight %}
 

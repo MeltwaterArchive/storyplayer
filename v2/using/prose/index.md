@@ -17,13 +17,13 @@ Prose is the programming style used to automate [user stories](../stories/user-s
 
 Stories are told using PHP statements that call Storyplayer's [$st object](the-st-object.html):
 
-{% highlight php %}
+{% highlight php startinline %}
 $st->verbMODULE()->ACTION();
 {% endhighlight %}
 
 For example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $st->usingBrowser()->gotoPage("https://datasift.com");
 $st->usingBrowser()->waitForTitle(5, "DataSift | The Leading Social Platform");
 {% endhighlight %}
@@ -38,7 +38,7 @@ You can also [create your own modules](creating-modules.html) for Storyplayer.  
 
 When you call a module from your story, you prefix the module name with a verb:
 
-{% highlight php %}
+{% highlight php startinline %}
 // gets data from the Browser module
 $title = $st->fromBrowser()->getTitle();
 

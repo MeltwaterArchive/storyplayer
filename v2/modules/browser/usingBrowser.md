@@ -24,7 +24,7 @@ Write your story as if every action will be successful.
 
 Use `usingBrowser()->check()` to tick a checkbox.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->check()->boxWithLabel("T's & C's");
 {% endhighlight %}
 
@@ -32,7 +32,7 @@ usingBrowser()->check()->boxWithLabel("T's & C's");
 
 Use `usingBrowser()->clear()` to clear out any values inside a form's input box.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->clear()->fieldWithLabel("Username");
 {% endhighlight %}
 
@@ -46,7 +46,7 @@ __See Also:__
 
 Use `usingBrowser()->click()` to click on a button, link, or other element on the page.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->click()->linkWithText("Login");
 {% endhighlight %}
 
@@ -58,7 +58,7 @@ If using _click()_ to get around is too slow or too much like hard work for you,
 
 Use `usingBrowser()->gotoPage()` to load a new page into the web browser:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->gotoPage("http://datasift.com");
 usingBrowser()->waitForTitle(2, "Welcome To DataSift!");
 {% endhighlight %}
@@ -71,7 +71,7 @@ We recommend that you use _gotoPage()_ the first time your story needs to load a
 
 Use `usingBrowser()->select()` to pick an option in a dropdown list.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->select("United Kingdom")->fromDropdownWithLabel("Country");
 {% endhighlight %}
 
@@ -83,13 +83,13 @@ In general, we recommend using _[usingForm()->select()](../form/usingForm.html#s
 
 Use `usingBrowser()->type()` to send a string of text to a selected DOM element.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->type("Storyplayer lives!")->intoFieldWithLabel("progress");
 {% endhighlight %}
 
 You can also use _type()_ to send a mixture of normal text and non-printing keys, using the constants defined in _DataSift\WebDriver\WebDriverKeys_:
 
-{% highlight php %}
+{% highlight php startinline %}
 use DataSift\WebDriver\WebDriverKeys;
 
 usingBrowser()->type(
@@ -168,7 +168,7 @@ After all of the keys have been typed into the browser, the modifier keys are re
 
 Use `usingBrowser()->waitForOverlay()` to wait for an overlay (such as an image lightbox) to appear on the current page in the web browser.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->waitForOverlay(2, 'lightbox');
 {% endhighlight php %}
 
@@ -181,7 +181,7 @@ _waitForOverlay()_ takes two parameters:
 
 Use `usingBrowser()->waitForTitle()` to wait for the page title to change.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->gotoPage("http://datasift.com");
 usingBrowser()->waitForTitle(2, "Welcome To DataSift!");
 {% endhighlight %}
@@ -197,7 +197,7 @@ See _[gotoPage()](#gotopage)_ for a fuller discussion.
 
 Use `usingBrowser()->waitForTitles()` to wait for the page title to change.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->gotoPage("http://datasift.com");
 usingBrowser()->waitForTitles(2, array(
 	"Personal Details",

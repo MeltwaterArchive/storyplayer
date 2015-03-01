@@ -13,7 +13,7 @@ The `$st` object provides the following methods for you to use inside your own s
 
 Use `$st->getCheckpoint()` to retrieve the [checkpoint object](../stories/the-checkpoint.html).
 
-{% highlight php %}
+{% highlight php startinline %}
 $checkpoint = $st->getCheckpoint();
 {% endhighlight %}
 
@@ -28,7 +28,7 @@ Where can you use `getCheckpoint()`?
 
 Use `$st->getParams()` to get a list of the [params](../stories/story-params.html) passed into this story.
 
-{% highlight php %}
+{% highlight php startinline %}
 $params = $st->getParams();
 {% endhighlight %}
 
@@ -41,7 +41,7 @@ Where can you use `getParams()`?
 
 Use `$st->startAction()` to retrieve the `$log` object that is used for [logging about the actions of your module](adding-logging.html).
 
-{% highlight php %}
+{% highlight php startinline %}
 $log = $st->startAction($msg);
 {% endhighlight %}
 

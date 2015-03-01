@@ -61,7 +61,7 @@ This class provides:
 
 Each method in your Prose module's classes will need access to Storyplayer's `$st` object.  This is available as a property of your class (thanks to the `Prose` base class), and you'll normally create a local variable for it to save yourself a lot of extra typing:
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 use DataSift\Storyplayer\Prose;
@@ -82,7 +82,7 @@ class UsingFoo extends Prose
 
 Each method in your Prose module's classes must tell the user what it is doing.  Be verbose - when a test fails, whoever is running Storyplayer is going to be relying on this information to work out where the test failed and why.  There are few things worse than having to re-run a test several times (with more and more debugging) to figure out why it no longer worse.
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 use DataSift\Storyplayer\Prose;
@@ -107,7 +107,7 @@ class UsingFoo extends Prose
 
 Normally, your methods will be very short, and the single log message will be enough.  Sometimes, however, your method might need to contain several steps in order to be useful.  When this happens, you can call `$log->addStep()` to perform additional logging:
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 use DataSift\Storyplayer\Prose;

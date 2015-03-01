@@ -15,7 +15,7 @@ Use the _WithAltText_ search filter to find DOM elements that have a matching _a
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 click()->elementWithAltText("Login Button");
 {% endhighlight %}
 
@@ -27,7 +27,7 @@ Use the _WithClass_ search filter to find DOM elements that have a matching CSS 
 
 Examples:
 
-{% highlight php %}
+{% highlight php startinline %}
 $invoices = fromBrowser()->get()->cellsWithClass("invoice-number");
 $errors = fromBrowser()->get()->fieldsWithClass("input-errors");
 {% endhighlight %}
@@ -40,7 +40,7 @@ Use the _WithId_ search filter to find DOM elements with a matching _id_ attribu
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->click()->buttonWithId('submit_payment');
 {% endhighlight %}
 
@@ -57,7 +57,7 @@ Use the _WithLabel_ or _Labelled_ search filter (they're identical) to find DOM 
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->type('storyplayer is great!')->intoFieldLabelled('Feedback');
 {% endhighlight %}
 
@@ -80,7 +80,7 @@ Use the _WithName_ or _Named_ search filter (they're identical) to find DOM elem
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->type('1111222233334444')->intoBoxNamed('cc_number');
 {% endhighlight %}
 
@@ -96,7 +96,7 @@ Use The _WithPlaceholder_ search filter to find DOM elements that have a matchin
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 type('stuart')->intoBoxWithPlaceholder("Username ...");
 {% endhighlight %}
 
@@ -108,7 +108,7 @@ Use the _WithText_ search filter to find DOM elements that contain matching text
 
 Examples:
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsBrowser()->has()->fieldWithText('Login');
 usingBrowser()->click()->buttonWithText('Register');
 {% endhighlight %}
@@ -121,7 +121,7 @@ Use the _WithTitle_ search filter to find DOM elements that have a matching _tit
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 click()->fieldWithTitle("Next Page");
 {% endhighlight %}
 

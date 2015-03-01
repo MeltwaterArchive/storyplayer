@@ -39,7 +39,7 @@ To use SavageD, you'll also need Etsy's statsd and Graphite installed and workin
 
 You must add SavageD's HTTP port number to your [configuration](../../stories/configuration.html):
 
-{% highlight php %}
+{% highlight php startinline %}
 {
 	"environments": {
 		"defaults": {
@@ -58,7 +58,7 @@ If this setting is missing from your environments section, you'll see an excepti
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingSavageD($ipAddress)->ACTION();
 {% endhighlight %}
 

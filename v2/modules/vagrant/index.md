@@ -109,7 +109,7 @@ where:
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION();
 {% endhighlight %}
 
@@ -123,7 +123,7 @@ Once you've used the Vagrant module to start your virtual machine, you'll then u
 
 Here's one of our internal tests, which proves that we can deploy and start our in-house queueing solution called Ogre:
 
-{% highlight php %}
+{% highlight php startinline %}
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 // ========================================================================

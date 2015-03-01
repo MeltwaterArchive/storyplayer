@@ -33,7 +33,7 @@ This module relies on the [Browser module](../browser/index.html). See [its list
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE($formId)->ACTION();
 {% endhighlight %}
 

@@ -31,7 +31,7 @@ Additionally, this module uses the standard UNIX `diff` tool for some of its act
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE($actualData)->COMPARISON($expectedData);
 {% endhighlight %}
 
@@ -47,14 +47,14 @@ and __comparison__ is one of the methods available on the __module__ you choose.
 
 Here are some examples:
 
-{% highlight php %}
+{% highlight php startinline %}
 // array comparison
 $expectedCountries = array ("United Kingdom", "United States");
 $actualCountries = fromBrowser()->getOptions()->fromDropdownLabelled("Countries");
 expectsArray($actualCountries)->equals($expectedCountries);
 {% endhighlight %}
 
-{% highlight php %}
+{% highlight php startinline %}
 // string comparison
 $expectedTitle = "Welcome To Storyplayer";
 $actualTitle = fromBrowser()->getTitle();

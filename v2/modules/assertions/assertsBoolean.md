@@ -24,7 +24,7 @@ Write your story as if every test must pass.
 
 Use `assertsBoolean()->doesNotEqual()` to make sure that two booleans are not the same.
 
-{% highlight php %}
+{% highlight php startinline %}
 $expected = true;
 $actual   = false;
 assertsBoolean($actual)->doesNotEqual($expected);
@@ -36,7 +36,7 @@ See _[equals()](#equals)_ for a discussion of how this test works.
 
 Use `assertsBoolean()->equals()` to make sure that two boolean values are the same.
 
-{% highlight php %}
+{% highlight php startinline %}
 $expected = true;
 $actual   = true;
 assertsBoolean($actual)->equals($expected);
@@ -48,7 +48,7 @@ If the test fails, Storyplayer's output will contain a _[unified diff](http://en
 
 Use `assertsBoolean()->isBoolean()` to make sure that something really is a boolean.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = true;
 assertsBoolean($data)->isBoolean();
 {% endhighlight %}
@@ -71,7 +71,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 Use `assertsBoolean()->isFalse()` to make sure that the PHP variable is FALSE.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = false;
 assertsBoolean($data)->isFalse();
 {% endhighlight %}
@@ -82,7 +82,7 @@ See _[isTrue()](#istrue)_ for a discussion on what TRUE and FALSE means to this 
 
 Use `assertsBoolean()->isNull()` to make sure that the PHP variable is actually NULL, rather than a boolean.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = null;
 assertsBoolean($data)->isNull()
 {% endhighlight %}
@@ -93,7 +93,7 @@ This has been added for completeness; we'd always recommend using _[isBoolean()]
 
 Use `assertsBoolean()->isNotNull()` to make sure that the PHP variable is not NULL.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = true;
 assertsBoolean($data)->isNotNull();
 {% endhighlight %}
@@ -104,7 +104,7 @@ This has been added for completeness; we'd always recommend using _[isBoolean()]
 
 Use `assertsBoolean()->isNotSameAs()` to make sure that two PHP booleans are not references to each other.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data1 = true;
 $data2 = true;
 
@@ -117,7 +117,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 Use `assertsBoolean()->isSameAs()` to make sure that two PHP booleans are references to each other.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data1 = true;
 $data2 = &$data1;
 

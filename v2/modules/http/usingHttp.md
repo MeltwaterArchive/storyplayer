@@ -27,7 +27,7 @@ If you're looking to make a GET request, use _[fromHttp()->get()](fromHttp.html#
 
 Use `usingHttp()->delete()` to make a HTTP DELETE request to a (possibly) remote HTTP server.
 
-{% highlight php %}
+{% highlight php startinline %}
 $response = usingHttp()->delete('http://api.example.com/destination/ec2-1');
 {% endhighlight %}
 
@@ -42,7 +42,7 @@ _delete()_ takes up to four parameters:
 
 Use `usingHttp()->post()` to make a HTTP POST request to a (possibly) remote HTTP server.
 
-{% highlight php %}
+{% highlight php startinline %}
 $payload = json_encode(array('ami' => 'ubuntu-13.04'));
 $response = usingHttp()->post('http://api.example.com/destination/ec2-1', array(), $payload);
 {% endhighlight %}
@@ -58,7 +58,7 @@ _post()_ takes up to four parameters:
 
 Use `usingHttp()->put()` to make a HTTP PUT request to a (possibly) remote HTTP server.
 
-{% highlight php %}
+{% highlight php startinline %}
 $payload = json_encode(array('ami' => 'ubuntu-13.04', 'name' => 'ec2-1'));
 $response = usingHttp()->delete('http://api.example.com/destination/');
 {% endhighlight %}

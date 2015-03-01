@@ -15,7 +15,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 Use `assertsString()->doesNotEndWith()` to make sure that a string does not end with a given string.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "filename.png";
 expectsString($data)->doesNotEndWith('.gif');
 {% endhighlight %}
@@ -24,7 +24,7 @@ expectsString($data)->doesNotEndWith('.gif');
 
 Use `assertsString()->doesNotEqual()` to make sure that two strings are not the same.
 
-{% highlight php %}
+{% highlight php startinline %}
 $expected = "filename.png";
 $actual   = "filename.gif";
 assertsString($actual)->doesNotEqual($expected);
@@ -40,7 +40,7 @@ Not implemented yet.
 
 Use `assertsString()->doesNotStartWith()` to make sure that a string does not start with a given string.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "theme2/filename.png";
 expectsString($data)->doesNotStartWith("theme1");
 {% endhighlight %}
@@ -49,7 +49,7 @@ expectsString($data)->doesNotStartWith("theme1");
 
 Use `assertsString()->endsWith()` to make sure that a string does end with the string that you expect it to.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "filename.png";
 expectsString($data)->doesNotEndWith('.png');
 {% endhighlight %}
@@ -58,7 +58,7 @@ expectsString($data)->doesNotEndWith('.png');
 
 Use `assertsString()->equals()` to make sure that two strings contain the exact same values.
 
-{% highlight php %}
+{% highlight php startinline %}
 $expected = "filename.png";
 $actual   = "filename.png";
 assertsString($actual)->equals($expected);
@@ -70,7 +70,7 @@ If the test fails, Storyplayer's output will contain a _[unified diff](http://en
 
 Use `assertsString()->isEmpty()` to make sure that a string has no contents.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "";
 assertsString($data)->isEmpty();
 {% endhighlight %}
@@ -79,7 +79,7 @@ assertsString($data)->isEmpty();
 
 Use `assertsString()->isHash()` to make sure that a string is a hash value of some kind.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = md5_sum("hello, world!");
 assertsString($data)->isHash();
 {% endhighlight %}
@@ -90,7 +90,7 @@ A hash is any valid hexadecimal string of even length.
 
 Use `assertsString()->isNotEmpty()` to make sure that a string has contents.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "hello, world!";
 assertsString($data)->isNotEmpty();
 {% endhighlight %}
@@ -99,7 +99,7 @@ assertsString($data)->isNotEmpty();
 
 Use `assertsString()->isNull()` to make sure that the PHP variable is actually NULL, rather than a string.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = null;
 assertsString($data)->isNull()
 {% endhighlight %}
@@ -110,7 +110,7 @@ This has been added for completeness; we'd always recommend using _[isString()](
 
 Use `assertsString()->isNotNull()` to make sure that the PHP variable is not NULL.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "hello, world!";
 assertsString($data)->isNotNull();
 {% endhighlight %}
@@ -121,7 +121,7 @@ This has been added for completeness; we'd always recommend using _[isString()](
 
 Use `assertsString()->isNotSameAs()` to make sure that two PHP strings are not references to each other.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data1 = "hello, world!";
 $data2 = "hello, world";
 
@@ -134,7 +134,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 Use `assertsString()->isNotValidJson()` to make sure that a string is not JSON-encoded data.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "hello, world!";
 assertsString($data)->isNotValidJson();
 {% endhighlight %}
@@ -143,7 +143,7 @@ assertsString($data)->isNotValidJson();
 
 Use `assertsString()->isSameAs()` to make sure that two PHP strings are references to each other.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data1 = "hello, world!";
 $data2 = &$data1;
 
@@ -156,7 +156,7 @@ This has been added for completeness; you'll probably use _[equals()](#equals)_ 
 
 Use `assertsString()->isString()` to make sure that something really is a string.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "hello, world!";
 assertsString($data)->isString();
 {% endhighlight %}
@@ -179,7 +179,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 Use `assertsString()->isUuid()` to make sure that a string is a _[universally-unique identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)_ of some kind:
 
-{% highlight php %}
+{% highlight php startinline %}
 $uuid = fromUuid()->generateUuid();
 expectsString($uuid)->isUuid();
 {% endhighlight %}
@@ -190,7 +190,7 @@ A UUID is a 32 character hexadecimal string (with four '-' characters at various
 
 Use `assertsString()->isValidJson()` to make sure that a string contains valid JSON-encoded data.
 
-{% highlight php %}
+{% highlight php startinline %}
 $response = usingHttp()->get("http://api.example.com/balance");
 assertsString($response->body)->isValidJson();
 {% endhighlight %}
@@ -203,7 +203,7 @@ Not implemented yet.
 
 Use `assertsString()->startsWith()` to make sure that a string starts with a given string.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = "theme2/filename.png";
 expectsString($data)->startWith("theme2/");
 {% endhighlight %}

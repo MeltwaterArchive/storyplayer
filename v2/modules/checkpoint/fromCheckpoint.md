@@ -19,13 +19,13 @@ Every action returns either a value on success, or `NULL` on failure.  None of t
 
 Use `fromCheckpoint()->get()` to retrieve data stored in the checkpoint.
 
-{% highlight php %}
+{% highlight php startinline %}
 $balance = fromCheckpoint()->get('balance');
 {% endhighlight %}
 
 This is the same as doing:
 
-{% highlight php %}
+{% highlight php startinline %}
 // get the checkpoint
 $checkpoint = getCheckpoint();
 

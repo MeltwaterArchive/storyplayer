@@ -19,7 +19,7 @@ Every action returns either a value on success, or `NULL` on failure.  These act
 
 Use `fromEc2Instance()->getInstanceIsRunning()` to determine if the named instance is up and running or not.
 
-{% highlight php %}
+{% highlight php startinline %}
 $isRunning = fromEc2Instance($vmName)->getInstanceIsRunning();
 {% endhighlight php %}
 
@@ -32,7 +32,7 @@ where:
 
 Use `fromEc2Instance()->getInstanceVolumes()` to get a list of the storage volumes attached to the named instance.
 
-{% highlight php %}
+{% highlight php startinline %}
 $volumes = fromEc2Instance($vmName)->getInstanceVolumes();
 {% endhighlight php %}
 
@@ -45,7 +45,7 @@ where:
 
 Use `fromEc2Instance()->getPublicDnsName()` to get the fully-qualified domain name to use to access an EC2 instance.
 
-{% highlight php %}
+{% highlight php startinline %}
 $fqdn = fromEc2Instance($vmName)->getPublicDnsName();
 {% endhighlight php %}
 

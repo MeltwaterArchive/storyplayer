@@ -24,7 +24,7 @@ Write your story as if every action will be successful.
 
 Use `usingEc2()->createVm()` to start a new virtual machine running on EC2.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingEc2()->createVm($vmName, $osName, $amiId, $instanceType, $securityGroup);
 {% endhighlight %}
 
@@ -46,7 +46,7 @@ If the virtual machine starts successfully, we create an entry in Storyplayer's 
 
 Use `usingEc2()->destroyVm()` to shutdown and delete a virtual machine that was previously started using _[createVm()](#createvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingEc2->destroyVm($vmName);
 {% endhighlight %}
 
@@ -66,7 +66,7 @@ __NOTE__
 
 Use `usingEc2()->startVm()` to start a virtual machine that was previous stopped using _[stopVm()](#stopvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingEc2()->startVm($vmName);
 {% endhighlight %}
 
@@ -82,7 +82,7 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 Use `usingEc2()->stopVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingEc2()->stopVm($vmName);
 {% endhighlight %}
 
@@ -98,7 +98,7 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 Use `usingEc2()->restartVm()` to reboot a virtual machine that was previously started using _[createVm()](#createvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingEc2()->restartVm($vmName);
 {% endhighlight %}
 

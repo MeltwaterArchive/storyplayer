@@ -23,7 +23,7 @@ This module has no dependencies of its own, but you will probably want to use it
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE($hostName)->ACTION();
 {% endhighlight %}
 

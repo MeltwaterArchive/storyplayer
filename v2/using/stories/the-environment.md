@@ -15,7 +15,7 @@ Storyplayer was originally designed to run tests against our _staging_ and _prod
 
 The _environment object_ is a plain old PHP object that's created every time you run Storyplayer.  It contains all of the settings that apply to the environment that you are testing against, and is available for you to read from in any phase of your story:
 
-{% highlight php %}
+{% highlight php startinline %}
 // gets the whole object
 $env = $st->getEnvironment();
 

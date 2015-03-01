@@ -24,7 +24,7 @@ Write your story as if every test must pass.
 
 Use `expectsHost()->hostIsRunning()` to ensure that a host is up and running.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsHost($hostName)->hostIsRunning();
 {% endhighlight %}
 
@@ -38,7 +38,7 @@ If the host is not running (for example, it failed to start after being created 
 
 Use `expectsHost()->hostIsNotRunning()` to ensure that a host is currently shutdown.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsHost($hostName)->hostIsNotRunning();
 {% endhighlight %}
 
@@ -52,7 +52,7 @@ If the host is running (for example, it failed to shutdown when requested to), a
 
 Use `expectsHost()->packageIsInstalled()` to ensure that a package is installed on the guest operating system.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsHost($hostName)->packageIsInstalled($packageName);
 {% endhighlight %}
 
@@ -67,7 +67,7 @@ If the package is not installed, an exception is thrown.
 
 Use `expectsHost()->packageIsNotInstalled()` to ensure that a package is not installed on the guest operating system.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsHost($hostName)->packageIsNotInstalled($packageName);
 {% endhighlight %}
 
@@ -82,7 +82,7 @@ If the package is installed, an exception is thrown.
 
 Use `expectsHost()->processIsRunning()` to ensure that a process is running.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsHost($hostName)->processIsRunning($processName);
 {% endhighlight %}
 
@@ -97,7 +97,7 @@ If the process is not running, an exception is thrown.
 
 Use `expectsHost()->processIsNotRunning()` to ensure that a process is not running.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsHost($hostName)->processIsNotRunning($processName);
 {% endhighlight %}
 

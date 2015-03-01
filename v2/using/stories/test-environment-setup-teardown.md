@@ -28,7 +28,7 @@ Creating and destroying test environments are the first and last phases of a sto
 
 To create your test environment, add a _TestEnvironmentSetup_ function to your story:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addTestEnvironmentSetup(function(StoryTeller $st) {
     // steps go here
 });
@@ -47,7 +47,7 @@ The [Environments section](../environments/index.html) of this manual looks at t
 
 If your test creates a test environment, add a _TestEnvironmentTeardown_ function to your story to undo everything you created in the _TestEnvironmentSetup_ function:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addTestEnvironmentTeardown(function(StoryTeller $st) {
     // steps go here
 });
@@ -57,7 +57,7 @@ $story->addTestEnvironmentTeardown(function(StoryTeller $st) {
 
 Once you've written a few tests, you'll probably find that they have the same test environment setup and teardown steps. Storyplayer's [story templating](story-templates.html) feature was originally added to avoid having to duplicate the same steps across multiple tests.
 
-{% highlight php %}
+{% highlight php startinline %}
 use DataSift\Storyplayer\PlayerLib\StoryTemplate;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
@@ -87,7 +87,7 @@ You may need to run the exact same test against multiple types of environments, 
 
 You can do this by adding a simple `switch` statement to your _TestEnvironmentSetup_ function:
 
-{% highlight php %}
+{% highlight php startinline %}
 $st->addTestEnvironmentSetup(function(StoryTeller $st) {
     // set the defaults for this story / template
     $st->setParams(array(

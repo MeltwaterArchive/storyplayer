@@ -24,13 +24,13 @@ Write your story as if every action will be successful.
 
 Use `usingCheckpoint()->set()` to store data in the checkpoint.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingCheckpoint()->set('balance', 10);
 {% endhighlight %}
 
 This is the same as doing:
 
-{% highlight php %}
+{% highlight php startinline %}
 $checkpoint = getCheckpoint();
 $checkpoint->balance = 10;
 {% endhighlight %}

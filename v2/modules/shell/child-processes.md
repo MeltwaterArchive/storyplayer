@@ -47,7 +47,7 @@ There's nothing stopping you using the _UNIX Shell_ module to start and stop chi
 
 The following test is one of our internal tests for our _Ogre_ ZeroMQ-based queueing system.  It uses a mixture of the open source Storyplayer modules, our own local dialect, and our own custom test tools:
 
-{% highlight php %}
+{% highlight php startinline %}
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 // ========================================================================

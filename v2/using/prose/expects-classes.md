@@ -13,7 +13,7 @@ This page contains any implementation details that are specific to _Expects_ cla
 
 _Expects_ classes normally extend the `Prose` base class:
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 use DataSift\Storyplayer\Prose\Prose;
@@ -48,7 +48,7 @@ __Please note__:
 
 If any of the assertions fail, `AssertionsBase` throws an [E5xx_ExpectFailed](exceptions.html#E5xx_ExpectFailed) exception:
 
-{% highlight php %}
+{% highlight php startinline %}
 class ExpectsFoo extends Prose
 {
 	public function fooIsReadyForUse()

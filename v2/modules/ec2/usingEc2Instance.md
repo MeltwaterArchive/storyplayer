@@ -24,7 +24,7 @@ Write your story as if every action will be successful.
 
 Use `usingEc2Instance()->createImage()` to create an new Amazon Machine Image (AMI) from a running EC2 instance.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingEc2Instance($vmName)->createImage($imageName);
 {% endhighlight %}
 
@@ -37,7 +37,7 @@ where:
 
 Use `usingEc2Instance()->markAllVolumesAsDeleteOnTermination()` tell EC2 to delete all of the block devices that are attached to the instance whenever the instance is destroyed using _[usingEc2()->destroyVm()](usingEc2.html#destroyvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingEc2Instance($vmName)->markAllVolumesAsDeleteOnTermination();
 {% endhighlight %}
 

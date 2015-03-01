@@ -24,7 +24,7 @@ Write your story as if every test must pass.
 
 Use `expectsHostsTable()->hasEntryForHost()` to ensure that a host has an entry in the hosts table.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsHostsTable()->hasEntryForHost($hostName);
 {% endhighlight %}
 

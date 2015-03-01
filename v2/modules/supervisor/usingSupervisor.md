@@ -24,7 +24,7 @@ Write your story as if every action must succeed.
 
 Use `usingSupervisor()->startProgram()` to start a program that is managed by Supervisor.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingSupervisor($hostname)->startProgram($programName);
 {% endhighlight %}
 
@@ -37,7 +37,7 @@ where:
 
 Use `usingSupervisor()->stopProgram()` to stop a program that is managed by Supervisor.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingSupervisor($hostname)->startProgram($programName);
 {% endhighlight %}
 

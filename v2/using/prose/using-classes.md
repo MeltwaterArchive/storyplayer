@@ -13,7 +13,7 @@ This page contains any implementation details that are specific to _Using_ class
 
 _Using_ classes normally extend the `Prose` base class:
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 use DataSift\Storyplayer\Prose\Prose;
@@ -39,7 +39,7 @@ You should throw an [E5xx_ActionFailed](exceptions.html#E5xx_ActionFailed) excep
 
 If your _Using_ classes call other code that can throw exceptions, you should always catch those exceptions, make sure that you log them using `$log`, and then throw an `E5xx_ActionFailed` back to the caller.
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 // remember to import Exception, otherwise your try/catch

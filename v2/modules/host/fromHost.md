@@ -19,7 +19,7 @@ Every action returns either a value on success, or `NULL` on failure.  These act
 
 Use `fromHost()->getDetails()` to retrieve the host's entry in Storyplayer's [hosts table](../hoststable/how-hosts-are-remembered.html).
 
-{% highlight php %}
+{% highlight php startinline %}
 $details = fromHost($hostName)->getDetails();
 {% endhighlight %}
 
@@ -36,7 +36,7 @@ __NOTE__
 
 Use `fromHost()->getHostIsRunning()` to determine if the specified host is currently running or not.
 
-{% highlight php %}
+{% highlight php startinline %}
 $isRunning = fromHost($hostName)->getHostIsRunning();
 {% endhighlight %}
 
@@ -51,7 +51,7 @@ If the host is not running, this could be because your test has stopped the host
 
 Use `fromHost()->getInstalledPackageDetails()` to get information about an installed package from the guest operating system's inventory.
 
-{% highlight php %}
+{% highlight php startinline %}
 $details = fromHost($hostName)->getInstalledPackageDetails($packageName);
 {% endhighlight %}
 
@@ -70,7 +70,7 @@ __NOTE__
 
 Use `fromHost()->getIpAddress()` to get the host's current IP address.
 
-{% highlight php %}
+{% highlight php startinline %}
 $ipAddress = fromHost($hostName)->getIpAddress();
 {% endhighlight %}
 
@@ -87,7 +87,7 @@ __NOTE__
 
 Use `fromHost()->getPid()` to get the process ID of a running process.
 
-{% highlight php %}
+{% highlight php startinline %}
 $pid = fromHost($hostName)->getPid($processName);
 {% endhighlight %}
 
@@ -105,7 +105,7 @@ __NOTE__
 
 Use `fromHost()->getProcessIsRunning()` to determine if a process is currently running or not.
 
-{% highlight php %}
+{% highlight php startinline %}
 $isRunning = fromHost($hostName)->getProcessIsRunning($processName);
 {% endhighlight %}
 
@@ -119,7 +119,7 @@ where:
 
 Use `fromHost()->getSshUsername()` to get the default username used for SSH'ing into the host.
 
-{% highlight php %}
+{% highlight php startinline %}
 $sshUsername = fromHost($hostName)->getSshUsername();
 {% endhighlight %}
 
@@ -132,7 +132,7 @@ where:
 
 Use `fromHost()->getSshKeyFile()` to get the path to the SSH private key file that Storyplayer will use in _[usingHost()->runCommand()](usingHost.html#runcommand)_ et al.
 
-{% highlight php %}
+{% highlight php startinline %}
 $sshKeyFile = fromHost($hostName)->getSshKeyFile();
 {% endhighlight %}
 

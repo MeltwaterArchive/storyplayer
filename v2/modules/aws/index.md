@@ -54,6 +54,6 @@ where:
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 $client = fromAws()->ACTION();
 {% endhighlight %}

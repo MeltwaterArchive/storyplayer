@@ -22,7 +22,7 @@ Write your story as if every test must pass.
 
 Use `usingProvisioningEngine()->provisionHosts()` to apply a provisioning definition.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingProvisioningEngine($engineName)->provisionHosts($def);
 {% endhighlight %}
 

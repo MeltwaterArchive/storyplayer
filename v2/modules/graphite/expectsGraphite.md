@@ -23,7 +23,7 @@ Write your story as if every test must pass.
 
 Use `expectsGraphite()->metricIsAlwaysZero()` to ensure that data in Graphite for a given metric, between two given times, is always zero.
 
-{% highlight php %}
+{% highlight php startinline %}
 $now = time();
 $data = expectsGraphite()->metricIsAlwaysZero('qa.api.http.500', $now - 300, $now);
 {% endhighlight %}
@@ -42,7 +42,7 @@ Missing data is treated as having a value of zero, for this test.
 
 Use `expectsGraphite()->metricSumIs()` to ensure that data in Graphite for a given metric, between two given times, adds up to the value you expect.
 
-{% highlight php %}
+{% highlight php startinline %}
 $now = time();
 $data = expectsGraphite()->metricSumIs('qa.api.http.200', 10000, $now - 300, $now);
 {% endhighlight %}
@@ -60,7 +60,7 @@ If the data between `$startTime` and `$endTime` is less than, or greater than, `
 
 Use `expectsGraphite()->metricNeverExceeds()` to ensure that data in Graphite for a given metric, between two given times, never has a value higher than a given amount.
 
-{% highlight php %}
+{% highlight php startinline %}
 $now = time();
 $data = expectsGraphite()->metricNeverExceeds('qa.api.latency', 150, $now - 300, $now);
 {% endhighlight %}
@@ -80,7 +80,7 @@ Use `expectsGraphite()->metricAverageDoesntExceed()` to ensure that the average 
 
 This test uses the [arithmetic mean](http://en.wikipedia.org/wiki/Arithmetic_mean) for the average of the data.
 
-{% highlight php %}
+{% highlight php startinline %}
 $now = time();
 $data = expectsGraphite()->metricAverageDoesntExceed('qa.api.latency', 100, $now - 300, $now);
 {% endhighlight %}

@@ -15,7 +15,7 @@ __Note__: none of these actions make any changes to your hosts.  Your hosts are 
 
 This step is very straight-forward, and it creates an empty definition to work with.
 
-{% highlight php %}
+{% highlight php startinline %}
 $def = usingProvisioning()->createDefinition();
 {% endhighlight %}
 
@@ -23,7 +23,7 @@ $def = usingProvisioning()->createDefinition();
 
 Provisioning engines such as [Ansible](http://ansible.cc/), [Chef](http://www.opscode.com/chef/) and [Puppet](https://puppetlabs.com/) support the concept of _roles_, where a role is something that a host can do (e.g. be a webserver).  Hosts can have multiple roles.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingProvisioningDefinition($def)->addRole($roleName)->toHost($hostName);
 {% endhighlight %}
 
@@ -37,7 +37,7 @@ where:
 
 Provisioning engines normally used some form of _parameterised instructions_, which allow you to inject variables into the rules and templated config files at deployment time.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingProvisioningDefinition($def)->addParams($params)->toHost($hostName);
 {% endhighlight php %}
 

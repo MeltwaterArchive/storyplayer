@@ -24,7 +24,7 @@ Write your story as if every action will be successful.
 
 Use `usingVagrant()->createVm()` to start a new virtual machine using Vagrant.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingVagrant()->createVm($vmName, $osName, $homeFolder);
 {% endhighlight %}
 
@@ -44,7 +44,7 @@ If the virtual machine starts successfully, we create an entry in Storyplayer's 
 
 Use `usingVagrant()->destroyVm()` to shutdown and delete a virtual machine that was previously started using _[createVm()](#createvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingVagrant->destroyVm($vmName);
 {% endhighlight %}
 
@@ -60,7 +60,7 @@ Once this is done, we remove the virtual machine's entry from Storyplayer's [hos
 
 Use `usingVagrant()->startVm()` to start a virtual machine that was previous stopped using _[stopVm()](#stopvm)_ or _[powerOffVm()](#poweroffvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingVagrant()->startVm($vmName);
 {% endhighlight %}
 
@@ -79,7 +79,7 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 Use `usingVagrant()->stopVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingVagrant()->stopVm($vmName);
 {% endhighlight %}
 
@@ -95,7 +95,7 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 Use `usingVagrant()->restartVm()` to reboot a virtual machine that was previously started using _[createVm()](#createvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingVagrant()->restartVm($vmName);
 {% endhighlight %}
 
@@ -111,7 +111,7 @@ Please note that Vagrant will re-run any provisioning plugin that you have liste
 
 Use `usingVagrant()->powerOffVm()` to stop a virtual machine that was previously started using _[createVm()](#createvm)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingVagrant()->powerOffVm($vmName);
 {% endhighlight %}
 
@@ -127,7 +127,7 @@ Please remember to use _[destroyVm()](#destroyvm)_ at the end of your test to de
 
 Use `usingVagrant()->runVagrantCommand()` to call the `vagrant` command line tool directly from your stories.
 
-{% highlight php %}
+{% highlight php startinline %}
 $result = usingVagrant()->runVagrantCommand($vmName, $command);
 {% endhighlight %}
 

@@ -24,7 +24,7 @@ Write your story as if every test must pass.
 
 Use `expectsUuid()->requirementsAreMet()` to make sure that any calls to the UUID module will work.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsUuid()->requirementsAreMet();
 {% endhighlight %}
 

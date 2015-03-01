@@ -35,7 +35,7 @@ If the install is successful, you should see information about the UUID extensio
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION()
 {% endhighlight %}
 

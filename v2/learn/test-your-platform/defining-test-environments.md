@@ -79,7 +79,7 @@ Let's break this down:
 
 The outermost part of a test environment config file is always a JSON array:
 
-{% highlight php %}
+{% highlight php startinline %}
 [
 ]
 {% endhighlight %}

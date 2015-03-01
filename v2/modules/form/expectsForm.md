@@ -24,7 +24,7 @@ Write your story as if every test must pass.
 
 Use `expectsForm()->doesntHave()` to ensure that the specified form _doesn't_ contain a specified DOM element or elements.  This is the direct opposite of _[expectsForm()->has()](#has)_.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsForm('registration')->doesntHave()->linkWithText("Login");
 expectsForm('credit_card')->doesntHave()->fieldsWithClass("invoice");
 {% endhighlight %}
@@ -35,7 +35,7 @@ See _[has()](#has)_ below for a longer discussion.
 
 Use `expectsForm()->has()` to ensure that the specified form contains a specified DOM element or elements.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsForm('registration')->has()->linkWithText("Sign Up!");
 expectsForm('login')->has()->linkWithText("Login");
 {% endhighlight %}

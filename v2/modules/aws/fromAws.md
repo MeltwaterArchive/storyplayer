@@ -19,7 +19,7 @@ Every action returns either a value on success, or `NULL` on failure.  These act
 
 Use `fromAws()->getEc2Client()` to obtain an EC2 client object from the official Amazon AWS SDK.
 
-{% highlight php %}
+{% highlight php startinline %}
 $ec2Client = fromAws()->getEc2Client();
 {% endhighlight %}
 

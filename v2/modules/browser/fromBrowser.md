@@ -19,7 +19,7 @@ Every action returns either a value on success, or `NULL` on failure.  None of t
 
 Use `fromBrowser()->has()` to work out whether the DOM contains the content that you're looking for.
 
-{% highlight php %}
+{% highlight php startinline %}
 if (fromBrowser()->has()->buttonWithText('Register')) {
 	// we are on the registration form
 }
@@ -38,7 +38,7 @@ __See Also:__
 
 Use `fromBrowser()->get()` to get one or more [WebDriver element objects](webdriver.html#webdriver_elements) from the DOM.
 
-{% highlight php %}
+{% highlight php startinline %}
 $element = fromBrowser()->get()->tableWithId('results');
 {% endhighlight %}
 
@@ -48,7 +48,7 @@ This action is normally used when you need to run a custom XPath query to extrac
 
 Use `fromBrowser()->getName()` to get the _name_ attribute from a specific DOM element.
 
-{% highlight php %}
+{% highlight php startinline %}
 $name = fromBrowser()->getName()->fromFieldWithLabel("Username");
 {% endhighlight %}
 
@@ -60,7 +60,7 @@ It's also handy for web pages where the _name_ attribute is being used outside o
 
 Use `fromBrowser()->getNames()` to get the _name_ attribute from a set of specified DOM elements.
 
-{% highlight php %}
+{% highlight php startinline %}
 $names = fromBrowser()->getNames()->ofFieldsWithClass('input-error');
 {% endhighlight %}
 
@@ -70,13 +70,13 @@ This action is normally only used with web pages where the _name_ attribute is b
 
 Use `fromBrowser()->getOptions()` to get the list of possible values from a _&lt;select&gt;_ list.
 
-{% highlight php %}
+{% highlight php startinline %}
 $options = fromBrowser()->getOptions()->fromDropdownWithLabel("Country");
 {% endhighlight %}
 
 This action is normally used for making sure that the end-user has the choices that are expected - especially if the dropdown list is dynamically generated.  For example:
 
-{% highlight php %}
+{% highlight php startinline %}
 // the choices that should be available
 $expectedOptions = array (
 	"Gold Subscription Plan" => "gold",
@@ -95,7 +95,7 @@ expectsArray($actualOptions)->equals($expectedOptions);
 
 Use `fromBrowser()->getTag()` to get the HTML tag used by a specified DOM element.
 
-{% highlight php %}
+{% highlight php startinline %}
 $tag = fromBrowser()->getTag()->ofFieldWithText("Login");
 {% endhighlight %}
 
@@ -105,13 +105,13 @@ This action is normally used when you want to perform a low-level check on the H
 
 Use `fromBrowser()->getText()` to get the contents of the specified DOM element.
 
-{% highlight php %}
+{% highlight php startinline %}
 $text = fromBrowser()->getText()->fromFieldWithClass("total-amount");
 {% endhighlight %}
 
 This action is normally used when you want to check that the expected information is present on the page, for example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $expectedAmount = "$60";
 $actualAmount = fromBrowser()->getText()->fromFieldWithClass("total-amount");
 expectsString($actualAmount)->equals($expectedAmount);
@@ -121,7 +121,7 @@ expectsString($actualAmount)->equals($expectedAmount);
 
 Use `fromBrowser()->getTopElement()` to get the DOM element that's at the top of the document loaded in the browser.  This is always the element created by the _&lt;html&gt;_ tag.
 
-{% highlight php %}
+{% highlight php startinline %}
 $topElement = fromBrowser()->getTopElement();
 {% endhighlight %}
 
@@ -131,7 +131,7 @@ This action returns a _[WebDriverElement](webdriver.html)_, which you can then u
 
 Use `fromBrowser()->getTitle()` to get the _&lt;title&gt;_ of the currently loaded page.
 
-{% highlight php %}
+{% highlight php startinline %}
 $title = fromBrowser()->getTitle();
 {% endhighlight %}
 
@@ -141,7 +141,7 @@ This action is normally used inside [local Prose dialects](../../prose/local-dia
 
 Use `fromBrowser()->getValue()` to get the _value_ attribute of a specified DOM element.
 
-{% highlight php %}
+{% highlight php startinline %}
 $username = fromBrowser()->getValue()->ofBoxWithLabel('Username');
 {% endhighlight %}
 

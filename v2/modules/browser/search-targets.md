@@ -15,7 +15,7 @@ Use _box_ or _boxes_ to only search for _&lt;input&gt;_ tags in the DOM.
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->type('hello!')->intoBoxWithLabel("First Name");
 {% endhighlight %}
 
@@ -25,7 +25,7 @@ Use _button_ or _buttons_ to only search for _&lt;input&gt;_ tags in the DOM.
 
 Examples:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingBrowser()->click()->buttonWithText("Login");
 expectsBrowser()->has()->buttonsWithClass("button");
 {% endhighlight %}
@@ -36,7 +36,7 @@ Use _cell_ or _cells_ to only search for _&lt;td&gt;_ tags in the DOM.
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $value = fromBrowser()->getText()->fromCellWithId('cell_1_1');
 {% endhighlight %}
 
@@ -46,7 +46,7 @@ Use _dropdown_ or _dropdowns_ to only search for _&lt;select&gt;_ tags in the DO
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $value = fromBrowser()->getOptions()->fromDropdownWithLabel('Country');
 {% endhighlight %}
 
@@ -60,7 +60,7 @@ Search against all elements in the DOM.  Use this when you don't want to limit t
 
 This is often useful for faux buttons - an element that _looks_ like a button to the user, but underneath could be a real button (an &lt;input&gt; tag) or a false one (an &lt;a&gt; tag):
 
-{% highlight php %}
+{% highlight php startinline %}
 $value = fromBrowser()->click()->fieldWithText('Login');
 {% endhighlight %}
 
@@ -72,7 +72,7 @@ Use _heading_ to only search for _&lt;h1&gt;-&lt;h6&gt;_ tags in the DOM.
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $text = fromBrowser()->getText()->fromHeadingWithId('introduction');
 {% endhighlight %}
 
@@ -82,7 +82,7 @@ Use _link_ or _links_ to only search for _&lt;a&gt;_ tags in the DOM.
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $value = fromBrowser()->click()->linkWithText('Login');
 {% endhighlight %}
 
@@ -92,7 +92,7 @@ Use _orderedlist_ to only search for _&lt;ol&gt;_ tags in the DOM.
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $list = fromBrowser()->get()->orderedlistWithId('priorities');
 {% endhighlight %}
 
@@ -102,7 +102,7 @@ Use _span_ to only search for _&lt;span&gt;_ tags in the DOM.
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $amount = fromBrowser()->getText()->fromSpanWithClass('payment_total');
 {% endhighlight %}
 
@@ -112,7 +112,7 @@ Use _unorderedlist_ to only search for _&lt;ul&gt;_ tags in the DOM.
 
 Example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $list = fromBrowser()->get()->unorderedlistWithId('tasks');
 {% endhighlight %}
 

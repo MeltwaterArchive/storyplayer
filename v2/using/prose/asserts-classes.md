@@ -13,7 +13,7 @@ This page contains any implementation details that are specific to _Asserts_ cla
 
 _Asserts_ classes normally extend the `DataSift\Storyplayer\Prose\AssertionsBase` class, and provide a _Comparitor_ object which knows how to examine and test a PHP data type or a specific type of object:
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;

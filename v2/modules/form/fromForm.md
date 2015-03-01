@@ -19,7 +19,7 @@ Every action returns either a value on success, or `NULL` on failure.  None of t
 
 Use `fromForm()->has()` to work out whether the form contains the content that you're looking for.
 
-{% highlight php %}
+{% highlight php startinline %}
 if (fromForm('registration')->has()->buttonWithText('Register')) {
 	// we are on the registration form
 }
@@ -39,7 +39,7 @@ __See Also:__
 
 Use `fromForm()->get()` to get one or more [WebDriver element objects](webdriver.html#webdriver_elements) from the specified form.
 
-{% highlight php %}
+{% highlight php startinline %}
 $element = fromForm('registration')->get()->fieldWithId('hidden_field');
 {% endhighlight %}
 
@@ -49,7 +49,7 @@ This action is normally used when you need to run a custom XPath query to extrac
 
 Use `fromForm()->getName()` to get the _name_ attribute from a specific DOM element in the specified form.
 
-{% highlight php %}
+{% highlight php startinline %}
 $name = fromForm('registration')->getName()->fromFieldWithLabel("Username");
 {% endhighlight %}
 
@@ -61,7 +61,7 @@ It's also handy for web pages where the _name_ attribute is being used outside o
 
 Use `fromForm()->getNames()` to get the _name_ attribute from a set of specified DOM elements in the specified form.
 
-{% highlight php %}
+{% highlight php startinline %}
 $names = fromForm('registration')->getNames()->ofFieldsWithClass('input-error');
 {% endhighlight %}
 
@@ -71,13 +71,13 @@ This action is normally only used with web pages where the _name_ attribute is b
 
 Use `fromForm()->getOptions()` to get the list of possible values from a _&lt;select&gt;_ list in the specified form.
 
-{% highlight php %}
+{% highlight php startinline %}
 $options = fromForm('personal_details')->getOptions()->fromDropdownWithLabel("Country");
 {% endhighlight %}
 
 This action is normally used for making sure that the end-user has the choices that are expected - especially if the dropdown list is dynamically generated.  For example:
 
-{% highlight php %}
+{% highlight php startinline %}
 // the choices that should be available
 $expectedOptions = array (
 	"Gold Subscription Plan" => "gold",
@@ -96,7 +96,7 @@ expectsArray($actualOptions)->equals($expectedOptions);
 
 Use `fromForm()->getTag()` to get the HTML tag used by a specified DOM element in the specified form.
 
-{% highlight php %}
+{% highlight php startinline %}
 $tag = fromForm('login_form')->getTag()->ofFieldWithText("Login");
 {% endhighlight %}
 
@@ -106,13 +106,13 @@ This action is normally used when you want to perform a low-level check on the H
 
 Use `fromForm()->getText()` to get the contents of the specified DOM element in the specified form.
 
-{% highlight php %}
+{% highlight php startinline %}
 $text = fromForm('checkout')->getText()->fromFieldWithClass("total-amount");
 {% endhighlight %}
 
 This action is normally used when you want to check that the expected information is present on the page, for example:
 
-{% highlight php %}
+{% highlight php startinline %}
 $expectedAmount = "$60";
 $actualAmount = fromForm('checkout')->getText()->fromFieldWithClass("total-amount");
 expectsString($actualAmount)->equals($expectedAmount);
@@ -124,7 +124,7 @@ You can use it to inspect any element inside the form - it doesn't have to be a 
 
 Use `fromForm()->getTopElement()` to get the specified form's _&lt;form&gt;_ DOM element.
 
-{% highlight php %}
+{% highlight php startinline %}
 $topElement = fromForm('registration')->getTopElement();
 {% endhighlight %}
 
@@ -134,7 +134,7 @@ This action returns a _[WebDriverElement](webdriver.html)_, which you can then u
 
 Use `fromForm()->getValue()` to get the _value_ attribute of a specified DOM element in the specified form.
 
-{% highlight php %}
+{% highlight php startinline %}
 $username = fromForm('registration')->getValue()->ofBoxWithLabel('Username');
 {% endhighlight %}
 

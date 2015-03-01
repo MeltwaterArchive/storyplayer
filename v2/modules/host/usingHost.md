@@ -23,7 +23,7 @@ Write your story as if every test must pass.
 
 Use `usingHost()->runCommand()` to run a command on the host.
 
-{% highlight php %}
+{% highlight php startinline %}
 $result = usingHost($hostName)->runCommand($command);
 {% endhighlight %}
 
@@ -41,7 +41,7 @@ If the return code from running `$command` is not zero, the command is assumed t
 
 Use `usingHost()->runCommandAndIgnoreErrors()` to run a command on the host.
 
-{% highlight php %}
+{% highlight php startinline %}
 $result = usingHost($hostName)->runCommandAndIgnoreErrors($command);
 {% endhighlight %}
 
@@ -59,7 +59,7 @@ This action does not throw an exception if the return code from running `$comman
 
 Use `usingHost()->runCommandAsUser()` to run a command on the host as a specific user.
 
-{% highlight php %}
+{% highlight php startinline %}
 $result = usingHost($hostName)->runCommandAsUser($command, $user);
 {% endhighlight %}
 
@@ -80,7 +80,7 @@ If the return code from running `$command` is not zero, the command is assumed t
 
 Use `usingHost()->runCommandAsUserAndIgnoreErrors()` to run a command on the host as a specific user.
 
-{% highlight php %}
+{% highlight php startinline %}
 $result = usingHost($hostName)->runCommandAsUser($command, $user);
 {% endhighlight %}
 

@@ -19,7 +19,7 @@ Every action returns either a value on success, or `NULL` on failure.  None of t
 
 Use `fromHttp()->get()` to make a GET request to a (possibly) remote HTTP server.
 
-{% highlight php %}
+{% highlight php startinline %}
 $response = usingHttp()->get('http://api.datasift.com/balance');
 {% endhighlight %}
 

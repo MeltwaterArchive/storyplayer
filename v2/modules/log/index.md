@@ -17,7 +17,7 @@ The source code for this Prose module can be found in this PHP class:
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingLog()->ACTION();
 {% endhighlight %}
 

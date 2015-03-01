@@ -15,7 +15,7 @@ The source code for these actions can be found in the class _DataSift\Storyplaye
 
 Use `assertsInteger()->doesNotEqual()` to make sure that two integer numbers are not the same.
 
-{% highlight php %}
+{% highlight php startinline %}
 $expected = 1;
 $actual   = 2;
 assertsInteger($actual)->doesNotEqual($expected);
@@ -27,7 +27,7 @@ See _[equals()](#equals)_ for a discussion of how this test works.
 
 Use `assertsInteger()->equals()` to make sure that two integer numbers are the same.
 
-{% highlight php %}
+{% highlight php startinline %}
 $expected = 1;
 $actual   = 1;
 assertsInteger($actual)->equals($expected);
@@ -39,7 +39,7 @@ If the test fails, Storyplayer's output will show the differences between the tw
 
 Use `assertsInteger()->isEmpty()` to make sure that a variable is empty.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = 0;
 assertsInteger($data)->isEmpty();
 {% endhighlight %}
@@ -48,7 +48,7 @@ assertsInteger($data)->isEmpty();
 
 Use `assertsInteger()->isGreaterThan()` to make sure that an integer number is larger than a value you provide.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = 2;
 assertsInteger($data)->isGreaterThan(1);
 {% endhighlight %}
@@ -57,7 +57,7 @@ assertsInteger($data)->isGreaterThan(1);
 
 Use `assertsInteger()->isGreaterThan()` to make sure that an integer number is at least a value you provide.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = 2;
 assertsInteger($data)->isGreaterThanOrEqualTo(1);
 {% endhighlight %}
@@ -66,14 +66,14 @@ assertsInteger($data)->isGreaterThanOrEqualTo(1);
 
 Use `assertsInteger()->isInteger()` to make sure that something really is an integer.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = 1.1;
 assertsInteger($data)->isInteger();
 {% endhighlight %}
 
 This is most often used in the [post-test inspection phase](../../stories/post-test-inspection.html) to validate the data in the [checkpoint](../../stories/the-checkpoint.html):
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addPostTestInspection(function(StoryTeller $st) {
     // get the checkpoint
     $checkpoint = getCheckpoint();
@@ -89,7 +89,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 
 Use `assertsInteger()->isLessThan()` to make sure that an integer number is smaller than a value you provide.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = 1;
 assertsInteger($data)->isLessThan(2);
 {% endhighlight %}
@@ -98,7 +98,7 @@ assertsInteger($data)->isLessThan(2);
 
 Use `assertsInteger()->isLessThanOrEqualTo()` to make sure that an integer number is no larger than a value you provide.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = 1;
 assertsInteger($data)->isLessThanOrEqualTo(1);
 {% endhighlight %}
@@ -107,7 +107,7 @@ assertsInteger($data)->isLessThanOrEqualTo(1);
 
 Use `assertsInteger()->isNotEmpty()` to make sure that an integer number is not empty.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = 1;
 assertsInteger($data)->isNotEmpty();
 {% endhighlight %}
@@ -116,7 +116,7 @@ assertsInteger($data)->isNotEmpty();
 
 Use `assertsInteger()->isNull()` to make sure that the PHP variable is actually NULL, rather than an integer number.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = null;
 assertsInteger($data)->isNull()
 {% endhighlight %}
@@ -127,7 +127,7 @@ This has been added for completeness; we'd always recommend using _[isInteger()]
 
 Use `assertsInteger()->isNotNull()` to make sure that the PHP variable is not NULL.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data = 1;
 assertsInteger($data)->isNotNull();
 {% endhighlight %}
@@ -138,7 +138,7 @@ This has been added for completeness; we'd always recommend using _[isInteger()]
 
 Use `assertsInteger()->isNotSameAs()` to make sure that two PHP integer numbers are not references to each other.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data1 = 1;
 $data2 = 1;
 
@@ -151,7 +151,7 @@ This has been added for completeness; you'll probably use _[doesNotEqual()](#doe
 
 Use `assertsInteger()->isSameAs()` to make sure that two PHP integer numbers are references to each other.
 
-{% highlight php %}
+{% highlight php startinline %}
 $data1 = 1;
 $data2 = &$data1;
 

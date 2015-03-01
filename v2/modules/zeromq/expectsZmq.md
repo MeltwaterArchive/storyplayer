@@ -24,7 +24,7 @@ Write your story as if every test must pass.
 
 Use `expectsZmq()->canSendmultiNonBlocking()` to make sure that the ZMQ socket's sending message buffer isn't currently full.
 
-{% highlight php %}
+{% highlight php startinline %}
 expectsZmq()->canSendmultiNonBlocking($socket, $message);
 {% endhighlight %}
 

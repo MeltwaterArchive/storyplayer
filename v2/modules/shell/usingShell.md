@@ -39,7 +39,7 @@ This command is mostly for use by other modules (such as the _[Provisioning](../
 
 Use `usingShell()->startInScreen()` to start a process on the same computer that Storyplayer is running on.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingShell()->startInScreen($screenName, $commandLine);
 {% endhighlight %}
 
@@ -60,7 +60,7 @@ In the background, Storyplayer starts a new `screen` session, and inside that se
 
 Use `usingShell()->stopInScreen()` to stop a process that was originally started using _[usingShell()->startInScreen()](#startinscreen)_:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingShell()->stopInScreen($screenName);
 {% endhighlight %}
 
@@ -72,7 +72,7 @@ where:
 
 Use `stopAllScreens()` to stop all processes that have been started using _[usingShell()->startInScreen()](#startinscreen)_:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingShell()->stopAllScreens();
 {% endhighlight %}
 
@@ -82,7 +82,7 @@ If there are no processes running, no error is thrown.
 
 Use `stopProcess()` to stop process that is running on the same computer that Storyplayer is running on.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingShell()->stopProcess($pid);
 {% endhighlight %}
 

@@ -24,7 +24,7 @@ Write your story as if every action will be successful.
 
 Use `usingForm()->check()` to tick a checkbox.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingForm('registration')->check()->boxWithLabel("T's & C's");
 {% endhighlight %}
 
@@ -32,7 +32,7 @@ usingForm('registration')->check()->boxWithLabel("T's & C's");
 
 Use `usingForm()->clear()` to clear out any values inside a form's input box.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingForm('login')->clear()->fieldWithLabel("Username");
 {% endhighlight %}
 
@@ -46,7 +46,7 @@ __See Also:__
 
 Use `usingForm()->click()` to click on a button, link, or other element on the page.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingForm('login')->click()->linkWithText("Login");
 {% endhighlight %}
 
@@ -54,7 +54,7 @@ usingForm('login')->click()->linkWithText("Login");
 
 Use `usingForm()->select()` to pick an option in a dropdown list.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingForm('registration')->select("United Kingdom")->fromDropdownWithLabel("Country");
 {% endhighlight %}
 
@@ -64,7 +64,7 @@ _select()_ takes one parameter - the text of the option that you want to select.
 
 Use `usingForm()->type()` to send a string of text to a selected DOM element.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingForm('feedback')->type("Storyplayer lives!")->intoFieldWithLabel("comments");
 {% endhighlight %}
 

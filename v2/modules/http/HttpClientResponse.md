@@ -13,7 +13,7 @@ Working with the HTTP module means working with the _HttpClientResponse_ object 
 
 Here's the parts of the _HttpClientResponse_ that you can safely use in your tests.
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace DataSift\Stone\HttpLib;
 
 class HttpClientResponse

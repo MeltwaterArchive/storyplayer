@@ -34,7 +34,7 @@ How can you avoid this happening?
 
 Your stories are plain old PHP files, so the easiest way to avoid this is to add a [PHP switch() statement](http://www.php.net/manual/en/control-structures.switch.php) in your `TestEnvironmentSetup()` and `TestEnvironmentTeardown()` functions:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addTestEnvironmentSetup(function($st) {
 	// which environment are we running against?
 	$envName = $st->getEnvironmentName();

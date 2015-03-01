@@ -21,13 +21,13 @@ Write your story as if every action will succeed.
 
 Use `fromEnvironment()->getAppSetting()` to get a single piece of information from the environment.
 
-{% highlight php %}
+{% highlight php startinline %}
 $value = fromEnvironment()->getAppSetting($app, $setting);
 {% endhighlight %}
 
 This is the equivalent of:
 
-{% highlight php %}
+{% highlight php startinline %}
 $env = getEnvironment();
 $value = $env->$app->$setting
 {% endhighlight %}
@@ -40,14 +40,14 @@ Most tests tend to need to use all the available settings for `$app` in the envi
 
 Use `fromEnvironment()->getAppSettings()` to get all the information about an 'app' from the environment.
 
-{% highlight php %}
+{% highlight php startinline %}
 $settings = fromEnvironment()->getAppSettings($app);
 $value = $settings->$setting;
 {% endhighlight %}
 
 This is the equivalent of:
 
-{% highlight php %}
+{% highlight php startinline %}
 $env = getEnvironment();
 $settings = $env->$app;
 {% endhighlight %}

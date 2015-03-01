@@ -56,7 +56,7 @@ The general flow of building a test environment is:
 
 Here's a `testEnvironmentSetup()` method from one of our internal [story templates](../../stories/templates.html), which handles setting up a test environment for our Pickle engine:
 
-{% highlight php %}
+{% highlight php startinline %}
     public function testEnvironmentSetup(StoryTeller $st)
     {
         // what params has the caller passed in?

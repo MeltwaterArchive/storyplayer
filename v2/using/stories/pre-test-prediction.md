@@ -30,7 +30,7 @@ The `PreTestPrediction()` happens once the test conditions have been setup:
 
 To make a pre-test prediction, add a `PreTestPrediction()` function to your story:
 
-{% highlight php %}
+{% highlight php startinline %}
 $story->addPreTestPrediction(function(StoryTeller $st) {
 	// steps go here
 });

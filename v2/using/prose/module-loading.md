@@ -13,7 +13,7 @@ One of the `$st` object's main roles is to dynamically load Prose modules as you
 
 When you use the `$st` object in your tests, every method call that you make is mapped to a class inside a Prose module like this:
 
-{% highlight php %}
+{% highlight php startinline %}
 # maps to Prose\UsingModule::doX()
 $st->usingModule()->doX();
 

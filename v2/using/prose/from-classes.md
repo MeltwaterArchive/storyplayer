@@ -13,7 +13,7 @@ This page contains any implementation details that are specific to _From_ classe
 
 _From_ classes normally extend the `Prose` base class:
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 use DataSift\Storyplayer\Prose\Prose;
@@ -42,7 +42,7 @@ Your _From_ classes should not throw any exceptions.
 
 If your _From_ classes call other code that can throw exceptions, you should always catch those exceptions, and make sure that you log them using `$log`, and then return `NULL` back to the caller.
 
-{% highlight php %}
+{% highlight php startinline %}
 namespace Prose;
 
 // remember to import Exception, otherwise your try/catch

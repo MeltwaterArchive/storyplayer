@@ -115,7 +115,7 @@ where:
 
 The basic format of an action is:
 
-{% highlight php %}
+{% highlight php startinline %}
 MODULE()->ACTION();
 {% endhighlight %}
 
@@ -133,7 +133,7 @@ In general, once you've used the EC2 module to start your virtual machine, you'l
 
 Here's one of our internal stories, which we use to create the EC2 images we use in our tests:
 
-{% highlight php %}
+{% highlight php startinline %}
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 // ========================================================================
@@ -285,7 +285,7 @@ storyplayer -e stu-office stories/ec2/CanCreateEc2InstanceStory.php
 
 and that story includes:
 
-{% highlight php %}
+{% highlight php startinline %}
 usingEc2()->createVm('instance-test');
 {% endhighlight %}
 

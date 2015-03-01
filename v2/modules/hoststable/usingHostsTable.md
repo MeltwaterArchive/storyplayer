@@ -23,7 +23,7 @@ Write your story as if every test must pass.
 
 Use `usingHostsTable()->addHost()` to inject a new host into the hosts table.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingHostsTable()->addHost($hostName, $hostDetails);
 {% endhighlight %}
 
@@ -38,7 +38,7 @@ This has been added
 
 Use `usingHostsTable()->removeHost()` to delete a host from the hosts table.
 
-{% highlight php %}
+{% highlight php startinline %}
 usingHostsTable()->removeHost($hostName, $hostDetails);
 {% endhighlight %}
 
