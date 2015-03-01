@@ -77,7 +77,6 @@ use Prose\ExpectsGraphite;
 use Prose\ExpectsHost;
 use Prose\ExpectsHostsTable;
 use Prose\ExpectsHttpResponse;
-use Prose\ExpectsIframe;
 use Prose\ExpectsProcessesTable;
 use Prose\ExpectsRolesTable;
 use Prose\ExpectsRuntimeTable;
