@@ -15,6 +15,12 @@ The source code for this Prose module can be found in these PHP classes:
 * DataSift\Storyplayer\Prose\FromHostsTable
 * DataSift\Storyplayer\Prose\UsingHostsTable
 
+<div class="callout warning" markdown="1">
+#### Internal Module
+
+This module is used internally by Storyplayer. Do not call this module from your stories.
+</div>
+
 ## Dependencies
 
 This module has no dependencies.
