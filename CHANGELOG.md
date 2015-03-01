@@ -20,6 +20,10 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 ### Fixes:
 
+Amazon AWS Module:
+
+* now expects your AWS keys to be in 'moduleSettings.aws' in your `storyplayer.json` file.
+
 Asserts Module:
 
 * assertsDouble() now works (required fix in datasift/stone-1.9.6)
