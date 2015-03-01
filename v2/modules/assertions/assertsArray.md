@@ -53,8 +53,8 @@ See _[containsValue()](#containsvalue)_ for a discussion of the limits of this t
 Use `assertsArray()->doesNotEqual()` to make sure that two arrays are not the same.
 
 {% highlight php startinline %}
-$expectedData = array(1,2,3,4);
-$actualData   = array(4,5,6,7);
+$expectedData = [ 1,2,3,4 ];
+$actualData   = [ 4,5,6,7 ];
 assertsArray($actualArray)->doesNotEqual($expectedArray);
 {% endhighlight %}
 
@@ -65,7 +65,7 @@ See _[equals()](#equals)_ for a discussion of how this test works.
 Use `assertsArray()->doesNotHaveKey()` to make sure that an array does not contain the key that you do not expect it to.
 
 {% highlight php startinline %}
-$data = array("first_name" => "Stuart", "surname" => "Herbert");
+$data = [ "first_name" => "Stuart", "surname" => "Herbert" ];
 assertsArray($data)->doesNotHaveKey("middle_name");
 {% endhighlight %}
 
@@ -76,8 +76,8 @@ See _[hasKey()](#haskey)_ for a discussion of the limits of this test.
 Use `assertsArray()->equals()` to make sure that two arrays contain the exact same values.
 
 {% highlight php startinline %}
-$expectedArray = array(1,2,3,4);
-$actualArray = array(1,2,3,4);
+$expectedArray = [ 1,2,3,4 ];
+$actualArray = [ 1,2,3,4 ];
 assertsArray($actualArray)->equals($expectedArray);
 {% endhighlight %}
 
@@ -90,14 +90,14 @@ If the test fails, Storyplayer's output will contain a _[unified diff](http://en
 Use `assertsArray()->hasKey()` to make sure that an array contains the key that you expect it to.
 
 {% highlight php startinline %}
-$data = array("first_name" => "Stuart", "surname" => "Herbert");
+$data = [ "first_name" => "Stuart", "surname" => "Herbert" ];
 assertsArray($data)->hasKey("first_name");
 {% endhighlight %}
 
 This test does not search inside multi-dimensional arrays.  For example, the following test will fail:
 
 {% highlight php startinline %}
-$data = array("address" => array("line1" => "Enterprise Centre"));
+$data = [ "address" => [ "line1" => "Enterprise Centre" ] ];
 
 // this test succeeds
 assertsArray($data)->hasKey("address");
@@ -112,16 +112,16 @@ Use `assertsArray()->hasLength()` to make sure that an array has the number of e
 
 {% highlight php startinline %}
 // single-dimensional array example
-$data = array(1,2,3,4);
+$data = [ 1,2,3,4 ];
 assertsArray($data)->hasLength(4);
 
 // multi-dimensional array example
-$data = array(
-    "address" => array(
+$data = [
+    "address" => [
         "line1" => "Enterprise Centre",
         "line2" => "University of Reading"
-    )
-);
+    ]
+];
 assertsArray($data)->hasLength(1);
 {% endhighlight %}
 
@@ -130,7 +130,7 @@ assertsArray($data)->hasLength(1);
 Use `assertsArray()->isArray()` to make sure that something really is an array.
 
 {% highlight php startinline %}
-$data = array(1,2,3,4);
+$data = [ 1,2,3,4 ];
 assertsArray($data)->isArray();
 {% endhighlight %}
 
@@ -153,7 +153,7 @@ $story->addPostTestInspection(function(StoryTeller $st) {
 Use `assertsArray()->isEmpty()` to make sure that an array has no contents.
 
 {% highlight php startinline %}
-$data = array();
+$data = [ ];
 assertsArray($data)->isEmpty();
 {% endhighlight %}
 
@@ -162,7 +162,7 @@ assertsArray($data)->isEmpty();
 Use `assertsArray()->isNotEmpty()` to make sure that an array has contents.
 
 {% highlight php startinline %}
-$data = array(1,2,3,4);
+$data = [ 1,2,3,4 ];
 assertsArray($data)->isNotEmpty();
 {% endhighlight %}
 
@@ -182,47 +182,19 @@ This has been added for completeness; we'd always recommend using _[isArray()](#
 Use `assertsArray()->isNotNull()` to make sure that the PHP variable is not NULL.
 
 {% highlight php startinline %}
-$data = array(1,2,3,4);
+$data = [ 1,2,3,4 ];
 assertsArray($data)->isNotNull();
 {% endhighlight %}
 
 This has been added for completeness; we'd always recommend using _[isArray()](#isarray)_ instead of testing for NULL.
-
-## isNotSameAs()
-
-Use `assertsArray()->isNotSameAs()` to make sure that two PHP arrays are not references to each other.
-
-{% highlight php startinline %}
-$data1 = array(1,2,3,4);
-$data2 = array(1,2,3,4);
-
-assertsArray($data1)->isNotSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[doesNotEqual()](#doesnotequal)_ instead.
-
-## isSameAs()
-
-Use `assertsArray()->isSameAs()` to make sure that two PHP arrays are references to each other.
-
-{% highlight php startinline %}
-$data1 = array(1,2,3,4);
-$data2 = &$data1;
-
-assertsArray($data1)->isSameAs($data2);
-{% endhighlight %}
-
-This has been added for completeness; you'll probably use _[equals()](#equals)_ instead.
 
 ## isSameLengthAs()
 
 Use `assertsArray()->isSameLengthAs()` to make sure that two PHP arrays are the same length.
 
 {% highlight php startinline %}
-$data1 = array(1,2,3,4);
-$data2 = array(5,6,7,8);
+$data1 = [ 1,2,3,4 ];
+$data2 = [ 5,6,7,8 ];
 
 assertsArray($data1)->isSameLengthAs($data2);
 {% endhighlight %}
-
-This has been added for completeness.
