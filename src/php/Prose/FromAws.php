@@ -66,7 +66,7 @@ class FromAws extends Prose
 		$log = $st->startAction("create AWS client factory using official SDK");
 
 		// get the settings for Aws
-		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
+		$awsSettings = $st->fromConfig()->getModuleSettings('aws');
 
 		// create the AWS client factory
 		$awsFactory = Aws::factory(array(
