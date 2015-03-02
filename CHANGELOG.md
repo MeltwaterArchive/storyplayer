@@ -12,11 +12,19 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
-## 2.1.0 - `develop` branch
+## 2.2.0 - `develop` branch
+
+Nothing new yet.
+
+## 2.1.0 - Monday 2nd March 2015
 
 ### New features:
 
 * $story->inGroup() now supports an array, or a string using ' > ' as the delimiter
+* fromHttp()->get() now supports optional timeout parameter
+* usingHttp()->delete() now supports optional timeout parameter
+* usingHttp()->post() now supports optional timeout parameter
+* usingHttp()->put() now supports optional timeout parameter
 
 ### Fixes:
 
@@ -45,10 +53,6 @@ Stories:
 * assertsInteger() module now covered
 * assertsObject() module now covered
 * assertsString() module now covered
-
-Unit tests:
-
-* none added yet
 
 ## 2.0.2 - Tue 17th Feb, 2015
 
