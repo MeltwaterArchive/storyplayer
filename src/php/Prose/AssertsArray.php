@@ -49,6 +49,19 @@ use DataSift\Stone\ComparisonLib\ArrayComparitor;
 /**
  * Assertions about the nature of, and contents of, arrays
  *
+ * @method void isArray()
+ * @method void containsValue(mixed $value)
+ * @method void doesNotContainValue(mixed $key)
+ * @method void doesNotEqual(array $expected)
+ * @method void doesNotHaveKey(mixed $key)
+ * @method void equals(array $expected)
+ * @method void hasLength(int $expected)
+ * @method void hasKey(mixed $key)
+ * @method void isEmpty()
+ * @method void isNull()
+ * @method void isNotNull()
+ * @method void isSameLengthAs(array $expected)
+ *
  * @category  Libraries
  * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>

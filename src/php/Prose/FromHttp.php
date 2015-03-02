@@ -62,7 +62,7 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  */
 class FromHttp extends Prose
 {
-	public function get($url, $params = array(), $headers = array())
+	public function get($url, $params = array(), $headers = array(), $timeout = null)
 	{
 		// shorthand
 		$st = $this->st;
@@ -95,7 +95,11 @@ class FromHttp extends Prose
 	        if (!$validateSsl) {
 	        	$request->disableSslCertificateValidation();
 	        }
-	    }
+	}
+
+	if ($timeout !== null) {
+		$request->setReadTimeout($timeout);
+	}
 
 		// make the call
 		$client = new HttpClient();

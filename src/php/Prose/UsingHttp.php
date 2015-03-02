@@ -62,25 +62,25 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  */
 class UsingHttp extends Prose
 {
-	public function delete($url, $params = array(), $body = null, $headers = array())
+	public function delete($url, $params = array(), $body = null, $headers = array(), $timeout = null)
 	{
-		return $this->makeHttpRequest($url, "DELETE", $params, $body, $headers);
+		return $this->makeHttpRequest($url, "DELETE", $params, $body, $headers, $timeout);
 	}
 
-	public function post($url, $params = array(), $body = null, $headers = array())
+	public function post($url, $params = array(), $body = null, $headers = array(), $timeout = null)
 	{
-		return $this->makeHttpRequest($url, "POST", $params, $body, $headers);
+		return $this->makeHttpRequest($url, "POST", $params, $body, $headers, $timeout);
 	}
 
-	public function put($url, $params = array(), $body = null, $headers = array())
+	public function put($url, $params = array(), $body = null, $headers = array(), $timeout = null)
 	{
-		return $this->makeHttpRequest($url, "PUT", $params, $body, $headers);
+		return $this->makeHttpRequest($url, "PUT", $params, $body, $headers, $timeout);
 	}
 
 	/**
 	 * @param string $verb
 	 */
-	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array())
+	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array(), $timeout = null)
 	{
 		// shorthand
 		$st = $this->st;
@@ -129,6 +129,10 @@ class UsingHttp extends Prose
         if (!$validateSsl) {
         	$request->disableSslCertificateValidation();
         }
+
+	if ($timeout !== null) {
+		$request->setReadTimeout($timeout);
+	}
 
 		// make the call
 		$client = new HttpClient();

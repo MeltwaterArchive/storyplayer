@@ -44,6 +44,8 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\PlayerLib\Story_Checkpoint;
+use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\TextLib\TextHelper;
 
 /**
@@ -74,30 +76,14 @@ class AssertionsBase extends Prose
 		// what are we doing?
 		//
 		// let's try and make it a bit more useful to the reader
-		$className = get_class($this);
-		$className = preg_replace('/^.*[\\\\_]([A-Za-z0-9]+)$/', "$1", get_class($this));
-		$words = TextHelper::convertCamelCaseToWords($className);
-		if (isset($words[1])) {
-			$msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
-			if (isset($params[0])) {
-				if (is_string($params[0])) {
-					$msg .= " '" . $params[0] . "'";
-				}
-				else if (is_scalar($params[0])) {
-					$msg .= ' ' . $params[0];
-				}
-				else {
-					$msg .= ' ' . $st->convertDataForOutput($params[0]);
-				}
-			}
-		}
-		else {
-			$msg = "check data using $className::$methodName";
-		}
+		$msg = $this->getStartLogMessage($methodName, $params);
 		$log = $st->startAction($msg);
+		$actual4Log = $this->getActualDataForLog();
+		usingLog()->writeToLog("checking data: " . $actual4Log);
 
 		// is the user trying to call a method that exists in our comparitor?
 		if (!method_exists($this->comparitor, $methodName)) {
+			$log->endAction("unsupported comparison '{$methodName}'");
 			throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
 		}
 
@@ -106,12 +92,56 @@ class AssertionsBase extends Prose
 
 		// was the comparison successful?
 		if ($result->hasPassed()) {
-			$log->endAction();
+			$log->endAction("assertion passed!");
 			return true;
 		}
 
 		// if we get here, then the comparison failed
+		usingLog()->writeToLog("expected outcome: " . $result->getExpected());
+		usingLog()->writeToLog("actual   outcome: " . $result->getActual());
+		$log->endAction("assertion failed!");
 		throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
+	}
+
+	protected function getStartLogMessage($methodName, $params)
+	{
+		$className = preg_replace('/^.*[\\\\_]([A-Za-z0-9]+)$/', "$1", get_class($this));
+		$words = TextHelper::convertCamelCaseToWords($className);
+		if (isset($words[1])) {
+			$msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
+		}
+		else {
+			$msg = "check data using $className::$methodName";
+		}
+
+		foreach ($params as $expected) {
+			if (is_string($expected)) {
+				$msg .= " '" . $expected . "'";
+			}
+			else {
+				$printer = new DataPrinter;
+				$msg .= ' ' . $printer->convertToStringWithTypeInformation($expected);
+			}
+		}
+
+		// all done
+		return $msg;
+	}
+
+	protected function getActualDataForLog()
+	{
+		// special case - our checkpoint object is a 'fake' object
+		$actual = $this->comparitor->getValue();
+
+		if ($actual instanceof Story_Checkpoint) {
+			$printer = new DataPrinter;
+			$actualLogMsg = $printer->convertToStringWithTypeInformation($actual->getData());
+		}
+		else {
+			$actualLogMsg = $this->comparitor->getValueForLogMessage();
+		}
+
+		return $actualLogMsg;
 	}
 
 	public function getComparitor()

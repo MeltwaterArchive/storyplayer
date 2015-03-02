@@ -43,6 +43,9 @@
 
 namespace DataSift\Storyplayer\PlayerLib;
 
+use ArrayIterator;
+use IteratorAggregate;
+
 /**
  * our data container, that is available to each phase of a test
  *
@@ -53,7 +56,7 @@ namespace DataSift\Storyplayer\PlayerLib;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Story_Checkpoint
+class Story_Checkpoint implements IteratorAggregate
 {
 	/**
 	 * the StoryTeller object
@@ -388,5 +391,25 @@ class Story_Checkpoint
 
         // return the array that we've built
         return $return;
+    }
+
+    /**
+     * get all the data held inside the checkpoint
+     *
+     * @return \stdClass
+     */
+    public function getData()
+    {
+        return (object)$this->data;
+    }
+
+    /**
+     * support foreach() loops over our data
+     *
+     * @return \Traversable
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->data);
     }
 }

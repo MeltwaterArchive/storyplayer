@@ -49,6 +49,17 @@ use DataSift\Stone\ComparisonLib\IntegerComparitor;
 /**
  * Assertions about the nature of, and contents of, integers
  *
+ * @method void isInteger()
+ * @method void isGreaterThan(double|int $expected)
+ * @method void isGreaterThanOrEqualTo(double|int $expected)
+ * @method void isLessThan(double|int $expected)
+ * @method void isLessThanOrEqualTo(double|int $expected)
+ * @method void equals(double|int $expected)
+ * @method void doesNotEqual(double|int $expected)
+ * @method void isEmpty()
+ * @method void isNull()
+ * @method void isNotNull()
+ *
  * @category  Libraries
  * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
