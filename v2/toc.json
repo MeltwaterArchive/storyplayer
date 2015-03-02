@@ -122,6 +122,7 @@
 		"modules/browser/usingBrowser",
 		"modules/browser/webdriver",
 		"modules/checkpoint/index",
+		"modules/checkpoint/getCheckpoint",
 		"modules/checkpoint/fromCheckpoint",
 		"modules/checkpoint/usingCheckpoint",
 		"modules/config/index",
