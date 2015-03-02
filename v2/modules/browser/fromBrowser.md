@@ -21,14 +21,12 @@ Use `fromBrowser()->has()` to work out whether the DOM contains the content that
 
 {% highlight php startinline %}
 if (fromBrowser()->has()->buttonWithText('Register')) {
-	// we are on the registration form
+    // we are on the registration form
 }
 else {
-	// we are on the login form
+    // we are on the login form
 }
 {% endhighlight %}
-
-This action is normally used inside [local Prose dialects](../../prose/local-dialects.html), where you're building wrappers for your app's actions.
 
 __See Also:__
 
@@ -42,7 +40,7 @@ Use `fromBrowser()->get()` to get one or more [WebDriver element objects](webdri
 $element = fromBrowser()->get()->tableWithId('results');
 {% endhighlight %}
 
-This action is normally used when you need to run a custom XPath query to extract content from a DOM element that cannot be found by any other means.  This should be your last resort, as these kind of XPath queries are quite fragile, and take a lot of maintenance.
+This action returns a WebDriver element object that you can then use directly. It's normally used when you need to do something with a DOM element that isn't currently supported by Storyplayer's Browser module.
 
 ## getName()
 
@@ -79,9 +77,9 @@ This action is normally used for making sure that the end-user has the choices t
 {% highlight php startinline %}
 // the choices that should be available
 $expectedOptions = array (
-	"Gold Subscription Plan" => "gold",
-	"Silver Subscription Plan" => "silver",
-	"Bronze Subscription Plan" => "bronze"
+    "Gold Subscription Plan" => "gold",
+    "Silver Subscription Plan" => "silver",
+    "Bronze Subscription Plan" => "bronze"
 );
 
 // the choices that *are* available
@@ -90,6 +88,18 @@ $actualOptions = fromBrowser()->getOptions()->fromDropdownWithLabel("Payment Pla
 // make sure the right choices are there
 expectsArray($actualOptions)->equals($expectedOptions);
 {% endhighlight %}
+
+## getTableContents()
+
+Use `fromBrowser()->getTable()` to get the contents of a HTML table as an array.
+
+{% highlight php startinline %}
+$contents = fromBrowser()->getTableContents()->fromTableWithId('latest-scores');
+{% endhighlight %}
+
+Make sure that you use a _fromElementWithXXX()_ search term, otherwise Storyplayer will not be able to retrieve any data from the table you've searched for.
+
+This action is very handy for building automated datasets using the [`storyplayer automate`](../../using/storyplayer-commands/automate.html) command.
 
 ## getTag()
 
@@ -134,8 +144,6 @@ Use `fromBrowser()->getTitle()` to get the _&lt;title&gt;_ of the currently load
 {% highlight php startinline %}
 $title = fromBrowser()->getTitle();
 {% endhighlight %}
-
-This action is normally used inside [local Prose dialects](../../prose/local-dialects.html), where your Prose might be wrapping up a complex operation that spans multiple pages.
 
 ## getValue()
 

@@ -9,7 +9,7 @@ next: '<a href="../../modules/browser/webdriver.html">Next: The WebDriver Librar
 
 _usingBrowser()_ allows you to load web pages into the browser, and to interact with the DOM elements inside the page.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingBrowser_.
+The source code for these actions can be found in the class `Prose\UsingBrowser`.
 
 ## Behaviour And Return Codes
 
@@ -208,6 +208,6 @@ usingBrowser()->waitForTitles(2, array(
 _waitForTitles()_ takes two parameters:
 
 * `$timeout` - how many seconds to wait before deciding that the action has failed
-* `$title` - a list of the different page titles that you expect
+* `$titles` - a list of the different page titles that you expect
 
 See _[gotoPage()](#gotopage)_ for a fuller discussion.

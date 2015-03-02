@@ -9,7 +9,7 @@ next: '<a href="../../modules/browser/usingBrowser.html">Next: usingBrowser()</a
 
 _expectsBrowser()_ allows you to test the currently loaded HTML page and make sure that it contains what you expect it to.  Use these tests to prove that your story can continue.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsBrowser_.
+The source code for these actions can be found in the class `Prose\ExpectsBrowser`.
 
 ## Behaviour And Return Codes
 

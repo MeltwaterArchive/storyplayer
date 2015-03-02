@@ -97,7 +97,7 @@ Use The _WithPlaceholder_ search filter to find DOM elements that have a matchin
 Example:
 
 {% highlight php startinline %}
-type('stuart')->intoBoxWithPlaceholder("Username ...");
+usingBrowser()->type('stuart')->intoBoxWithPlaceholder("Username ...");
 {% endhighlight %}
 
 This search filter is handy for testing that the placeholder (a visual clue) is present in the DOM.  Just be aware that it doesn't prove that the end-user can actually see the text.
@@ -122,7 +122,7 @@ Use the _WithTitle_ search filter to find DOM elements that have a matching _tit
 Example:
 
 {% highlight php startinline %}
-click()->fieldWithTitle("Next Page");
+usingBrowser()->click()->fieldWithTitle("Next Page");
 {% endhighlight %}
 
 This search filter normally gets used for clicking on images.  An alternative is the [WithAltText](#withalttext) filter.

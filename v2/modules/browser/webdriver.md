@@ -7,8 +7,7 @@ next: '<a href="../../modules/checkpoint/index.html">Next: The Checkpoint Module
 
 # The WebDriver Library
 
-The _Browser_ module uses [the WebDriver client library](https://github.com/datasift/php_webdriver/) to talk to Selenium Server (which, in turn, talks to the web browser that is being controlled).  This library was [originally written and released by Facebook](https://github.com/facebook/php-webdriver); we've forked it to add new functionality, bundle Selenium and the chromedriver, PSR-0 autoloading support, and PEAR packaging.
-Just as with the original, this library is released under the terms of [the Apache license](http://opensource.org/licenses/Apache-2.0) (the rest of Storyplayer uses [the new BSD license](http://opensource.org/licenses/BSD-3-Clause)).
+The _Browser_ module uses [the WebDriver client library](https://github.com/datasift/php_webdriver/) to talk to Selenium Server (which, in turn, talks to the web browser that is being controlled).  This library was [originally written and released by Facebook](https://github.com/facebook/php-webdriver); we've forked it to add new functionality, bundle Selenium and the chromedriver, PSR-0 autoloading support, and PEAR packaging. Just as with the original, this library is released under the terms of [the Apache license](http://opensource.org/licenses/Apache-2.0) (the rest of Storyplayer uses [the new BSD license](http://opensource.org/licenses/BSD-3-Clause)).
 
 You will find the source code for the WebDriver client library under the _DataSift\WebDriver_ namespace.
 
@@ -49,10 +48,10 @@ Facebook's original WebDriver client library acts as a thin facade to the Json W
 
 ## WebDriver Sessions
 
-The _DataSift\WebDriver\WebDriverSession_ represents a single running instance of a web browser.  You can get the current session from the `$st` object:
+The _DataSift\WebDriver\WebDriverSession_ represents a single running instance of a web browser.  You can get the current session using the [Device Manager module](../devicemanager/index.html):
 
 {% highlight php startinline %}
-$session = getRunningWebBrowser();
+$session = fromDeviceManager()->getRunningWebBrowser();
 {% endhighlight %}
 
 The session provides a lot of useful functionality, including opening web pages, working with multiple browser windows, working with cookies, and much more.  We hope to add support for most of this functionality to the _Browser_ module over time.
@@ -62,7 +61,7 @@ The session provides a lot of useful functionality, including opening web pages,
 The _DataSift\WebDriver\WebDriverElement_ represents a single DOM element inside the web browser.
 
 {% highlight php startinline %}
-$session = getRunningWebBrowser();
+$session = fromDeviceManager()->getRunningWebBrowser();
 $body = $session->getElement('tag name', 'body');
 {% endhighlight %}
 

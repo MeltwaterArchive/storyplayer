@@ -7,7 +7,13 @@ next: '<a href="../../modules/browser/search-filters.html">Next: Supported Searc
 
 # Supported Search Targets
 
-_Search targets_ are used to determine the HTML tags that the _search term_ will search against inside the browser's current DOM.
+_Search targets_ are used to determine the HTML tags that the _search filter_ will search against inside the browser's current DOM.
+
+{% highlight php startinline %}
+fromBrowser()->get()->[from|into|of]<SearchTarget><SearchFilter>();
+{% endhighlight %}
+
+See [Searching The DOM](searching-the-dom.html) for full details of how to use _search targets_ and _search filters_ together.
 
 ## box / boxes
 
@@ -104,6 +110,16 @@ Example:
 
 {% highlight php startinline %}
 $amount = fromBrowser()->getText()->fromSpanWithClass('payment_total');
+{% endhighlight %}
+
+## table
+
+Use _table_ to search for _&lt;table&gt;_ tags in the DOM.
+
+Example:
+
+{% highlight php startinline %}
+$contents = fromBrowser()->getTableContents()->fromTableWithId('latest-scores');
 {% endhighlight %}
 
 ## unorderedlist
