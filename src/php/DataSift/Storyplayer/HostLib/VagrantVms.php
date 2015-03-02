@@ -137,8 +137,7 @@ class VagrantVms implements SupportedHost
 		}
 
 		// work out which network interface to use
-		$bridgedIface = $this->determineBridgedInterface();
-		putenv('VAGRANT_BRIDGE_ADAPTER=' . $bridgedIface);
+		putenv('VAGRANT_BRIDGE_ADAPTER=' . $this->determineBridgedInterface($envDetails));
 
 		// let's start the VM
 		$command = "vagrant up";
@@ -404,13 +403,27 @@ class VagrantVms implements SupportedHost
 		return $hostname;
 	}
 
-	public function determineBridgedInterface()
+	public function determineBridgedInterface($envDetails)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
 		$log = $st->startAction("determine bridged network interface for Vagrant VM");
+
+		// check if VirtualBox (VBoxManage) is installed 
+		$command = 'which VBoxManage';
+		$commandRunner = new CommandRunner();
+		$result = $commandRunner->runSilently($this->st, $command);
+		if ($result->returnCode !== 0) {
+			// VBoxManage is not installed, try to read the configured value (if any)
+			if (empty($envDetails->bridgedIface)) {
+				// set default value
+				$envDetails->bridgedIface = 'eth0';
+			}
+			$log->endAction('VBoxManage is not installed: returning default '.$envDetails->bridgedIface.' interface');
+			return $envDetails->bridgedIface;
+		}
 
 		// VBoxManage can actually tell us what we need to know
 		$command = 'VBoxManage list bridgedifs';
@@ -433,10 +446,15 @@ class VagrantVms implements SupportedHost
 				// our network interface contains an IPAddress - it is likely
 				// to be one that works
 				if ($matches[1] != '0.0.0.0') {
+					$log->endAction($iface);
 					return $iface;
 				}
 			}
 		}
+
+		// if we get here, then we haven't found a network interface to use
+		$log->endAction("no bridgeable network interface found :(");
+		throw new E5xx_ActionFailed(__METHOD__);
 	}
 
 	public function determinePrivateKey($vmDetails)
