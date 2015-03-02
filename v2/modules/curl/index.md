@@ -2,7 +2,7 @@
 layout: v2/modules-curl
 title: The cURL Module
 prev: '<a href="../../modules/config/index.html">Prev: The Config Module</a>'
-next: '<a href="../../modules/environment/index.html">Next: The Environment Module</a>'
+next: '<a href="../../modules/devicemanager/index.html">Next: The DeviceManager Module</a>'
 ---
 
 # The cURL Module
