@@ -20,6 +20,7 @@ Module | Use To ...
 [Checkpoint](checkpoint/index.html) |
 [Config](config/index.html) |
 [cURL](curl/index.html) |
+[DeviceManager](devicemanager/index.html) | start and stop the test device.
 [Environment](environment/index.html) |
 [Failure](failure/index.html) |
 [File](file/index.html) |
