@@ -16,7 +16,7 @@ Module | Use To ...
 [Amazon AWS](aws/index.html) |
 [Amazon EC2](ec2/index.html) |
 [Assertions](asserts/index.html) | test data that you've obtained from other modules.
-[Browser](browser/index.html) |
+[Browser](browser/index.html) | control a web browser.
 [Checkpoint](checkpoint/index.html) |
 [Config](config/index.html) |
 [cURL](curl/index.html) |
