@@ -7,9 +7,9 @@ next: '<a href="../../modules/config/index.html">Next: The Config Module</a>'
 
 # usingCheckpoint()
 
-_usingCheckpoint()_ allows you to put data into the checkpoint without having to call _$st()->getCheckpoint()_ yourself.
+_usingCheckpoint()_ allows you to put data into the checkpoint without having to call `getCheckpoint()` yourself.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingCheckpoint_.
+The source code for these actions can be found in the class `Prose\UsingCheckpoint`.
 
 ## Behaviour And Return Codes
 
