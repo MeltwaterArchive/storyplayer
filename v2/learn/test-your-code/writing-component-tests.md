@@ -22,10 +22,10 @@ Every component test follows this 4-step plan:
 The first step in any component test is to create the conditions that the test itself needs. You do this by adding a `TestSetup` phase to your story.
 
 {% highlight php startinline %}
-$story->addTestSetup(function($st) {
+$story->addTestSetup(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
+    foreach (hostWithRole('upload_target') as $hostId) {
+        usingHost($hostId)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
     }
 });
 {% endhighlight %}
@@ -49,9 +49,9 @@ The next step is to do something - perform an action that is expected to work. Y
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function($st) {
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->fromHost($hostname)->downloadFile('testfile.txt', "/tmp/testfile-{$hostname}.txt");
+$story->addAction(function() {
+    foreach (hostWithRole('upload_target') as $hostId) {
+        fromHost($hostId)->downloadFile('testfile.txt', "/tmp/testfile-{$hostId}.txt");
     }
 });
 {% endhighlight %}
@@ -73,13 +73,13 @@ __Always write your tests assuming no errors have occurred.__ This makes your te
 Assuming that the `Action` phase was successful, the next step in your component test is to double-check everything to make sure that the `Action` phase actually did something. This is the _deep inspection_ that we talk more about in our [Belt and Braces Test Philosophy](../fundamentals/belt-and-braces-testing.html) discussion.
 
 {% highlight php startinline %}
-$story->addPostTestInspection(function($st) {
+$story->addPostTestInspection(function() {
     // we should have a file for each host in the configuration
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $filename = '/tmp/testfile-' . $hostname . '.txt';
+    foreach (hostWithRole('upload_target') as $hostId) {
+        $filename = '/tmp/testfile-' . $hostId . '.txt';
         if (!file_exists($filename)) {
-            $st->usingLog()->writeToLog("file not downloaded from host '$hostname'");
-            $st->usingErrors()->throwException("file '{$filename}' not downloaded");
+            usingLog()->writeToLog("file not downloaded from host '$hostId'");
+            usingErrors()->throwException("file '{$filename}' not downloaded");
         }
     }
 });
@@ -104,14 +104,14 @@ Finally, if you added a `TestSetup` phase to your story, you need to undo whatev
 This is done by adding a `TestTeardown` phase to your story.
 
 {% highlight php startinline %}
-$story->addTestTeardown(function($st) {
+$story->addTestTeardown(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
+    foreach (hostWithRole('upload_target') as $hostId) {
     	// remove the file from the test environment
-        $st->usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
+        usingHost($hostId)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
 
         // remove the file from our computer too
-        $filename = '/tmp/testfile-' . $hostname . '.txt';
+        $filename = '/tmp/testfile-' . $hostId . '.txt';
         if (file_exists($filename)) {
             // tidy up
             unlink($filename);
@@ -175,36 +175,37 @@ $story->requiresStoryplayerVersion(2);
 //
 // ------------------------------------------------------------------------
 
-$story->addTestSetup(function($st) {
+$story->addTestSetup(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
+    foreach (hostWithRole('upload_target') as $hostId) {
+        usingHost($hostId)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
     }
 });
 
-$story->addTestTeardown(function($st) {
+$story->addTestTeardown(function() {
     // cleanup after ourselves
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
+    foreach (hostWithRole('upload_target') as $hostId) {
     	// remove the file from the test environment
-        $st->usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
+        usingHost($hostId)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
 
         // remove the file from our computer too
-        $filename = '/tmp/testfile-' . $hostname . '.txt';
+        $filename = '/tmp/testfile-' . $hostId . '.txt';
         if (file_exists($filename)) {
             // tidy up
             unlink($filename);
         }
     }
 });
+
 // ========================================================================
 //
 // POSSIBLE ACTION(S)
 //
 // ------------------------------------------------------------------------
 
-$story->addAction(function($st) {
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $st->fromHost($hostname)->downloadFile('testfile.txt', "/tmp/testfile-{$hostname}.txt");
+$story->addAction(function() {
+    foreach (hostWithRole('upload_target') as $hostId) {
+        fromHost($hostId)->downloadFile('testfile.txt', "/tmp/testfile-{$hostId}.txt");
     }
 });
 
@@ -214,13 +215,13 @@ $story->addAction(function($st) {
 //
 // ------------------------------------------------------------------------
 
-$story->addPostTestInspection(function($st) {
+$story->addPostTestInspection(function() {
     // we should have a file for each host in the configuration
-    foreach (hostWithRole($st, 'upload_target') as $hostname) {
-        $filename = '/tmp/testfile-' . $hostname . '.txt';
+    foreach (hostWithRole('upload_target') as $hostId) {
+        $filename = '/tmp/testfile-' . $hostId . '.txt';
         if (!file_exists($filename)) {
-            $st->usingLog()->writeToLog("file not downloaded from host '$hostname'");
-            $st->usingErrors()->throwException("file '{$filename}' not downloaded");
+            usingLog()->writeToLog("file not downloaded from host '$hostId'");
+            usingErrors()->throwException("file '{$filename}' not downloaded");
         }
     }
 });

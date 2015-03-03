@@ -34,13 +34,13 @@ $story = newStoryFor('My App')
 
 $story->requiresStoryplayerVersion(2);
 
-$story->addAction(function($st) {
+$story->addAction(function() {
     // add an empty action
 });
 
-$story->addPostTestInspection(function($st) {
+$story->addPostTestInspection(function() {
     // this checks every host in turn
-    $st->foreachHostWithRole('web-server')->expectsHost()->packageIsInstalled('my_app');
+    foreachHostWithRole('web-server')->expectsHost()->packageIsInstalled('my_app');
 });
 {% endhighlight %}
 
@@ -55,20 +55,20 @@ $story = newStoryFor('My App')
 
 $story->requiresStoryplayerVersion(2);
 
-$story->addAction(function($st) {
+$story->addAction(function() {
     // add an empty action
 });
 
-$story->addPostTestInspection(function($st) {
+$story->addPostTestInspection(function() {
     // iterate over all hosts that should have our app installed
-    foreach(hostWithRole($st, 'web-server') as $hostname) {
+    foreach(hostWithRole(, 'web-server') as $hostId) {
         // which user does Nginx run as on here?
         //
         // also, where should our web app be installed on here?
-        $nginxSettings = $st->fromHost($hostname)->getAppSettings('nginx');
+        $nginxSettings = fromHost($hostId)->getAppSettings('nginx');
 
         // make sure that our app is on the file system
-        $st->expectsHost($hostname)->hasFolderWithPermissions(
+        expectsHost($hostId)->hasFolderWithPermissions(
             $nginxSettings->appFolder . '/my_app',
             'root',
             'root',
@@ -76,7 +76,7 @@ $story->addPostTestInspection(function($st) {
         );
 
         // make sure that Nginx can see our app's public folder
-        $st->expectsHost($hostname)->hasFolderWithPermissions(
+        expectsHost($hostId)->hasFolderWithPermissions(
             // /var/www/my_app/public
             $nginxSettings->appFolder . '/my_app/public',
             // www-data
@@ -86,7 +86,7 @@ $story->addPostTestInspection(function($st) {
         );
 
         // make sure that Nginx has the config file for our app
-        $st->expectsHost($hostname)->hasFileWithPermissions(
+        expectsHost($hostId)->hasFileWithPermissions(
             // /etc/nginx/sites-enabled/my_app
             $nginxSettings->sitesEnabledFolder . '/my_app',
             'root',
@@ -124,10 +124,10 @@ Notice how I don't hard-code details about Nginx, such as folder paths, users an
 ]
 {% endhighlight %}
 
-and get them using `$st->fromHost()`:
+and get them using [`fromHost()`](../../modules/host/fromHost.html):
 
 {% highlight php startinline %}
-$nginxSettings = $st->fromHost($hostname)->getAppSettings('nginx');
+$nginxSettings = fromHost($hostId)->getAppSettings('nginx');
 {% endhighlight %}
 
 This way, if I ever switch operating systems - or start testing on multiple operating systems - the story itself doesn't have to change. I just have to put the right settings into the test environment config file.
@@ -153,36 +153,36 @@ $story = newStoryFor('My App')
 
 $story->requiresStoryplayerVersion(2);
 
-$st->addTestSetup(function($st) {
+$story->addTestSetup(function() {
     // if the app is running, we need to stop it, otherwise we can't test
     // that it starts correctly!
-    foreach(hostWithRole($st, 'web-server') as $hostname) {
+    foreach(hostWithRole('web-server') as $hostId) {
         // get our nginx settings for this host
-        $nginxSettings = $st->fromHost($hostname)->getAppSettings('nginx');
+        $nginxSettings = fromHost($hostId)->getAppSettings('nginx');
 
         // stop nginx
-        if ($st->fromHost($hostname)->getProcessIsRunning('nginx')) {
-            $st->usingHost($hostname)->runCommand($nginxSettings->shutdownCommand);
+        if (fromHost($hostId)->getProcessIsRunning('nginx')) {
+            usingHost($hostId)->runCommand($nginxSettings->shutdownCommand);
 
             // make sure it has stayed dead
-            $st->expectsHost($hostname)->processIsNotRunning('nginx');
+            expectsHost($hostId)->processIsNotRunning('nginx');
         }
     }
 });
 
-$st->addAction(function($st) {
-    foreach(hostWithRole($st, 'web-server') as $hostname) {
+$story->addAction(function() {
+    foreach(hostWithRole('web-server') as $hostId) {
         // get our nginx settings
-        $nginxSettings = $st->fromHost($hostname)->getAppSettings('nginx');
+        $nginxSettings = fromHost($hostId)->getAppSettings('nginx');
 
         // start nginx
-        $st->usingHost($hostname)->runCommand($nginxSettings->startCommand);
+        usingHost($hostId)->runCommand($nginxSettings->startCommand);
     }
 });
 
-$st->addPostTestInspection(function($st) {
+$story->addPostTestInspection(function() {
     // make sure nginx is running everywhere
-    $st->foreachHostWithRole('web-server')->expectsHost()->processIsRunning('nginx');
+    foreachHostWithRole('web-server')->expectsHost()->processIsRunning('nginx');
 });
 {% endhighlight %}
 
@@ -248,26 +248,26 @@ $story = newStoryFor('My App')
 
 $story->requiresStoryplayerVersion(2);
 
-$story->addAction(function($st) {
+$story->addAction(function() {
     // an empty action, because we are not changing anything at all
 });
 
-$story->addPostTestInspection(function($st) {
+$story->addPostTestInspection(function() {
     // what is the address of our healthcheck page?
-    $healthcheckPage = $st->fromSystemUnderTest()->getAppSetting('my_app.pages.healthcheck');
+    $healthcheckPage = fromSystemUnderTest()->getAppSetting('my_app.pages.healthcheck');
 
     // what do we expect the healthcheck page to say?
     $expectedBody = file_get_contents(__DIR__ . '/200-healthcheck-page.html');
 
     // check each host for what we want
-    foreach(hostWithRole($st, 'web-server') as $hostname) {
+    foreach(hostWithRole('web-server') as $hostId) {
         // what is the name of this server on the network?
-        $fqdn = $st->fromHost($hostname)->getNetworkHostname();
+        $fqdn = fromHost($hostId)->getHostname();
 
         // make sure we can get our healthcheck page
-        $response = $st->fromHttp()->get("http://{$fqdn}/{$healthcheckPage}");
-        $st->expectsHttpResponse($response)->hasStatusCode(200);
-        $st->expectsHttpResponse($response)->hasBody($expectedBody);
+        $response = fromHttp()->get("http://{$fqdn}/{$healthcheckPage}");
+        expectsHttpResponse($response)->hasStatusCode(200);
+        expectsHttpResponse($response)->hasBody($expectedBody);
     }
 });
 {% endhighlight %}
