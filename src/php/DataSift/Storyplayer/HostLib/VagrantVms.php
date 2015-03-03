@@ -137,7 +137,7 @@ class VagrantVms implements SupportedHost
 		}
 
 		// work out which network interface to use
-		putenv('VAGRANT_BRIDGE_ADAPTER=' . $this->determineBridgedInterface($envDetails));
+		$this->setVagrantBridgedInterface();
 
 		// let's start the VM
 		$command = "vagrant up";
@@ -403,7 +403,17 @@ class VagrantVms implements SupportedHost
 		return $hostname;
 	}
 
-	public function determineBridgedInterface($envDetails)
+	/**
+	 * Set the VAGRANT_BRIDGE_ADAPTER and VIRTUALBOX_BRIDGE_ADAPTER
+	 * environmental variables.
+	 */
+	public function setVagrantBridgedInterface() {
+		$bridgedIface = $this->determineBridgedInterface();
+		putenv('VAGRANT_BRIDGE_ADAPTER='.$bridgedIface);
+		putenv('VIRTUALBOX_BRIDGE_ADAPTER='.$bridgedIface);
+	}
+
+	public function determineBridgedInterface()
 	{
 		// shorthand
 		$st = $this->st;
@@ -411,21 +421,30 @@ class VagrantVms implements SupportedHost
 		// what are we doing?
 		$log = $st->startAction("determine bridged network interface for Vagrant VM");
 
-		// check if VirtualBox (VBoxManage) is installed 
+		try {
+			// 1. try to load Vagrant settings from storyplayer.json
+			// e.g.: "moduleSettings":{"vagrant":{"bridgedIface":"eth0"}}
+			$vagrantSettings = $st->fromConfig()->getModuleSetting('vagrant');
+			if (!empty($vagrantSettings->bridgedIface)) {
+				$log->endAction('Returning configured '.$vagrantSettings->bridgedIface.' interface');
+				return $vagrantSettings->bridgedIface;
+			}
+		} catch (E5xx_ActionFailed $e) {
+			// ignore errors as this setting may not exist
+		}
+
+		// 2. check if VirtualBox (VBoxManage) is installed 
 		$command = 'which VBoxManage';
 		$commandRunner = new CommandRunner();
 		$result = $commandRunner->runSilently($this->st, $command);
 		if ($result->returnCode !== 0) {
-			// VBoxManage is not installed, try to read the configured value (if any)
-			if (empty($envDetails->bridgedIface)) {
-				// set default value
-				$envDetails->bridgedIface = 'eth0';
-			}
-			$log->endAction('VBoxManage is not installed: returning default '.$envDetails->bridgedIface.' interface');
-			return $envDetails->bridgedIface;
+			// VBoxManage is not installed, we are probably using another provider
+			// like OpenStack that do not require this setting
+			$log->endAction('VBoxManage is not installed: returning default eth0 interface');
+			return 'eth0';
 		}
 
-		// VBoxManage can actually tell us what we need to know
+		// 3. VBoxManage can actually tell us what we need to know
 		$command = 'VBoxManage list bridgedifs';
 		$commandRunner = new CommandRunner();
 		$result = $commandRunner->runSilently($st, $command);

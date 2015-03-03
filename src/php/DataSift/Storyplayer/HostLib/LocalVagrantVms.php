@@ -109,7 +109,7 @@ class LocalVagrantVms extends VagrantVms implements SupportedHost
 		}
 
 		// work out which network interface to use
-		putenv('VIRTUALBOX_BRIDGE_ADAPTER=' . $this->determineBridgedInterface($envDetails));
+		$this->setVagrantBridgedInterface();
 
 		// let's start the VM
 		$command = "vagrant up";
