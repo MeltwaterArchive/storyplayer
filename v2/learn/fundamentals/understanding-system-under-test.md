@@ -84,7 +84,7 @@ But what happens if the URL moves in a later version of your app? If you put the
 }
 {% endhighlight %}
 
-... you can then get these settings using the [Config()](../../modules/config/index.html) module. You can get a single setting like this:
+... you can then get these settings using the [SystemUnderTest module](../../modules/systemundertest/index.html). You can get a single setting like this:
 
 {% highlight php startinline %}
 $loginPage = fromSystemUnderTest()->getAppSetting("storyplanner.loginPage");
@@ -103,4 +103,4 @@ This helps your stories become independent of which version of your app that you
 ### Further Reading
 
 * [System Under Test Config File](../../using/configuration/system-under-test-config.html) is the complete reference to everything you can do with this config file.
-* Your stories need to use [the Config Module](../../modules/config/index.html) to retrieve any settings from your system under test config file.
+* Your stories need to use [the SystemUnderTest module](../../modules/systemundertest/index.html) to retrieve any settings from your system under test config file.
