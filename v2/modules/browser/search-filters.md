@@ -16,7 +16,7 @@ Use the _WithAltText_ search filter to find DOM elements that have a matching _a
 Example:
 
 {% highlight php startinline %}
-click()->elementWithAltText("Login Button");
+usingBrowser()->click()->elementWithAltText("Login Button");
 {% endhighlight %}
 
 This search filter normally gets used for clicking on images.
@@ -29,7 +29,7 @@ Examples:
 
 {% highlight php startinline %}
 $invoices = fromBrowser()->get()->cellsWithClass("invoice-number");
-$errors = fromBrowser()->get()->fieldsWithClass("input-errors");
+$errors   = fromBrowser()->get()->fieldsWithClass("input-errors");
 {% endhighlight %}
 
 This search filter is very useful for extracting DOM elements (or their contents) where there's no label or fixed text to search for.
