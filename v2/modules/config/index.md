@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-config
 title: The Config Module
-prev: '<a href="../../modules/checkpoint/usingCheckpoint.html">Prev: usingCheckpoint()</a>'
+prev: '<a href="../../modules/internal-modules.html">Prev: Internal Modules</a>'
 next: '<a href="../../modules/config/fromConfig.html">Next: fromConfig()</a>'
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: v2/top-level
 title: ChangeLog
-prev: '<a href="modules/zeromq/usingZmq.html">Prev: usingZmq()</a>'
+prev: '<a href="modules/targetstable/index.html">Prev: The TargetsTable Module</a>'
 next: '<a href="copyright.html">Next: Legal Stuff</a>'
 ---
 

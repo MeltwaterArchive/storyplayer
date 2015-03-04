@@ -2,7 +2,7 @@
 layout: v2/modules-zeromq
 title: usingZmq()
 prev: '<a href="../../modules/zeromq/expectsZmq.html">Prev: expectsZmq()</a>'
-next: '<a href="../../changelog.html">Next: ChangeLog</a>'
+next: '<a href="../../modules/internal-modules.html">Next: Internal Modules</a>'
 ---
 # usingZmq()
 

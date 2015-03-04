@@ -2,7 +2,7 @@
 layout: v2/modules-checkpoint
 title: usingCheckpoint()
 prev: '<a href="../../modules/checkpoint/fromCheckpoint.html">Prev: fromCheckpoint()</a>'
-next: '<a href="../../modules/config/index.html">Next: The Config Module</a>'
+next: '<a href="../../modules/curl/index.html">Next: The cURL Module</a>'
 ---
 
 # usingCheckpoint()

@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-http
 title: The HTTP Module
-prev: '<a href="../../modules/hoststable/usingHostsTable.html">Prev: usingHostsTable()</a>'
+prev: '<a href="../../modules/host/usingHost.html">Prev: usingHost()</a>'
 next: '<a href="../../modules/http/HttpClientResponse.html">Next: The HttpClientResponse Object</a>'
 ---
 

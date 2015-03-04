@@ -1,8 +1,8 @@
 ---
 layout: v2/modules-processestable
 title: The Processes Table Module
-prev: '<a href="../../modules/log/usingLog.html">Prev: usingLog()</a>'
-next: '<a href="../../modules/provisioning/index.html">Next: The Provisioning Module</a>'
+prev: '<a href="../../modules/hoststable/usingHostsTable.html">Prev: usingHostsTable()</a>'
+next: '<a href="../../modules/rolestable/index.html">Next: The RolesTable Module</a>'
 ---
 
 # The Processes Table Module

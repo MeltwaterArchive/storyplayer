@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-testenvironment
 title: The TestEnvironment Module
-prev: '<a href="../../modules/targetstable/index.html">Prev: The TargetsTable Module</a>'
+prev: '<a href="../../modules/systemundertest/index.html">Prev: The SystemUnderTest Module</a>'
 next: '<a href="../../modules/uuid/index.html">Next: The UUID Module</a>'
 ---
 

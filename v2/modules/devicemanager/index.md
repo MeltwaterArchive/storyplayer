@@ -1,8 +1,8 @@
 ---
 layout: v2/modules-devicemanager
 title: The DeviceManager Module
-prev: '<a href="../../modules/curl/index.html">Prev: The cURL Module</a>'
-next: '<a href="../../modules/environment/index.html">Next: The Environment Module</a>'
+prev: '<a href="../../modules/config/fromConfig.html">Prev: fromConfig()</a>'
+next: '<a href="../../modules/hoststable/index.html">Next: The HostsTable Module</a>'
 ---
 
 # The DeviceManager Module

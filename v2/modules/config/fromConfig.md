@@ -2,7 +2,7 @@
 layout: v2/modules-config
 title: fromConfig()
 prev: '<a href="../../modules/config/index.html">Prev: The Config Module</a>'
-next: '<a href="../../modules/curl/index.html">Next: The cURL Module</a>'
+next: '<a href="../../modules/devicemanager/index.html">Next: The DeviceManager Module</a>'
 ---
 
 # fromConfig()

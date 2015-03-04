@@ -2,7 +2,7 @@
 layout: v2/modules-runtimetable
 title: The RuntimeTable Module
 prev: '<a href="../../modules/rolestable/index.html">Prev: The RolesTable Module</a>'
-next: '<a href="../../modules/savaged/index.html">Next: The SavageD Module</a>'
+next: '<a href="../../modules/targetstable/index.html">Next: The TargetsTable Module</a>'
 ---
 
 # The RuntimeTable Module

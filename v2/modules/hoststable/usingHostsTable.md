@@ -2,7 +2,7 @@
 layout: v2/modules-hoststable
 title: usingHostsTable()
 prev: '<a href="../../modules/hoststable/expectsHostsTable.html">Prev: expectsHostsTable()</a>'
-next: '<a href="../../modules/http/index.html">Next: The HTTP Module</a>'
+next: '<a href="../../modules/processestable/index.html">Next: The Processes Table Module</a>'
 ---
 
 # usingHostsTable()
