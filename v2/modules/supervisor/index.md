@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-supervisor
 title: The Supervisor Module
-prev: '<a href="../../modules/shell/usingShell.html">Prev: usingShell()</a>'
+prev: '<a href="../../modules/storyplayer/fromStoryplayer.html">Prev: fromStoryplayer()</a>'
 next: '<a href="../../modules/supervisor/fromSupervisor.html">Next: fromSupervisor()</a>'
 ---
 
