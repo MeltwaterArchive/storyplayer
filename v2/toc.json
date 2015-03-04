@@ -126,6 +126,7 @@
 		"modules/checkpoint/fromCheckpoint",
 		"modules/checkpoint/usingCheckpoint",
 		"modules/config/index",
+		"modules/config/fromConfig",
 		"modules/curl/index",
 		"modules/devicemanager/index",
 		"modules/environment/index",
