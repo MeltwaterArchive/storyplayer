@@ -2,7 +2,7 @@
 layout: v2/modules-config
 title: The Config Module
 prev: '<a href="../../modules/checkpoint/usingCheckpoint.html">Prev: usingCheckpoint()</a>'
-next: '<a href="../../modules/curl/index.html">Next: The cURL Module</a>'
+next: '<a href="../../modules/config/fromConfig.html">Next: fromConfig()</a>'
 ---
 
 # The Config Module

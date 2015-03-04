@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-curl
 title: The cURL Module
-prev: '<a href="../../modules/config/index.html">Prev: The Config Module</a>'
+prev: '<a href="../../modules/config/fromConfig.html">Prev: fromConfig()</a>'
 next: '<a href="../../modules/devicemanager/index.html">Next: The DeviceManager Module</a>'
 ---
 
