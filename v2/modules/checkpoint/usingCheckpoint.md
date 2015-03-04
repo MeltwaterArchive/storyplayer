@@ -11,6 +11,14 @@ _usingCheckpoint()_ allows you to put data into the checkpoint without having to
 
 The source code for these actions can be found in the class `Prose\UsingCheckpoint`.
 
+<div class="callout warning" markdown="1">
+#### Deprecated in Storyplayer v2
+
+The functionality documented here is deprecated, and will be removed in Storyplayer v3.
+
+Use [getCheckpoint()](getCheckpoint.html) instead.
+</div>
+
 ## Behaviour And Return Codes
 
 Every action makes changes to the inter-phase checkpoint.

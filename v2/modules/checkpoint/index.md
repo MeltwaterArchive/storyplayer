@@ -13,10 +13,9 @@ The __Checkpoint__ module allows you to work with [Storyplayer's inter-phase che
 
 This module is here for convenience; you can achieve the same results using a mixture of plain PHP and the [Assertions module](../assertions/index.html).
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this Prose module can be found in this PHP file:
 
-* `Prose\FromCheckpoint`
-* `Prose\UsingCheckpoint`
+* `Prose\functions.php`
 
 ## Dependencies
 
@@ -24,37 +23,10 @@ This module has no dependencies.
 
 ## Using The Checkpoint Module
 
-### Most Common Way
-
-The most common way to use the checkpoint module is to simply retrieve the Checkpoint object:
+Use the checkpoint module to retrieve the Checkpoint object:
 
 {% highlight php startinline %}
 $checkpoint = getCheckpoint();
 {% endhighlight %}
 
 You can then treat it as an ordinary PHP object by getting and setting attributes.
-
-### Alternative Way
-
-The basic format of an action is:
-
-{% highlight php startinline %}
-MODULE()->ACTION();
-{% endhighlight %}
-
-where __module__ is one of:
-
-* _[fromCheckpoint()](fromCheckpoint.html)_ - get data from the checkpoint
-* _[usingCheckpoint()](usingCheckpoint.html)_ - put data into the checkpoint
-
-and __action__ is one of the methods available on the __module__ you choose.
-
-Here are some examples:
-
-{% highlight php startinline %}
-$balance = fromCheckpoint()->get('balance');
-{% endhighlight %}
-
-{% highlight php startinline %}
-usingCheckpoint()->set('balance', 100);
-{% endhighlight %}

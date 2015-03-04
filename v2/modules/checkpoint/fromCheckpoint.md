@@ -11,6 +11,14 @@ _fromCheckpoint()_ allows you to retrieve data stored in the checkpoint, without
 
 The source code for these actions can be found in the class `Prose\FromCheckpoint`.
 
+<div class="callout warning" markdown="1">
+#### Deprecated in Storyplayer v2
+
+The functionality documented here is deprecated, and will be removed in Storyplayer v3.
+
+Use [getCheckpoint()](getCheckpoint.html) instead.
+</div>
+
 ## Behaviour And Return Codes
 
 Every action returns either a value on success, or `NULL` on failure.  None of these actions throw exceptions on failure.
