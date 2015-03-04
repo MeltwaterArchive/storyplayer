@@ -31,6 +31,7 @@ Module | Use To ...
 [Log](log/index.html) |
 [Provisioning](provisioning/index.html) |
 [SavageD](savaged/index.html) |
+[Storyplayer](storyplayer/index.html) | retrieve settings from your `storyplayer.json` config file
 [Supervisor](supervisor/index.html) |
 [System Under Test](systemundertest/index.html) |
 [Test Environment](testenvironment/index.html) |
