@@ -18,7 +18,6 @@ Module | Use To ...
 [Assertions](asserts/index.html) | test data that you've obtained from other modules.
 [Browser](browser/index.html) | control a web browser.
 [Checkpoint](checkpoint/index.html) |
-[Config](config/index.html) |
 [cURL](curl/index.html) |
 [DeviceManager](devicemanager/index.html) | start and stop the test device.
 [Environment](environment/index.html) |
@@ -54,6 +53,7 @@ New for Storyplayer v2, we've added support for modules that provide iterators f
 
 These modules are intended for internal use by Storyplayer, and you shouldn't call them from your stories. You might find them useful if you're writing new modules for Storyplayer, or adding new features.
 
+* [Config](config/index.html)
 * [Hosts Table](hoststable/index.html)
 * [Processes Table](processestable/index.html)
 * [Roles Table](rolestable/index.html)
