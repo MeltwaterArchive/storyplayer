@@ -53,6 +53,7 @@
 		"using/configuration/user-config",
 		"using/configuration/prose-namespaces",
 		"using/configuration/runtime-config",
+		"using/configuration/dot.notation.support",
 		"using/stories/index",
 		"using/stories/user-stories",
 		"using/stories/service-stories",
