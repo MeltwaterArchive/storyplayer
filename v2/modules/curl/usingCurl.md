@@ -2,7 +2,7 @@
 layout: v2/modules-curl
 title: usingCurl()
 prev: '<a href="../../modules/curl/fromCurl.html">Prev: fromCurl()</a>'
-next: '<a href="../../modules/environment/index.html">Next: The Environment Module</a>'
+next: '<a href="../../modules/failure/index.html">Next: The Failure Module</a>'
 ---
 
 # usingCurl()
