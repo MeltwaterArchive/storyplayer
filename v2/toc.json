@@ -130,6 +130,7 @@
 		"modules/curl/fromCurl",
 		"modules/curl/usingCurl",
 		"modules/failure/index",
+		"modules/failure/expectsFailure",
 		"modules/file/index",
 		"modules/file/fromFile",
 		"modules/file/usingFile",

@@ -2,23 +2,21 @@
 layout: v2/modules-failure
 title: The Failure Module
 prev: '<a href="../../modules/curl/usingCurl.html">Prev: usingCurl()</a>'
-next: '<a href="../../modules/file/index.html">Next: The File Module</a>'
+next: '<a href="../../modules/failure/expectsFailure.html">Next: expectsFailure()</a>'
 ---
 
 # The Failure Module
 
-We haven't documented this module yet, but we will!
+The __Failure__ module allows you to run a set of steps that are supposed to fail.
+
+The source code for this module can be found in:
+
+* `Prose\ExpectsFailure`
 
 ## Dependencies
 
-TBD.
+This module has no dependencies.
 
 ## Using The Failure Module
 
-TBD.
-
-## Source Code
-
-The source code for this module can be found in this class:
-
-* `Prose\ExpectsFailure.php`
+This module has one operation: _[expectsFailure()->when()](expectsFailure.html). You'll find full details there.
