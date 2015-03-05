@@ -1,6 +1,8 @@
 ---
 layout: v2/modules-curl
 title: usingCurl()
+prev: '<a href="../../modules/curl/fromCurl.html">Prev: fromCurl()</a>'
+next: '<a href="../../modules/environment/index.html">Next: The Environment Module</a>'
 ---
 
 # usingCurl()
@@ -9,7 +11,7 @@ _usingCurl()_ allows you to send data to HTTP services via PUT, POST and DELETE 
 
 The source code for these actions can be found in the class `Prose\UsingCurl`.
 
-<div class="callout warning" callout="1">
+<div class="callout warning" markdown="1">
 #### Not Implemented
 
 This module has not yet been implemented.

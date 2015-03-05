@@ -1,6 +1,8 @@
 ---
 layout: v2/modules-curl
 title: fromCurl()
+prev: '<a href="../../modules/curl/index.html">Prev: The cURL Module</a>'
+next: '<a href="../../modules/curl/usingCurl.html">Next: usingCurl()</a>'
 ---
 
 # fromCurl()

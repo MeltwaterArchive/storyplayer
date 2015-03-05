@@ -127,6 +127,8 @@
 		"modules/checkpoint/fromCheckpoint",
 		"modules/checkpoint/usingCheckpoint",
 		"modules/curl/index",
+		"modules/curl/fromCurl",
+		"modules/curl/usingCurl",
 		"modules/environment/index",
 		"modules/environment/fromEnvironment",
 		"modules/failure/index",
