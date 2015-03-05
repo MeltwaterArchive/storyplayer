@@ -25,6 +25,15 @@ There's absolutely nothing stopping you from using both sets of modules in the s
 
 You _can_ use the HTTP module to retrieve web pages from your app, if that's what you want to do, but if you do, __remember__ that any cookies your app sends won't get set in the browser.  As long as you treat the HTTP module and the Browser module as being completely independent of each other, you'll be fine.
 
+## Why Two Competing Modules For HTTP Requests?
+
+For making HTTP requests, you've currently got two choices: the [cURL module](../curl/index.html) and the [HTTP module](../http/index.html). Which one should you choose?
+
+__Write your tests for the HTTP module, and switch to the cURL module if the HTTP module's strictness causes you problems.__
+
+* The HTTP module is specifically built for in-depth testing of HTTP requests and responses. It provides detailed information about the response. It's a lot stricter than libcurl, and sometimes this strictness can get in the way of testing a service that's built on top of a low-quality HTTP stack.
+* The cURL module is available for when you can't use the HTTP module for whatever reason. It doesn't provide detailed information about the response, making it unsuitable for detailed testing of HTTP APIs.
+
 ## RESTful Or Not - It's Your Choice
 
 There are many different styles of HTTP-based API out in the world, and we've kept this module quite low level to make sure that it should be able to test your API whether it's RESTful or not.
