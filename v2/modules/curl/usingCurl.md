@@ -15,7 +15,7 @@ The source code for these actions can be found in the class `Prose\UsingCurl`.
 #### Not Implemented
 
 This module has not yet been implemented.
-<div>
+</div>
 
 ## Behaviour And Return Codes
 
