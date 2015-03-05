@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-environment
 title: The Environment Module
-prev: '<a href="../../modules/curl/usingCurl.html">Prev: usingCurl()</a>'
+prev: '<a href="../../modules/deprecated-modules.html">Prev: Deprecated Modules</a>'
 next: '<a href="../../modules/environment/fromEnvironment.html">Next: fromEnvironment()</a>'
 ---
 # The Environment Module

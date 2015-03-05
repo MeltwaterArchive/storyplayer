@@ -2,7 +2,7 @@
 layout: v2/modules-targetstable
 title: The TargetsTable Module
 prev: '<a href="../../modules/runtimetable/index.html">Prev: The RuntimeTable Module</a>'
-next: '<a href="../../changelog.html">Next: ChangeLog</a>'
+next: '<a href="../../modules/deprecated-modules.html">Next: Deprecated Modules</a>'
 ---
 
 # The TargetsTable Module

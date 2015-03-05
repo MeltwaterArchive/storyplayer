@@ -129,8 +129,6 @@
 		"modules/curl/index",
 		"modules/curl/fromCurl",
 		"modules/curl/usingCurl",
-		"modules/environment/index",
-		"modules/environment/fromEnvironment",
 		"modules/failure/index",
 		"modules/file/index",
 		"modules/file/fromFile",
@@ -202,6 +200,9 @@
 		"modules/rolestable/index",
 		"modules/runtimetable/index",
 		"modules/targetstable/index",
+		"modules/deprecated-modules",
+		"modules/environment/index",
+		"modules/environment/fromEnvironment",
 		"changelog",
 		"copyright",
 		"editorial-guidelines"
@@ -315,7 +316,6 @@
 			"Config": "modules/config/index",
 			"cURL": "modules/curl/index",
 			"Device Manager": "modules/devicemanager/index",
-			"Environment": "modules/environment/index",
 			"Failure": "modules/failure/index",
 			"File": "modules/file/index",
 			"Form": "modules/form/index",
@@ -336,11 +336,15 @@
 			"Vagrant": "modules/vagrant/index",
 			"ZeroMQ": "modules/zeromq/index",
 			"Sep2": "",
+			"Internal Modules": "modules/internal-modules",
 			"Hosts Table": "modules/hoststable/index",
 			"Processes Table": "modules/processestable/index",
 			"Roles Table": "modules/rolestable/index",
 			"Runtime Table": "modules/runtimetable/index",
-			"Targets Table": "modules/targetstable/index"
+			"Targets Table": "modules/targetstable/index",
+			"Sep3": "",
+			"Deprecated Modules": "modules/deprecated-modules",
+			"Environment": "modules/environment/index"
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-failure
 title: The Failure Module
-prev: '<a href="../../modules/environment/fromEnvironment.html">Prev: fromEnvironment()</a>'
+prev: '<a href="../../modules/curl/usingCurl.html">Prev: usingCurl()</a>'
 next: '<a href="../../modules/file/index.html">Next: The File Module</a>'
 ---
 
