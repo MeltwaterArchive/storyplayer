@@ -74,6 +74,10 @@
 FROM ubuntu:trusty
 MAINTAINER nicola.asuni@datasift.com
 
+ENV DEBIAN_FRONTEND noninteractive
+ENV TERM linux
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 RUN apt-get update
 RUN apt-get -y dist-upgrade
 RUN apt-get -y install build-essential git screen ansible vagrant python php5 php5-cli php5-common php5-curl php5-json php-pear libyaml-dev php5-dev ruby-dev
