@@ -64,7 +64,7 @@ class UsingHornet extends Prose
 		$log = $st->startAction("start hornet-drone '{$clientName}' with params '(" . implode(', ', $clientParams) . ")");
 
 		// build the command to run
-		$appSettings = $st->fromConfig()->getAppSettings('hornet');
+		$appSettings = $st->fromStoryplayer()->getAppSettings('hornet');
 		$command = $appSettings->path . '/hornet-drone ' . implode(' ', $clientParams);
 
 		// run the command in a screen session
