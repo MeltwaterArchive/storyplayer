@@ -16,6 +16,12 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 Nothing new yet.
 
+## 2.1.1 - Friday 6th March 2015
+
+### Fixes:
+
+* Initial support for using Vagrant with something other than Virtualbox
+
 ## 2.1.0 - Monday 2nd March 2015
 
 ### New features:
