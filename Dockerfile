@@ -74,6 +74,7 @@
 FROM ubuntu:trusty
 MAINTAINER nicola.asuni@datasift.com
 
+ENV VAGRANT_HOME=/.vagrant.d
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
