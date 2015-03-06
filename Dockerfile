@@ -74,7 +74,6 @@
 FROM ubuntu:trusty
 MAINTAINER nicola.asuni@datasift.com
 
-ENV VAGRANT_HOME /.vagrant.d
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
@@ -87,6 +86,7 @@ RUN echo "extension=yaml.so" >> /etc/php5/cli/php.ini
 RUN echo "extension=yaml.so" >> /etc/php5/apache2/php.ini
 
 # install vagrant provider plugins
+ENV VAGRANT_HOME /root/.vagrant.d
 RUN vagrant plugin install vagrant-omnibus
 RUN vagrant plugin install vagrant-openstack-plugin
 RUN vagrant plugin install vagrant-aws
