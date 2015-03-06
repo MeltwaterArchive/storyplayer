@@ -14,7 +14,13 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 ## 2.2.0 - `develop` branch
 
-Nothing new yet.
+### New:
+
+* [fromStoryplayer() module](https://datasift.github.io/storyplayer/v2/modules/storyplayer/index.html)
+
+### Fixes:
+
+* [fromConfig() module](https://datasift.github.io/storyplayer/v2/modules/config/index.html) is now an internal module. Use the _fromStoryplayer()_ module instead.
 
 ## 2.1.1 - Friday 6th March 2015
 
