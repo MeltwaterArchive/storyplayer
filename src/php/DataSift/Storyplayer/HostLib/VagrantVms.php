@@ -113,7 +113,7 @@ class VagrantVms implements SupportedHost
 		}
 
 		// make sure the folder exists
-		$vagrantDir = $st->fromConfig()->getModuleSetting('vagrant', 'dir');
+		$vagrantDir = $st->fromStoryplayer()->getModuleSetting('vagrant', 'dir');
 		$pathToHomeFolder = $vagrantDir . '/' . $envDetails->homeFolder;
 		if (!is_dir($pathToHomeFolder)) {
 			throw new E5xx_ActionFailed(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
@@ -424,7 +424,7 @@ class VagrantVms implements SupportedHost
 		try {
 			// 1. try to load Vagrant settings from storyplayer.json
 			// e.g.: "moduleSettings":{"vagrant":{"bridgedIface":"eth0"}}
-			$vagrantSettings = $st->fromConfig()->getModuleSetting('vagrant');
+			$vagrantSettings = $st->fromStoryplayer()->getModuleSetting('vagrant');
 			if (!empty($vagrantSettings->bridgedIface)) {
 				$log->endAction('Returning configured '.$vagrantSettings->bridgedIface.' interface');
 				return $vagrantSettings->bridgedIface;
@@ -433,7 +433,7 @@ class VagrantVms implements SupportedHost
 			// ignore errors as this setting may not exist
 		}
 
-		// 2. check if VirtualBox (VBoxManage) is installed 
+		// 2. check if VirtualBox (VBoxManage) is installed
 		$command = 'which VBoxManage';
 		$commandRunner = new CommandRunner();
 		$result = $commandRunner->runSilently($this->st, $command);

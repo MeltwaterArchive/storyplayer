@@ -110,6 +110,7 @@ use Prose\FromRuntimeTable;
 use Prose\FromRuntimeTableForTargetEnvironment;
 use Prose\FromSauceLabs;
 use Prose\FromShell;
+use Prose\FromStoryplayer;
 use Prose\FromSupervisor;
 use Prose\FromSystemUnderTest;
 use Prose\FromTargetsTable;
@@ -1033,6 +1034,21 @@ function fromSauceLabs()
 function fromShell()
 {
     return new FromShell(StoryTeller::instance());
+}
+
+/**
+ * returns the FromStoryplayer module
+ *
+ * This module provides access to Storyplayer's loaded config. This is a
+ * combination of your storyplayer.json[.dist] file and additional information
+ * about Storyplayer (such as the local computer's IP address) that are
+ * detected at runtime.
+ *
+ * @return \Prose\FromStoryplayer
+ */
+function fromStoryplayer()
+{
+    return new FromStoryplayer(StoryTeller::instance());
 }
 
 /**

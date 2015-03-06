@@ -104,6 +104,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @method Prose\FromRuntimeTableForTargetEnvironment fromRuntimeTableForTargetEnvironment()
  * @method Prose\FromSauceLabs fromSauceLabs()
  * @method Prose\FromShell fromShell()
+ * @method Prose\FromStoryplayer fromStoryplayer()
  * @method Prose\FromSupervisor fromSupervisor()
  * @method Prose\FromTargetsTable fromTargetsTable()
  * @method Prose\FromTestEnvironment fromTestEnvironment()
