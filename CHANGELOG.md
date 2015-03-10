@@ -16,6 +16,12 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 Nothing new yet.
 
+## 2.1.2 - Tuesday 10th March 2015
+
+### Fixes:
+
+* Use correct VM name in VagrantVm when checking if the box is running
+
 ## 2.1.1 - Friday 6th March 2015
 
 ### Fixes:
