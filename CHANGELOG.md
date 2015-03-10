@@ -22,6 +22,12 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 * [fromConfig() module](https://datasift.github.io/storyplayer/v2/modules/config/index.html) is now an internal module. Use the _fromStoryplayer()_ module instead.
 
+## 2.1.2 - Tuesday 10th March 2015
+
+### Fixes:
+
+* Use correct VM name in VagrantVm when checking if the box is running
+
 ## 2.1.1 - Friday 6th March 2015
 
 ### Fixes:
