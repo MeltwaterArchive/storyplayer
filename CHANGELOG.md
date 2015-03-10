@@ -17,6 +17,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 ### New:
 
 * [fromStoryplayer() module](https://datasift.github.io/storyplayer/v2/modules/storyplayer/index.html)
+* `src/bin/storyplayer` now uses Composer to work out what its version number is
 
 ### Fixes:
 
