@@ -29,6 +29,7 @@
 		"learn/test-your-code/writing-component-tests",
 		"learn/test-your-code/final-thoughts",
 		"learn/test-your-platform/index",
+		"learn/test-your-webpage/index",
 		"learn/worked-examples/index",
 		"learn/worked-examples/opencfp/index",
 		"learn/worked-examples/opencfp/01-exploring-the-project",
@@ -221,6 +222,7 @@
 			"Fundamentals": "learn/fundamentals/index",
 			"Test Your Code": "learn/test-your-code/index",
 			"Test Your Platform": "learn/test-your-platform/index",
+			"Test Your HTML": "lear/test-your-webpage/index",
 			"Worked Examples": "learn/worked-examples/index"
 		},
 		"Use": {
