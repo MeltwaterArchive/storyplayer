@@ -3,6 +3,7 @@ layout: v2/modules-browser
 title: Supported Search Targets
 prev: '<a href="../../modules/browser/searching-the-dom.html">Prev: Searching The DOM</a>'
 next: '<a href="../../modules/browser/search-filters.html">Next: Supported Search Filters</a>'
+updated_for_v2: true
 ---
 
 # Supported Search Targets

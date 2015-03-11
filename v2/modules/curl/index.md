@@ -3,6 +3,7 @@ layout: v2/modules-curl
 title: The cURL Module
 prev: '<a href="../../modules/checkpoint/usingCheckpoint.html">Prev: usingCheckpoint()</a>'
 next: '<a href="../../modules/curl/fromCurl.html">Next: fromCurl()</a>'
+updated_for_v2: true
 ---
 
 # The cURL Module

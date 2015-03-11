@@ -3,6 +3,7 @@ layout: v2/learn-test-your-code
 title: Recommended First Tests
 prev: '<a href="../../learn/test-your-code/defining-your-system-under-test.html">Prev: Defining Your System Under Test</a>'
 next: '<a href="../../learn/test-your-code/designing-component-tests.html">Next: Designing Component Tests</a>'
+updated_for_v2: true
 ---
 # Recommended First Tests
 

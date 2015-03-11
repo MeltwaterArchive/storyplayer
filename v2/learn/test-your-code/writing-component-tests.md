@@ -3,6 +3,7 @@ layout: v2/learn-test-your-code
 title: Writing Component Tests
 prev: '<a href="../../learn/test-your-code/designing-component-tests.html">Prev: Designing Component Tests</a>'
 next: '<a href="../../learn/test-your-code/final-thoughts.html">Next: Final Thoughts</a>'
+updated_for_v2: true
 ---
 # Writing Component Tests
 

@@ -3,6 +3,7 @@ layout: v2/modules
 title: Internal Modules
 prev: '<a href="../modules/zeromq/usingZmq.html">Prev: usingZmq()</a>'
 next: '<a href="../modules/config/index.html">Next: The Config Module</a>'
+updated_for_v2: true
 ---
 # Internal Modules
 

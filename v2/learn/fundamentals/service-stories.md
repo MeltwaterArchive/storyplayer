@@ -3,6 +3,7 @@ layout: v2/learn-fundamentals
 title: Service Stories
 prev: '<a href="../../learn/fundamentals/user-stories.html">Prev: User Stories</a>'
 next: '<a href="../../learn/fundamentals/understanding-system-under-test.html">Next: Understanding The System Under Test</a>'
+updated_for_v2: true
 ---
 
 # Service Stories

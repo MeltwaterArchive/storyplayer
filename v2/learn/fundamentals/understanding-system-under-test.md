@@ -3,6 +3,7 @@ layout: v2/learn-fundamentals
 title: Understanding The System Under Test
 prev: '<a href="../../learn/fundamentals/service-stories.html">Prev: Service Stories</a>'
 next: '<a href="../../learn/fundamentals/understanding-test-environments.html">Next: Understanding Test Environments</a>'
+updated_for_v2: true
 ---
 # Understanding The System Under Test
 

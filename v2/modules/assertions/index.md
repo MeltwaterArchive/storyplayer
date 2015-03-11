@@ -3,6 +3,7 @@ layout: v2/modules-assertions
 title: The Assertions Module
 prev: '<a href="../../modules/ec2/usingEc2Instance.html">Prev: usingEc2Instance()</a>'
 next: '<a href="../../modules/assertions/assertsArray.html">Next: Array Assertions</a>'
+updated_for_v2: true
 ---
 
 # The Assertions Module

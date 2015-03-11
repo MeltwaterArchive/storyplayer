@@ -3,6 +3,7 @@ title: Getting Setup For Storyplayer
 layout: v2/learn-getting-setup
 prev: '<a href="../../learn/index.html">Prev: Learning Storyplayer</a>'
 next: '<a href="../../learn/getting-setup/setting-up-osx-with-homebrew.html">Next: Setting Up Apple OSX Using Homebrew</a>'
+updated_for_v2: true
 ---
 # Getting Setup For Storyplayer
 

@@ -3,6 +3,7 @@ layout: v2/learn-getting-setup
 title: Setting Up Apple OSX Using Macports
 prev: '<a href="../../learn/getting-setup/setting-up-osx-with-homebrew.html">Prev: Setting Up Apple OSX Using Homebrew</a>'
 next: '<a href="../../learn/getting-setup/setting-up-ubuntu-desktop.html">Next: Setting Up Ubuntu Desktop</a>'
+updated_for_v2: true
 ---
 
 # Setting Up Apple OSX Using Macports

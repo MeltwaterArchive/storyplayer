@@ -3,6 +3,7 @@ layout: v2/modules-browser
 title: fromBrowser()
 prev: '<a href="../../modules/browser/search-filters.html">Prev: Supported Search Filters</a>'
 next: '<a href="../../modules/browser/expectsBrowser.html">Next: expectsBrowser()</a>'
+updated_for_v2: true
 ---
 
 # fromBrowser()

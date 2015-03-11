@@ -13,9 +13,11 @@
             </div>
 
             <!-- version banner -->
+            {% if page.updated_for_v2 != true %}
             <div class="callout danger">
-              <p>Storyplayer v2 has been released. We're currently updating this manual. <strong>This manual may be incomplete, and may still describe features that no longer exist in Storyplayer v2.</strong></p>
+              <p>Storyplayer v2 has been released. We're currently updating this manual. <strong>This page may be incomplete, and may still describe Storyplayer v1 features that no longer exist in Storyplayer v2.</strong></p>
             </div>
+            {% endif %}
 
             <!-- main content goes here -->
             {{ content }}

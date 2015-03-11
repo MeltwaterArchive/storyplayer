@@ -3,6 +3,7 @@ layout: v2/learn-fundamentals
 title: User Stories
 prev: '<a href="../../learn/fundamentals/understanding-storyplayer-modules.html">Prev: Understanding Storyplayer Modules</a>'
 next: '<a href="../../learn/fundamentals/service-stories.html">Next: Service Stories</a>'
+updated_for_v2: true
 ---
 
 # User Stories

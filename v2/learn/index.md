@@ -3,6 +3,7 @@ layout: v2/learn
 title: Learning Storyplayer
 prev: '<a href="../index.html">Prev: Storyplayer</a>'
 next: '<a href="../learn/getting-setup/index.html">Next: Getting Setup For Storyplayer</a>'
+updated_for_v2: true
 ---
 
 # Learning Storyplayer

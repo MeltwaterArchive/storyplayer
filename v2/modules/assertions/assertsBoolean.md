@@ -3,6 +3,7 @@ layout: v2/modules-assertions
 title: Boolean Assertions
 prev: '<a href="../../modules/assertions/assertsArray.html">Prev: Array Assertions</a>'
 next: '<a href="../../modules/assertions/assertsDouble.html">Next: Double Assertions</a>'
+updated_for_v2: true
 ---
 
 # Boolean Assertions

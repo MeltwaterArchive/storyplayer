@@ -3,6 +3,7 @@ layout: v2/learn-test-your-code
 title: Final Thoughts
 prev: '<a href="../../learn/test-your-code/writing-component-tests.html">Prev: Writing Component Tests</a>'
 next: '<a href="../../learn/test-your-platform/index.html">Next: Test Your Platform</a>'
+updated_for_v2: true
 ---
 # Final Thoughts
 

@@ -3,6 +3,7 @@ layout: v2/modules-failure
 title: The Failure Module
 prev: '<a href="../../modules/curl/usingCurl.html">Prev: usingCurl()</a>'
 next: '<a href="../../modules/failure/expectsFailure.html">Next: expectsFailure()</a>'
+updated_for_v2: true
 ---
 
 # The Failure Module

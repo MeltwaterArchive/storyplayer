@@ -3,6 +3,7 @@ layout: v2/modules-failure
 title: expectsFailure()
 prev: '<a href="../../modules/failure/index.html">Prev: The Failure Module</a>'
 next: '<a href="../../modules/file/index.html">Next: The File Module</a>'
+updated_for_v2: true
 ---
 
 # expectsFailure()

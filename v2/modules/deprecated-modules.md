@@ -3,6 +3,7 @@ layout: v2/modules
 title: Deprecated Modules
 prev: '<a href="../modules/targetstable/index.html">Prev: The TargetsTable Module</a>'
 next: '<a href="../modules/environment/index.html">Next: The Environment Module</a>'
+updated_for_v2: true
 ---
 # Deprecated Modules
 

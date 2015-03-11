@@ -3,6 +3,7 @@ layout: v2/modules-browser
 title: usingBrowser()
 prev: '<a href="../../modules/browser/expectsBrowser.html">Prev: expectsBrowser()</a>'
 next: '<a href="../../modules/browser/webdriver.html">Next: The WebDriver Library</a>'
+updated_for_v2: true
 ---
 
 # usingBrowser()

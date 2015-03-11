@@ -3,6 +3,7 @@ layout: v2/learn-getting-setup
 title: Setting Up Apple OSX Using Homebrew
 prev: '<a href="../../learn/getting-setup/index.html">Prev: Getting Setup For Storyplayer</a>'
 next: '<a href="../../learn/getting-setup/setting-up-osx-with-macports.html">Next: Setting Up Apple OSX Using Macports</a>'
+updated_for_v2: true
 ---
 
 # Setting Up Apple OSX Using Homebrew

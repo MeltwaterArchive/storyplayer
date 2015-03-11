@@ -3,6 +3,7 @@ layout: v2/learn-test-your-code
 title: Designing Your Test Environment
 prev: '<a href="../../learn/test-your-code/sample-layout-for-source-code-repo.html">Prev: Sample Layout For Source Code Repo</a>'
 next: '<a href="../../learn/test-your-code/defining-your-system-under-test.html">Next: Defining Your System Under Test</a>'
+updated_for_v2: true
 ---
 # Designing Your Test Environment
 

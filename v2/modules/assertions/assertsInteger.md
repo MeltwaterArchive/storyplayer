@@ -3,6 +3,7 @@ layout: v2/modules-assertions
 title: Integer Assertions
 prev: '<a href="../../modules/assertions/assertsDouble.html">Prev: Double Assertions</a>'
 next: '<a href="../../modules/assertions/assertsObject.html">Next: Object Assertions</a>'
+updated_for_v2: true
 ---
 
 # Integer Assertions

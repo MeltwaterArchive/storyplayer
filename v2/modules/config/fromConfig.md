@@ -3,6 +3,7 @@ layout: v2/modules-config
 title: fromConfig()
 prev: '<a href="../../modules/config/index.html">Prev: The Config Module</a>'
 next: '<a href="../../modules/devicemanager/index.html">Next: The DeviceManager Module</a>'
+updated_for_v2: true
 ---
 
 # fromConfig()

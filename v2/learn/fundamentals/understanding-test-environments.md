@@ -3,6 +3,7 @@ layout: v2/learn-fundamentals
 title: Understanding Test Environments
 prev: '<a href="../../learn/fundamentals/understanding-system-under-test.html">Prev: Understanding The System Under Test</a>'
 next: '<a href="../../learn/fundamentals/belt-and-braces-testing.html">Next: Belt and Braces Testing</a>'
+updated_for_v2: true
 ---
 # Understanding Test Environments
 

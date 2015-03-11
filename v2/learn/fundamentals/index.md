@@ -3,6 +3,7 @@ title: Fundamentals Of Storyplayer
 layout: v2/learn-fundamentals
 prev: '<a href="../../learn/getting-setup/testing-your-setup.html">Prev: Testing Your Setup</a>'
 next: '<a href="../../learn/fundamentals/installing-storyplayer.html">Next: Installing Storyplayer</a>'
+updated_for_v2: true
 ---
 # Fundamentals Of Storyplayer
 

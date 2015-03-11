@@ -3,6 +3,7 @@ layout: v2/modules-checkpoint
 title: The Checkpoint Module
 prev: '<a href="../../modules/browser/webdriver.html">Prev: The WebDriver Library</a>'
 next: '<a href="../../modules/checkpoint/getCheckpoint.html">Next: getCheckpoint()</a>'
+updated_for_v2: true
 ---
 
 # The Checkpoint Module

@@ -3,6 +3,7 @@ layout: v2/learn-test-your-code
 title: Why Component Testing?
 prev: '<a href="../../learn/test-your-code/index.html">Prev: Test Your Code</a>'
 next: '<a href="../../learn/test-your-code/what-are-you-testing.html">Next: What Are You Testing?</a>'
+updated_for_v2: true
 ---
 # Why Component Testing?
 

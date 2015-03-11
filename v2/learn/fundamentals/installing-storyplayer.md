@@ -3,6 +3,7 @@ layout: v2/learn-fundamentals
 title: Installing Storyplayer
 prev: '<a href="../../learn/fundamentals/index.html">Prev: Fundamentals Of Storyplayer</a>'
 next: '<a href="../../learn/fundamentals/running-storyplayer.html">Next: Running Storyplayer</a>'
+updated_for_v2: true
 ---
 
 # Installing Storyplayer

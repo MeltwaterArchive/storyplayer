@@ -3,6 +3,7 @@ layout: v2/modules-assertions
 title: String Assertions
 prev: '<a href="../../modules/assertions/assertsObject.html">Prev: Object Assertions</a>'
 next: '<a href="../../modules/browser/index.html">Next: The Browser Module</a>'
+updated_for_v2: true
 ---
 
 # String Assertions

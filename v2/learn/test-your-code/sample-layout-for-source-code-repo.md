@@ -3,6 +3,7 @@ layout: v2/learn-test-your-code
 title: Sample Layout For Source Code Repo
 prev: '<a href="../../learn/test-your-code/what-are-you-testing.html">Prev: What Are You Testing?</a>'
 next: '<a href="../../learn/test-your-code/defining-your-test-environment.html">Next: Designing Your Test Environment</a>'
+updated_for_v2: true
 ---
 # Sample Layout For Source Code Repo
 

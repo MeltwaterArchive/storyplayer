@@ -3,6 +3,7 @@ layout: v2/learn-test-your-code
 title: Organising Your Tests Into Groups
 prev: '<a href="../../learn/test-your-code/writing-component-tests.html">Prev: Writing Component Tests</a>'
 next: '<a href="../../learn/test-your-code/final-thoughts.html">Next: Final Thoughts</a>'
+updated_for_v2: true
 ---
 # Organising Your Tests Into Groups
 

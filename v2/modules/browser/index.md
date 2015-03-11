@@ -3,6 +3,7 @@ layout: v2/modules-browser
 title: The Browser Module
 prev: '<a href="../../modules/assertions/assertsString.html">Prev: String Assertions</a>'
 next: '<a href="../../modules/browser/searching-the-dom.html">Next: Searching The DOM</a>'
+updated_for_v2: true
 ---
 
 # The Browser Module

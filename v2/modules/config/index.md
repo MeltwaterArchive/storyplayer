@@ -3,6 +3,7 @@ layout: v2/modules-config
 title: The Config Module
 prev: '<a href="../../modules/internal-modules.html">Prev: Internal Modules</a>'
 next: '<a href="../../modules/config/fromConfig.html">Next: fromConfig()</a>'
+updated_for_v2: true
 ---
 
 # The Config Module

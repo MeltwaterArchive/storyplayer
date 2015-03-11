@@ -3,6 +3,7 @@ layout: v2/learn-fundamentals
 title: Running Storyplayer
 prev: '<a href="../../learn/fundamentals/installing-storyplayer.html">Prev: Installing Storyplayer</a>'
 next: '<a href="../../learn/fundamentals/understanding-stories.html">Next: Understanding Stories</a>'
+updated_for_v2: true
 ---
 # Running Storyplayer
 

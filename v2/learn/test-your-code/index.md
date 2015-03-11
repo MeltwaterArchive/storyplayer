@@ -3,6 +3,7 @@ layout: v2/learn-test-your-code
 title: Test Your Code
 prev: '<a href="../../learn/fundamentals/belt-and-braces-testing.html">Prev: Belt and Braces Testing</a>'
 next: '<a href="../../learn/test-your-code/why-component-testing.html">Next: Why Component Testing?</a>'
+updated_for_v2: true
 ---
 # Guide To Testing Your Code With Storyplayer
 

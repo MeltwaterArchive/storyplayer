@@ -3,6 +3,7 @@ layout: v2/modules-file
 title: The File Module
 prev: '<a href="../../modules/failure/expectsFailure.html">Prev: expectsFailure()</a>'
 next: '<a href="../../modules/file/fromFile.html">Next: fromFile()</a>'
+updated_for_v2: true
 ---
 
 # The File Module

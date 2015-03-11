@@ -3,6 +3,7 @@ layout: v2/learn-getting-setup
 title: Testing Your Setup
 prev: '<a href="../../learn/getting-setup/setting-up-ubuntu-desktop.html">Prev: Setting Up Ubuntu Desktop</a>'
 next: '<a href="../../learn/fundamentals/index.html">Next: Fundamentals Of Storyplayer</a>'
+updated_for_v2: true
 ---
 
 # Testing Your Setup

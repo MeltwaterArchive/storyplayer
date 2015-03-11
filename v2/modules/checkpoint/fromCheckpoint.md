@@ -3,6 +3,7 @@ layout: v2/modules-checkpoint
 title: fromCheckpoint()
 prev: '<a href="../../modules/checkpoint/getCheckpoint.html">Prev: getCheckpoint()</a>'
 next: '<a href="../../modules/checkpoint/usingCheckpoint.html">Next: usingCheckpoint()</a>'
+updated_for_v2: true
 ---
 
 # fromCheckpoint()

@@ -3,6 +3,7 @@ layout: v2/modules
 title: Storyplayer Modules
 prev: '<a href="../tips/vagrant/speed-up-virtualbox.html">Prev: How To Speed Up Vagrant VMs</a>'
 next: '<a href="../modules/aws/index.html">Next: The Amazon AWS Module</a>'
+updated_for_v2: true
 ---
 
 # Storyplayer Modules
