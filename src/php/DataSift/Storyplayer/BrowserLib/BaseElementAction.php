@@ -327,20 +327,20 @@ class BaseElementAction
 			}
 
 			// skip hidden input fields
-			if ($element->name() == 'input') {
-				try {
-					$typeAttr = $element->attribute('type');
-					if ($typeAttr == 'hidden') {
-						// skip this
-						continue;
-					}
-				}
-				catch (Exception $e) {
-					// no 'type' attribute
-					//
-					// not fatal
-				}
-			}
+			// if ($element->name() == 'input') {
+			// 	try {
+			// 		$typeAttr = $element->attribute('type');
+			// 		if ($typeAttr == 'hidden') {
+			// 			// skip this
+			// 			continue;
+			// 		}
+			// 	}
+			// 	catch (Exception $e) {
+			// 		// no 'type' attribute
+			// 		//
+			// 		// not fatal
+			// 	}
+			// }
 
 			if ($checkedIndex == $nth) {
 				// a match!
