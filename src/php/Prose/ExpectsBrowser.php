@@ -79,13 +79,22 @@ class ExpectsBrowser extends Prose
 				//
 				// expectsBrowser()->doesntHave()->anyFieldsWithId('XXX');
 				case null:
-				case 0:
+				case 'any':
 					if ($actualCount === 0) {
 						$log->endAction("0 element(s) found");
 						return;
 					}
-					break;
 					throw new E5xx_ExpectFailed(__METHOD__, "0 element(s) to exist", "$actualCount element(s) exist");
+					break;
+
+				case 'several':
+					if ($actualCount < 3 || $actualCount > 9) {
+						$log->endAction($actualCount . " element(s) found");
+						return true;
+					}
+
+					throw new E5xx_ExpectFailed(__METHOD__, "must not be several element(s)", "several element(s) exist");
+					break;
 
 				// this satisfies something like:
 				//
@@ -120,14 +129,24 @@ class ExpectsBrowser extends Prose
 				//
 				// expectsBrowser()->has()->fieldWithId('XX');
 				case null:
+				case 'any':
 					if ($actualCount > 0) {
 						$log->endAction($actualCount . " element(s) found");
 						return true;
 					}
 
 					throw new E5xx_ExpectFailed(__METHOD__, "at least one element to exist", "$actualCount element(s) exist");
-
 					break;
+
+				case 'several':
+					if ($actualCount > 2 && $actualCount < 10) {
+						$log->endAction($actualCount . " element(s) found");
+						return true;
+					}
+
+					throw new E5xx_ExpectFailed(__METHOD__, "several element to exist", "$actualCount element(s) exist");
+					break;
+
 				// this satisfies something like:
 				//
 				// expectsBrowser()->has()->oneFieldWithId('XX');

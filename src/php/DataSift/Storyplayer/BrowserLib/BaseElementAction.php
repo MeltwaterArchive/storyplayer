@@ -66,7 +66,10 @@ class BaseElementAction
 	const PLURAL_TARGET = 2;
 
 	protected $countTypes = array(
-		"any"		=> 0,
+		"any"		=> "any",
+		"several"   => "several",
+		"no"		=> 0,
+		"zero"		=> 0,
 		"one"       => 1,
 		"a"			=> 1,
 		"an"		=> 2,
