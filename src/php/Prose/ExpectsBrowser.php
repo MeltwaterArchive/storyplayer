@@ -43,6 +43,7 @@
 
 namespace Prose;
 
+use DataSift\Storyplayer\BrowserLib\MultiElementAction;
 use DataSift\Storyplayer\BrowserLib\SingleElementExpect;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
@@ -65,19 +66,41 @@ class ExpectsBrowser extends Prose
 
 	public function doesntHave()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
+		$action = function(StoryTeller $st, $requiredCount, $elements, $elementName, $elementDesc) {
 
 			$log = $st->startAction("$elementDesc '$elementName' must not exist");
 
-			if (is_object($element)) {
-				$log->endAction();
-				return true;
-			}
+			// how many elements actually exist?
+			$actualCount = count($elements);
 
-			throw new E5xx_ExpectFailed(__METHOD__, 'element does not exist', 'element exists');
+			// this gets a little complicated
+			switch ($requiredCount) {
+				// this satisfies something like:
+				//
+				// expectsBrowser()->doesntHave()->anyFieldsWithId('XXX');
+				case null:
+				case 0:
+					if ($actualCount === 0) {
+						$log->endAction("0 element(s) found");
+						return;
+					}
+					break;
+					throw new E5xx_ExpectFailed(__METHOD__, "0 element(s) to exist", "$actualCount element(s) exist");
+
+				// this satisfies something like:
+				//
+				// expectsBrowser()->doesntHave()->fiveFieldsWithId('XX');
+				default:
+					if ($actualCount != $requiredCount) {
+						$log->endAction($actualCount . " element(s) found");
+						return true;
+					}
+
+					throw new E5xx_ExpectFailed(__METHOD__, "$requiredCount element(s) must not exist", "$actualCount element(s) exist");
+			}
 		};
 
-		return new TargettedBrowserSearch(
+		return new MultiElementAction(
 			$this->st,
 			$action,
 			"doesntHave",
@@ -87,19 +110,38 @@ class ExpectsBrowser extends Prose
 
 	public function has()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
+		$action = function(StoryTeller $st, $requiredCount, $elements, $elementName, $elementDesc) {
 
 			$log = $st->startAction("$elementDesc '$elementName' must exist");
 
-			if (is_object($element)) {
-				$log->endAction();
-				return true;
-			}
+			$actualCount = count($elements);
+			switch($requiredCount) {
+				// this satisfies something like:
+				//
+				// expectsBrowser()->has()->fieldWithId('XX');
+				case null:
+					if ($actualCount > 0) {
+						$log->endAction($actualCount . " element(s) found");
+						return true;
+					}
 
-			throw new E5xx_ExpectFailed(__METHOD__, 'element to exist', 'element does not exist');
+					throw new E5xx_ExpectFailed(__METHOD__, "at least one element to exist", "$actualCount element(s) exist");
+
+					break;
+				// this satisfies something like:
+				//
+				// expectsBrowser()->has()->oneFieldWithId('XX');
+				default:
+					if ($actualCount == $requiredCount) {
+						$log->endAction($actualCount . " element(s) found");
+						return true;
+					}
+
+					throw new E5xx_ExpectFailed(__METHOD__, "$requiredCount element(s) to exist", "$actualCount element(s) exist");
+			}
 		};
 
-		return new TargettedBrowserSearch(
+		return new MultiElementAction(
 			$this->st,
 			$action,
 			"has",

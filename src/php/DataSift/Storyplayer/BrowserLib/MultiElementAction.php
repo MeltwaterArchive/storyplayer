@@ -89,7 +89,7 @@ class MultiElementAction extends BaseElementAction
 
 		// now that we have our elements, let's apply the action to them
 		$action = $this->action;
-		$return = $action($this->st, $elements, $countType, $searchTerm, $methodName);
+		$return = $action($this->st, $countType, $elements, $methodArgs[0], $methodName);
 
 		// all done
 		return $return;
