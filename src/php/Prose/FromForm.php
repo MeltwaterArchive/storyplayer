@@ -64,7 +64,7 @@ class FromForm extends FromBrowser
 		$formId = $this->args[0];
 
 		// find the form
-		$formElement = $st->fromBrowser()->getElementById($formId);
+		$formElement = $st->fromBrowser()->get()->elementById($formId);
 
 		// is it really a form?
 		if (strtolower($formElement->name()) !== 'form') {

@@ -43,6 +43,7 @@
 
 namespace Prose;
 
+use DataSift\Storyplayer\BrowserLib\SingleElementExpect;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
@@ -106,20 +107,6 @@ class ExpectsBrowser extends Prose
 		);
 	}
 
-	public function hasField($searchTerm)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// how do we find the element to test?
-		$action = function() use ($st, $searchTerm) {
-			$element = $st->fromBrowser()->getElementByLabelIdOrName($searchTerm);
-			return $element;
-		};
-
-		return new TargettedBrowserExpects($st, $action, $searchTerm, 'field');
-	}
-
 	public function hasTitle($title)
 	{
 		// shorthand
@@ -177,5 +164,10 @@ class ExpectsBrowser extends Prose
 
 		// all done
 		$log->endAction();
+	}
+
+	public function __call($methodName, $methodParams)
+	{
+		return new SingleElementExpect($this->st, $this->getTopElement(), $methodName, $methodParams);
 	}
 }

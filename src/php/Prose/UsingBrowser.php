@@ -44,6 +44,8 @@
 namespace Prose;
 
 use Exception;
+use DataSift\Storyplayer\BrowserLib\SingleElementAction;
+use DataSift\Storyplayer\BrowserLib\MultiElementAction;
 
 /**
  * Do things using the web browser
@@ -68,49 +70,148 @@ class UsingBrowser extends Prose
 	//
 	// ------------------------------------------------------------------
 
+	/**
+	 * tick a checkbox or radio button if it has not yet been checked
+	 *
+	 * @return \DataSift\BrowserLib\SingleElementAction
+	 */
 	public function check()
 	{
-		$topElement = $this->getTopElement();
+		$action = function($st, $element, $elementName, $elementDesc) {
+			$log = $st->startAction("check $elementDesc '$elementName'");
 
-		$action = new ContainedBrowserAction($this->st, $topElement);
-		return $action->check();
+			// does the element need clicking to check it?
+			if (!$element->selected()) {
+				// click the element to check it
+				$element->click();
+				$log->endAction();
+			}
+			else {
+				$log->endAction("was already checked");
+			}
+		};
+
+		return new SingleElementAction(
+			$this->st,
+			$action,
+			"check",
+			$this->topElement
+		);
 	}
 
+	/**
+	 * remove any content from an input box, or untick a checkbox or
+	 * radio button
+	 *
+	 * @return \DataSift\BrowserLib\SingleElementAction
+	 */
 	public function clear()
 	{
-		$topElement = $this->getTopElement();
+		$action = function($st, $element, $elementName, $elementDesc) {
+			// what are we doing?
+			$log = $st->startAction("clear $elementDesc '$elementName'");
 
-		$action = new ContainedBrowserAction($this->st, $topElement);
-		return $action->clear();
+			// clear the element if we can
+			$tag = $element->name();
+			switch ($tag) {
+				case "input":
+				case "textarea":
+					$element->clear();
+					break;
+			}
+
+			// all done
+			$log->endAction();
+		};
+
+		return new SingleElementAction(
+			$this->st,
+			$action,
+			"clear",
+			$this->topElement
+		);
 	}
 
+	/**
+	 * Send a 'click' to the selected element
+	 *
+	 * @return \DataSift\BrowserLib\SingleElementAction
+	 */
 	public function click()
 	{
-		$topElement = $this->getTopElement();
+		$action = function($st, $element, $elementName, $elementDesc) {
+			$log = $st->startAction("click $elementDesc '$elementName'");
+			$element->click();
+			$log->endAction();
+		};
 
-		$action = new ContainedBrowserAction($this->st, $topElement);
-		return $action->click();
+		return new SingleElementAction(
+			$this->st,
+			$action,
+			"click",
+			$this->topElement
+		);
 	}
 
+	/**
+	 * choose an option from a <select> box
+	 *
+	 * @param  string $label
+	 *         the human-readable text of the option to select
+	 * @return \DataSift\BrowserLib\SingleElementAction
+	 */
 	public function select($label)
 	{
-		$topElement = $this->getTopElement();
+		$action = function ($st, $element, $elementName, $elementDesc) use ($label) {
 
-		$action = new ContainedBrowserAction($this->st, $topElement);
-		return $action->select($label);
+			// what are we doing?
+			$log = $st->startAction("choose option '$label' from $elementDesc '$elementName'");
+
+			// get the option to select
+			$option = $element->getElement('xpath', 'option[normalize-space(text()) = "' . $label . '" ]');
+
+			// select it
+			$option->click();
+
+			// all done
+			$log->endAction();
+		};
+
+		return new SingleElementAction(
+			$this->st,
+			$action,
+			"select",
+			$this->topElement
+		);
 	}
 
+	/**
+	 * type text into an input field
+	 *
+	 * @param  string $text
+	 *         the text to type
+	 * @return \DataSift\BrowserLib\SingleElementAction
+	 */
 	public function type($text)
 	{
-		$topElement = $this->getTopElement();
+		$action = function($st, $element, $elementName, $elementDesc) use ($text) {
 
-		$action = new ContainedBrowserAction($this->st, $topElement);
-		return $action->type($text);
-	}
+			// what are we doing?
+			$log = $st->startAction("type '$text' into $elementDesc '$elementName'");
 
-	public function fromElement($element)
-	{
-		return new ContainedBrowserAction($this->st, $element);
+			// type the text
+			$element->type($text);
+
+			// all done
+			$log->endAction();
+		};
+
+		return new SingleElementAction(
+			$this->st,
+			$action,
+			"type",
+			$this->topElement
+		);
 	}
 
 	// ==================================================================

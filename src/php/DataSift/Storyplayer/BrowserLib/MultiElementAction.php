@@ -34,45 +34,64 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace DataSift\Storyplayer\BrowserLib;
+
+use Exception;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 /**
- * test forms in the web browser
+ * Helper class for finding multiple DOM elements to act upon
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsForm extends ExpectsBrowser
+class MultiElementAction extends BaseElementAction
 {
-	protected $formId;
+	protected $st;
+	protected $pageContext;
+	protected $action;
+	protected $actionDesc;
+	protected $baseElement;
 
-	protected function initActions()
+	/**
+	 * @param \Closure $action
+	 * @param string $actionDesc
+	 */
+	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
 	{
-		// shorthand
-		$st     = $this->st;
-		$formId = $this->args[0];
+		$this->st          = $st;
+		$this->action      = $action;
+		$this->actionDesc  = $actionDesc;
+		$this->baseElement = $baseElement;
+	}
 
-		// find the form
-		$formElement = fromBrowser()->get()->elementById($formId);
+	public function __call($methodName, $methodArgs)
+	{
+		// turn the method name into an array of words
+		$words = $this->convertMethodNameToWords($methodName);
 
-		// is it really a form?
-		if (strtolower($formElement->name()) !== 'form') {
-			throw new E5xx_ActionFailed('form');
-		}
+		// how many elements are we searching for?
+		$countType  = $this->determineCountType($words);
 
-		// yes, it really is a form
-		$this->formId      = $formId;
-		$this->setTopElement($formElement);
+		// get the elements we need
+		$elements = $this->retrieveElements($methodName, $methodArgs);
+
+		// now that we have our elements, let's apply the action to them
+		$action = $this->action;
+		$return = $action($this->st, $elements, $countType, $searchTerm, $methodName);
+
+		// all done
+		return $return;
 	}
 }
