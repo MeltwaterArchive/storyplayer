@@ -66,7 +66,7 @@ This will allow you to return input fields with the 'hidden' attribute set. Just
 
 ## N-Style
 
-Use _one, two, three ... nineteen, or twenty_ when you are searching for a group of elements from the HTML page.
+Use _one, two, three ... nineteen, or twenty_ when you are searching for a group ofg elements from the HTML page.
 
 For example, to make sure that the page has two links that say "Logout", you would do this:
 
