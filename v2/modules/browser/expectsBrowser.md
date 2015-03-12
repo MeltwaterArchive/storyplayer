@@ -63,3 +63,43 @@ expectsBrowser()->hasTitles(array("Home", "Dashboard"));
 {% endhighlight %}
 
 Sometimes, when you click on a link or submit a form, your web-based application may not take you to the same page every time.  For example, in a payment wizard, your app might have a step called "Personal Details" which only appears when some of the details are missing.  In these situations, this action makes it very easy to make sure that the browser has (after redirects) ended up on a page that you expect - and not one that you don't.
+
+## isBlank()
+
+Use `expectsBrowser()->isBlank()` to ensure that an input field on the currently loaded HTML page is blank (i.e. has an empty 'value' attribute).
+
+{% highlight php startinline %}
+expectsBrowser()->firstFieldWithId("blank_value")->isBlank();
+{% endhighlight %}
+
+Note that the [browser search term](searching-the-dom.html) comes in the middle of this statement, rather than at the end.
+
+## isNotBlank()
+
+Use `expectsBrowser()->isNotBlank()` to ensure that an input field on the currently loaded HTML page is not blank (i.e. has an 'value' attribute that is not empty).
+
+{% highlight php startinline %}
+expectsBrowser()->firstFieldWithId("username")->isNotBlank();
+{% endhighlight %}
+
+Note that the [browser search term](searching-the-dom.html) comes in the middle of this statement, rather than at the end.
+
+## isChecked()
+
+Use `expectsBrowser()->isChecked()` to ensure that a checkbox or radio button on the currently loaded HTML page has been selected.
+
+{% highlight php startinline %}
+expectsBrowser()->firstFieldWithLabel("I have read the terms and conditions")->isChecked();
+{% endhighlight %}
+
+Note that the [browser search term](searching-the-dom.html) comes in the middle of this statement, rather than at the end.
+
+## isNotChecked()
+
+Use `expectsBrowser()->isNotChecked()` to ensure that a checkbox or radio button on the currently loaded HTML page has not been selected.
+
+{% highlight php startinline %}
+expectsBrowser()->firstFieldWithLabel("I have read the terms and conditions")->isNotChecked();
+{% endhighlight %}
+
+Note that the [browser search term](searching-the-dom.html) comes in the middle of this statement, rather than at the end.
