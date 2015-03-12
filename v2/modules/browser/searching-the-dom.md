@@ -2,7 +2,7 @@
 layout: v2/modules-browser
 title: Searching The DOM
 prev: '<a href="../../modules/browser/index.html">Prev: The Browser Module</a>'
-next: '<a href="../../modules/browser/search-targets.html">Next: Supported Search Targets</a>'
+next: '<a href="../../modules/browser/ordinal-prefixes.html">Next: Supported Ordinal Prefixes</a>'
 updated_for_v2: true
 ---
 
@@ -15,11 +15,12 @@ Most of the Browser module's operations need a DOM element to work on.  You tell
 An element search term looks like this:
 
 {% highlight php startinline %}
-[from|into|of]ButtonWithId('your-id');
+[first|second|from|into|of]ButtonWithId('your-id');
 {% endhighlight %}
 
 where:
 
+* __first__ or __second__ is an [ordinal prefix](ordinal-prefixes.html)
 * __from__ or __into__ or __of__ are entirely optional - you can add them to the front of the search term to make it nicer to read, or you can leave it out entirely!
 * __Button__ is one of our [supported targets](search-targets.html)
 * __WithId__ is one of our [supported filters](search-filters.html)

@@ -117,6 +117,7 @@
 		"modules/assertions/assertsString",
 		"modules/browser/index",
 		"modules/browser/searching-the-dom",
+		"modules/browser/ordinal-prefixes",
 		"modules/browser/search-targets",
 		"modules/browser/search-filters",
 		"modules/browser/fromBrowser",
