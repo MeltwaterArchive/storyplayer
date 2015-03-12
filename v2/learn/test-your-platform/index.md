@@ -2,7 +2,7 @@
 layout: v2/learn-test-your-platform
 title: Test Your Platform
 prev: '<a href="../../learn/test-your-code/final-thoughts.html">Prev: Final Thoughts</a>'
-next: '<a href="../../learn/worked-examples/index.html">Next: Worked Examples</a>'
+next: '<a href="../../learn/test-your-webpage/index.html">Next: How To Test Your HTML</a>'
 ---
 # Guide To Testing Your Platform With Storyplayer
 
