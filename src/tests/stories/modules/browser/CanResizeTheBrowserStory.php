@@ -8,8 +8,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer Service Stories')
-         ->inGroup('Web Browsing')
+$story = newStoryFor("Storyplayer")
+         ->inGroup(["Modules", "Browser"])
          ->called('Can resize the web browser');
 
 $story->requiresStoryplayerVersion(2);
@@ -54,7 +54,7 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
 
     // resize the window
     usingBrowser()->resizeCurrentWindow(

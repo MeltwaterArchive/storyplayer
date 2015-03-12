@@ -6,9 +6,9 @@
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer Service Stories')
-         ->inGroup('Web Pages')
-         ->called('Can switch between browser windows');
+$story = newStoryFor("Storyplayer")
+         ->inGroup(["Modules", "Browser"])
+         ->called('Can retrieve a heading by ID');
 
 $story->requiresStoryplayerVersion(2);
 
@@ -41,26 +41,10 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithWindows.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
 
-    // get the h1
-    $checkpoint->mainHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_windows');
-
-    // open the second window
-    usingBrowser()->click()->linkWithText('open a second window');
-
-    // switch to the second window
-    usingBrowser()->switchToWindow("Storyplayer: Second Window");
-
-    // get the h1
-    $checkpoint->secondHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_second_window');
-
-    // close the second window
-    // this leaves the browser in a bit of a state
-    usingBrowser()->closeCurrentWindow();
-
-    // switch back to the first window
-    usingBrowser()->switchToWindow("Storyplayer: Working With Windows");
+    // get a h2 by its ID
+    $checkpoint->content = fromBrowser()->getText()->fromHeadingWithId('self_test_website');
 });
 
 // ========================================================================
@@ -74,9 +58,6 @@ $story->addPostTestInspection(function() {
 	$checkpoint = getCheckpoint();
 
 	// do we have the content we expected?
-	assertsObject($checkpoint)->hasAttribute('mainHeader');
-	assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With Windows");
-
-	assertsObject($checkpoint)->hasAttribute('secondHeader');
-	assertsString($checkpoint->secondHeader)->equals("Storyplayer: Second Window");
+	assertsObject($checkpoint)->hasAttribute('content');
+	assertsString($checkpoint->content)->equals("Self-Test Website");
 });

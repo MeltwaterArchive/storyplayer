@@ -6,9 +6,9 @@
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer Service Stories')
-         ->inGroup('Web Pages')
-         ->called('Can retrieve a heading by ID');
+$story = newStoryFor('Storyplayer')
+         ->inGroup(['Modules', 'Forms'])
+         ->called('Can expect a form input to be blank');
 
 $story->requiresStoryplayerVersion(2);
 
@@ -37,14 +37,11 @@ $story->requiresStoryplayerVersion(2);
 // ------------------------------------------------------------------------
 
 $story->addAction(function() {
-	// get the checkpoint, to store data in
-	$checkpoint = getCheckpoint();
-
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithForms.html');
 
-    // get a h2 by its ID
-    $checkpoint->content = fromBrowser()->getText()->fromHeadingWithId('self_test_website');
+    // check the control that we're interested in
+    expectsForm('test_form')->inputWithLabel('Page Subtitle')->isBlank();
 });
 
 // ========================================================================
@@ -54,10 +51,5 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	// get the checkpoint
-	$checkpoint = getCheckpoint();
-
-	// do we have the content we expected?
-	assertsObject($checkpoint)->hasAttribute('content');
-	assertsString($checkpoint->content)->equals("Self-Test Website");
+	// do nothing
 });

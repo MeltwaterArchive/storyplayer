@@ -6,9 +6,9 @@
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer Service Stories')
-         ->inGroup('Web Pages')
-         ->called('Can see inside iFrames');
+$story = newStoryFor("Storyplayer")
+         ->inGroup(["Modules", "Browser"])
+         ->called('Can open web browser');
 
 $story->requiresStoryplayerVersion(2);
 
@@ -41,16 +41,10 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithIFrames.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
 
-    // get a h1
-    $checkpoint->mainHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
-
-    // switch to the iFrame
-    usingBrowser()->switchToIframe('iframe1');
-
-    // get the h1 now
-    $checkpoint->iFrameHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
+    // get the title of the test page
+    $checkpoint->title = fromBrowser()->getTitle();
 });
 
 // ========================================================================
@@ -63,10 +57,7 @@ $story->addPostTestInspection(function() {
 	// get the checkpoint
 	$checkpoint = getCheckpoint();
 
-	// do we have the content we expected?
-	assertsObject($checkpoint)->hasAttribute('mainHeader');
-	assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With IFrames");
-
-	assertsObject($checkpoint)->hasAttribute('iFrameHeader');
-	assertsString($checkpoint->iFrameHeader)->equals("IFrame Content");
+	// do we have the title we expected?
+	assertsObject($checkpoint)->hasAttribute('title');
+	assertsString($checkpoint->title)->equals("Storyplayer: Welcome To The Tests!");
 });

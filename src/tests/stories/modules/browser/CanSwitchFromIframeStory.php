@@ -6,8 +6,8 @@
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer Service Stories')
-         ->inGroup('Web Pages')
+$story = newStoryFor("Storyplayer")
+         ->inGroup(["Modules", "Browser"])
          ->called('Can switch from iFrame to main frame');
 
 $story->requiresStoryplayerVersion(2);
@@ -41,7 +41,7 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/WorkingWithIFrames.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithIFrames.html');
 
     // switch to the iFrame
     usingBrowser()->switchToIframe('iframe1');

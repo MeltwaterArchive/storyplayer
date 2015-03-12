@@ -6,9 +6,12 @@
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer Service Stories')
-         ->inGroup('Web Browsing')
-         ->called('Can open web browser');
+$story = newStoryFor("Storyplayer")
+         ->inGroup(["Modules", "Browser"])
+         ->called('Can persist the test device');
+
+// keep the test device open
+$story->setPersistDevice();
 
 $story->requiresStoryplayerVersion(2);
 
@@ -37,14 +40,8 @@ $story->requiresStoryplayerVersion(2);
 // ------------------------------------------------------------------------
 
 $story->addAction(function() {
-	// get the checkpoint, to store data in
-	$checkpoint = getCheckpoint();
-
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
-
-    // get the title of the test page
-    $checkpoint->title = fromBrowser()->getTitle();
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
 });
 
 // ========================================================================
@@ -54,10 +51,13 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	// get the checkpoint
-	$checkpoint = getCheckpoint();
+	// if this feature is working, the browser should already be open
+	// and we can just grab the title
+	$title = fromBrowser()->getTitle();
 
 	// do we have the title we expected?
-	assertsObject($checkpoint)->hasAttribute('title');
-	assertsString($checkpoint->title)->equals("Storyplayer: Welcome To The Tests!");
+	assertsString($title)->equals("Storyplayer: Welcome To The Tests!");
+
+	// all done - shut down the browser
+	stopDevice();
 });

@@ -6,12 +6,9 @@
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer Service Stories')
-         ->inGroup('Web Browsing')
-         ->called('Can persist the test device');
-
-// keep the test device open
-$story->setPersistDevice();
+$story = newStoryFor("Storyplayer")
+         ->inGroup(["Modules", "Browser"])
+         ->called('Can see inside iFrames');
 
 $story->requiresStoryplayerVersion(2);
 
@@ -40,8 +37,20 @@ $story->requiresStoryplayerVersion(2);
 // ------------------------------------------------------------------------
 
 $story->addAction(function() {
+	// get the checkpoint, to store data in
+	$checkpoint = getCheckpoint();
+
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithIFrames.html');
+
+    // get a h1
+    $checkpoint->mainHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
+
+    // switch to the iFrame
+    usingBrowser()->switchToIframe('iframe1');
+
+    // get the h1 now
+    $checkpoint->iFrameHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
 });
 
 // ========================================================================
@@ -51,13 +60,13 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	// if this feature is working, the browser should already be open
-	// and we can just grab the title
-	$title = fromBrowser()->getTitle();
+	// get the checkpoint
+	$checkpoint = getCheckpoint();
 
-	// do we have the title we expected?
-	assertsString($title)->equals("Storyplayer: Welcome To The Tests!");
+	// do we have the content we expected?
+	assertsObject($checkpoint)->hasAttribute('mainHeader');
+	assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With IFrames");
 
-	// all done - shut down the browser
-	stopDevice();
+	assertsObject($checkpoint)->hasAttribute('iFrameHeader');
+	assertsString($checkpoint->iFrameHeader)->equals("IFrame Content");
 });
