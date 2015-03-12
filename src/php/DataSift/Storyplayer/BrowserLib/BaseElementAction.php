@@ -173,8 +173,10 @@ class BaseElementAction
 
 	protected function determineCountType($words)
 	{
-		if (isset($this->countTypes[$words[0]])) {
-			return $this->countTypes[$words[0]];
+		foreach ($words as $word) {
+			if (isset($this->countTypes[$word])) {
+				return $this->countTypes[$word];
+			}
 		}
 
 		// if we do not recognise the word, tell the caller
@@ -183,8 +185,10 @@ class BaseElementAction
 
 	protected function determineIndexType($words)
 	{
-		if (isset($this->indexTypes[$words[0]])) {
-			return $this->indexTypes[$words[0]];
+		foreach ($words as $word) {
+			if (isset($this->indexTypes[$word])) {
+				return $this->indexTypes[$word];
+			}
 		}
 
 		// if we do not recognise the word, we want the first match
