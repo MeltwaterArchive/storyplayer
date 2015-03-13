@@ -3,13 +3,14 @@ layout: v2/modules-form
 title: fromForm()
 prev: '<a href="../../modules/form/expectsForm.html">Prev: expectsForm()</a>'
 next: '<a href="../../modules/form/usingForm.html">Next: usingForm()</a>'
+updated_for_v2: true
 ---
 
 # fromForm()
 
 _fromForm()_ allows you to extract information and [WebDriverElement objects](webdriver.html) from a specified form on the currently loaded HTML page.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromForm_.
+The source code for these actions can be found in the class `Prose\FromForm`.
 
 ## Behaviour And Return Codes
 
@@ -27,8 +28,6 @@ else {
 	// we are on the login form
 }
 {% endhighlight %}
-
-This action is normally used inside [local Prose dialects](../../prose/local-dialects.html), where you're building wrappers for your app's actions.
 
 __See Also:__
 

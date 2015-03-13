@@ -3,13 +3,14 @@ layout: v2/modules-form
 title: The Form Module
 prev: '<a href="../../modules/file/usingFile.html">Prev: usingFile()</a>'
 next: '<a href="../../modules/form/expectsForm.html">Next: expectsForm()</a>'
+updated_for_v2: true
 ---
 
 # The Form Module
 
 ## Introduction
 
-The __Form__ module allows you to isolate and work with a specific form on a HTML page.
+The __Form__ module allows you to isolate and work with a specific form on a HTML page.  It is an extension of the _[Browser](../browser/index.html)_ module.
 
 The source code for this Prose module can be found in these PHP classes:
 

@@ -3,13 +3,14 @@ layout: v2/modules-form
 title: usingForm()
 prev: '<a href="../../modules/form/fromForm.html">Prev: fromForm()</a>'
 next: '<a href="../../modules/fs/index.html">Next: The Filesystem Module</a>'
+updated_for_v2: true
 ---
 
 # usingForm()
 
 _usingForm()_ allows you to interact with the specified form inside the page.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingForm_.
+The source code for these actions can be found in the class `Prose\UsingForm`.
 
 ## Behaviour And Return Codes
 
@@ -22,11 +23,14 @@ Write your story as if every action will be successful.
 
 ## check()
 
-Use `usingForm()->check()` to tick a checkbox.
+Use `usingForm()->check()` to tick a checkbox or radio button.
 
 {% highlight php startinline %}
 usingForm('registration')->check()->boxWithLabel("T's & C's");
+usingForm('checkout')->check()->radiobuttonWithLabel("Next Day Delivery");
 {% endhighlight %}
+
+The difference between `usingForm()->check()` and `usingForm()->click()` is that `check()` always leaves the checkbox ticked, even if it was already ticked. If you `click()` a ticked checkbox, this will untick the checkbox.
 
 ## clear()
 
@@ -38,9 +42,15 @@ usingForm('login')->clear()->fieldWithLabel("Username");
 
 This is commonly used to remove any browser-supplied auto-complete data when filling out forms.
 
-__See Also:__
+## clearFields()
 
-* _[usingForm()->fillOutFormFields()](#fillOutFormFields)_
+Use `usingForm()->clearFields` to clear out any values currently set in the form.
+
+{% highlight php startinline %}
+usingForm('login')->clearFields();
+{% endhighlight %}
+
+This is commonly used to remove all browser-supplied auto-complete data before filling out a form.
 
 ## click()
 
@@ -49,6 +59,32 @@ Use `usingForm()->click()` to click on a button, link, or other element on the p
 {% highlight php startinline %}
 usingForm('login')->click()->linkWithText("Login");
 {% endhighlight %}
+
+## fillInFields()
+
+Use `usingForm()->fillInFields()` to complete a form's text and dropdown fields quickly.
+
+{% highlight php startinline %}
+usingForm('login')->fillInFields([
+	"username" => "testUser",
+	"password" => "storyplayerRocks"
+]);
+{% endhighlight %}
+
+The array keys can be any of the label text, id attribute, or name attribute of the field to complete. If the field cannot be found, an exception is thrown.
+
+## fillInFieldsIfPresent()
+
+Use `usingForm()->fillInFieldsIfPresent()` to complete a form's text and dropdown fields quickly.
+
+{% highlight php startinline %}
+usingForm('login')->fillInFieldsIfPresent([
+	"username" => "testUser",
+	"password" => "storyplayerRocks"
+]);
+{% endhighlight %}
+
+The array keys can be any of the label text, id attribute, or name attribute of the field to complete. If the field is not present, no error occurs.
 
 ## select()
 
