@@ -68,7 +68,7 @@ class FromGraphite extends Prose
 		$log = $st->startAction("get raw data from graphite for '{$metric}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
 		// find out where graphite is
-		$graphiteUrl = $st->fromEnvironment()->getGraphiteUrl();
+		$graphiteUrl = $st->fromTestEnvironment()->getModuleSetting('graphite.url');
 		if (substr($graphiteUrl, -1, 1) !== '/') {
 			$graphiteUrl .= '/';
 		}
