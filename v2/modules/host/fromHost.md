@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-host
 title: fromHost()
-prev: '<a href="../../modules/host/supported-hosts.html">Prev: Supported Hosts</a>'
+prev: '<a href="../../modules/host/index.html">Prev: The Host Module</a>'
 next: '<a href="../../modules/host/expectsHost.html">Next: expectsHost()</a>'
 updated_for_v2: true
 ---
