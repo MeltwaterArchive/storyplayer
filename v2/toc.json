@@ -145,7 +145,6 @@
 		"modules/graphite/fromGraphite",
 		"modules/graphite/expectsGraphite",
 		"modules/host/index",
-		"modules/host/supported-hosts",
 		"modules/host/fromHost",
 		"modules/host/expectsHost",
 		"modules/host/usingHost",
