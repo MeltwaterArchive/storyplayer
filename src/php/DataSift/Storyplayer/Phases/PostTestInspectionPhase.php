@@ -100,7 +100,7 @@ class PostTestInspectionPhase extends StoryPhase
 			// ... but should it have?
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setPlayingFailed(
-					$phaseResult::SUCCESS,
+					$phaseResult::SUCCEEDED,
 					"post-test inspection succeeded when it was expected to fail"
 				);
 				$storyResult->setStoryHasFailed($phaseResult);
@@ -112,7 +112,7 @@ class PostTestInspectionPhase extends StoryPhase
 		catch (E5xx_ActionFailed $e) {
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
-					$phaseResult::SUCCESS,
+					$phaseResult::SUCCEEDED,
 					$e->getMessage(),
 					$e
 				);
@@ -129,7 +129,7 @@ class PostTestInspectionPhase extends StoryPhase
 		catch (E5xx_ExpectFailed $e) {
 			if ($storyResult->getStoryShouldFail()) {
 				$phaseResult->setContinuePlaying(
-					$phaseResult::SUCCESS,
+					$phaseResult::SUCCEEDED,
 					$e->getMessage(),
 					$e
 				);
