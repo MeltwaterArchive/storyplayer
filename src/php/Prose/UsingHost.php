@@ -168,72 +168,54 @@ class UsingHost extends HostBase
 		return $result;
 	}
 
-	public function startInScreen($processName, $commandLine)
+	public function startInScreen($sessionName, $commandLine)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("run process '{$processName}' ({$commandLine}) in the background on host '{$this->args[0]}'");
+		$log = $st->startAction("start screen session '{$sessionName}' ({$commandLine}) on host '{$this->args[0]}'");
+
+		// do we already have this session running on the host?
+		expectsHost($this->args[0])->screenIsNotRunning($sessionName);
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
-		// build up the process data structure
-		$processDetails = new BaseObject();
-
-		// remember where we are running this
-		$processDetails->hostId = $hostDetails->hostId;
-
-		// remember how users will refer to this
-		$processDetails->processName = $processName;
-
-		// we need to create a unique screen name
-		$processDetails->screenName = $processName . '_' . date('YmdHis');
-
 		// build up our command to run
-		$processDetails->commandLine = "screen -L -d -m -S " . $processDetails->screenName
-		         . ' bash -c "' . $commandLine . '"';
+		$commandLine = 'screen -L -d -m -S "' . $sessionName . '" bash -c "' . $commandLine . '"';
 
 		// run our command
 		//
-		// this creates a detached screen session called $appData->screenName
-		$this->runCommand($processDetails->commandLine);
+		// this creates a detached screen session called $sessionName
+		$this->runCommand($commandLine);
 
 		// find the PID of the screen session, for future use
-		$cmd = "screen -ls | grep {$processDetails->screenName} | awk -F. '{print $1}'";
-		$result = $this->runCommand($cmd);
-		$processDetails->pid = trim(rtrim($result->output));
+		$sessionDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
 
 		// did the process start, or has it already terminated?
-		if (empty($processDetails->pid)) {
-			$log->endAction("process failed to start");
-			throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$processName}'");
+		if (empty($sessionDetails->pid)) {
+			$log->endAction("session failed to start, or command exited quickly");
+			throw new E5xx_ActionFailed(__METHOD__, "failed to start session '{$sessionName}'");
 		}
 
-		// remember this process
-		$st->usingProcessesTable()->addProcess($this->args[0], $processDetails);
-
 		// all done
-		$log->endAction("process running as '{$processDetails->screenName}' ({$processDetails->pid})");
+		$log->endAction("session running as PID {$sessionDetails->pid}");
 	}
 
-	public function stopInScreen($processName)
+	public function stopInScreen($sessionName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop screen process '{$processName}' on host '{$this->args[0]}'");
+		$log = $st->startAction("stop screen session '{$sessionName}' on host '{$this->args[0]}'");
 
 		// get the process details
-		$processDetails = $st->fromShell()->getScreenSessionDetails($processName);
+		$processDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
 
 		// stop the process
 		$st->usingHost($this->args[0])->stopProcess($processDetails->pid);
-
-		// remove the process from the processes table
-		$st->usingProcessesTable()->removeProcess($this->args[0],$processDetails);
 
 		// all done
 		$log->endAction();
@@ -245,7 +227,7 @@ class UsingHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop all running screen processes on host '{$this->args[0]}'");
+		$log = $st->startAction("stop all running screen sessions on host '{$this->args[0]}'");
 
 		// get the app details
 		$processes = $st->fromHost($this->args[0])->getAllScreenSessions();
@@ -257,7 +239,7 @@ class UsingHost extends HostBase
 		}
 
 		// all done
-		$log->endAction();
+		$log->endAction("stopped " . count($processes) . " session(s)");
 	}
 
 	public function stopProcess($pid)

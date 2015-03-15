@@ -45,7 +45,9 @@ namespace Prose;
 
 use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
+
 use DataSift\Stone\DataLib\DataPrinter;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * get information about a given host
@@ -194,7 +196,7 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("is process PID '{$pid}' running on VM '{$this->args[0]}'?");
+		$log = $st->startAction("is process PID '{$pid}' running on host '{$this->args[0]}'?");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -221,7 +223,7 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("is process '{$processName}' running on VM '{$this->args[0]}'?");
+		$log = $st->startAction("is process '{$processName}' running on host '{$this->args[0]}'?");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -302,22 +304,24 @@ class FromHost extends HostBase
 		return $return;
 	}
 
-	public function getIsScreenRunning($processName)
+	public function getIsScreenRunning($sessionName)
+	{
+		return $this->getScreenIsRunning($sessionName);
+	}
+
+	public function getScreenIsRunning($sessionName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("check if process '{$processName}' is still running in screen");
+		$log = $st->startAction("check if screen session '{$sessionName}' is still running");
 
 		// get the details
-		$appData = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
-
-		// is it still running?
-		$isRunning = $st->fromHost($this->args[0])->getPidIsRunning($appData->pid);
+		$sessionData = $st->fromHost($this->args[0])->getScreenSessionDetails($sessionName);
 
 		// all done
-		if ($isRunning) {
+		if ($sessionData) {
 			$log->endAction("still running");
 			return true;
 		}
@@ -327,28 +331,34 @@ class FromHost extends HostBase
 		}
 	}
 
-	public function getScreenSessionDetails($processName)
+	public function getScreenSessionDetails($sessionName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get details about process '{$processName}'");
+		$log = $st->startAction("get details about screen session '{$sessionName}' on host '{$this->args[0]}' from Storyplayer");
 
 		// are there any details?
-		$processesTable = $st->fromProcessesTable()->getProcessesTable();
-		foreach ($processesTable as $processDetails) {
-			if (isset($processDetails->processName) && $processDetails->processName == $processName) {
-				// success!
-				$log->endAction();
-				return $processDetails;
-			}
+		$cmd = "screen -ls | grep -E '[[:digit:]]+.{$sessionName}[[:space:]]' | awk -F. '{print \\\$1}'";
+		$result = usingHost($this->args[0])->runCommand($cmd);
+
+		// there might be
+		$processDetails = new BaseObject;
+		$processDetails->hostId = $this->args[0];
+		$processDetails->name = $sessionName;
+		$processDetails->type = 'screen';
+		$processDetails->pid = trim(rtrim($result->output));
+
+		if (empty($processDetails->pid)) {
+			$msg = "unable to find PID of screen session '{$sessionName}'";
+			$log->endAction($msg);
+			return null;
 		}
 
-		// we don't have this process
-		$msg = "no process with the screen name '{$processName}'";
-		$log->endAction($msg);
-		throw new E5xx_ActionFailed(__METHOD__, $msg);
+		// all done
+		$log->endAction("session is running as PID '{$processDetails->pid}'");
+		return $processDetails;
 	}
 
 	public function getAllScreenSessions()
@@ -357,24 +367,35 @@ class FromHost extends HostBase
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get details about all screen processes");
-
-		// our return data
-		$return = array();
+		$log = $st->startAction("get details about all screen sessions on host '{$this->args[0]}'");
 
 		// are there any details?
-		$processesTable = $st->fromProcessesTable()->getProcessesTable();
-		foreach ($processesTable as $processDetails) {
-			if (isset($processDetails->screenName)) {
-				$return[] = $processDetails;
+		$cmd = "screen -ls | grep -E '[[:digit:]]+\.[^[:space:]]+[[:space:]]' | awk '{print \\\$1}'";
+		$result = usingHost($this->args[0])->runCommand($cmd);
+
+		$retval = [];
+		foreach (explode("\n", $result->output) as $line) {
+			// skip empty lines
+			$line = trim(rtrim($line));
+			if (empty($line)) {
+				continue;
 			}
+			$parts = explode('.', $line);
+
+			$processDetails = new BaseObject;
+			$processDetails->hostId = $this->args[0];
+			$processDetails->type = 'screen';
+			$processDetails->pid  = $parts[0];
+			$processDetails->name = $parts[1];
+
+			$retval[] = $processDetails;
 		}
 
 		// all done
-		$log->endAction("found " . count($return) . " screen process(es)");
+		$log->endAction("found " . count($retval) . " screen process(es)");
 
 		// all done
-		return $return;
+		return $retval;
 	}
 
 	public function getAppSettings($appName)

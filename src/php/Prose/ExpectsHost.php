@@ -189,48 +189,68 @@ class ExpectsHost extends HostBase
 		$log->endAction();
 	}
 
-	public function isRunningInScreen($processName)
+	public function screenIsRunning($sessionName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
+		$log = $st->startAction("make sure screen session '{$sessionName}' is running on host '{$this->args[0]}'");
 
-		// get the details
-		$processDetails = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
-
-		// is this process still running?
-		if (!$st->fromHost($this->args[0])->getPidIsRunning($processDetails->pid)) {
-			$log->endAction("process is not running");
-			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} running", "process {$processDetails->pid} not running");
+		// is this session still running?
+		if ($st->fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
+			$log->endAction();
+			return;
 		}
 
-		// all done
-		$log->endAction();
-		return true;
+		$log->endAction("session is not running");
+		throw new E5xx_ExpectFailed(__METHOD__, "session '{$sessionName}' running", "session '{$sessionName}' not running");
 	}
 
-	public function isNotRunningInScreen($processName)
+	public function screenIsNotRunning($sessionName)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
+		$log = $st->startAction("make sure screen session '{$sessionName}' is not running on host '{$this->args[0]}'");
 
 		// get the details
-		$processDetails = $st->fromHost($this->args[0])->getScreenSessionDetails($processName);
-
-		// is this process still running?
-		if ($st->fromHost($this->args[0])->getPidIsRunning($processDetails->pid)) {
-			$log->endAction("process is running");
-			throw new E5xx_ExpectFailed(__METHOD__, "process {$processDetails->pid} not running", "process {$processDetails->pid} is running");
+		if (!$st->fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
+			$log->endAction("session is not running");
+			return;
 		}
 
-		// all done
-		$log->endAction();
-		return true;
+		$log->endAction("session is running");
+		throw new E5xx_ExpectFailed(__METHOD__, "session not running", "session running as PID {$processDetails->pid}");
+	}
+
+	/**
+	 * the old SPv1 call, when this was part of expectsShell()
+	 *
+	 * @deprecated use $this->screenIsRunning() instead
+	 *
+	 * @param  string $sessionName
+	 *         name of the screen session to check on
+	 * @return void
+	 */
+	public function isRunningInScreen($sessionName)
+	{
+		return $this->screenIsRunning($sessionName);
+	}
+
+	/**
+	 * the old SPv1 call, when this was part of expectsShell()
+	 *
+	 * @deprecated use $this->screenIsNotRunning() instead
+	 *
+	 * @param  string $sessionName
+	 *         name of the screen session to check on
+	 * @return void
+	 */
+	public function isNotRunningInScreen($sessionName)
+	{
+		return $this->screenIsNotRunning($sessionName);
 	}
 
 	public function hasFileWithPermissions($filename, $owner, $group, $mode)
