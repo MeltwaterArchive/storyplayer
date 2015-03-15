@@ -33,6 +33,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 ### Fixes:
 
 * [fromConfig() module](https://datasift.github.io/storyplayer/v2/modules/config/index.html) is now an internal module. Use the _fromStoryplayer()_ module instead.
+* the [Graphite module](https://datasift.github.io/storyplayer/v2/modules/graphite/index.html) now looks in your test environment config file for its settings. You can have different Graphite servers for different test environments now :)
 
 ## 2.1.2 - Tuesday 10th March 2015
 
