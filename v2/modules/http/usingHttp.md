@@ -3,13 +3,14 @@ layout: v2/modules-http
 title: usingHttp()
 prev: '<a href="../../modules/http/fromHttp.html">Prev: fromHttp()</a>'
 next: '<a href="../../modules/iterators/index.html">Next: Iterators</a>'
+updated_for_v2: true
 ---
 
 # usingHttp()
 
 _usingHttp()_ allows you to make HTTP requests to a (possibly) remote HTTP server.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingHttp_.
+The source code for these actions can be found in the class `Prose\UsingHttp`.
 
 ## Behaviour And Return Codes
 
@@ -28,44 +29,44 @@ If you're looking to make a GET request, use _[fromHttp()->get()](fromHttp.html#
 Use `usingHttp()->delete()` to make a HTTP DELETE request to a (possibly) remote HTTP server.
 
 {% highlight php startinline %}
-$response = usingHttp()->delete('http://api.example.com/destination/ec2-1');
+$response = usingHttp()->delete($url, $params = array(), $headers = array(), $timeout = null);
 {% endhighlight %}
 
 _delete()_ takes up to four parameters:
 
 * `$url` - the URL to send the DELETE request to
 * `$params` - (optional) additional parameters to add to the query string
-* `$body` - (optional) content to send (such as a JSON payload)
 * `$headers` - (optional) additional headers to add to the request
+* `$timeout` - (optional) how long to wait for the HTTP request to complete
 
 ## post()
 
 Use `usingHttp()->post()` to make a HTTP POST request to a (possibly) remote HTTP server.
 
 {% highlight php startinline %}
-$payload = json_encode(array('ami' => 'ubuntu-13.04'));
-$response = usingHttp()->post('http://api.example.com/destination/ec2-1', array(), $payload);
+$response = usingHttp()->post($url, $params = array(), $body = null, $headers = array(), $timeout = null);
 {% endhighlight %}
 
-_post()_ takes up to four parameters:
+_post()_ takes up to five parameters:
 
 * `$url` - the URL to send the DELETE request to
 * `$params` - (optional) additional parameters to add to the query string
 * `$body` - (optional) content to send (such as a JSON payload)
 * `$headers` - (optional) additional headers to add to the request
+* `$timeout` - (optional) how long to wait for the HTTP request to complete
 
 ## put()
 
 Use `usingHttp()->put()` to make a HTTP PUT request to a (possibly) remote HTTP server.
 
 {% highlight php startinline %}
-$payload = json_encode(array('ami' => 'ubuntu-13.04', 'name' => 'ec2-1'));
-$response = usingHttp()->delete('http://api.example.com/destination/');
+$response = usingHttp()->put($url, $params = array(), $body = null, $headers = array(), $timeout = null);
 {% endhighlight %}
 
-_put()_ takes up to four parameters:
+_put()_ takes up to five parameters:
 
 * `$url` - the URL to send the DELETE request to
 * `$params` - (optional) additional parameters to add to the query string
 * `$body` - (optional) content to send (such as a JSON payload)
 * `$headers` - (optional) additional headers to add to the request
+* `$timeout` - (optional) how long to wait for the HTTP request to complete

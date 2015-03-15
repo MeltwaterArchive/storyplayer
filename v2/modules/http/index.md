@@ -3,6 +3,7 @@ layout: v2/modules-http
 title: The HTTP Module
 prev: '<a href="../../modules/host/usingHost.html">Prev: usingHost()</a>'
 next: '<a href="../../modules/http/HttpClientResponse.html">Next: The HttpClientResponse Object</a>'
+updated_for_v2: true
 ---
 
 # The HTTP Module
@@ -44,11 +45,15 @@ This module provides no helpers at all for working with SOAP-based APIs.  We don
 
 ## SSL Support
 
-At the moment, this module does not support SSL at all (or, more accurately, the underlying _HttpLib_ in Stone doesn't support SSL yet).  This is something we'll be addressing in the near future.
+This module includes support for 'https:' URLS via TLS and SSL. Simply make sure that your copy of PHP has been compiled with OpenSSL support.
 
 ## Dependencies
 
 This module relies on [DataSift's Stone library](http://github.com/datasift/Stone), which is installed as part of Storyplayer's installation.
+
+## PSR-7 and HttpMessages
+
+We're keeping an eye on the proposed [PHP PSR-7 standard: HTTP messages](https://github.com/php-fig/fig-standards/blob/master/proposed/http-message.md). When time allows, we plan on implementing PSR-7 support in Storyplayer.
 
 ## Using The HTTP Module
 

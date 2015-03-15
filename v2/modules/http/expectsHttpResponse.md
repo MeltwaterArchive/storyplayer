@@ -3,6 +3,7 @@ layout: v2/modules-http
 title: expectsHttpResponse()
 prev: '<a href="../../modules/http/HttpClientResponse.html">Prev: The HttpClientResponse Object</a>'
 next: '<a href="../../modules/http/fromHttp.html">Next: fromHttp()</a>'
+updated_for_v2: true
 ---
 
 # expectsHttpResponse()
@@ -11,7 +12,7 @@ _expectsHttpResponse()_ allows you to test the contents of a _[HttpClientRespons
 
 This is a convenience module to improve the readability of your tests. You can do the same tests by using [the Assertions module](../assertions/index.html) directly on the _HttpClientResponse's_ public API if you prefer.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsHttpResponse_.
+The source code for these actions can be found in the class `Prose\ExpectsHttpResponse`.
 
 ## Behaviour And Return Codes
 

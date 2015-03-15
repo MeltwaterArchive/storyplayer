@@ -3,6 +3,7 @@ layout: v2/modules-http
 title: The HttpClientResponse Object
 prev: '<a href="../../modules/http/index.html">Prev: The HTTP Module</a>'
 next: '<a href="../../modules/http/expectsHttpResponse.html">Next: expectsHttpResponse()</a>'
+updated_for_v2: true
 ---
 
 # The HttpClientResponse Object
