@@ -62,9 +62,9 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  */
 class UsingHttp extends Prose
 {
-	public function delete($url, $params = array(), $body = null, $headers = array(), $timeout = null)
+	public function delete($url, $params = array(), $headers = array(), $timeout = null)
 	{
-		return $this->makeHttpRequest($url, "DELETE", $params, $body, $headers, $timeout);
+		return $this->makeHttpRequest($url, "DELETE", $params, null, $headers, $timeout);
 	}
 
 	public function post($url, $params = array(), $body = null, $headers = array(), $timeout = null)
