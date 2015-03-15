@@ -3,6 +3,7 @@ layout: v2/modules-graphite
 title: The Graphite Module
 prev: '<a href="../../modules/fs/index.html">Prev: The Filesystem Module</a>'
 next: '<a href="../../modules/graphite/fromGraphite.html">Next: fromGraphite()</a>'
+updated_for_v2: true
 ---
 
 # The Graphite Module
@@ -29,15 +30,9 @@ The kind of data that goes into Graphite is data about your test, such as:
 
 This is data gathered when your own command-line utilities are pumping data into your back-end component, and any monitoring that you have in place whilst your test is running.  It is these tools that need to report data into Graphite for you.
 
-For example, at DataSift, we've built three test tools that log data into Graphite:
+For example, at DataSift, we've built Graphite stats into most of our platform. We've also created _[SavageD](https://github.com/datasift/SavageD/)_ to monitor processes and servers during tests in real time. We use Storyplayer (via the [SavageD module](../savaged/index.html)) to tell SavageD what to monitor, and we use the Graphite module in the [post-test inspection phase](../../stories/post-test-inspection.html) to look at the data in Graphite and decide whether or not the test passed.
 
-* _Hornet_, our evil test tool, which generates high volumes of test data and writes it into whatever backend component we're testing
-* _zmq-pull_, a lightweight ZMQ client that pulls data out of backend component, and
-* _[SavageD](https://github.com/datasift/SavageD/)_, our real-time process and server monitoring tool
-
-We use Storyplayer to control all three tools (using the [Shell module](../shell/index.html) to start and stop _Hornet_ and _zmq-pull_, and using the [SavageD module](../savaged/index.html) to tell SavageD what to monitor), and we use the Graphite module in the [post-test inspection phase](../../stories/post-test-inspection.html) to look at the data in Graphite and decide whether or not the test passed.
-
-This allows us to test non-functional requirements at the same time that we're testing functional requirements.  Being able to test both in one test run can save a lot of time when preparing software for release :)
+This allows us to test non-functional requirements (such as RAM and CPU usage) at the same time that we're testing functional requirements.  Being able to test both in one test run can save a lot of time when preparing software for release :)
 
 ## Dependencies
 
@@ -47,18 +42,13 @@ We also recommend following [Stuart's real-time graphing with Graphite instructi
 
 ## Configuration
 
-Once you have Graphite (and optionally statsd) installed, you'll need to update the _storyplayer.json_ config file with the URL where Graphite can be found.
+Once you have Graphite (and optionally statsd) installed, you'll need to update your test environment config file with the URL where Graphite can be found.
 
 {% highlight json %}
 {
-    "environments": {
-        <your-environment-name>: {
-            "graphite": {
-                "url": <url-to-graphite>
-            },
-            "statsd": {
-                "host": <host-or-ip-address>
-            }
+    "moduleSettings": {
+        "graphite": {
+            "url": <url-to-graphite>
         }
     }
 }

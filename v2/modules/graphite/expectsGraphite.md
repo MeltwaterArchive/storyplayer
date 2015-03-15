@@ -3,12 +3,13 @@ layout: v2/modules-graphite
 title: expectsGraphite()
 prev: '<a href="../../modules/graphite/fromGraphite.html">Prev: fromGraphite()</a>'
 next: '<a href="../../modules/host/index.html">Next: The Host Module</a>'
+updated_for_v2: true
 ---
 # expectsGraphite()
 
 _expectsGraphite()_ allows you to test the data in Graphite.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\ExpectsGraphite_.
+The source code for these actions can be found in the class `Prose\ExpectsGraphite`.
 
 ## Behaviour And Return Codes
 

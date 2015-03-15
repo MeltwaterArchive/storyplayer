@@ -3,12 +3,13 @@ layout: v2/modules-graphite
 title: fromGraphite()
 prev: '<a href="../../modules/graphite/index.html">Prev: The Graphite Module</a>'
 next: '<a href="../../modules/graphite/expectsGraphite.html">Next: expectsGraphite()</a>'
+updated_for_v2: true
 ---
 # fromGraphite()
 
 _fromGraphite()_ allows you to extract data from Graphite.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\FromGraphite_.
+The source code for these actions can be found in the class `Prose\FromGraphite`.
 
 ## Behaviour And Return Codes
 
