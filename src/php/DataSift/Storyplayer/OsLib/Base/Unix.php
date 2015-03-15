@@ -151,7 +151,7 @@ abstract class Base_Unix extends OsBase
 		$log = $st->startAction("is process '{$processName}' running on host '{$hostDetails->hostId}'?");
 
 		// SSH in and have a look
-		$command   = "ps -ef | awk '{ print \\\$8 }' | grep '[" . $processName{0} . "]" . substr($processName, 1) . "'";
+		$command   = "ps -ef | awk '{ print \\\$8 }' | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "'";
 		$result    = $this->runCommand($hostDetails, $command);
 
 		// what did we find?
@@ -180,7 +180,7 @@ abstract class Base_Unix extends OsBase
 		$log = $st->startAction("get PID for process '{$processName}' running on host '{$hostDetails->hostId}'");
 
 		// run the command to get the process id
-		$command   = "ps -ef | grep '[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
+		$command   = "ps -ef | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
 		$result    = $this->runCommand($hostDetails, $command);
 
 		// check that we got something
