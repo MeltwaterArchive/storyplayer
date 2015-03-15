@@ -242,7 +242,7 @@ class UsingHost extends HostBase
 		$log->endAction("stopped " . count($processes) . " session(s)");
 	}
 
-	public function stopProcess($pid)
+	public function stopProcess($pid, $grace = 5)
 	{
 		// shorthand
 		$st = $this->st;
@@ -268,26 +268,34 @@ class UsingHost extends HostBase
 		});
 
 		// has this worked?
-		$log->addStep("wait for process to terminate", function() use($st, $pid) {
-			for($i = 0; $i < 2; $i++) {
-				if ($st->fromHost($this->args[0])->getProcessIsRunning($pid)) {
-					// process still exists
-					sleep(1);
+		$isStopped = $log->addStep("wait for process to terminate", function() use($st, $pid, $grace, $log) {
+			for($i = 0; $i < $grace; $i++) {
+				if (!$st->fromHost($this->args[0])->getPidIsRunning($pid)) {
+					return true;
 				}
+
+				// process still exists
+				sleep(1);
 			}
+
+			return false;
 		});
 
-		if (posix_kill($pid, 0)) {
-			$log->addStep("send SIGKILL to process '{$pid}'", function() use($st, $pid) {
-				if ($this->getIsLocalhost()) {
-					posix_kill($pid, SIGKILL);
-				}
-				else {
-					$st->usingHost($this->args[0])->runCommand("kill -9 {$pid}");
-				}
-				sleep(1);
-			});
+		// did the process stop?
+		if ($isStopped) {
+			$log->endAction();
+			return;
 		}
+
+		$log->addStep("send SIGKILL to process '{$pid}'", function() use($st, $pid) {
+			if ($this->getIsLocalhost()) {
+				posix_kill($pid, SIGKILL);
+			}
+			else {
+				$st->usingHost($this->args[0])->runCommand("kill -9 {$pid}");
+			}
+			sleep(1);
+		});
 
 		// success?
 		if ($st->fromHost($this->args[0])->getProcessIsRunning($pid)) {
