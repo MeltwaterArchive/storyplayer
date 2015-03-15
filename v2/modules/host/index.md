@@ -3,11 +3,12 @@ layout: v2/modules-host
 title: The Host Module
 prev: '<a href="../../modules/graphite/expectsGraphite.html">Prev: expectsGraphite()</a>'
 next: '<a href="../../modules/host/supported-hosts.html">Next: Supported Hosts</a>'
+updated_for_v2: true
 ---
 
 # The Host Module
 
-The __Host__ module allows you to inspect and run commands on other computers, such as [Vagrant](../vagrant/index.html) virtual machines.  We call these computers _hosts_.
+The __Host__ module allows you to inspect and run commands on the computers in your test environment.
 
 The source code for this Prose module can be found in these PHP classes:
 
@@ -17,7 +18,7 @@ The source code for this Prose module can be found in these PHP classes:
 
 ## Dependencies
 
-This module has no dependencies of its own, but you will probably want to use it with the [Vagrant](../vagrant/index.html) module.
+This module has no dependencies of its own.
 
 ## Using The Host Module
 
@@ -34,8 +35,3 @@ where __module__ is one of:
 * _[usingHost()](usingHost.html)_ - perform actions on the host
 
 and __action__ is one of the methods available on the __module__ you choose.
-
-Before you can use the _Host_ module, you first need to create a host to work with.  (The _Host_ module is designed to work with hosts that have already been created).  You do this using any of the following modules:
-
-* _[usingHostsTable()->addHost()](../hoststable/usingHostsTable.html#addhost)_
-* _[usingVagrant()->createVm()](../vagrant/usingVagrant.html#createvm)_

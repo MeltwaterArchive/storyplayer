@@ -3,13 +3,14 @@ layout: v2/modules-host
 title: usingHost()
 prev: '<a href="../../modules/host/expectsHost.html">Prev: expectsHost()</a>'
 next: '<a href="../../modules/http/index.html">Next: The HTTP Module</a>'
+updated_for_v2: true
 ---
 
 # usingHost()
 
-_usingHost()_ allows you to run commands on the named host.
+_usingHost()_ allows you to run commands on the given host.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingHost_.
+The source code for these actions can be found in the class `Prose\UsingHost`.
 
 ## Behaviour And Return Codes
 
@@ -24,12 +25,12 @@ Write your story as if every test must pass.
 Use `usingHost()->runCommand()` to run a command on the host.
 
 {% highlight php startinline %}
-$result = usingHost($hostName)->runCommand($command);
+$result = usingHost($hostId)->runCommand($command);
 {% endhighlight %}
 
 where:
 
-* `$hostName` is the name you set when you created the host
+* `$hostId` is the ID of the host in your test environment
 * `$command` is the command to execute
 * `$result` is a _CommandResult_ object containing the _returnCode_ and the _output_
 
@@ -42,12 +43,12 @@ If the return code from running `$command` is not zero, the command is assumed t
 Use `usingHost()->runCommandAndIgnoreErrors()` to run a command on the host.
 
 {% highlight php startinline %}
-$result = usingHost($hostName)->runCommandAndIgnoreErrors($command);
+$result = usingHost($hostId)->runCommandAndIgnoreErrors($command);
 {% endhighlight %}
 
 where:
 
-* `$hostName` is the name you set when you created the host
+* `$hostId` is the ID of the host in your test environment
 * `$command` is the command to execute
 * `$result` is a _CommandResult_ object containing the _returnCode_ and the _output_
 
@@ -60,12 +61,12 @@ This action does not throw an exception if the return code from running `$comman
 Use `usingHost()->runCommandAsUser()` to run a command on the host as a specific user.
 
 {% highlight php startinline %}
-$result = usingHost($hostName)->runCommandAsUser($command, $user);
+$result = usingHost($hostId)->runCommandAsUser($command, $user);
 {% endhighlight %}
 
 where:
 
-* `$hostName` is the name you set when you created the host
+* `$hostId` is the ID of the host in your test environment
 * `$command` is the command to execute
 * `$user` is the user you want to run the command as
 * `$result` is a _CommandResult_ object containing the _returnCode_ and the _output_
@@ -81,12 +82,12 @@ If the return code from running `$command` is not zero, the command is assumed t
 Use `usingHost()->runCommandAsUserAndIgnoreErrors()` to run a command on the host as a specific user.
 
 {% highlight php startinline %}
-$result = usingHost($hostName)->runCommandAsUser($command, $user);
+$result = usingHost($hostId)->runCommandAsUser($command, $user);
 {% endhighlight %}
 
 where:
 
-* `$hostName` is the name you set when you created the host
+* `$hostId` is the ID of the host in your test environment
 * `$command` is the command to execute
 * `$user` is the user you want to run the command as
 * `$result` is a _CommandResult_ object containing the _returnCode_ and the _output_
@@ -96,3 +97,76 @@ Whenever a host is created, details about the host are added to Storyplayer's [h
 __NOTE:__
 
 This action does not throw an exception if the return code from running `$command` is not zero.  This allows you to work with badly-behaved commands and tools.
+
+## startInScreen()
+
+Use `usingHost()->startInScreen()` to run a command in a `screen` session on the host.
+
+{% highlight php startinline %}
+usingHost($hostId)->startInScreen($sessionName, $commandLine);
+{% endhighlight %}
+
+* `$hostId` is the ID of the host in your test environment
+* `$sessionName` is name to give to this session
+* `$commandLine` is the command to execute inside `screen`
+
+## stopInScreen()
+
+Use `usingHost()->stopInScreen()` to stop a `screen` session on the host.
+
+{% highlight php startinline %}
+usingHost($hostId)->stopInScreen($sessionName);
+{% endhighlight %}
+
+where:
+
+* `$hostId` is the ID of the host in your test environment
+* `$sessionName` is the name you used when you started the session
+
+__NOTE:__
+
+* Starting from Storyplayer v2.2.0, you can use this action to stop any screen session, not just screen sessions started from within Storyplayer.
+
+## stopAllScreens()
+
+Use `usingHost()->stopAllScreens()` to stop all screen sessions on the given host.
+
+{% highlight php startinline %}
+usingHost($hostId)->stopAllScreens();
+{% endhighlight %}
+
+where:
+
+* `$hostId` is the ID of the host in your test environment
+
+## stopProcess()
+
+Use `usingHost()->stopProcess()` to stop a running process on the given host.
+
+{% highlight php startinline %}
+usingHost($hostId)->stopProcess($pid, $grace = 5);
+{% endhighlight %}
+
+where:
+
+* `$hostId` is the ID of the host in your test environment
+* `$pid` is the process ID that you want to stop
+* `$grace` is how long to wait before killing the process (the default is 5 seconds)
+
+__NOTES:__
+
+* we send SIGTERM first. If the process is still running after `$grace` seconds, we follow up with SIGKILL.
+
+## uploadFile()
+
+Use `usingHost()->uploadFile()` to upload a file from your computer to the given host.
+
+{% highlight php startinline %}
+usingHost($hostId)->uploadFile($src, $dest);
+{% endhighlight %}
+
+where:
+
+* `$hostId` is the ID of the host in your test environment
+* `$src` is the file on your computer to upload
+* `$dest` is where the file should be uploaded to on the remote host
