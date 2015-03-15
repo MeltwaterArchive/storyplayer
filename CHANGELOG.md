@@ -28,13 +28,13 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 * New 'usingBrowser()->click()->firstXXX' et al [ordinal prefix for search terms](https://datasift.github.io/storyplayer/v2/modules/browser/ordinal-prefixes.html)
 * New 'expectsBrowser()->has()->oneXXX' et al [ordinal prefix for search terms](https://datasift.github.io/storyplayer/v2/modules/browser/ordinal-prefixes.html)
 * [fromStoryplayer() module](https://datasift.github.io/storyplayer/v2/modules/storyplayer/index.html)
+* you can now throw a `Prose\E4xx_StoryShouldFail` exception in your PreTestPrediction when you predict that the story should fail
 * `src/bin/storyplayer` now uses Composer to work out what its version number is
 
 ### Fixes:
 
 * [fromConfig() module](https://datasift.github.io/storyplayer/v2/modules/config/index.html) is now an internal module. Use the _fromStoryplayer()_ module instead.
 * the [Graphite module](https://datasift.github.io/storyplayer/v2/modules/graphite/index.html) now looks in your test environment config file for its settings. You can have different Graphite servers for different test environments now :)
-
 ## 2.1.2 - Tuesday 10th March 2015
 
 ### Fixes:

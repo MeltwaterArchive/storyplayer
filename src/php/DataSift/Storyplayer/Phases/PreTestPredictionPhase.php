@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use Prose\E4xx_StoryShouldFail;
 use Prose\E5xx_ActionFailed;
 use Prose\E5xx_ExpectFailed;
 use Prose\E5xx_NotImplemented;
@@ -110,6 +111,15 @@ class PreTestPredictionPhase extends StoryPhase
 			$storyResult->setStoryShouldFail();
 		}
 		catch (E5xx_ExpectFailed $e) {
+			$phaseResult->setContinuePlaying(
+				$phaseResult::FAILED,
+				$e->getMessage(),
+				$e
+			);
+			$storyResult->setStoryShouldFail();
+		}
+		// users can throw this to tell us that the story should fail
+		catch (E4xx_StoryShouldFail $e) {
 			$phaseResult->setContinuePlaying(
 				$phaseResult::FAILED,
 				$e->getMessage(),
