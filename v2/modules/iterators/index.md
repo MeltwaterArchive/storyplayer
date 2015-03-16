@@ -3,23 +3,45 @@ layout: v2/modules-iterators
 title: Iterators
 prev: '<a href="../../modules/http/usingHttp.html">Prev: usingHttp()</a>'
 next: '<a href="../../modules/log/index.html">Next: The Log Module</a>'
+updated_for_v2: true
 ---
 
 # Iterators
 
-We haven't documented this module yet, but we will!
+## What Are Iterators?
 
-## Dependencies
+_Iterators_ help you write stories that work with multiple test environments. You use iterators to discover hosts by their assigned role, so that your story does not need to have hostnames or host IDs hardcoded in.
 
-TBD.
+{% highlight php startinline %}
+foreach(hostWithRole('frontend') as $hostId) {
+    expectsHost($hostId)->packageIsInstalled("my-app");
+}
+{% endhighlight %}
 
-## Using The Iterators
+## Why Do We Need Iterators?
 
-TBD.
+In Storyplayer v1, it was very difficult to run the same story against multiple test environments. Our stories ended up with a hard-coded list of hostnames, and fragile `case` statements where the story acted differently depending on the test environment in use. These stories proved difficult to maintain and extend - exactly the opposite of what we set out to achieve.
 
-## Source Code
+To fix this, Storyplayer v2 introduced several important changes:
 
-The source code for this module can be found in this class:
+* test environments are no longer created by stories
+* hosts in test environments have IDs and roles, not hostnames
+* stories now use a host's role to perform actions
 
-* `Prose\FromCurl.php`
-* `Prose\UsingCurl.php`
+_Iterators_ are how a story searches for hosts by the host's assigned role.
+
+You can learn more about when to use iterators in our [How To Test Your Platform](../../learn/test-your-platform/index.html) guide, and in our [Worked Examples](../../learn/worked-examples/index.html).
+
+## Performing An Action Against One Host Out Of Many
+
+When you need to work with just a single host, use one of these iterators:
+
+* _[expectsFirstHostWithRole()](expectsFirstHostWithRole.html)_
+* _[fromFirstHostWithRole()](fromFirstHostWithRole.html)_
+* _[usingFirstHostWithRole()](usingFirstHostWithRole.html)_
+
+## Performing An Action Against Many Hosts
+
+When you need to work with all the hosts that have a given role, use this iterator:
+
+* _[foreach(hostWithRole())](hostWithRole.html)_
