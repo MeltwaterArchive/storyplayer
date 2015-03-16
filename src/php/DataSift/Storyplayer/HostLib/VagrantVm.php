@@ -152,7 +152,7 @@ class VagrantVm implements SupportedHost
 		});
 
 		if ($result->returnCode != 0) {
-			$log->endAction("WARNING: unable to set the rsync-auto mode, you need at least Vagrant 1.6.4");
+			$st->usingLog()->writeToLog('WARNING: unable to set the rsync-auto mode, you need at least Vagrant 1.6.4');
 		}
 
 		// now, we need to know how to contact this VM
