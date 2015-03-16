@@ -155,6 +155,8 @@
 		"modules/http/usingHttp",
 		"modules/iterators/index",
 		"modules/iterators/hostWithRole",
+		"modules/iterators/firstHostWithRole",
+		"modules/iterators/lastHostWithRole",
 		"modules/log/index",
 		"modules/log/usingLog",
 		"modules/provisioning/index",
