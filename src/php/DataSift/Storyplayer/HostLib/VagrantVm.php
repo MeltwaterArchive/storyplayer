@@ -141,7 +141,16 @@ class VagrantVm implements SupportedHost
 		}
 
 		// yes it did!!
-		//
+
+		// Set automatic rsync mode
+		// This command watches all local directories of any rsync synced folders
+		// and automatically initiates an rsync transfer when changes are detected.
+		// the "--poll" option is required for some filesystems that don't support events.
+		$command = 'vagrant rsync-auto --poll';
+		$result = $log->addStep('set automatic rsync mode for Vagrant', function() use($envDetails, $command) {
+			return $this->runCommandAgainstHostManager($envDetails, $command);
+		});
+
 		// now, we need to know how to contact this VM
 		$vmDetails->ipAddress = $this->determineIpAddress($vmDetails);
 		$vmDetails->hostname  = $this->determineHostname($vmDetails);
