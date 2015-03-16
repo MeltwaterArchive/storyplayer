@@ -151,6 +151,10 @@ class VagrantVm implements SupportedHost
 			return $this->runCommandAgainstHostManager($envDetails, $command);
 		});
 
+		if ($result->returnCode != 0) {
+			$log->endAction("WARNING: unable to set the rsync-auto mode, you need at least Vagrant 1.6.4");
+		}
+
 		// now, we need to know how to contact this VM
 		$vmDetails->ipAddress = $this->determineIpAddress($vmDetails);
 		$vmDetails->hostname  = $this->determineHostname($vmDetails);

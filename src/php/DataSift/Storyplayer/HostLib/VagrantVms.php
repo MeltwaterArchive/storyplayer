@@ -184,8 +184,7 @@ class VagrantVms implements SupportedHost
 		});
 
 		if ($result->returnCode != 0) {
-			$log->endAction("VM failed to set automatic rsync mode");
-			throw new E5xx_ActionFailed(__METHOD__);
+			$log->endAction("WARNING: unable to set the rsync-auto mode, you need at least Vagrant 1.6.4");
 		}
 
 		// store the details
