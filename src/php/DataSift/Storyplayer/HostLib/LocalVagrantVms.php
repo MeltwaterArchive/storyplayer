@@ -57,6 +57,7 @@ use DataSift\Storyplayer\HostLib\VagrantVms;
  * @category  Libraries
  * @package   Storyplayer/HostLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Nicola Asuni <nicola.asuni@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -71,8 +72,8 @@ class LocalVagrantVms extends VagrantVms
 	protected function checkEnvDetails($envDetails)
 	{
 		// make sure we have a Vagrantfile
-		if (!file_exists("Vagrantfile")) {
-			throw new E5xx_ActionFailed(__METHOD__, "no Vagrantfile in current working directory");
+		if (!file_exists('Vagrantfile')) {
+			throw new E5xx_ActionFailed(__METHOD__, 'no Vagrantfile in current working directory');
 		}
 	}
 
