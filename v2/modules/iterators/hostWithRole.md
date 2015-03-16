@@ -31,4 +31,4 @@ Write your story as if every Storyplayer module action will succeed.
 
 ## Discussion
 
-This is a standard PHP _[foreach()](http://www.php.net/foreach)_ loop. `hostWithRole()` is a generator that returns each matching host ID in turn.
+You need to call this iterator in a standard PHP _[foreach()](http://www.php.net/foreach)_ loop. `hostWithRole()` is a generator that returns each matching host ID in turn.

@@ -20,12 +20,12 @@ foreach(hostWithRole('frontend') as $hostId) {
 
 ## Why Do We Need Iterators?
 
-In Storyplayer v1, it was very difficult to run the same story against multiple test environments. Our stories ended up with a hard-coded list of hostnames, and fragile `case` statements where the story acted differently depending on the test environment in use. These stories proved difficult to maintain and extend - exactly the opposite of what we set out to achieve.
+In Storyplayer v1, it was very difficult to run the same story against multiple test environments. Our stories ended up with a hard-coded list of hostnames, and fragile `switch` statements where the story acted differently depending on the test environment in use. These stories proved difficult to maintain and extend - exactly the opposite of what we set out to achieve.
 
 To fix this, Storyplayer v2 introduced several important changes:
 
 * test environments are no longer created by stories
-* hosts in test environments have IDs and roles, not hostnames
+* hosts in test environments have IDs as their primary key, and roles for discovery purposes
 * stories now use a host's role to perform actions
 
 _Iterators_ are how a story searches for hosts by the host's assigned role.
@@ -36,9 +36,8 @@ You can learn more about when to use iterators in our [How To Test Your Platform
 
 When you need to work with just a single host, use one of these iterators:
 
-* _[expectsFirstHostWithRole()](expectsFirstHostWithRole.html)_
-* _[fromFirstHostWithRole()](fromFirstHostWithRole.html)_
-* _[usingFirstHostWithRole()](usingFirstHostWithRole.html)_
+* _[foreach(firstHostWithRole())](firstHostWithRole.html)_
+* _[foreach(lastHostWithRole())](lastHostWithRole.html)_
 
 ## Performing An Action Against Many Hosts
 
