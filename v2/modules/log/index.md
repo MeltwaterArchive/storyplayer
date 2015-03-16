@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-log
 title: The Log Module
-prev: '<a href="../../modules/iterators/hostWithRole.html">Prev: foreach(hostWithRole())</a>'
+prev: '<a href="../../modules/iterators/lastHostWithRole.html">Prev: foreach(lastHostWithRole())</a>'
 next: '<a href="../../modules/log/usingLog.html">Next: usingLog()</a>'
 ---
 

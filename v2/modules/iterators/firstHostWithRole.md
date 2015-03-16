@@ -2,6 +2,8 @@
 layout: v2/modules-iterators
 title: foreach(firstHostWithRole())
 updated_for_v2: true
+prev: '<a href="../../modules/iterators/hostWithRole.html">Prev: foreach(hostWithRole())</a>'
+next: '<a href="../../modules/iterators/lastHostWithRole.html">Next: foreach(lastHostWithRole())</a>'
 ---
 
 # foreach(firstHostWithRole())
