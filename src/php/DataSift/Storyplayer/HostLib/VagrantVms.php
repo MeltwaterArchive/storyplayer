@@ -144,7 +144,7 @@ class VagrantVms implements SupportedHost
 		}
 
 		// make sure the VM is stopped, if it is running
-		$log->addStep("stop vagrant VM if already running", function() use($envDetails) {
+		$log->addStep('stop vagrant VM in '.$envDetails->dir.' if already running', function() use($envDetails) {
 			$command = "vagrant destroy --force";
 			$this->runCommandAgainstHostManager($envDetails, $command);
 		});
@@ -162,7 +162,7 @@ class VagrantVms implements SupportedHost
 
 		// let's start the VM
 		$command = "vagrant up";
-		$result = $log->addStep("create vagrant VM", function() use($envDetails, $command) {
+		$result = $log->addStep('create vagrant VM in '.$envDetails->dir, function() use($envDetails, $command) {
 			return $this->runCommandAgainstHostManager($envDetails, $command);
 		});
 
