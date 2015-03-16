@@ -62,7 +62,7 @@ use DataSift\Storyplayer\HostLib\VagrantVms;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class LocalVagrantVms extends VagrantVms
+class LocalVagrantVms extends VagrantVms implements SupportedHost
 {
 	/**
 	 * Check environmental details
