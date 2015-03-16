@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-iterators
 title: foreach(hostWithRole())
-prev: '<a href="../../modules/http/usingHttp.html">Prev: usingHttp()</a>'
+prev: '<a href="../../modules/iterators/index.html">Prev: Iterators</a>'
 next: '<a href="../../modules/log/index.html">Next: The Log Module</a>'
 updated_for_v2: true
 ---
