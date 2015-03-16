@@ -80,7 +80,7 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 
 RUN apt-get update
 RUN apt-get -y dist-upgrade
-RUN apt-get -y install build-essential git screen ansible virtualbox python php5 php5-cli php5-common php5-curl php5-json php-pear libyaml-dev php5-dev ruby-dev
+RUN apt-get -y install build-essential git screen ansible python php5 php5-cli php5-common php5-curl php5-json php-pear libyaml-dev php5-dev ruby-dev
 RUN yes '' | pecl install -f yaml-beta
 RUN echo "extension=yaml.so" >> /etc/php5/cli/php.ini
 RUN echo "extension=yaml.so" >> /etc/php5/apache2/php.ini
