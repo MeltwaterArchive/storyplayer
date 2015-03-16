@@ -78,16 +78,15 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
-RUN apt-get update
-RUN apt-get -y dist-upgrade
-RUN apt-get -y install build-essential git screen ansible python php5 php5-cli php5-common php5-curl php5-json php-pear libyaml-dev php5-dev ruby-dev
+RUN apt-get update && apt-get -y dist-upgrade
+RUN apt-get -y install build-essential wget git screen ansible python php5 php5-cli php5-common php5-curl php5-json php-pear libyaml-dev php5-dev ruby-dev
 RUN yes '' | pecl install -f yaml-beta
 RUN echo "extension=yaml.so" >> /etc/php5/cli/php.ini
 RUN echo "extension=yaml.so" >> /etc/php5/apache2/php.ini
 
 # install vagrant
 ENV VAGRANT_HOME /root/.vagrant.d
-cd /tmp && wget --no-check-certificate https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb && apt-get -y install ./vagrant_1.7.2_x86_64.deb
+RUN cd /tmp && wget --no-check-certificate https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb && dpkg -i vagrant_1.7.2_x86_64.deb && apt-get -y install -f
 RUN vagrant plugin install vagrant-omnibus
 RUN vagrant plugin install vagrant-openstack-plugin
 RUN vagrant plugin install vagrant-aws
