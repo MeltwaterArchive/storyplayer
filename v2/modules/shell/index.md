@@ -9,7 +9,7 @@ next: '<a href="../../modules/shell/child-processes.html">Next: The Role Of Chil
 
 The __UNIX Shell__ module allows you to start and stop child processes that run on the same computer that _storyplayer_ is running on.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this Storyplayer module can be found in these PHP classes:
 
 * `Prose\ExpectsShell`
 * `Prose\FromShell`

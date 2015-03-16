@@ -14,7 +14,7 @@ The __Checkpoint__ module allows you to work with [Storyplayer's inter-phase che
 
 This module is here for convenience; you can achieve the same results using a mixture of plain PHP and the [Assertions module](../assertions/index.html).
 
-The source code for this Prose module can be found in this PHP file:
+The source code for this module can be found in this PHP file:
 
 * `Prose\functions.php`
 

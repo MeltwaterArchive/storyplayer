@@ -30,7 +30,7 @@ where:
 
 For information about the structure of `$imageData`, please see [the Amazon SDK docs](http://docs.aws.amazon.com/aws-sdk-php-2/latest/class-Aws.Ec2.Ec2Client.html#_describeImages).
 
-This method was added primarily as a helper for other Prose modules.
+This method was added primarily as a helper for other modules.
 
 ## getInstance()
 
@@ -47,4 +47,4 @@ where:
 
 For information about the structure of `$instanceData`, please see [the Amazon SDK docs](http://docs.aws.amazon.com/aws-sdk-php-2/latest/class-Aws.Ec2.Ec2Client.html#_describeInstances).
 
-This method was added primarily as a helper for other Prose modules.
+This method was added primarily as a helper for other modules.

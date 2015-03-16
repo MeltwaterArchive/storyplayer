@@ -12,7 +12,7 @@ updated_for_v2: true
 
 The __HTTP__ module allows you to send GET, POST, PUT and DELETE requests to a HTTP server.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsHttpResponse`
 * `Prose\FromHttp`

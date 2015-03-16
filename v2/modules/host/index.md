@@ -10,7 +10,7 @@ updated_for_v2: true
 
 The __Host__ module allows you to inspect and run commands on the computers in your test environment.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsHost`
 * `Prose\FromHost`

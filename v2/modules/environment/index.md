@@ -10,7 +10,7 @@ next: '<a href="../../modules/environment/fromEnvironment.html">Next: fromEnviro
 
 The __Environment__ module allows you to pull information about the _environments_ section of [your configuration file(s)](../../configuration.html).
 
-The source code for this Prose module can be found in this PHP class:
+The source code for this module can be found in this PHP class:
 
 * `Prose\FromEnvironment`
 

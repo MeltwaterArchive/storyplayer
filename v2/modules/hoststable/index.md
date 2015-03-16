@@ -9,7 +9,7 @@ next: '<a href="../../modules/hoststable/how-hosts-are-remembered.html">Next: Ho
 
 The __HostsTable__ module allows you to interact with Storyplayer's internal list of hosts that it knows about, such as [Vagrant](../vagrant/index.html) virtual machines.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsHostsTable`
 * `Prose\FromHostsTable`

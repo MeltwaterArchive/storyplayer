@@ -9,7 +9,7 @@ next: '<a href="../../modules/uuid/fromUuid.html">Next: fromUuid()</a>'
 
 The __UUID__ module allows you to generate new (and possibly salted) hashes to the length that you request, for use in your tests.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsUuid`
 * `Prose\FromUuid`

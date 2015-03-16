@@ -60,7 +60,7 @@ where:
 * `$screenName` is the name you assigned the process when you called _[usingShell()->startInScreen()](usingShell.html#startinscreen)_
 * `$details` is a plain old PHP object containing all of the current details
 
-We may add additional information into `$details` in the future, but we expect to keep it backwards-compatible, so that it is safe to use this inside your own Prose modules.
+We may add additional information into `$details` in the future, but we expect to keep it backwards-compatible, so that it is safe to use this inside your own Storyplayer modules.
 
 Here are the current details available:
 
@@ -94,4 +94,4 @@ foreach ($list as $screenName => $details)
 }
 {% endhighlight %}
 
-We may add additional information into these PHP objects in the future, but we expect to keep it backwards-compatible, so that it is safe to use inside your own Prose modules. See _[getScreenSessionDetails()](#getscreensessiondetails)_ for a list of the information we track about each shell process.
+We may add additional information into these PHP objects in the future, but we expect to keep it backwards-compatible, so that it is safe to use inside your own Storyplayer modules. See _[getScreenSessionDetails()](#getscreensessiondetails)_ for a list of the information we track about each shell process.

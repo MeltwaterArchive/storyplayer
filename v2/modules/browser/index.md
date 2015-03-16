@@ -12,7 +12,7 @@ updated_for_v2: true
 
 The __Browser__ module allows you to load and inspect HTML pages.  It also has (currently limited) support for inspecting the HTTP response when a HTML page was loaded.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsBrowser`
 * `Prose\FromBrowser`

@@ -9,7 +9,7 @@ next: '<a href="../../modules/log/usingLog.html">Next: usingLog()</a>'
 
 The __Log__ module allows your story to write a message into Storyplayer's output log.
 
-The source code for this Prose module can be found in this PHP class:
+The source code for this module can be found in this PHP class:
 
 * `Prose\UsingLog`
 

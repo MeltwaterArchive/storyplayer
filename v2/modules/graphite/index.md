@@ -12,7 +12,7 @@ updated_for_v2: true
 
 The _Graphite_ module allows you to extract data from [Graphite](https://github.com/graphite-project), and to use that data in your tests.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsGraphite`
 * `Prose\FromGraphite`

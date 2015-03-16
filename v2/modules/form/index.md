@@ -12,7 +12,7 @@ updated_for_v2: true
 
 The __Form__ module allows you to isolate and work with a specific form on a HTML page.  It is an extension of the _[Browser](../browser/index.html)_ module.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsForm`
 * `Prose\FromForm`

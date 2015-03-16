@@ -9,7 +9,7 @@ next: '<a href="../../modules/savaged/usingSavageD.html">Next: usingSavageD()</a
 
 The __SavageD__ module allows you to control one or more (possibly) remote SavageD daemons.
 
-The source code for this Prose module can be found in this PHP class:
+The source code for this module can be found in this PHP class:
 
 * `Prose\UsingSavageD`
 

@@ -12,7 +12,7 @@ updated_for_v2: true
 
 The __Assertions__ module allows you to test data that you've obtained from other modules.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\AssertsArray`
 * `Prose\AssertsDouble`

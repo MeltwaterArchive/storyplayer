@@ -9,7 +9,7 @@ next: '<a href="../../modules/timer/usingTimer.html">Next: usingTimer()</a>'
 
 The __Timer__ module allows you to wait for something to happen, and to timeout (which throws an exception) if that something doesn't happen quickly enough.
 
-The source code for this Prose module can be found in this PHP class:
+The source code for this module can be found in this PHP class:
 
 * `Prose\UsingTimer`
 

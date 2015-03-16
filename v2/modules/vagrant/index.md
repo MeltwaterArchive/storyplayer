@@ -9,7 +9,7 @@ next: '<a href="../../modules/vagrant/supported-guests.html">Next: Supported Gue
 
 The __Vagrant__ module allows you to create and destroy virtual machines using the popular [Vagrant](http://www.vagrantup.com/) tool.  Once a virtual machine has been created, it's then available to be used by the [Host](../host/index.html) module.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsVagrant`
 * `Prose\FromVagrant`

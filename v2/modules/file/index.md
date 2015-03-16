@@ -14,7 +14,7 @@ The __File__ module allows you to work with temporary files on disk.
 
 It currently doesn't do anything more than this because, at DataSift, we normally run tests against virtual machines - we're seldom testing software that's installed on the same machine that Storyplayer is running on.  If Storyplayer finds a wider audience, we'll happily turn the _File_ module into something more capable.  Pull requests are welcome too :)
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\FromFile`
 * `Prose\UsingFile`

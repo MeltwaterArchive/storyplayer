@@ -9,7 +9,7 @@ next: '<a href="../../modules/provisioning/provisioning-definition.html">Next: C
 
 The __Provisioning__ module allows you to deploy exactly the software that you need to a real or virtual machine, to increase how repeatable your tests are each time they are run.
 
-The source code for this Prose module can be found in this PHP class:
+The source code for this module can be found in this PHP class:
 
 * `Prose\UsingProvisioner`
 * `Prose\UsingProvisioning`

@@ -11,7 +11,7 @@ The __EC2__ module allows you to create and destroy virtual machines using the p
 
 Additionally, the __EC2__ module allows you to convert an EC2 virtual machine into an EC2 image.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\Ec2ImageBase`
 * `Prose\Ec2InstanceBase`
@@ -63,24 +63,11 @@ You're limited only by your imagination, and the performance limitations that co
 
 We support EC2 because it is a popular hosting solution for creating temporary virtual machines 'in the cloud'.  Many firms use EC2 for their production environments, but even if you don't, it can often be a great place to spin up temporary machines for use in your tests.
 
-Supported hosting solutions currently are:
-
-* [Amazon EC2](../ec2/index.html)
-* [Vagrant + VirtualBox](../vagrant/index.html)
-
-Planned in the future are:
-
-* OpenStack (which we use at DataSift)
-* Physical Hosts (which we use at DataSift)
-* Statesman (DataSift QA's internal VM provision system)
-
-Pull requests for other hosting solutions are welcome.
+Full details of all of our supported hosting solutions are available in [the test environments section of this manual](../../test-environments/index.html).
 
 ## Dependencies
 
-We use the official Amazon SDK, which should be automatically installed when you install Storyplayer.
-
-You'll probably want to use one of our [supported provisioning engines](../provisioning/index.html) too.
+We use the official Amazon SDK, which is automatically installed into your `vendor/` folder when you install Storyplayer.
 
 ## Before You Use The EC2 Module
 
@@ -88,16 +75,16 @@ Before you write any tests for your stories, test your EC2 instance by hand. Mak
 
 ## Configuring The EC2 Module
 
+Add the following to `storyplayer.json[.dist]` config file:
+
 {% highlight json %}
 {
-    "environments": {
-        "env-name": {
-            "aws": {
-                "ec2": {
-                    "keyPairName": "QA_AWS",
-                    "sshUsername": "qa",
-                    "sshKeyFile": "/home/stuart/.ssh/QA_AWS.pem"
-                }
+    "moduleSettings": {
+        "aws": {
+            "ec2": {
+                "keyPairName": "QA_AWS",
+                "sshUsername": "qa",
+                "sshKeyFile": "./QA_AWS.pem"
             }
         }
     }
@@ -106,7 +93,6 @@ Before you write any tests for your stories, test your EC2 instance by hand. Mak
 
 where:
 
-* _env-name_ is the name of your test environment (or 'defaults' to apply to all test environments)
 * _keyPairName_ is the name of the key pair you've defined at EC2 for your virtual machines
 * _sshUsername_ is the name of default user on your EC2 image
 * _sshKeyFile_ is the path to your copy of the private key to use when
@@ -127,36 +113,16 @@ where __module__ is one of:
 * _[fromEc2Instance()](fromEc2Instance.html)_ - get data about an EC2 virtual machine
 * _[usingEc2Instance()](usingEc2Instance.html)_ - change a running EC2 virtual machine
 
-In general, once you've used the EC2 module to start your virtual machine, you'll then use the _[Hosts module](../hosts/index.html)_ to work with the VM until your test destroys the VM.
+Once you've used the EC2 module to start your virtual machine, you'll then use the _[Hosts module](../hosts/index.html)_ to work with the VM until your test destroys the VM.
 
 ## An Example
 
 Here's one of our internal stories, which we use to create the EC2 images we use in our tests:
 
 {% highlight php startinline %}
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
-// ========================================================================
-//
-// STORY DETAILS
-//
-// ------------------------------------------------------------------------
-
 $story = newStoryFor('EC2')
          ->inGroup('Image Preparation')
          ->called('Create CentOS 6 image');
-
-// ========================================================================
-//
-// TEST ENVIRONMENT SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
-
-// ========================================================================
-//
-// TEST SETUP / TEAR-DOWN
-//
-// ------------------------------------------------------------------------
 
 $story->addTestTeardown(function() {
     // get the checkpoint
@@ -182,24 +148,6 @@ $story->addTestTeardown(function() {
         }
     }
 });
-
-// ========================================================================
-//
-// PRE-TEST PREDICTION
-//
-// ------------------------------------------------------------------------
-
-// ========================================================================
-//
-// PRE-TEST INSPECTION
-//
-// ------------------------------------------------------------------------
-
-// ========================================================================
-//
-// POSSIBLE ACTION(S)
-//
-// ------------------------------------------------------------------------
 
 $story->addAction(function() {
     // we're going to store some information in here
@@ -240,12 +188,6 @@ $story->addAction(function() {
         expectsEc2Image($checkpoint->amiId)->isAvailable();
     }, 'PT5M');
 });
-
-// ========================================================================
-//
-// POST-TEST INSPECTION
-//
-// ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
     // the information to guide our checks is in the checkpoint

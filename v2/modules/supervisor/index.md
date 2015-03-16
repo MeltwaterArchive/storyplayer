@@ -9,7 +9,7 @@ next: '<a href="../../modules/supervisor/fromSupervisor.html">Next: fromSupervis
 
 The __Supervisor__ module allows you to start and stop processes that are being managed by [Supervisor](http://supervisord.org).
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this Storyplayer module can be found in these PHP classes:
 
 * `Prose\ExpectsSupervisor`
 * `Prose\FromSupervisor`

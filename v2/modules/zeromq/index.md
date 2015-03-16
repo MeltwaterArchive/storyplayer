@@ -9,7 +9,7 @@ next: '<a href="../../modules/zeromq/expectsZmq.html">Next: expectsZmq()</a>'
 
 The __ZeroMQ__ module allows you to send and receive messages via the lightweight [ZeroMQ](http://www.zeromq.org/) socket-level messaging layer.
 
-The source code for this Prose module can be found in these PHP classes:
+The source code for this module can be found in these PHP classes:
 
 * `Prose\ExpectsZmq`
 * `Prose\UsingZmq`
