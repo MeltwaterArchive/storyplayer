@@ -3,8 +3,8 @@ layout: v2/modules-log
 title: The Log Module
 prev: '<a href="../../modules/iterators/lastHostWithRole.html">Prev: foreach(lastHostWithRole())</a>'
 next: '<a href="../../modules/log/usingLog.html">Next: usingLog()</a>'
+updated_for_v2: true
 ---
-
 # The Log Module
 
 The __Log__ module allows your story to write a message into Storyplayer's output log.

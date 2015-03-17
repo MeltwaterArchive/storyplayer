@@ -3,6 +3,7 @@ layout: v2/modules-log
 title: usingLog()
 prev: '<a href="../../modules/log/index.html">Prev: The Log Module</a>'
 next: '<a href="../../modules/provisioning/index.html">Next: The Provisioning Module</a>'
+updated_for_v2: true
 ---
 
 # usingLog()
@@ -36,4 +37,17 @@ where:
 __NOTES:__
 
 * Only use this module from inside your story's phases.
-* Prose modules should create a `$log` object via `startAction()`.
+* Storyplayer modules should create a `$log` object via `startAction()`.
+
+## vardump()
+
+Use `usingLog()->vardump()` to dump the value of a PHP variable into the log file.
+
+{% highlight php startinline %}
+usingLog()->vardump($name, $var);
+{% endhighlight %}
+
+where:
+
+* `$name` is the text that you want to appear in the output log
+* `$var` is a PHP variable that you want to `var_dump()` into Storyplayer's output log
