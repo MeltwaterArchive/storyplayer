@@ -79,6 +79,43 @@ class VagrantVms implements SupportedHost
 	}
 
 	/**
+	 * Check environmental details
+	 *
+	 * @param  stdClass $envDetails
+	 */
+	protected function checkEnvDetails($envDetails)
+	{
+		// make sure we like the provided details
+		if (!isset($envDetails->homeFolder)) {
+			throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->homeFolder");
+		}
+		if (!isset($envDetails->machines)) {
+			throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines");
+		}
+		if (empty($envDetails->machines)) {
+			throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
+		}
+	}
+
+	/**
+	 * Get the Vagrant directory
+	 *
+	 * @param  stdClass $envDetails
+	 *
+	 * @return string
+	 */
+	protected function getVagrantDir($envDetails)
+	{
+		// make sure the folder exists
+		$vagrantDir = $this->st->fromStoryplayer()->getModuleSetting('vagrant', 'dir');
+		$pathToHomeFolder = $vagrantDir . '/' . $envDetails->homeFolder;
+		if (!is_dir($pathToHomeFolder)) {
+			throw new E5xx_ActionFailed(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
+		}
+		return $pathToHomeFolder;
+	}
+
+	/**
 	 *
 	 * @param  stdClass $envDetails
 	 * @param  array $provisioningVars
@@ -92,16 +129,10 @@ class VagrantVms implements SupportedHost
 		// what are we doing?
 		$log = $st->startAction('create new VM');
 
-		// make sure we like the provided details
-		if (!isset($envDetails->homeFolder)) {
-			throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->homeFolder");
-		}
-		if (!isset($envDetails->machines)) {
-			throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines");
-		}
-		if (empty($envDetails->machines)) {
-			throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
-		}
+		$this->checkEnvDetails($envDetails);
+		$envDetails->dir = $this->getVagrantDir($envDetails);
+
+		// make sure we're happy with details about the machine
 		foreach($envDetails->machines as $hostId => $machine) {
 			// TODO: it would be great to autodetect this one day
 			if (!isset($machine->osName)) {
@@ -112,18 +143,8 @@ class VagrantVms implements SupportedHost
 			}
 		}
 
-		// make sure the folder exists
-		$vagrantDir = $st->fromStoryplayer()->getModuleSetting('vagrant', 'dir');
-		$pathToHomeFolder = $vagrantDir . '/' . $envDetails->homeFolder;
-		if (!is_dir($pathToHomeFolder)) {
-			throw new E5xx_ActionFailed(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
-		}
-
-		// remember where the Vagrantfile is
-		$envDetails->dir = $pathToHomeFolder;
-
 		// make sure the VM is stopped, if it is running
-		$log->addStep("stop vagrant VM in '{$pathToHomeFolder}' if already running", function() use($envDetails) {
+		$log->addStep('stop vagrant VM in '.$envDetails->dir.' if already running', function() use($envDetails) {
 			$command = "vagrant destroy --force";
 			$this->runCommandAgainstHostManager($envDetails, $command);
 		});
@@ -141,7 +162,7 @@ class VagrantVms implements SupportedHost
 
 		// let's start the VM
 		$command = "vagrant up";
-		$result = $log->addStep("create vagrant VM in '{$pathToHomeFolder}'", function() use($envDetails, $command) {
+		$result = $log->addStep('create vagrant VM in '.$envDetails->dir, function() use($envDetails, $command) {
 			return $this->runCommandAgainstHostManager($envDetails, $command);
 		});
 
@@ -152,6 +173,19 @@ class VagrantVms implements SupportedHost
 		}
 
 		// yes it did!!
+
+		// Set automatic rsync mode
+		// This command watches all local directories of any rsync synced folders
+		// and automatically initiates an rsync transfer when changes are detected.
+		// the "--poll" option is required for some filesystems that don't support events.
+		$command = 'vagrant rsync-auto --poll';
+		$result = $log->addStep('set automatic rsync mode for Vagrant', function() use($envDetails, $command) {
+			return $this->runCommandAgainstHostManager($envDetails, $command);
+		});
+
+		if ($result->returnCode != 0) {
+			$st->usingLog()->writeToLog('WARNING: unable to set the rsync-auto mode, you need at least Vagrant 1.6.4');
+		}
 
 		// store the details
 		foreach($envDetails->machines as $hostId => $machine)
@@ -170,7 +204,7 @@ class VagrantVms implements SupportedHost
 			$vmDetails->hostId      = $hostId;
 
 			// remember where the machine lives
-			$vmDetails->dir         = $pathToHomeFolder;
+			$vmDetails->dir         = $envDetails->dir;
 
 			// we need to remember how to SSH into the box
 			$vmDetails->sshUsername = 'vagrant';
