@@ -18,6 +18,12 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 * We've dropped support for browsermob-proxy for the moment. We're going to make it optional before we tag v2.2.0.
 
+### Backwards-compatibility Breaks:
+
+These are SPv1 features that have been upgraded to support SPv2's new features such as test environments.
+
+* [SavageD module](https://datasift.github.io/storyplayer/v2/modules/savaged/index.html) overhauled to support SPv2 test environments and host IDs
+
 ### New:
 
 * New methods for _expectsBrowser()_ and _expectsForm()_:

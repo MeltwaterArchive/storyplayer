@@ -54,7 +54,7 @@ namespace Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingSavageD extends Prose
+class UsingSavageD extends HostBase
 {
 	public function deleteStatsPrefix()
 	{
@@ -62,12 +62,10 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("delete SavageD stats prefix");
+		$log = $st->startAction("delete SavageD stats prefix on host '{$this->args[0]}'");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/stats/prefix";
+		// where are we doing this?
+		$url = $this->getSavagedUrl() . "/stats/prefix";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -86,12 +84,10 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("set SavageD stats prefix to '{$prefix}'");
+		$log = $st->startAction("set SavageD stats prefix to '{$prefix}' on host '{$this->args[0]}'");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/stats/prefix";
+		// where are we doing this?
+		$url = $this->getSavagedUrl() . "/stats/prefix";
 
 		// make the request
 		$st->usingHttp()->post($url, null, array("prefix" => $prefix));
@@ -112,12 +108,11 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("watch the '{$processName}' process w/ ID '{$pid}'");
+		$log = $st->startAction("watch the '{$processName}' process w/ ID '{$pid}' on host '{$this->args[0]}'");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/pid";
+		// where are we doing this?
+		$safeProcessName = urlencode($processName);
+		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/pid";
 
 		// make the request
 		$st->usingHttp()->post($url, null, array("pid" => $pid));
@@ -137,12 +132,11 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop watching the '{$processName}' process");
+		$log = $st->startAction("stop watching the '{$processName}' process on host '{$this->args[0]}'");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/pid";
+		// where are we doing this?
+		$safeProcessName = urlencode($processName);
+		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/pid";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -162,12 +156,12 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("watch the CPU used by the '{$processName}' process");
+		$log = $st->startAction("watch the CPU used by the '{$processName}' process on host '{$this->args[0]}'");
 
 		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/cpu";
+		// where are we doing this?
+		$safeProcessName = urlencode($processName);
+		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/cpu";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -187,15 +181,11 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop watch the cpu used by the '{$processName}' process");
+		$log = $st->startAction("stop watch the cpu used by the '{$processName}' process on host '{$this->args[0]}'");
 
-		// get the process ID of the process
-
-
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/cpu";
+		// where are we doing this?
+		$safeProcessName = urlencode($processName);
+		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/url";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -215,12 +205,12 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("watch the memory used by the '{$processName}' process");
+		$log = $st->startAction("watch the memory used by the '{$processName}' process on host '{$this->args[0]}'");
 
 		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/memory";
+		// where are we doing this?
+		$safeProcessName = urlencode($processName);
+		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/memory";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -240,15 +230,11 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop watch the memory used by the '{$processName}' process");
+		$log = $st->startAction("stop watch the memory used by the '{$processName}' process on host '{$this->args[0]}'");
 
-		// get the process ID of the process
-
-
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/process/{$processName}/memory";
+		// where are we doing this?
+		$safeProcessName = urlencode($processName);
+		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/memory";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -268,12 +254,11 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("watch the server's cpu usage");
+		$log = $st->startAction("watch the server's cpu usage on host '{$this->args[0]}'");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/server/{$testName}.host/cpu";
+		// where are we doing this?
+		$safeTestName = urlencode($testName);
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/cpu";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -293,12 +278,11 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop watching the server's cpu");
+		$log = $st->startAction("stop watching the server's cpu on host '{$this->args[0]}'");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/server/{$testName}.host/cpu";
+		// where are we doing this?
+		$safeTestName = urlencode($testName);
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/cpu";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -318,12 +302,11 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("watch the server's load average");
+		$log = $st->startAction("watch the server's load average on host '{$this->args[0]}'");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/server/{$testName}.host/loadavg";
+		// where are we doing this?
+		$safeTestName = urlencode($testName);
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/loadavg";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -343,12 +326,11 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("stop watching the server's load average");
+		$log = $st->startAction("stop watching the server's load average on host '{$this->args[0]}'");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/server/{$testName}.host/loadavg";
+		// where are we doing this?
+		$safeTestName = urlencode($testName);
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/loadavg";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -368,12 +350,10 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("tell SavageD to start sending stats to statsd");
+		$log = $st->startAction("tell SavageD on host '{$this->args[0]}' to start sending stats to statsd");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/stats/monitoring";
+		// where are we doing this?
+		$url = $this->getSavagedUrl() . "/stats/monitoring";
 
 		// make the request
 		$st->usingHttp()->post($url, null, array("monitoring" => "true"));
@@ -393,12 +373,10 @@ class UsingSavageD extends Prose
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("tell SavageD to stop sending stats to statsd");
+		$log = $st->startAction("tell SavageD on host '{$this->args[0]}' to stop sending stats to statsd");
 
-		// build the URL
-		$ipAddress = $this->args[0];
-		$httpPort  = $st->fromEnvironment()->getAppSetting("savaged", "httpPort");
-		$url       = "http://{$ipAddress}:{$httpPort}/stats/monitoring";
+		// where are we doing this?
+		$url = $this->getSavagedUrl() . "/stats/monitoring";
 
 		// make the request
 		$st->usingHttp()->post($url, array("monitoring" => false));
@@ -410,5 +388,20 @@ class UsingSavageD extends Prose
 
 		// all done
 		$log->endAction();
+	}
+
+	protected function getSavagedUrl()
+	{
+		// where is SavageD running?
+		$hostDetails = $this->getHostDetails();
+
+		// do we have the module settings we need?
+		if (!isset($hostDetails->moduleSettings, $hostDetails->moduleSettings->savaged, $hostDetails->moduleSettings->savaged->httpPort)) {
+			throw new E5xx_ActionFailed(__METHOD__, "moduleSettings.savaged.httpPort not set for host '{$this->args[0]}'");
+		}
+
+		$url = "http://" . $hostDetails->ipAddress . ":" . $hostDetails->moduleSettings->savaged->httpPort;
+
+		return $url;
 	}
 }
