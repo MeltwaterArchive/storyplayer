@@ -74,41 +74,6 @@ function first($arrayToSearch)
 }
 
 /**
- * iterate over all hosts that match the given role
- *
- * @param  string $roleName
- *         The role that we want
- *
- * @return string
- *         a hostid that matches the role
- */
-function hostWithRole($roleName)
-{
-	// special case
-	if ($roleName instanceof StoryTeller) {
-		throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
-	}
-
-	// shorthand
-	$st = StoryTeller::instance();
-
-	$listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
-	if (!count(get_object_vars($listOfHosts))) {
-		throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
-	}
-
-	// what are we doing?
-	$log = $st->startAction("for each host with role '{$roleName}' ... ");
-
-	foreach ($listOfHosts as $hostDetails) {
-		yield($hostDetails->hostId);
-	}
-
-	// all done
-	$log->endAction();
-}
-
-/**
  * Create a new story object
  *
  * @param  string $category the category that the story belongs to

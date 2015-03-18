@@ -1764,3 +1764,105 @@ function usingZmq()
 {
     return new UsingZmq(StoryTeller::instance());
 }
+
+// ==================================================================
+//
+// Iterators go here
+//
+// ------------------------------------------------------------------
+
+/**
+ * iterate over all hosts that match the given role, and return only the first one
+ *
+ * @param  string $roleName
+ *         The role that we want
+ *
+ * @return string
+ *         a hostid that matches the role
+ */
+function firstHostWithRole($roleName)
+{
+    // shorthand
+    $st = StoryTeller::instance();
+
+    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    if (!count(get_object_vars($listOfHosts))) {
+        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+    }
+
+    // what are we doing?
+    $log = $st->startAction("for the first host with role '{$roleName}' ... ");
+
+    // we yield a single host ID ...
+    $hostDetails = array_pop($listOfHosts);
+    yield($hostDetails->hostId);
+
+    // all done
+    $log->endAction();
+}
+
+/**
+ * iterate over all hosts that match the given role, and return only the last one
+ *
+ * @param  string $roleName
+ *         The role that we want
+ *
+ * @return string
+ *         a hostid that matches the role
+ */
+function lastHostWithRole($roleName)
+{
+    // shorthand
+    $st = StoryTeller::instance();
+
+    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    if (!count(get_object_vars($listOfHosts))) {
+        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+    }
+
+    // what are we doing?
+    $log = $st->startAction("for the last host with role '{$roleName}' ... ");
+
+    // we yield a single host ID ...
+    $keys = array_keys($listOfHosts);
+    $hostDetails = $listOfHosts[end($keys)];
+    yield($hostDetails->hostId);
+
+    // all done
+    $log->endAction();
+}
+
+/**
+ * iterate over all hosts that match the given role
+ *
+ * @param  string $roleName
+ *         The role that we want
+ *
+ * @return string
+ *         a hostid that matches the role
+ */
+function hostWithRole($roleName)
+{
+    // special case
+    if ($roleName instanceof StoryTeller) {
+        throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
+    }
+
+    // shorthand
+    $st = StoryTeller::instance();
+
+    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    if (!count(get_object_vars($listOfHosts))) {
+        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+    }
+
+    // what are we doing?
+    $log = $st->startAction("for each host with role '{$roleName}' ... ");
+
+    foreach ($listOfHosts as $hostDetails) {
+        yield($hostDetails->hostId);
+    }
+
+    // all done
+    $log->endAction();
+}
