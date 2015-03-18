@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: Adding App Settings To Your Config File
 prev: '<a href="../../using/configuration/storyplayer-json.html">Prev: The storyplayer.json File</a>'
-next: '<a href="../../using/configuration/logging.html">Next: Logging</a>'
+next: '<a href="../../using/configuration/module-settings.html">Next: Module Settings</a>'
 ---
 
 # Adding App Settings To Your Config File

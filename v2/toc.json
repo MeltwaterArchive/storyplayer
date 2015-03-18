@@ -45,6 +45,7 @@
 		"using/configuration/index",
 		"using/configuration/storyplayer-json",
 		"using/configuration/app-settings",
+		"using/configuration/module-settings",
 		"using/configuration/logging",
 		"using/configuration/test-phases",
 		"using/configuration/environment-config",
