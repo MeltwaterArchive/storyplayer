@@ -142,12 +142,12 @@ class VagrantVm implements SupportedHost
 
 		// yes it did!!
 
-		if (getenv('VAGRANT_AUTO_RSYNC') === 'true') {
+		if (($vagrant_autorsync_opt = getenv('VAGRANT_AUTO_RSYNC')) !== false) {
 			// Set automatic rsync mode (requires Vagrant >= 1.7.0)
 			// This command watches all local directories of any rsync synced folders
 			// and automatically initiates an rsync transfer when changes are detected.
 			// the "--poll" option is required for some filesystems that don't support events.
-			$command = 'vagrant rsync-auto --poll';
+			$command = 'vagrant rsync-auto '.$vagrant_autorsync_opt;
 			$result = $log->addStep('set automatic rsync mode for Vagrant', function() use($envDetails, $command) {
 				return $this->runCommandAgainstHostManager($envDetails, $command);
 			});
