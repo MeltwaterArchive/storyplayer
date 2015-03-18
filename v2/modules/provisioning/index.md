@@ -15,6 +15,12 @@ The source code for this module can be found in this PHP class:
 * `Prose\UsingProvisioning`
 * `Prose\UsingProvisioningDefinition`
 
+<div class="callout info" markdown="1">
+#### Provisioning In Storyplayer v2
+
+Stories no longer need to do their own provisioning. This is now done when a test environment is spun up.
+</div>
+
 ## Building Test Environments
 
 We have [a whole section of this manual devoted to test environments](../../environments/index.html) - __that's how important we believe test environments are.__
