@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-shell
 title: The UNIX Shell Module
-prev: '<a href="../../modules/timer/usingTimer.html">Prev: usingTimer()</a>'
+prev: '<a href="../../modules/savaged/usingSavageD.html">Prev: usingSavageD()</a>'
 next: '<a href="../../modules/shell/child-processes.html">Next: The Role Of Child Processes In Testing</a>'
 ---
 

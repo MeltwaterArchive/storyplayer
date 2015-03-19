@@ -2,7 +2,7 @@
 layout: v2/modules-savaged
 title: usingSavageD()
 prev: '<a href="../../modules/savaged/index.html">Prev: The SavageD Module</a>'
-next: '<a href="../../modules/timer/index.html">Next: The Timer Module</a>'
+next: '<a href="../../modules/shell/index.html">Next: The UNIX Shell Module</a>'
 updated_for_v2: true
 ---
 

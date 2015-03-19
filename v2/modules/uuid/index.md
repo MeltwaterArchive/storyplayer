@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-uuid
 title: The UUID Module
-prev: '<a href="../../modules/testenvironment/index.html">Prev: The TestEnvironment Module</a>'
+prev: '<a href="../../modules/timer/usingTimer.html">Prev: usingTimer()</a>'
 next: '<a href="../../modules/uuid/fromUuid.html">Next: fromUuid()</a>'
 ---
 
