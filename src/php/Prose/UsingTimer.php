@@ -58,7 +58,8 @@ use DataSift\Stone\TimeLib\DateInterval;
  */
 class UsingTimer extends Prose
 {
-	public function waitFor($callback, $timeout = 'PT5S') {
+	public function waitFor($callback, $timeout = 'PT5S')
+	{
 		// shorthand
 		$st = $this->st;
 
@@ -74,7 +75,6 @@ class UsingTimer extends Prose
 		// when does this end?
 		$now = time();
 		$end = $now + $seconds;
-
 
 		// what are we doing?
 		$log = $st->startAction("polling for up to {$seconds} seconds");
@@ -126,6 +126,7 @@ class UsingTimer extends Prose
 		$now = time();
 		$end = $now + $seconds;
 
+		// what are we doing?
 		$log = $st->startAction("polling for up to '{$seconds}' seconds");
 
 		while ($now < $end) {
@@ -163,7 +164,8 @@ class UsingTimer extends Prose
 		throw new E5xx_ActionFailed('timer()->waitWhile()');
 	}
 
-	public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up") {
+	public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up")
+	{
 		if (is_string($timeout)) {
 			$interval = new DateInterval($timeout);
 			$seconds  = $interval->getTotalSeconds();
@@ -172,8 +174,16 @@ class UsingTimer extends Prose
 			$seconds = $timeout;
 		}
 
-		$log = $this->st->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
+
+		// zzzzz
 		sleep($seconds);
+
+		// all done
 		$log->endAction("finished sleeping");
 	}
 }
