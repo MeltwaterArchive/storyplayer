@@ -46,3 +46,10 @@ A list of the different operating systems we know how to talk to.
 ## Provisioning Engines
 
 Details about the different provisioners supported.
+
+## Localhost
+
+Details about the special case 'localhost' need adding.
+
+* localhost is always added to your test environment
+* Storyplayer also creates a 'localhost' target (which is the default target too)
