@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-testenvironment
 title: The TestEnvironment Module
-prev: '<a href="../../modules/systemundertest/index.html">Prev: The SystemUnderTest Module</a>'
+prev: '<a href="../../modules/systemundertest/fromSystemUnderTest.html">Prev: fromSystemUnderTest()</a>'
 next: '<a href="../../modules/timer/index.html">Next: The Timer Module</a>'
 ---
 

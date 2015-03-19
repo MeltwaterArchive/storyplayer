@@ -178,6 +178,7 @@
 		"modules/supervisor/expectsSupervisor",
 		"modules/supervisor/usingSupervisor",
 		"modules/systemundertest/index",
+		"modules/systemundertest/fromSystemUnderTest",
 		"modules/testenvironment/index",
 		"modules/timer/index",
 		"modules/timer/usingTimer",
