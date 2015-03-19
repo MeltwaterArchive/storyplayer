@@ -2,14 +2,15 @@
 layout: v2/modules-timer
 title: usingTimer()
 prev: '<a href="../../modules/timer/index.html">Prev: The Timer Module</a>'
-next: '<a href="../../modules/shell/index.html">Next: The UNIX Shell Module</a>'
+next: '<a href="../../modules/uuid/index.html">Next: The UUID Module</a>'
+updated_for_v2: true
 ---
 
 # usingTimer()
 
 _usingTimer()_ allows you to wait for something to happen.  If it doesn't happen within the timeout period, an exception is thrown.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingTimer_.
+The source code for these actions can be found in the class `Prose\UsingTimer`.
 
 ## Behaviour And Return Codes
 
@@ -21,7 +22,7 @@ Write your story as if every test must pass.
 
 ## waitFor()
 
-Use `usingTimer()->waitFor()` to wait for something to happen
+Use `usingTimer()->waitFor()` to wait for something to happen.
 
 {% highlight php startinline %}
 usingTimer()->waitFor($callback, $timeout);
@@ -30,20 +31,20 @@ usingTimer()->waitFor($callback, $timeout);
 where:
 
 * `$callback` is a PHP callback of some kind, which throws an exception if the 'something' hasn't happened yet (see [Repeated Polling](index.html#repeated_polling) for a longer discussion)
-* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
+* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the-dateinterval-is-your-friend) for a longer discussion)
 
 For example:
 
 {% highlight php startinline %}
 // assumes the current page title is not "Welcome to Example.com!"
-usingTimer()->waitFor(function($st) {
-	expectsBrowser()->hasTitle("Welcome to Example.com!");
+usingTimer()->waitFor(function() {
+    expectsBrowser()->hasTitle("Welcome to Example.com!");
 }, 'PT5S');
 {% endhighlight %}
 
 ## waitWhile()
 
-Use `usingTimer()->waitFor()` to wait for something to change
+Use `usingTimer()->waitFor()` to wait for something to change.
 
 {% highlight php startinline %}
 usingTimer()->waitFor($callback, $timeout);
@@ -52,14 +53,14 @@ usingTimer()->waitFor($callback, $timeout);
 where:
 
 * `$callback` is a PHP callback of some kind, which throws an exception if the 'something' hasn't changed yet (see [Repeated Polling](index.html#repeated_polling) for a longer discussion)
-* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
+* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the-dateinterval-is-your-friend) for a longer discussion)
 
 For example:
 
 {% highlight php startinline %}
 // assumes the current page title is "Login"
-usingTimer()->waitWhile(function($st) {
-	expectsBrowser()->hasTitle("Login");
+usingTimer()->waitWhile(function() {
+    expectsBrowser()->hasTitle("Login");
 }, 'PT5S');
 {% endhighlight %}
 
@@ -73,5 +74,5 @@ usingTimer()->wait($timeout, $reason);
 
 where:
 
-* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the_dateinterval_is_your_friend) for a longer discussion)
+* `$timeout` is how long to wait before giving up (see [The DateInterval Is Your Friend](index.html#the-dateinterval-is-your-friend) for a longer discussion)
 * `$reason` is a text message for the log files to explain why this pause is there.

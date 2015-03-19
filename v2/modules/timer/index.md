@@ -1,8 +1,9 @@
 ---
 layout: v2/modules-timer
 title: The Timer Module
-prev: '<a href="../../modules/savaged/usingSavageD.html">Prev: usingSavageD()</a>'
+prev: '<a href="../../modules/testenvironment/index.html">Prev: The TestEnvironment Module</a>'
 next: '<a href="../../modules/timer/usingTimer.html">Next: usingTimer()</a>'
+updated_for_v2: true
 ---
 
 # The Timer Module
@@ -38,7 +39,7 @@ where:
 
 ## Repeated Polling
 
-Many of the Timer module's actions take a `$callback` parameter.  This is a [PHP anonymous function](http://uk1.php.net/manual/en/functions.anonymous.php).  It takes one parameter ([the `$st` object](../../Prose/the-st-object.html)), and its job is to run one or more tests to see if whatever you're waiting for has happened yet.
+Many of the Timer module's actions take a `$callback` parameter.  This is a [PHP anonymous function](http://uk1.php.net/manual/en/functions.anonymous.php).  It takes no parameters, and its job is to run one or more tests to see if whatever you're waiting for has happened yet.
 
 The callback function should throw an exception if whatever you're waiting for hasn't happened yet.
 
@@ -47,8 +48,8 @@ For example, here's how _[usingBrowser()->waitForTitle()](../browser/usingBrowse
 {% highlight php startinline %}
 $title = "Welcome To Example.com!";
 $timeout = 'PT2S';
-usingTimer()->waitFor(function($st) use($title) {
-	expectsBrowser()->hasTitle($title);
+usingTimer()->waitFor(function() use($title) {
+    expectsBrowser()->hasTitle($title);
 }, $timeout);
 {% endhighlight %}
 
