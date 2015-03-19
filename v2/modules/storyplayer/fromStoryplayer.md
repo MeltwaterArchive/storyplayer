@@ -3,6 +3,7 @@ layout: v2/modules-storyplayer
 title: fromStoryplayer()
 prev: '<a href="../../modules/storyplayer/index.html">Prev: The Storyplayer Module</a>'
 next: '<a href="../../modules/supervisor/index.html">Next: The Supervisor Module</a>'
+updated_for_v2: true
 ---
 
 # fromStoryplayer()

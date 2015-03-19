@@ -3,6 +3,7 @@ layout: v2/modules-storyplayer
 title: The Storyplayer Module
 prev: '<a href="../../modules/shell/usingShell.html">Prev: usingShell()</a>'
 next: '<a href="../../modules/storyplayer/fromStoryplayer.html">Next: fromStoryplayer()</a>'
+updated_for_v2: true
 ---
 
 # The Storyplayer Module
