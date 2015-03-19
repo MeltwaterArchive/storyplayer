@@ -3,11 +3,12 @@ layout: v2/modules-shell
 title: The UNIX Shell Module
 prev: '<a href="../../modules/savaged/usingSavageD.html">Prev: usingSavageD()</a>'
 next: '<a href="../../modules/shell/child-processes.html">Next: The Role Of Child Processes In Testing</a>'
+updated_for_v2: true
 ---
 
 # The UNIX Shell Module
 
-The __UNIX Shell__ module allows you to start and stop child processes that run on the same computer that _storyplayer_ is running on.
+The __UNIX Shell__ module allows you to start and stop child processes that run on the same computer that _Storyplayer_ is running on.
 
 The source code for this Storyplayer module can be found in these PHP classes:
 
@@ -15,12 +16,15 @@ The source code for this Storyplayer module can be found in these PHP classes:
 * `Prose\FromShell`
 * `Prose\UsingShell`
 
-## Everything Is Screened
+## The Shell Module Now Runs On Localhost
 
-Whenever this module starts a new process, it runs that process inside a _screen_ session.  Here's why:
+In SPv1, the UNIX Shell module was its own thing. In SPv2, we've rewritten the module to simply be an alias the [Host module](../host/index.html).
 
-* _You can connect to the screen session manually to watch the output from the process._ This can be very handy when debugging a new test, or looking at why a test that used to work no longer does.
-* _Screen handles killing off all child processes when it is told to terminate the session._ On UNIX systems, if you try to kill a process that has created its own child processes, those child processes can sometimes live on. If those child processes have sockets open, this can prevent tests running.  By using _screen_, we make sure that everything is tidied up when it's time to stop the process.
+* `expectsShell()` is an alias for `expectsHost("localhost")`
+* `fromShell()` is an alias for `fromShell("localhost")`
+* `usingShell()` is an alias for `usingShell("localhost")`
+
+Storyplayer always adds _localhost_ to your test environment. You do not need to define it yourself (although you can if you want to). See [Test Environment Configuration](../../using/configuration/test-environment-config.html#localhost) for details.
 
 ## Dependencies
 
@@ -30,6 +34,16 @@ You need to install:
 * [bash](http://www.gnu.org/software/bash/), a popular UNIX shell
 
 _bash_ is probably already installed on your computer. _screen_ may not be installed; you will need to install it by hand before you use this module.
+
+<div class="callout warning" markdown="1">
+#### OSX Users Need To Replace Apple's screen
+
+Apple's OSX already includes `screen`. Unfortunately, it doesn't behave identically to the original GNU Screen. Please follow our [Setup Your Computer](../../learn/getting-setup/index.html) instructions and replace Apple's `screen` with the original.
+
+What's different?
+
+* When you close a GNU Screen, it automatically shuts down all child processes. Storyplayer relies heavily on this functionality to make sure that we do not leave rogue processes behind afterwards. Unfortunately, Apple's Screen does not shut down all child processes :(
+</div>
 
 ## Using The UNIX Shell Module
 
