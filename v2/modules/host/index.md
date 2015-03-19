@@ -18,7 +18,22 @@ The source code for this module can be found in these PHP classes:
 
 ## Dependencies
 
-This module has no dependencies of its own.
+You need to install:
+
+* [GNU Screen](http://www.gnu.org/software/screen/), a terminal emulator from [the Free Software Foundation](http://www.fsf.org/), and
+* [bash](http://www.gnu.org/software/bash/), a popular UNIX shell
+
+_bash_ is probably already installed on your computer. _screen_ may not be installed; you will need to install it by hand before you use this module.
+
+<div class="callout warning" markdown="1">
+#### OSX Users Need To Replace Apple's screen
+
+Apple's OSX already includes `screen`. Unfortunately, it doesn't behave identically to the original GNU Screen. Please follow our [Setup Your Computer](../../learn/getting-setup/index.html) instructions and replace Apple's `screen` with the original.
+
+What's different?
+
+* When you close a GNU Screen, it automatically shuts down all child processes. Storyplayer relies heavily on this functionality to make sure that we do not leave rogue processes behind afterwards. Unfortunately, Apple's Screen does not shut down all child processes :(
+</div>
 
 ## Using The Host Module
 
