@@ -3,13 +3,14 @@ layout: v2/modules-supervisor
 title: usingSupervisor()
 prev: '<a href="../../modules/supervisor/expectsSupervisor.html">Prev: expectsSupervisor()</a>'
 next: '<a href="../../modules/systemundertest/index.html">Next: The SystemUnderTest Module</a>'
+updated_for_v2: true
 ---
 
 # usingSupervisor()
 
 _usingSupervisor()_ allows you to start and stop processes that are managed by Supervisor.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\UsingSupervisor_.
+The source code for these actions can be found in the class `Prose\UsingSupervisor`.
 
 ## Behaviour And Return Codes
 
@@ -25,12 +26,12 @@ Write your story as if every action must succeed.
 Use `usingSupervisor()->startProgram()` to start a program that is managed by Supervisor.
 
 {% highlight php startinline %}
-usingSupervisor($hostname)->startProgram($programName);
+usingSupervisor($hostId)->startProgram($programName);
 {% endhighlight %}
 
 where:
 
-* `$hostname` is the name of the host you want to check
+* `$hostId` is the ID of the host in your test environment where Supervisor is running
 * `$programName` is the name of the program that Supervisor is managing
 
 ## stopProgram()
@@ -38,10 +39,10 @@ where:
 Use `usingSupervisor()->stopProgram()` to stop a program that is managed by Supervisor.
 
 {% highlight php startinline %}
-usingSupervisor($hostname)->startProgram($programName);
+usingSupervisor($hostId)->stopProgram($programName);
 {% endhighlight %}
 
 where:
 
-* `$hostname` is the name of the host you want to check
+* `$hostId` is the ID of the host in your test environment where Supervisor is running
 * `$programName` is the name of the program that Supervisor is managing

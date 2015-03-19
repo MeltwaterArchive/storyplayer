@@ -3,13 +3,14 @@ layout: v2/modules-supervisor
 title: expectsSupervisor()
 prev: '<a href="../../modules/supervisor/fromSupervisor.html">Prev: fromSupervisor()</a>'
 next: '<a href="../../modules/supervisor/usingSupervisor.html">Next: usingSupervisor()</a>'
+updated_for_v2: true
 ---
 
 # expectsSupervisor()
 
 _expectsSupervisor()_ allows you to test the state of a process that is being managed by [Supervisor](http://supervisord.org).
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsSupervisor_.
+The source code for these actions can be found in the class `Prose\ExpectsSupervisor`.
 
 ## Behaviour And Return Codes
 
@@ -25,12 +26,12 @@ Write your story as if every test must pass.
 Use `expectsSupervisor()->programIsRunning()` to make sure that a program managed by Supervisor is running.
 
 {% highlight php startinline %}
-expectsSupervisor($hostname)->programIsRunning($programName);
+expectsSupervisor($hostId)->programIsRunning($programName);
 {% endhighlight %}
 
 where:
 
-* `$hostname` is the name of the host you want to check
+* `$hostId` is the ID of the host in your test environment where Supervisor is running
 * `$programName` is the name of the program that Supervisor is managing
 
 ## programIsNotRunning()
@@ -38,10 +39,10 @@ where:
 Use `expectsSupervisor()->programIsNotRunning()` to make sure that a program managed by Supervisor is not running.
 
 {% highlight php startinline %}
-expectsSupervisor($hostname)->programIsNotRunning($programName);
+expectsSupervisor($hostId)->programIsNotRunning($programName);
 {% endhighlight %}
 
 where:
 
-* `$hostname` is the name of the host you want to check
+* `$hostId` is the ID of the host in your test environment where Supervisor is running
 * `$programName` is the name of the program that Supervisor is managing

@@ -3,6 +3,7 @@ layout: v2/modules-supervisor
 title: The Supervisor Module
 prev: '<a href="../../modules/storyplayer/fromStoryplayer.html">Prev: fromStoryplayer()</a>'
 next: '<a href="../../modules/supervisor/fromSupervisor.html">Next: fromSupervisor()</a>'
+updated_for_v2: true
 ---
 
 # The Supervisor Module
