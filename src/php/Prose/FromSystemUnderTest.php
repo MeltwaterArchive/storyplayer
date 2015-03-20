@@ -71,7 +71,9 @@ class FromSystemUnderTest extends Prose
 		// get the details
 		$config = $st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__);
+			$msg = "module setting '$path' not found";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
 		}
 		$value = $config->getData($fullPath);
 
@@ -98,7 +100,9 @@ class FromSystemUnderTest extends Prose
 		// get the details
 		$config = $st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__);
+			$msg = "no app '$app' found in the config";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
 		}
 		$value = $config->getData($fullPath);
 
@@ -125,7 +129,9 @@ class FromSystemUnderTest extends Prose
 		// get the details
 		$config = $st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__, "module setting '$path' not found");
+			$msg = "module setting '$path' not found";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
 		}
 
 		// success!
@@ -154,7 +160,9 @@ class FromSystemUnderTest extends Prose
 		// get the details
 		$config = $st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no module '$module' found in the config");
+			$msg = "no module '$module' found in the config";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
 		}
 
 		// success!
@@ -183,7 +191,9 @@ class FromSystemUnderTest extends Prose
 		// get the details
 		$config = $st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no system-under-test name found; internal Storyplayer bug!");
+			$msg = "no system-under-test name found; internal Storyplayer bug!";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
 		}
 
 		// success!
@@ -194,5 +204,55 @@ class FromSystemUnderTest extends Prose
 
 		// all done
 		return $value;
+	}
+
+	public function get($path)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get the setting '{$path}' from the actve system-under-test");
+
+		// what is the full path to this data?
+		if (empty($path)) {
+			$fullPath = 'systemundertest';
+		}
+		else {
+			$fullPath = 'systemundertest.' . $path;
+		}
+
+		// get the details
+		$config = $st->getActiveConfig();
+		if (!$config->hasData($fullPath)) {
+			$log->endAction("no settings found");
+			throw new E5xx_ActionFailed(__METHOD__, "no settings found");
+		}
+
+		// success!
+		$value = $config->getData($fullPath);
+
+		// log the settings
+		$log->endAction($value);
+
+		// all done
+		return $value;
+	}
+
+	public function getConfig()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get the system under test config");
+
+		// get the details
+		$config = $st->getActiveConfig();
+		$retval = $config->getData("systemundertest");
+
+		// all done
+		$log->endAction($retval);
+		return $retval;
 	}
 }
