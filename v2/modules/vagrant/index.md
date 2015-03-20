@@ -15,6 +15,14 @@ The source code for this module can be found in these PHP classes:
 * `Prose\FromVagrant`
 * `Prose\UsingVagrant`
 
+<div class="callout info" markdown="1">
+#### Big Changes For Storyplayer v2
+
+In Storyplayer v2, stories are no longer responsible for creating test environments. These are now created separately using the `--target` command-line switch.
+
+As a result, your stories probably do not need to call the Vagrant module at all.
+</div>
+
 ## Does Your Code Actually Work?
 
 Unit tests are a vitally important part of your approach to quality, and they go a long way to making sure that each of your classes and functions function as intended.  You should be writing lots of high-quality unit tests, and every time you find a bug, you should also write a test for that bug too.
