@@ -47,7 +47,7 @@ use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\DataLib\DotNotationConvertor;
 
 /**
- * Get information from the environment defined for the test environment
+ * Get information from the active test environment config
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -58,6 +58,40 @@ use DataSift\Stone\DataLib\DotNotationConvertor;
  */
 class FromTestEnvironment extends Prose
 {
+	public function get($name)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get '$name' from the test environment config");
+
+		// what is the full path to this data?
+		$fullPath = 'target';
+		if (!empty($name)) {
+			$fullPath = $fullPath . '.' . $name;
+		}
+
+		// get the details
+		$config = $st->getActiveConfig();
+
+		if (!$config->hasData($fullPath)) {
+			$log->endAction("no such setting '{$name}'");
+			return null;
+		}
+
+		// if we get here, then success \o/
+		$value = $config->getData($fullPath);
+
+		// log the settings
+		$printer  = new DataPrinter();
+		$logValue = $printer->convertToString($value);
+		$log->endAction("value is: '{$logValue}'");
+
+		// all done
+		return $value;
+	}
+
 	public function getName()
 	{
 		// shorthand
@@ -126,13 +160,26 @@ class FromTestEnvironment extends Prose
 		return $value;
 	}
 
+	/**
+	 * I think this is used internally at DataSift.
+	 *
+	 * We've standardised on 'getConfig()' as the documented name for this
+	 * functionality across all three of the config-related modules.
+	 *
+	 * @return object
+	 */
 	public function getAllSettings()
+	{
+		return $this->getConfig();
+	}
+
+	public function getConfig()
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("get all settings from the test environment");
+		$log = $st->startAction("get the test environment config");
 
 		// get the details
 		$testEnv = $st->getTestEnvironmentConfig();
