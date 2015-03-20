@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-timer
 title: The Timer Module
-prev: '<a href="../../modules/testenvironment/index.html">Prev: The TestEnvironment Module</a>'
+prev: '<a href="../../modules/testenvironment/fromTestEnvironment.html">Prev: fromTestEnvironment()</a>'
 next: '<a href="../../modules/timer/usingTimer.html">Next: usingTimer()</a>'
 updated_for_v2: true
 ---

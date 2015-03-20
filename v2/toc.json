@@ -180,6 +180,7 @@
 		"modules/systemundertest/index",
 		"modules/systemundertest/fromSystemUnderTest",
 		"modules/testenvironment/index",
+		"modules/testenvironment/fromTestEnvironment",
 		"modules/timer/index",
 		"modules/timer/usingTimer",
 		"modules/uuid/index",
