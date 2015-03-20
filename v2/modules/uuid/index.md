@@ -3,6 +3,7 @@ layout: v2/modules-uuid
 title: The UUID Module
 prev: '<a href="../../modules/timer/usingTimer.html">Prev: usingTimer()</a>'
 next: '<a href="../../modules/uuid/fromUuid.html">Next: fromUuid()</a>'
+updated_for_v2: true
 ---
 
 # The UUID Module

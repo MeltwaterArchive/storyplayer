@@ -3,13 +3,14 @@ layout: v2/modules-uuid
 title: fromUuid()
 prev: '<a href="../../modules/uuid/index.html">Prev: The UUID Module</a>'
 next: '<a href="../../modules/uuid/expectsUuid.html">Next: expectsUuid()</a>'
+updated_for_v2: true
 ---
 
 # fromUuid()
 
 _fromUuid()_ allows you to generate new UUID strings.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\FromUuid_.
+The source code for these actions can be found in the class `Prose\FromUuid`.
 
 ## Behaviour And Return Codes
 
@@ -25,11 +26,11 @@ $uuid = fromUuid()->generateUuid();
 
 where:
 
-* `$uuid` is a new Version 4 UUID string
+* `$uuid` gets set to a new Version 4 UUID string
 
-You can use _[expectsString()->isUuid()](../assertions/assertsString.html#isuuid)_ to test `$uuid` and make sure that it is a valud UUID string:
+You can use _[assertsString()->isUuid()](../assertions/assertsString.html#isuuid)_ to test `$uuid` and make sure that it is a valid UUID string:
 
 {% highlight php startinline %}
 $uuid = fromUuid()->generateUuid();
-expectsString($uuid)->isUuid();
+assertsString($uuid)->isUuid();
 {% endhighlight %}

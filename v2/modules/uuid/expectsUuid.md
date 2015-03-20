@@ -3,13 +3,14 @@ layout: v2/modules-uuid
 title: expectsUuid()
 prev: '<a href="../../modules/uuid/fromUuid.html">Prev: fromUuid()</a>'
 next: '<a href="../../modules/vagrant/index.html">Next: The Vagrant Module</a>'
+updated_for_v2: true
 ---
 
 # expectsUuid()
 
 _expectsUuid()_ allows you to test UUID strings and the dependencies for the UUID module.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsUuid_.
+The source code for these actions can be found in the class `Prose\ExpectsUuid`.
 
 ## Behaviour And Return Codes
 
