@@ -1,15 +1,16 @@
 ---
-layout: v2/modules-zeromq
+layout: v2/modules-zmq
 title: expectsZmq()
 prev: '<a href="../../modules/zeromq/index.html">Prev: The ZeroMQ Module</a>'
 next: '<a href="../../modules/zeromq/usingZmq.html">Next: usingZmq()</a>'
+updated_for_v2: true
 ---
 
 # expectsZmq()
 
 _expectsZmq()_ allows you to make sure that a ZMQ socket would behave in the way that you expect it to.
 
-The source code for these actions can be found in the class _DataSift\Storyplayer\Prose\ExpectsZmq_.
+The source code for these actions can be found in the class `Prose\ExpectsZmq`.
 
 ## Behaviour And Return Codes
 
