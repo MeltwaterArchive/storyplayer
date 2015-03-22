@@ -20,18 +20,31 @@ Every action is a test of some kind.
 
 Write your story as if every test must pass.
 
-## recv()
+## getEndpoints()
 
-Use `fromZmqSocket()->recv()` to receive a single-part message via a ZeroMQ socket previously created using _[usingZmqContext()->bindToPort()](usingZmqContext.html#bindToPort)_ or _[usingZmqContext()->connectToHost()](usingZmqContext.html#connectToHost)_.
+Use `fromZmqSocket()->getEndpoints()` to receive a list of every address that the `ZMQSocket` is either bound to or connected to.
 
 {% highlight php startinline %}
-$message = fromZmqSocket($socket)->recv($timeout=-1);
+$addresses = fromZmqSocket($socket)->getEndpoints();
 {% endhighlight %}
 
 where:
 
 * `$socket` is a `ZMQSocket`
-* `$timeout` is how long to wait (in seconds) for a message (default is to wait forever)
+* `$addresses` is set to an array containing a list of addresses where the socket is bound to or connected to
+
+## recv()
+
+Use `fromZmqSocket()->recv()` to receive a single-part message via a ZeroMQ socket previously created using _[usingZmqContext()->bindToPort()](usingZmqContext.html#bindToPort)_ or _[usingZmqContext()->connectToHost()](usingZmqContext.html#connectToHost)_.
+
+{% highlight php startinline %}
+$message = fromZmqSocket($socket)->recv($timeout=null);
+{% endhighlight %}
+
+where:
+
+* `$socket` is a `ZMQSocket`
+* `$timeout` is how long to wait (in seconds) for a message (default is to wait 5 seconds)
 * `$message` gets set to the single-part message read from the `$socket`
 
 ## recvMulti()
@@ -39,13 +52,13 @@ where:
 Use `fromZmqSocket()->recvMulti()` to receive a multi-part message via a ZeroMQ socket previously created using _[usingZmqContext()->bindToPort()](usingZmqContext.html#bindToPort)_ or _[usingZmqContext()->connectToHost()](usingZmqContext.html#connectToHost)_.
 
 {% highlight php startinline %}
-$message = fromZmqSocket($socket)->recvMulti($timeout=-1);
+$message = fromZmqSocket($socket)->recvMulti($timeout=5);
 {% endhighlight %}
 
 where:
 
 * `$socket` is a `ZMQSocket`
-* `$timeout` is how long to wait (in seconds) for a message (default is to wait forever)
+* `$timeout` is how long to wait (in seconds) for a message (default is to wait 5 seconds)
 * `$message` gets set to the multi-part message read from the `$socket`
 
 ## recvMultiNonBlocking()
@@ -59,7 +72,7 @@ $message = fromZmqSocket()->recvMultiNonBlocking();
 where:
 
 * `$socket` is a `ZMQSocket`
-* `$message` gets set to the multi-part message read from the `$socket`, or NULL if the socket would have blocked
+* `$message` gets set to the multi-part message read from the `$socket`, or NULL if the read would have blocked
 
 See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQ_Socket`.
 
@@ -74,4 +87,4 @@ $message = fromZmqSocket()->recvNonBlocking();
 where:
 
 * `$socket` is a `ZMQSocket`
-* `$message` gets set to the single-part message read from the `$socket`, or NULL if the socket would have blocked
+* `$message` gets set to the single-part message read from the `$socket`, or NULL if the read would have blocked
