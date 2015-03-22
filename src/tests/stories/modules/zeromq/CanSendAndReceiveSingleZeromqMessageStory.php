@@ -66,8 +66,8 @@ $story->addAction(function() {
 		$inSocket  = usingZmqContext($context)->connectToHost($hostId, $inPort, 'PUSH');
 		$outSocket = usingZmqContext($context)->connectToHost($hostId, $outPort, 'PULL');
 
-		usingZmqSocket($inSocket)->send($checkpoint->expectedMessage, 1);
-		$checkpoint->actualMessage = fromZmqSocket($outSocket)->recv(1);
+		usingZmqSocket($inSocket)->send($checkpoint->expectedMessage);
+		$checkpoint->actualMessage = fromZmqSocket($outSocket)->recv();
 	}
 });
 
