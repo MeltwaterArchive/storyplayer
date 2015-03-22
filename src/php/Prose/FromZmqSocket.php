@@ -161,4 +161,20 @@ class FromZmqSocket extends ZmqSocketBase
 		}
 		return $return;
 	}
+
+	public function getEndpoints()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get the list of endpoints for a ZMQ socket");
+
+		// do it
+		$endpoints = $this->args[0]->getEndpoints();
+
+		// all done
+		$log->endAction($endpoints);
+		return $endpoints;
+	}
 }
