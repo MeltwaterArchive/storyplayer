@@ -1,5 +1,5 @@
 ---
-layout: homepage
+layout: v2/frontpage
 title: Storyplayer Documentation
 ---
 
