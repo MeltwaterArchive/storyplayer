@@ -97,7 +97,7 @@ class UsingZmqContext extends Prose
 
 		// all done
 		$log->endAction();
-		return $this->args[1];
+		return $this->args[0];
 	}
 
 	public function bindToPort($port, $socketType, $portType='tcp')
