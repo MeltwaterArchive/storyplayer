@@ -216,15 +216,13 @@
 		"modules/environment/index",
 		"modules/environment/fromEnvironment",
 		"changelog",
-		"copyright",
-		"editorial-guidelines"
+		"copyright"
 	],
 	"navbar": {
 		"Home": {
 			"Welcome To Storyplayer": "index",
 			"ChangeLog": "changelog",
-			"Legal Stuff": "copyright",
-			"Editorial Guidelines": "editorial-guidelines"
+			"Legal Stuff": "copyright"
 		},
 		"Learn": {
 			"Introduction": "learn/index",
