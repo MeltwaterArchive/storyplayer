@@ -39,7 +39,8 @@ Module | Use To ...
 [UNIX Shell](shell/index.html) |
 [UUID](uuid/index.html) |
 [Vagrant](vagrant/index.html) |
-[ZeroMQ](zeromq/index.html) |
+[ZeroMQ](zeromq/index.html) | use the ZeroMQ messaging library
+[ZMQ]|(zmq/index.html) | the original ZeroMQ module from SPv1
 
 ## Iterators
 
