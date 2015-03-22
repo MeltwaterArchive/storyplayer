@@ -8,8 +8,6 @@ updated_for_v2: true
 
 # Setting Up Apple OSX Using Macports
 
-Coming very soon!
-
 These are the instructions to prepare your OSX machine for running Storyplayer. These instructions use [MacPorts](http://www.macports.org), a package manager that makes it easy to install open-source software onto OSX.
 
 ## Why Macports?
