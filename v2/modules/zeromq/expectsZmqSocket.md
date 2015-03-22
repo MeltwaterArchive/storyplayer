@@ -21,6 +21,27 @@ Every action is a test of some kind.
 
 Write your story as if every test must pass.
 
+## canSendNonBlocking()
+
+Use `expectsZmqSocket()->canSendNonBlocking()` to make sure that the ZMQ socket's sending message buffer isn't currently full.
+
+{% highlight php startinline %}
+expectsZmqSocket($socket)->canSendNonBlocking($message);
+{% endhighlight %}
+
+where:
+
+* `$socket` is a `ZMQSocket`
+* `$message` is an array containing a single-part ZeroMQ message to send
+
+If sending the message would cause ZeroMQ (and therefore your process) to block, an exception is thrown.  Otherwise, the message is sent.
+
+__NOTE:__
+
+If a message doesn't block when you attempt to send it, that doesn't guarantee that the message has reached the receiving process.  The message could be buffered by ZeroMQ itself, or it could be buffered by the operating system's TCP/IP stack.
+
+In other words, be conservative about the conclusions you draw in your tests.
+
 ## canSendmultiNonBlocking()
 
 Use `expectsZmqSocket()->canSendmultiNonBlocking()` to make sure that the ZMQ socket's sending message buffer isn't currently full.
@@ -32,7 +53,7 @@ expectsZmqSocket($socket)->canSendmultiNonBlocking($message);
 where:
 
 * `$socket` is a `ZMQSocket`
-* `$message` is an array containing a multipart ZeroMQ message to send
+* `$message` is an array containing a multi-part ZeroMQ message to send
 
 If sending the message would cause ZeroMQ (and therefore your process) to block, an exception is thrown.  Otherwise, the message is sent.
 
@@ -41,3 +62,17 @@ __NOTE:__
 If a message doesn't block when you attempt to send it, that doesn't guarantee that the message has reached the receiving process.  The message could be buffered by ZeroMQ itself, or it could be buffered by the operating system's TCP/IP stack.
 
 In other words, be conservative about the conclusions you draw in your tests.
+
+## isConnectedToHost()
+
+Use `expectsZmqSocket()->isConnectedToHost()` to make sure that a ZMQ socket is connected to where you think it is connected to.
+
+{% highlight php startinline %}
+expectsZmqSocket($socket)->isConnectedToHost($hostId, $portNumber);
+{% endhighlight %}
+
+where:
+
+* `$socket` is the `ZMQSocket` you want to test
+* `$hostId` is the ID of the host in your test environment where `$socket` should be connected to
+* `$portNumber` is the port number that `$socket` should be connected to
