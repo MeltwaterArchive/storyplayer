@@ -31,7 +31,7 @@ where:
 
 * `$address` is a URI that ZeroMQ supports (such as _tcp://\*:5000_)
 * `$socketType` is one of the _ZMQ::SOCKET\_\*_ constants
-* `$sock` is the `ZMQ_Socket` for you to send/receive on
+* `$sock` is the `ZMQSocket` for you to send/receive on
 
 __TIPS:__
 
@@ -51,7 +51,7 @@ where:
 * `$socketType` is one of the _ZMQ::SOCKET\_\*_ constants
 * `$sendHwm` is an _optional_ size for ZeroMQ's sending buffer (defaults to 100, not sure it's reliably implemented in the PHP extension)
 * `$recvHwm` is an _optional_ size for ZeroMQ's receiving buffer (defaults to 100, not sure it's reliably implemented in the PHP extension)
-* `$sock` is the `ZMQ_Socket` for you to send/receive on
+* `$sock` is the `ZMQSocket` for you to send/receive on
 
 __TIPS:__
 
@@ -67,16 +67,16 @@ $message = usingZmq()->recv($socket);
 
 where:
 
-* `$socket` is a `ZMQ_Socket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
+* `$socket` is a `ZMQSocket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
 * `$message` is the single-part message read from the `$socket`
 
-As `$socket` is a genuine `ZMQ_Socket`, you could simply _recv()_ directly on the socket like this:
+As `$socket` is a genuine `ZMQSocket`, you could simply _recv()_ directly on the socket like this:
 
 {% highlight php startinline %}
 $message = $socket->recv();
 {% endhighlight %}
 
-and it will work.  The reason we recommend using _usingZmq()->recv()_ et al instead of working directly with the `ZMQ_Socket` is because these wrapper methods write additional information to [the Storyplayer log](../../configuration/logging.html).  This information can be useful when attempting to understand why a test is failing or is hanging.
+and it will work.  The reason we recommend using _usingZmq()->recv()_ et al instead of working directly with the `ZMQSocket` is because these wrapper methods write additional information to [the Storyplayer log](../../configuration/logging.html).  This information can be useful when attempting to understand why a test is failing or is hanging.
 
 ## recvMulti()
 
@@ -88,10 +88,10 @@ $message = usingZmq()->recvMulti($socket);
 
 where:
 
-* `$socket` is a `ZMQ_Socket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
+* `$socket` is a `ZMQSocket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
 * `$message` is the multi-part message read from the `$socket`
 
-See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQ_Socket`.
+See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQSocket`.
 
 ## recvMultiNonBlocking()
 
@@ -103,10 +103,10 @@ $message = usingZmq()->recvMultiNonBlocking($socket);
 
 where:
 
-* `$socket` is a `ZMQ_Socket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
+* `$socket` is a `ZMQSocket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
 * `$message` is the multi-part message read from the `$socket`, or NULL if the socket would have blocked
 
-See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQ_Socket`.
+See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQSocket`.
 
 ## recvNonBlocking()
 
@@ -118,10 +118,10 @@ $message = usingZmq()->recvNonBlocking($socket);
 
 where:
 
-* `$socket` is a `ZMQ_Socket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
+* `$socket` is a `ZMQSocket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
 * `$message` is the single-part message read from the `$socket`, or NULL if the socket would have blocked
 
-See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQ_Socket`.
+See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQSocket`.
 
 ## send()
 
@@ -133,10 +133,10 @@ usingZmq()->send($socket, $message);
 
 where:
 
-* `$socket` is a `ZMQ_Socket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
+* `$socket` is a `ZMQSocket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
 * `$message` is the single-part message to be send via the `$socket`
 
-See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQ_Socket`.
+See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQSocket`.
 
 ## sendMulti()
 
@@ -148,7 +148,7 @@ usingZmq()->sendMulti($socket, $message);
 
 where:
 
-* `$socket` is a `ZMQ_Socket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
+* `$socket` is a `ZMQSocket` previously created using _[bind()](#bind)_ or _[connect()](#connect)_
 * `$message` is the multi-part message to be send via the `$socket`
 
-See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQ_Socket`.
+See _[usingZmq()->recv()](#recv)_ for a discussion about why we recommend using these wrapper methods instead of simply working directly with the `ZMQSocket`.
