@@ -84,6 +84,7 @@ use Prose\ExpectsShell;
 use Prose\ExpectsSupervisor;
 use Prose\ExpectsUuid;
 use Prose\ExpectsZmq;
+use Prose\ExpectsZmqSocket;
 use Prose\ForeachHostWithRole;
 use Prose\FromAws;
 use Prose\FromBrowser;
@@ -586,6 +587,20 @@ function expectsUuid()
 function expectsZmq()
 {
     return new ExpectsZmq(StoryTeller::instance());
+}
+
+/**
+ * returns the ExpectsZmqSocket module
+ *
+ * This module provides support for testing ZeroMQ sockets
+ *
+ * @param  \ZMQSocket
+ *         the ZMQSocket to test
+ * @return \Prose\ExpectsZmqSocket
+ */
+function expectsZmqSocket($zmqSocket)
+{
+    return new ExpectsZmqSocket(StoryTeller::instance(), [$zmqSocket]);
 }
 
 /**
