@@ -79,10 +79,8 @@ class UsingZmqContext extends Prose
 		// make sure we have a ZMQContext
 		//
 		// $params[0] is null when we need to create a ZMQContext
-		// $params[1] contains the number of IO threads to create inside
-		// the context
-		if (!isset($params[0]) || !$params[0] instanceof ZMQContext) {
-			$params[0] = new ZMQContext($params[1]);
+		if (!isset($params[0])) {
+			$params[0] = new ZMQContext();
 		}
 
 		// now we're ready to call the parent constructor
