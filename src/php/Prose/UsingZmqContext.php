@@ -133,13 +133,13 @@ class UsingZmqContext extends Prose
 		return $socket;
 	}
 
-	public function connectToHost($hostId, $port, $socketType, $portType = 'tcp', $sendHwm = 100, $recvHwm = 100)
+	public function connectToHost($hostId, $port, $socketType, $sendHwm = 100, $recvHwm = 100)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("connect() to ZMQ {$portType} '{$socketType}' socket on host '{$hostId}'");
+		$log = $st->startAction("connect() to ZMQ '{$socketType}' socket on host '{$hostId}':{$port}");
 
 		// do we have a supported socket?
 		if (!isset($this->socketMap[$socketType])) {
@@ -165,9 +165,9 @@ class UsingZmqContext extends Prose
 
 		// make the connection
 		//
-		// NOTE: ZMQ does 'lazy' connections. there's no way for us to tell
-		// whether or not this connect has succeeded
-		$socket->connect("{$portType}://{$ipAddress}:{$port}");
+		// NOTE: we use the 'force' parameter here to avoid Storyplayer
+		// hanging if the remote end is not available
+		$socket->connect("tcp://{$ipAddress}:{$port}", true);
 
 		// all done
 		$log->endAction();
