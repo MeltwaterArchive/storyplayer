@@ -3,6 +3,7 @@ layout: v2/top-level
 title: Legal Stuff
 prev: '<a href="changelog.html">Prev: ChangeLog</a>'
 next: '<a href="editorial-guidelines.html">Next: Editorial Guidelines</a>'
+updated_for_v2: true
 ---
 # Legal Stuff
 
