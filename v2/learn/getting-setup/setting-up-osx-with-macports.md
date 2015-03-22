@@ -34,28 +34,59 @@ Storyplayer will work equally well with both, but if you're not sure which one t
 1. [Install MacPorts](http://www.macports.org) if you don't already have it.
 1. Run these commands in Terminal:
 
-        tbd
+        # install PHP from Macports
+        sudo port install php56 php56-curl php56-mcrypt php56-opcache php56-pcntl
+        sudo port install php56-pear php56-posix php56-mysql
+        sudo port install pkgconfig wget curl
 
-1. Make sure that `/usr/local/bin` and `/usr/local/sbin` are at the front of your PATH. (This is the default behaviour on OSX Yosemite.)  You can check this by running:
+        # replace Apple's PHP with a modern one
+        sudo rm /usr/bin/phpize
+        sudo ln -s /opt/local/bin/phpize56 /usr/bin/
+        sudo rm /usr/bin/php-config
+        sudo ln -s /opt/local/bin/php-config56 /usr/bin/
+        sudo rm /usr/bin/php
+        sudo ln -s /opt/local/bin/php56 /usr/bin/
+
+        # fix Macports PEAR / PECL support
+        sudo ln -s /opt/local/lib/php/pear/bin/pear /opt/local/bin/
+        sudo ln -s /opt/local/lib/php/pear/bin/pecl /opt/local/bin/
+
+1. Make sure that `/opt/local/bin` and `/opt/local/sbin` are at the front of your PATH. You can check this by running:
 
         which php
 
-    You should see `/usr/local/bin/php` as the answer.
+    You should see `/opt/local/bin/php` as the answer.
 
-1. Edit `/usr/local/etc/php/5.6/php.ini` and change the following settings:
+1. Edit `/opt/local/var/db/php56/php.ini` and change the following settings:
 
         date.timezone = UTC
 
-1. Create the file `/usr/local/etc/php/5.6/conf.d/ext-opcache.ini`, with this content:
+1. Install libzmq from Github:
 
-        [opcache]
-        zend_extension=/usr/local/Cellar/php56/5.6.4/lib/php/extensions/no-debug-non-zts-20131226/opcache.so
+        cd ~
+        mkdir Sources
+        cd Sources
+        git clone https://github.com/zeromq/zeromq4-x.git
+        cd zeromq4-x
+        ./autogen.sh
+        ./configure
+        make
+        sudo make install
+
+1. Install PHP's ZMQ extension
+
+        echo | pecl install zmq-1.1.2
+
+1. Edit `/opt/local/var/db/php56/zmq.ini` and give it the following contents:
+
+        [zmq]
+        extension=zmq.so
 
 ## Other CLI Tools
 
 1. Run this command in Terminal to install GNU Screen:
 
-        port install screen
+        sudo port install screen
 
    OSX does already include `screen`, but unfortunately it doesn't behave quite the same as the original GNU Screen. Storyplayer needs the original!
 
