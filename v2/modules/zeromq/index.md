@@ -20,7 +20,7 @@ The source code for this module can be found in these PHP classes:
 <div class="callout info" markdown="1">
 #### A New API For Storyplayer v2
 
-For Storyplayer v2, we've created a new ZeroMQ module which is much clearer to understand. We recommend that all new stories use the new ZeroMQ module.
+For Storyplayer v2, we've created a new ZeroMQ module which is much clearer to understand, and much easier to use. We recommend that all new stories use the new ZeroMQ module.
 
 If you're looking for the original module from Storyplayer v1, this is now documented as the _[ZMQ module](../zmq/index.html)_. We've no plans to drop the original module.
 </div>
@@ -41,17 +41,16 @@ Depending on what you want to test, you might be better off creating a custom te
 
 You need to install:
 
-* ZeroMQ (we recommend version 4.0 or later)
-* The PHP extension for ZeroMQ
+* ZeroMQ (we recommend [version 4.0](https://github.com/zeromq/zeromq4-x) or later)
+* The PHP extension for ZeroMQ `echo | pecl install zmq-1.1.2`
 
 ## Using The ZeroMQ Module
 
 The basic pattern for using the ZeroMQ module is:
 
+1. Create a `ZMQContext` to share amongst the ZeroMQ sockets.
 1. Create a ZeroMQ socket that either binds or connects as appropriate.
 1. Use that socket to send or receive single or multi-part messages.
-
-Note that we don't close the socket afterwards ... at the time of writing, the PHP extension for ZeroMQ doesn't support closing and destroying sockets :(
 
 Here's an example:
 
@@ -92,7 +91,7 @@ ZeroMQ's default behaviour of _lazy connect_ does not fit well with PHP applicat
 
 Storyplayer avoids this problem by disabling ZeroMQ's _lazy connect_ strategy. When you attempt to `connect()` to a (possibly) remote socket, Storyplayer tells ZeroMQ to return straight away if the `connect()` fails.
 
-## ZeroMQ Sockets And Timeouts
+## ZeroMQ Sockets And Default Timeouts
 
 ZeroMQ sockets have internal queues for holding messages that are waiting to be sent, or that have been received from the network but not yet read by the application.
 
@@ -101,11 +100,21 @@ These send and receive queues have a maximum length, known as the _high water ma
 {% highlight php startinline %}
 // create a socket with an send queue of 200 messages,
 // and a receive queue of 500 messages
-$socket = usingZmqContext($context)->connectToHost($hostId, $port, 'tcp', 200, 500);
+$socket = usingZmqContext($context)->connectToHost($hostId, $port, 200, 500);
 {% endhighlight %}
 
-When you `send()` or `sendMulti()` a message, you're actually asking ZeroMQ to put your message onto the socket's send queue. `send()` and `sendMulti()` will block until there is space on the send queue for your message.
+When you `send()` or `sendMulti()` a message, you're actually asking ZeroMQ to put your message onto the socket's send queue. To avoid `send()` and `sendMulti()` potentially blocking forever, Storyplayer sets a default timeout of 5 seconds.
 
-That means, when the `send()` or `sendMulti()` method call returns, there's no guarantee that your message has made it to the receiving application yet.
+You can override this whenever you send or receive a message:
 
-To avoid `send()` and `sendMulti()` blocking forever, use the `$timeout` parameter. `$timeout` is the number of seconds to wait for there to be space on the send queue before giving up.
+{% highlight php startinline %}
+// timeout after 2 seconds
+usingZmqSocket($socket)->send($msg, 2);
+{% endhighlight %}
+
+If you really need to block forever, use a timeout of `-1`:
+
+{% highlight php startinline %}
+// wait for as long as it takes
+usingZmqSocket($socket)->send($msg, -1);
+{% endhighlight %}
