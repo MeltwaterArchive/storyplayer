@@ -1,8 +1,8 @@
 ---
 layout: v2/modules-zmq
 title: expectsZmq()
-prev: '<a href="../../modules/zeromq/index.html">Prev: The ZeroMQ Module</a>'
-next: '<a href="../../modules/zeromq/usingZmq.html">Next: usingZmq()</a>'
+prev: '<a href="../../modules/zmq/index.html">Prev: The ZMQ Module</a>'
+next: '<a href="../../modules/zmq/usingZmq.html">Next: usingZmq()</a>'
 updated_for_v2: true
 ---
 
@@ -41,3 +41,15 @@ __NOTE:__
 If a message doesn't block when you attempt to send it, that doesn't guarantee that the message has reached the receiving process.  The message could be buffered by ZeroMQ itself, or it could be buffered by the operating system's TCP/IP stack.
 
 In other words, be conservative about the conclusions you draw in your tests.
+
+## requirementsAreMet()
+
+Use `expectsZmq()->requirementsAreMet()` to make sure that Storyplayer has access to PHP's ZMQ extension.
+
+{% highlight php startinline %}
+$story->addTestCanRunCheck(function() {
+	// tell Storyplayer to skip this test
+	// if the PHP ZMQ extension is not installed
+	expectsZmq()->requirementsAreMet();
+});
+{% endhighlight %}

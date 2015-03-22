@@ -1,8 +1,8 @@
 ---
 layout: v2/modules-zmq
-title: The ZeroMQ Module
-prev: '<a href="../../modules/vagrant/expectsVagrant.html">Prev: expectsVagrant()</a>'
-next: '<a href="../../modules/zeromq/expectsZmq.html">Next: expectsZmq()</a>'
+title: The ZMQ Module
+prev: '<a href="../../modules/zeromq/usingZmqSocket.html">Prev: usingZmqSocket()</a>'
+next: '<a href="../../modules/zmq/expectsZmq.html">Next: expectsZmq()</a>'
 updated_for_v2: true
 ---
 
@@ -18,11 +18,11 @@ The source code for this module can be found in these PHP classes:
 <div class="callout info" markdown="1">
 #### A Lower-Level Module
 
-This is the ZeroMQ module originally created for Storyplayer v1. It was created before Storyplayer supported test environments.
+This is the ZeroMQ module originally created for Storyplayer v1. It was created before Storyplayer supported test environments. The new [ZeroMQ module](../zeromq/index.html) is much easier to use.
 
 We recommend only using this module if you're already using it in existing tests.
 
-We've no plans to get rid of this module.
+We've no plans to get rid of this module. This module is heavily in use inside DataSift. We can't make any changes that will break backwards compatibility.
 </div>
 
 ## Sometimes An External Messaging Tool Is Best
@@ -41,7 +41,7 @@ Depending on what you want to test, you might be better off creating a custom te
 
 You need to install:
 
-* ZeroMQ (we recommend version 3.2 or later)
+* ZeroMQ (we recommend version 4.0 or later)
 * The PHP extension for ZeroMQ
 
 ## Using The ZeroMQ Module

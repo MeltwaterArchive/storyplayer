@@ -2,7 +2,7 @@
 layout: v2/modules-zeromq
 title: usingZmqSocket()
 prev: '<a href="../../modules/zeromq/fromZmqSocket.html">Prev: fromZmqSocket()</a>'
-next: '<a href="../../modules/zmq/index.html">Next: The ZeroMQ Module</a>'
+next: '<a href="../../modules/zmq/index.html">Next: The ZMQ Module</a>'
 updated_for_v2: true
 ---
 # usingZmqSocket()
