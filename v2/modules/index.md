@@ -66,5 +66,5 @@ These modules are intended for internal use by Storyplayer, and you shouldn't ca
 These modules will be removed in Storyplayer v3. Do not use them in new stories.
 
 Module | Use To ...
--------------------
+-------|-----------
 [Environment](environment/index.html) | get settings from Storyplayer's running config
