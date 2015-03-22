@@ -74,7 +74,9 @@ If in doubt, connect using a shared context.
 Use `usingZmqContext()->bindToPort()` to bind to a port on `localhost` to receive ZMQ connections.
 
 {% highlight php startinline %}
-$socket = usingZmqContext($context)->bindToPort($portNumber, $socketType, $portType="tcp", $sendHwm=100, $recvHwm=100);
+$socket = usingZmqContext($context)->bindToPort(
+    $portNumber, $socketType, $sendHwm=100, $recvHwm=100
+);
 {% endhighlight %}
 
 where:
@@ -82,7 +84,6 @@ where:
 * `$context` is a `ZMQContext` created using `usingZmqContext()->getZmqContext()`. If omitted, Storyplayer will create a new ZMQContext for this action.
 * `$portNumber` is the port number that you want to bind to
 * `$socketType` is one of the [supported ZMQ socket types](#supported-zmq-socket-types)
-* `$portType` is 'tcp' (default) or 'udp'
 * `$sendHwm` sets the length of the internal queue for sending messages
 * `$recvHwm` sets the length of the internal queue for receiving messages
 
@@ -91,16 +92,17 @@ where:
 Use `usingZmqContext()->connectToHost()` to connect to a port on a host in your test environment.
 
 {% highlight php startinline %}
-$socket = usingZmqContext($context)->connectToHost($hostId, $portNumber, $socketType, $portType="tcp", $sendHwm=100, $recvHwm=100);
+$socket = usingZmqContext($context)->connectToHost(
+    $hostId, $portNumber, $socketType, $sendHwm=100, $recvHwm=100
+);
 {% endhighlight %}
 
 where:
 
 * `$context` is a `ZMQContext` created using `usingZmqContext()->getZmqContext()`. If omitted, Storyplayer will create a new ZMQContext for this action.
 * `$hostId` is the ID of the host in your test environment to connect to
-* `$portNumber` is the port number that you want to bind to
+* `$portNumber` is the port number that you want to connect to
 * `$socketType` is one of the [supported ZMQ socket types](#supported-zmq-socket-types)
-* `$portType` is 'tcp' (default) or 'udp'
 * `$sendHwm` sets the length of the internal queue for sending messages
 * `$recvHwm` sets the length of the internal queue for receiving messages
 
