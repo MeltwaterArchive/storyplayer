@@ -45,10 +45,10 @@ Module | Use To ...
 
 New for Storyplayer v2, we've added support for modules that provide iterators for your story:
 
-* [hostWithRole](iterators/hostWithRole.html)
-* [expectsFirstHostWithRole](iterators/expectsFirstHostWithRole.html)
-* [fromFirstHostWithRole](iterators/fromFirstHostWithRole.html)
-* [usingFirstHostWithRole](iterators/usingFirstHostWithRole.html)
+* [An introduction to iterators](iterators/index.html)
+* [foreach(hostWithRole())](iterators/hostWithRole.html)
+* [foreach(firstHostWithRole())](iterators/firstHostWithRole.html)
+* [foreach(lastHostWithRole())](iterators/lastHostWithRole.html)
 
 ## Internal Modules
 
