@@ -16,31 +16,30 @@ Module | Use To ...
 -------|------------
 [Amazon AWS](aws/index.html) |
 [Amazon EC2](ec2/index.html) |
-[Assertions](asserts/index.html) | test data that you've obtained from other modules.
-[Browser](browser/index.html) | control a web browser.
-[Checkpoint](checkpoint/index.html) |
-[cURL](curl/index.html) |
-[DeviceManager](devicemanager/index.html) | start and stop the test device.
-[Environment](environment/index.html) |
-[Failure](failure/index.html) |
-[File](file/index.html) |
-[Form](form/index.html) |
-[Graphite](graphite/index.html) |
-[Host](host/index.html) |
-[HTTP](http/index.html) |
-[Log](log/index.html) |
-[Provisioning](provisioning/index.html) |
-[SavageD](savaged/index.html) |
+[Assertions](asserts/index.html) | test data that you've obtained from other modules
+[Browser](browser/index.html) | control a web browser
+[Checkpoint](checkpoint/index.html) | get the Checkpoint object
+[cURL](curl/index.html) | make cURL requests
+[DeviceManager](devicemanager/index.html) | start and stop the test device
+[Failure](failure/index.html) | deal with actions that are expected to fail
+[File](file/index.html) | work with files locally
+[Form](form/index.html) | fill out forms in a web browser
+[Graphite](graphite/index.html) | get data from a Graphite server
+[Host](host/index.html) | work with hosts in your test environment
+[HTTP](http/index.html) | make HTTP/HTTPS requests
+[Log](log/index.html) | write to Storyplayer's logfile
+[Provisioning](provisioning/index.html) | provision hosts in your test environment
+[SavageD](savaged/index.html) | monitor processes and servers in your test environment
 [Storyplayer](storyplayer/index.html) | retrieve settings from your `storyplayer.json` config file
-[Supervisor](supervisor/index.html) |
-[System Under Test](systemundertest/index.html) |
-[Test Environment](testenvironment/index.html) |
-[Timer](timer/index.html) |
-[UNIX Shell](shell/index.html) |
-[UUID](uuid/index.html) |
-[Vagrant](vagrant/index.html) |
+[Supervisor](supervisor/index.html) | work with Supervisor on hosts in your test environment
+[System Under Test](systemundertest/index.html) | get settings from your system under test config file
+[Test Environment](testenvironment/index.html) | get settings from your test environment config file
+[Timer](timer/index.html) | wait for things to happen
+[UNIX Shell](shell/index.html) | work with your local Linux / OSX computer
+[UUID](uuid/index.html) | create Universally-Unique IDs
+[Vagrant](vagrant/index.html) | work with Vagrant
 [ZeroMQ](zeromq/index.html) | use the ZeroMQ messaging library
-[ZMQ]|(zmq/index.html) | the original ZeroMQ module from SPv1
+[ZMQ](zmq/index.html) | the original ZeroMQ module from SPv1
 
 ## Iterators
 
@@ -61,3 +60,11 @@ These modules are intended for internal use by Storyplayer, and you shouldn't ca
 * [Roles Table](rolestable/index.html)
 * [Runtime Table](runtimetable/index.html)
 * [Targets Table](targetstable/index.html)
+
+## Deprecated Modules
+
+These modules will be removed in Storyplayer v3. Do not use them in new stories.
+
+Module | Use To ...
+-------------------
+[Environment](environment/index.html) | get settings from Storyplayer's running config
