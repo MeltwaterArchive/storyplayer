@@ -81,20 +81,14 @@ class UsingZmqSocket extends ZmqSocketBase
 		$log->endAction();
 	}
 
-	public function sendNonBlocking($message, $timeout = -1)
+	public function sendNonBlocking($message)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		if ($timeout == -1) {
-			$log = $st->startAction("sendNonBlocking() to ZMQ socket; no timeout");
-			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
-		}
-		else {
-			$log = $st->startAction("sendNonBlocking() to ZMQ socket; timeout is {$timeout} seconds");
-			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
-		}
+		$log = $st->startAction("sendNonBlocking() to ZMQ socket");
+		$this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
 
 		// do it
 		$sent = $this->args[0]->send($message, ZMQ::MODE_NOBLOCK);
@@ -136,20 +130,13 @@ class UsingZmqSocket extends ZmqSocketBase
 		$log->endAction();
 	}
 
-	public function sendMultiNonBlocking($message, $timeout = -1)
+	public function sendMultiNonBlocking($message)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		if ($timeout == -1) {
-			$log = $st->startAction("sendMultiNonBlocking() to ZMQ socket; no timeout");
-			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
-		}
-		else {
-			$log = $st->startAction("sendMultiNonBlocking() to ZMQ socket; timeout is {$timeout} seconds");
-			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
-		}
+		$log = $st->startAction("sendMultiNonBlocking() to ZMQ socket");
 
 		// do it
 		$sent = $this->args[0]->sendmulti($message, ZMQ::MODE_NOBLOCK);
