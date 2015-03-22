@@ -59,10 +59,99 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class UsingZmqSocket extends ZmqSocketBase
 {
-	public function send($message, $timeout = -1)
+	public function bindToPort($port, $sendHwm = 100, $recvHwm = 100)
 	{
 		// shorthand
 		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("bind() as ZMQ tcp socket at host 'localhost':{$port}");
+
+		// reuse the existing socket
+		$socket = $this->args[0];
+		$socket->bind("tcp://*:{$port}");
+
+		// set high-water marks now
+		$socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
+		$socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function unbindFromPort($port)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("unbind() ZMQ tcp socket at host 'localhost':{$port}");
+
+		// attempt the unbind
+		$socket->unbind("tcp://*:{$port}");
+
+		// all done
+		$log->endAction();
+	}
+
+	public function connectToHost($hostId, $port, $sendHwm = 100, $recvHwm = 100)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("connect() to ZMQ tcp socket on host '{$hostId}':{$port}");
+
+		// where are we connecting to?
+		$ipAddress = fromHost($hostId)->getIpAddress();
+
+		// we're reusing the existing socket
+		$socket = $this->args[0];
+
+		// set high-water marks now
+		$socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
+		$socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
+
+		// make the connection
+		//
+		// NOTE: we use the 'force' parameter here to avoid Storyplayer
+		// hanging if the remote end is not available
+		$socket->connect("tcp://{$ipAddress}:{$port}", true);
+
+		// all done
+		$log->endAction();
+	}
+
+	public function disconnectFromHost($hostId, $port)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("disconnect() from ZMQ tcp socket on host '{$hostId}':{$port}");
+
+		// where are we connecting to?
+		$ipAddress = fromHost($hostId)->getIpAddress();
+
+		// we're reusing the existing socket
+		$socket = $this->args[0];
+
+		// attempt the disconnection
+		$socket->disconnect("tcp://{$ipAddress}:{$port}");
+
+		// all done
+		$log->endAction();
+	}
+
+	public function send($message, $timeout = null)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// do we need to set a default timeout?
+		if ($timeout === null) {
+			$timeout = self::$defaultTimeout;
+		}
 
 		// what are we doing?
 		if ($timeout == -1) {
