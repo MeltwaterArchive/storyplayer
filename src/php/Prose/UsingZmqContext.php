@@ -100,13 +100,13 @@ class UsingZmqContext extends Prose
 		return $this->args[0];
 	}
 
-	public function bindToPort($port, $socketType, $portType='tcp')
+	public function bindToPort($port, $socketType, $sendHwm = 100, $recvHwm = 100)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("bind() to ZMQ {$portType} '{$socketType}' socket at host 'localhost'");
+		$log = $st->startAction("bind() to ZMQ tcp '{$socketType}' socket at host 'localhost':{$port}");
 
 		// do we have a supported socket?
 		if (!isset($this->socketMap[$socketType])) {
@@ -122,7 +122,11 @@ class UsingZmqContext extends Prose
 			$log->endAction($msg);
 			throw new E5xx_ActionFailed(__METHOD__, $msg);
 		}
-		$socket->bind("{$portType}://0.0.0.0:{$port}");
+		$socket->bind("tcp://*:{$port}");
+
+		// set high-water marks now
+		$socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
+		$socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
 
 		// all done
 		$log->endAction();
