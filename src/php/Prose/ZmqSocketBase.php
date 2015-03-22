@@ -61,6 +61,8 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class ZmqSocketBase extends Prose
 {
+	static public $defaultTimeout = 5;
+
 	public function __construct(Storyteller $st, $params = [])
 	{
 		// call our parent first

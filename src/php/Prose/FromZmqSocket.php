@@ -60,10 +60,15 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class FromZmqSocket extends ZmqSocketBase
 {
-	public function recv($timeout = -1)
+	public function recv($timeout = null)
 	{
 		// shorthand
 		$st = $this->st;
+
+		// do we need to set a default timeout?
+		if ($timeout === null) {
+			$timeout = self::$defaultTimeout;
+		}
 
 		// what are we doing?
 		if ($timeout == -1) {
@@ -104,10 +109,15 @@ class FromZmqSocket extends ZmqSocketBase
 		return $return;
 	}
 
-	public function recvMulti($timeout = -1)
+	public function recvMulti($timeout = null)
 	{
 		// shorthand
 		$st = $this->st;
+
+		// do we need to set a default timeout?
+		if ($timeout === null) {
+			$timeout = self::$defaultTimeout;
+		}
 
 		// what are we doing?
 		if ($timeout == -1) {

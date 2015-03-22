@@ -109,10 +109,15 @@ class UsingZmqSocket extends ZmqSocketBase
 		return $sent;
 	}
 
-	public function sendMulti($message, $timeout = -1)
+	public function sendMulti($message, $timeout = null)
 	{
 		// shorthand
 		$st = $this->st;
+
+		// do we need to set a default timeout?
+		if ($timeout === null) {
+			$timeout = self::$defaultTimeout;
+		}
 
 		// what are we doing?
 		if ($timeout == -1) {
