@@ -36,6 +36,8 @@ These are SPv1 features that have been upgraded to support SPv2's new features s
 * [Host module](https://datasift.github.io/storyplayer/v2/modules/host/index.html) can now start/stop any screen session in your test environment
 * You can now override the default grace period in `usingHost()->stopProcess()`
 * [fromStoryplayer() module](https://datasift.github.io/storyplayer/v2/modules/storyplayer/index.html)
+* [New ZeroMQ module](https://datasift.github.io/storyplayer/v2/modules/zeromq/index.html)
+* The old ZeroMQ module is now known as the [ZMQ module](https://datasift.github.io/storyplayer/v2/modules/zmq/index.html)
 * you can now throw a `Prose\E4xx_StoryShouldFail` exception in your PreTestPrediction when you predict that the story should fail
 * `src/bin/storyplayer` now uses Composer to work out what its version number is
 
