@@ -94,6 +94,26 @@ class UsingZmqSocket extends ZmqSocketBase
 		$log->endAction();
 	}
 
+	public function unbindFromAllPorts()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("unbind() ZMQ socket from all ports");
+
+		// where are we unbinding from?
+		$endpoints = fromZmqSocket($this->args[0])->getEndpoints();
+
+		foreach($endpoints['bind'] as $address) {
+			usingLog()->writeToLog("unbinding from {$address}");
+			$this->args[0]->unbind($address);
+		}
+
+		// all done
+		$log->endAction();
+	}
+
 	public function connectToHost($hostId, $port, $sendHwm = 100, $recvHwm = 100)
 	{
 		// shorthand
@@ -138,6 +158,41 @@ class UsingZmqSocket extends ZmqSocketBase
 
 		// attempt the disconnection
 		$socket->disconnect("tcp://{$ipAddress}:{$port}");
+
+		// all done
+		$log->endAction();
+	}
+
+	public function disconnectFromAllHosts()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("disconnect() ZMQ socket from all endpoints");
+
+		// where are we disconnecting from?
+		$endpoints = fromZmqSocket($this->args[0])->getEndpoints();
+
+		foreach($endpoints['connect'] as $address) {
+			usingLog()->writeToLog("disconnecting from {$address}");
+			$this->args[0]->disconnect($address);
+		}
+
+		// all done
+		$log->endAction();
+	}
+
+	public function close()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("close all open endpoints on ZMQ socket");
+
+		$this->unbindFromAllPorts();
+		$this->disconnectFromAllHosts();
 
 		// all done
 		$log->endAction();
