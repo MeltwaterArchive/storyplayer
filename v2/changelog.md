@@ -8,7 +8,11 @@ updated_for_v2: true
 
 # ChangeLog
 
-## 2.2.0 - in progress in the `develop` branch
+For the very latest list of changes in upcoming releases, see the [CHANGELOG](https://github.com/datasift/storyplayer/blob/develop/CHANGELOG.md) on GitHub.
+
+## v2.2.0
+
+Currently in progress in the `develop` branch on GitHub.
 
 ### Important:
 
@@ -44,19 +48,25 @@ These are SPv1 features that have been upgraded to support SPv2's new features s
 * [usingHost()->delete()](https://datasift/github.io/storyplayer/v2/modules/http/usingHttp.html#delete) no longer takes a `$body` parameter (violated the HTTP protocol standard)
 * the PreTestPrediction phase works once more
 
-## 2.1.2 - Tuesday 10th March 2015
+## v2.1.2
+
+Released Tuesday 10th March 2015.
 
 ### Fixes:
 
 * Use correct VM name in VagrantVm when checking if the box is running
 
-## 2.1.1 - Friday 6th March 2015
+## v2.1.1
+
+Released Friday 6th March 2015.
 
 ### Fixes:
 
 * Initial support for using Vagrant with something other than Virtualbox
 
-## 2.1.0 - Monday 2nd March 2015
+## v2.1.0
+
+Released Monday 2nd March 2015.
 
 ### New features:
 
@@ -94,7 +104,9 @@ Stories:
 * assertsObject() module now covered
 * assertsString() module now covered
 
-## 2.0.2 - Tue 17th Feb, 2015
+## v2.0.2
+
+Released Tue 17th Feb, 2015.
 
 ### Fixes
 
@@ -105,13 +117,17 @@ The --users switch introduced in 2.0.0 should now work as originally intended.
 * --users switch will accept an empty file
 * better warning and error messages around --users problems
 
-## 2.0.1 - Tue 17th Feb, 2015
+## v2.0.1
+
+Released Tue 17th Feb, 2015.
 
 ### Fixes
 
 * Checkpoint: make sure each story starts with an empty checkpoint
 
-## 2.0.0 - Sun 15th Feb, 2015
+## v2.0.0
+
+Released Sun 15th Feb, 2015.
 
 Considered feature-complete / stable.
 
