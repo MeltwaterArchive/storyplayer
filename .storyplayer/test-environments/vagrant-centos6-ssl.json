@@ -10,7 +10,8 @@
 						"roles": [
 							"host_target",
 							"upload_target",
-							"ssl_target"
+							"ssl_target",
+							"zmq_target"
 						],
 						"appSettings": {
 							"host": {
@@ -22,6 +23,16 @@
 							"user": {
 								"username": "vagrant",
 								"group": "vagrant"
+							},
+							"zmq": {
+								"single": {
+									"inPort": 5000,
+									"outPort": 5001
+								},
+								"multi": {
+									"inPort": 5002,
+									"outPort": 5003
+								}
 							}
 						}
 					}

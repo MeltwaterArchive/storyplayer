@@ -44,9 +44,12 @@
 namespace Prose;
 
 use ZMQ;
+use ZMQContext;
+use ZMQSocket;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * test ZeroMQ connections
+ * receive data from a ZMQ socket
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -55,32 +58,97 @@ use ZMQ;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsZmq extends Prose
+class FromZmqSocket extends ZmqSocketBase
 {
-	public function canSendmultiNonBlocking($socket, $message)
+	public function recv($timeout = -1)
 	{
 		// shorthand
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("make sure ZMQ::sendmulti() does not block");
-
-		// send the data
-		$sent = $socket->sendmulti($message, ZMQ::MODE_NOBLOCK);
-
-		// would it have blocked?
-		if (!$sent) {
-			throw new E5xx_ExpectFailed(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
+		if ($timeout == -1) {
+			$log = $st->startAction("recv() from ZMQ socket; no timeout");
+			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
 		}
+		else {
+			$log = $st->startAction("recv() from ZMQ socket; timeout is {$timeout} seconds");
+			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
+		}
+
+		// do it
+		$return = $this->args[0]->recv();
 
 		// all done
 		$log->endAction();
+		return $return;
 	}
 
-	public function requirementsAreMet()
+	public function recvNonBlocking()
 	{
-		if (!class_exists('ZMQ')) {
-			throw new E5xx_ExpectFailed(__METHOD__, "PHP ZMQ extension installed", "PHP ZMQ extension is not installed");
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("recv() from ZMQ socket");
+
+		// do it
+		$return = $this->args[0]->recv(ZMQ::MODE_NOBLOCK);
+
+		// all done
+		if ($return === false) {
+			$log->endAction("receive attempt would have blocked");
 		}
+		else {
+			$log->endAction();
+		}
+		return $return;
+	}
+
+	public function recvMulti($timeout = -1)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		if ($timeout == -1) {
+			$log = $st->startAction("recvmulti() from ZMQ socket; no timeout");
+			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
+		}
+		else {
+			$log = $st->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
+			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
+		}
+
+		// do it
+		$return = $this->args[0]->recvmulti();
+
+		// we need to look at the received value
+		$printer = new DataPrinter();
+		$msg     = $printer->convertToString($return);
+
+		// all done
+		$log->endAction("result is: {$msg}");
+		return $return;
+	}
+
+	public function recvMultiNonBlocking()
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("recvmulti() from ZMQ socket");
+
+		// do it
+		$return = $this->args[0]->recvmulti(ZMQ::MODE_NOBLOCK);
+
+		// all done
+		if ($return === false) {
+			$log->endAction("receive attempt would have blocked");
+		}
+		else {
+			$log->endAction();
+		}
+		return $return;
 	}
 }

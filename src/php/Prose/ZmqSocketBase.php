@@ -44,9 +44,13 @@
 namespace Prose;
 
 use ZMQ;
+use ZMQContext;
+use ZMQSocket;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * test ZeroMQ connections
+ * base class for all things ZMQ socket related
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -55,32 +59,16 @@ use ZMQ;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsZmq extends Prose
+class ZmqSocketBase extends Prose
 {
-	public function canSendmultiNonBlocking($socket, $message)
+	public function __construct(Storyteller $st, $params = [])
 	{
-		// shorthand
-		$st = $this->st;
+		// call our parent first
+		parent::__construct($st, $params);
 
-		// what are we doing?
-		$log = $st->startAction("make sure ZMQ::sendmulti() does not block");
-
-		// send the data
-		$sent = $socket->sendmulti($message, ZMQ::MODE_NOBLOCK);
-
-		// would it have blocked?
-		if (!$sent) {
-			throw new E5xx_ExpectFailed(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
-		}
-
-		// all done
-		$log->endAction();
-	}
-
-	public function requirementsAreMet()
-	{
-		if (!class_exists('ZMQ')) {
-			throw new E5xx_ExpectFailed(__METHOD__, "PHP ZMQ extension installed", "PHP ZMQ extension is not installed");
+		// make sure that we have a ZMQ socket
+		if (!isset($params[0]) || !$params[0] instanceof ZMQSocket) {
+			throw new E5xx_ActionFailed(__METHOD__, "first param must be a ZMQ socket");
 		}
 	}
 }

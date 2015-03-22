@@ -117,6 +117,7 @@ use Prose\FromTargetsTable;
 use Prose\FromTestEnvironment;
 use Prose\FromUsers;
 use Prose\FromUuid;
+use Prose\FromZmqSocket;
 use Prose\UsingBrowser;
 use Prose\UsingCheckpoint;
 use Prose\UsingEc2;
@@ -154,6 +155,8 @@ use Prose\UsingUsers;
 use Prose\UsingVagrant;
 use Prose\UsingYamlFile;
 use Prose\UsingZmq;
+use Prose\UsingZmqContext;
+use Prose\UsingZmqSocket;
 use Prose\UsingZookeeper;
 
 /**
@@ -1161,6 +1164,20 @@ function fromUuid()
 }
 
 /**
+ * returns the FromZmqSocket module
+ *
+ * This module adds support for receiving data via a ZeroMQ socket.
+ *
+ * @param  \ZMQSocket $zmqSocket
+ *         the ZeroMQ socket you want to receive data from
+ * @return \Prose\FromZmqSocket
+ */
+function fromZmqSocket($zmqSocket)
+{
+    return new FromZmqSocket(StoryTeller::instance(), [$zmqSocket]);
+}
+
+/**
  * return the Checkpoint object
  *
  * The Checkpoint is a 'data bag' - an object that you can store anything
@@ -1765,6 +1782,35 @@ function usingZmq()
     return new UsingZmq(StoryTeller::instance());
 }
 
+/**
+ * returns the UsingZmqContext module
+ *
+ * This module provides support for creating ZeroMQ sockets
+ *
+ * @param  \ZMQContext|null $zmqContext
+ *         the ZMQContext to use when creating the socket
+ *         (leave empty and we'll create a context for you)
+ * @return \Prose\UsingZmqContext
+ */
+function usingZmqContext($zmqContext = null, $ioThreads = 1)
+{
+    return new UsingZmqContext(StoryTeller::instance(), [$zmqContext, $ioThreads]);
+}
+
+/**
+ * returns the UsingZmqSocket module
+ *
+ * This module provides support for sending messages via a ZeroMQ socket
+ *
+ * @param  \ZMQSocket $zmqSocket
+ *         the socket to send on
+ * @return \Prose\UsingZmqSocket
+ */
+function usingZmqSocket($zmqSocket)
+{
+    return new UsingZmqSocket(StoryTeller::instance(), [$zmqSocket]);
+}
+
 // ==================================================================
 //
 // Iterators go here
@@ -1794,7 +1840,7 @@ function firstHostWithRole($roleName)
     $log = $st->startAction("for the first host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $hostDetails = array_pop($listOfHosts);
+    $hostDetails = array_pop(get_object_vars($listOfHosts));
     yield($hostDetails->hostId);
 
     // all done
