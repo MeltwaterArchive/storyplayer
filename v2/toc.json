@@ -56,6 +56,12 @@
 		"using/configuration/prose-namespaces",
 		"using/configuration/runtime-config",
 		"using/configuration/dot.notation.support",
+		"using/devices/index",
+		"using/devices/how-it-works",
+		"using/devices/localbrowsers",
+		"using/devices/saucelabs",
+		"using/devices/remotewebdriver",
+		"using/devices/how-to-test",
 		"using/stories/index",
 		"using/stories/user-stories",
 		"using/stories/service-stories",
@@ -91,12 +97,6 @@
 		"using/test-environments/physical-hosts",
 		"using/test-environments/vagrant",
 		"using/test-environments/safeguarding",
-		"devices/index",
-		"devices/how-it-works",
-		"devices/localbrowsers",
-		"devices/saucelabs",
-		"devices/remotewebdriver",
-		"devices/how-to-test",
 		"tips/index",
 		"tips/vagrant/index",
 		"tips/vagrant/speed-up-virtualbox",
@@ -251,6 +251,15 @@
 				"Runtime Config": "configuration/runtime-config",
 				"The Hosts Table": "modules/hoststable/how-hosts-are-remembered"
 			},
+			"Devices": {
+				"Introduction": "using/devices/index",
+				"How It Works": "using/devices/how-it-works",
+				"Browsers On Your Machine": "using/devices/localbrowsers",
+				"SauceLabs": "using/devices/saucelabs",
+				"Remote WebDriver": "using/devices/remotewebdriver",
+				"Sep1": "",
+				"How To Test": "using/devices/how-to-test"
+			},
 			"Stories": {
 				"Introduction": "using/stories/index",
 				"User Stories": "using/stories/user-stories",
@@ -300,15 +309,6 @@
 				"Vagrant": "environments/vagrant",
 				"Sep2": "",
 				"Safeguarding Environments": "environments/safeguarding"
-			},
-			"Devices": {
-				"Introduction": "devices/index",
-				"How It Works": "devices/how-it-works",
-				"Browsers On Your Machine": "devices/localbrowsers",
-				"SauceLabs": "devices/saucelabs",
-				"Remote WebDriver": "devices/remotewebdriver",
-				"Sep1": "",
-				"How To Test": "devices/how-to-test"
 			}
 		},
 		"Tips": {

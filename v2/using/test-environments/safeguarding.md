@@ -2,7 +2,7 @@
 layout: v2/using-test-environments
 title: Safeguarding Environments
 prev: '<a href="../../using/test-environments/vagrant.html">Prev: Creating Test Environments Using Vagrant</a>'
-next: '<a href="../../devices/index.html">Next: Testing With Different Devices</a>'
+next: '<a href="../../tips/index.html">Next: Tips For Using Storyplayer</a>'
 ---
 
 # Safeguarding Environments

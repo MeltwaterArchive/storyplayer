@@ -1,7 +1,7 @@
 ---
 layout: v2/using-stories
 title: Introducing Stories
-prev: '<a href="../../using/configuration/dot.notation.support.html">Prev: dot.notation.support</a>'
+prev: '<a href="../../using/devices/how-to-test.html">Prev: How To Test With Browsers And Devices</a>'
 next: '<a href="../../using/stories/user-stories.html">Next: User Stories</a>'
 ---
 

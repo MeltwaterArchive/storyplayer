@@ -1,8 +1,8 @@
 ---
-layout: v2/devices
+layout: v2/using-devices
 title: Testing Multiple Browsers Using SauceLabs
-prev: '<a href="../devices/localbrowsers.html">Prev: Testing With Locally Running Web Browsers</a>'
-next: '<a href="../devices/remotewebdriver.html">Next: Testing Unusual Browsers Using The Remote WebDriver</a>'
+prev: '<a href="../../using/devices/localbrowsers.html">Prev: Testing With Locally Running Web Browsers</a>'
+next: '<a href="../../using/devices/remotewebdriver.html">Next: Testing Unusual Browsers Using The Remote WebDriver</a>'
 ---
 
 # Testing Multiple Browsers Using SauceLabs

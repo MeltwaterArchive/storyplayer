@@ -1,8 +1,8 @@
 ---
-layout: v2/devices
+layout: v2/using-devices
 title: Testing Unusual Browsers Using The Remote WebDriver
-prev: '<a href="../devices/saucelabs.html">Prev: Testing Multiple Browsers Using SauceLabs</a>'
-next: '<a href="../devices/how-to-test.html">Next: How To Test With Browsers And Devices</a>'
+prev: '<a href="../../using/devices/saucelabs.html">Prev: Testing Multiple Browsers Using SauceLabs</a>'
+next: '<a href="../../using/devices/how-to-test.html">Next: How To Test With Browsers And Devices</a>'
 ---
 
 # Testing Unusual Browsers Using The Remote WebDriver

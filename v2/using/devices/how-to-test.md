@@ -1,8 +1,8 @@
 ---
-layout: v2/devices
+layout: v2/using-devices
 title: How To Test With Browsers And Devices
-prev: '<a href="../devices/remotewebdriver.html">Prev: Testing Unusual Browsers Using The Remote WebDriver</a>'
-next: '<a href="../tips/index.html">Next: Tips For Using Storyplayer</a>'
+prev: '<a href="../../using/devices/remotewebdriver.html">Prev: Testing Unusual Browsers Using The Remote WebDriver</a>'
+next: '<a href="../../using/stories/index.html">Next: Introducing Stories</a>'
 ---
 
 # How To Test With Browsers And Devices

@@ -1,7 +1,7 @@
 ---
 layout: v2/tips
 title: Tips For Using Storyplayer
-prev: '<a href="../devices/how-to-test.html">Prev: How To Test With Browsers And Devices</a>'
+prev: '<a href="../using/test-environments/safeguarding.html">Prev: Safeguarding Environments</a>'
 next: '<a href="../tips/vagrant/index.html">Next: Tips For Vagrant</a>'
 ---
 

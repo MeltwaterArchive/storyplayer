@@ -1,8 +1,8 @@
 ---
-layout: v2/devices
+layout: v2/using-devices
 title: Testing With Different Devices
-prev: '<a href="../using/test-environments/safeguarding.html">Prev: Safeguarding Environments</a>'
-next: '<a href="../devices/how-it-works.html">Next: How We Control Web Browsers</a>'
+prev: '<a href="../../using/configuration/dot.notation.support.html">Prev: dot.notation.support</a>'
+next: '<a href="../../using/devices/how-it-works.html">Next: How We Control Web Browsers</a>'
 ---
 
 # Testing With Different Devices
