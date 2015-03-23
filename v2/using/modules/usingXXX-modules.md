@@ -1,11 +1,11 @@
 ---
-layout: v2/using-prose
-title: Using Classes
-prev: '<a href="../../using/prose/from-classes.html">Prev: From Classes</a>'
-next: '<a href="../../using/test-environments/index.html">Next: Test Environments</a>'
+layout: v2/using-modules
+title: usingXXX Modules
+prev: '<a href="../../using/modules/fromXXX-modules.html">Prev: fromXXX Actions</a>'
+next: '<a href="../../using/modules/the-st-object.html">Next: The $st Object</a>'
 ---
 
-# Using Classes
+# usingXXX Actions
 
 This page contains any implementation details that are specific to _Using_ classes in Prose modules.  For background, please read [Creating Your Own Prose Modules](creating-prose-modules.html) first.
 

@@ -1,11 +1,11 @@
 ---
-layout: v2/using-prose
-title: From Classes
-prev: '<a href="../../using/prose/expects-classes.html">Prev: Expects Classes</a>'
-next: '<a href="../../using/prose/using-classes.html">Next: Using Classes</a>'
+layout: v2/using-modules
+title: fromXXX Actions
+prev: '<a href="../../using/modules/expectsXXX-modules.html">Prev: expectsXXX Modules</a>'
+next: '<a href="../../using/modules/usingXXX-modules.html">Next: usingXXX Modules</a>'
 ---
 
-# From Classes
+# fromXXX Actions
 
 This page contains any implementation details that are specific to _From_ classes in Prose modules.  For background, please read [Creating Your Own Prose Modules](creating-prose-modules.html) first.
 

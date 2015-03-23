@@ -1,11 +1,11 @@
 ---
-layout: v2/using-prose
-title: Expects Classes
-prev: '<a href="../../using/prose/asserts-classes.html">Prev: Asserts Classes</a>'
-next: '<a href="../../using/prose/from-classes.html">Next: From Classes</a>'
+layout: v2/using-modules
+title: expectsXXX Modules
+prev: '<a href="../../using/modules/assertsXXX-modules.html">Prev: assertsXXX Actions</a>'
+next: '<a href="../../using/modules/fromXXX-modules.html">Next: fromXXX Actions</a>'
 ---
 
-# Expects Classes
+# expectsXXX Modules
 
 This page contains any implementation details that are specific to _Expects_ classes in Prose modules.  For background, please read [Creating Your Own Prose Modules](creating-prose-modules.html) first.
 

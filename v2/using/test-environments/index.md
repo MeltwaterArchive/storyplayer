@@ -1,7 +1,7 @@
 ---
 layout: v2/using-test-environments
 title: Test Environments
-prev: '<a href="../../using/prose/using-classes.html">Prev: Using Classes</a>'
+prev: '<a href="../../using/modules/creating-modules.html">Prev: Creating Your Own Storyplayer Modules</a>'
 next: '<a href="../../using/test-environments/your-machine.html">Next: Testing On Your Machine</a>'
 ---
 

@@ -1,8 +1,8 @@
 ---
-layout: v2/using-prose
+layout: v2/using-modules
 title: $st Helper Methods
-prev: '<a href="../../using/prose/the-st-object.html">Prev: The $st Object</a>'
-next: '<a href="../../using/prose/module-loading.html">Next: Module Loading</a>'
+prev: '<a href="../../using/modules/the-st-object.html">Prev: The $st Object</a>'
+next: '<a href="../../using/modules/module-loading.html">Next: Module Loading</a>'
 ---
 
 # $st Helper Methods

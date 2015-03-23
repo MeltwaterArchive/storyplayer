@@ -1,11 +1,11 @@
 ---
-layout: v2/using-prose
-title: Creating Your Own Prose Modules
-prev: '<a href="../../using/prose/module-namespaces.html">Prev: Module Namespaces</a>'
-next: '<a href="../../using/prose/asserts-classes.html">Next: Asserts Classes</a>'
+layout: v2/using-modules
+title: Creating Your Own Storyplayer Modules
+prev: '<a href="../../using/modules/module-namespaces.html">Prev: Module Namespaces</a>'
+next: '<a href="../../using/test-environments/index.html">Next: Test Environments</a>'
 ---
 
-# Creating Your Own Prose Modules
+# Creating Your Own Storyplayer Modules
 
 If you've jumped straight to this page, please make sure you're familiar with the role of [the $st object](the-st-object.html), [how modules are loaded](module-loading.html) and [the PHP namespaces used for modules](module-namespaces.html) before attempting to create your own Prose modules.
 

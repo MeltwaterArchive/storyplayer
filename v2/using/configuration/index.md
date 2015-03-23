@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: Configuring Storyplayer
 next: '<a href="../../using/configuration/storyplayer-json.html">Next: The storyplayer.json File</a>'
-prev: '<a href="../../using/storyplayer-commands/play-story.html">Prev: The play-story Command</a>'
+prev: '<a href="../../using/index.html">Prev: Storyplayer Reference Manual</a>'
 ---
 
 # Configuring Storyplayer

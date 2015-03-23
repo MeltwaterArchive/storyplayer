@@ -2,7 +2,7 @@
 layout: v2/using-stories
 title: Test Users
 prev: '<a href="../../using/stories/story-params.html">Prev: Story Parameters</a>'
-next: '<a href="../../using/prose/index.html">Next: Introducing Prose</a>'
+next: '<a href="../../using/storyplayer-commands/index.html">Next: Storyplayer Commands</a>'
 ---
 
 # Test Users

@@ -1,11 +1,11 @@
 ---
-layout: v2/using-prose
-title: Asserts Classes
-prev: '<a href="../../using/prose/creating-prose-modules.html">Prev: Creating Your Own Prose Modules</a>'
-next: '<a href="../../using/prose/expects-classes.html">Next: Expects Classes</a>'
+layout: v2/using-modules
+title: assertsXXX Actions
+prev: '<a href="../../using/modules/index.html">Prev: Storyplayer Modules</a>'
+next: '<a href="../../using/modules/expectsXXX-modules.html">Next: expectsXXX Modules</a>'
 ---
 
-# Asserts Classes
+# assertsXXX Actions
 
 This page contains any implementation details that are specific to _Asserts_ classes in Prose modules.  For background, please read [Creating Your Own Prose Modules](creating-prose-modules.html) first.
 
