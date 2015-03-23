@@ -40,6 +40,7 @@
 		"learn/worked-examples/opencfp/06-testing-the-admin-functions",
 		"learn/worked-examples/opencfp/07-testing-the-command-line-utilities",
 		"learn/worked-examples/opencfp/08-final-thoughts",
+		"using/index",
 		"using/storyplayer-commands/index",
 		"using/storyplayer-commands/play-story",
 		"using/configuration/index",
@@ -234,6 +235,7 @@
 			"Worked Examples": "learn/worked-examples/index"
 		},
 		"Use": {
+			"Introduction": "using/index",
 			"Configuration": "using/configuration/index",
 			"Devices": "using/devices/index",
 			"Stories": "using/stories/index",
