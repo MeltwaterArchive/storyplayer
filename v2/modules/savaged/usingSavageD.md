@@ -151,6 +151,18 @@ where:
 
 * `$hostId` is the ID of the host in your test environment where SavageD is installed and running
 
+## stopWatchingServerDiskstats()
+
+Use `usingSavageD()->stopWatchingServerDiskstats()` to tell SavageD to stop writing disk-related stats about the server that SavageD is running on.
+
+{% highlight php startinline %}
+usingSavageD($hostId)->stopWatchingServerDiskstats();
+{% endhighlight %}
+
+where:
+
+* `$hostId` is the ID of the host in your test environment where SavageD is installed and running
+
 ## stopWatchingServerLoadavg()
 
 Use `usingSavageD()->stopWatchingServerLoadavg()` to tell SavageD to stop writing load-average related stats about the server that SavageD is running on.
@@ -226,29 +238,43 @@ _Be aware that the Linux kernel's memory counters are not additive, which can be
 Use `usingSavageD()->watchServerCpu()` to tell SavageD to write CPU-related stats about the server that SavageD is running on. No stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
 
 {% highlight php startinline %}
-usingSavageD($hostId)->watchServerCpu($alias);
+usingSavageD($hostId)->watchServerCpu();
 {% endhighlight %}
 
 where:
 
 * `$hostId` is the ID of the host in your test environment where SavageD is installed and running
 
-The stats will appear as _$prefix.$alias.cpu.\*_ in Graphite, giving you the %CPU usage for each of the per-CPU counters that your Linux kernel tracks.  100% CPU usage is the equivalent of using all of a single CPU core.  If your computer has multiple CPU cores, the total CPU usage will be 100% * no of cores.
+The stats will appear as _$prefix.$hostId.host.cpu.\*_ in Graphite, giving you the %CPU usage for each of the per-CPU counters that your Linux kernel tracks.  100% CPU usage is the equivalent of using all of a single CPU core.  If your computer has multiple CPU cores, the total CPU usage will be 100% * no of cores.
 
 _Be aware that the kernel itself does not report CPU usage in percentages. SavageD has to calculate the percentages based on sampling the CPU-related stats once a second.  SavageD needs a couple of seconds after you start monitoring to grab a starting sample of stats to calculate the percentages from._
+
+## watchServerDiskstats()
+
+Use `usingSavageD()->watchServerDiskstats()` to tell SavageD to write disk-io-related stats about the server that SavageD is running on. No stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
+
+{% highlight php startinline %}
+usingSavageD($hostId)->watchServerDiskstats();
+{% endhighlight %}
+
+where:
+
+* `$hostId` is the ID of the host in your test environment where SavageD is installed and running
+
+The stats will appear as _$prefix.$hostId.host.diskstats.\*_ in Graphite, giving you the disk stats for each of the devices that your Linux kernel tracks.
 
 ## watchServerLoadavg()
 
 Use `usingSavageD()->watchServerLoadavg()` to tell SavageD to write load-average related stats about the server that SavageD is running on. No stats are written to Graphite until you call _[startMonitoring()](#startmonitoring)_.
 
 {% highlight php startinline %}
-usingSavageD($hostId)->watchServerLoadavg($alias);
+usingSavageD($hostId)->watchServerLoadavg();
 {% endhighlight %}
 
 where:
 
 * `$hostId` is the ID of the host in your test environment where SavageD is installed and running
 
-The stats will appear as _$prefix.$alias.loadavg.\*_ in Graphite, giving you the load average figures for 1 minute, 5 minutes and 15 minutes.
+The stats will appear as _$prefix.$hostId.host.loadavg.\*_ in Graphite, giving you the load average figures for 1 minute, 5 minutes and 15 minutes.
 
 _The load average is the number of processes in a runnable state.  When the load average is higher than the number of CPU cores in your computer, that can be an indication that you're trying to do too much on the machine. However, it's more nuanced than that, and we recommend that you focus more on measuring response latency and concurrent users / throughput to get a more accurate picture._
