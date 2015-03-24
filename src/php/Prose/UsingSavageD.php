@@ -306,7 +306,7 @@ class UsingSavageD extends HostBase
 
 		// where are we doing this?
 		$safeTestName = urlencode($this->args[0] . '.host');
-		$url = $this->getSavagedUrl() . "/host/{$safeTestName}/loadavg";
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}/loadavg";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -330,7 +330,7 @@ class UsingSavageD extends HostBase
 
 		// where are we doing this?
 		$safeTestName = urlencode($this->args[0] . '.host');
-		$url = $this->getSavagedUrl() . "/host/{$safeTestName}/loadavg";
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}/loadavg";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -354,7 +354,7 @@ class UsingSavageD extends HostBase
 
 		// where are we doing this?
 		$safeTestName = urlencode($this->args[0] . '.host');
-		$url = $this->getSavagedUrl() . "/host/{$safeTestName}/diskstats";
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}/diskstats";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -378,7 +378,7 @@ class UsingSavageD extends HostBase
 
 		// where are we doing this?
 		$safeTestName = urlencode($this->args[0] . '.host');
-		$url = $this->getSavagedUrl() . "/host/{$safeTestName}/diskstats";
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}/diskstats";
 
 		// make the request
 		$st->usingHttp()->delete($url);
