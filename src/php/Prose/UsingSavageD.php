@@ -111,7 +111,7 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("watch the '{$processName}' process w/ ID '{$pid}' on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeProcessName = urlencode($processName);
+		$safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
 		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/pid";
 
 		// make the request
@@ -135,7 +135,7 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("stop watching the '{$processName}' process on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeProcessName = urlencode($processName);
+		$safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
 		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/pid";
 
 		// make the request
@@ -160,7 +160,7 @@ class UsingSavageD extends HostBase
 
 		// build the URL
 		// where are we doing this?
-		$safeProcessName = urlencode($processName);
+		$safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
 		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/cpu";
 
 		// make the request
@@ -184,7 +184,7 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("stop watch the cpu used by the '{$processName}' process on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeProcessName = urlencode($processName);
+		$safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
 		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/url";
 
 		// make the request
@@ -209,7 +209,7 @@ class UsingSavageD extends HostBase
 
 		// build the URL
 		// where are we doing this?
-		$safeProcessName = urlencode($processName);
+		$safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
 		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/memory";
 
 		// make the request
@@ -233,7 +233,7 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("stop watch the memory used by the '{$processName}' process on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeProcessName = urlencode($processName);
+		$safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
 		$url = $this->getSavagedUrl() . "/process/{$safeProcessName}/memory";
 
 		// make the request
@@ -248,7 +248,7 @@ class UsingSavageD extends HostBase
 		$log->endAction();
 	}
 
-	public function watchServerCpu($testName)
+	public function watchServerCpu()
 	{
 		// shorthand
 		$st = $this->st;
@@ -257,8 +257,8 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("watch the server's cpu usage on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeTestName = urlencode($testName);
-		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/cpu";
+		$safeTestName = urlencode($this->args[0] . '.host');
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}/cpu";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -272,7 +272,7 @@ class UsingSavageD extends HostBase
 		$log->endAction();
 	}
 
-	public function stopWatchingServerCpu($testName)
+	public function stopWatchingServerCpu()
 	{
 		// shorthand
 		$st = $this->st;
@@ -281,8 +281,8 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("stop watching the server's cpu on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeTestName = urlencode($testName);
-		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/cpu";
+		$safeTestName = urlencode($this->args[0] . '.host');
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}/cpu";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -296,7 +296,7 @@ class UsingSavageD extends HostBase
 		$log->endAction();
 	}
 
-	public function watchServerLoadavg($testName)
+	public function watchServerLoadavg()
 	{
 		// shorthand
 		$st = $this->st;
@@ -305,8 +305,8 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("watch the server's load average on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeTestName = urlencode($testName);
-		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/loadavg";
+		$safeTestName = urlencode($this->args[0] . '.host');
+		$url = $this->getSavagedUrl() . "/host/{$safeTestName}/loadavg";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -320,7 +320,7 @@ class UsingSavageD extends HostBase
 		$log->endAction();
 	}
 
-	public function stopWatchingServerLoadavg($testName)
+	public function stopWatchingServerLoadavg()
 	{
 		// shorthand
 		$st = $this->st;
@@ -329,8 +329,8 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("stop watching the server's load average on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeTestName = urlencode($testName);
-		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/loadavg";
+		$safeTestName = urlencode($this->args[0] . '.host');
+		$url = $this->getSavagedUrl() . "/host/{$safeTestName}/loadavg";
 
 		// make the request
 		$st->usingHttp()->delete($url);
@@ -344,7 +344,7 @@ class UsingSavageD extends HostBase
 		$log->endAction();
 	}
 
-	public function watchServerDiskstats($testName)
+	public function watchServerDiskstats()
 	{
 		// shorthand
 		$st = $this->st;
@@ -353,8 +353,8 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("watch the server's diskstats on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeTestName = urlencode($testName);
-		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/diskstats";
+		$safeTestName = urlencode($this->args[0] . '.host');
+		$url = $this->getSavagedUrl() . "/host/{$safeTestName}/diskstats";
 
 		// make the request
 		$st->usingHttp()->post($url);
@@ -368,7 +368,7 @@ class UsingSavageD extends HostBase
 		$log->endAction();
 	}
 
-	public function stopWatchingServerLoadavg($testName)
+	public function stopWatchingServerDiskstats()
 	{
 		// shorthand
 		$st = $this->st;
@@ -377,8 +377,8 @@ class UsingSavageD extends HostBase
 		$log = $st->startAction("stop watching the server's diskstats on host '{$this->args[0]}'");
 
 		// where are we doing this?
-		$safeTestName = urlencode($testName);
-		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/diskstats";
+		$safeTestName = urlencode($this->args[0] . '.host');
+		$url = $this->getSavagedUrl() . "/host/{$safeTestName}/diskstats";
 
 		// make the request
 		$st->usingHttp()->delete($url);
