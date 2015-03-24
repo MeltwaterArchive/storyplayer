@@ -344,6 +344,54 @@ class UsingSavageD extends HostBase
 		$log->endAction();
 	}
 
+	public function watchServerDiskstats($testName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("watch the server's diskstats on host '{$this->args[0]}'");
+
+		// where are we doing this?
+		$safeTestName = urlencode($testName);
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/diskstats";
+
+		// make the request
+		$st->usingHttp()->post($url);
+
+		// did it work?
+		$response = $st->fromHttp()->get($url);
+		$st->expectsHttpResponse($response)->hasStatusCode(200);
+		$st->expectsHttpResponse($response)->hasBody('{"monitoring":true}');
+
+		// all done
+		$log->endAction();
+	}
+
+	public function stopWatchingServerLoadavg($testName)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("stop watching the server's diskstats on host '{$this->args[0]}'");
+
+		// where are we doing this?
+		$safeTestName = urlencode($testName);
+		$url = $this->getSavagedUrl() . "/server/{$safeTestName}.host/diskstats";
+
+		// make the request
+		$st->usingHttp()->delete($url);
+
+		// did it work?
+		$response = $st->fromHttp()->get($url);
+		$st->expectsHttpResponse($response)->hasStatusCode(404);
+		$st->expectsHttpResponse($response)->hasBody('{"monitoring":false}');
+
+		// all done
+		$log->endAction();
+	}
+
 	public function startMonitoring()
 	{
 		// shorthand
