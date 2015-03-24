@@ -1665,9 +1665,9 @@ function usingSauceLabs()
  *
  * @return \Prose\UsingSavageD
  */
-function usingSavageD()
+function usingSavageD($hostId)
 {
-    return new UsingSavageD(StoryTeller::instance());
+    return new UsingSavageD(StoryTeller::instance(), [$hostId]);
 }
 
 /**
