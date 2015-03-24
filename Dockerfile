@@ -84,12 +84,14 @@ RUN echo "Host *" > /root/.ssh/config
 RUN echo "    StrictHostKeyChecking no" >> /root/.ssh/config
 
 RUN apt-get update && apt-get -y dist-upgrade
-RUN apt-get -y install build-essential openssh-server openssh-client wget curl rsync libzmq3 git screen ansible python php5 php5-dev php5-cli php5-common php5-curl php5-json php-pear libyaml-dev ruby-dev
+RUN apt-get -y install build-essential openssh-server openssh-client wget curl rsync libxslt libzmq3 git screen ansible python php5 php5-dev php5-cli php5-common php5-curl php5-json php5-xsl php-pear libyaml-dev ruby-dev
 RUN yes '' | pecl install -f yaml-beta
 RUN yes '' | pecl install -f zmq-beta
 RUN echo "extension=yaml.so" >> /etc/php5/cli/php.ini
+RUN echo "extension=xsl.so" >> /etc/php5/cli/php.ini
 RUN echo "extension=zmq.so" >> /etc/php5/cli/php.ini
 RUN echo "extension=yaml.so" >> /etc/php5/apache2/php.ini
+RUN echo "extension=xsl.so" >> /etc/php5/apache2/php.ini
 RUN echo "extension=zmq.so" >> /etc/php5/apache2/php.ini
 
 # install Vagrant
