@@ -3,56 +3,70 @@ layout: v2/using-configuration
 title: "The storyplayer.json File"
 next: '<a href="../../using/configuration/app-settings.html">Next: Adding App Settings To Your Config File</a>'
 prev: '<a href="../../using/configuration/index.html">Prev: Configuring Storyplayer</a>'
+updated_for_v2: true
 ---
 
 # The storyplayer.json File
 
-_storyplayer.json_ is the main configuration file for your tests.  You should place _storyplayer.json_ in the top-level folder of the repository containing your tests.
+`storyplayer.json` is the main configuration file for your tests.  You should place `storyplayer.json` in the top-level folder of the repository containing your tests.
 
-## An Example storyplayer.json File
+## Contents
+
+`storyplayer.json` is a JSON file. It must define an object. The following sections are permitted:
 
 {% highlight json %}
 {
-    "environments": {
-        "defaults": {
-            "api": {
-                "url": "https://api.dev0",
-                "streamUrl": "https://stream.dev0"
-            },
-            "vagrant": {
-                "provisioning_vars_file": "ansible-playbooks/vars/storyplayer.yml"
-            }
-        },
-        "staging": {
-            "api": {
-                "url": "https://api.stagingdatasift.com",
-                "streamUrl": "https://stream.stagingdatasift.com"
-            }
-        },
-        "production": {
-            "api": {
-                "url": "https://api.datasift.com",
-                "streamUrl": "https://stream.datasift.com"
-            }
-        }
-    }
+    "defaults": [ ],
+    "storySettings": { },
+    "moduleSettings": { }
 }
 {% endhighlight %}
 
-## Structure Of The storyplayer.json File
+where:
 
-Your storyplayer.json file must contain the following sections:
+* `defaults` is a list of the default command-line arguments (discussed in a moment)
+* `storySettings` are [configuration settings for your stories to use](story-settings.html)
+* `moduleSettings` are [configuration settings for Storyplayer modules to use](module-settings.html)
 
-* _environments_: this an object containing a list of environments to run tests against, one object per test environment.  There must be at least one test environment in the list.  Each of these objects contains any [app settings](app-settings.html) that you want to use in your tests.
+## The defaults Section
 
-Your storyplayer.json file may contain the following sections:
+`defaults` is an array of strings. It contains the command-line arguments for Storyplayer to use. Put one argument per string.  For example:
 
-* _environments->defaults_: this object contains any app settings that you want to use in your tests, to avoid having to copy all of the settings for each of your environments.  At runtime, any default settings are merged into any settings for the environment that you choose to run the test against.
-* _logging_: this object contains the [configuration for Storyplayer's output log](logging.html).
-* _phases_: this object allows you to [disable specific phases of each story](test-phases.html), which can save a lot of time when you're developing a new test.
+{% highlight json %}
+{
+    "defaults": [
+        "--system-under-test", "storyplayer-2.x",
+        "--target", "vagrant-centos6-ssl",
+        "--users", "src/tests/stories/default-users.json",
+        "play-story", "src/tests/stories/"
+    ]
+}
+{% endhighlight %}
+
+When you run Storyplayer with no command-line arguments:
+
+{% highlight bash %}
+vendor/bin/storyplayer
+{% endhighlight %}
+
+it is exactly the same as running Storyplayer with all of the arguments listed in the `defaults` section:
+
+{% highlight bash %}
+vendor/bin/storyplayer --system-under-test storyplayer-2.x --target vagrant-centos6-ssl --users src/tests/stories/default-users.json play-story src/tests/stories/
+{% endhighlight %}
+
+It's always a good idea to add a `defaults` section, so that anyone can run your tests without having to know what arguments are needed.
+
+### Notes
+
+* `defaults` is optional. It can be an empty array. It can be left out entirely.
 
 ## The storyplayer.json.dist File
 
-If Storyplayer cannot find a _storyplayer.json_ file, it will look for _storyplayer.json.dist_.  This is the same approach that PHPUnit uses with its _phpunit.xml_ config file.
+If Storyplayer cannot find a `storyplayer.json` file, it will look for a file called `storyplayer.json.dist`.  This is the same approach that PHPUnit uses with its `phpunit.xml` config file.
 
-For your open-source projects, it allows you to ship a _storyplayer.json.dist_ file, and if anyone wants their own settings instead, they can just write their own _storyplayer.json_ file - they don't have to edit the _storyplayer.json.dist_ file.
+Name your config file as `storyplayer.json.dist` when you add it to version control. If anyone wants their own settings instead, they can just write their own `storyplayer.json` file - they don't have to edit the `storyplayer.json.dist` file.
+
+### Notes
+
+* Storyplayer will never load `storyplayer.json.dist` if there is a `storyplayer.json` file.
