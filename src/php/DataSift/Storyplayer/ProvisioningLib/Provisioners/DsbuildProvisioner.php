@@ -36,6 +36,7 @@
  * @category  Libraries
  * @package   Storyplayer/ProvisioningLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @author    Nicola Asuni <nicola.asuni@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
@@ -147,6 +148,25 @@ class DsbuildProvisioner extends Provisioner
 
 			// at this point, we are ready to provision
 			$commandRunner = new CommandRunner();
+
+			// copy the dsbuildparams files to the target machine using scp
+			// NOTE: the "vagrant rsync" command seems not working with some Vagrant provisioners (e.g. OpenStack)
+			$command = 'scp'
+				.' '.$dsbuildParams->{'hosts_'.$hostId.'_scpOptions_0'}
+				.' '.$dsbuildParams->{'hosts_'.$hostId.'_scpOptions_1'}
+				.' dsbuildparams.*'
+				.' '.$dsbuildParams->{'hosts_'.$hostId.'_sshUsername'}
+				.'@'.$dsbuildParams->{'hosts_'.$hostId.'_ipAddress'}
+				.':/vagrant/';
+			$result = $commandRunner->runSilently($st, $command);
+
+			if (!$result->didCommandSucceed()) {
+				// try to rsync folders in case of scp fail
+				$command = 'vagrant rsync ' . $hostId;
+				$result = $commandRunner->runSilently($st, $command);
+			}
+
+			// provision
 			$command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '" "' . $hostId . '"';
 			$result = $commandRunner->runSilently($st, $command);
 
