@@ -88,10 +88,8 @@ RUN apt-get -y install build-essential pkg-config openssh-server openssh-client 
 RUN yes '' | pecl install -f yaml-beta
 RUN yes '' | pecl install -f zmq-beta
 RUN echo "extension=yaml.so" > /etc/php5/cli/conf.d/20-yaml.ini
-RUN echo "extension=xsl.so" > /etc/php5/cli/conf.d/20-xsl.ini
 RUN echo "extension=zmq.so" > /etc/php5/cli/conf.d/20-zmq.ini
 RUN echo "extension=yaml.so" > /etc/php5/apache2/conf.d/20-yaml.ini
-RUN echo "extension=xsl.so" > /etc/php5/apache2/conf.d/20-xsl.ini
 RUN echo "extension=zmq.so" > /etc/php5/apache2/conf.d/20-zmq.ini
 
 # install Vagrant
