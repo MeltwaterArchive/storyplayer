@@ -55,6 +55,7 @@
 		"using/configuration/prose-namespaces",
 		"using/configuration/runtime-config",
 		"using/configuration/dot.notation.support",
+		"using/configuration/overriding-from-the-command-line",
 		"using/deprecated/index",
 		"using/deprecated/appSettings",
 		"using/devices/index",
