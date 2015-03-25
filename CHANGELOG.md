@@ -48,6 +48,14 @@ These are SPv1 features that have been upgraded to support SPv2's new features s
 * [usingHost()->delete()](https://datasift/github.io/storyplayer/v2/modules/http/usingHttp.html#delete) no longer takes a `$body` parameter (violated the HTTP protocol standard)
 * the PreTestPrediction phase works once more
 
+### Deprecated
+
+The following are now deprecated, and will be removed in Storyplayer v3.0.
+
+* [appSettings](https://datasift.github.io/storyplayer/v2/using/deprecated/appSettings.html)
+
+Full details, including migration instructions, are included with each link above.
+
 ## 2.1.2 - Tuesday 10th March 2015
 
 ### Fixes:

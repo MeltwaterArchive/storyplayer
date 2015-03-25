@@ -115,6 +115,35 @@ class FromSystemUnderTest extends Prose
 		return $value;
 	}
 
+	public function getStorySetting($path)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get storySetting '{$path}' from the system-under-test config");
+
+		// what is the full path to this data?
+		$fullPath = 'systemundertest.storySettings.' . $path;
+
+		// get the details
+		$config = $st->getActiveConfig();
+		if (!$config->hasData($fullPath)) {
+			$msg = "module setting '$path' not found";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
+		}
+		$value = $config->getData($fullPath);
+
+		// log the settings
+		$printer  = new DataPrinter();
+		$logValue = $printer->convertToString($value);
+		$log->endAction("setting for '{$path}' is '{$logValue}'");
+
+		// all done
+		return $value;
+	}
+
 	public function getModuleSetting($path)
 	{
 		// shorthand

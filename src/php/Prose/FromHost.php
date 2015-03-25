@@ -505,6 +505,38 @@ class FromHost extends HostBase
 		return $value;
 	}
 
+	public function getStorySetting($path)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get storySetting '{$path}' from host '{$this->args[0]}'");
+
+		// make sure we have valid host details
+		$hostDetails = $this->getHostDetails();
+
+		// do we have any app settings?
+		if (!isset($hostDetails->storySettings)) {
+			$msg = "host has no storySettings at all";
+			$log->endAction($msg);
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
+		}
+
+		// do we have the setting that we want?
+		if (!$hostDetails->storySettings->hasData($path)) {
+			$msg = "host does not have storySetting '{$path}'";
+			throw new E5xx_ActionFailed(__METHOD__, $msg);
+		}
+
+		// success
+		$data = $hostDetails->storySettings->getData($path);
+
+		// all done
+		$log->endAction([ "setting is", $data ]);
+		return $data;
+	}
+
 	public function downloadFile($sourceFilename, $destFilename)
 	{
 		// shorthand
