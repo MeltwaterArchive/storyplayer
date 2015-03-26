@@ -2,6 +2,8 @@
 layout: v2/using-deprecated
 title: appSettings
 updated_for_v2: true
+prev: '<a href="../../using/deprecated/index.html">Prev: Deprecated Features</a>'
+next: '<a href="../../using/devices/index.html">Next: Testing With Different Devices</a>'
 ---
 # appSettings
 

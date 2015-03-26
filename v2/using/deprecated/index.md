@@ -1,6 +1,8 @@
 ---
 layout: v2/using-deprecated
 title: Deprecated Features
+prev: '<a href="../../using/configuration/overriding-from-the-command-line.html">Prev: Overriding From The Command-Line</a>'
+next: '<a href="../../using/deprecated/appSettings.html">Next: appSettings</a>'
 ---
 # Deprecated Features
 
