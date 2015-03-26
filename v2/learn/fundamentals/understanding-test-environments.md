@@ -64,10 +64,10 @@ For each machine in each group, Storyplayer needs to know the machine's _name_, 
 
   In your stories, you never access machines by name - you access them by role. That allows your stories to run against multiple test environments, as long as the role names are consistent across your different environments.
 
-Every machine can have an `appSettings` section. You can use this to store settings that are different from machine to machine:
+Every machine can have an `storySettings` section. You can use this to store settings that are different from machine to machine:
 
 {% highlight php startinline %}
-$loginUrl = fromFirstHostWithRole('web-server')->getAppSetting('storyplanner.loginUrl');
+$loginUrl = fromFirstHostWithRole('web-server')->getStorySetting('storyplanner.loginUrl');
 usingBrowser()->gotoPage('http://{$loginUrl}');
 {% endhighlight %}
 

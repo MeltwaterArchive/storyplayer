@@ -77,7 +77,7 @@ But what happens if the URL moves in a later version of your app? If you put the
 
 {% highlight json %}
 {
-    "appSettings": {
+    "storySettings": {
         "storyplanner": {
             "loginPage": "/login/"
         }
@@ -88,14 +88,14 @@ But what happens if the URL moves in a later version of your app? If you put the
 ... you can then get these settings using the [SystemUnderTest module](../../modules/systemundertest/index.html). You can get a single setting like this:
 
 {% highlight php startinline %}
-$loginPage = fromSystemUnderTest()->getAppSetting("storyplanner.loginPage");
+$loginPage = fromSystemUnderTest()->getStorySetting("storyplanner.loginPage");
 usingBrowser()->gotoPage("http://{$hostname}{$loginPage}");
 {% endhighlight %}
 
 or you can get all of the settings like this:
 
 {% highlight php startinline %}
-$storyplannerSettings = fromSystemUnderTest()->getAppSettings("storyplanner");
+$storyplannerSettings = fromSystemUnderTest()->getStorySetting("storyplanner");
 usingBrowser()->gotoPage("http://{$hostname}{$storyplannerSettings->loginPage}");
 {% endhighlight %}
 

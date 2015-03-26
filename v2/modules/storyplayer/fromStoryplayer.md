@@ -29,6 +29,12 @@ $bridgedIface   = fromStoryplayer()->get('moduleSettings.vagrant.bridgedIface');
 
 ## getAppSetting()
 
+<div class="callout danger" markdown="1">
+#### Deprecated Feature
+
+This action was deprecated in Storyplayer v2.2.0. [More details are available here.](../../using/deprecated/appSettings.html)
+</div>
+
 Use `fromStoryplayer()->getAppSetting()` to retrieve a single setting from the config file.
 
 {% highlight php startinline %}
@@ -36,6 +42,12 @@ $mode = fromStoryplayer()->getAppSetting('testTypes.smokeTests');
 {% endhighlight %}
 
 ## getAppSettings()
+
+<div class="callout danger" markdown="1">
+#### Deprecated Feature
+
+This action was deprecated in Storyplayer v2.2.0. [More details are available here.](../../using/deprecated/appSettings.html)
+</div>
 
 Use `fromStoryplayer()->getAppSettings()` to retrieve all the settings for an app from the config file.
 
@@ -74,3 +86,11 @@ $awsSettings = fromStoryplayer()->getModuleSettings('aws');
 Notes:
 
 * This method is meant to be used by Storyplayer modules. You should never need to call this from your stories.
+
+## getStorySetting()
+
+Use `fromStoryplayer()->getStorySetting()` to retrieve a setting from the `storySettings` section of your `storyplayer.json` config file.
+
+{% highlight php startinline %}
+$mode = fromStoryplayer()->getStorySetting('testTypes.smokeTests');
+{% endhighlight %}

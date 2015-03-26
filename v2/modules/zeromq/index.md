@@ -59,8 +59,8 @@ $story->addAction(function() {
     // if there are multiple queues, we only need to write to one of them
     foreach(firstHostWithRole("acme_queue") as $hostId) {
         // get the ports that the ACME queue uses
-        $inPort     = fromHost($hostId)->getAppSetting('acme_queue.zmq.in');
-        $outPort    = fromHost($hostId)->getAppSetting('acme_queue.zmq.out');
+        $inPort     = fromHost($hostId)->getStorySetting('acme_queue.zmq.in');
+        $outPort    = fromHost($hostId)->getStorySetting('acme_queue.zmq.out');
 
         // use a shared context for our ZMQ sockets
         $context = usingZmqContext()->getZmqContext();

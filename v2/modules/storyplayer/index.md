@@ -38,5 +38,5 @@ Here are some examples:
 {% highlight php startinline %}
 $moduleSettings  = fromStoryplayer()->get('moduleSettings');
 $bridgedIface = fromStoryplayer()->get('moduleSettings.vagrant.bridgedIface');
-$mode = fromStoryplayer()->getAppSetting('testTypes.smokeTests');
+$mode = fromStoryplayer()->getStorySetting('testTypes.smokeTests');
 {% endhighlight %}

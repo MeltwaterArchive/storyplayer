@@ -20,7 +20,7 @@ Placeholder.
 				"<machine-name>": {
 					"osName": "<operating-system-adapter>"
 					... machine details ...
-					"appSettings": {
+					"storySettings": {
 						...
 					},
 					"roles": [

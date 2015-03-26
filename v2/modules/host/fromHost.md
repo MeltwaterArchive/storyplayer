@@ -45,7 +45,13 @@ where:
 
 ## getAppSetting()
 
-Use `fromHost()->getAppSetting()` to retrieve
+<div class="callout danger" markdown="1">
+#### Deprecated Feature
+
+This action was deprecated in Storyplayer v2.2.0. [More details are available here.](../../using/deprecated/appSettings.html)
+</div>
+
+Use `fromHost()->getAppSetting()` to retrieve a value from the `appSettings` section of your test environment config file.
 
 {% highlight php startinline %}
 $appSetting = fromHost($hostId)->getAppSetting($appSettingName);
@@ -61,7 +67,13 @@ Use _[appSetting()](#appSetting)_ to retrieve a single value, and _[appSettings(
 
 ## getAppSettings()
 
-Use `fromHost()->getAppSettings()` to retrieve
+<div class="callout danger" markdown="1">
+#### Deprecated Feature
+
+This action was deprecated in Storyplayer v2.2.0. [More details are available here.](../../using/deprecated/appSettings.html)
+</div>
+
+Use `fromHost()->getAppSettings()` to retrieve a value from the `appSettings` section of your test environment config file.
 
 {% highlight php startinline %}
 $appSettings = fromHost($hostId)->getAppSettings($appName);
@@ -271,3 +283,17 @@ where:
 * `$sshKeyFile` is the default SSH key file for that host
 
 The SSH private key file is set when the host is originally created (e.g. when _[usingVagrant()->createVm()](../vagrant/usingVagrant.html#createvm)_ is called).
+
+## getStorySetting()
+
+Use `fromHost()->getStorySetting()` to retrieve a value from the `storySettings` section of your test environment config file.
+
+{% highlight php startinline %}
+$storySetting = fromHost($hostId)->getStorySetting($pathToSetting);
+{% endhighlight %}
+
+where:
+
+* `$hostId` is the ID of the host in your test environment
+* `$pathToSetting` is the dot.notation.path to the setting you want
+* `$storySetting` gets set to the setting you asked for

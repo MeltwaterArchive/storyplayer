@@ -14,7 +14,7 @@ next: '<a href="../../modules/log/index.html">Next: The Log Module</a>'
 
 {% highlight php startinline %}
 foreach(lastHostWithRole($roleName) as $hostId) {
-    fromHost($hostId)->getAppSettings('pages');
+    fromHost($hostId)->getStorySetting('pages');
 }
 {% endhighlight %}
 

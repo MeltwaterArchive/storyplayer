@@ -96,7 +96,7 @@ $story->addTestSetup(function() {
     $ipAddress = fromVagrant()->getIpAddress('ogre');
 
     // start monitoring the daemon's reported stats
-    $httpPort = fromEnvironment()->getAppSetting('ogre', 'httpPort');
+    $httpPort = fromTestEnvironment()->getStorySetting('ogre.httpPort');
     usingDatasiftCppDaemon()->startMonitoringStats('ogre', "http://{$ipAddress}:{$httpPort}/stats");
 });
 
@@ -131,7 +131,7 @@ $story->addPreTestInspection(function() {
 
     // get the stats from Ogre's HTTP page
     $ipAddress = fromVagrant()->getIpAddress('ogre');
-    $httpPort  = fromEnvironment()->getAppSetting('ogre', 'httpPort');
+    $httpPort  = fromEnvironment()->getStorySetting('ogre.httpPort');
     $stats     = fromDaemonStatsPage()->getCurrentStats("http://{$ipAddress}:{$httpPort}/stats");
     $checkpoint->stats = $stats;
 
@@ -165,11 +165,11 @@ $story->addAction(function() {
     $statsdHost = fromEnvironment()->getStatsdHost();
 
     // start retrieving messages from the queue
-    $zmqReadPort = fromEnvironment()->getAppSetting('ogre', 'zmqReadPort');
+    $zmqReadPort = fromTestEnvironment()->getStorySetting('ogre.zmqReadPort');
     usingShell()->startInScreen("pull", "./bin/zmq-pull 'tcp://{$ipAddress}:{$zmqReadPort}' {$checkpoint->sendCount} '{$statsdHost}' 'qa.ogre' > {$checkpoint->tmpFile}");
 
     // then, start writing messages to Ogre
-    $zmqWritePort = fromEnvironment()->getAppSetting('ogre', 'zmqWritePort');
+    $zmqWritePort = fromEnvironment()->getStorySetting('ogre.zmqWritePort');
     usingHornet()->startHornetDrone("push", array(
         "integration",
         "AclTestClient",
@@ -216,7 +216,7 @@ $story->addPostTestInspection(function() {
 
     // get the latest stats from the VM
     $ipAddress = fromVagrant()->getIpAddress('ogre');
-    $httpPort  = fromEnvironment()->getAppSetting('ogre', 'httpPort');
+    $httpPort  = fromEnvironment()->getStorySetting('ogre.httpPort');
     $newStats  = fromDaemonStatsPage()->getCurrentStats("http://{$ipAddress}:{$httpPort}/stats");
 
     // make sure *something* has been received

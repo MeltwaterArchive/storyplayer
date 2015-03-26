@@ -1,7 +1,7 @@
 ---
 layout: v2/using-configuration
 title: Module Settings
-prev: '<a href="../../using/configuration/app-settings.html">Prev: Adding App Settings To Your Config File</a>'
+prev: '<a href="../../using/configuration/story-settings.html">Prev: storySettings Section</a>'
 next: '<a href="../../using/configuration/logging.html">Next: Logging</a>'
 ---
 

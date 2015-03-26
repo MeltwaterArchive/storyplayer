@@ -46,11 +46,11 @@ In fact, at this point, it's probably a good idea to skip ahead to [our recommen
 
 ## Build Up The Config Bit By Bit
 
-As you will have seen if you skipped ahead, you can add an `appSettings` section to the system under test's config file.
+As you will have seen if you skipped ahead, you can add an `storySettings` section to the system under test's config file.
 
 {% highlight json %}
 {
-	"appSettings": {
+	"storySettings": {
 		"my_app": {
 			"pages": {
 				"healthcheck": "/healthcheck.php"
@@ -63,8 +63,8 @@ As you will have seen if you skipped ahead, you can add an `appSettings` section
 You can then get these settings using Storyplayer's [SystemUnderTest module](../../modules/systemundertest/index.html):
 
 {% highlight php startinline %}
-$myAppSettings = $st->fromSystemUnderTest()->getAppSettings('my_app');
-$url = $myAppSettings->pages->healthcheck;
+$myStorySettings = $st->fromSystemUnderTest()->getStorySetting('my_app');
+$url = $myStorySettings->pages->healthcheck;
 {% endhighlight %}
 
 ## Version (Semi-)Independence
@@ -91,7 +91,7 @@ This is where the system under test config file comes in. Create a file called `
 
 {% highlight json %}
 {
-	"appSettings": {
+	"storySettings": {
 		"my_app": {
 			"pages": {
 				"healthcheck": "/healthcheck.php",
@@ -107,7 +107,7 @@ and then create a second file called `.storyplayer/systems-under-test/my_app-2.0
 
 {% highlight json %}
 {
-	"appSettings": {
+	"storySettings": {
 		"my_app": {
 			"pages": {
 				"healthcheck": "/private/healthcheck.php",
@@ -124,20 +124,20 @@ You can then tell Storyplayer which file to use for your tests:
     vendor/bin/storyplayer -s my_app-v1.x
     vendor/bin/storyplayer -s my_app-v2.0
 
-and as long as your stories use the [SystemUnderTest module](../../modules/system-under-test/index.html) to read the `appSettings`, you can test against both versions without having to change your tests:
+and as long as your stories use the [SystemUnderTest module](../../modules/system-under-test/index.html) to read the `storySettings`, you can test against both versions without having to change your tests:
 
 {% highlight php startinline %}
 $story->addAction(function($st) {
-	$myAppSettings = $st->fromSystemUnderTest()->getAppSettings('my_app');
+	$myStorySettings = $st->fromSystemUnderTest()->getStorySetting('my_app');
 
 	// with -s 'my_app-v1.x', this is "/healthcheck.php"
 	// with '-s my_app-v2.0', this is "/private/healthcheck.php"
-	$healthCheckPath = $myAppSettings->pages->healthcheck;
+	$healthCheckPath = $myStorySettings->pages->healthcheck;
 });
 {% endhighlight %}
 
 ## Going Further
 
-Most of the time, adding `appSettings` to your system under test config file will be all that you need to do for your tests.
+Most of the time, adding `storySettings` to your system under test config file will be all that you need to do for your tests.
 
 If you're curious about what else you can do with this config file, we have [a page dedicated to the System Under Config config file in our reference manual](../../using/configuration/system-under-test-config.html).

@@ -35,7 +35,7 @@ where:
 
 __TIPS:__
 
-* Do not hard-code addresses into your app. [Put them into your storyplayer config file](../../configuration/app-settings.html), and use _[fromEnvironment()->getAppSettings()](../environment/fromEnvironment.html#getappsettings)_ to use the config in your tests.
+* Do not hard-code addresses into your app. [Put them into your test environment config file](../../configuration/test-environment-config.html), and use _[fromHost()->getStorySetting()](../environment/fromHost.html#getstorysetting)_ to use the config in your tests.
 
 ## connect()
 
@@ -55,7 +55,7 @@ where:
 
 __TIPS:__
 
-* Do not hard-code addresses into your app. [Put them into your storyplayer config file](../../configuration/app-settings.html), and use _[fromEnvironment()->getAppSettings()](../environment/fromEnvironment.html#getappsettings)_ to use the config in your tests.
+* Do not hard-code addresses into your app. [Put them into your test environment config file](../../configuration/test-environment-config.html), and use _[fromHost()->getStorySetting()](../environment/fromHost.html#getstorysetting)_ to use the config in your tests.
 
 ## recv()
 

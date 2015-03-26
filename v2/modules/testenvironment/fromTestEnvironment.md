@@ -29,9 +29,21 @@ $bridgedIface   = fromTestEnvironment()->get('moduleSettings.vagrant.bridgedIfac
 
 ## getAppSetting()
 
+<div class="callout danger" markdown="1">
+#### Deprecated Feature
+
+This action was deprecated in Storyplayer v2.2.0. [More details are available here.](../../using/deprecated/appSettings.html)
+</div>
+
 Use _[fromHost()->getAppSetting()](../host/fromHost.html#getAppSetting)_ to retrieve an app setting from your test environment config.
 
 ## getAppSettings()
+
+<div class="callout danger" markdown="1">
+#### Deprecated Feature
+
+This action was deprecated in Storyplayer v2.2.0. [More details are available here.](../../using/deprecated/appSettings.html)
+</div>
 
 Use _[fromHost()->getAppSettings()](../host/fromHost.html#getAppSettings)_ to retrieve the app settings from your test environment config.
 
@@ -74,3 +86,7 @@ Use `fromTestEnvironment()->getName()` to get the name of the system under test.
 {% highlight php startinline %}
 $name = fromTestEnvironment()->getName();
 {% endhighlight %}
+
+## getStorySetting()
+
+Use _[fromHost()->getStorySetting()](../host/fromHost.html#getStorySetting)_ to retrieve a config setting from the `storySettings` section of your test environment config.

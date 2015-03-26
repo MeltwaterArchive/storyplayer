@@ -34,5 +34,5 @@ where:
 Here are some examples:
 
 {% highlight php startinline %}
-$paths = fromSystemUnderTest()->getAppSetting('pages');
+$paths = fromSystemUnderTest()->getStorySetting('pages');
 {% endhighlight %}

@@ -13,7 +13,7 @@ Placeholder.
 
 <pre>
 {
-	"appSettings": {
+	"storySettings": {
 		...
 	},
 	"moduleSettings": {

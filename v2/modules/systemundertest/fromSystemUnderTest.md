@@ -29,6 +29,12 @@ $bridgedIface   = fromSystemUnderTest()->get('moduleSettings.vagrant.bridgedIfac
 
 ## getAppSetting()
 
+<div class="callout danger" markdown="1">
+#### Deprecated Feature
+
+This action was deprecated in Storyplayer v2.2.0. [More details are available here.](../../using/deprecated/appSettings.html)
+</div>
+
 Use `fromSystemUnderTest()->getAppSetting()` to retrieve a single setting from the config file.
 
 {% highlight php startinline %}
@@ -36,6 +42,12 @@ $login_path = fromSystemUnderTest()->getAppSetting('pages.login');
 {% endhighlight %}
 
 ## getAppSettings()
+
+<div class="callout danger" markdown="1">
+#### Deprecated Feature
+
+This action was deprecated in Storyplayer v2.2.0. [More details are available here.](../../using/deprecated/appSettings.html)
+</div>
 
 Use `fromSystemUnderTest()->getAppSettings()` to retrieve all the settings for an app from the system under test config file.
 
@@ -81,4 +93,12 @@ Use `fromSystemUnderTest()->getName()` to get the name of the system under test.
 
 {% highlight php startinline %}
 $name = fromSystemUnderTest()->getName();
+{% endhighlight %}
+
+## getStorySetting()
+
+Use `fromSystemUnderTest()->getStorySetting()` to retrieve a setting from the `storySettings` section in your system under test config file.
+
+{% highlight php startinline %}
+$paths = fromSystemUnderTest()->getStorySetting('pages');
 {% endhighlight %}

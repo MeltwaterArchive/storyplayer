@@ -66,7 +66,7 @@ $story->addPostTestInspection(function() {
         // which user does Nginx run as on here?
         //
         // also, where should our web app be installed on here?
-        $nginxSettings = fromHost($hostId)->getAppSettings('nginx');
+        $nginxSettings = fromHost($hostId)->getStorySetting('nginx');
 
         // make sure that our app is on the file system
         expectsHost($hostId)->hasFolderWithPermissions(
@@ -100,7 +100,7 @@ $story->addPostTestInspection(function() {
 });
 {% endhighlight %}
 
-Notice how I don't hard-code details about Nginx, such as folder paths, users and groups? These are details that might be different on different operating systems. I put them in an `appSettings` section in my test environment config:
+Notice how I don't hard-code details about Nginx, such as folder paths, users and groups? These are details that might be different on different operating systems. I put them in a `storySettings` section in my test environment config:
 
 {% highlight json %}
 [
@@ -111,7 +111,7 @@ Notice how I don't hard-code details about Nginx, such as folder paths, users an
                 "roles": [
                     "web-server"
                 ],
-                "appSettings": {
+                "storySettings": {
                     "nginx": {
                         "appFolder": "/var/www",
                         "sitesEnabledFolder": "/etc/nginx/sites-enabled",
@@ -128,7 +128,7 @@ Notice how I don't hard-code details about Nginx, such as folder paths, users an
 and get them using [`fromHost()`](../../modules/host/fromHost.html):
 
 {% highlight php startinline %}
-$nginxSettings = fromHost($hostId)->getAppSettings('nginx');
+$nginxSettings = fromHost($hostId)->getStorySetting('nginx');
 {% endhighlight %}
 
 This way, if I ever switch operating systems - or start testing on multiple operating systems - the story itself doesn't have to change. I just have to put the right settings into the test environment config file.
@@ -159,7 +159,7 @@ $story->addTestSetup(function() {
     // that it starts correctly!
     foreach(hostWithRole('web-server') as $hostId) {
         // get our nginx settings for this host
-        $nginxSettings = fromHost($hostId)->getAppSettings('nginx');
+        $nginxSettings = fromHost($hostId)->getStorySetting('nginx');
 
         // stop nginx
         if (fromHost($hostId)->getProcessIsRunning('nginx')) {
@@ -174,7 +174,7 @@ $story->addTestSetup(function() {
 $story->addAction(function() {
     foreach(hostWithRole('web-server') as $hostId) {
         // get our nginx settings
-        $nginxSettings = fromHost($hostId)->getAppSettings('nginx');
+        $nginxSettings = fromHost($hostId)->getStorySetting('nginx');
 
         // start nginx
         usingHost($hostId)->runCommand($nginxSettings->startCommand);
@@ -189,7 +189,7 @@ $story->addPostTestInspection(function() {
 
 This test introduces the `TestSetup` phase. `TestSetup` creates the pre-conditions for the test. In this case, it makes sure that `nginx` isn't running, so that we can start it in the `Action` phase.
 
-Once again, the test uses `appSettings` from the test environment config. We've added two new settings, `nginx.startCommand` and `nginx.shutdownCommand`.
+Once again, the test uses `storySettings` from the test environment config. We've added two new settings, `nginx.startCommand` and `nginx.shutdownCommand`.
 
 {% highlight json %}
 [
@@ -200,7 +200,7 @@ Once again, the test uses `appSettings` from the test environment config. We've 
                 "roles": [
                     "web-server"
                 ],
-                "appSettings": {
+                "storySettings": {
                     "nginx": {
                         "appFolder": "/var/www",
                         "sitesEnabledFolder": "/etc/nginx/sites-enabled",
@@ -255,7 +255,7 @@ $story->addAction(function() {
 
 $story->addPostTestInspection(function() {
     // what is the address of our healthcheck page?
-    $healthcheckPage = fromSystemUnderTest()->getAppSetting('my_app.pages.healthcheck');
+    $healthcheckPage = fromSystemUnderTest()->getStorySetting('my_app.pages.healthcheck');
 
     // what do we expect the healthcheck page to say?
     $expectedBody = file_get_contents(__DIR__ . '/200-healthcheck-page.html');
@@ -275,11 +275,11 @@ $story->addPostTestInspection(function() {
 
 Once again, we avoid hard-coding settings into the test.
 
-The URL of the healthcheck page is part of the `appSettings` for the system under test:
+The URL of the healthcheck page is part of the `storySettings` for the system under test:
 
 {% highlight json %}
 {
-    "appSettings": {
+    "storySettings": {
         "my_app": {
             "pages": {
                 "healthcheck": "/healthcheck.php"
@@ -289,7 +289,7 @@ The URL of the healthcheck page is part of the `appSettings` for the system unde
 }
 {% endhighlight %}
 
-Until now, I've been putting `appSettings` into the test environment config file. This setting goes in the system under test config file because it doesn't change from test environment to test environment.
+Until now, I've been putting `storySettings` into the test environment config file. This setting goes in the system under test config file because it doesn't change from test environment to test environment.
 
 Secondly, this test shows a really clean way to check that we have the correct webpage. It simply loads a pre-cached copy of what the page should look like from disk, and then checks the downloaded page to make sure it matches.
 

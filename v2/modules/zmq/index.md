@@ -61,8 +61,8 @@ $story->addAction(function() {
     foreach(firstHostWithRole("acme_queue") as $hostId) {
         // get the ports that the ACME queue uses
         $ipAddress  = fromHost($hostId)->getIpAddress();
-        $inPort     = fromHost($hostId)->getAppSetting('acme_queue.zmq.in');
-        $outPort    = fromHost($hostId)->getAppSetting('acme_queue.zmq.out');
+        $inPort     = fromHost($hostId)->getStorySetting('acme_queue.zmq.in');
+        $outPort    = fromHost($hostId)->getStorySetting('acme_queue.zmq.out');
 
         // create our sending socket
         $sendSock = usingZmq()->connect("tcp://{$ipAddress}:{$inPort}", ZMQ::SOCKET_PUSH);

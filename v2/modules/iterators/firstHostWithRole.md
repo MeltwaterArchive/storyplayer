@@ -14,7 +14,7 @@ next: '<a href="../../modules/iterators/lastHostWithRole.html">Next: foreach(las
 
 {% highlight php startinline %}
 foreach(firstHostWithRole($roleName) as $hostId) {
-    fromHost($hostId)->getAppSettings('pages');
+    fromHost($hostId)->getStorySetting('pages');
 }
 {% endhighlight %}
 
