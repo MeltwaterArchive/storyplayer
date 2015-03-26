@@ -2,7 +2,15 @@
 	"appSettings": {
 		"testData": {
 			"name": "storyplayer",
-			"version": "2.x"
+			"version": "2.x",
+			"isAppSettings": true
+		}
+	},
+	"storySettings": {
+		"testData": {
+			"name": "storyplayer",
+			"version": "2.x",
+			"isStorySettings": true
 		}
 	},
 	"roles": [

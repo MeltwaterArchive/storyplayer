@@ -13,7 +13,7 @@
 							"ssl_target",
 							"zmq_target"
 						],
-						"appSettings": {
+						"storySettings": {
 							"host": {
 								"expected": "successfully retrieved this appSetting :)"
 							},

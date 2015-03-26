@@ -8,7 +8,7 @@
 
 $story = newStoryFor('Storyplayer')
          ->inGroup('Config')
-         ->called('Can get system-under-test appSettings');
+         ->called('Can get system-under-test storySettings');
 
 $story->requiresStoryplayerVersion(2);
 
@@ -29,10 +29,10 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-    $appSettings = fromSystemUnderTest()->getAppSettings('testData');
+    $storySettings = fromSystemUnderTest()->getStorySetting('testData');
 
-    assertsObject($appSettings)->isNotNull();
-    assertsObject($appSettings)->hasAttribute('name');
-    assertsObject($appSettings)->hasAttribute('version');
-    assertsObject($appSettings)->hasAttribute('isAppSettings');
+    assertsObject($storySettings)->isNotNull();
+    assertsObject($storySettings)->hasAttribute('name');
+    assertsObject($storySettings)->hasAttribute('version');
+    assertsObject($storySettings)->hasAttribute('isStorySettings');
 });
