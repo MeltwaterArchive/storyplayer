@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: Per-Environment Configuration
 next: '<a href="../../using/configuration/system-under-test-config.html">Next: System Under Test Configuration</a>'
-prev: '<a href="../../using/configuration/test-phases.html">Prev: Test Phases Configuration</a>'
+prev: '<a href="../../using/configuration/module-settings.html">Prev: moduleSettings Section</a>'
 ---
 
 # Per-Environment Configuration

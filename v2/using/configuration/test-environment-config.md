@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: Test Environment Configuration
 prev: '<a href="../../using/configuration/system-under-test-config.html">Prev: System Under Test Configuration</a>'
-next: '<a href="../../using/configuration/device-config.html">Next: Per-Device Configuration</a>'
+next: '<a href="../../using/configuration/user-config.html">Next: Per-User Configuration</a>'
 ---
 
 # Test Environment Configuration

@@ -1,8 +1,8 @@
 ---
 layout: v2/using-configuration
 title: Per-Device Configuration
-prev: '<a href="../../using/configuration/test-environment-config.html">Prev: Test Environment Configuration</a>'
-next: '<a href="../../using/configuration/user-config.html">Next: Per-User Configuration</a>'
+prev: '<a href="../../using/configuration/test-phases.html">Prev: Test Phases Configuration</a>'
+next: '<a href="../../using/configuration/prose-namespaces.html">Next: Prose Namespaces</a>'
 ---
 
 # Per-Device Configuration
