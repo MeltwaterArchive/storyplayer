@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: moduleSettings Section
 prev: '<a href="../../using/configuration/story-settings.html">Prev: storySettings Section</a>'
-next: '<a href="../../using/configuration/environment-config.html">Next: Per-Environment Configuration</a>'
+next: '<a href="../../using/configuration/system-under-test-config.html">Next: System Under Test Configuration</a>'
 updated_for_v2: true
 ---
 

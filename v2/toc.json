@@ -45,7 +45,6 @@
 		"using/configuration/storyplayer-json",
 		"using/configuration/story-settings",
 		"using/configuration/module-settings",
-		"using/configuration/environment-config",
 		"using/configuration/system-under-test-config",
 		"using/configuration/test-environment-config",
 		"using/configuration/user-config",
