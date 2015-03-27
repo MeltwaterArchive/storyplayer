@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: storySettings Section
 prev: '<a href="../../using/configuration/storyplayer-json.html">Prev: The storyplayer.json File</a>'
-next: '<a href="../../using/configuration/module-settings.html">Next: Module Settings</a>'
+next: '<a href="../../using/configuration/module-settings.html">Next: moduleSettings Section</a>'
 updated_for_v2: true
 ---
 

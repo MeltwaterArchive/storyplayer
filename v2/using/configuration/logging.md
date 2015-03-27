@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: Logging
 next: '<a href="../../using/configuration/test-phases.html">Next: Test Phases Configuration</a>'
-prev: '<a href="../../using/configuration/module-settings.html">Prev: Module Settings</a>'
+prev: '<a href="../../using/configuration/module-settings.html">Prev: moduleSettings Section</a>'
 ---
 
 # Logging
