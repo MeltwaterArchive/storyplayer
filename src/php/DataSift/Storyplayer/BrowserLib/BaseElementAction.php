@@ -299,12 +299,9 @@ class BaseElementAction
 	 */
 	public function returnNthVisibleElement($nth, $elements)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$count = count($elements);
-		$log = $st->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
+		$log = usingLog()->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
 
 		// special case - not enough elements, even if they were all
 		// visible
