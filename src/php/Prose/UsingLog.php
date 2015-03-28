@@ -79,4 +79,9 @@ class UsingLog extends Prose
 
 		// all done
 	}
+
+	public function startAction($msg)
+	{
+		return $this->st->startAction($msg);
+	}
 }
