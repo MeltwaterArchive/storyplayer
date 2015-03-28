@@ -35,3 +35,33 @@ $config = fromConfig()->getAll();
 {% endhighlight %}
 
 Use this method if you ever want to `var_dump()` Storyplayer's internal configuration. This can be useful when debugging modules.
+
+## getModuleSetting()
+
+Use `fromConfig()->getModuleSetting()` to retrieve a module setting from Storyplayer's config files.
+
+{% highlight php startinline %}
+$setting = fromConfig()->getModuleSetting($settingPath);
+{% endhighlight %}
+
+where:
+
+* `$settingPath` is the [dot.notation.path](../../using/configuration/dot.notation.support.html) to the moduleSetting you want
+* `$setting` is set to the moduleSetting that you've retrieved
+
+See [moduleSettings reference](../../using/configuration/module-settings.html) for details about the search order.
+
+## hasModuleSetting()
+
+Use `fromConfig()->hasModuleSetting()` to determine if a module setting exists in Storyplayer's config files.
+
+{% highlight php startinline %}
+$hasSetting = fromConfig()->hasModuleSetting($settingPath);
+{% endhighlight %}
+
+where:
+
+* `$settingPath` is the [dot.notation.path](../../using/configuration/dot.notation.support.html) to the moduleSetting you want
+* `$hasSetting` is set to `TRUE` if the setting exists, `FALSE` otherwise
+
+See [moduleSettings reference](../../using/configuration/module-settings.html) for details about the search order.
