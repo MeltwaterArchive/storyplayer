@@ -13,5 +13,12 @@
     			}
     		}
     	}
-    }
+    },
+	"moduleSettings": {
+		"device": {
+			"browsermob": {
+				"enable": false
+			}
+		}
+	}
 }

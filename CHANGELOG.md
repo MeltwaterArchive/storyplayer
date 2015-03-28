@@ -14,15 +14,15 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 ## 2.2.0 - `develop` branch
 
-### Important:
-
-* We've dropped support for browsermob-proxy for the moment. We're going to make it optional before we tag v2.2.0.
-
 ### Backwards-compatibility Breaks:
 
 These are SPv1 features that have been upgraded to support SPv2's new features such as test environments.
 
 * [SavageD module](https://datasift.github.io/storyplayer/v2/modules/savaged/index.html) overhauled to support SPv2 test environments and host IDs
+
+Other changes you need to know about:
+
+* `browsermob-proxy` is now optional, and switched off by default. You can switch it back on if you [add these config settings](https://datasift.github.io/storyplayer/using/configuration/browsermob-proxy.html).
 
 ### New:
 

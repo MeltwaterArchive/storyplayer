@@ -68,23 +68,38 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 	 */
 	public function start(StoryTeller $st)
 	{
+		// are we using browsermob-proxy?
+		$useProxy = false;
+		if (fromConfig()->hasModuleSetting('device.browsermob.enable')) {
+			$useProxy = fromConfig()->getModuleSetting('device.browsermob.enable');
+		}
+
 		try {
-			// $httpProxy = new BrowserMobProxyClient();
-			// $httpProxy->enableFeature('enhancedReplies');
+			// by default, we have no proxy session
+			$this->proxySession = null;
 
-			// $this->proxySession = $httpProxy->createProxy();
+			// start the proxy if we want it
+			if ($useProxy) {
+				$httpProxy = new BrowserMobProxyClient();
+				$httpProxy->enableFeature('enhancedReplies');
 
-			// // start recording
-			// $this->proxySession->startHAR();
+				$this->proxySession = $httpProxy->createProxy();
+
+				// start recording
+				$this->proxySession->startHAR();
+			}
+
+			// build our requirements for Selenium
+			$desiredCapabilities = $this->browserDetails->desiredCapabilities;
+			if (is_object($this->proxySession)) {
+				$desiredCapabilities['proxy'] = $this->proxySession->getWebDriverProxyConfig();
+			}
 
 			// create the browser session
 			$webDriver = new WebDriverClient();
 			$this->browserSession = $webDriver->newSession(
 				$this->browserDetails->browser,
-				array(
-					// 'proxy' => $this->proxySession->getWebDriverProxyConfig()
-				) + $this->browserDetails->desiredCapabilities
-
+				$desiredCapabilities
 			);
 		}
 		catch (Exception $e) {
