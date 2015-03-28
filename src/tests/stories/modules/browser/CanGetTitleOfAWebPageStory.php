@@ -53,5 +53,5 @@ $story->addPostTestInspection(function() {
 	$checkpoint = getCheckpoint();
 
 	assertsObject($checkpoint)->hasAttribute("title");
-	assertsString($checkpoint->title)->equals("BBC News - Home");
+	assertsString($checkpoint->title)->equals("Home - BBC News");
 });
