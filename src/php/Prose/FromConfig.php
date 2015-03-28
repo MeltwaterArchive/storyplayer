@@ -138,4 +138,36 @@ class FromConfig extends Prose
 		// if we get here, the module setting does not exist
 		throw new E5xx_ActionFailed(__METHOD__, "unable to find moduleSetting '{$settingPath}'");
 	}
+
+	public function hasModuleSetting($settingPath)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("check if module setting '{$settingPath}' exists");
+
+		// get the active config
+		$config = $st->getActiveConfig();
+
+		// we search the config in this order
+		$pathsToSearch = [
+			"user.moduleSettings.{$settingPath}"            => "user's .storyplayer file",
+			"systemundertest.moduleSettings.{$settingPath}" => "system under test config file",
+			"target.moduleSettings.{$settingPath}"          => "test environment config file",
+			"storyplayer.moduleSettings.{$settingPath}"     => "storyplayer.json config file",
+		];
+
+		foreach ($pathsToSearch as $searchPath => $origin) {
+			if ($config->hasData($searchPath)) {
+				$log->endAction("found in $origin");
+
+				return true;
+			}
+		}
+
+		// if we get here, the module setting does not exist
+		$log->endAction("not found");
+		return false;
+	}
 }
