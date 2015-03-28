@@ -17,7 +17,7 @@ Selenium WebDriver is the successor to the popular Selenium browser-testing tool
 
 Selenium WebDriver's functionality is based around controlling a web browser, and inspecting the DOM.  It currently doesn't have a lot of functionality around the networking aspects of what a browser does.
 
-Storyplayer tells every browser it controls to send all of their requests through a HTTP proxy called [browsermob-proxy](https://github.com/webmetrics/browsermob-proxy).  browsermob-proxy as an API of its own, and together with Selenium WebDriver, this gives Storyplayer all the functionality it needs to test websites in a meaningful way.
+[If you switch on browsermob-proxy support](../configuration/browsermob-proxy.html), Storyplayer tells every browser it controls to send all of their requests through a HTTP proxy called [browsermob-proxy](https://github.com/webmetrics/browsermob-proxy).  browsermob-proxy as an API of its own, and together with Selenium WebDriver, this gives Storyplayer all the functionality it needs to test websites in a meaningful way.
 
 ## Dependencies That We Install
 

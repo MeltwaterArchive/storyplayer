@@ -54,6 +54,7 @@
 		"using/configuration/device-config",
 		"using/configuration/prose-namespaces",
 		"using/configuration/runtime-config",
+		"using/configuration/browsermob-proxy",
 		"using/deprecated/index",
 		"using/deprecated/appSettings",
 		"using/devices/index",

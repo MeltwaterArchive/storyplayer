@@ -1,7 +1,7 @@
 ---
 layout: v2/using-deprecated
 title: Deprecated Features
-prev: '<a href="../../using/configuration/runtime-config.html">Prev: The Runtime Configuration</a>'
+prev: '<a href="../../using/configuration/browsermob-proxy.html">Prev: browsermob-proxy Configuration</a>'
 next: '<a href="../../using/deprecated/appSettings.html">Next: appSettings</a>'
 ---
 # Deprecated Features
