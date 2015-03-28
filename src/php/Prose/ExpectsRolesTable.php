@@ -75,7 +75,7 @@ class ExpectsRolesTable extends Prose
      */
     public function hasEntryForRole($roleName)
     {
-        $this->st->expectsRuntimeTable($this->entryKey)->hasEntry($roleName);
+        expectsRuntimeTable($this->entryKey)->hasEntry($roleName);
     }
 
     /**
@@ -88,6 +88,6 @@ class ExpectsRolesTable extends Prose
      */
     public function hasNoEntryForRole($roleName)
     {
-        $this->st->expectsRuntimeTable($this->entryKey)->hasNoEntry($roleName);
+        expectsRuntimeTable($this->entryKey)->hasNoEntry($roleName);
     }
 }

@@ -68,9 +68,6 @@ class FromFacebook extends Prose
 	 */
 	public function getAccessToken($options = array()){
 
-		// Shorthand
-		$st = $this->st;
-
 		// Grab the details of our user
 		$user = $this->args[0];
 
@@ -78,7 +75,7 @@ class FromFacebook extends Prose
 		$disableCache = isset($options['disable_cache']) && $options['disable_cache'];
 
 		// Get our runtime config
-		$config = $st->getRuntimeConfig();
+		$config = $this->st->getRuntimeConfig();
 
 		// Check the one in the runtime config if we've not disabled the cache
 		if (isset($config->facebookAccessToken, $config->facebookAccessToken->expires) && $config->facebookAccessToken->expires > time() && !$disableCache){
@@ -86,22 +83,22 @@ class FromFacebook extends Prose
 		}
 
 		// Login to Facebook
-		$st->usingBrowser()->gotoPage($this->login_url);
-		$st->usingBrowser()->type($user['email'])->intoFieldWithId('email');
-		$st->usingBrowser()->type($user['password'])->intoFieldWithId('pass');
-		$st->usingBrowser()->click()->fieldWithName('login');
+		usingBrowser()->gotoPage($this->login_url);
+		usingBrowser()->type($user['email'])->intoFieldWithId('email');
+		usingBrowser()->type($user['password'])->intoFieldWithId('pass');
+		usingBrowser()->click()->fieldWithName('login');
 
 		// Get our access token
 		$tokenCreationTime = time();
-		$st->usingBrowser()->gotoPage($this->developer_url);
-		$access_token = $st->fromBrowser()->getValue()->fromFieldWithId('access_token');
+		usingBrowser()->gotoPage($this->developer_url);
+		$access_token = fromBrowser()->getValue()->fromFieldWithId('access_token');
 
 		// Write it to the config
 		$config->facebookAccessToken = array(
 			"access_token" => $access_token,
 			"expires" => ($tokenCreationTime + 5400) // It expires in 1.5 hours
 		);
-		$st->saveRuntimeConfig();
+		$this->st->saveRuntimeConfig();
 
 		return $access_token;
 	}

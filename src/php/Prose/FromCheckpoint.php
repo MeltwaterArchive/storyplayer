@@ -57,14 +57,11 @@ class FromCheckpoint extends Prose
 {
 	public function get($fieldName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get value of checkpoint field '{$fieldName}'");
+		$log = usingLog()->startAction("get value of checkpoint field '{$fieldName}'");
 
 		// get the checkpoint
-		$checkpoint = $st->getCheckpoint();
+		$checkpoint = getCheckpoint();
 
 		// does the value exist?
 		if (!isset($checkpoint->$fieldName)) {

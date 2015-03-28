@@ -996,11 +996,13 @@ function fromRolesTable()
  * This module is intended for internal use only. You shouldn't need to call
  * this module from your own stories.
  *
+ * @param  string $tableName
+ *         which runtime table do you want?
  * @return \Prose\FromRuntimeTable
  */
-function fromRuntimeTable()
+function fromRuntimeTable($tableName)
 {
-    return new FromRuntimeTable(StoryTeller::instance());
+    return new FromRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1014,9 +1016,9 @@ function fromRuntimeTable()
  *
  * @return \Prose\FromRuntimeTableForTargetEnvironment
  */
-function fromRuntimeTableForTargetEnvironment()
+function fromRuntimeTableForTargetEnvironment($tableName)
 {
-    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance());
+    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1621,9 +1623,9 @@ function usingRolesTable()
  *
  * @return \Prose\UsingRuntimeTable
  */
-function usingRuntimeTable()
+function usingRuntimeTable($tableName)
 {
-    return new UsingRolesTable(StoryTeller::instance());
+    return new UsingRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1634,9 +1636,9 @@ function usingRuntimeTable()
  *
  * @return \Prose\UsingRuntimeTableForTargetEnvironment
  */
-function usingRuntimeTableForTargetEnvironment()
+function usingRuntimeTableForTargetEnvironment($tableName)
 {
-    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance());
+    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1843,16 +1845,13 @@ function usingZmqSocket($zmqSocket)
  */
 function firstHostWithRole($roleName)
 {
-    // shorthand
-    $st = StoryTeller::instance();
-
-    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count(get_object_vars($listOfHosts))) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
-    $log = $st->startAction("for the first host with role '{$roleName}' ... ");
+    $log = usingLog()->startAction("for the first host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
     $hostDetails = array_pop(get_object_vars($listOfHosts));
@@ -1873,16 +1872,13 @@ function firstHostWithRole($roleName)
  */
 function lastHostWithRole($roleName)
 {
-    // shorthand
-    $st = StoryTeller::instance();
-
-    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count(get_object_vars($listOfHosts))) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
-    $log = $st->startAction("for the last host with role '{$roleName}' ... ");
+    $log = usingLog()->startAction("for the last host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
     $keys = array_keys($listOfHosts);
@@ -1909,16 +1905,13 @@ function hostWithRole($roleName)
         throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
     }
 
-    // shorthand
-    $st = StoryTeller::instance();
-
-    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count(get_object_vars($listOfHosts))) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
-    $log = $st->startAction("for each host with role '{$roleName}' ... ");
+    $log = usingLog()->startAction("for each host with role '{$roleName}' ... ");
 
     foreach ($listOfHosts as $hostDetails) {
         yield($hostDetails->hostId);

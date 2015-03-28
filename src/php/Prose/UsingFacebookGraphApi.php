@@ -69,11 +69,8 @@ class UsingFacebookGraphApi extends Prose
 	 */
 	public function getPostsFromPage($id)
 	{
-		// shorthand
-		$st   = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get posts from facebook for page {$id} via graph api");
+		$log = usingLog()->startAction("get posts from facebook for page {$id} via graph api");
 		$returnedData = $this->makeGraphApiRequest("/".$id."/posts");
 		$log->endAction("got posts for page {$id}");
 
@@ -104,24 +101,22 @@ class UsingFacebookGraphApi extends Prose
 	 * @return stdClass
 	 */
 	private function makeGraphApiRequest($path){
-		$st = $this->st;
-
-		$environment = $st->getEnvironment();
+		$environment  = $this->st->getEnvironment();
 		$access_token = $environment->facebookAccessToken;
 
 		// GET $path/?access_token=$access_token
-		$resp = $st->fromCurl()->get($this->base_path.$path.'?access_token='. $access_token);
+		$resp = fromCurl()->get($this->base_path.$path.'?access_token='. $access_token);
 
 		// Make sure it's well formed
-		$log = $st->startAction("make sure we have the 'data' key in the response");
+		$log = usingLog()->startAction("make sure we have the 'data' key in the response");
 		if (!isset($resp->data)){
 
 			// if it was an access token error, remove it from the runtime config
 			if (isset($resp->error->message) && strpos($resp->error->message, "Error validating access token") !== false){
 				// Remove the access token from the runtime config
-				$config = $st->getRuntimeConfig();
+				$config = $this->st->getRuntimeConfig();
 				unset($config->facebookAccessToken);
-				$st->saveRuntimeConfig();
+				$this->st->saveRuntimeConfig();
 			}
 
 			$respString = json_encode($resp);

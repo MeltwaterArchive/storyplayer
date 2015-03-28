@@ -67,14 +67,14 @@ class Ec2InstanceBase extends Prose
 		parent::__construct($st, $params);
 
 		// get the VM details from the hosts table
-		$this->vmDetails = $st->fromHostsTable()->getDetailsForHost($params[0]);
+		$this->vmDetails = fromHostsTable()->getDetailsForHost($params[0]);
 
 		if ($this->vmDetails) {
 			// remember the name of this VM
 			$this->instanceName = $this->vmDetails->ec2Name;
 
 			// get the data about the instance from EC2
-			$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+			$this->instance = fromEc2()->getInstance($this->instanceName);
 
 			// add the instance data to the vmDetails too, to keep that
 			// up to date

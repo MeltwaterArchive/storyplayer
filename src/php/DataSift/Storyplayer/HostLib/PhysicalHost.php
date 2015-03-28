@@ -173,14 +173,11 @@ class PhysicalHost implements SupportedHost
 	 */
 	public function determineIpAddress($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine IP address of physical host '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine IP address of physical host '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
 		// get the IP address
 		$ipAddress = $host->determineIpAddress($vmDetails, $this);
@@ -198,14 +195,11 @@ class PhysicalHost implements SupportedHost
 	 */
 	public function determineHostname($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine hostname of physical host '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine hostname of physical host '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
 		// get the hostname
 		$hostname = $host->determineHostname($vmDetails, $this);

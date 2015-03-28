@@ -57,18 +57,15 @@ class UsingHornet extends Prose
 {
 	public function startHornetDrone($clientName, $clientParams)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("start hornet-drone '{$clientName}' with params '(" . implode(', ', $clientParams) . ")");
+		$log = usingLog()->startAction("start hornet-drone '{$clientName}' with params '(" . implode(', ', $clientParams) . ")");
 
 		// build the command to run
-		$appSettings = $st->fromStoryplayer()->getAppSettings('hornet');
+		$appSettings = fromStoryplayer()->getAppSettings('hornet');
 		$command = $appSettings->path . '/hornet-drone ' . implode(' ', $clientParams);
 
 		// run the command in a screen session
-		$st->usingShell()->startInScreen($clientName, $command);
+		usingShell()->startInScreen($clientName, $command);
 
 		// all done
 		$log->endAction();

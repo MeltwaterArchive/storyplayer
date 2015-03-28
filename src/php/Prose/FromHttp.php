@@ -64,16 +64,13 @@ class FromHttp extends Prose
 {
 	public function get($url, $params = array(), $headers = array(), $timeout = null)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// create the full URL
 		if (count($params) > 0) {
 			$url = $url . '?' . http_build_query($params);
 		}
 
 		// what are we doing?
-		$log = $st->startAction("HTTP GET '${url}'");
+		$log = usingLog()->startAction("HTTP GET '${url}'");
 
 		// build the HTTP request
 		$request = new HttpClientRequest($url);
@@ -87,7 +84,7 @@ class FromHttp extends Prose
         // test environment?
         $httpAddress = $request->getAddress();
         if ($httpAddress->scheme == "https") {
-	        $validateSsl = $st->fromConfig()->getModuleSetting("http.validateSsl");
+	        $validateSsl = fromConfig()->getModuleSetting("http.validateSsl");
 	        if (null === $validateSsl) {
 	        	// default to TRUE if no setting present
 	        	$validateSsl = true;

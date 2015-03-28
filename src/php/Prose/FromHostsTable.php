@@ -72,17 +72,14 @@ class FromHostsTable extends Prose
 	 */
 	public function getHostsTable()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the hosts table for the current test environment");
+		$log = usingLog()->startAction("get the hosts table for the current test environment");
 
 		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
+		$testEnvName = $this->st->getTestEnvironmentName();
 
 		// get the table
-		$table = $st->fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+		$table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
 
 		// all done
 		$log->endAction();
@@ -100,17 +97,14 @@ class FromHostsTable extends Prose
 	 */
 	public function getDetailsForHost($hostId)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get details for host '{$hostId}' from the current test environment");
+		$log = usingLog()->startAction("get details for host '{$hostId}' from the current test environment");
 
 		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
+		$testEnvName = $this->st->getTestEnvironmentName();
 
 		// get the details
-		$hostDetails = $st->fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostId);
+		$hostDetails = fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostId);
 
 		// all done
 		$log->endAction();
@@ -119,17 +113,14 @@ class FromHostsTable extends Prose
 
 	public function hasTestEnvironment()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("do we already have the test environment defined in the hosts table?");
+		$log = usingLog()->startAction("do we already have the test environment defined in the hosts table?");
 
 		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
+		$testEnvName = $this->st->getTestEnvironmentName();
 
 		// get the hosts table
-		$hostsTable = $st->fromRuntimeTable($this->entryKey)->getTable();
+		$hostsTable = fromRuntimeTable($this->entryKey)->getTable();
 		//var_dump($hostsTable);
 
 		// does the test environment exist?

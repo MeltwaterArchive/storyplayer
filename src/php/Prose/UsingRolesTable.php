@@ -78,14 +78,13 @@ class UsingRolesTable extends Prose
 	public function addHostToRole($hostDetails, $roleName)
 	{
 		// shorthand
-		$st = $this->st;
 		$hostId = $hostDetails->hostId;
 
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostId}' to role '{$roleName}'");
+		$log = usingLog()->startAction("add host '{$hostId}' to role '{$roleName}'");
 
 		// add it
-		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->addItemToGroup($roleName, $hostId, $hostDetails);
+		usingRuntimeTableForTargetEnvironment($this->entryKey)->addItemToGroup($roleName, $hostId, $hostDetails);
 
 		// all done
 		$log->endAction();
@@ -103,14 +102,11 @@ class UsingRolesTable extends Prose
 	 */
 	public function removeHostFromRole($hostId, $roleName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostId}' from '{$roleName}'");
+		$log = usingLog()->startAction("remove host '{$hostId}' from '{$roleName}'");
 
 		// remove it
-		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromGroup($roleName, $hostId);
+		usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromGroup($roleName, $hostId);
 
 		// all done
 		$log->endAction();
@@ -118,14 +114,11 @@ class UsingRolesTable extends Prose
 
 	public function removeHostFromAllRoles($hostId)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostId}' from all roles");
+		$log = usingLog()->startAction("remove host '{$hostId}' from all roles");
 
 		// remove it
-		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromAllGroups($hostId);
+		usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromAllGroups($hostId);
 
 		// all done
 		$log->endAction();

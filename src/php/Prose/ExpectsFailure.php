@@ -57,11 +57,8 @@ class ExpectsFailure extends Prose
 {
 	public function when($what, $callback)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("expect {$what} to fail");
+		$log = usingLog()->startAction("expect {$what} to fail");
 
 		// let's do it
 		try {

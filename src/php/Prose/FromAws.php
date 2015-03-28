@@ -59,14 +59,11 @@ class FromAws extends Prose
 {
 	public function getAwsClientFactory()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("create AWS client factory using official SDK");
+		$log = usingLog()->startAction("create AWS client factory using official SDK");
 
 		// get the settings for Aws
-		$awsSettings = $st->fromConfig()->getModuleSetting('aws');
+		$awsSettings = fromConfig()->getModuleSetting('aws');
 
 		// create the AWS client factory
 		$awsFactory = Aws::factory(array(
@@ -85,15 +82,12 @@ class FromAws extends Prose
 		// the client to return
 		static $ec2Client = null;
 
-		// shorthand
-		$st = $this->st;
-
 		if (!$ec2Client) {
 			// what are we doing?
-			$log = $st->startAction("create AWS client for EC2");
+			$log = usingLog()->startAction("create AWS client for EC2");
 
 			// get the Aws client factory
-			$awsFactory = $st->fromAws()->getAwsClientFactory();
+			$awsFactory = fromAws()->getAwsClientFactory();
 
 			// create the EC2 client
 			$ec2Client = $awsFactory->get('ec2');

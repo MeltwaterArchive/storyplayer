@@ -72,17 +72,14 @@ class FromTargetsTable extends Prose
 	 */
 	public function getCurrentTestEnvironment()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the current test environment from the targets table");
+		$log = usingLog()->startAction("get the current test environment from the targets table");
 
 		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
+		$testEnvName = $this->st->getTestEnvironmentName();
 
 		// get the table
-		$table = $st->fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+		$table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
 
 		// all done
 		$log->endAction();
@@ -91,17 +88,14 @@ class FromTargetsTable extends Prose
 
 	public function hasCurrentTestEnvironment()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("do we already have the test environment defined in the targets table?");
+		$log = usingLog()->startAction("do we already have the test environment defined in the targets table?");
 
 		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
+		$testEnvName = $this->st->getTestEnvironmentName();
 
 		// get the full targets table
-		$targetsTable = $st->fromRuntimeTable($this->entryKey)->getTable();
+		$targetsTable = fromRuntimeTable($this->entryKey)->getTable();
 
 		// does the test environment exist?
 		if (isset($targetsTable->$testEnvName)) {
@@ -116,17 +110,14 @@ class FromTargetsTable extends Prose
 
 	public function getCurrentTestEnvironmentSignature()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("do we already have the test environment defined in the targets table?");
+		$log = usingLog()->startAction("do we already have the test environment defined in the targets table?");
 
 		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
+		$testEnvName = $this->st->getTestEnvironmentName();
 
 		// get the full targets table
-		$targetsTable = $st->fromRuntimeTable($this->entryKey)->getTable();
+		$targetsTable = fromRuntimeTable($this->entryKey)->getTable();
 		//var_dump($hostsTable);
 
 		// does the test environment exist?

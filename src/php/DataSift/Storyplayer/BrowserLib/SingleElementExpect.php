@@ -60,7 +60,6 @@ use Prose\E5xx_ExpectFailed;
  */
 class SingleElementExpect
 {
-	protected $st;
 	protected $searchFunction;
 	protected $searchTerm;
 	protected $element;
@@ -70,9 +69,8 @@ class SingleElementExpect
 	/**
 	 * @param string $elementDesc
 	 */
-	public function __construct(StoryTeller $st, $topElement, $searchMethodName, $searchMethodParams)
+	public function __construct($topElement, $searchMethodName, $searchMethodParams)
 	{
-		$this->st                 = $st;
 		$this->topElement         = $topElement;
 		$this->searchMethodName   = $searchMethodName;
 		$this->searchMethodParams = $searchMethodParams;
@@ -80,8 +78,8 @@ class SingleElementExpect
 
 	public function isBlank()
 	{
-		$action = function($st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("$elementDesc '$elementName' must be blank");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("$elementDesc '$elementName' must be blank");
 
 			// test it
 			if (strlen($element->attribute("value")) == 0) {
@@ -93,7 +91,6 @@ class SingleElementExpect
 		};
 
 		$wrapper = new SingleElementAction(
-			$this->st,
 			$action,
 			"check",
 			$this->topElement
@@ -107,8 +104,8 @@ class SingleElementExpect
 
 	public function isNotBlank()
 	{
-		$action = function($st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("$elementDesc '$elementName' must not be blank");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("$elementDesc '$elementName' must not be blank");
 
 			// test it
 			if (strlen($element->attribute("value")) > 0) {
@@ -120,7 +117,6 @@ class SingleElementExpect
 		};
 
 		$wrapper = new SingleElementAction(
-			$this->st,
 			$action,
 			"check",
 			$this->topElement
@@ -134,8 +130,8 @@ class SingleElementExpect
 
 	public function isChecked()
 	{
-		$action = function($st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("$elementDesc '$elementName' must be checked");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("$elementDesc '$elementName' must be checked");
 
 			// test it
 			if ($element->attribute("checked")) {
@@ -147,7 +143,6 @@ class SingleElementExpect
 		};
 
 		$wrapper = new SingleElementAction(
-			$this->st,
 			$action,
 			"check",
 			$this->topElement
@@ -161,8 +156,8 @@ class SingleElementExpect
 
 	public function isNotChecked()
 	{
-		$action = function($st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("$elementDesc '$elementName' must not be checked");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("$elementDesc '$elementName' must not be checked");
 
 			// test it
 			if (!$element->attribute("checked")) {
@@ -174,7 +169,6 @@ class SingleElementExpect
 		};
 
 		$wrapper = new SingleElementAction(
-			$this->st,
 			$action,
 			"check",
 			$this->topElement

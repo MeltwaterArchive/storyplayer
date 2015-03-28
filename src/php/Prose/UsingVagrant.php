@@ -67,11 +67,8 @@ class UsingVagrant extends VmActionsBase
 
 	public function createVm($vmName, $osName, $homeFolder)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("start vagrant VM '{$vmName}', running guest OS '{$osName}', using Vagrantfile in '{$homeFolder}'");
+		$log = usingLog()->startAction("start vagrant VM '{$vmName}', running guest OS '{$osName}', using Vagrantfile in '{$homeFolder}'");
 
 		// put the details into an array
 		$vmDetails = new BaseObject();
@@ -93,7 +90,7 @@ class UsingVagrant extends VmActionsBase
 		];
 
 		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+		$host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
 		// create our virtual machine
 		$host->createHost($vmDetails);
@@ -104,11 +101,8 @@ class UsingVagrant extends VmActionsBase
 
 	public function determinePrivateKey($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
 		// the key will be in one of two places, in this order:
 		//
@@ -123,7 +117,7 @@ class UsingVagrant extends VmActionsBase
 
 		foreach ($keyFilenames as $keyFilename)
 		{
-			$st->usingLog()->writeToLog("checking if {$keyFilename} exists");
+			usingLog()->writeToLog("checking if {$keyFilename} exists");
 			if (file_exists($keyFilename)) {
 				$log->endAction($keyFilename);
 				return $keyFilename;

@@ -60,11 +60,8 @@ class FromEnvironment extends Prose
 {
 	public function getAppSetting($appName, $settingName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get $settingName for '{$appName}'");
+		$log = usingLog()->startAction("get $settingName for '{$appName}'");
 
 		// do we have any settings anywhere for this app?
 		$appSettings = $this->getAppSettings($appName);
@@ -86,14 +83,11 @@ class FromEnvironment extends Prose
 
 	public function getAppSettings($appName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get all settings for $appName");
+		$log = usingLog()->startAction("get all settings for $appName");
 
 		// do we have any in the storyplayer.json file?
-		$config = $st->getConfig();
+		$config = $this->st->getConfig();
 		if (isset($config->storyplayer, $config->storyplayer->appSettings, $config->storyplayer->appSettings->$appName)) {
 			// success!
 			$value = $config->storyplayer->appSettings->$appName;
@@ -120,14 +114,11 @@ class FromEnvironment extends Prose
 
 	public function __isset($appName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("check to see if the config contains '$appName'");
+		$log = usingLog()->startAction("check to see if the config contains '$appName'");
 
 		// do we have this setting in the config?
-		$config = $st->getConfig();
+		$config = $this->st->getConfig();
 		if (isset($config->storyplayer, $config->storyplayer->appSettings, $config->storyplayer->appSettings->$appName)) {
 			$log->endAction("it does");
 			return true;

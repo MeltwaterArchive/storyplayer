@@ -63,11 +63,8 @@ class FromHost extends HostBase
 {
 	public function getDetails()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("retrieve details for host '{$this->args[0]}'");
+		$log = usingLog()->startAction("retrieve details for host '{$this->args[0]}'");
 
 		// get the host details
 		$hostDetails = $this->getHostDetails();
@@ -91,17 +88,14 @@ class FromHost extends HostBase
 	 */
 	public function getHostIsRunning()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("is host '{$this->args[0]}' running?");
+		$log = usingLog()->startAction("is host '{$this->args[0]}' running?");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = HostLib::getHostAdapter($st, $hostDetails->type);
+		$host = HostLib::getHostAdapter($this->st, $hostDetails->type);
 
 		// if the box is running, it should have a status of 'running'
 		$result = $host->isRunning($hostDetails);
@@ -128,11 +122,8 @@ class FromHost extends HostBase
 	 */
 	public function getHostname()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the hostname of host ID '{$this->args[0]}'");
+		$log = usingLog()->startAction("get the hostname of host ID '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -154,11 +145,8 @@ class FromHost extends HostBase
 	 */
 	public function getIpAddress()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get IP address of host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get IP address of host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -170,17 +158,14 @@ class FromHost extends HostBase
 
 	public function getInstalledPackageDetails($packageName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get details for package '{$packageName}' installed on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get details for package '{$packageName}' installed on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// get the information
 		$return = $host->getInstalledPackageDetails($hostDetails, $packageName);
@@ -192,17 +177,14 @@ class FromHost extends HostBase
 
 	public function getPidIsRunning($pid)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("is process PID '{$pid}' running on host '{$this->args[0]}'?");
+		$log = usingLog()->startAction("is process PID '{$pid}' running on host '{$this->args[0]}'?");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// get the information
 		$return = $host->getPidIsRunning($hostDetails, $pid);
@@ -219,17 +201,14 @@ class FromHost extends HostBase
 
 	public function getProcessIsRunning($processName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("is process '{$processName}' running on host '{$this->args[0]}'?");
+		$log = usingLog()->startAction("is process '{$processName}' running on host '{$this->args[0]}'?");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// get the information
 		$return = $host->getProcessIsRunning($hostDetails, $processName);
@@ -246,17 +225,14 @@ class FromHost extends HostBase
 
 	public function getPid($processName)
 	{
-		// alias the storyteller object
-		$st = $this->st;
-
 		// log some info to the user
-		$log = $st->startAction("get id of process '{$processName}' running on VM '{$this->args[0]}'");
+		$log = usingLog()->startAction("get id of process '{$processName}' running on VM '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// get the information
 		$return = $host->getPid($hostDetails, $processName);
@@ -268,11 +244,8 @@ class FromHost extends HostBase
 
 	public function getSshUsername()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get username to use with SSH to host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get username to use with SSH to host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -287,11 +260,8 @@ class FromHost extends HostBase
 
 	public function getSshKeyFile()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get key file to use with SSH to host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get key file to use with SSH to host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -311,14 +281,11 @@ class FromHost extends HostBase
 
 	public function getScreenIsRunning($sessionName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("check if screen session '{$sessionName}' is still running");
+		$log = usingLog()->startAction("check if screen session '{$sessionName}' is still running");
 
 		// get the details
-		$sessionData = $st->fromHost($this->args[0])->getScreenSessionDetails($sessionName);
+		$sessionData = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
 
 		// all done
 		if ($sessionData) {
@@ -333,11 +300,8 @@ class FromHost extends HostBase
 
 	public function getScreenSessionDetails($sessionName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get details about screen session '{$sessionName}' on host '{$this->args[0]}' from Storyplayer");
+		$log = usingLog()->startAction("get details about screen session '{$sessionName}' on host '{$this->args[0]}' from Storyplayer");
 
 		// are there any details?
 		$cmd = "screen -ls | grep -E '[[:digit:]]+.{$sessionName}[[:space:]]' | awk -F. '{print \\\$1}'";
@@ -363,11 +327,8 @@ class FromHost extends HostBase
 
 	public function getAllScreenSessions()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get details about all screen sessions on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get details about all screen sessions on host '{$this->args[0]}'");
 
 		// are there any details?
 		$cmd = "screen -ls | grep -E '[[:digit:]]+\.[^[:space:]]+[[:space:]]' | awk '{print \\\$1}'";
@@ -400,11 +361,8 @@ class FromHost extends HostBase
 
 	public function getAppSettings($appName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get settings for '{$appName}' from host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get settings for '{$appName}' from host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -438,11 +396,8 @@ class FromHost extends HostBase
 
 		// if we get here, then we are using the new dot.notation.support
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get appSetting '{$path}' from host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get appSetting '{$path}' from host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -470,11 +425,8 @@ class FromHost extends HostBase
 
 	protected function getLegacyAppSetting($appName, $settingName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get $settingName for '{$appName}' from host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get $settingName for '{$appName}' from host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -507,11 +459,8 @@ class FromHost extends HostBase
 
 	public function getStorySetting($path)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get storySetting '{$path}' from host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get storySetting '{$path}' from host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
@@ -539,17 +488,14 @@ class FromHost extends HostBase
 
 	public function downloadFile($sourceFilename, $destFilename)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("download file '{$this->args[0]}':'{$sourceFilename}' to '{$destFilename}'");
+		$log = usingLog()->startAction("download file '{$this->args[0]}':'{$sourceFilename}' to '{$destFilename}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// upload the file
 		$result = $host->downloadFile($hostDetails, $sourceFilename, $destFilename);
@@ -568,17 +514,14 @@ class FromHost extends HostBase
 
 	public function getFileDetails($filename)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get details for '{$filename}' on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("get details for '{$filename}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// get the details
 		$details = $host->getFileDetails($hostDetails, $filename);

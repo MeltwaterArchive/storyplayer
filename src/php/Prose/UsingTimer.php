@@ -60,9 +60,6 @@ class UsingTimer extends Prose
 {
 	public function waitFor($callback, $timeout = 'PT5S')
 	{
-		// shorthand
-		$st = $this->st;
-
 		// how long do we wait for?
 		if (is_string($timeout)) {
 			$interval = new DateInterval($timeout);
@@ -77,11 +74,11 @@ class UsingTimer extends Prose
 		$end = $now + $seconds;
 
 		// what are we doing?
-		$log = $st->startAction("polling for up to {$seconds} seconds");
+		$log = usingLog()->startAction("polling for up to {$seconds} seconds");
 
 		while ($now < $end) {
 			try {
-				$result = $callback($st);
+				$result = $callback($this->st);
 
 				// if we get here, the actions inside the callback
 				// must have worked
@@ -112,9 +109,6 @@ class UsingTimer extends Prose
 
 	public function waitWhile($callback, $timeout = 'PT5S')
 	{
-		// shorthand
-		$st = $this->st;
-
 		if (is_string($timeout)) {
 			$interval = new DateInterval($timeout);
 			$seconds  = $interval->getTotalSeconds();
@@ -127,11 +121,11 @@ class UsingTimer extends Prose
 		$end = $now + $seconds;
 
 		// what are we doing?
-		$log = $st->startAction("polling for up to '{$seconds}' seconds");
+		$log = usingLog()->startAction("polling for up to '{$seconds}' seconds");
 
 		while ($now < $end) {
 			try {
-				$result = $callback($st);
+				$result = $callback($this->st);
 
 				// if we get here, the actions inside the callback
 				// must have worked
@@ -174,11 +168,8 @@ class UsingTimer extends Prose
 			$seconds = $timeout;
 		}
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
+		$log = usingLog()->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
 
 		// zzzzz
 		sleep($seconds);

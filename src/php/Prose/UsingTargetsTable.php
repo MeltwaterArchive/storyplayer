@@ -68,18 +68,15 @@ class UsingTargetsTable extends Prose
 	 */
 	public function addCurrentTestEnvironment()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("add current test environment to targets table");
+		$log = usingLog()->startAction("add current test environment to targets table");
 
 		// get the details to add
-		$testEnvName = $st->getTestEnvironmentName();
-		$testEnvSig  = $st->getTestEnvironmentSignature();
+		$testEnvName = $this->st->getTestEnvironmentName();
+		$testEnvSig  = $this->st->getTestEnvironmentSignature();
 
 		// add it
-		$st->usingRuntimeTable($this->entryKey)->addItem($testEnvName, $testEnvSig);
+		usingRuntimeTable($this->entryKey)->addItem($testEnvName, $testEnvSig);
 
 		// all done
 		$log->endAction();
@@ -90,17 +87,14 @@ class UsingTargetsTable extends Prose
 	 */
 	public function removeCurrentTestEnvironment()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("remove current test environment from targets table");
+		$log = usingLog()->startAction("remove current test environment from targets table");
 
 		// get the details to remove
-		$testEnvName = $st->getTestEnvironmentName();
+		$testEnvName = $this->st->getTestEnvironmentName();
 
 		// remove it
-		$st->usingRuntimeTable($this->entryKey)->removeItem($testEnvName);
+		usingRuntimeTable($this->entryKey)->removeItem($testEnvName);
 
 		// all done
 		$log->endAction();

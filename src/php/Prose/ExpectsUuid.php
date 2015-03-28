@@ -59,11 +59,8 @@ class ExpectsUuid extends Prose
 {
 	public function requirementsAreMet()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure the UUID module's requirements are installed");
+		$log = usingLog()->startAction("make sure the UUID module's requirements are installed");
 
 		// do we have the UUID extension?
 		if (!function_exists('uuid_create')) {

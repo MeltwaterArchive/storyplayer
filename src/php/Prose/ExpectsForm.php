@@ -60,7 +60,6 @@ class ExpectsForm extends ExpectsBrowser
 	protected function initActions()
 	{
 		// shorthand
-		$st     = $this->st;
 		$formId = $this->args[0];
 
 		// find the form

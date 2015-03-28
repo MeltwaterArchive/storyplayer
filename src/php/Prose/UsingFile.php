@@ -57,11 +57,8 @@ class UsingFile extends Prose
 {
 	public function removeFile($filename)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("delete the file '{$filename}'");
+		$log = usingLog()->startAction("delete the file '{$filename}'");
 
 		// remove the file
 		if (file_exists($filename)) {

@@ -73,14 +73,11 @@ class FromRolesTable extends Prose
      */
     public function getRolesTable()
     {
-        // shorthand
-        $st = $this->st;
-
         // what are we doing?
-        $log = $st->startAction("get the roles table for the current test environment");
+        $log = usingLog()->startAction("get the roles table for the current test environment");
 
         // what is our roles table for this test environment?
-        $rolesTable = $st->fromRuntimeTableForTargetEnvironment($this->entryKey)->getTable();
+        $rolesTable = fromRuntimeTableForTargetEnvironment($this->entryKey)->getTable();
 
         // all done
         $log->endAction();
@@ -97,11 +94,8 @@ class FromRolesTable extends Prose
      */
     public function getDetailsForRole($roleName)
     {
-        // shorthand
-        $st = $this->st;
-
         // what are we doing?
-        $log = $st->startAction("get details for role '{$roleName}' for the current test environment");
+        $log = usingLog()->startAction("get details for role '{$roleName}' for the current test environment");
 
         // pull the table
         $rolesTable = $this->getRolesTable();
@@ -112,7 +106,7 @@ class FromRolesTable extends Prose
 
             // we've just created a new entry in the runtime config, so
             // we need to force a save to disk
-            $st->saveRuntimeConfig();
+            $this->st->saveRuntimeConfig();
         }
 
         // all done

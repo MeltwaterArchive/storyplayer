@@ -60,11 +60,8 @@ class UsingRedisConn extends BaseRedisConn
 {
 	public function __call($methodName, $params)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction(["run redis command", $methodName, "with params:", $params]);
+		$log = usingLog()->startAction(["run redis command", $methodName, "with params:", $params]);
 
 		// do we have such a redis call?
 		if (!method_exists($this->args[0], $methodName)) {

@@ -58,17 +58,14 @@ class ForeachHostWithRole extends HostsByRoleBase
 {
 	public function __call($moduleName, $params)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("for each host with role '{$this->roleName}' ...");
+		$log = usingLog()->startAction("for each host with role '{$this->roleName}' ...");
 
 		// get the hosts details
 		$hostsDetails = $this->retrieveHostsDetails();
 
 		// build the iterator that we're going to use
-		$return = new DelayedHostsModuleIterator($st, $hostsDetails, $moduleName);
+		$return = new DelayedHostsModuleIterator($this->st, $hostsDetails, $moduleName);
 
 		// all done
 		$log->endAction();

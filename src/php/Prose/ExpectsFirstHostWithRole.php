@@ -69,7 +69,7 @@ class ExpectsFirstHostWithRole extends ExpectsHost
 		// function correctly
 
 		// what are we doing?
-		$log = $st->startAction("select first host with role '{$this->args[0]}' ...");
+		$log = usingLog()->startAction("select first host with role '{$this->args[0]}' ...");
 
 		// get the hosts details
 		$hostDetails = $this->retrieveFirstHost($this->args[0]);

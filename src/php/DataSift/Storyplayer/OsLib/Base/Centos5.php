@@ -67,11 +67,8 @@ abstract class Base_Centos5 extends Base_Unix
 	 */
 	public function determineIpAddress($hostDetails, SupportedHost $host)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("query " . basename(__CLASS__) . " for IP address");
+		$log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
 
 		if (empty($hostDetails->ifaces)) {
 			// set default network interfaces
@@ -100,11 +97,8 @@ abstract class Base_Centos5 extends Base_Unix
 
 	public function determineHostname($hostDetails, SupportedHost $host)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("query " . basename(__CLASS__) . " for hostname");
+		$log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
 
 		// how do we do this?
 		$command = "hostname --fqdn";
@@ -132,11 +126,8 @@ abstract class Base_Centos5 extends Base_Unix
 	 */
 	public function getInstalledPackageDetails($hostDetails, $packageName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
+		$log = usingLog()->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
 
 		// get the details
 		$command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";

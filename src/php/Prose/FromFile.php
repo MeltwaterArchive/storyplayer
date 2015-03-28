@@ -57,11 +57,8 @@ class FromFile extends Prose
 {
 	public function getTmpFileName()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("generate a temporary filename");
+		$log = usingLog()->startAction("generate a temporary filename");
 
 		// create it
 		$filename = tempnam(null, 'storyplayer-data-');

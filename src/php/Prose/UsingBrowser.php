@@ -77,8 +77,8 @@ class UsingBrowser extends Prose
 	 */
 	public function check()
 	{
-		$action = function($st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("check $elementDesc '$elementName'");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("check $elementDesc '$elementName'");
 
 			// does the element need clicking to check it?
 			if (!$element->selected()) {
@@ -92,7 +92,6 @@ class UsingBrowser extends Prose
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"check",
 			$this->topElement
@@ -107,9 +106,9 @@ class UsingBrowser extends Prose
 	 */
 	public function clear()
 	{
-		$action = function($st, $element, $elementName, $elementDesc) {
+		$action = function($element, $elementName, $elementDesc) {
 			// what are we doing?
-			$log = $st->startAction("clear $elementDesc '$elementName'");
+			$log = usingLog()->startAction("clear $elementDesc '$elementName'");
 
 			// clear the element if we can
 			$tag = $element->name();
@@ -125,7 +124,6 @@ class UsingBrowser extends Prose
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"clear",
 			$this->topElement
@@ -139,14 +137,13 @@ class UsingBrowser extends Prose
 	 */
 	public function click()
 	{
-		$action = function($st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("click $elementDesc '$elementName'");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("click $elementDesc '$elementName'");
 			$element->click();
 			$log->endAction();
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"click",
 			$this->topElement
@@ -162,10 +159,10 @@ class UsingBrowser extends Prose
 	 */
 	public function select($label)
 	{
-		$action = function ($st, $element, $elementName, $elementDesc) use ($label) {
+		$action = function ($element, $elementName, $elementDesc) use ($label) {
 
 			// what are we doing?
-			$log = $st->startAction("choose option '$label' from $elementDesc '$elementName'");
+			$log = usingLog()->startAction("choose option '$label' from $elementDesc '$elementName'");
 
 			// get the option to select
 			$option = $element->getElement('xpath', 'option[normalize-space(text()) = "' . $label . '" ]');
@@ -178,7 +175,6 @@ class UsingBrowser extends Prose
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"select",
 			$this->topElement
@@ -194,10 +190,10 @@ class UsingBrowser extends Prose
 	 */
 	public function type($text)
 	{
-		$action = function($st, $element, $elementName, $elementDesc) use ($text) {
+		$action = function($element, $elementName, $elementDesc) use ($text) {
 
 			// what are we doing?
-			$log = $st->startAction("type '$text' into $elementDesc '$elementName'");
+			$log = usingLog()->startAction("type '$text' into $elementDesc '$elementName'");
 
 			// type the text
 			$element->type($text);
@@ -207,7 +203,6 @@ class UsingBrowser extends Prose
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"type",
 			$this->topElement
@@ -223,7 +218,6 @@ class UsingBrowser extends Prose
 	public function gotoPage($url)
 	{
 		// some shorthand to make things easier to read
-		$st      = $this->st;
 		$browser = $this->device;
 
 		// relative, or absolute URL?
@@ -238,8 +232,8 @@ class UsingBrowser extends Prose
 		// if we have no host, we cannot continue
 		if (isset($urlParts['host'])) {
 			// do we have any HTTP AUTH credentials to merge in?
-			if ($st->fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
-				$adapter = $st->getDeviceAdapter();
+			if (fromBrowser()->hasHttpBasicAuthForHost($urlParts['host'])) {
+				$adapter = $this->st->getDeviceAdapter();
 
 				// the adapter *might* embed the authentication details
 				// into the URL
@@ -248,7 +242,7 @@ class UsingBrowser extends Prose
 		}
 
 		// what are we doing?
-		$log = $st->startAction("goto URL: $url");
+		$log = usingLog()->startAction("goto URL: $url");
 
 		// tell the browser to move to the page we want
 		$browser->open($url);
@@ -259,15 +253,12 @@ class UsingBrowser extends Prose
 
 	public function waitForOverlay($timeout, $id)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("wait for the overlay with id '{$id}' to appear");
+		$log = usingLog()->startAction("wait for the overlay with id '{$id}' to appear");
 
 		// check for the overlay
-		$st->usingTimer()->waitFor(function() use($st, $id) {
-			$st->expectsBrowser()->has()->elementWithId($id);
+		usingTimer()->waitFor(function() use($id) {
+			expectsBrowser()->has()->elementWithId($id);
 		}, $timeout);
 
 		// all done
@@ -276,21 +267,18 @@ class UsingBrowser extends Prose
 
 	public function waitForTitle($timeout, $title, $failedTitle = null)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("check that the the right page has loaded");
+		$log = usingLog()->startAction("check that the the right page has loaded");
 
 		// check the title
-		$st->usingTimer()->waitFor(function() use($st, $title, $failedTitle) {
+		usingTimer()->waitFor(function() use($title, $failedTitle) {
 			// have we already failed?
-			if ($failedTitle && $st->fromBrowser()->getTitle() == $failedTitle) {
+			if ($failedTitle && fromBrowser()->getTitle() == $failedTitle) {
 				return false;
 			}
 
 			// we have not failed yet
-			$st->expectsBrowser()->hasTitle($title);
+			expectsBrowser()->hasTitle($title);
 		}, $timeout);
 
 		// all done
@@ -299,15 +287,12 @@ class UsingBrowser extends Prose
 
 	public function waitForTitles($timeout, $titles)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("check that the the right page has loaded");
+		$log = usingLog()->startAction("check that the the right page has loaded");
 
 		// check the title
-		$st->usingTimer()->waitFor(function() use($st, $titles) {
-			$st->expectsBrowser()->hasTitles($titles);
+		usingTimer()->waitFor(function() use($titles) {
+			expectsBrowser()->hasTitles($titles);
 		}, $timeout);
 
 		// all done
@@ -323,11 +308,10 @@ class UsingBrowser extends Prose
 	public function resizeCurrentWindow($width, $height)
 	{
 		// shorthand
-		$st      = $this->st;
 		$browser = $this->device;
 
 		// what are we doing?
-		$log = $st->startAction("change the current browser window size to be {$width} x {$height} (w x h)");
+		$log = usingLog()->startAction("change the current browser window size to be {$width} x {$height} (w x h)");
 
 		// resize the window
 		$browser->window()->postSize(array("width" => $width, "height" => $height));
@@ -339,11 +323,10 @@ class UsingBrowser extends Prose
 	public function switchToWindow($name)
 	{
 		// shorthand
-		$st      = $this->st;
 		$browser = $this->device;
 
 		// what are we doing?
-		$log = $st->startAction("switch to browser window called '{$name}'");
+		$log = usingLog()->startAction("switch to browser window called '{$name}'");
 
 		// get the list of available window handles
 		$handles = $browser->window_handles();
@@ -371,11 +354,10 @@ class UsingBrowser extends Prose
 	public function closeCurrentWindow()
 	{
 		// shorthand
-		$st      = $this->st;
 		$browser = $this->device;
 
 		// what are we doing?
-		$log = $st->startAction("close the current browser window");
+		$log = usingLog()->startAction("close the current browser window");
 
 		// close the current window
 		$browser->deleteWindow();
@@ -393,11 +375,10 @@ class UsingBrowser extends Prose
 	public function switchToIframe($id)
 	{
 		// shorthand
-		$st      = $this->st;
 		$browser = $this->device;
 
 		// what are we doing?
-		$log = $st->startAction("switch to working inside the iFrame with the id '{$id}'");
+		$log = usingLog()->startAction("switch to working inside the iFrame with the id '{$id}'");
 
 		// switch to the iFrame
 		$browser->frame(array('id' => $id));
@@ -409,11 +390,10 @@ class UsingBrowser extends Prose
 	public function switchToMainFrame()
 	{
 		// shorthand
-		$st      = $this->st;
 		$browser = $this->device;
 
 		// what are we doing?
-		$log = $st->startAction("switch to working with the main frame");
+		$log = usingLog()->startAction("switch to working with the main frame");
 
 		// switch to the iFrame
 		$browser->frame(array('id' => null));
@@ -430,15 +410,12 @@ class UsingBrowser extends Prose
 
 	public function setHttpBasicAuthForHost($hostname, $username, $password)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("set HTTP basic auth for host '{$hostname}': user: '{$username}'; password: '{$password}'");
+		$log = usingLog()->startAction("set HTTP basic auth for host '{$hostname}': user: '{$username}'; password: '{$password}'");
 
 		try {
 			// get the browser adapter
-			$adapter = $st->getDeviceAdapter();
+			$adapter = $this->st->getDeviceAdapter();
 
 			// set the details
 			$adapter->setHttpBasicAuthForHost($hostname, $username, $password);

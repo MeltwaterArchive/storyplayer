@@ -60,17 +60,14 @@ class FromStoryplayer extends Prose
 {
 	public function getAppSetting($path)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get app setting '{$path}' from the storyplayer config");
+		$log = usingLog()->startAction("get app setting '{$path}' from the storyplayer config");
 
 		// what is the full path to this data?
 		$fullPath = 'storyplayer.appSettings.' . $path;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -87,17 +84,14 @@ class FromStoryplayer extends Prose
 
 	public function getAppSettings($app)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get all settings for '{$app}' from the storyplayer config");
+		$log = usingLog()->startAction("get all settings for '{$app}' from the storyplayer config");
 
 		// what is the full path to this data?
 		$fullPath = 'storyplayer.appSettings.' . $app;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -114,17 +108,14 @@ class FromStoryplayer extends Prose
 
 	public function getStorySetting($path)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get storySetting '{$path}' from the storyplayer config");
+		$log = usingLog()->startAction("get storySetting '{$path}' from the storyplayer config");
 
 		// what is the full path to this data?
 		$fullPath = 'storyplayer.storySettings.' . $path;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -141,17 +132,14 @@ class FromStoryplayer extends Prose
 
 	public function getModuleSetting($path)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get module setting '{$path}' from the storyplayer config");
+		$log = usingLog()->startAction("get module setting '{$path}' from the storyplayer config");
 
 		// what is the full path to this data?
 		$fullPath = 'storyplayer.moduleSettings.' . $path;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			throw new E5xx_ActionFailed(__METHOD__, "module setting '$path' not found");
 		}
@@ -170,17 +158,14 @@ class FromStoryplayer extends Prose
 
 	public function getModuleSettings($module)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get all settings for '{$module}' from the storyplayer config");
+		$log = usingLog()->startAction("get all settings for '{$module}' from the storyplayer config");
 
 		// what is the full path to this data?
 		$fullPath = 'storyplayer.moduleSettings.' . $module;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			throw new E5xx_ActionFailed(__METHOD__, "no module '$module' found in the config");
 		}
@@ -199,11 +184,8 @@ class FromStoryplayer extends Prose
 
 	public function get($name)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get '$name' from the storyplayer config");
+		$log = usingLog()->startAction("get '$name' from the storyplayer config");
 
 		// what is the full path to this data?
 		$fullPath = 'storyplayer';
@@ -212,7 +194,7 @@ class FromStoryplayer extends Prose
 		}
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 
 		if (!$config->hasData($fullPath)) {
 			$log->endAction("no such setting '{$name}'");
@@ -233,14 +215,11 @@ class FromStoryplayer extends Prose
 
 	public function getConfig()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the storyplayer.json config");
+		$log = usingLog()->startAction("get the storyplayer.json config");
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		$retval = $config->getData("storyplayer");
 
 		// all done

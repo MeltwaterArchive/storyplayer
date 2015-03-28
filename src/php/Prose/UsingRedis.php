@@ -60,11 +60,8 @@ class UsingRedis extends Prose
 {
 	public function connect($dsn)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("connect to Redis server '{$dsn}'");
+		$log = usingLog()->startAction("connect to Redis server '{$dsn}'");
 
 		// make the connection
 		try {

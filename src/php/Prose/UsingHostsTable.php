@@ -75,14 +75,11 @@ class UsingHostsTable extends Prose
 	 */
 	public function addHost($hostId, $hostDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostId}' to current test environment hosts table");
+		$log = usingLog()->startAction("add host '{$hostId}' to current test environment hosts table");
 
 		// add it
-		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->addItem($hostId, $hostDetails);
+		usingRuntimeTableForTargetEnvironment($this->entryKey)->addItem($hostId, $hostDetails);
 
 		// all done
 		$log->endAction();
@@ -98,14 +95,11 @@ class UsingHostsTable extends Prose
 	 */
 	public function removeHost($hostId)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("remove host '{$hostId}' from current test environment hosts table");
+		$log = usingLog()->startAction("remove host '{$hostId}' from current test environment hosts table");
 
 		// remove it
-		$st->usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItem($hostId);
+		usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItem($hostId);
 
 		// all done
 		$log->endAction();

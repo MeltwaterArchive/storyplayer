@@ -61,11 +61,8 @@ class UsingPDO extends Prose
 {
 	public function connect($dsn, $username = null, $password = null, $options = [])
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("connect to database '{$dsn}'");
+		$log = usingLog()->startAction("connect to database '{$dsn}'");
 
 		// make the connection
 		try {

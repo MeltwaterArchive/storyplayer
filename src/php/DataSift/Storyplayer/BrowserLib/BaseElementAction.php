@@ -286,7 +286,7 @@ class BaseElementAction
 		$searchMethod = 'getElements' . $searchType;
 
 		// let's go find our element
-		$searchObject = new DomElementSearch($this->st, $this->baseElement);
+		$searchObject = new DomElementSearch($this->baseElement);
 		$elements = $searchObject->$searchMethod($searchTerm, $tag);
 
 		// all done

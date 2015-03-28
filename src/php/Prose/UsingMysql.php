@@ -75,11 +75,8 @@ class UsingMysql extends Prose
 
 	public function query($sql)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction(["run SQL against '{$this->args[0]}':", $sql]);
+		$log = usingLog()->startAction(["run SQL against '{$this->args[0]}':", $sql]);
 
 		// connect
 		$conn = new mysqli($this->args[0], $this->args[1], $this->args[2]);

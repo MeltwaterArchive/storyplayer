@@ -65,7 +65,7 @@ class DelayedHostsModuleIterator
 	public function __call($methodName, $params)
 	{
 		// shorthand
-		$st = $this->st;
+		$st         = $this->st;
 		$moduleName = $this->moduleName;
 
 		// our (potentially empty) return result

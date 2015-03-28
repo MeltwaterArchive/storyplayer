@@ -48,7 +48,7 @@ namespace Prose;
  *
  * as of Storyplayer v2, this is now just an alias for:
  *
- *   $st->fromHost('localhost')
+ *   fromHost('localhost')
  *
  * @category  Libraries
  * @package   Storyplayer/Prose

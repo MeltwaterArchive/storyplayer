@@ -76,11 +76,10 @@ class HostsByRoleBase extends Prose
 	protected function retrieveHostsDetails()
 	{
 		// shorthand
-		$st = $this->st;
 		$roleName = $this->roleName;
 
 		// do we have this role?
-		$role = $st->fromRolesTable()->getDetailsForRole($roleName);
+		$role = fromRolesTable()->getDetailsForRole($roleName);
 		if (!count(get_object_vars($role))) {
 			throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
 		}

@@ -77,7 +77,7 @@ class UsingProcessesTable extends Prose
 	public function addProcess($hostId, $processDetails)
 	{
 		$key = $hostId . ":" . $processDetails->pid;
-		$this->st->usingRuntimeTable($this->tableName)->addItem($key, $processDetails);
+		usingRuntimeTable($this->tableName)->addItem($key, $processDetails);
 	}
 
 	/**
@@ -93,6 +93,6 @@ class UsingProcessesTable extends Prose
 	public function removeProcess($hostId, $processDetails)
 	{
 		$key = $hostId . ":" . $processDetails->pid;
-		$this->st->usingRuntimeTable($this->tableName)->removeItem($key);
+		usingRuntimeTable($this->tableName)->removeItem($key);
 	}
 }

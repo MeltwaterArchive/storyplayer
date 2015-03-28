@@ -57,18 +57,15 @@ class ExpectsGraphite extends Prose
 {
 	public function metricIsAlwaysZero($metric, $startTime, $endTime)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// when are we looking for?
 		$humanStartTime = date('Y-m-d H:i:s', $startTime);
 		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
 		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' is zero between '{$humanStartTime}' and '{$humanEndTime}'");
+		$log = usingLog()->startAction("ensure metric '{$metric}' is zero between '{$humanStartTime}' and '{$humanEndTime}'");
 
 		// get the data from graphite
-		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
+		$data = fromGraphite()->getDataFor($metric, $startTime, $endTime);
 
 		// do we *have* any data?
 		if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
@@ -95,18 +92,15 @@ class ExpectsGraphite extends Prose
 
 	public function metricSumIs($metric, $expectedTotal, $startTime, $endTime)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// when are we looking for?
 		$humanStartTime = date('Y-m-d H:i:s', $startTime);
 		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
 		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' sums to '{$expectedTotal}' between '{$humanStartTime}' and '{$humanEndTime}'");
+		$log = usingLog()->startAction("ensure metric '{$metric}' sums to '{$expectedTotal}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
 		// get the data from graphite
-		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
+		$data = fromGraphite()->getDataFor($metric, $startTime, $endTime);
 
 		// do we *have* any data?
 		if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
@@ -134,7 +128,7 @@ class ExpectsGraphite extends Prose
 		}
 
 		// do we have the total we expected?
-		$st->assertsDouble($actualTotal)->equals($expectedTotal);
+		assertsDouble($actualTotal)->equals($expectedTotal);
 
 		// all done
 		$log->endAction("data was available, metric '{$metric}' sums to '{$actualTotal}'");
@@ -143,18 +137,15 @@ class ExpectsGraphite extends Prose
 
 	public function metricNeverExceeds($metric, $expectedMax, $startTime, $endTime)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// when are we looking for?
 		$humanStartTime = date('Y-m-d H:i:s', $startTime);
 		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
 		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' never exceeds value '{$expectedMax}' between '{$humanStartTime}' and '{$humanEndTime}'");
+		$log = usingLog()->startAction("ensure metric '{$metric}' never exceeds value '{$expectedMax}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
 		// get the data from graphite
-		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
+		$data = fromGraphite()->getDataFor($metric, $startTime, $endTime);
 
 		// do we *have* any data?
 		if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
@@ -176,7 +167,7 @@ class ExpectsGraphite extends Prose
 		// we have data ... let's make sure we're happy with it
 		foreach ($data[0]->datapoints as $datapoint) {
 			if ($datapoint[0] !== null) {
-				$st->assertsDouble($datapoint[0])->isLessThanOrEqualTo($expectedMax);
+				assertsDouble($datapoint[0])->isLessThanOrEqualTo($expectedMax);
 			}
 		}
 
@@ -187,18 +178,15 @@ class ExpectsGraphite extends Prose
 
 	public function metricAverageDoesntExceed($metric, $expectedAverage, $startTime, $endTime)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// when are we looking for?
 		$humanStartTime = date('Y-m-d H:i:s', $startTime);
 		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
 		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' average never exceeds value '{$expectedAverage}' between '{$humanStartTime}' and '{$humanEndTime}'");
+		$log = usingLog()->startAction("ensure metric '{$metric}' average never exceeds value '{$expectedAverage}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
 		// get the data from graphite
-		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
+		$data = fromGraphite()->getDataFor($metric, $startTime, $endTime);
 
 		// do we *have* any data?
 		if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
@@ -231,7 +219,7 @@ class ExpectsGraphite extends Prose
 		$average = $total/$count;
 
 		// are we happy?
-		$st->assertsDouble($average)->isLessThanOrEqualTo($expectedAverage);
+		assertsDouble($average)->isLessThanOrEqualTo($expectedAverage);
 
 		// all done
 		$log->endAction("data was available, metric '{$metric}' never exceeds '{$expectedAverage}'");

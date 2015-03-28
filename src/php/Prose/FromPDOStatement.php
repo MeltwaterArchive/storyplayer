@@ -78,11 +78,8 @@ class FromPDOStatement extends Prose
 
 	public function fetchAll()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("fetch all rows from the PDO query result");
+		$log = usingLog()->startAction("fetch all rows from the PDO query result");
 
 		try
 		{
@@ -101,11 +98,8 @@ class FromPDOStatement extends Prose
 
 	public function fetchAssoc()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("fetch 1 row from the PDO query result");
+		$log = usingLog()->startAction("fetch 1 row from the PDO query result");
 
 		try
 		{
@@ -124,11 +118,8 @@ class FromPDOStatement extends Prose
 
 	public function fetchNum()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("fetch 1 row from the PDO query result");
+		$log = usingLog()->startAction("fetch 1 row from the PDO query result");
 
 		try
 		{
@@ -147,11 +138,8 @@ class FromPDOStatement extends Prose
 
 	public function fetchObj()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("fetch 1 row from the PDO query result");
+		$log = usingLog()->startAction("fetch 1 row from the PDO query result");
 
 		try
 		{
@@ -170,11 +158,8 @@ class FromPDOStatement extends Prose
 
 	public function getRowCount()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("how many rows were affected by the last SQL query?");
+		$log = usingLog()->startAction("how many rows were affected by the last SQL query?");
 
 		// get the answer
 		$rowCount = $this->args[0]->rowCount();

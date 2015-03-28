@@ -69,7 +69,7 @@ class Ec2ImageBase extends Prose
 		$this->amiId = $params[0];
 
 		// get the data about the instance from EC2
-		$this->image = $st->fromEc2()->getImage($this->amiId);
+		$this->image = fromEc2()->getImage($this->amiId);
 	}
 
 	protected function requiresValidImage($method)

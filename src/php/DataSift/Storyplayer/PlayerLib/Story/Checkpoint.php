@@ -137,7 +137,7 @@ class Story_Checkpoint implements IteratorAggregate
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("retrieve '{$key}' from the checkpoint");
+		$log = usingLog()->startAction("retrieve '{$key}' from the checkpoint");
 
 		// do we have the data to return?
 		if (!isset($this->data[$key])) {
@@ -185,7 +185,7 @@ class Story_Checkpoint implements IteratorAggregate
 		$st = $this->st;
 
 		// what are we doing?
-		$log = $st->startAction("store '{$key}' in the checkpoint");
+		$log = usingLog()->startAction("store '{$key}' in the checkpoint");
 
 		// are we allowed to change the data at this time?
 		if ($this->readOnly)

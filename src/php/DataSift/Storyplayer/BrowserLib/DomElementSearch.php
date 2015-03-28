@@ -66,10 +66,9 @@ use Prose\E5xx_ActionFailed;
  */
 class DomElementSearch
 {
-	public function __construct($st)
+	public function __construct($topElement)
 	{
-		$this->st = $st;
-		$this->initDevice();
+		$this->setTopElement($topElement);
 	}
 
 	// ==================================================================
@@ -98,12 +97,9 @@ class DomElementSearch
 
 	public function getElementsByAltText($text, $tags = '*')
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("get '{$tag}' elements with alt text '{$text}'");
+		$log = usingLog()->startAction("get '{$tag}' elements with alt text '{$text}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -131,12 +127,9 @@ class DomElementSearch
 
 	public function getElementsByClass($class, $tags = '*')
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("get '{$tag}' elements with CSS class '{$class}'");
+		$log = usingLog()->startAction("get '{$tag}' elements with CSS class '{$class}'");
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -161,12 +154,9 @@ class DomElementSearch
 
 	public function getElementsById($id, $tags = '*')
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("get '{$tag}' elements with id '{$id}'");
+		$log = usingLog()->startAction("get '{$tag}' elements with id '{$id}'");
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -191,12 +181,8 @@ class DomElementSearch
 
 	public function getElementsByLabel($labelText)
 	{
-		// shorthand
-		$st         = $this->st;
-		$topElement = $this->getTopElement();
-
 		// what are we doing?
-		$log = $st->startAction("get elements for label '{$labelText}'");
+		$log = usingLog()->startAction("get elements for label '{$labelText}'");
 
 		// our return value
 		$retval = [];
@@ -241,11 +227,10 @@ class DomElementSearch
 	protected function getElementAssociatedWithLabelElement($labelElement, $labelText)
 	{
 		// shorthand
-		$st         = $this->st;
 		$topElement = $this->getTopElement();
 
 		// what are we doing?
-		$log = $st->startAction("find elements associated with label '$labelText'");
+		$log = usingLog()->startAction("find elements associated with label '$labelText'");
 
 		$inputElementId = null;
 		try {
@@ -310,12 +295,9 @@ class DomElementSearch
 
 	public function getElementsByLabelIdOrName($searchTerm, $tags = '*')
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("get '{$tag}' with label, id or name '{$searchTerm}'");
+		$log = usingLog()->startAction("get '{$tag}' with label, id or name '{$searchTerm}'");
 
 		// our return value
 		$elements = [];
@@ -348,12 +330,9 @@ class DomElementSearch
 
 	public function getElementsByName($name, $tags = '*')
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("get '{$tag}' elements with name '{$name}'");
+		$log = usingLog()->startAction("get '{$tag}' elements with name '{$name}'");
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -379,12 +358,9 @@ class DomElementSearch
 
 	public function getElementsByPlaceholder($text, $tags = '*')
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("get '{$tag}' element with placeholder '{$text}'");
+		$log = usingLog()->startAction("get '{$tag}' element with placeholder '{$text}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -412,12 +388,9 @@ class DomElementSearch
 
 	public function getElementsByText($text, $tags = '*')
 	{
-		// short hand
-		$st = $this->st;
-
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("get '{$tag}' element with text '{$text}'");
+		$log = usingLog()->startAction("get '{$tag}' element with text '{$text}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -453,12 +426,9 @@ class DomElementSearch
 
 	public function getElementsByTitle($title, $tags = '*')
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
-		$log = $st->startAction("get '{$tag}' element with title '{$title}'");
+		$log = usingLog()->startAction("get '{$tag}' element with title '{$title}'");
 
 		$successMsg = "found one";
 		$failureMsg = "no matching elements";
@@ -487,11 +457,10 @@ class DomElementSearch
 	public function getElementsByXpath($xpathList)
 	{
 		// shorthand
-		$st = $this->st;
 		$topElement = $this->getTopElement();
 
 		// what are we doing?
-		$log = $st->startAction("search the browser's DOM using a list of XPath queries");
+		$log = usingLog()->startAction("search the browser's DOM using a list of XPath queries");
 
 		// our set of elements to return
 		$return = array();
@@ -527,27 +496,6 @@ class DomElementSearch
 	//
 	// ------------------------------------------------------------------
 
-	protected function initDevice()
-	{
-		// start the test device
-		$this->device = $this->st->getRunningDevice();
-
-		// set our top XPATH node
-		//
-		// for the moment, we are assuming that the test device is
-		// a web browser, because historically this has always been
-		// the case
-		//
-		// when this assumption is no longer valid, we will need to
-		// revisit this code
-		$this->setTopXpath("//html");
-
-		// set our top element
-		//
-		// we cannot assume that the browser has any DOM loaded at all
-		$this->setTopElement($this->device);
-	}
-
 	public function getTopElement()
 	{
 		return $this->topElement;
@@ -570,5 +518,4 @@ class DomElementSearch
 	{
 		$this->topXpath = $xpath;
 	}
-
 }

@@ -59,14 +59,11 @@ class UsingEc2Instance extends Ec2InstanceBase
 	{
 		$this->requiresValidHost(__METHOD__);
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("create EBS AMI image '{$imageName}' from EC2 VM '{$this->instanceName}'");
+		$log = usingLog()->startAction("create EBS AMI image '{$imageName}' from EC2 VM '{$this->instanceName}'");
 
 		// get the AWS EC2 client to work with
-		$ec2Client = $st->fromAws()->getEc2Client();
+		$ec2Client = fromAws()->getEc2Client();
 
 		$response = $ec2Client->createImage(array(
 			"InstanceId" => $this->instance['InstanceId'],
@@ -87,11 +84,8 @@ class UsingEc2Instance extends Ec2InstanceBase
 	{
 		$this->requiresValidHost(__METHOD__);
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("mark all volumes on EC2 VM '{$this->instanceName}' to be deleted on termination");
+		$log = usingLog()->startAction("mark all volumes on EC2 VM '{$this->instanceName}' to be deleted on termination");
 
 		// create a list of all of the volumes we're going to modify
 		$ebsVolumes = array();
@@ -107,7 +101,7 @@ class UsingEc2Instance extends Ec2InstanceBase
 		}
 
 		// get the AWS EC2 client to work with
-		$ec2Client = $st->fromAws()->getEc2Client();
+		$ec2Client = fromAws()->getEc2Client();
 
 		// let's mark all of the volumes as needing to be deleted
 		// on termination
@@ -117,7 +111,7 @@ class UsingEc2Instance extends Ec2InstanceBase
 		));
 
 		// now, we need to make sure that actually worked
-		$this->instance = $st->fromEc2()->getInstance($this->instanceName);
+		$this->instance = fromEc2()->getInstance($this->instanceName);
 
 		// var_dump("\n\n\nAFTER MODIFY INSTANCE ATTRIBUTE\n\n");
 		// var_dump($this->instance);

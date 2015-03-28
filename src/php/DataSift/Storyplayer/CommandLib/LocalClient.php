@@ -113,14 +113,11 @@ class LocalClient implements CommandClient
 		Contract::RequiresValue($command, is_string($command));
 		Contract::RequiresValue($command, !empty($command));
 
-		// shorthand
-		$st = $this->st;
-
 		// make the params printable / executable
 		// $printableParams = $this->convertParamsForUse($params);
 
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' against localhost ");
+		$log = usingLog()->startAction("run command '{$command}' against localhost ");
 
 		// build the full command
 		// <command> <command-args>
@@ -130,8 +127,8 @@ class LocalClient implements CommandClient
 		$fullCommand = $command;
 
 		// run the command
-		$commandRunner = $st->getNewCommandRunner();
-		$result = $commandRunner->runSilently($st, $fullCommand);
+		$commandRunner = $this->st->getNewCommandRunner();
+		$result = $commandRunner->runSilently($fullCommand);
 
 		// all done
 		$log->endAction("return code was '{$result->returnCode}'");
@@ -146,14 +143,11 @@ class LocalClient implements CommandClient
         Contract::RequiresValue($destFilename, is_string($destFilename));
         Contract::RequiresValue($destFilename, !empty($destFilename));
 
-        // shorthand
-        $st = $this->st;
-
         // make the params printable / executable
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = $st->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
+        $log = usingLog()->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
 
         // build the full command
         //
@@ -162,8 +156,8 @@ class LocalClient implements CommandClient
                      . "'" . $destFilename . "'";
 
         // run the command
-        $commandRunner = $st->getNewCommandRunner();
-        $result = $commandRunner->runSilently($st, $fullCommand);
+        $commandRunner = $this->st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($fullCommand);
 
         // all done
         $log->endAction("return code was '{$result->returnCode}'");
@@ -179,14 +173,11 @@ class LocalClient implements CommandClient
         Contract::RequiresValue($destFilename, is_string($destFilename));
         Contract::RequiresValue($destFilename, !empty($destFilename));
 
-        // shorthand
-        $st = $this->st;
-
         // make the params printable / executable
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = $st->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
+        $log = usingLog()->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
 
         // build the full command
         //
@@ -195,8 +186,8 @@ class LocalClient implements CommandClient
                      . "'" . $destFilename . "'";
 
         // run the command
-        $commandRunner = $st->getNewCommandRunner();
-        $result = $commandRunner->runSilently($st, $fullCommand);
+        $commandRunner = $this->st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($fullCommand);
 
         // all done
         $log->endAction("return code was '{$result->returnCode}'");

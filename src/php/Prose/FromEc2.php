@@ -57,14 +57,11 @@ class FromEc2 extends Prose
 {
 	public function getImage($amiId)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get data for EC2 image '{$amiId}'");
+		$log = usingLog()->startAction("get data for EC2 image '{$amiId}'");
 
 		// get the client
-		$client = $st->fromAws()->getEc2Client();
+		$client = fromAws()->getEc2Client();
 
 		// get the list of registered images
 		$result = $client->describeImages();
@@ -85,14 +82,11 @@ class FromEc2 extends Prose
 
 	public function getInstance($instanceName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get data for EC2 VM '{$instanceName}'");
+		$log = usingLog()->startAction("get data for EC2 VM '{$instanceName}'");
 
 		// get the client
-		$client = $st->fromAws()->getEc2Client();
+		$client = fromAws()->getEc2Client();
 
 		// get the list of running instances
 		$result = $client->describeInstances();

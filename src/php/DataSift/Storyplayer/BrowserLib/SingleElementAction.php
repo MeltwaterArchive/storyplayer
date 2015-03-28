@@ -241,9 +241,8 @@ class SingleElementAction extends BaseElementAction
 	 * @param \Closure $action
 	 * @param string $actionDesc
 	 */
-	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
+	public function __construct($action, $actionDesc, $baseElement = null)
 	{
-		$this->st          = $st;
 		$this->action      = $action;
 		$this->actionDesc  = $actionDesc;
 		$this->baseElement = $baseElement;
@@ -257,7 +256,7 @@ class SingleElementAction extends BaseElementAction
 
 		// now that we have our element, let's apply the action to it
 		$action = $this->action;
-		$return = $action($this->st, $element, $methodArgs[0], $methodName);
+		$return = $action($element, $methodArgs[0], $methodName);
 
 		// all done
 		return $return;

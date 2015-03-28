@@ -73,7 +73,7 @@ class FromProcessesTable extends Prose
 	 */
 	public function getProcessesTable()
 	{
-		return $this->st->fromRuntimeTable($this->tableName)->getTable();
+		return fromRuntimeTable($this->tableName)->getTable();
 	}
 
 	/**
@@ -87,6 +87,6 @@ class FromProcessesTable extends Prose
 	 */
 	public function getDetailsForPid($pid)
 	{
-		return $this->st->fromRuntimeTable($this->tableName)->getDetails($pid);
+		return fromRuntimeTable($this->tableName)->getDetails($pid);
 	}
 }

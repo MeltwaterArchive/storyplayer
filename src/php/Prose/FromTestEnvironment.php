@@ -60,11 +60,8 @@ class FromTestEnvironment extends Prose
 {
 	public function get($name)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get '$name' from the test environment config");
+		$log = usingLog()->startAction("get '$name' from the test environment config");
 
 		// what is the full path to this data?
 		$fullPath = 'target';
@@ -73,7 +70,7 @@ class FromTestEnvironment extends Prose
 		}
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 
 		if (!$config->hasData($fullPath)) {
 			$log->endAction("no such setting '{$name}'");
@@ -94,15 +91,12 @@ class FromTestEnvironment extends Prose
 
 	public function getName()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get current test environment name");
+		$log = usingLog()->startAction("get current test environment name");
 
 		// get the details
-		$config = $st->getConfig();
-		$value   = $config->getData('target.name');
+		$config = $this->st->getConfig();
+		$value  = $config->getData('target.name');
 
 		// all done
 		$log->endAction($value);
@@ -111,14 +105,11 @@ class FromTestEnvironment extends Prose
 
 	public function getOption($optionName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get option '{$optionName}' from test environment");
+		$log = usingLog()->startAction("get option '{$optionName}' from test environment");
 
 		// get the details
-		$config = $st->getConfig();
+		$config = $this->st->getConfig();
 		$fullPath = 'target.options.' . $optionName;
 		$value = null;
 		if ($config->hasData($fullPath)) {
@@ -136,15 +127,12 @@ class FromTestEnvironment extends Prose
 
 	public function getModuleSetting($setting)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get '{$setting}' from test environment's module settings");
+		$log = usingLog()->startAction("get '{$setting}' from test environment's module settings");
 
 		// get the details
 		$fullPath = 'target.moduleSettings.' . $setting;
-		$config  = $st->getConfig();
+		$config  = $this->st->getConfig();
 
 		$value = null;
 		if ($config->hasData($fullPath)) {
@@ -175,20 +163,17 @@ class FromTestEnvironment extends Prose
 
 	public function getConfig()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the test environment config");
+		$log = usingLog()->startAction("get the test environment config");
 
 		// get the details
-		$testEnv = $st->getTestEnvironmentConfig();
+		$testEnv = $this->st->getTestEnvironmentConfig();
 
 		// var_dump($testEnv);
 
 		// convert into dot notation
 		$convertor = new DotNotationConvertor();
-		$return    = $convertor->convertToArray($testEnv->getExpandedData($st->getConfig()));
+		$return    = $convertor->convertToArray($testEnv->getExpandedData($this->st->getConfig()));
 
 		// all done
 		$log->endAction();

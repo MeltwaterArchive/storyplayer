@@ -66,9 +66,9 @@ class ExpectsBrowser extends Prose
 
 	public function doesntHave()
 	{
-		$action = function(StoryTeller $st, $requiredCount, $elements, $elementName, $elementDesc) {
+		$action = function($requiredCount, $elements, $elementName, $elementDesc) {
 
-			$log = $st->startAction("$elementDesc '$elementName' must not exist");
+			$log = usingLog()->startAction("$elementDesc '$elementName' must not exist");
 
 			// how many elements actually exist?
 			$actualCount = count($elements);
@@ -110,7 +110,6 @@ class ExpectsBrowser extends Prose
 		};
 
 		return new MultiElementAction(
-			$this->st,
 			$action,
 			"doesntHave",
 			$this->getTopElement()
@@ -119,9 +118,9 @@ class ExpectsBrowser extends Prose
 
 	public function has()
 	{
-		$action = function(StoryTeller $st, $requiredCount, $elements, $elementName, $elementDesc) {
+		$action = function($requiredCount, $elements, $elementName, $elementDesc) {
 
-			$log = $st->startAction("$elementDesc '$elementName' must exist");
+			$log = usingLog()->startAction("$elementDesc '$elementName' must exist");
 
 			$actualCount = count($elements);
 			switch($requiredCount) {
@@ -161,7 +160,6 @@ class ExpectsBrowser extends Prose
 		};
 
 		return new MultiElementAction(
-			$this->st,
 			$action,
 			"has",
 			$this->getTopElement()
@@ -170,14 +168,11 @@ class ExpectsBrowser extends Prose
 
 	public function hasTitle($title)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("page title must be {$title}");
+		$log = usingLog()->startAction("page title must be {$title}");
 
 		// get the browser title
-		$browserTitle = $st->fromBrowser()->getTitle();
+		$browserTitle = fromBrowser()->getTitle();
 
 		if ($title != $browserTitle) {
 			throw new E5xx_ExpectFailed('BrowserExpects::title', $title, $browserTitle);
@@ -189,15 +184,12 @@ class ExpectsBrowser extends Prose
 
 	public function hasTitles($titles)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$titlesString = implode('; or ', $titles);
-		$log = $st->startAction("page title must be one of: {$titlesString}");
+		$log = usingLog()->startAction("page title must be one of: {$titlesString}");
 
 		// get the browser title
-		$browserTitle = $st->fromBrowser()->getTitle();
+		$browserTitle = fromBrowser()->getTitle();
 
 		if (!in_array($browserTitle, $titles)) {
 			throw new E5xx_ExpectFailed(__METHOD__, $titlesString, $browserTitle);
@@ -209,14 +201,11 @@ class ExpectsBrowser extends Prose
 
 	public function currentWindowSizeIs($width, $height)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("current browser window dimensions must be '{$width}' x '{$height}' (w x h)");
+		$log = usingLog()->startAction("current browser window dimensions must be '{$width}' x '{$height}' (w x h)");
 
 		// get the dimensions
-		$dimensions = $st->fromBrowser()->getCurrentWindowSize();
+		$dimensions = fromBrowser()->getCurrentWindowSize();
 
 		// are they right?
 		if ($dimensions['width'] != $width || $dimensions['height'] != $height) {
@@ -229,6 +218,6 @@ class ExpectsBrowser extends Prose
 
 	public function __call($methodName, $methodParams)
 	{
-		return new SingleElementExpect($this->st, $this->getTopElement(), $methodName, $methodParams);
+		return new SingleElementExpect($this->getTopElement(), $methodName, $methodParams);
 	}
 }

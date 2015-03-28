@@ -66,7 +66,6 @@ class UsingForm extends UsingBrowser
 		parent::initActions();
 
 		// shorthand
-		$st     = $this->st;
 		$formId = $this->args[0];
 
 		// find the form
@@ -90,14 +89,11 @@ class UsingForm extends UsingBrowser
 
 	public function clearFields($fields)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("clear " . count($fields) . " field(s) in the form '{$this->formId}'");
+		$log = usingLog()->startAction("clear " . count($fields) . " field(s) in the form '{$this->formId}'");
 
 		foreach ($fields as $labelText => $fieldValue) {
-			$this->st->usingForm($this->formId)->clear()->theFieldLabelled($labelText);
+			usingForm($this->formId)->clear()->theFieldLabelled($labelText);
 		}
 
 		$log->endAction();
@@ -106,15 +102,14 @@ class UsingForm extends UsingBrowser
 	public function fillInFields($fields)
 	{
 		// shorthand
-		$st     = $this->st;
 		$formId = $this->formId;
 
 		// what are we doing?
-		$log = $st->startAction("fill in " . count($fields) . " field(s) in the form '{$this->formId}'");
+		$log = usingLog()->startAction("fill in " . count($fields) . " field(s) in the form '{$this->formId}'");
 
 		foreach ($fields as $labelText => $fieldValue) {
 			// find the element
-			$element = $st->fromForm($formId)->getElementByLabelIdOrName($labelText);
+			$element = fromForm($formId)->getElementByLabelIdOrName($labelText);
 			$tag     = $element->name();
 
 			switch ($tag) {
@@ -144,17 +139,16 @@ class UsingForm extends UsingBrowser
 	public function fillInFieldsIfPresent($fields)
 	{
 		// shorthand
-		$st     = $this->st;
 		$formId = $this->formId;
 
 		// what are we doing?
-		$log = $st->startAction("fill in " . count($fields) . " field(s) in form '{$formId}' if present");
+		$log = usingLog()->startAction("fill in " . count($fields) . " field(s) in form '{$formId}' if present");
 
 		foreach ($fields as $labelText => $fieldValue) {
 			// find the element
-			$element = $log->addStep("finding field with label, id or name '{$labelText}'", function($log) use($st, $formId, $labelText) {
+			$element = $log->addStep("finding field with label, id or name '{$labelText}'", function($log) use($formId, $labelText) {
 				try {
-					return $st->fromForm($formId)->getElementByLabelIdOrName($labelText);
+					return fromForm($formId)->getElementByLabelIdOrName($labelText);
 				}
 				catch (Exception $e) {
 					$log->endAction("field '{$labelText}' not present; ignoring!");

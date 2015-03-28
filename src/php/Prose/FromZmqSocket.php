@@ -62,9 +62,6 @@ class FromZmqSocket extends ZmqSocketBase
 {
 	public function recv($timeout = null)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// do we need to set a default timeout?
 		if ($timeout === null) {
 			$timeout = self::$defaultTimeout;
@@ -72,11 +69,11 @@ class FromZmqSocket extends ZmqSocketBase
 
 		// what are we doing?
 		if ($timeout == -1) {
-			$log = $st->startAction("recv() from ZMQ socket; no timeout");
+			$log = usingLog()->startAction("recv() from ZMQ socket; no timeout");
 			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
 		}
 		else {
-			$log = $st->startAction("recv() from ZMQ socket; timeout is {$timeout} seconds");
+			$log = usingLog()->startAction("recv() from ZMQ socket; timeout is {$timeout} seconds");
 			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
 		}
 
@@ -90,11 +87,8 @@ class FromZmqSocket extends ZmqSocketBase
 
 	public function recvNonBlocking()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("recv() from ZMQ socket");
+		$log = usingLog()->startAction("recv() from ZMQ socket");
 
 		// do it
 		$return = $this->args[0]->recv(ZMQ::MODE_NOBLOCK);
@@ -111,9 +105,6 @@ class FromZmqSocket extends ZmqSocketBase
 
 	public function recvMulti($timeout = null)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// do we need to set a default timeout?
 		if ($timeout === null) {
 			$timeout = self::$defaultTimeout;
@@ -121,11 +112,11 @@ class FromZmqSocket extends ZmqSocketBase
 
 		// what are we doing?
 		if ($timeout == -1) {
-			$log = $st->startAction("recvmulti() from ZMQ socket; no timeout");
+			$log = usingLog()->startAction("recvmulti() from ZMQ socket; no timeout");
 			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
 		}
 		else {
-			$log = $st->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
+			$log = usingLog()->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
 			$this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
 		}
 
@@ -143,11 +134,8 @@ class FromZmqSocket extends ZmqSocketBase
 
 	public function recvMultiNonBlocking()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("recvmulti() from ZMQ socket");
+		$log = usingLog()->startAction("recvmulti() from ZMQ socket");
 
 		// do it
 		$return = $this->args[0]->recvmulti(ZMQ::MODE_NOBLOCK);
@@ -164,11 +152,8 @@ class FromZmqSocket extends ZmqSocketBase
 
 	public function getEndpoints()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the list of endpoints for a ZMQ socket");
+		$log = usingLog()->startAction("get the list of endpoints for a ZMQ socket");
 
 		// do it
 		$endpoints = $this->args[0]->getEndpoints();

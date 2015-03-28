@@ -100,12 +100,9 @@ class Prose
 
 	protected function initPageContext()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// make sure we are looking at the right part of the page
-		$pageContext = $st->getPageContext();
-		$pageContext->switchToContext($st);
+		$pageContext = $this->st->getPageContext();
+		$pageContext->switchToContext($this->st);
 	}
 
 	/**

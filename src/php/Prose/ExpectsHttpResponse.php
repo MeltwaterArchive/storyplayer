@@ -49,7 +49,7 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
 
 /**
  * test the contents of a HttpClientResponse (retrieved by using
- * $st->fromHttp()->get() et al)
+ * fromHttp()->get() et al)
  *
  * great for testing APIs
  *
@@ -94,11 +94,10 @@ class ExpectsHttpResponse extends Prose
 	public function hasStatusCode($status)
 	{
 		// shorthand
-		$st = $this->st;
 		$response = $this->args[0];
 
 		// what are we doing?
-		$log = $st->startAction("make sure HTTP response has status code '{$status}'");
+		$log = usingLog()->startAction("make sure HTTP response has status code '{$status}'");
 
 		// do we even HAVE a response?
 		if (!is_object($response)) {
@@ -122,18 +121,17 @@ class ExpectsHttpResponse extends Prose
 	public function hasBody($expectedBody)
 	{
 		// shorthand
-		$st = $this->st;
 		$response = $this->args[0];
 
 		// make a printable version of $expectedBody
 		$printer = new DataPrinter();
-		$logValue = $st->convertDataForOutput($expectedBody);
+		$logValue = $this->st->convertDataForOutput($expectedBody);
 
 		// what are we doing?
-		$log = $st->startAction(["make sure HTTP response has body", $expectedBody]);
+		$log = usingLog()->startAction(["make sure HTTP response has body", $expectedBody]);
 
 		// do the comparison
-		$st->assertsString($response->getBody())->equals($expectedBody);
+		assertsString($response->getBody())->equals($expectedBody);
 
 		// if we get here, all is well
 		$log->endAction();

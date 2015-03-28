@@ -86,11 +86,8 @@ class PhysicalHosts implements SupportedHost
 	 */
 	public function createHost($envDetails, $provisioningVars = array())
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction('register physical host(s)');
+		$log = usingLog()->startAction('register physical host(s)');
 
 		// make sure we like the provided details
 		if (!isset($envDetails->machines)) {
@@ -111,10 +108,10 @@ class PhysicalHosts implements SupportedHost
 
 		// remove any existing hosts table entry
 		foreach ($envDetails->machines as $hostId => $machine) {
-			$st->usingHostsTable()->removeHost($hostId);
+			usingHostsTable()->removeHost($hostId);
 
 			// remove any roles
-			$st->usingRolesTable()->removeHostFromAllRoles($hostId);
+			usingRolesTable()->removeHostFromAllRoles($hostId);
 		}
 
 		// there's nothing to start ... we assume that each host is
@@ -144,9 +141,9 @@ class PhysicalHosts implements SupportedHost
 			$vmDetails->provisioned = true;
 
 			// remember this blackbox
-			$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
+			usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
 			foreach ($vmDetails->roles as $role) {
-				$st->usingRolesTable()->addHostToRole($vmDetails, $role);
+				usingRolesTable()->addHostToRole($vmDetails, $role);
 			}
 		}
 
@@ -201,19 +198,16 @@ class PhysicalHosts implements SupportedHost
 	 */
 	public function destroyHost($envDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("de-register blackbox(es)");
+		$log = usingLog()->startAction("de-register blackbox(es)");
 
 		// de-register all the hosts
 		foreach ($envDetails->machines as $hostId => $machine)
 		{
 			foreach ($machine->roles as $role) {
-				$st->usingRolesTable()->removeHostFromAllRoles($hostId);
+				usingRolesTable()->removeHostFromAllRoles($hostId);
 			}
-			$st->usingHostsTable()->removeHost($hostId);
+			usingHostsTable()->removeHost($hostId);
 		}
 
 		// all done

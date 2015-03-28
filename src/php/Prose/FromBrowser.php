@@ -75,15 +75,12 @@ class FromBrowser extends Prose
 
 	public function getTableContents($xpath)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get HTML table using xpath");
+		$log = usingLog()->startAction("get HTML table using xpath");
 
 		// can we find the table?
 		try {
-			$tableElement = $st->fromBrowser()->get()->elementByXpath($xpath);
+			$tableElement = fromBrowser()->get()->elementByXpath($xpath);
 		}
 		catch (Exception $e) {
 			// no such table
@@ -136,9 +133,9 @@ class FromBrowser extends Prose
 
 	public function has()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
+		$action = function($element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("check the current page for $elementDesc '$elementName'");
+			$log = usingLog()->startAction("check the current page for $elementDesc '$elementName'");
 			if (is_object($element)) {
 				$log->endAction('found it');
 				return true;
@@ -149,7 +146,6 @@ class FromBrowser extends Prose
 		};
 
 		return new MultiElementAction(
-			$this->st,
 			$action,
 			"has",
 			$this->getTopElement()
@@ -158,15 +154,14 @@ class FromBrowser extends Prose
 
 	public function get()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
+		$action = function($element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("retrieve the $elementDesc '$elementName'");
+			$log = usingLog()->startAction("retrieve the $elementDesc '$elementName'");
 			$log->endAction();
 			return $element;
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"get",
 			$this->getTopElement()
@@ -175,15 +170,14 @@ class FromBrowser extends Prose
 
 	public function getName()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
+		$action = function($element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("retrieve the name of the $elementDesc '$elementName'");
+			$log = usingLog()->startAction("retrieve the name of the $elementDesc '$elementName'");
 			$log->endAction('name is: ' . $element->attribute('name'));
 			return $element->attribute('name');
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"getName",
 			$this->getTopElement()
@@ -192,9 +186,9 @@ class FromBrowser extends Prose
 
 	public function getNames()
 	{
-		$action = function(StoryTeller $st, $elements, $elementName, $elementDesc) {
+		$action = function($elements, $elementName, $elementDesc) {
 
-			$log = $st->startAction("retrieve the names of the $elementDesc '$elementName'");
+			$log = usingLog()->startAction("retrieve the names of the $elementDesc '$elementName'");
 			if (!is_array($elements)) {
 				$log->endAction('1 element found');
 				return $elements->attribute('name');
@@ -210,7 +204,6 @@ class FromBrowser extends Prose
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"getNames",
 			$this->getTopElement()
@@ -219,9 +212,9 @@ class FromBrowser extends Prose
 
 	public function getOptions()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
+		$action = function($element, $elementName, $elementDesc) {
 
-			$log = $st->startAction("retrieve the options of them $elementDesc '$elementName'");
+			$log = usingLog()->startAction("retrieve the options of them $elementDesc '$elementName'");
 			// get the elements
 			$optionElements = $element->getElements('xpath', "descendant::option");
 
@@ -237,7 +230,6 @@ class FromBrowser extends Prose
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			'getOptions',
 			$this->getTopElement()
@@ -246,14 +238,13 @@ class FromBrowser extends Prose
 
 	public function getTag()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("retrieve the tagname of the $elementDesc '$elementName'");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("retrieve the tagname of the $elementDesc '$elementName'");
 			$log->endAction("tag is: " . $element->name());
 			return $element->name();
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"getTag",
 			$this->getTopElement()
@@ -262,14 +253,13 @@ class FromBrowser extends Prose
 
 	public function getText()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("retrieve the text of the $elementDesc '$elementName'");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("retrieve the text of the $elementDesc '$elementName'");
 			$log->endAction("text is: " . $element->text());
 			return $element->text();
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"getText",
 			$this->getTopElement()
@@ -278,8 +268,8 @@ class FromBrowser extends Prose
 
 	public function getValue()
 	{
-		$action = function(StoryTeller $st, $element, $elementName, $elementDesc) {
-			$log = $st->startAction("retrieve the value of the $elementDesc '$elementName'");
+		$action = function($element, $elementName, $elementDesc) {
+			$log = usingLog()->startAction("retrieve the value of the $elementDesc '$elementName'");
 
 			// is this a select box?
 			switch($element->name()) {
@@ -308,7 +298,6 @@ class FromBrowser extends Prose
 		};
 
 		return new SingleElementAction(
-			$this->st,
 			$action,
 			"getValue",
 			$this->getTopElement()
@@ -324,11 +313,10 @@ class FromBrowser extends Prose
 	public function getUrl()
 	{
 		// shorthand
-		$st      = $this->st;
 		$browser = $this->device;
 
 		// what are we doing?
-		$log = $st->startAction("retrieve the current URL from the browser");
+		$log = usingLog()->startAction("retrieve the current URL from the browser");
 
 		// get the URL
 		$url = $browser->url();
@@ -347,9 +335,6 @@ class FromBrowser extends Prose
 
 	public function getHttpBasicAuthForHost($hostname)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// this method deliberately has no logging, because it is called
 		// every single time that we want the browser to go to a new URL
 		//
@@ -357,7 +342,7 @@ class FromBrowser extends Prose
 
 		try {
 			// get the browser adapter
-			$adapter = $st->getDeviceAdapter();
+			$adapter = $this->st->getDeviceAdapter();
 
 			// get the details
 			$credentials = $adapter->getHttpBasicAuthForHost($hostname);
@@ -373,9 +358,6 @@ class FromBrowser extends Prose
 
 	public function hasHttpBasicAuthForHost($hostname)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// this method deliberately has no logging, because it is called
 		// every single time that we want the browser to go to a new URL
 		//
@@ -383,7 +365,7 @@ class FromBrowser extends Prose
 
 		try {
 			// get the browser adapter
-			$adapter = $st->getDeviceAdapter();
+			$adapter = $this->st->getDeviceAdapter();
 
 			// get the details
 			return $adapter->hasHttpBasicAuthForHost($hostname);
@@ -403,10 +385,9 @@ class FromBrowser extends Prose
 	public function getTitle()
 	{
 		// some shorthand to make things easier to read
-		$st      = $this->st;
 		$browser = $this->device;
 
-		$log = $st->startAction("retrieve the current page title");
+		$log = usingLog()->startAction("retrieve the current page title");
 		$log->endAction("title is: " . $browser->title());
 
 		return $browser->title();
@@ -421,11 +402,10 @@ class FromBrowser extends Prose
 	public function getCurrentWindowSize()
 	{
 		// shorthand
-		$st      = $this->st;
 		$browser = $this->device;
 
 		// what are we doing?
-		$log = $st->startAction("retrieve the current browser window's dimensions");
+		$log = usingLog()->startAction("retrieve the current browser window's dimensions");
 
 		// get the dimensions
 		$dimensions = $browser->window()->getSize();

@@ -67,11 +67,8 @@ abstract class Base_Unix extends OsBase
 	 */
 	public function determineIpAddress($hostDetails, SupportedHost $host)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("query " . basename(__CLASS__) . " for IP address");
+		$log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
 
 		// how do we do this?
 		if (isset($hostDetails->hostname)) {
@@ -97,11 +94,8 @@ abstract class Base_Unix extends OsBase
 	 */
 	public function determineHostname($hostDetails, SupportedHost $host)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("query " . basename(__CLASS__) . " for hostname");
+		$log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
 
 		// how do we do this?
 		if (isset($hostDetails->hostname)) {
@@ -144,11 +138,8 @@ abstract class Base_Unix extends OsBase
 	 */
 	public function getProcessIsRunning($hostDetails, $processName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("is process '{$processName}' running on host '{$hostDetails->hostId}'?");
+		$log = usingLog()->startAction("is process '{$processName}' running on host '{$hostDetails->hostId}'?");
 
 		// SSH in and have a look
 		$command   = "ps -ef | awk '{ print \\\$8 }' | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "'";
@@ -173,11 +164,8 @@ abstract class Base_Unix extends OsBase
 	 */
 	public function getPid($hostDetails, $processName)
 	{
-		// alias the storyteller object
-		$st = $this->st;
-
 		// log some info to the user
-		$log = $st->startAction("get PID for process '{$processName}' running on host '{$hostDetails->hostId}'");
+		$log = usingLog()->startAction("get PID for process '{$processName}' running on host '{$hostDetails->hostId}'");
 
 		// run the command to get the process id
 		$command   = "ps -ef | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
@@ -212,11 +200,8 @@ abstract class Base_Unix extends OsBase
 	 */
 	public function getPidIsRunning($hostDetails, $pid)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("is process PID '{$pid}' running on UNIX '{$hostDetails->hostId}'?");
+		$log = usingLog()->startAction("is process PID '{$pid}' running on UNIX '{$hostDetails->hostId}'?");
 
 		// SSH in and have a look
 		$command   = "ps -ef | awk '{ print \\\$2 }' | grep '[" . $pid{0} . "]" . substr($pid, 1) . "'";

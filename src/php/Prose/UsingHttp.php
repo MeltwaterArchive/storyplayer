@@ -82,9 +82,6 @@ class UsingHttp extends Prose
 	 */
 	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array(), $timeout = null)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// create the full URL
 		if (count($params) > 0) {
 			$url = $url . '?' . http_build_query($params);
@@ -98,7 +95,7 @@ class UsingHttp extends Prose
 		if (count($headers) > 0) {
 			$logMsg[] = $headers;
 		}
-		$log = $st->startAction($logMsg);
+		$log = usingLog()->startAction($logMsg);
 
 		// build the HTTP request
 		$request = new HttpClientRequest($url);
@@ -121,7 +118,7 @@ class UsingHttp extends Prose
 
         // special case - do we validate SSL certificates in this
         // test environment?
-        $validateSsl = $st->fromConfig()->getModuleSetting("http.validateSsl");
+        $validateSsl = fromConfig()->getModuleSetting("http.validateSsl");
         if (null === $validateSsl) {
         	// default to TRUE if no setting present
         	$validateSsl = true;
@@ -130,9 +127,9 @@ class UsingHttp extends Prose
         	$request->disableSslCertificateValidation();
         }
 
-	if ($timeout !== null) {
-		$request->setReadTimeout($timeout);
-	}
+		if ($timeout !== null) {
+			$request->setReadTimeout($timeout);
+		}
 
 		// make the call
 		$client = new HttpClient();

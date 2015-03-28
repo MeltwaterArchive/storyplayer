@@ -65,13 +65,11 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      */
     public function addItem($key, $value)
     {
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
-        $log = $st->startAction("add entry '{$key}' to {$tableName}->{$targetEnv} table");
+        $log = usingLog()->startAction("add entry '{$key}' to {$tableName}->{$targetEnv} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -99,8 +97,8 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
         $tables->$tableName->$targetEnv->$key = $value;
 
         // save the updated runtime config
-        $log->addStep("saving runtime config to disk", function() use ($st){
-            $st->saveRuntimeConfig();
+        $log->addStep("saving runtime config to disk", function() {
+            $this->st->saveRuntimeConfig();
         });
 
         // all done
@@ -118,15 +116,12 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      */
     public function removeItem($key)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
         // what are we doing?
-        $log = $st->startAction("remove entry '{$key}' from {$tableName}->{$targetEnv} table");
+        $log = usingLog()->startAction("remove entry '{$key}' from {$tableName}->{$targetEnv} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -154,7 +149,7 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
         unset($tables->$tableName->$targetEnv->$key);
 
         // save the changes
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
 
         // all done
         $log->endAction();
@@ -170,13 +165,11 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      */
     public function addItemToGroup($group, $key, $value)
     {
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
-        $log = $st->startAction("add entry '{$group}->{$key}' to {$tableName}->{$targetEnv} table");
+        $log = usingLog()->startAction("add entry '{$group}->{$key}' to {$tableName}->{$targetEnv} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -207,12 +200,12 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
         //
         // NOTE: any code that adds groups to tables by hand does NOT
         //       get this guarantee
-        $activeConfig = $st->getActiveConfig();
+        $activeConfig = $this->st->getActiveConfig();
         $activeConfig->setData($tableName, $tables->$tableName);
 
         // save the updated runtime config
-        $log->addStep("saving runtime config to disk", function() use ($st){
-            $st->saveRuntimeConfig();
+        $log->addStep("saving runtime config to disk", function() {
+            $this->st->saveRuntimeConfig();
         });
 
         // all done
@@ -228,15 +221,12 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      */
     public function removeItemFromGroup($group, $key)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
         // what are we doing?
-        $log = $st->startAction("remove entry '{$group}->{$key}' from {$tableName}->{$targetEnv} table");
+        $log = usingLog()->startAction("remove entry '{$group}->{$key}' from {$tableName}->{$targetEnv} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -267,7 +257,7 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
         unset($tables->$tableName->$targetEnv->$group->$key);
 
         // save the changes
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
 
         // all done
         $log->endAction();
@@ -282,15 +272,12 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      */
     public function removeItemFromAllGroups($key)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
         // what are we doing?
-        $log = $st->startAction("remove entry '{$key}' from all groups in {$tableName}->{$targetEnv} table");
+        $log = usingLog()->startAction("remove entry '{$key}' from all groups in {$tableName}->{$targetEnv} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -329,7 +316,7 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
         }
 
         // save the changes
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
 
         // all done
         $log->endAction();

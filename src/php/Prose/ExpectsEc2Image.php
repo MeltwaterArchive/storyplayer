@@ -59,11 +59,8 @@ class ExpectsEc2Image extends Ec2ImageBase
 	{
 		$this->requiresValidImage(__METHOD__);
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure EC2 image '{$this->amiId}' is available");
+		$log = usingLog()->startAction("make sure EC2 image '{$this->amiId}' is available");
 
 		// get the state of the image
 		$imageState = $this->image['State'];
@@ -81,11 +78,8 @@ class ExpectsEc2Image extends Ec2ImageBase
 	{
 		$this->requiresValidImage(__METHOD__);
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure EC2 image '{$this->amiId}' has failed");
+		$log = usingLog()->startAction("make sure EC2 image '{$this->amiId}' has failed");
 
 		// get the state of the image
 		$imageState = $this->image['State'];
@@ -103,11 +97,8 @@ class ExpectsEc2Image extends Ec2ImageBase
 	{
 		$this->requiresValidImage(__METHOD__);
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure EC2 image '{$this->amiId}' is pending");
+		$log = usingLog()->startAction("make sure EC2 image '{$this->amiId}' is pending");
 
 		// get the state of the image
 		$imageState = $this->image['State'];

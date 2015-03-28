@@ -60,11 +60,10 @@ class FromForm extends FromBrowser
 	protected function initActions()
 	{
 		// shorthand
-		$st     = $this->st;
 		$formId = $this->args[0];
 
 		// find the form
-		$formElement = $st->fromBrowser()->get()->elementById($formId);
+		$formElement = fromBrowser()->get()->elementById($formId);
 
 		// is it really a form?
 		if (strtolower($formElement->name()) !== 'form') {

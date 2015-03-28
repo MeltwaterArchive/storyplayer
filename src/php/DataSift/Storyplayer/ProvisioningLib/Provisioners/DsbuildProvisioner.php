@@ -74,27 +74,24 @@ class DsbuildProvisioner extends Provisioner
 		// our return value
 		$provDef = new ProvisioningDefinition;
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("build dsbuild provisioning definition");
+		$log = usingLog()->startAction("build dsbuild provisioning definition");
 
 		// add in each machine in the environment
 		foreach ($env->details->machines as $hostId => $machine) {
-			$st->usingProvisioningDefinition($provDef)->addHost($hostId);
+			usingProvisioningDefinition($provDef)->addHost($hostId);
 
 			foreach ($machine->roles as $role) {
-				$st->usingProvisioningDefinition($provDef)->addRole($role)->toHost($hostId);
+				usingProvisioningDefinition($provDef)->addRole($role)->toHost($hostId);
 			}
 
 			if (isset($machine->params)) {
 				$params = [];
 				foreach ($machine->params as $paramName => $paramValue) {
-					$params[$paramName]  = $st->fromConfig()->get('hosts.' . $hostId . '.params.'.$paramName);
+					$params[$paramName]  = fromConfig()->get('hosts.' . $hostId . '.params.'.$paramName);
 				}
 				if (count($params)) {
-					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($hostId);
+					usingProvisioningDefinition($provDef)->addParams($params)->toHost($hostId);
 				}
 			}
 		}
@@ -105,11 +102,8 @@ class DsbuildProvisioner extends Provisioner
 
 	public function provisionHosts(ProvisioningDefinition $hosts, $provConfig)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("use dsbuild to provision host(s)");
+		$log = usingLog()->startAction("use dsbuild to provision host(s)");
 
 		// the params file that we are going to output
 		$dsbuildParams = new BaseObject;
@@ -117,7 +111,7 @@ class DsbuildProvisioner extends Provisioner
 		// build up the list of settings to write out
 		foreach($hosts as $hostId => $hostProps) {
 			// what is the host's IP address?
-			$ipAddress = $st->fromHost($hostId)->getIpAddress();
+			$ipAddress = fromHost($hostId)->getIpAddress();
 
 			$propName = $hostId . '_ipv4Address';
 			$dsbuildParams->$propName = $ipAddress;
@@ -127,8 +121,8 @@ class DsbuildProvisioner extends Provisioner
 		}
 
 		// add in all the config settings that we know about
-		$dsbuildParams->storyplayer_ipv4Address = $st->fromConfig()->get('storyplayer.ipAddress');
-		$dsbuildParams->mergeFrom($this->flattenData($st->getActiveConfig()->getData('')));
+		$dsbuildParams->storyplayer_ipv4Address = fromConfig()->get('storyplayer.ipAddress');
+		$dsbuildParams->mergeFrom($this->flattenData($this->st->getActiveConfig()->getData('')));
 
 		// write them out
 		$this->writeDsbuildParamsShellFile((array)$dsbuildParams);
@@ -158,17 +152,17 @@ class DsbuildProvisioner extends Provisioner
 				.' '.$dsbuildParams->{'hosts_'.$hostId.'_sshUsername'}
 				.'@'.$dsbuildParams->{'hosts_'.$hostId.'_ipAddress'}
 				.':/vagrant/';
-			$result = $commandRunner->runSilently($st, $command);
+			$result = $commandRunner->runSilently($command);
 
 			if (!$result->didCommandSucceed()) {
 				// try to rsync folders in case of scp fail
 				$command = 'vagrant rsync ' . $hostId;
-				$result = $commandRunner->runSilently($st, $command);
+				$result = $commandRunner->runSilently($command);
 			}
 
 			// provision
 			$command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '" "' . $hostId . '"';
-			$result = $commandRunner->runSilently($st, $command);
+			$result = $commandRunner->runSilently($command);
 
 			// what happened?
 			if (!$result->didCommandSucceed()) {
@@ -185,17 +179,14 @@ class DsbuildProvisioner extends Provisioner
 	 */
 	protected function writeDsbuildParamsYamlFile($vars)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("write dsbuildparams.yml");
+		$log = usingLog()->startAction("write dsbuildparams.yml");
 
 		// what is the path to the file?
 		$filename = "dsbuildparams.yml";
 
 		// write the data
-		$st->usingYamlFile($filename)->writeDataToFile($vars);
+		usingYamlFile($filename)->writeDataToFile($vars);
 
 		// all done
 		$log->endAction();
@@ -206,11 +197,8 @@ class DsbuildProvisioner extends Provisioner
 	 */
 	protected function writeDsbuildParamsShellFile($vars)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("write dsbuildparams.sh");
+		$log = usingLog()->startAction("write dsbuildparams.sh");
 
 		// what is the path to the file?
 		$filename = "dsbuildparams.sh";

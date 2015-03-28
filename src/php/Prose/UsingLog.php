@@ -58,11 +58,8 @@ class UsingLog extends Prose
 {
 	public function writeToLog($msg)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction($msg);
+		$log = usingLog()->startAction($msg);
 
 		// all done
 		$log->endAction();
@@ -71,8 +68,7 @@ class UsingLog extends Prose
 	public function vardump($name, $var)
 	{
 		// shorthand
-		$st = $this->st;
-		$output = $st->getOutput();
+		$output = $this->st->getOutput();
 
 		// dump our variable
 		$output->logVardump($name, $var);

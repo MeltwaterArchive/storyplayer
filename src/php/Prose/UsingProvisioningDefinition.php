@@ -74,11 +74,8 @@ class UsingProvisioningDefinition extends Prose
 
 	public function addHost($hostId)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("add host '{$hostId}' to provisioning definition");
+		$log = usingLog()->startAction("add host '{$hostId}' to provisioning definition");
 
 		// create the host
 		if (!isset($this->args[0]->$hostId)) {
@@ -92,9 +89,9 @@ class UsingProvisioningDefinition extends Prose
 	public function addRole($roleName)
 	{
 		// build our callable
-		$action = function($st, $def, $hostId) use($roleName) {
+		$action = function($def, $hostId) use($roleName) {
 			// what are we doing?
-			$log = $st->startAction("add role '{$roleName}' to host '{$hostId}'");
+			$log = usingLog()->startAction("add role '{$roleName}' to host '{$hostId}'");
 
 			// make sure we have an entry for this host
 			if (!isset($def->$hostId)) {
@@ -115,7 +112,6 @@ class UsingProvisioningDefinition extends Prose
 
 		// build our return object
 		$return = new DelayedProvisioningDefinitionAction (
-			$this->st,
 			$this->args[0],
 			$action
 		);
@@ -127,13 +123,13 @@ class UsingProvisioningDefinition extends Prose
 	public function addParams($params)
 	{
 		// build our callable
-		$action = function($st, $def, $hostId) use($params) {
+		$action = function($def, $hostId) use($params) {
 			// convert the params into something we can log
 			$printer = new DataPrinter();
 			$logParams = $printer->convertToString($params);
 
 			// what are we doing?
-			$log = $st->startAction("add params '{$logParams}' to host '{$hostId}'");
+			$log = usingLog()->startAction("add params '{$logParams}' to host '{$hostId}'");
 
 			// make sure we have an entry for this host
 			if (!isset($def->$hostId)) {
@@ -149,7 +145,6 @@ class UsingProvisioningDefinition extends Prose
 
 		// build our return object
 		$return = new DelayedProvisioningDefinitionAction (
-			$this->st,
 			$this->args[0],
 			$action
 		);
@@ -161,9 +156,9 @@ class UsingProvisioningDefinition extends Prose
 	public function usePlaybook($playbookName)
 	{
 		// build our callable
-		$action = function($st, $def, $hostId) use($playbookName) {
+		$action = function($def, $hostId) use($playbookName) {
 			// what are we doing?
-			$log = $st->startAction("use top-level playbook '{$playbookName}' to host '{$hostId}'");
+			$log = usingLog()->startAction("use top-level playbook '{$playbookName}' to host '{$hostId}'");
 
 			// make sure we have an entry for this host
 			if (!isset($def->$hostId)) {
@@ -179,7 +174,6 @@ class UsingProvisioningDefinition extends Prose
 
 		// build our return object
 		$return = new DelayedProvisioningDefinitionAction (
-			$this->st,
 			$this->args[0],
 			$action
 		);

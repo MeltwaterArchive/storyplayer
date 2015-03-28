@@ -58,17 +58,14 @@ class ExpectsHost extends HostBase
 {
 	public function hostIsRunning()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure host '{$this->args[0]}' is running");
+		$log = usingLog()->startAction("make sure host '{$this->args[0]}' is running");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// is it running?
-		$running = $st->fromHost($hostDetails->hostId)->getHostIsRunning();
+		$running = fromHost($hostDetails->hostId)->getHostIsRunning();
 		if (!$running) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, 'host is running', 'host is not running');
@@ -80,17 +77,14 @@ class ExpectsHost extends HostBase
 
 	public function hostIsNotRunning()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure host '{$this->args[0]}' is not running");
+		$log = usingLog()->startAction("make sure host '{$this->args[0]}' is not running");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// is it running?
-		$running = $st->fromHost($hostDetails->hostId)->getHostIsRunning();
+		$running = fromHost($hostDetails->hostId)->getHostIsRunning();
 		if ($running) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, 'host is not running', 'host is running');
@@ -102,17 +96,14 @@ class ExpectsHost extends HostBase
 
 	public function packageIsInstalled($packageName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure package '{$packageName}' is installed on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("make sure package '{$packageName}' is installed on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// is it installed?
-		$details = $st->fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
+		$details = fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
 		if (!isset($details->version)) {
 			$log->endAction();
 			throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
@@ -124,17 +115,14 @@ class ExpectsHost extends HostBase
 
 	public function packageIsNotInstalled($packageName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure package '{$packageName}' is not installed on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("make sure package '{$packageName}' is not installed on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// is it installed?
-		$details = $st->fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
+		$details = fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
 
 		if (isset($details->version)) {
 			$log->endAction();
@@ -147,17 +135,14 @@ class ExpectsHost extends HostBase
 
 	public function processIsRunning($processName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// is the process running?
-		$isRunning = $st->fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
+		$isRunning = fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
 
 		if (!$isRunning) {
 			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' running", "process '{$processName}' is not running");
@@ -169,17 +154,14 @@ class ExpectsHost extends HostBase
 
 	public function processIsNotRunning($processName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// is the process running?
-		$isRunning = $st->fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
+		$isRunning = fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
 
 		if ($isRunning) {
 			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");
@@ -191,14 +173,11 @@ class ExpectsHost extends HostBase
 
 	public function screenIsRunning($sessionName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure screen session '{$sessionName}' is running on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("make sure screen session '{$sessionName}' is running on host '{$this->args[0]}'");
 
 		// is this session still running?
-		if ($st->fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
+		if (fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
 			$log->endAction();
 			return;
 		}
@@ -209,14 +188,11 @@ class ExpectsHost extends HostBase
 
 	public function screenIsNotRunning($sessionName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure screen session '{$sessionName}' is not running on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("make sure screen session '{$sessionName}' is not running on host '{$this->args[0]}'");
 
 		// get the details
-		if (!$st->fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
+		if (!fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
 			$log->endAction("session is not running");
 			return;
 		}
@@ -256,17 +232,16 @@ class ExpectsHost extends HostBase
 	public function hasFileWithPermissions($filename, $owner, $group, $mode)
 	{
 		// shorthand
-		$st = $this->st;
 		$octMode = decoct($mode);
 
 		// what are we doing?
-		$log = $st->startAction("make sure file '{$filename}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
+		$log = usingLog()->startAction("make sure file '{$filename}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get the file details
-		$details = $st->fromHost($hostDetails->hostId)->getFileDetails($filename);
+		$details = fromHost($hostDetails->hostId)->getFileDetails($filename);
 
 		// validate the details
 		if ($details === null) {
@@ -293,17 +268,16 @@ class ExpectsHost extends HostBase
 	public function hasFolderWithPermissions($folder, $owner, $group, $mode)
 	{
 		// shorthand
-		$st = $this->st;
 		$octMode = decoct($mode);
 
 		// what are we doing?
-		$log = $st->startAction("make sure folder '{$folder}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
+		$log = usingLog()->startAction("make sure folder '{$folder}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get the file details
-		$details = $st->fromHost($hostDetails->hostId)->getFileDetails($folder);
+		$details = fromHost($hostDetails->hostId)->getFileDetails($folder);
 
 		// validate the details
 		if ($details === null) {

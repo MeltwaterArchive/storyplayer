@@ -59,17 +59,14 @@ class FromSystemUnderTest extends Prose
 {
 	public function getAppSetting($path)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get app setting '{$path}' from the system-under-test config");
+		$log = usingLog()->startAction("get app setting '{$path}' from the system-under-test config");
 
 		// what is the full path to this data?
 		$fullPath = 'systemundertest.appSettings.' . $path;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			$msg = "module setting '$path' not found";
 			$log->endAction($msg);
@@ -88,17 +85,14 @@ class FromSystemUnderTest extends Prose
 
 	public function getAppSettings($app)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get all settings for '{$app}' from the system-under-test config");
+		$log = usingLog()->startAction("get all settings for '{$app}' from the system-under-test config");
 
 		// what is the full path to this data?
 		$fullPath = 'systemundertest.appSettings.' . $app;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			$msg = "no app '$app' found in the config";
 			$log->endAction($msg);
@@ -117,17 +111,14 @@ class FromSystemUnderTest extends Prose
 
 	public function getStorySetting($path)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get storySetting '{$path}' from the system-under-test config");
+		$log = usingLog()->startAction("get storySetting '{$path}' from the system-under-test config");
 
 		// what is the full path to this data?
 		$fullPath = 'systemundertest.storySettings.' . $path;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			$msg = "module setting '$path' not found";
 			$log->endAction($msg);
@@ -146,17 +137,14 @@ class FromSystemUnderTest extends Prose
 
 	public function getModuleSetting($path)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get module setting '{$path}' from the system-under-test config");
+		$log = usingLog()->startAction("get module setting '{$path}' from the system-under-test config");
 
 		// what is the full path to this data?
 		$fullPath = 'systemundertest.moduleSettings.' . $path;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			$msg = "module setting '$path' not found";
 			$log->endAction($msg);
@@ -177,17 +165,14 @@ class FromSystemUnderTest extends Prose
 
 	public function getModuleSettings($module)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get all settings for '{$module}' from the system-under-test config");
+		$log = usingLog()->startAction("get all settings for '{$module}' from the system-under-test config");
 
 		// what is the full path to this data?
 		$fullPath = 'systemundertest.moduleSettings.' . $module;
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			$msg = "no module '$module' found in the config";
 			$log->endAction($msg);
@@ -208,17 +193,14 @@ class FromSystemUnderTest extends Prose
 
 	public function getName()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the name of the actve system-under-test");
+		$log = usingLog()->startAction("get the name of the actve system-under-test");
 
 		// what is the full path to this data?
 		$fullPath = 'systemundertest.name';
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			$msg = "no system-under-test name found; internal Storyplayer bug!";
 			$log->endAction($msg);
@@ -237,11 +219,8 @@ class FromSystemUnderTest extends Prose
 
 	public function get($path)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the setting '{$path}' from the actve system-under-test");
+		$log = usingLog()->startAction("get the setting '{$path}' from the actve system-under-test");
 
 		// what is the full path to this data?
 		if (empty($path)) {
@@ -252,7 +231,7 @@ class FromSystemUnderTest extends Prose
 		}
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		if (!$config->hasData($fullPath)) {
 			$log->endAction("no settings found");
 			throw new E5xx_ActionFailed(__METHOD__, "no settings found");
@@ -270,14 +249,11 @@ class FromSystemUnderTest extends Prose
 
 	public function getConfig()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the system under test config");
+		$log = usingLog()->startAction("get the system under test config");
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		$retval = $config->getData("systemundertest");
 
 		// all done

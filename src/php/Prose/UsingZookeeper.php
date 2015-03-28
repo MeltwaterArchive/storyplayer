@@ -82,11 +82,8 @@ class UsingZookeeper extends Prose
 
 	protected function connect($host)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("connect to Zookeeper at '{$host}'");
+		$log = usingLog()->startAction("connect to Zookeeper at '{$host}'");
 
 		// create a Zookeeper object, and connect
 		$zk = new Zookeeper();
@@ -146,11 +143,8 @@ class UsingZookeeper extends Prose
 
 	public function write($key, $value)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("set '{$key}' to '{$value}' in Zookeeper");
+		$log = usingLog()->startAction("set '{$key}' to '{$value}' in Zookeeper");
 
 		// make sure the path exists
 		$this->ensurePathToKeyExists($key);
@@ -173,11 +167,8 @@ class UsingZookeeper extends Prose
 	 */
 	public function delete($key)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("delete '{$key}' from Zookeeper");
+		$log = usingLog()->startAction("delete '{$key}' from Zookeeper");
 
 		// does the key itself exist in zookeeper?
 		if (!$this->zk->exists($key)) {
@@ -207,11 +198,8 @@ class UsingZookeeper extends Prose
 	 */
 	public function deleteChildrenOf($key)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("delete all children of '{$key}' from Zookeeper");
+		$log = usingLog()->startAction("delete all children of '{$key}' from Zookeeper");
 
 		// does the key itself exist in zookeeper?
 		if (!$this->zk->exists($key)) {

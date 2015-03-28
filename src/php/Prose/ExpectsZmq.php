@@ -59,11 +59,8 @@ class ExpectsZmq extends Prose
 {
 	public function canSendmultiNonBlocking($socket, $message)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure ZMQ::sendmulti() does not block");
+		$log = usingLog()->startAction("make sure ZMQ::sendmulti() does not block");
 
 		// send the data
 		$sent = $socket->sendmulti($message, ZMQ::MODE_NOBLOCK);

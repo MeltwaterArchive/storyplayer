@@ -51,7 +51,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  *
  * as of Storyplayer v2, this is now just an alias for:
  *
- *   $st->usingHost('localhost')
+ *   usingHost('localhost')
  *
  * @category  Libraries
  * @package   Storyplayer/Prose

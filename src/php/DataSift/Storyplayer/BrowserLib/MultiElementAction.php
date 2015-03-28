@@ -58,7 +58,6 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class MultiElementAction extends BaseElementAction
 {
-	protected $st;
 	protected $pageContext;
 	protected $action;
 	protected $actionDesc;
@@ -68,9 +67,8 @@ class MultiElementAction extends BaseElementAction
 	 * @param \Closure $action
 	 * @param string $actionDesc
 	 */
-	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
+	public function __construct($action, $actionDesc, $baseElement = null)
 	{
-		$this->st          = $st;
 		$this->action      = $action;
 		$this->actionDesc  = $actionDesc;
 		$this->baseElement = $baseElement;
@@ -89,7 +87,7 @@ class MultiElementAction extends BaseElementAction
 
 		// now that we have our elements, let's apply the action to them
 		$action = $this->action;
-		$return = $action($this->st, $countType, $elements, $methodArgs[0], $methodName);
+		$return = $action($countType, $elements, $methodArgs[0], $methodName);
 
 		// all done
 		return $return;

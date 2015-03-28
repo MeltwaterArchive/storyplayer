@@ -89,11 +89,8 @@ class UsingZmqContext extends Prose
 
 	public function getZmqContext()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get a ZMQContext object");
+		$log = usingLog()->startAction("get a ZMQContext object");
 
 		// all done
 		$log->endAction();
@@ -102,11 +99,8 @@ class UsingZmqContext extends Prose
 
 	public function bindToPort($port, $socketType, $sendHwm = 100, $recvHwm = 100)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("bind() to ZMQ tcp '{$socketType}' socket at host 'localhost':{$port}");
+		$log = usingLog()->startAction("bind() to ZMQ tcp '{$socketType}' socket at host 'localhost':{$port}");
 
 		// do we have a supported socket?
 		if (!isset($this->socketMap[$socketType])) {
@@ -135,11 +129,8 @@ class UsingZmqContext extends Prose
 
 	public function connectToHost($hostId, $port, $socketType, $sendHwm = 100, $recvHwm = 100)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("connect() to ZMQ '{$socketType}' socket on host '{$hostId}':{$port}");
+		$log = usingLog()->startAction("connect() to ZMQ '{$socketType}' socket on host '{$hostId}':{$port}");
 
 		// do we have a supported socket?
 		if (!isset($this->socketMap[$socketType])) {

@@ -86,11 +86,8 @@ class VagrantVm implements SupportedHost
 	 */
 	public function createHost($vmDetails, $provisioningVars = array())
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction('provision new VM');
+		$log = usingLog()->startAction('provision new VM');
 
 		// make sure we like the provided details
 		foreach(array('name', 'osName', 'homeFolder') as $param) {
@@ -100,7 +97,7 @@ class VagrantVm implements SupportedHost
 		}
 
 		// make sure the folder exists
-		$config = $st->getConfig();
+		$config = $this->st->getConfig();
 		if (!isset($config->storyplayer->modules->vagrant)) {
 			throw new E5xx_ActionFailed(__METHOD__, "'vagrant' section missing in your storyplayer.json config file");
 		}
@@ -123,10 +120,10 @@ class VagrantVm implements SupportedHost
 		});
 
 		// remove any existing hosts table entry
-		$st->usingHostsTable()->removeHost($vmDetails->hostId);
+		usingHostsTable()->removeHost($vmDetails->hostId);
 
 		// remove any roles
-		$st->usingRolesTable()->removeHostFromAllRoles($vmDetails->hostId);
+		usingRolesTable()->removeHostFromAllRoles($vmDetails->hostId);
 
 		// let's start the VM
 		$command = "vagrant up";
@@ -152,12 +149,12 @@ class VagrantVm implements SupportedHost
 		$vmDetails->provisioned = true;
 
 		// remember this vm, now that it is running
-		$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
+		usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
 
 		// now, let's get this VM into our SSH known_hosts file, to avoid
 		// prompting people when we try and provision this VM
-		$log->addStep("get the VM into the SSH known_hosts file", function() use($st, $vmDetails) {
-			$st->usingHost($vmDetails->hostId)->runCommand("ls");
+		$log->addStep("get the VM into the SSH known_hosts file", function() use($vmDetails) {
+			usingHost($vmDetails->hostId)->runCommand("ls");
 		});
 
 		// all done
@@ -171,11 +168,8 @@ class VagrantVm implements SupportedHost
 	 */
 	public function startHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("start VM");
+		$log = usingLog()->startAction("start VM");
 
 		// is the VM actually running?
 		if ($this->isRunning($vmDetails)) {
@@ -217,11 +211,8 @@ class VagrantVm implements SupportedHost
 	 */
 	public function stopHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("stop VM");
+		$log = usingLog()->startAction("stop VM");
 
 		// is the VM actually running?
 		if (!$this->isRunning($vmDetails)) {
@@ -252,11 +243,8 @@ class VagrantVm implements SupportedHost
 	 */
 	public function restartHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("restart VM");
+		$log = usingLog()->startAction("restart VM");
 
 		// stop and start
 		$this->stopHost($vmDetails);
@@ -273,11 +261,8 @@ class VagrantVm implements SupportedHost
 	 */
 	public function powerOffHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("power off VM");
+		$log = usingLog()->startAction("power off VM");
 
 		// is the VM actually running?
 		if (!$this->isRunning($vmDetails)) {
@@ -308,11 +293,8 @@ class VagrantVm implements SupportedHost
 	 */
 	public function destroyHost($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("destroy VM");
+		$log = usingLog()->startAction("destroy VM");
 
 		// is the VM actually running?
 		if ($this->isRunning($vmDetails)) {
@@ -328,10 +310,10 @@ class VagrantVm implements SupportedHost
 		}
 
 		// if we get here, we need to forget about this VM
-		$st->usingHostsTable()->removeHost($vmDetails->hostId);
+		usingHostsTable()->removeHost($vmDetails->hostId);
 
 		// remove any roles
-		$st->usingRolesTable()->removeHostFromAllRoles($vmDetails->hostId);
+		usingRolesTable()->removeHostFromAllRoles($vmDetails->hostId);
 
 		// all done
 		$log->endAction();
@@ -345,18 +327,15 @@ class VagrantVm implements SupportedHost
 	 */
 	public function runCommandAgainstHostManager($vmDetails, $command)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("run vagrant command '{$command}'");
+		$log = usingLog()->startAction("run vagrant command '{$command}'");
 
 		// build the command
 		$fullCommand = "cd '{$vmDetails->dir}' && $command 2>&1";
 
 		// run the command
 		$commandRunner = new CommandRunner();
-		$result = $commandRunner->runSilently($st, $fullCommand);
+		$result = $commandRunner->runSilently($fullCommand);
 
 		// all done
 		$log->endAction("return code was '{$result->returnCode}'");
@@ -371,18 +350,15 @@ class VagrantVm implements SupportedHost
 	 */
 	public function runCommandViaHostManager($vmDetails, $command)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("run vagrant command '{$command}'");
+		$log = usingLog()->startAction("run vagrant command '{$command}'");
 
 		// build the command
 		$fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
 
 		// run the command
 		$commandRunner = new CommandRunner();
-		$result = $commandRunner->runSilently($st, $fullCommand);
+		$result = $commandRunner->runSilently($fullCommand);
 
 		// all done
 		$log->endAction("return code was '{$result->returnCode}'");
@@ -396,11 +372,8 @@ class VagrantVm implements SupportedHost
 	 */
 	public function isRunning($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine status of Vagrant VM '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine status of Vagrant VM '{$vmDetails->hostId}'");
 
 		// if the box is running, it should have a status of 'running'
 		$command = "vagrant status | grep {$vmDetails->hostId} | head -n 1 | awk '{print \$2'}";
@@ -425,14 +398,11 @@ class VagrantVm implements SupportedHost
 	 */
 	public function determineIpAddress($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
 		// get the IP address
 		$ipAddress = $host->determineIpAddress($vmDetails, $this);
@@ -449,14 +419,11 @@ class VagrantVm implements SupportedHost
 	 */
 	public function determineHostname($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
 		// get the hostname
 		$hostname = $host->determineHostname($vmDetails, $this);
@@ -468,11 +435,8 @@ class VagrantVm implements SupportedHost
 
 	public function determinePrivateKey($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
 		// the key will be in one of two places, in this order:
 		//

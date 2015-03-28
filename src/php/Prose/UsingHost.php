@@ -60,17 +60,14 @@ class UsingHost extends HostBase
 {
 	public function runCommand($command)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("run command '{$command}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// run the command in the guest operating system
 		$result = $host->runCommand($hostDetails, $command);
@@ -89,17 +86,14 @@ class UsingHost extends HostBase
 
 	public function runCommandAsUser($command, $user)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// make a copy of the hostDetails, so that we can override them
 		$myHostDetails = clone $hostDetails;
@@ -122,17 +116,14 @@ class UsingHost extends HostBase
 
 	public function runCommandAndIgnoreErrors($command)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("run command '{$command}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// run the command in the guest operating system
 		$result = $host->runCommand($hostDetails, $command);
@@ -144,17 +135,14 @@ class UsingHost extends HostBase
 
 	public function runCommandAsUserAndIgnoreErrors($command, $user)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
 
 		// make sure we have valid host details
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// make a copy of the hostDetails, so that we can override them
 		$myHostDetails = clone $hostDetails;
@@ -170,11 +158,8 @@ class UsingHost extends HostBase
 
 	public function startInScreen($sessionName, $commandLine)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("start screen session '{$sessionName}' ({$commandLine}) on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("start screen session '{$sessionName}' ({$commandLine}) on host '{$this->args[0]}'");
 
 		// do we already have this session running on the host?
 		expectsHost($this->args[0])->screenIsNotRunning($sessionName);
@@ -205,17 +190,14 @@ class UsingHost extends HostBase
 
 	public function stopInScreen($sessionName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("stop screen session '{$sessionName}' on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("stop screen session '{$sessionName}' on host '{$this->args[0]}'");
 
 		// get the process details
 		$processDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
 
 		// stop the process
-		$st->usingHost($this->args[0])->stopProcess($processDetails->pid);
+		usingHost($this->args[0])->stopProcess($processDetails->pid);
 
 		// all done
 		$log->endAction();
@@ -223,19 +205,16 @@ class UsingHost extends HostBase
 
 	public function stopAllScreens()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("stop all running screen sessions on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("stop all running screen sessions on host '{$this->args[0]}'");
 
 		// get the app details
-		$processes = $st->fromHost($this->args[0])->getAllScreenSessions();
+		$processes = fromHost($this->args[0])->getAllScreenSessions();
 
 		// stop the process
 		foreach ($processes as $processDetails) {
-			$st->usingHost($this->args[0])->stopProcess($processDetails->pid);
-			$st->usingProcessesTable()->removeProcess($this->args[0], $processDetails);
+			usingHost($this->args[0])->stopProcess($processDetails->pid);
+			usingProcessesTable()->removeProcess($this->args[0], $processDetails);
 		}
 
 		// all done
@@ -244,33 +223,30 @@ class UsingHost extends HostBase
 
 	public function stopProcess($pid, $grace = 5)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
+		$log = usingLog()->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
 
 		// is the process running at all?
-		if (!$st->fromHost($this->args[0])->getPidIsRunning($pid)) {
+		if (!fromHost($this->args[0])->getPidIsRunning($pid)) {
 			$log->endAction("process is not running");
 			return;
 		}
 
 		// yes it is, so stop it
 		// send a TERM signal to the screen session
-		$log->addStep("send SIGTERM to process '{$pid}'", function() use ($st, $pid) {
+		$log->addStep("send SIGTERM to process '{$pid}'", function() use ($pid) {
 			if ($this->getIsLocalhost()) {
 				posix_kill($pid, SIGTERM);
 			}
 			else {
-				$st->usingHost($this->args[0])->runCommand("kill {$pid}");
+				usingHost($this->args[0])->runCommand("kill {$pid}");
 			}
 		});
 
 		// has this worked?
-		$isStopped = $log->addStep("wait for process to terminate", function() use($st, $pid, $grace, $log) {
+		$isStopped = $log->addStep("wait for process to terminate", function() use($pid, $grace, $log) {
 			for($i = 0; $i < $grace; $i++) {
-				if (!$st->fromHost($this->args[0])->getPidIsRunning($pid)) {
+				if (!fromHost($this->args[0])->getPidIsRunning($pid)) {
 					return true;
 				}
 
@@ -287,18 +263,18 @@ class UsingHost extends HostBase
 			return;
 		}
 
-		$log->addStep("send SIGKILL to process '{$pid}'", function() use($st, $pid) {
+		$log->addStep("send SIGKILL to process '{$pid}'", function() use($pid) {
 			if ($this->getIsLocalhost()) {
 				posix_kill($pid, SIGKILL);
 			}
 			else {
-				$st->usingHost($this->args[0])->runCommand("kill -9 {$pid}");
+				usingHost($this->args[0])->runCommand("kill -9 {$pid}");
 			}
 			sleep(1);
 		});
 
 		// success?
-		if ($st->fromHost($this->args[0])->getProcessIsRunning($pid)) {
+		if (fromHost($this->args[0])->getProcessIsRunning($pid)) {
 			$log->endAction("process is still running :(");
 			throw new E5xx_ActionFailed(__METHOD__);
 		}
@@ -309,11 +285,8 @@ class UsingHost extends HostBase
 
 	public function uploadFile($sourceFilename, $destFilename)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("upload file '{$sourceFilename}' to '{$this->args[0]}':'{$destFilename}'");
+		$log = usingLog()->startAction("upload file '{$sourceFilename}' to '{$this->args[0]}':'{$destFilename}'");
 
 		// does the source file exist?
 		if (!is_file($sourceFilename)) {
@@ -325,7 +298,7 @@ class UsingHost extends HostBase
 		$hostDetails = $this->getHostDetails();
 
 		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($st, $hostDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
 		// upload the file
 		$result = $host->uploadFile($hostDetails, $sourceFilename, $destFilename);

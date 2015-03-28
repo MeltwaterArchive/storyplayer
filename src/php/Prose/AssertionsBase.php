@@ -70,14 +70,11 @@ class AssertionsBase extends Prose
 
 	public function __call($methodName, $params)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		//
 		// let's try and make it a bit more useful to the reader
 		$msg = $this->getStartLogMessage($methodName, $params);
-		$log = $st->startAction($msg);
+		$log = usingLog()->startAction($msg);
 		$actual4Log = $this->getActualDataForLog();
 		usingLog()->writeToLog("checking data: " . $actual4Log);
 

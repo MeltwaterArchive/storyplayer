@@ -69,14 +69,10 @@ class FromCurl extends Prose
 	 */
 	public function get($url, $params = array(), $headers = array())
 	{
-
 		if (count($headers)){
 			// "FromCurl does not support headers yet"
 			throw new E5xx_NotImplemented(__METHOD__);
 		}
-
-		// shorthand
-		$st = $this->st;
 
 		// create the full URL
 		if (count($params) > 0) {
@@ -84,7 +80,7 @@ class FromCurl extends Prose
 		}
 
 		// what are we doing?
-		$log = $st->startAction("HTTP GET '${url}'");
+		$log = usingLog()->startAction("HTTP GET '${url}'");
 
 		// create a new cURL resource
 		$ch = curl_init();

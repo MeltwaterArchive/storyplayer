@@ -123,11 +123,8 @@ class VagrantVms implements SupportedHost
 	 */
 	public function createHost($envDetails, $provisioningVars = array())
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction('create new VM');
+		$log = usingLog()->startAction('create new VM');
 
 		$this->checkEnvDetails($envDetails);
 		$envDetails->dir = $this->getVagrantDir($envDetails);
@@ -151,10 +148,10 @@ class VagrantVms implements SupportedHost
 
 		// remove any existing hosts table entry
 		foreach ($envDetails->machines as $hostId => $machine) {
-			$st->usingHostsTable()->removeHost($hostId);
+			usingHostsTable()->removeHost($hostId);
 
 			// remove any roles
-			$st->usingRolesTable()->removeHostFromAllRoles($hostId);
+			usingRolesTable()->removeHostFromAllRoles($hostId);
 		}
 
 		// work out which network interface to use
@@ -217,15 +214,15 @@ class VagrantVms implements SupportedHost
 			$vmDetails->provisioned = true;
 
 			// remember this vm, now that it is running
-			$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
+			usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
 			foreach ($vmDetails->roles as $role) {
-				$st->usingRolesTable()->addHostToRole($vmDetails, $role);
+				usingRolesTable()->addHostToRole($vmDetails, $role);
 			}
 
 			// now, let's get this VM into our SSH known_hosts file, to avoid
 			// prompting people when we try and provision this VM
-			$log->addStep("get the VM into the SSH known_hosts file", function() use($st, $vmDetails) {
-				$st->usingHost($vmDetails->hostId)->runCommand("ls");
+			$log->addStep("get the VM into the SSH known_hosts file", function() use($vmDetails) {
+				usingHost($vmDetails->hostId)->runCommand("ls");
 			});
 		}
 
@@ -288,24 +285,21 @@ class VagrantVms implements SupportedHost
 	 */
 	public function destroyHost($envDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("destroy VM(s)");
+		$log = usingLog()->startAction("destroy VM(s)");
 
 		// stop all the VMs, one by one
 		foreach ($envDetails->machines as $hostId => $machine) {
 			// get the machine details
-			$vmDetails = $st->fromHostsTable()->getDetailsForHost($hostId);
+			$vmDetails = fromHostsTable()->getDetailsForHost($hostId);
 			if ($vmDetails) {
 				// is the VM actually running?
-				if ($st->fromHost($hostId)->getHostIsRunning()) {
+				if (fromHost($hostId)->getHostIsRunning()) {
 					// delete the VM from disk
 					//
 					// this will also deregister the host from the
 					// HostsTable and RolesTable
-					$st->usingVagrant()->destroyVm($hostId);
+					usingVagrant()->destroyVm($hostId);
 				}
 			}
 		}
@@ -322,18 +316,15 @@ class VagrantVms implements SupportedHost
 	 */
 	public function runCommandAgainstHostManager($envDetails, $command)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("run vagrant command '{$command}'");
+		$log = usingLog()->startAction("run vagrant command '{$command}'");
 
 		// build the command
 		$fullCommand = "cd '{$envDetails->dir}' && $command 2>&1";
 
 		// run the command
 		$commandRunner = new CommandRunner();
-		$result = $commandRunner->runSilently($st, $fullCommand);
+		$result = $commandRunner->runSilently($fullCommand);
 
 		// all done
 		$log->endAction("return code was '{$result->returnCode}'");
@@ -348,18 +339,15 @@ class VagrantVms implements SupportedHost
 	 */
 	public function runCommandViaHostManager($vmDetails, $command)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("run vagrant command '{$command}'");
+		$log = usingLog()->startAction("run vagrant command '{$command}'");
 
 		// build the command
 		$fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
 
 		// run the command
 		$commandRunner = new CommandRunner();
-		$result = $commandRunner->runSilently($st, $fullCommand);
+		$result = $commandRunner->runSilently($fullCommand);
 
 		// all done
 		$log->endAction("return code was '{$result->returnCode}'");
@@ -383,14 +371,11 @@ class VagrantVms implements SupportedHost
 	 */
 	public function determineIpAddress($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
 		// get the IP address
 		$ipAddress = $host->determineIpAddress($vmDetails, $this);
@@ -407,14 +392,11 @@ class VagrantVms implements SupportedHost
 	 */
 	public function determineHostname($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
 
 		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+		$host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
 		// get the hostname
 		$hostname = $host->determineHostname($vmDetails, $this);
@@ -436,16 +418,13 @@ class VagrantVms implements SupportedHost
 
 	public function determineBridgedInterface()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine bridged network interface for Vagrant VM");
+		$log = usingLog()->startAction("determine bridged network interface for Vagrant VM");
 
 		try {
 			// 1. try to load Vagrant settings from storyplayer.json
 			// e.g.: "moduleSettings":{"vagrant":{"bridgedIface":"eth0"}}
-			$vagrantSettings = $st->fromStoryplayer()->getModuleSetting('vagrant');
+			$vagrantSettings = fromStoryplayer()->getModuleSetting('vagrant');
 			if (!empty($vagrantSettings->bridgedIface)) {
 				$log->endAction('Returning configured '.$vagrantSettings->bridgedIface.' interface');
 				return $vagrantSettings->bridgedIface;
@@ -457,7 +436,7 @@ class VagrantVms implements SupportedHost
 		// 2. check if VirtualBox (VBoxManage) is installed
 		$command = 'which VBoxManage';
 		$commandRunner = new CommandRunner();
-		$result = $commandRunner->runSilently($this->st, $command);
+		$result = $commandRunner->runSilently($command);
 		if ($result->returnCode !== 0) {
 			// VBoxManage is not installed, we are probably using another provider
 			// like OpenStack that do not require this setting
@@ -468,7 +447,7 @@ class VagrantVms implements SupportedHost
 		// 3. VBoxManage can actually tell us what we need to know
 		$command = 'VBoxManage list bridgedifs';
 		$commandRunner = new CommandRunner();
-		$result = $commandRunner->runSilently($st, $command);
+		$result = $commandRunner->runSilently($command);
 		if ($result->returnCode != 0) {
 			$log->endAction('unable to get list of bridgable network interfaces from VBoxManage :(');
 			throw new E5xx_ActionFailed(__METHOD__);
@@ -499,11 +478,8 @@ class VagrantVms implements SupportedHost
 
 	public function determinePrivateKey($vmDetails)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
+		$log = usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
 		// the key will be in one of two places, in this order:
 		//
@@ -518,7 +494,7 @@ class VagrantVms implements SupportedHost
 
 		foreach ($keyFilenames as $keyFilename)
 		{
-			$st->usingLog()->writeToLog("checking if {$keyFilename} exists");
+			usingLog()->writeToLog("checking if {$keyFilename} exists");
 			if (file_exists($keyFilename)) {
 				$log->endAction($keyFilename);
 				return $keyFilename;

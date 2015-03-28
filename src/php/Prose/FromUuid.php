@@ -57,11 +57,8 @@ class FromUuid extends Prose
 {
 	public function generateUuid()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("generate a UUID");
+		$log = usingLog()->startAction("generate a UUID");
 
 		// do we have the UUID extension?
 		$uuid = uuid_create();

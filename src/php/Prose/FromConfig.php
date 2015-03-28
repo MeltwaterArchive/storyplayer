@@ -60,14 +60,11 @@ class FromConfig extends Prose
 {
 	public function get($name)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get '$name' from the active config");
+		$log = usingLog()->startAction("get '$name' from the active config");
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 
 		if (!$config->hasData($name)) {
 			$log->endAction("no such setting '{$name}'");
@@ -88,14 +85,11 @@ class FromConfig extends Prose
 
 	public function getAll()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the full active config");
+		$log = usingLog()->startAction("get the full active config");
 
 		// get the details
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 		$retval = $config->getData("");
 
 		// all done
@@ -105,14 +99,11 @@ class FromConfig extends Prose
 
 	public function getModuleSetting($settingPath)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get module setting '{$settingPath}'");
+		$log = usingLog()->startAction("get module setting '{$settingPath}'");
 
 		// get the active config
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 
 		// we search the config in this order
 		$pathsToSearch = [
@@ -141,14 +132,11 @@ class FromConfig extends Prose
 
 	public function hasModuleSetting($settingPath)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("check if module setting '{$settingPath}' exists");
+		$log = usingLog()->startAction("check if module setting '{$settingPath}' exists");
 
 		// get the active config
-		$config = $st->getActiveConfig();
+		$config = $this->st->getActiveConfig();
 
 		// we search the config in this order
 		$pathsToSearch = [

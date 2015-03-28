@@ -59,11 +59,8 @@ class ExpectsZmqSocket extends ZmqSocketBase
 {
 	public function canSendNonBlocking($message)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure ZMQ::send() does not block");
+		$log = usingLog()->startAction("make sure ZMQ::send() does not block");
 
 		// send the data
 		$sent = $this->args[0]->send($message, ZMQ::MODE_NOBLOCK);
@@ -79,11 +76,8 @@ class ExpectsZmqSocket extends ZmqSocketBase
 
 	public function canSendmultiNonBlocking($message)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure ZMQ::sendmulti() does not block");
+		$log = usingLog()->startAction("make sure ZMQ::sendmulti() does not block");
 
 		// send the data
 		$sent = $this->args[0]->sendmulti($message, ZMQ::MODE_NOBLOCK);
@@ -99,11 +93,8 @@ class ExpectsZmqSocket extends ZmqSocketBase
 
 	public function isConnectedToHost($hostId, $portNumber)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("make sure ZMQ socket is connected to host '{$hostId}':{$portNumber}");
+		$log = usingLog()->startAction("make sure ZMQ socket is connected to host '{$hostId}':{$portNumber}");
 
 		// build the address that we should be connected to
 		$ipAddress = fromHost($hostId)->getIpAddress();

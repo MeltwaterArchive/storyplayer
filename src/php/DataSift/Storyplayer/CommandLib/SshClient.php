@@ -354,14 +354,11 @@ class SshClient implements CommandClient
         Contract::RequiresValue($command, is_string($command));
         Contract::RequiresValue($command, !empty($command));
 
-        // shorthand
-        $st = $this->st;
-
         // make the params printable / executable
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = $st->startAction("run command '{$command}' against host ");
+        $log = usingLog()->startAction("run command '{$command}' against host ");
 
         // do we actually have everything we need to run the command?
         if (!$this->hasSshUsername()) {
@@ -394,8 +391,8 @@ class SshClient implements CommandClient
 
         // run the command
         //$log->startStep("run command via SSH: {$fullCommand}");
-        $commandRunner = $st->getNewCommandRunner();
-        $result = $commandRunner->runSilently($st, $fullCommand);
+        $commandRunner = $this->st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($fullCommand);
         //$log->endStep();
 
         // all done
@@ -411,14 +408,11 @@ class SshClient implements CommandClient
         Contract::RequiresValue($destFilename, is_string($destFilename));
         Contract::RequiresValue($destFilename, !empty($destFilename));
 
-        // shorthand
-        $st = $this->st;
-
         // make the params printable / executable
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = $st->startAction("download file '{$sourceFilename}' from host as '{$destFilename}'");
+        $log = usingLog()->startAction("download file '{$sourceFilename}' from host as '{$destFilename}'");
 
         // do we actually have everything we need to run the command?
         if (!$this->hasSshUsername()) {
@@ -448,8 +442,8 @@ class SshClient implements CommandClient
                      . ' "' . $destFilename . '"';
 
         // run the command
-        $commandRunner = $st->getNewCommandRunner();
-        $result = $commandRunner->runSilently($st, $fullCommand);
+        $commandRunner = $this->st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($fullCommand);
 
         // all done
         $log->endAction("return code was '{$result->returnCode}'");
@@ -465,14 +459,11 @@ class SshClient implements CommandClient
         Contract::RequiresValue($destFilename, is_string($destFilename));
         Contract::RequiresValue($destFilename, !empty($destFilename));
 
-        // shorthand
-        $st = $this->st;
-
         // make the params printable / executable
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = $st->startAction("upload file '{$sourceFilename}' to host as '{$destFilename}'");
+        $log = usingLog()->startAction("upload file '{$sourceFilename}' to host as '{$destFilename}'");
 
         // do we actually have everything we need to run the command?
         if (!$this->hasSshUsername()) {
@@ -502,8 +493,8 @@ class SshClient implements CommandClient
                      . ':' . $destFilename . '"';
 
         // run the command
-        $commandRunner = $st->getNewCommandRunner();
-        $result = $commandRunner->runSilently($st, $fullCommand);
+        $commandRunner = $this->st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($fullCommand);
 
         // all done
         $log->endAction("return code was '{$result->returnCode}'");

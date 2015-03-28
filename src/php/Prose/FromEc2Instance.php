@@ -57,11 +57,8 @@ class FromEc2Instance extends Ec2InstanceBase
 {
 	public function getInstanceIsRunning()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("determine if EC2 VM '{$this->instanceName}' is running");
+		$log = usingLog()->startAction("determine if EC2 VM '{$this->instanceName}' is running");
 
 		// does the instance exist?
 		if (!$this->instance) {
@@ -87,11 +84,8 @@ class FromEc2Instance extends Ec2InstanceBase
 		// make sure we have a host to work with
 		$this->requiresValidHost(__METHOD__);
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("retrieve configuration for all volumes attached to EC2 VM '{$this->instanceName}'");
+		$log = usingLog()->startAction("retrieve configuration for all volumes attached to EC2 VM '{$this->instanceName}'");
 
 		// does this instance have any block devices?
 		if (isset($this->instance['BlockDeviceMappings'])) {
@@ -110,11 +104,8 @@ class FromEc2Instance extends Ec2InstanceBase
 		// make sure we have a host to work with
 		$this->requiresValidHost(__METHOD__);
 
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("get the public DNS name for EC2 VM '{$this->instanceName}'");
+		$log = usingLog()->startAction("get the public DNS name for EC2 VM '{$this->instanceName}'");
 
 		// here are the details, as a string
 		$dnsName = $this->instance['PublicDnsName'];

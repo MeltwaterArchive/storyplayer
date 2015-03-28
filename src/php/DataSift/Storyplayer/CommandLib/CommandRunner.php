@@ -59,13 +59,13 @@ use Phix_Project\ContractLib2\Contract;
 
 class CommandRunner
 {
-	public function runSilently(StoryTeller $st, $cmd)
+	public function runSilently($cmd)
 	{
 		// enforce our inputs
 		Contract::RequiresValue($cmd, is_string($cmd));
 
 		// what are we doing?
-		$log = $st->startAction("run command: $cmd");
+		$log = usingLog()->startAction("run command: $cmd");
 
 		// the output that we will return to the caller
 		$output = '';

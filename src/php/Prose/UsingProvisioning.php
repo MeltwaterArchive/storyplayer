@@ -59,11 +59,8 @@ class UsingProvisioning extends Prose
 {
 	public function createDefinition()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("create empty provisioning definition");
+		$log = usingLog()->startAction("create empty provisioning definition");
 
 		// all done
 		$log->endAction();

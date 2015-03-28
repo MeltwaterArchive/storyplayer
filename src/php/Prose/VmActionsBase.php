@@ -66,17 +66,14 @@ class VmActionsBase extends Prose
 
 	public function destroyVm($vmName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("destroy VM '{$vmName}'");
+		$log = usingLog()->startAction("destroy VM '{$vmName}'");
 
 		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+		$vmDetails = fromHost($vmName)->getDetails();
 
 		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+		$host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
 		// stop the VM
 		$host->destroyHost($vmDetails);
@@ -87,17 +84,14 @@ class VmActionsBase extends Prose
 
 	public function stopVm($vmName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("stop VM '{$vmName}'");
+		$log = usingLog()->startAction("stop VM '{$vmName}'");
 
 		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+		$vmDetails = fromHost($vmName)->getDetails();
 
 		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+		$host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
 		// stop the VM
 		$host->stopHost($vmDetails);
@@ -108,17 +102,14 @@ class VmActionsBase extends Prose
 
 	public function powerOffVm($vmName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("power off VM '{$vmName}'");
+		$log = usingLog()->startAction("power off VM '{$vmName}'");
 
 		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+		$vmDetails = fromHost($vmName)->getDetails();
 
 		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+		$host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
 		// stop the VM
 		$host->stopHost($vmDetails);
@@ -129,17 +120,14 @@ class VmActionsBase extends Prose
 
 	public function restartVm($vmName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("restart VM '{$vmName}'");
+		$log = usingLog()->startAction("restart VM '{$vmName}'");
 
 		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+		$vmDetails = fromHost($vmName)->getDetails();
 
 		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+		$host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
 		// restart our virtual machine
 		$host->restartHost($vmDetails);
@@ -150,17 +138,14 @@ class VmActionsBase extends Prose
 
 	public function startVm($vmName)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("start VM '{$vmName}'");
+		$log = usingLog()->startAction("start VM '{$vmName}'");
 
 		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+		$vmDetails = fromHost($vmName)->getDetails();
 
 		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+		$host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
 		// restart our virtual machine
 		$host->startHost($vmDetails);

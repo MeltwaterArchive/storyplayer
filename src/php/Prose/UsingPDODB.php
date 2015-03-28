@@ -78,11 +78,8 @@ class UsingPDODB extends Prose
 
 	public function query($sql, $params = [], $driverParams = [])
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction(["run SQL query:", $sql, "/ with params:", $params, "and driver params:", $driverParams]);
+		$log = usingLog()->startAction(["run SQL query:", $sql, "/ with params:", $params, "and driver params:", $driverParams]);
 
 		try
 		{
@@ -106,11 +103,8 @@ class UsingPDODB extends Prose
 
 	public function rawQuery($sql, $driverParams = [])
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction(["run raw SQL query:", $sql, "with driver params: ", $driverParams]);
+		$log = usingLog()->startAction(["run raw SQL query:", $sql, "with driver params: ", $driverParams]);
 
 		try
 		{
@@ -132,11 +126,8 @@ class UsingPDODB extends Prose
 
 	public function beginTransaction()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("begin PDO database transaction");
+		$log = usingLog()->startAction("begin PDO database transaction");
 
 		try
 		{
@@ -153,11 +144,8 @@ class UsingPDODB extends Prose
 
 	public function commitTransaction()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("commit PDO database transaction");
+		$log = usingLog()->startAction("commit PDO database transaction");
 
 		try
 		{
@@ -174,11 +162,8 @@ class UsingPDODB extends Prose
 
 	public function rollbackTransaction()
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("rollback PDO database transaction");
+		$log = usingLog()->startAction("rollback PDO database transaction");
 
 		try
 		{

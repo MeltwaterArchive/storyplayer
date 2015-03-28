@@ -67,19 +67,16 @@ class UsingEc2 extends VmActionsBase
 
 	public function createVm($vmName, $osName, $amiId, $instanceType, $securityGroup)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
-		$log = $st->startAction("start EC2 VM '{$vmName}', running guest OS '{$osName}', using AMI ID '{$amiId}' and security group '{$securityGroup}'");
+		$log = usingLog()->startAction("start EC2 VM '{$vmName}', running guest OS '{$osName}', using AMI ID '{$amiId}' and security group '{$securityGroup}'");
 
 		// get the aws settings
-		$awsSettings = $st->fromEnvironment()->getAppSettings('aws');
+		$awsSettings = fromEnvironment()->getAppSettings('aws');
 
 		// put the details into an array
 		$vmDetails = new Ec2VmDetails;
 		$vmDetails->hostId        = $vmName;
-		$vmDetails->environment   = $st->getTestEnvironmentName();
+		$vmDetails->environment   = $this->st->getTestEnvironmentName();
 		$vmDetails->osName        = $osName;
 		$vmDetails->amiId         = $amiId;
 		$vmDetails->type          = 'Ec2Vm';
@@ -96,7 +93,7 @@ class UsingEc2 extends VmActionsBase
 		);
 
 		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+		$host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
 		// create our virtual machine
 		$host->createHost($vmDetails);

@@ -73,13 +73,12 @@ class UsingYamlFile extends Prose
 	public function writeDataToFile($params)
 	{
 		// shorthand
-		$st = $this->st;
 		$filename = $this->args[0];
 
 		// what are we doing?
 		$printer = new DataPrinter();
 		$logParams = $printer->convertToString($params);
-		$log = $st->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
+		$log = usingLog()->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
 
 		// create an instance of the Symfony YAML writer
 		$writer = new Dumper();
