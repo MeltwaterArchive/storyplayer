@@ -121,7 +121,7 @@ class UsingHttp extends Prose
 
         // special case - do we validate SSL certificates in this
         // test environment?
-        $validateSsl = $st->fromTestEnvironment()->getModuleSetting("http.validateSsl");
+        $validateSsl = $st->fromConfig()->getModuleSetting("http.validateSsl");
         if (null === $validateSsl) {
         	// default to TRUE if no setting present
         	$validateSsl = true;

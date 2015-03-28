@@ -87,7 +87,7 @@ class FromHttp extends Prose
         // test environment?
         $httpAddress = $request->getAddress();
         if ($httpAddress->scheme == "https") {
-	        $validateSsl = $st->fromTestEnvironment()->getModuleSetting("http.validateSsl");
+	        $validateSsl = $st->fromConfig()->getModuleSetting("http.validateSsl");
 	        if (null === $validateSsl) {
 	        	// default to TRUE if no setting present
 	        	$validateSsl = true;

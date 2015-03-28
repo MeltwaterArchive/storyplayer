@@ -102,4 +102,40 @@ class FromConfig extends Prose
 		$log->endAction($retval);
 		return $retval;
 	}
+
+	public function getModuleSetting($settingPath)
+	{
+		// shorthand
+		$st = $this->st;
+
+		// what are we doing?
+		$log = $st->startAction("get module setting '{$settingPath}'");
+
+		// get the active config
+		$config = $st->getActiveConfig();
+
+		// we search the config in this order
+		$pathsToSearch = [
+			"user.moduleSettings.{$settingPath}"            => "user's .storyplayer file",
+			"systemundertest.moduleSettings.{$settingPath}" => "system under test config file",
+			"target.moduleSettings.{$settingPath}"          => "test environment config file",
+			"storyplayer.moduleSettings.{$settingPath}"     => "storyplayer.json config file",
+		];
+
+		foreach ($pathsToSearch as $searchPath => $origin) {
+			if ($config->hasData($searchPath)) {
+				$value = $config->getData($searchPath);
+
+				// log the settings
+				$printer  = new DataPrinter();
+				$logValue = $printer->convertToString($value);
+				$log->endAction("found in $origin: '{$logValue}'");
+
+				return $value;
+			}
+		}
+
+		// if we get here, the module setting does not exist
+		throw new E5xx_ActionFailed(__METHOD__, "unable to find moduleSetting '{$settingPath}'");
+	}
 }
