@@ -4,5 +4,14 @@
         "--target", "vagrant-centos6-ssl",
 		"--users", "src/tests/stories/default-users.json",
         "play-story", "src/tests/stories/"
-    ]
+    ],
+    "storySettings": {
+    	"modules": {
+    		"http": {
+    			"remotePage": {
+    				"title": "Home - BBC News"
+    			}
+    		}
+    	}
+    }
 }
