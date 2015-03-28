@@ -13,9 +13,14 @@
 							"ssl_target",
 							"zmq_target"
 						],
-						"storySettings": {
+						"appSettings": {
 							"host": {
 								"expected": "successfully retrieved this appSetting :)"
+							}
+						},
+						"storySettings": {
+							"host": {
+								"expected": "successfully retrieved this storySetting :)"
 							},
 							"http": {
 								"homepage": "https://storyplayer.test/"
