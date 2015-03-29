@@ -65,7 +65,9 @@ class SingleElementExpect
 	protected $searchMethodParams;
 
 	/**
-	 * @param string $elementDesc
+	 * @param \DataSift\WebDriver\WebDriverElement $topElement
+	 * @param string $searchMethodName
+	 * @param array  $searchMethodParams
 	 */
 	public function __construct($topElement, $searchMethodName, $searchMethodParams)
 	{
