@@ -88,8 +88,8 @@ class ActiveConfig extends WrappedConfig
 		// we also want to link in the hosts and roles tables, to make
 		// it a lot easier for Prose modules
 		$activeConfig         = $this->getConfig();
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $runtimeConfig        = $injectables->getRuntimeConfig();
+        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
         $testEnvName          = $injectables->activeTestEnvironmentName;
 
 		$hostsTable = $runtimeConfigManager->getTable($runtimeConfig, 'hosts');

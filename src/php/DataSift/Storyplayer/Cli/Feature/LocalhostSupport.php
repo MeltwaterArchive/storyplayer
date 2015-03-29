@@ -79,7 +79,7 @@ class Feature_LocalhostSupport implements Feature
         $host->provisioned = true;
 
         // we need to make sure it's registered in the hosts table
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
         $hostsTable = $runtimeConfigManager->getTable($injectables->runtimeConfig, 'hosts');
         $testEnv = $injectables->activeTestEnvironmentName;
 

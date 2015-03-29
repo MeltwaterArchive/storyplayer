@@ -258,8 +258,8 @@ class StoryTeller
         $this->setConfig($injectables->activeConfig);
 
         // our runtime config
-        $this->setRuntimeConfig($injectables->runtimeConfig);
-        $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
+        $this->setRuntimeConfig($injectables->getRuntimeConfig());
+        $this->setRuntimeConfigManager($injectables->getRuntimeConfigManager());
 
         self::$self = $this;
     }

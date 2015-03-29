@@ -58,11 +58,10 @@ use DataSift\Storyplayer\Cli\RuntimeConfigManager;
  */
 trait RuntimeConfigSupport
 {
-	public $runtimeConfigManager;
-	public $runtimeConfig;
+	protected $runtimeConfigManager = null;
+	protected $runtimeConfig = null;
 
 	/**
-	 *
 	 * @return RuntimeConfigManager
 	 */
 	public function initRuntimeConfigSupport(Injectables $injectables)
@@ -78,5 +77,29 @@ trait RuntimeConfigSupport
 
 		// all done
 		return $this->runtimeConfigManager;
+	}
+
+	/**
+	 * @return \DataSift\Storyplayer\Cli\RuntimeConfigManager
+	 */
+	public function getRuntimeConfigManager()
+	{
+		if ($this->runtimeConfigManager === null) {
+			throw new E4xx_NotInitialised('runtimeConfigManager');
+		}
+
+		return $this->runtimeConfigManager;
+	}
+
+	/**
+	 * @return object
+	 */
+	public function getRuntimeConfig()
+	{
+		if ($this->runtimeConfig === null) {
+			throw new E4xx_NotInitialised('runtimeConfig');
+		}
+
+		return $this->runtimeConfig;
 	}
 }

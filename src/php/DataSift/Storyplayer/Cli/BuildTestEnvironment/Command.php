@@ -172,8 +172,8 @@ class BuildTestEnvironment_Command extends BaseCommand
         $this->initFeaturesBeforeModulesAvailable($engine);
 
         // now it is safe to create our shorthand
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $runtimeConfig        = $injectables->getRuntimeConfig();
+        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
         $output               = $injectables->output;
 
         // save the output for use in other methods
