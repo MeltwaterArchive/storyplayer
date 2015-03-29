@@ -215,7 +215,7 @@ class PhaseGroup_Player
      * @param  Injectables $injectables
      * @param  Phase       $phase
      * @param  boolean     $isActive
-     * @return PhaseResult
+     * @return Phase_Result
      */
     public function playPhase(StoryTeller $st, Injectables $injectables, Phase $phase, $isActive, $thingBeingPlayed = null)
     {

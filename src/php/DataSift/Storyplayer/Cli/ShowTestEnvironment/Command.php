@@ -77,11 +77,13 @@ class ShowTestEnvironment_Command extends CliCommand
      * @param  CliEngine $engine
      * @param  array     $params
      * @param  mixed     $additionalContext
-     * @return Phix_Project\CliEngine\CliResult
+     * @return int
      */
     public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
     {
         // output the default environment name
         echo $additionalContext->defaultTestEnvironmentName . PHP_EOL;
+
+        return 0;
     }
 }

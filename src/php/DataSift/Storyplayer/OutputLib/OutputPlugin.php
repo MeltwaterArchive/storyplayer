@@ -75,16 +75,26 @@ abstract class OutputPlugin
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return void
+     */
     public function addOutputToStdout()
     {
         $this->writer->addOutputToStdout();
     }
 
+    /**
+     * @return void
+     */
     public function addOutputToStderr()
     {
         $this->writer->addOutputToStderr();
     }
 
+    /**
+     * @param string $filename
+     * @return void
+     */
     public function addOutputToFile($filename)
     {
         // make sure $filename isn't a reserved name
@@ -99,11 +109,21 @@ abstract class OutputPlugin
         $this->writer->addOutputToFile($filename);
     }
 
+    /**
+     * @param  string $output
+     * @param  string $style
+     * @return void
+     */
     public function write($output, $style = null)
     {
         $this->writer->write($output, $style);
     }
 
+    /**
+     * @param  float $duration
+     * @param  string $style
+     * @return void
+     */
     public function writeDuration($duration, $style = null)
     {
         // break down the duration into reportable units
@@ -170,6 +190,9 @@ abstract class OutputPlugin
         $this->writer->write($output, $style);
     }
 
+    /**
+     * @return OutputWriter
+     */
     public function getWriter()
     {
         return $this->writer;
@@ -181,16 +204,25 @@ abstract class OutputPlugin
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return void
+     */
     public function disableColourSupport()
     {
         $this->writer->setColourMode(self::COLOUR_MODE_OFF);
     }
 
+    /**
+     * @return void
+     */
     public function enableColourSupport()
     {
         $this->writer->setColourMode(self::COLOUR_MODE_AUTO);
     }
 
+    /**
+     * @return void
+     */
     public function enforceColourSupport()
     {
         $this->writer->setColourMode(self::COLOUR_MODE_ON);
@@ -217,10 +249,24 @@ abstract class OutputPlugin
      */
     abstract public function endStoryplayer($duration);
 
+    /**
+     * @return void
+     */
     abstract public function resetSilentMode();
+
+    /**
+     * @return void
+     */
     abstract public function setSilentMode();
 
+    /**
+     * @return void
+     */
     abstract public function startPhaseGroup($activity, $name);
+
+    /**
+     * @return void
+     */
     abstract public function endPhaseGroup($result);
 
     /**

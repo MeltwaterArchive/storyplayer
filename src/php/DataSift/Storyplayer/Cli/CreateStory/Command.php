@@ -86,7 +86,7 @@ class CreateStory_Command extends CliCommand
      * @param  CliEngine $engine
      * @param  array     $params
      * @param  mixed     $additionalContext
-     * @return Phix_Project\CliEngine\CliResult
+     * @return int
      */
     public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
     {

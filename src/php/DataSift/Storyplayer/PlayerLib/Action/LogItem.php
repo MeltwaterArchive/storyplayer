@@ -212,6 +212,7 @@ class Action_LogItem
      *        the message to write
      * @param callback $callable
      *        the function / lambda to call
+     * @return mixed
      */
     public function addStep($text, $callable)
     {
@@ -233,6 +234,9 @@ class Action_LogItem
         return $return;
     }
 
+    /**
+     * @return void
+     */
     public function startStep($text)
     {
         // make sure any nested action has completed
@@ -246,11 +250,17 @@ class Action_LogItem
         $this->nestedAction = $action;
     }
 
+    /**
+     * @return void
+     */
     public function endStep()
     {
         $this->closeAllOpenSubActions();
     }
 
+    /**
+     * @return void
+     */
     public function captureOutput($text)
     {
         // trick the logger into indenting the output one more
@@ -264,11 +274,17 @@ class Action_LogItem
         $this->nestLevel--;
     }
 
+    /**
+     * @return void
+     */
     protected function writeToLog($text, $codeLine = null)
     {
         $this->output->logPhaseActivity(str_repeat("  ", $this->nestLevel - 1) . $text, $codeLine);
     }
 
+    /**
+     * @return int
+     */
     public function getNestLevel()
     {
         return $this->nestLevel;
@@ -280,6 +296,9 @@ class Action_LogItem
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return Action_LogItem|null
+     */
     public function getOpenAction()
     {
         // do we have an active nested action?
@@ -297,6 +316,9 @@ class Action_LogItem
         return null;
     }
 
+    /**
+     * @return float|null
+     */
     public function getStartTime()
     {
         if (!isset($this->startTime)) {
@@ -306,6 +328,9 @@ class Action_LogItem
         return $this->startTime;
     }
 
+    /**
+     * @return float|null
+     */
     public function getEndTime()
     {
         if (!isset($this->endTime)) {

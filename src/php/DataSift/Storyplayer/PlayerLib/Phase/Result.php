@@ -106,11 +106,17 @@ class Phase_Result
         $this->phaseName = $phaseName;
     }
 
+    /**
+     * @return string
+     */
     public function getPhaseName()
     {
         return $this->phaseName;
     }
 
+    /**
+     * @return boolean
+     */
     public function hasMessage()
     {
         if (isset($this->message)) {
@@ -120,21 +126,33 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function getMessage()
     {
         return $this->message;
     }
 
+    /**
+     * @return \Exception
+     */
     public function getException()
     {
         return $this->exception;
     }
 
+    /**
+     * @return int
+     */
     public function getPhaseResult()
     {
         return $this->result;
     }
 
+    /**
+     * @return string
+     */
     public function getPhaseResultString()
     {
         if (isset($this->RESULT_STRING[$this->result])) {
@@ -144,6 +162,9 @@ class Phase_Result
         return "UNKNOWN";
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseCompleted()
     {
         if ($this->result == self::COMPLETED) {
@@ -153,6 +174,9 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseSucceeded()
     {
         if ($this->result == self::COMPLETED) {
@@ -162,6 +186,9 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseFailed()
     {
         if ($this->result == self::FAILED) {
@@ -171,6 +198,9 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseIsIncomplete()
     {
         if ($this->result == self::INCOMPLETE) {
@@ -180,6 +210,9 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseHasNoActions()
     {
         if ($this->result == self::HASNOACTIONS) {
@@ -189,6 +222,9 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseIsBlacklisted()
     {
         if ($this->result == self::BLACKLISTED) {
@@ -198,6 +234,9 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseHasBeenSkipped()
     {
         if ($this->result == self::SKIPPED) {
@@ -207,6 +246,9 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseCannotRun()
     {
         if ($this->result == self::CANNOTRUN) {
@@ -216,6 +258,9 @@ class Phase_Result
         return false;
     }
 
+    /**
+     * @return int
+     */
     public function getNextAction()
     {
         return $this->nextAction;
@@ -225,6 +270,7 @@ class Phase_Result
      * @param integer $result
      * @param string $msg
      * @param Exception $e
+     * @return void
      */
     public function setContinuePlaying($result = 1, $msg = null, $e = null)
     {
@@ -238,6 +284,7 @@ class Phase_Result
      * @param integer $result
      * @param string $msg
      * @param Exception $e
+     * @return void
      */
     public function setPlayingFailed($result, $msg, $e = null)
     {
@@ -250,6 +297,7 @@ class Phase_Result
     /**
      * @param integer $result
      * @param string $msg
+     * @return void
      */
     public function setSkipPlaying($result, $msg, $e = null)
     {

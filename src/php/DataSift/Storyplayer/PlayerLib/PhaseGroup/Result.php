@@ -139,11 +139,17 @@ class PhaseGroup_Result
         $this->startTime = microtime(true);
     }
 
+    /**
+     * @return void
+     */
     public function setActivity($activity)
     {
         $this->activity = $activity;
     }
 
+    /**
+     * @return void
+     */
     public function setPhaseGroupHasSucceeded()
     {
         $this->resultCode  = self::OKAY;
@@ -151,6 +157,9 @@ class PhaseGroup_Result
         $this->setEndTime();
     }
 
+    /**
+     * @return void
+     */
     public function setPhaseGroupHasBeenSkipped()
     {
         $this->resultCode  = self::SKIPPED;
@@ -158,6 +167,9 @@ class PhaseGroup_Result
         $this->setEndTime();
     }
 
+    /**
+     * @return void
+     */
     public function setPhaseGroupHasBeenBlacklisted($phaseResult)
     {
         $this->resultCode  = self::BLACKLISTED;
@@ -165,6 +177,9 @@ class PhaseGroup_Result
         $this->setEndTime();
     }
 
+    /**
+     * @return void
+     */
     public function setPhaseGroupIsIncomplete($phaseResult)
     {
         $this->resultCode  = self::INCOMPLETE;
@@ -172,6 +187,9 @@ class PhaseGroup_Result
         $this->setEndTime();
     }
 
+    /**
+     * @return void
+     */
     public function setPhaseGroupHasFailed($phaseResult)
     {
         $this->resultCode  = self::FAIL;
@@ -179,6 +197,9 @@ class PhaseGroup_Result
         $this->setEndTime();
     }
 
+    /**
+     * @return void
+     */
     public function setPhaseGroupHasError($phaseResult)
     {
         $this->resultCode  = self::ERROR;
@@ -186,6 +207,9 @@ class PhaseGroup_Result
         $this->setEndTime();
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseGroupSucceeded()
     {
         if (self::OKAY == $this->resultCode) {
@@ -194,6 +218,9 @@ class PhaseGroup_Result
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseGroupFailed()
     {
         switch ($this->resultCode)
@@ -208,6 +235,9 @@ class PhaseGroup_Result
         }
     }
 
+    /**
+     * @return bool
+     */
     public function getPhaseGroupSkipped()
     {
         switch ($this->resultCode)
@@ -221,17 +251,26 @@ class PhaseGroup_Result
         }
     }
 
+    /**
+     * @return void
+     */
     protected function setEndTime()
     {
         $this->endTime = microtime(true);
         $this->durationTime = $this->endTime - $this->startTime;
     }
 
+    /**
+     * @return float
+     */
     public function getDuration()
     {
         return $this->durationTime;
     }
 
+    /**
+     * @return string
+     */
     public function getResultString()
     {
         if (isset($this->resultStrings[$this->resultCode])) {
