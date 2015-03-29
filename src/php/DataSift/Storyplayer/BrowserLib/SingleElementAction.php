@@ -237,10 +237,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class SingleElementAction extends BaseElementAction
 {
-	protected $st;
 	protected $action;
 	protected $actionDesc;
-	protected $baseElement;
 
 	/**
 	 * @param \Closure $action
@@ -248,9 +246,10 @@ class SingleElementAction extends BaseElementAction
 	 */
 	public function __construct($action, $actionDesc, $baseElement = null)
 	{
+		parent::__construct($baseElement);
+
 		$this->action      = $action;
 		$this->actionDesc  = $actionDesc;
-		$this->baseElement = $baseElement;
 	}
 
 	public function __call($methodName, $methodArgs)

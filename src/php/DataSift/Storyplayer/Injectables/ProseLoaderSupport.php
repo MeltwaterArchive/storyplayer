@@ -71,11 +71,18 @@ trait ProseLoaderSupport
 
 		// does the user have any namespaces of their own that they
 		// want to search?
-		if (isset($injectables->staticConfig->prose, $injectables->staticConfig->prose->namespaces) && is_array($injectables->staticConfig->prose->namespaces)) {
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			$this->proseLoader->setNamespaces($injectables->staticConfig->prose->namespaces);
+		$configPath = 'storyplayer.prose.namespaces';
+		if (!$injectables->activeConfig->hasData($configPath)) {
+			return;
 		}
 
+		$proseList = $injectables->activeConfig->getData($configPath);
+		if (!is_array($phasesList)) {
+			$injectables->output->logCliError("'prose.namespaces' must be an array in your storyplayer.json config file");
+			exit(1);
+		}
+
+		// if we get here, then we have some namespaces to use
+		$this->proseLoader->setNamespaces($proseList);
 	}
 }

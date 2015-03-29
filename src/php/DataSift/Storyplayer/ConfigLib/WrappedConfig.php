@@ -73,9 +73,15 @@ class WrappedConfig
 
     /**
      * remember where we were loaded from
-     * @var string
+     * @var string|null
      */
     private $filename = null;
+
+    /**
+     * the name assigned to this config container
+     * @var string|null
+     */
+    private $name = null;
 
     /**
      * constructor
@@ -158,7 +164,7 @@ class WrappedConfig
 
     /**
      * returns the name assigned to this config
-     * @return string
+     * @return string|null
      */
     public function getName()
     {

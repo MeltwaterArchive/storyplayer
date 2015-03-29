@@ -59,7 +59,7 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      * Add an item to a module's runtime config table
      *
      * @param string $key The key to save data under
-     * @param string $value The value to save
+     * @param mixed $value The value to save
      *
      * @return void
      */
@@ -159,7 +159,7 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      * Add an item to a module's runtime config table
      *
      * @param string $key The key to save data under
-     * @param string $value The value to save
+     * @param mixed $value The value to save
      *
      * @return void
      */

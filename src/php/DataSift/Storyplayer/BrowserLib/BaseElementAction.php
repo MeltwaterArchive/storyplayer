@@ -62,6 +62,8 @@ use Prose\E5xx_UnknownDomElementType;
  */
 class BaseElementAction
 {
+	use VisibleElementFinder;
+
 	const SINGLE_TARGET = 1;
 	const PLURAL_TARGET = 2;
 
@@ -165,6 +167,19 @@ class BaseElementAction
 		'labelidortext' => 'ByLabelIdText',
 	);
 
+	protected $baseElement;
+
+	public function __construct($baseElement)
+	{
+		$this->baseElement = $baseElement;
+	}
+
+	/**
+	 * @param  string $methodName
+	 *         camelCase string to parse
+	 * @return array<string>
+	 *         $methodName broken into individual words, all lower-cased
+	 */
 	protected function convertMethodNameToWords($methodName)
 	{
 		// turn the method name into an array of words
@@ -174,6 +189,11 @@ class BaseElementAction
 		return $words;
 	}
 
+	/**
+	 * @param  array<string> $words
+	 *         a list of words to examine
+	 * @return int|null
+	 */
 	protected function determineCountType($words)
 	{
 		foreach ($words as $word) {
@@ -186,6 +206,11 @@ class BaseElementAction
 		return null;
 	}
 
+	/**
+	 * @param  array<string> $words
+	 *         a list of words to examine
+	 * @return int|null
+	 */
 	protected function determineIndexType($words)
 	{
 		foreach ($words as $word) {
@@ -198,6 +223,11 @@ class BaseElementAction
 		return 0;
 	}
 
+	/**
+	 * @param  array<string> $words
+	 *         a list of words to examine
+	 * @return string|null
+	 */
 	protected function determineSearchType($words)
 	{
 		foreach ($words as $word) {
@@ -210,6 +240,11 @@ class BaseElementAction
 		return null;
 	}
 
+	/**
+	 * @param  array<string> $words
+	 *         a list of words to examine
+	 * @return string
+	 */
 	protected function determineTargetType($words)
 	{
 		foreach ($words as $word) {
@@ -222,6 +257,11 @@ class BaseElementAction
 		return 'field';
 	}
 
+	/**
+	 * @param  array<string> $words
+	 *         a list of words to examine
+	 * @return string
+	 */
 	protected function determineTagType($targetType)
 	{
 		// do we have a specific tag to look for?
@@ -233,6 +273,11 @@ class BaseElementAction
 		return '*';
 	}
 
+	/**
+	 * @param  array<string> $words
+	 *         a list of words to examine
+	 * @return bool
+	 */
 	protected function isPluralTarget($targetType)
 	{
 		// is this a valid target type?
@@ -265,6 +310,11 @@ class BaseElementAction
 		return $element;
 	}
 
+	/**
+	 * @param  string $methodName
+	 * @param  array<mixed> $methodArgs
+	 * @return array
+	 */
 	protected function retrieveElements($methodName, $methodArgs)
 	{
 		$words = $this->convertMethodNameToWords($methodName);
@@ -291,63 +341,5 @@ class BaseElementAction
 
 		// all done
 		return $elements;
-	}
-
-	/**
-	 * @param string $successMsg
-	 * @param string $failureMsg
-	 */
-	public function returnNthVisibleElement($nth, $elements)
-	{
-		// what are we doing?
-		$count = count($elements);
-		$log = usingLog()->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
-
-		// special case - not enough elements, even if they were all
-		// visible
-		if ($nth >= count($elements)) {
-			$log->endAction("not enough elements :(");
-			throw new E5xx_ActionFailed(__METHOD__, "no matching element found");
-		}
-
-		// let's track which visible element we're looking at
-		$checkedIndex = 0;
-
-		// if the page contains multiple matches, return the first one
-		// that the user can see
-		foreach ($elements as $element) {
-			if (!$element->displayed()) {
-				// DO NOT increment $checkedIndex here
-				//
-				// we only increment it for elements that are visible
-				continue;
-			}
-
-			// skip hidden input fields
-			// if ($element->name() == 'input') {
-			// 	try {
-			// 		$typeAttr = $element->attribute('type');
-			// 		if ($typeAttr == 'hidden') {
-			// 			// skip this
-			// 			continue;
-			// 		}
-			// 	}
-			// 	catch (Exception $e) {
-			// 		// no 'type' attribute
-			// 		//
-			// 		// not fatal
-			// 	}
-			// }
-
-			if ($checkedIndex == $nth) {
-				// a match!
-				$log->endAction();
-				return $element;
-			}
-		}
-
-		$msg = "no matching element found";
-		$log->endAction($msg);
-		throw new E5xx_ActionFailed(__METHOD__, $msg);
 	}
 }

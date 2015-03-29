@@ -104,7 +104,7 @@ class AnsibleProvisioner extends Provisioner
 		$log = usingLog()->startAction("use Ansible to provision host(s)");
 
 		// get our ansible configuration
-		$ansibleSettings = fromConfig()->getModuleSettings('ansible');
+		$ansibleSettings = fromConfig()->getModuleSetting('ansible');
 
 		// our reverse list of roles => hosts
 		$rolesToHosts = array();
@@ -271,7 +271,7 @@ class AnsibleProvisioner extends Provisioner
 		$log = usingLog()->startAction("determine host_vars filename for host '{$hostId}'");
 
 		// get our ansible settings
-		$ansibleSettings = fromConfig()->getModuleSettings('ansible');
+		$ansibleSettings = fromConfig()->getModuleSetting('ansible');
 
 		// get our inventory folder
 		$invFolder = $this->getInventoryFolder($ansibleSettings, $inventoryFolder);

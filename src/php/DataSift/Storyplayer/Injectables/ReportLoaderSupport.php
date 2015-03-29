@@ -71,11 +71,18 @@ trait ReportLoaderSupport
 
 		// does the user have any namespaces of their own that they
 		// want to search?
-		if (isset($injectables->staticConfig->reports, $injectables->staticConfig->reports->namespaces) && is_array($injectables->staticConfig->reports->namespaces)) {
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			$this->reportLoader->setNamespaces($injectables->staticConfig->reports->namespaces);
+		$configPath = 'storyplayer.reports.namespaces';
+		if (!$injectables->activeConfig->hasData($configPath)) {
+			return;
 		}
 
+		$reportsList = $injectables->activeConfig->getData($configPath);
+		if (!is_array($phasesList)) {
+			$injectables->output->logCliError("'reports.namespaces' must be an array in your storyplayer.json config file");
+			exit(1);
+		}
+
+		// if we get here, then we have some namespaces to use
+		$this->reportsLoader->setNamespaces($reportsList);
 	}
 }

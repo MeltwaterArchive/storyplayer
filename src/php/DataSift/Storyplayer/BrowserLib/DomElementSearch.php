@@ -66,6 +66,11 @@ use Prose\E5xx_ActionFailed;
  */
 class DomElementSearch
 {
+	use VisibleElementFinder;
+
+	protected $topElement;
+	protected $topXpath;
+
 	public function __construct($topElement)
 	{
 		$this->setTopElement($topElement);
@@ -100,9 +105,6 @@ class DomElementSearch
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
 		$log = usingLog()->startAction("get '{$tag}' elements with alt text '{$text}'");
-
-		$successMsg = "found one";
-		$failureMsg = "no matching elements";
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -269,9 +271,6 @@ class DomElementSearch
 		//
 		// let's hope (assume?) that the input is inside the element
 		try {
-			$successMsg = "found nested input";
-			$failureMsg = "no visible elements";
-
 			// build up the xpath to use
 			$xpathList = [
 				'descendant::label[normalize-space(text()) = "' . $labelText . '"]/input'
@@ -300,7 +299,7 @@ class DomElementSearch
 		$log = usingLog()->startAction("get '{$tag}' with label, id or name '{$searchTerm}'");
 
 		// our return value
-		$elements = [];
+		$retval = [];
 
 		// can we find this puppy by its label?
 		try {
@@ -319,7 +318,7 @@ class DomElementSearch
 		}
 
 		// and what about finding it by its text?
-		$retval = array_merge($retval, $this->getElementByName($searchTerm, $tags));
+		$retval = array_merge($retval, $this->getElementsByName($searchTerm, $tags));
 
 		// log the result
 		$log->endAction(count($retval) . " element(s) found");
@@ -362,9 +361,6 @@ class DomElementSearch
 		$tag = $this->convertTagsToString($tags);
 		$log = usingLog()->startAction("get '{$tag}' element with placeholder '{$text}'");
 
-		$successMsg = "found one";
-		$failureMsg = "no matching elements";
-
 		// prepare the list of tags
 		if (is_string($tags)) {
 			$tags = array($tags);
@@ -391,9 +387,6 @@ class DomElementSearch
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
 		$log = usingLog()->startAction("get '{$tag}' element with text '{$text}'");
-
-		$successMsg = "found one";
-		$failureMsg = "no matching elements";
 
 		// prepare the list of tags
 		if (is_string($tags)) {
@@ -429,9 +422,6 @@ class DomElementSearch
 		// what are we doing?
 		$tag = $this->convertTagsToString($tags);
 		$log = usingLog()->startAction("get '{$tag}' element with title '{$title}'");
-
-		$successMsg = "found one";
-		$failureMsg = "no matching elements";
 
 		// prepare the list of tags
 		if (is_string($tags)) {

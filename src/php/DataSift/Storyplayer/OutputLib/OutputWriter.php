@@ -68,6 +68,7 @@ class OutputWriter
     public $urlStyle = null;
     public $successStyle = null;
     public $failStyle = null;
+    public $activityStyle = null;
     public $skippedStyle = null;
     public $nameStyle = null;
     public $durationStyle = null;

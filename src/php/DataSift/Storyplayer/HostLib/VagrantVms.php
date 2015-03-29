@@ -461,7 +461,7 @@ class VagrantVms implements SupportedHost
 			if (preg_match("|Name:[\s]+(.*)|", $line, $matches)) {
 				$iface = $matches[1];
 			}
-			else if ($iface && preg_match("|IPAddress:[\s]+(.*)|", $line, $matches)) {
+			else if ($iface !== null && preg_match("|IPAddress:[\s]+(.*)|", $line, $matches)) {
 				// our network interface contains an IPAddress - it is likely
 				// to be one that works
 				if ($matches[1] != '0.0.0.0') {

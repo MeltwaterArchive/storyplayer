@@ -184,7 +184,7 @@ class ActiveConfig extends WrappedConfig
                     // success!
                     //
                     // but wait - is it actually the loopback interface?
-                    if (in_array($adapterToTest, ['lo0', 'lo']) && ($loopback == null)) {
+                    if (in_array($adapterToTest, ['lo0', 'lo']) && ($loopback === null)) {
                         $loopback = $ipAddress;
                     }
                     else {
@@ -196,7 +196,7 @@ class ActiveConfig extends WrappedConfig
             // we didn't find any adapters with an IP address
             //
             // but is the loopback up and running?
-            if ($loopback != null) {
+            if ($loopback !== null) {
                 // this is better than throwing an error
                 return $loopback;
             }

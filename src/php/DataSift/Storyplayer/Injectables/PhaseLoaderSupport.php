@@ -71,11 +71,18 @@ trait PhaseLoaderSupport
 
 		// does the user have any namespaces of their own that they
 		// want to search?
-		if (isset($injectables->staticConfig->phases, $injectables->staticConfig->phases->namespaces) && is_array($injectables->staticConfig->phases->namespaces)) {
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			$this->phaseLoader->setNamespaces($injectables->staticConfig->phases->namespaces);
+		$configPath = 'storyplayer.phases.namespaces';
+		if (!$injectables->activeConfig->hasData($configPath)) {
+			return;
 		}
 
+		$phasesList = $injectables->activeConfig->getData($configPath);
+		if (!is_array($phasesList)) {
+			$injectables->output->logCliError("'phases.namespaces' must be an array in your storyplayer.json config file");
+			exit(1);
+		}
+
+		// if we get here, then we have some namespaces to use
+		$this->phaseLoader->setNamespaces($phasesList);
 	}
 }

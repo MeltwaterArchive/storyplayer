@@ -60,11 +60,9 @@ use Prose\E5xx_ExpectFailed;
  */
 class SingleElementExpect
 {
-	protected $searchFunction;
-	protected $searchTerm;
-	protected $element;
-	protected $elementType;
-	protected $elementDesc;
+	protected $topElement;
+	protected $searchmethodName;
+	protected $searchMethodParams;
 
 	/**
 	 * @param string $elementDesc

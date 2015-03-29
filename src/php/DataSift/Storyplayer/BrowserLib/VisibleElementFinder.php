@@ -34,64 +34,83 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/CommandLib
+ * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\CommandLib;
+namespace DataSift\Storyplayer\BrowserLib;
+
+use Prose\E5xx_ActionFailed;
+use Prose\E5xx_UnknownDomElementType;
 
 /**
- * helper for tracking result of executing a command
- *
+ * Trait for assisting with finding a visible element from a larger list
  * @category  Libraries
- * @package   Storyplayer/CommandLib
+ * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-
-class CommandResult
+trait VisibleElementFinder
 {
-	public $returnCode;
-	public $output;
-
 	/**
-	 * @param integer|null $returnCode
-	 * @param string|null $output
+	 * @return \DataSift\WebDriver\WebDriverElement
 	 */
-	public function __construct($returnCode, $output)
+	public function returnNthVisibleElement($nth, $elements)
 	{
-		$this->returnCode = $returnCode;
-		$this->output     = $output;
-	}
+		// what are we doing?
+		$count = count($elements);
+		$log = usingLog()->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
 
-	/**
-	 *
-	 * @return boolean
-	 */
-	public function didCommandFail()
-	{
-		if ($this->returnCode !== 0) {
-			return true;
+		// special case - not enough elements, even if they were all
+		// visible
+		if ($nth >= count($elements)) {
+			$log->endAction("not enough elements :(");
+			throw new E5xx_ActionFailed(__METHOD__, "no matching element found");
 		}
 
-		return false;
-	}
+		// let's track which visible element we're looking at
+		$checkedIndex = 0;
 
-	/**
-	 *
-	 * @return boolean
-	 */
-	public function didCommandSucceed()
-	{
-		if ($this->returnCode === 0) {
-			return true;
+		// if the page contains multiple matches, return the first one
+		// that the user can see
+		foreach ($elements as $element) {
+			if (!$element->displayed()) {
+				// DO NOT increment $checkedIndex here
+				//
+				// we only increment it for elements that are visible
+				continue;
+			}
+
+			// skip hidden input fields
+			// if ($element->name() == 'input') {
+			// 	try {
+			// 		$typeAttr = $element->attribute('type');
+			// 		if ($typeAttr == 'hidden') {
+			// 			// skip this
+			// 			continue;
+			// 		}
+			// 	}
+			// 	catch (Exception $e) {
+			// 		// no 'type' attribute
+			// 		//
+			// 		// not fatal
+			// 	}
+			// }
+
+			if ($checkedIndex == $nth) {
+				// a match!
+				$log->endAction();
+				return $element;
+			}
 		}
 
-		return false;
+		$msg = "no matching element found";
+		$log->endAction($msg);
+		throw new E5xx_ActionFailed(__METHOD__, $msg);
 	}
 }
