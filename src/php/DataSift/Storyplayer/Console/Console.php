@@ -398,7 +398,7 @@ abstract class Console extends OutputPlugin
 			}
 		}
 
-		if ($trace) {
+		if ($trace !== null) {
 			$this->write(PHP_EOL . "-----" . PHP_EOL, $this->writer->commentStyle);
 			$this->write("This is the stack trace for this failure:"
 			     . PHP_EOL . PHP_EOL

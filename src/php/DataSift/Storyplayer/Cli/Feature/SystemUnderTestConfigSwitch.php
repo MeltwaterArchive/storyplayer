@@ -60,8 +60,8 @@ use Phix_Project\CliEngine\CliSwitch;
 class Feature_SystemUnderTestConfigSwitch extends CliSwitch
 {
 	/**
-	 * @param array $envList
-	 * @param string $defaultEnvName
+	 * @param array $sutList
+	 * @param string $defaultSutName
 	 */
 	public function __construct($sutList, $defaultSutName)
 	{

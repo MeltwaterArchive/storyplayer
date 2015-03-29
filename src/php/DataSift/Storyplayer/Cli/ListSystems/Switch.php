@@ -87,8 +87,9 @@ class ListSystems_Switch extends CliSwitch
 	/**
 	 *
 	 * @param  CliEngine $engine
+	 * @param  int $invokes
 	 * @param  array     $params
-	 * @param  mixed     $additionalContext
+	 * @param  boolean $isDefaultParam
 	 * @return CliResult
 	 */
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)

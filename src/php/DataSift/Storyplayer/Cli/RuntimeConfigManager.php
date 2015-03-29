@@ -101,7 +101,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 
 	/**
 	 *
-	 * @return stdClass
+	 * @return \DataSift\Stone\ObjectLib\BaseObject
 	 */
 	public function loadRuntimeConfig(Output $output)
 	{

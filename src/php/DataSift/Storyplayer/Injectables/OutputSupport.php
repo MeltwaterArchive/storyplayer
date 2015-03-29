@@ -61,7 +61,7 @@ trait OutputSupport
 
 	/**
 	 *
-	 * @return void
+	 * @return Output
 	 */
 	public function initOutputSupport()
 	{

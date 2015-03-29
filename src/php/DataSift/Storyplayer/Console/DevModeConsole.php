@@ -210,7 +210,6 @@ class DevModeConsole extends Console
 	/**
 	 * called when a story logs an action
 	 *
-	 * @param integer $level
 	 * @param string $msg
 	 * @return void
 	 */

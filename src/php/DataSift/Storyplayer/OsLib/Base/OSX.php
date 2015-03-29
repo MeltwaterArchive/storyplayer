@@ -169,7 +169,7 @@ abstract class Base_OSX extends OsBase
 	/**
 	 *
 	 * @param  HostDetails $hostDetails
-	 * @param  string $processName
+	 * @param  int $pid
 	 * @return boolean
 	 */
 	public function getPidIsRunning($hostDetails, $pid)

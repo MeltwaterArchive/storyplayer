@@ -416,6 +416,9 @@ class VagrantVms implements SupportedHost
 		putenv('VIRTUALBOX_BRIDGE_ADAPTER='.$bridgedIface);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function determineBridgedInterface()
 	{
 		// what are we doing?

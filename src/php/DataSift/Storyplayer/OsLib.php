@@ -60,7 +60,7 @@ class OsLib
 	/**
 	 * @param PlayerLib\StoryTeller $st
 	 */
-	static public function getHostAdapter($st, $osName)
+	public static function getHostAdapter($st, $osName)
 	{
 
 		// Make sure that osName is capitalised correctly

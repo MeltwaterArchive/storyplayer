@@ -235,7 +235,7 @@ class Blackboxes implements SupportedHost
 
 	/**
 	 *
-	 * @param  stdClass $envDetails
+	 * @param  stdClass $vmDetails
 	 * @return boolean
 	 */
 	public function isRunning($vmDetails)

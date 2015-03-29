@@ -150,7 +150,7 @@ class PlayStory_Command extends BaseCommand implements CliSignalHandler
      *
      * @param  CliEngine $engine
      * @param  array     $params
-     * @param  Injectables $injectables
+     * @param  Injectables|null $injectables
      * @return integer
      */
     public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
@@ -346,7 +346,7 @@ class PlayStory_Command extends BaseCommand implements CliSignalHandler
 
     /**
      *
-     * @param  CliEngine   $engine
+     * @param  CliEngine   $cliEngine
      * @param  Injectables $injectables
      * @param  array       $cliParams
      * @return void

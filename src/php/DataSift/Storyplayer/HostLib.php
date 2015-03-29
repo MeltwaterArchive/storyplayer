@@ -60,7 +60,7 @@ class HostLib
 	/**
 	 * @param PlayerLib\StoryTeller $st
 	 */
-	static public function getHostAdapter($st, $hostType)
+	public static function getHostAdapter($st, $hostType)
 	{
 		// what are we looking for?
 		$className = 'DataSift\Storyplayer\HostLib\\' . $hostType;

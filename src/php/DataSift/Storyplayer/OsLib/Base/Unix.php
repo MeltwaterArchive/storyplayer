@@ -195,7 +195,7 @@ abstract class Base_Unix extends OsBase
 	/**
 	 *
 	 * @param  HostDetails $hostDetails
-	 * @param  string $processName
+	 * @param  string $pid
 	 * @return boolean
 	 */
 	public function getPidIsRunning($hostDetails, $pid)

@@ -80,7 +80,7 @@ class Install_Command extends CliCommand
 	 *
 	 * @param  CliEngine $engine
 	 * @param  array     $params
-	 * @param  mixed     $additionalContext
+	 * @param  mixed     $injectables
 	 * @return void
 	 */
 	public function processCommand(CliEngine $engine, $params = array(), $injectables = null)

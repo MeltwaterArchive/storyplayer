@@ -57,7 +57,7 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Remote_Centos5 extends Base_Unix
+class Remote_Unix extends Base_Unix
 {
 	use Connector_SshClient;
 }
