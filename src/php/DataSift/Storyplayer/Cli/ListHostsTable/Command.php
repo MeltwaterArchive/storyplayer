@@ -87,7 +87,7 @@ class ListHostsTable_Command extends CliCommand
 	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
 	{
 		// shorthand
-		$runtimeConfig = $additionalContext->runtimeConfig;
+		$runtimeConfig = $additionalContext->getRuntimeConfig();
 
 		// are there any hosts in the table?
 		if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables, $runtimeConfig->storyplayer->tables->hosts)) {

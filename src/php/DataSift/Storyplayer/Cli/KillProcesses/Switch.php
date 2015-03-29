@@ -85,7 +85,7 @@ class KillProcesses_Switch extends CliSwitch
 	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false, $additionalContext = null)
 	{
 		// shorthand
-		$runtimeConfig = $additionalContext->runtimeConfig;
+		$runtimeConfig = $additionalContext->getRuntimeConfig();
 
 		// are there any processes in the table?
 		if (!isset($runtimeConfig->processes)) {

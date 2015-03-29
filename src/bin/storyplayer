@@ -215,7 +215,7 @@ function main($argv)
 		// create our runtime config folder, and load any pre-existing
 		// runtime config
 		$runtimeConfigManager = $injectables->initRuntimeConfigSupport($injectables);
-		$runtimeConfig        = $injectables->runtimeConfig;
+		$runtimeConfig        = $injectables->getRuntimeConfig();
 
 		// a list of the additional files that the user can select from
 		$sutList = new SystemsUnderTestList();
