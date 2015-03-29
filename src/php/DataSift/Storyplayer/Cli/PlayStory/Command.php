@@ -74,7 +74,7 @@ use DataSift\Storyplayer\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PlayStory_Command extends BaseCommand
+class PlayStory_Command extends BaseCommand implements CliSignalHandler
 {
     /**
      * should we let background processes survive when we shutdown?

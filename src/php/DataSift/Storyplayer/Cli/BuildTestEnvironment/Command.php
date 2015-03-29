@@ -88,7 +88,7 @@ use DataSift\Storyplayer\Cli\Feature\VerboseSupport;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class BuildTestEnvironment_Command extends BaseCommand
+class BuildTestEnvironment_Command extends BaseCommand implements CliSignalHandler
 {
     // we need to track this for handling CTRL-C
     protected $st;
