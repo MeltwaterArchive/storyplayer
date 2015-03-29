@@ -123,10 +123,6 @@ class ExpectsHttpResponse extends Prose
 		// shorthand
 		$response = $this->args[0];
 
-		// make a printable version of $expectedBody
-		$printer = new DataPrinter();
-		$logValue = $this->st->convertDataForOutput($expectedBody);
-
 		// what are we doing?
 		$log = usingLog()->startAction(["make sure HTTP response has body", $expectedBody]);
 

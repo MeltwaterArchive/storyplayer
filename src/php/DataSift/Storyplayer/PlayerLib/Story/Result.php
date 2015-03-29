@@ -67,6 +67,8 @@ class Story_Result extends PhaseGroup_Result
 	 */
 	public $storyShouldFail = false;
 
+	public $filename = null;
+
 	public $resultStrings = [
 		'UNKNOWN',
 		'PASS',

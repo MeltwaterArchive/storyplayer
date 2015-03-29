@@ -77,12 +77,12 @@ trait ReportLoaderSupport
 		}
 
 		$reportsList = $injectables->activeConfig->getData($configPath);
-		if (!is_array($phasesList)) {
+		if (!is_array($reportsList)) {
 			$injectables->output->logCliError("'reports.namespaces' must be an array in your storyplayer.json config file");
 			exit(1);
 		}
 
 		// if we get here, then we have some namespaces to use
-		$this->reportsLoader->setNamespaces($reportsList);
+		$this->reportLoader->setNamespaces($reportsList);
 	}
 }

@@ -239,7 +239,7 @@ abstract class OsBase implements SupportedOs
 		$result = $client->runCommand($statCommand);
 
 		// did it work?
-		if ($result->returnCode != 0) {
+		if ($result->returnCode !== 0) {
 			return null;
 		}
 		$retval = json_decode($result->output);

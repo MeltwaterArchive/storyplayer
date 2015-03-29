@@ -85,12 +85,4 @@ class HostsByRoleBase extends Prose
 		}
 		return $role;
 	}
-
-	protected function requireValidRoleDetails($caller)
-	{
-		// do we have valid host details?
-		if (!count(get_object_vars($this->hostsDetails))) {
-			throw new E5xx_ActionFailed($caller, "no hosts left in role {$this->roleName}");
-		}
-	}
 }

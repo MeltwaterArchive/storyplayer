@@ -77,7 +77,7 @@ trait ProseLoaderSupport
 		}
 
 		$proseList = $injectables->activeConfig->getData($configPath);
-		if (!is_array($phasesList)) {
+		if (!is_array($proseList)) {
 			$injectables->output->logCliError("'prose.namespaces' must be an array in your storyplayer.json config file");
 			exit(1);
 		}

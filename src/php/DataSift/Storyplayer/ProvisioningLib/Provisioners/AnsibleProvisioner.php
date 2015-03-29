@@ -95,6 +95,7 @@ class AnsibleProvisioner extends Provisioner
 		}
 
 		// all done
+		$log->endAction($provDef);
 		return $provDef;
 	}
 

@@ -82,7 +82,7 @@ class UsingZmqSocket extends ZmqSocketBase
 		$log = usingLog()->startAction("unbind() ZMQ tcp socket at host 'localhost':{$port}");
 
 		// attempt the unbind
-		$socket->unbind("tcp://*:{$port}");
+		$this->args[0]->unbind("tcp://*:{$port}");
 
 		// all done
 		$log->endAction();

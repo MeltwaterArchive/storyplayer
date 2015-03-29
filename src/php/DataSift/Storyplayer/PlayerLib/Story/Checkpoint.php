@@ -133,9 +133,6 @@ class Story_Checkpoint implements IteratorAggregate
 	 */
 	public function &__get($key)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$log = usingLog()->startAction("retrieve '{$key}' from the checkpoint");
 
@@ -181,9 +178,6 @@ class Story_Checkpoint implements IteratorAggregate
 	 */
 	public function __set($key, $value)
 	{
-		// shorthand
-		$st = $this->st;
-
 		// what are we doing?
 		$log = usingLog()->startAction("store '{$key}' in the checkpoint");
 

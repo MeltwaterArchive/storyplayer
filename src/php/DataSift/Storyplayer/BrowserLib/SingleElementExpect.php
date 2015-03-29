@@ -61,7 +61,7 @@ use Prose\E5xx_ExpectFailed;
 class SingleElementExpect
 {
 	protected $topElement;
-	protected $searchmethodName;
+	protected $searchMethodName;
 	protected $searchMethodParams;
 
 	/**

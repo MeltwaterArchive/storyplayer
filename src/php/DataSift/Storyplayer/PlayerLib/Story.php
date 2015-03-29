@@ -231,7 +231,7 @@ class Story
      *
      * @var string
      */
-    protected $sourceFile = '';
+    protected $storyFilename = '';
 
     /**
      * a list of the roles that the test environment must have defined,
@@ -549,9 +549,7 @@ class Story
 
     public function addValidRole($role)
     {
-        $this->validRoles[$role] = $role;
-
-        return $this;
+        throw new E4xx_DeprecatedFeature('user roles in stories have been removed from Storyplayer v2.');
     }
 
     /**
@@ -561,14 +559,12 @@ class Story
      */
     public function andValidRole($role)
     {
-        $this->validRoles[$role] = $role;
-
-        return $this;
+        throw new E4xx_DeprecatedFeature('user roles in stories have been removed from Storyplayer v2.');
     }
 
     public function hasRole($roleName)
     {
-        return isset($this->validRoles[$roleName]);
+        throw new E4xx_DeprecatedFeature('user roles in stories have been removed from Storyplayer v2.');
     }
 
     // ====================================================================

@@ -164,9 +164,6 @@ class UsingHost extends HostBase
 		// do we already have this session running on the host?
 		expectsHost($this->args[0])->screenIsNotRunning($sessionName);
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
-
 		// build up our command to run
 		$commandLine = 'screen -L -d -m -S "' . $sessionName . '" bash -c "' . $commandLine . '"';
 

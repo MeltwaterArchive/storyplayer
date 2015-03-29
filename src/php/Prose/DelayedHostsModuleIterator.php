@@ -55,6 +55,10 @@ namespace Prose;
  */
 class DelayedHostsModuleIterator
 {
+	protected $st;
+	protected $hostsDetails;
+	protected $moduleName;
+
 	public function __construct($st, $hostsDetails, $moduleName)
 	{
 		$this->st = $st;

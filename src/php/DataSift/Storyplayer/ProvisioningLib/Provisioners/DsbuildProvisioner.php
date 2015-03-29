@@ -97,6 +97,7 @@ class DsbuildProvisioner extends Provisioner
 		}
 
 		// all done
+		$log->endAction($provDef);
 		return $provDef;
 	}
 
@@ -157,7 +158,7 @@ class DsbuildProvisioner extends Provisioner
 			if (!$result->didCommandSucceed()) {
 				// try to rsync folders in case of scp fail
 				$command = 'vagrant rsync ' . $hostId;
-				$result = $commandRunner->runSilently($command);
+				$commandRunner->runSilently($command);
 			}
 
 			// provision

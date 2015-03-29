@@ -258,8 +258,7 @@ class BaseElementAction
 	}
 
 	/**
-	 * @param  array<string> $words
-	 *         a list of words to examine
+	 * @param  string $targetType
 	 * @return string
 	 */
 	protected function determineTagType($targetType)
@@ -274,8 +273,7 @@ class BaseElementAction
 	}
 
 	/**
-	 * @param  array<string> $words
-	 *         a list of words to examine
+	 * @param  string $targetType
 	 * @return bool
 	 */
 	protected function isPluralTarget($targetType)
@@ -325,7 +323,7 @@ class BaseElementAction
 		$searchTerm = $methodArgs[0];
 
 		$searchType = $this->determineSearchType($words);
-		if ($searchType == null) {				// we do not understand how to find the target field
+		if ($searchType === null) {				// we do not understand how to find the target field
 			throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
 		}
 
