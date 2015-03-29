@@ -11,6 +11,7 @@ filter:
         - 'bin/*'
         - 'library/*'
         - 'src/tests/unit-tests'
+        - 'src/tests/stories'
 
 checks:
     php:
