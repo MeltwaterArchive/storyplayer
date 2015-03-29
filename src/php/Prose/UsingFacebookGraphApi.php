@@ -56,76 +56,76 @@ namespace Prose;
 class UsingFacebookGraphApi extends Prose
 {
 
-	protected $base_path = "https://graph.facebook.com";
+    protected $base_path = "https://graph.facebook.com";
 
-	/**
-	 * getPostsFromPage
-	 *
-	 * Get the first page of posts from a Facebook page
-	 *
-	 * @param int $id ID of the page to get data from
-	 *
-	 * @return array Posts from the page
-	 */
-	public function getPostsFromPage($id)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("get posts from facebook for page {$id} via graph api");
-		$returnedData = $this->makeGraphApiRequest("/".$id."/posts");
-		$log->endAction("got posts for page {$id}");
+    /**
+     * getPostsFromPage
+     *
+     * Get the first page of posts from a Facebook page
+     *
+     * @param int $id ID of the page to get data from
+     *
+     * @return array Posts from the page
+     */
+    public function getPostsFromPage($id)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get posts from facebook for page {$id} via graph api");
+        $returnedData = $this->makeGraphApiRequest("/".$id."/posts");
+        $log->endAction("got posts for page {$id}");
 
-		return $returnedData;
-	}
+        return $returnedData;
+    }
 
-	/**
-	 * getLatestPostFromPage
-	 *
-	 * Get only the latest post from a page
-	 *
-	 * @param int $id ID of the page to get data from
-	 *
-	 * @return array First post from a page
-	 */
-	public function getLatestPostFromPage($id){
-		$posts = $this->getPostsFromPage($id);
-		return reset($posts);
-	}
+    /**
+     * getLatestPostFromPage
+     *
+     * Get only the latest post from a page
+     *
+     * @param int $id ID of the page to get data from
+     *
+     * @return array First post from a page
+     */
+    public function getLatestPostFromPage($id){
+        $posts = $this->getPostsFromPage($id);
+        return reset($posts);
+    }
 
-	/**
-	 * makeGraphApiRequest
-	 *
-	 * Make a request to the Graph API, including a user access token
-	 *
-	 * @param string $path URL to call in the graph API
-	 *
-	 * @return stdClass
-	 */
-	private function makeGraphApiRequest($path){
-		$environment  = $this->st->getEnvironment();
-		$access_token = $environment->facebookAccessToken;
+    /**
+     * makeGraphApiRequest
+     *
+     * Make a request to the Graph API, including a user access token
+     *
+     * @param string $path URL to call in the graph API
+     *
+     * @return stdClass
+     */
+    private function makeGraphApiRequest($path){
+        $environment  = $this->st->getEnvironment();
+        $access_token = $environment->facebookAccessToken;
 
-		// GET $path/?access_token=$access_token
-		$resp = fromCurl()->get($this->base_path.$path.'?access_token='. $access_token);
+        // GET $path/?access_token=$access_token
+        $resp = fromCurl()->get($this->base_path.$path.'?access_token='. $access_token);
 
-		// Make sure it's well formed
-		$log = usingLog()->startAction("make sure we have the 'data' key in the response");
-		if (!isset($resp->data)){
+        // Make sure it's well formed
+        $log = usingLog()->startAction("make sure we have the 'data' key in the response");
+        if (!isset($resp->data)){
 
-			// if it was an access token error, remove it from the runtime config
-			if (isset($resp->error->message) && strpos($resp->error->message, "Error validating access token") !== false){
-				// Remove the access token from the runtime config
-				$config = $this->st->getRuntimeConfig();
-				unset($config->facebookAccessToken);
-				$this->st->saveRuntimeConfig();
-			}
+            // if it was an access token error, remove it from the runtime config
+            if (isset($resp->error->message) && strpos($resp->error->message, "Error validating access token") !== false){
+                // Remove the access token from the runtime config
+                $config = $this->st->getRuntimeConfig();
+                unset($config->facebookAccessToken);
+                $this->st->saveRuntimeConfig();
+            }
 
-			$respString = json_encode($resp);
-			$log->endAction("no data key found. payload is '{$respString}'");
-			throw new E5xx_ActionFailed(__METHOD__, "Key 'data' was not found in response");
-		}
+            $respString = json_encode($resp);
+            $log->endAction("no data key found. payload is '{$respString}'");
+            throw new E5xx_ActionFailed(__METHOD__, "Key 'data' was not found in response");
+        }
 
-		$log->endAction();
+        $log->endAction();
 
-		return $resp->data;
-	}
+        return $resp->data;
+    }
 }

@@ -60,8 +60,8 @@ class E4xx_NoSuchSystemUnderTest extends Exxx_Exception
 {
     public function __construct($sutName)
     {
-    	$msg = "Unknown system under test '{$sutName}'; we have no config for it" . PHP_EOL . PHP_EOL
-    	     . "Use 'storyplayer --list-sut' to see the list of known systems under test";
+        $msg = "Unknown system under test '{$sutName}'; we have no config for it" . PHP_EOL . PHP_EOL
+             . "Use 'storyplayer --list-sut' to see the list of known systems under test";
         parent::__construct(400, $msg, $msg);
     }
 }

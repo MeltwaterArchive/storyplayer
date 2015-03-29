@@ -60,7 +60,7 @@ class E4xx_ConfigFileNotFound extends Exxx_Exception
 {
     public function __construct($pathToFile)
     {
-    	$msg = "Config file '{$pathToFile}' not found or is unreadable";
+        $msg = "Config file '{$pathToFile}' not found or is unreadable";
         parent::__construct(400, $msg, $msg);
     }
 }

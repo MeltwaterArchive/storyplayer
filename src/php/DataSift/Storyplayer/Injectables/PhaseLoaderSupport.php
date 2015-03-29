@@ -58,31 +58,31 @@ use DataSift\Storyplayer\PlayerLib\Phase_Loader;
  */
 trait PhaseLoaderSupport
 {
-	public $phaseLoader;
+    public $phaseLoader;
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initPhaseLoaderSupport(Injectables $injectables)
-	{
-		// $st will use this to load modules
-		$this->phaseLoader = new Phase_Loader();
+    /**
+     *
+     * @return void
+     */
+    public function initPhaseLoaderSupport(Injectables $injectables)
+    {
+        // $st will use this to load modules
+        $this->phaseLoader = new Phase_Loader();
 
-		// does the user have any namespaces of their own that they
-		// want to search?
-		$configPath = 'storyplayer.phases.namespaces';
-		if (!$injectables->activeConfig->hasData($configPath)) {
-			return;
-		}
+        // does the user have any namespaces of their own that they
+        // want to search?
+        $configPath = 'storyplayer.phases.namespaces';
+        if (!$injectables->activeConfig->hasData($configPath)) {
+            return;
+        }
 
-		$phasesList = $injectables->activeConfig->getData($configPath);
-		if (!is_array($phasesList)) {
-			$injectables->output->logCliError("'phases.namespaces' must be an array in your storyplayer.json config file");
-			exit(1);
-		}
+        $phasesList = $injectables->activeConfig->getData($configPath);
+        if (!is_array($phasesList)) {
+            $injectables->output->logCliError("'phases.namespaces' must be an array in your storyplayer.json config file");
+            exit(1);
+        }
 
-		// if we get here, then we have some namespaces to use
-		$this->phaseLoader->setNamespaces($phasesList);
-	}
+        // if we get here, then we have some namespaces to use
+        $this->phaseLoader->setNamespaces($phasesList);
+    }
 }

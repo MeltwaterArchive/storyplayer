@@ -55,70 +55,70 @@ namespace DataSift\Storyplayer\PlayerLib;
  */
 class Action_Logger
 {
-	protected $action = null;
-	protected $injectables;
+    protected $action = null;
+    protected $injectables;
 
-	/**
-	 * @param \DataSift\Storyplayer\Injectables $injectables
-	 */
-	public function __construct($injectables)
-	{
-		$this->injectables = $injectables;
-	}
+    /**
+     * @param \DataSift\Storyplayer\Injectables $injectables
+     */
+    public function __construct($injectables)
+    {
+        $this->injectables = $injectables;
+    }
 
-	/**
-	 *
-	 * @param  mixed $message
-	 *         the message to write to the log
-	 * @param  array $codeLine
-	 *         details about the line of code we are currently executing
-	 * @return Action_LogItem
-	 *         the object that tracks this log entry
-	 */
-	public function startAction($message, $codeLine = null)
-	{
-		// do we have an open action?
-		if (!$this->action || !$this->action->getIsOpen())
-		{
-			$openItem = $this->action = new Action_LogItem($this->injectables, 1);
-		}
-		else {
-			// this is a new nested item
-			$openItem = $this->action->newNestedAction();
-		}
+    /**
+     *
+     * @param  mixed $message
+     *         the message to write to the log
+     * @param  array $codeLine
+     *         details about the line of code we are currently executing
+     * @return Action_LogItem
+     *         the object that tracks this log entry
+     */
+    public function startAction($message, $codeLine = null)
+    {
+        // do we have an open action?
+        if (!$this->action || !$this->action->getIsOpen())
+        {
+            $openItem = $this->action = new Action_LogItem($this->injectables, 1);
+        }
+        else {
+            // this is a new nested item
+            $openItem = $this->action->newNestedAction();
+        }
 
-		return $openItem->startAction($message, $codeLine);
-	}
+        return $openItem->startAction($message, $codeLine);
+    }
 
-	public function closeAllOpenActions()
-	{
-		// do we have any empty log items?
-		if (!$this->action)
-		{
-			return;
-		}
+    public function closeAllOpenActions()
+    {
+        // do we have any empty log items?
+        if (!$this->action)
+        {
+            return;
+        }
 
-		// close the action
-		if ($this->action->getIsOpen()) {
-			$this->action->endAction();
-		}
+        // close the action
+        if ($this->action->getIsOpen()) {
+            $this->action->endAction();
+        }
 
-		// forget the action
-		$this->action = null;
-	}
+        // forget the action
+        $this->action = null;
+    }
 
-	// ==================================================================
-	//
-	// Helper methods for testing etc go here
-	//
-	// ------------------------------------------------------------------
+    // ==================================================================
+    //
+    // Helper methods for testing etc go here
+    //
+    // ------------------------------------------------------------------
 
-	public function getOpenAction()
-	{
-		if (!$this->action || $this->action->getIsComplete()) {
-			return null;
-		}
+    public function getOpenAction()
+    {
+        if (!$this->action || $this->action->getIsComplete()) {
+            return null;
+        }
 
-		return $this->action;
-	}
+        return $this->action;
+    }
 }

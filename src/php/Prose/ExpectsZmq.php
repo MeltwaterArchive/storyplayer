@@ -57,27 +57,27 @@ use ZMQ;
  */
 class ExpectsZmq extends Prose
 {
-	public function canSendmultiNonBlocking($socket, $message)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("make sure ZMQ::sendmulti() does not block");
+    public function canSendmultiNonBlocking($socket, $message)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure ZMQ::sendmulti() does not block");
 
-		// send the data
-		$sent = $socket->sendmulti($message, ZMQ::MODE_NOBLOCK);
+        // send the data
+        $sent = $socket->sendmulti($message, ZMQ::MODE_NOBLOCK);
 
-		// would it have blocked?
-		if (!$sent) {
-			throw new E5xx_ExpectFailed(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
-		}
+        // would it have blocked?
+        if (!$sent) {
+            throw new E5xx_ExpectFailed(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
+        }
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	public function requirementsAreMet()
-	{
-		if (!class_exists('ZMQ')) {
-			throw new E5xx_ExpectFailed(__METHOD__, "PHP ZMQ extension installed", "PHP ZMQ extension is not installed");
-		}
-	}
+    public function requirementsAreMet()
+    {
+        if (!class_exists('ZMQ')) {
+            throw new E5xx_ExpectFailed(__METHOD__, "PHP ZMQ extension installed", "PHP ZMQ extension is not installed");
+        }
+    }
 }

@@ -59,8 +59,8 @@ namespace Prose;
  */
 class FromShell extends FromHost
 {
-	public function __construct($st)
-	{
-		parent::__construct($st, ['localhost']);
-	}
+    public function __construct($st)
+    {
+        parent::__construct($st, ['localhost']);
+    }
 }

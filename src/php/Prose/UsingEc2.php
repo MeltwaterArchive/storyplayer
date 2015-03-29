@@ -59,46 +59,46 @@ use DataSift\Storyplayer\HostLib\Ec2VmDetails;
  */
 class UsingEc2 extends VmActionsBase
 {
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// call the parent constructor
-		parent::__construct($st, $args);
-	}
+    public function __construct(StoryTeller $st, $args = array())
+    {
+        // call the parent constructor
+        parent::__construct($st, $args);
+    }
 
-	public function createVm($vmName, $osName, $amiId, $instanceType, $securityGroup)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("start EC2 VM '{$vmName}', running guest OS '{$osName}', using AMI ID '{$amiId}' and security group '{$securityGroup}'");
+    public function createVm($vmName, $osName, $amiId, $instanceType, $securityGroup)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("start EC2 VM '{$vmName}', running guest OS '{$osName}', using AMI ID '{$amiId}' and security group '{$securityGroup}'");
 
-		// get the aws settings
-		$awsSettings = fromEnvironment()->getAppSettings('aws');
+        // get the aws settings
+        $awsSettings = fromEnvironment()->getAppSettings('aws');
 
-		// put the details into an array
-		$vmDetails = new Ec2VmDetails;
-		$vmDetails->hostId        = $vmName;
-		$vmDetails->environment   = $this->st->getTestEnvironmentName();
-		$vmDetails->osName        = $osName;
-		$vmDetails->amiId         = $amiId;
-		$vmDetails->type          = 'Ec2Vm';
-		$vmDetails->instanceType  = $instanceType;
-		$vmDetails->securityGroup = $securityGroup;
-		$vmDetails->keyPairName   = $awsSettings->ec2->keyPairName;
-		$vmDetails->sshUsername   = $awsSettings->ec2->sshUsername;
-		$vmDetails->sshKeyFile    = $awsSettings->ec2->sshKeyFile;
-		$vmDetails->sshOptions    = array (
-			"-i '" . $awsSettings->ec2->sshKeyFile . "'"
-		);
-		$vmDetails->scpOptions    = array (
-			"-i '" . $awsSettings->ec2->sshKeyFile . "'"
-		);
+        // put the details into an array
+        $vmDetails = new Ec2VmDetails;
+        $vmDetails->hostId        = $vmName;
+        $vmDetails->environment   = $this->st->getTestEnvironmentName();
+        $vmDetails->osName        = $osName;
+        $vmDetails->amiId         = $amiId;
+        $vmDetails->type          = 'Ec2Vm';
+        $vmDetails->instanceType  = $instanceType;
+        $vmDetails->securityGroup = $securityGroup;
+        $vmDetails->keyPairName   = $awsSettings->ec2->keyPairName;
+        $vmDetails->sshUsername   = $awsSettings->ec2->sshUsername;
+        $vmDetails->sshKeyFile    = $awsSettings->ec2->sshKeyFile;
+        $vmDetails->sshOptions    = array (
+            "-i '" . $awsSettings->ec2->sshKeyFile . "'"
+        );
+        $vmDetails->scpOptions    = array (
+            "-i '" . $awsSettings->ec2->sshKeyFile . "'"
+        );
 
-		// create our host adapter
-		$host = HostLib::getHostAdapter($this->st, $vmDetails->type);
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-		// create our virtual machine
-		$host->createHost($vmDetails);
+        // create our virtual machine
+        $host->createHost($vmDetails);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

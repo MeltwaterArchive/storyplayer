@@ -56,28 +56,28 @@ namespace Prose;
  */
 class ExpectsFirstHostWithRole extends ExpectsHost
 {
-	// pull in some handy helpers
-	use HostsByRoleTrait;
+    // pull in some handy helpers
+    use HostsByRoleTrait;
 
-	public function __construct($st, $args)
-	{
-		// call our parent constructor first
-		parent::__construct($st, $args);
+    public function __construct($st, $args)
+    {
+        // call our parent constructor first
+        parent::__construct($st, $args);
 
-		// $args[0] contains the rolename
-		// we need to replace this with the hostId for FromHost() to
-		// function correctly
+        // $args[0] contains the rolename
+        // we need to replace this with the hostId for FromHost() to
+        // function correctly
 
-		// what are we doing?
-		$log = usingLog()->startAction("select first host with role '{$this->args[0]}' ...");
+        // what are we doing?
+        $log = usingLog()->startAction("select first host with role '{$this->args[0]}' ...");
 
-		// get the hosts details
-		$hostDetails = $this->retrieveFirstHost($this->args[0]);
+        // get the hosts details
+        $hostDetails = $this->retrieveFirstHost($this->args[0]);
 
-		// we only need to remember the hostId
-		$this->args[0] = $hostDetails->hostId;
+        // we only need to remember the hostId
+        $this->args[0] = $hostDetails->hostId;
 
-		// all done
-		$log->endAction("selected host '{$this->args[0]}'");
-	}
+        // all done
+        $log->endAction("selected host '{$this->args[0]}'");
+    }
 }

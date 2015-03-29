@@ -60,7 +60,7 @@ class E4xx_NotInitialised extends Exxx_Exception
 {
     public function __construct($serviceName)
     {
-    	$msg = "Injectable '{$serviceName}' has not yet been initialised";
+        $msg = "Injectable '{$serviceName}' has not yet been initialised";
         parent::__construct(400, $msg, $msg);
     }
 }

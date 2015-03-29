@@ -60,33 +60,33 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class FromSupervisor extends HostBase
 {
-	public function getProgramIsRunning($programName)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("is program '{$programName}' running under supervisor on host '{$this->args[0]}'?");
+    public function getProgramIsRunning($programName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("is program '{$programName}' running under supervisor on host '{$this->args[0]}'?");
 
-		// get the host details
-		$hostDetails = $this->getHostDetails();
+        // get the host details
+        $hostDetails = $this->getHostDetails();
 
-		//run the supervisorctl command
-		$result = usingHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \\$2}'");
+        //run the supervisorctl command
+        $result = usingHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \\$2}'");
 
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // did the command succeed?
+        if ($result->didCommandFail()) {
+            $msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// what happened?
-		if (rtrim($result->output) == 'RUNNING') {
-			$log->endAction('current status is RUNNING');
-			return true;
-		}
+        // what happened?
+        if (rtrim($result->output) == 'RUNNING') {
+            $log->endAction('current status is RUNNING');
+            return true;
+        }
 
-		// if we get here, then the program is not RUNNING, and we
-		// treat that as a failure
-		$log->endAction('current status is ' . rtrim($result->output));
-		return false;
-	}
+        // if we get here, then the program is not RUNNING, and we
+        // treat that as a failure
+        $log->endAction('current status is ' . rtrim($result->output));
+        return false;
+    }
 }

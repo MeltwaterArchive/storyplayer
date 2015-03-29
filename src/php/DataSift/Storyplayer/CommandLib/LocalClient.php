@@ -59,81 +59,81 @@ use Phix_Project\ContractLib2\Contract;
 
 class LocalClient implements CommandClient
 {
-	/**
-	 *
-	 * @var StoryTeller
-	 */
-	protected $st;
+    /**
+     *
+     * @var StoryTeller
+     */
+    protected $st;
 
-	public function __construct(StoryTeller $st)
-	{
-		// remember for future use
-		$this->st = $st;
-	}
+    public function __construct(StoryTeller $st)
+    {
+        // remember for future use
+        $this->st = $st;
+    }
 
-	/**
-	 *
-	 * @param  string $params
-	 * @return string
-	 * @deprecated
-	 */
-	public function convertParamsForUse($params)
-	{
-		// vet our input
-		Contract::RequiresValue($params, is_string($params));
-		// we don't mind if the params are empty
+    /**
+     *
+     * @param  string $params
+     * @return string
+     * @deprecated
+     */
+    public function convertParamsForUse($params)
+    {
+        // vet our input
+        Contract::RequiresValue($params, is_string($params));
+        // we don't mind if the params are empty
 
-		// our list of what to convert from
-		$convertFrom = [
-			'\'',
-			'*'
-		];
+        // our list of what to convert from
+        $convertFrom = [
+            '\'',
+            '*'
+        ];
 
-		// our list of what to convert to
-		$convertTo = [
-			'\\\'',
-			'\'*\''
-		];
+        // our list of what to convert to
+        $convertTo = [
+            '\\\'',
+            '\'*\''
+        ];
 
-		// our return value
-		$result = str_replace($convertFrom, $convertTo, $params);
+        // our return value
+        $result = str_replace($convertFrom, $convertTo, $params);
 
-		// all done
-		return rtrim($result);
-	}
+        // all done
+        return rtrim($result);
+    }
 
-	/**
-	 *
-	 * @param  string $command
-	 * @return CommandResult
-	 */
-	public function runCommand($command)
-	{
-		// vet our input
-		Contract::RequiresValue($command, is_string($command));
-		Contract::RequiresValue($command, !empty($command));
+    /**
+     *
+     * @param  string $command
+     * @return CommandResult
+     */
+    public function runCommand($command)
+    {
+        // vet our input
+        Contract::RequiresValue($command, is_string($command));
+        Contract::RequiresValue($command, !empty($command));
 
-		// make the params printable / executable
-		// $printableParams = $this->convertParamsForUse($params);
+        // make the params printable / executable
+        // $printableParams = $this->convertParamsForUse($params);
 
-		// what are we doing?
-		$log = usingLog()->startAction("run command '{$command}' against localhost ");
+        // what are we doing?
+        $log = usingLog()->startAction("run command '{$command}' against localhost ");
 
-		// build the full command
-		// <command> <command-args>
-		//    the command to run on the local OS
-		//    (assumes the command will be globbed by the local shell)
-		//$fullCommand = str_replace('"', '\"', $command);
-		$fullCommand = $command;
+        // build the full command
+        // <command> <command-args>
+        //    the command to run on the local OS
+        //    (assumes the command will be globbed by the local shell)
+        //$fullCommand = str_replace('"', '\"', $command);
+        $fullCommand = $command;
 
-		// run the command
-		$commandRunner = $this->st->getNewCommandRunner();
-		$result = $commandRunner->runSilently($fullCommand);
+        // run the command
+        $commandRunner = $this->st->getNewCommandRunner();
+        $result = $commandRunner->runSilently($fullCommand);
 
-		// all done
-		$log->endAction("return code was '{$result->returnCode}'");
-		return $result;
-	}
+        // all done
+        $log->endAction("return code was '{$result->returnCode}'");
+        return $result;
+    }
 
     public function downloadFile($sourceFilename, $destFilename)
     {

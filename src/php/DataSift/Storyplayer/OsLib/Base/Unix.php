@@ -59,162 +59,162 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 
 abstract class Base_Unix extends OsBase
 {
-	/**
-	 *
-	 * @param  HostDetails $hostDetails
-	 * @param  SupportedHost $host
-	 * @return string
-	 */
-	public function determineIpAddress($hostDetails, SupportedHost $host)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
+    /**
+     *
+     * @param  HostDetails $hostDetails
+     * @param  SupportedHost $host
+     * @return string
+     */
+    public function determineIpAddress($hostDetails, SupportedHost $host)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
 
-		// how do we do this?
-		if (isset($hostDetails->hostname)) {
-			$ipAddress = gethostbyname($hostDetails->hostname);
-			if ($ipAddress != $hostDetails->hostname)
-			{
-				$log->endAction(["IP address is", $ipAddress]);
-				return $ipAddress;
-			}
-		}
+        // how do we do this?
+        if (isset($hostDetails->hostname)) {
+            $ipAddress = gethostbyname($hostDetails->hostname);
+            if ($ipAddress != $hostDetails->hostname)
+            {
+                $log->endAction(["IP address is", $ipAddress]);
+                return $ipAddress;
+            }
+        }
 
-		// if we get here, we do not know what the IP address is
-		$msg = "could not determine IP address";
-		$log->endAction($msg);
-		throw new E5xx_ActionFailed(__METHOD__, $msg);
-	}
+        // if we get here, we do not know what the IP address is
+        $msg = "could not determine IP address";
+        $log->endAction($msg);
+        throw new E5xx_ActionFailed(__METHOD__, $msg);
+    }
 
-	/**
-	 *
-	 * @param  HostDetails $hostDetails
-	 * @param  SupportedHost $host
-	 * @return string
-	 */
-	public function determineHostname($hostDetails, SupportedHost $host)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
+    /**
+     *
+     * @param  HostDetails $hostDetails
+     * @param  SupportedHost $host
+     * @return string
+     */
+    public function determineHostname($hostDetails, SupportedHost $host)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
 
-		// how do we do this?
-		if (isset($hostDetails->hostname)) {
-			$log->endAction(["hostname is", $hostDetails->hostname]);
-			return $hostDetails->hostname;
-		}
+        // how do we do this?
+        if (isset($hostDetails->hostname)) {
+            $log->endAction(["hostname is", $hostDetails->hostname]);
+            return $hostDetails->hostname;
+        }
 
-		$command = "hostname";
-		$result  = $this->runCommand($hostDetails, $command);
-		if ($result->didCommandSucceed()) {
-			$lines = explode("\n", $result->output);
-			$hostname = trim($lines[0]);
-			$hostname = $this->runHostnameSafeguards($hostDetails, $hostname);
-			$log->endAction(["hostname is", $hostname]);
-			return $hostname;
-		}
+        $command = "hostname";
+        $result  = $this->runCommand($hostDetails, $command);
+        if ($result->didCommandSucceed()) {
+            $lines = explode("\n", $result->output);
+            $hostname = trim($lines[0]);
+            $hostname = $this->runHostnameSafeguards($hostDetails, $hostname);
+            $log->endAction(["hostname is", $hostname]);
+            return $hostname;
+        }
 
-		// if we get here, we do not know what the hostname is
-		$msg = "could not determine hostname";
-		$log->endAction($msg);
-		throw new E5xx_ActionFailed(__METHOD__, $msg);
-	}
+        // if we get here, we do not know what the hostname is
+        $msg = "could not determine hostname";
+        $log->endAction($msg);
+        throw new E5xx_ActionFailed(__METHOD__, $msg);
+    }
 
-	/**
-	 *
-	 * @param  HostDetails $hostDetails
-	 * @param  string $packageName
-	 * @return BaseObject
-	 */
-	public function getInstalledPackageDetails($hostDetails, $packageName)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "not supported");
-	}
+    /**
+     *
+     * @param  HostDetails $hostDetails
+     * @param  string $packageName
+     * @return BaseObject
+     */
+    public function getInstalledPackageDetails($hostDetails, $packageName)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "not supported");
+    }
 
-	/**
-	 *
-	 * @param  HostDetails $hostDetails
-	 * @param  string $processName
-	 * @return boolean
-	 */
-	public function getProcessIsRunning($hostDetails, $processName)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("is process '{$processName}' running on host '{$hostDetails->hostId}'?");
+    /**
+     *
+     * @param  HostDetails $hostDetails
+     * @param  string $processName
+     * @return boolean
+     */
+    public function getProcessIsRunning($hostDetails, $processName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("is process '{$processName}' running on host '{$hostDetails->hostId}'?");
 
-		// SSH in and have a look
-		$command   = "ps -ef | awk '{ print \\\$8 }' | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "'";
-		$result    = $this->runCommand($hostDetails, $command);
+        // SSH in and have a look
+        $command   = "ps -ef | awk '{ print \\\$8 }' | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "'";
+        $result    = $this->runCommand($hostDetails, $command);
 
-		// what did we find?
-		if ($result->didCommandFail() || empty($result->output)) {
-			$log->endAction("not running");
-			return false;
-		}
+        // what did we find?
+        if ($result->didCommandFail() || empty($result->output)) {
+            $log->endAction("not running");
+            return false;
+        }
 
-		// success
-		$log->endAction("is running");
-		return true;
-	}
+        // success
+        $log->endAction("is running");
+        return true;
+    }
 
-	/**
-	 *
-	 * @param  HostDetails $hostDetails
-	 * @param  string $processName
-	 * @return integer
-	 */
-	public function getPid($hostDetails, $processName)
-	{
-		// log some info to the user
-		$log = usingLog()->startAction("get PID for process '{$processName}' running on host '{$hostDetails->hostId}'");
+    /**
+     *
+     * @param  HostDetails $hostDetails
+     * @param  string $processName
+     * @return integer
+     */
+    public function getPid($hostDetails, $processName)
+    {
+        // log some info to the user
+        $log = usingLog()->startAction("get PID for process '{$processName}' running on host '{$hostDetails->hostId}'");
 
-		// run the command to get the process id
-		$command   = "ps -ef | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
-		$result    = $this->runCommand($hostDetails, $command);
+        // run the command to get the process id
+        $command   = "ps -ef | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
+        $result    = $this->runCommand($hostDetails, $command);
 
-		// check that we got something
-		if ($result->didCommandFail() || empty($result->output)) {
-			$log->endAction("could not get pid ... is the process running?");
-			return 0;
-		}
+        // check that we got something
+        if ($result->didCommandFail() || empty($result->output)) {
+            $log->endAction("could not get pid ... is the process running?");
+            return 0;
+        }
 
-		// check that we found exactly one process
-		$pids = explode("\n", $result->output);
-		if (count($pids) != 1) {
-			$log->endAction("found more than one process but expecting only one ... is this correct?");
-			return 0;
-		}
+        // check that we found exactly one process
+        $pids = explode("\n", $result->output);
+        if (count($pids) != 1) {
+            $log->endAction("found more than one process but expecting only one ... is this correct?");
+            return 0;
+        }
 
-		// we can now reason that we have the correct pid
-		$pid = $pids[0];
+        // we can now reason that we have the correct pid
+        $pid = $pids[0];
 
-		// all done
-		$log->endAction("{$pid}");
-		return $pid;
-	}
+        // all done
+        $log->endAction("{$pid}");
+        return $pid;
+    }
 
-	/**
-	 *
-	 * @param  HostDetails $hostDetails
-	 * @param  string $pid
-	 * @return boolean
-	 */
-	public function getPidIsRunning($hostDetails, $pid)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("is process PID '{$pid}' running on UNIX '{$hostDetails->hostId}'?");
+    /**
+     *
+     * @param  HostDetails $hostDetails
+     * @param  string $pid
+     * @return boolean
+     */
+    public function getPidIsRunning($hostDetails, $pid)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("is process PID '{$pid}' running on UNIX '{$hostDetails->hostId}'?");
 
-		// SSH in and have a look
-		$command   = "ps -ef | awk '{ print \\\$2 }' | grep '[" . $pid{0} . "]" . substr($pid, 1) . "'";
-		$result    = $this->runCommand($hostDetails, $command);
+        // SSH in and have a look
+        $command   = "ps -ef | awk '{ print \\\$2 }' | grep '[" . $pid{0} . "]" . substr($pid, 1) . "'";
+        $result    = $this->runCommand($hostDetails, $command);
 
-		// what did we find?
-		if ($result->didCommandFail() || empty($result->output)) {
-			$log->endAction("not running");
-			return false;
-		}
+        // what did we find?
+        if ($result->didCommandFail() || empty($result->output)) {
+            $log->endAction("not running");
+            return false;
+        }
 
-		// success
-		$log->endAction("is running");
-		return true;
-	}
+        // success
+        $log->endAction("is running");
+        return true;
+    }
 }

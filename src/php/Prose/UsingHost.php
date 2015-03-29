@@ -58,257 +58,257 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingHost extends HostBase
 {
-	public function runCommand($command)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("run command '{$command}' on host '{$this->args[0]}'");
+    public function runCommand($command)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("run command '{$command}' on host '{$this->args[0]}'");
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
+        // get an object to talk to this host
+        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
-		// run the command in the guest operating system
-		$result = $host->runCommand($hostDetails, $command);
+        // run the command in the guest operating system
+        $result = $host->runCommand($hostDetails, $command);
 
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+        // did the command succeed?
+        if ($result->didCommandFail()) {
+            $msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-		// all done
-		$log->endAction();
-		return $result;
-	}
+        // all done
+        $log->endAction();
+        return $result;
+    }
 
-	public function runCommandAsUser($command, $user)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
+    public function runCommandAsUser($command, $user)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
+        // get an object to talk to this host
+        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
-		// make a copy of the hostDetails, so that we can override them
-		$myHostDetails = clone $hostDetails;
-		$myHostDetails->sshUsername = $user;
+        // make a copy of the hostDetails, so that we can override them
+        $myHostDetails = clone $hostDetails;
+        $myHostDetails->sshUsername = $user;
 
-		// run the command in the guest operating system
-		$result = $host->runCommand($myHostDetails, $command);
+        // run the command in the guest operating system
+        $result = $host->runCommand($myHostDetails, $command);
 
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			$msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+        // did the command succeed?
+        if ($result->didCommandFail()) {
+            $msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-		// all done
-		$log->endAction();
-		return $result;
-	}
+        // all done
+        $log->endAction();
+        return $result;
+    }
 
-	public function runCommandAndIgnoreErrors($command)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("run command '{$command}' on host '{$this->args[0]}'");
+    public function runCommandAndIgnoreErrors($command)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("run command '{$command}' on host '{$this->args[0]}'");
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
+        // get an object to talk to this host
+        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
-		// run the command in the guest operating system
-		$result = $host->runCommand($hostDetails, $command);
+        // run the command in the guest operating system
+        $result = $host->runCommand($hostDetails, $command);
 
-		// all done
-		$log->endAction();
-		return $result;
-	}
+        // all done
+        $log->endAction();
+        return $result;
+    }
 
-	public function runCommandAsUserAndIgnoreErrors($command, $user)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
+    public function runCommandAsUserAndIgnoreErrors($command, $user)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
+        // get an object to talk to this host
+        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
-		// make a copy of the hostDetails, so that we can override them
-		$myHostDetails = clone $hostDetails;
-		$myHostDetails->sshUsername = $user;
+        // make a copy of the hostDetails, so that we can override them
+        $myHostDetails = clone $hostDetails;
+        $myHostDetails->sshUsername = $user;
 
-		// run the command in the guest operating system
-		$result = $host->runCommand($myHostDetails, $command);
+        // run the command in the guest operating system
+        $result = $host->runCommand($myHostDetails, $command);
 
-		// all done
-		$log->endAction();
-		return $result;
-	}
+        // all done
+        $log->endAction();
+        return $result;
+    }
 
-	public function startInScreen($sessionName, $commandLine)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("start screen session '{$sessionName}' ({$commandLine}) on host '{$this->args[0]}'");
+    public function startInScreen($sessionName, $commandLine)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("start screen session '{$sessionName}' ({$commandLine}) on host '{$this->args[0]}'");
 
-		// do we already have this session running on the host?
-		expectsHost($this->args[0])->screenIsNotRunning($sessionName);
+        // do we already have this session running on the host?
+        expectsHost($this->args[0])->screenIsNotRunning($sessionName);
 
-		// build up our command to run
-		$commandLine = 'screen -L -d -m -S "' . $sessionName . '" bash -c "' . $commandLine . '"';
+        // build up our command to run
+        $commandLine = 'screen -L -d -m -S "' . $sessionName . '" bash -c "' . $commandLine . '"';
 
-		// run our command
-		//
-		// this creates a detached screen session called $sessionName
-		$this->runCommand($commandLine);
+        // run our command
+        //
+        // this creates a detached screen session called $sessionName
+        $this->runCommand($commandLine);
 
-		// find the PID of the screen session, for future use
-		$sessionDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
+        // find the PID of the screen session, for future use
+        $sessionDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
 
-		// did the process start, or has it already terminated?
-		if (empty($sessionDetails->pid)) {
-			$log->endAction("session failed to start, or command exited quickly");
-			throw new E5xx_ActionFailed(__METHOD__, "failed to start session '{$sessionName}'");
-		}
+        // did the process start, or has it already terminated?
+        if (empty($sessionDetails->pid)) {
+            $log->endAction("session failed to start, or command exited quickly");
+            throw new E5xx_ActionFailed(__METHOD__, "failed to start session '{$sessionName}'");
+        }
 
-		// all done
-		$log->endAction("session running as PID {$sessionDetails->pid}");
-	}
+        // all done
+        $log->endAction("session running as PID {$sessionDetails->pid}");
+    }
 
-	public function stopInScreen($sessionName)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("stop screen session '{$sessionName}' on host '{$this->args[0]}'");
+    public function stopInScreen($sessionName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("stop screen session '{$sessionName}' on host '{$this->args[0]}'");
 
-		// get the process details
-		$processDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
+        // get the process details
+        $processDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
 
-		// stop the process
-		usingHost($this->args[0])->stopProcess($processDetails->pid);
+        // stop the process
+        usingHost($this->args[0])->stopProcess($processDetails->pid);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	public function stopAllScreens()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("stop all running screen sessions on host '{$this->args[0]}'");
+    public function stopAllScreens()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("stop all running screen sessions on host '{$this->args[0]}'");
 
-		// get the app details
-		$processes = fromHost($this->args[0])->getAllScreenSessions();
+        // get the app details
+        $processes = fromHost($this->args[0])->getAllScreenSessions();
 
-		// stop the process
-		foreach ($processes as $processDetails) {
-			usingHost($this->args[0])->stopProcess($processDetails->pid);
-			usingProcessesTable()->removeProcess($this->args[0], $processDetails);
-		}
+        // stop the process
+        foreach ($processes as $processDetails) {
+            usingHost($this->args[0])->stopProcess($processDetails->pid);
+            usingProcessesTable()->removeProcess($this->args[0], $processDetails);
+        }
 
-		// all done
-		$log->endAction("stopped " . count($processes) . " session(s)");
-	}
+        // all done
+        $log->endAction("stopped " . count($processes) . " session(s)");
+    }
 
-	public function stopProcess($pid, $grace = 5)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
+    public function stopProcess($pid, $grace = 5)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
 
-		// is the process running at all?
-		if (!fromHost($this->args[0])->getPidIsRunning($pid)) {
-			$log->endAction("process is not running");
-			return;
-		}
+        // is the process running at all?
+        if (!fromHost($this->args[0])->getPidIsRunning($pid)) {
+            $log->endAction("process is not running");
+            return;
+        }
 
-		// yes it is, so stop it
-		// send a TERM signal to the screen session
-		$log->addStep("send SIGTERM to process '{$pid}'", function() use ($pid) {
-			if ($this->getIsLocalhost()) {
-				posix_kill($pid, SIGTERM);
-			}
-			else {
-				usingHost($this->args[0])->runCommand("kill {$pid}");
-			}
-		});
+        // yes it is, so stop it
+        // send a TERM signal to the screen session
+        $log->addStep("send SIGTERM to process '{$pid}'", function() use ($pid) {
+            if ($this->getIsLocalhost()) {
+                posix_kill($pid, SIGTERM);
+            }
+            else {
+                usingHost($this->args[0])->runCommand("kill {$pid}");
+            }
+        });
 
-		// has this worked?
-		$isStopped = $log->addStep("wait for process to terminate", function() use($pid, $grace, $log) {
-			for($i = 0; $i < $grace; $i++) {
-				if (!fromHost($this->args[0])->getPidIsRunning($pid)) {
-					return true;
-				}
+        // has this worked?
+        $isStopped = $log->addStep("wait for process to terminate", function() use($pid, $grace, $log) {
+            for($i = 0; $i < $grace; $i++) {
+                if (!fromHost($this->args[0])->getPidIsRunning($pid)) {
+                    return true;
+                }
 
-				// process still exists
-				sleep(1);
-			}
+                // process still exists
+                sleep(1);
+            }
 
-			return false;
-		});
+            return false;
+        });
 
-		// did the process stop?
-		if ($isStopped) {
-			$log->endAction();
-			return;
-		}
+        // did the process stop?
+        if ($isStopped) {
+            $log->endAction();
+            return;
+        }
 
-		$log->addStep("send SIGKILL to process '{$pid}'", function() use($pid) {
-			if ($this->getIsLocalhost()) {
-				posix_kill($pid, SIGKILL);
-			}
-			else {
-				usingHost($this->args[0])->runCommand("kill -9 {$pid}");
-			}
-			sleep(1);
-		});
+        $log->addStep("send SIGKILL to process '{$pid}'", function() use($pid) {
+            if ($this->getIsLocalhost()) {
+                posix_kill($pid, SIGKILL);
+            }
+            else {
+                usingHost($this->args[0])->runCommand("kill -9 {$pid}");
+            }
+            sleep(1);
+        });
 
-		// success?
-		if (fromHost($this->args[0])->getProcessIsRunning($pid)) {
-			$log->endAction("process is still running :(");
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // success?
+        if (fromHost($this->args[0])->getProcessIsRunning($pid)) {
+            $log->endAction("process is still running :(");
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// all done
-		$log->endAction("process has finished");
-	}
+        // all done
+        $log->endAction("process has finished");
+    }
 
-	public function uploadFile($sourceFilename, $destFilename)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("upload file '{$sourceFilename}' to '{$this->args[0]}':'{$destFilename}'");
+    public function uploadFile($sourceFilename, $destFilename)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("upload file '{$sourceFilename}' to '{$this->args[0]}':'{$destFilename}'");
 
-		// does the source file exist?
-		if (!is_file($sourceFilename)) {
-			$log->endAction("file '{$sourceFilename}' not found :(");
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // does the source file exist?
+        if (!is_file($sourceFilename)) {
+            $log->endAction("file '{$sourceFilename}' not found :(");
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// get an object to talk to this host
-		$host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
+        // get an object to talk to this host
+        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
-		// upload the file
-		$result = $host->uploadFile($hostDetails, $sourceFilename, $destFilename);
+        // upload the file
+        $result = $host->uploadFile($hostDetails, $sourceFilename, $destFilename);
 
-		// did the command used to upload succeed?
-		if ($result->didCommandFail()) {
-			$msg = "upload failed with return code '{$result->returnCode}' and output '{$result->output}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+        // did the command used to upload succeed?
+        if ($result->didCommandFail()) {
+            $msg = "upload failed with return code '{$result->returnCode}' and output '{$result->output}'";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-		// all done
-		$log->endAction();
-		return $result;
-	}
+        // all done
+        $log->endAction();
+        return $result;
+    }
 }

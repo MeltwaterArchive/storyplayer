@@ -57,61 +57,61 @@ use DataSift\Storyplayer\Injectables;
  */
 class Script_Player
 {
-	/**
-	 * path to the script that we are going to run
-	 *
-	 * @var string
-	 */
-	protected $scriptFilename;
+    /**
+     * path to the script that we are going to run
+     *
+     * @var string
+     */
+    protected $scriptFilename;
 
-	/**
-	 * a list of the phases we need to run to get everything ready to
-	 * run the script
-	 *
-	 * @var array
-	 */
-	protected $startupPhases;
+    /**
+     * a list of the phases we need to run to get everything ready to
+     * run the script
+     *
+     * @var array
+     */
+    protected $startupPhases;
 
-	/**
-	 * a list of the phases that make up the script
-	 *
-	 * @var array
-	 */
-	protected $scriptPhases;
+    /**
+     * a list of the phases that make up the script
+     *
+     * @var array
+     */
+    protected $scriptPhases;
 
-	/**
-	 * a list of the phases that we need to run once the script has
-	 * finished
-	 *
-	 * @var array
-	 */
-	protected $shutdownPhases;
+    /**
+     * a list of the phases that we need to run once the script has
+     * finished
+     *
+     * @var array
+     */
+    protected $shutdownPhases;
 
-	public function __construct($scriptFilename, Injectables $injectables)
-	{
-		$this->scriptFilename = $scriptFilename;
-		$this->scriptPhases   = $injectables->activeConfig->getData('storyplayer.phases.script');
-	}
+    public function __construct($scriptFilename, Injectables $injectables)
+    {
+        $this->scriptFilename = $scriptFilename;
+        $this->scriptPhases   = $injectables->activeConfig->getData('storyplayer.phases.script');
+    }
 
-	public function play(StoryTeller $st, Injectables $injectables)
-	{
-		// shorthand
-		$output = $st->getOutput();
+    public function play(StoryTeller $st, Injectables $injectables)
+    {
+        // shorthand
+        $output = $st->getOutput();
 
-		// we are playing this script
-		$script = new Script($this->scriptFilename);
+        // we are playing this script
+        $script = new Script($this->scriptFilename);
 
         // we're going to use this to play our setup and teardown phases
         $phasesPlayer = new PhaseGroup_Player();
 
-		// run the phases
-		$phasesPlayer->playPhases(
-			$st,
-			$injectables,
-			$this->scriptPhases,
-			$script
-		);
+        // run the phases
+        $phasesPlayer->playPhases(
+            $st,
+            $injectables,
+            $this->scriptPhases,
+            $script
+        );
 
-		// all done
-	}
+        // all done
+    }
 }

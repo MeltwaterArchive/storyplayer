@@ -55,44 +55,44 @@ namespace Prose;
  */
 class UsingProcessesTable extends Prose
 {
-	/**
-	 * tableName
-	 *
-	 * The key that this table stores it's data in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $tableName = "processes";
+    /**
+     * tableName
+     *
+     * The key that this table stores it's data in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $tableName = "processes";
 
-	/**
-	 * addProcess
-	 *
-	 * @param string $hostId
-	 *        ID of the host where the process is running
-	 * @param object $processDetails
-	 *        Details about the process we're working with
-	 *
-	 * @return void
-	 */
-	public function addProcess($hostId, $processDetails)
-	{
-		$key = $hostId . ":" . $processDetails->pid;
-		usingRuntimeTable($this->tableName)->addItem($key, $processDetails);
-	}
+    /**
+     * addProcess
+     *
+     * @param string $hostId
+     *        ID of the host where the process is running
+     * @param object $processDetails
+     *        Details about the process we're working with
+     *
+     * @return void
+     */
+    public function addProcess($hostId, $processDetails)
+    {
+        $key = $hostId . ":" . $processDetails->pid;
+        usingRuntimeTable($this->tableName)->addItem($key, $processDetails);
+    }
 
-	/**
-	 * removeProcess
-	 *
-	 * @param string $hostId
-	 *        ID of the host where the process was running
-	 * @param int $pid
-	 *        The process ID we're working with
-	 *
-	 * @return void
-	 */
-	public function removeProcess($hostId, $processDetails)
-	{
-		$key = $hostId . ":" . $processDetails->pid;
-		usingRuntimeTable($this->tableName)->removeItem($key);
-	}
+    /**
+     * removeProcess
+     *
+     * @param string $hostId
+     *        ID of the host where the process was running
+     * @param int $pid
+     *        The process ID we're working with
+     *
+     * @return void
+     */
+    public function removeProcess($hostId, $processDetails)
+    {
+        $key = $hostId . ":" . $processDetails->pid;
+        usingRuntimeTable($this->tableName)->removeItem($key);
+    }
 }

@@ -58,129 +58,129 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class Prose
 {
-	/**
-	 * the one object that knows how to get to everything
-	 * @var \DataSift\Storyplayer\PlayerLib\StoryTeller
-	 */
-	protected $st = null;
-	protected $args = array();
-	protected $topElement = null;
-	protected $topXpath   = null;
-	protected $device     = null;
+    /**
+     * the one object that knows how to get to everything
+     * @var \DataSift\Storyplayer\PlayerLib\StoryTeller
+     */
+    protected $st = null;
+    protected $args = array();
+    protected $topElement = null;
+    protected $topXpath   = null;
+    protected $device     = null;
 
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// save the StoryTeller object; we're going to need it!
-		$this->st = $st;
+    public function __construct(StoryTeller $st, $args = array())
+    {
+        // save the StoryTeller object; we're going to need it!
+        $this->st = $st;
 
-		// save any arguments that have been passed into the constructor
-		// our child classes may be interested in them
-		if (!is_array($args)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$this->args = $args;
+        // save any arguments that have been passed into the constructor
+        // our child classes may be interested in them
+        if (!is_array($args)) {
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
+        $this->args = $args;
 
-		// add ourselves to the list of parsed code, for better error
-		// handling
-		//
-		// because $st is used as a generic module loader throughout
-		// the codebase, it is possible for a Prose module to be run
-		// before we know what story we are executing
-		$story = $st->getStory();
-		if ($story) {
-			$story->buildParseTreeForFile($this->getSourceFilename());
-		}
+        // add ourselves to the list of parsed code, for better error
+        // handling
+        //
+        // because $st is used as a generic module loader throughout
+        // the codebase, it is possible for a Prose module to be run
+        // before we know what story we are executing
+        $story = $st->getStory();
+        if ($story) {
+            $story->buildParseTreeForFile($this->getSourceFilename());
+        }
 
-		// setup the page context
-		$this->initPageContext();
+        // setup the page context
+        $this->initPageContext();
 
-		// run any context-specific setup that we need
-		$this->initActions();
-	}
+        // run any context-specific setup that we need
+        $this->initActions();
+    }
 
-	protected function initPageContext()
-	{
-		// make sure we are looking at the right part of the page
-		$pageContext = $this->st->getPageContext();
-		$pageContext->switchToContext($this->st);
-	}
+    protected function initPageContext()
+    {
+        // make sure we are looking at the right part of the page
+        $pageContext = $this->st->getPageContext();
+        $pageContext->switchToContext($this->st);
+    }
 
-	/**
-	 * override this method if required (for example, for web browsers)
-	 *
-	 * @return void
-	 */
-	protected function initActions()
-	{
-	}
+    /**
+     * override this method if required (for example, for web browsers)
+     *
+     * @return void
+     */
+    protected function initActions()
+    {
+    }
 
-	protected function initDevice()
-	{
-		// start the test device
-		$this->device = $this->st->getRunningDevice();
+    protected function initDevice()
+    {
+        // start the test device
+        $this->device = $this->st->getRunningDevice();
 
-		// set our top XPATH node
-		//
-		// for the moment, we are assuming that the test device is
-		// a web browser, because historically this has always been
-		// the case
-		//
-		// when this assumption is no longer valid, we will need to
-		// revisit this code
-		$this->setTopXpath("//html");
+        // set our top XPATH node
+        //
+        // for the moment, we are assuming that the test device is
+        // a web browser, because historically this has always been
+        // the case
+        //
+        // when this assumption is no longer valid, we will need to
+        // revisit this code
+        $this->setTopXpath("//html");
 
-		// set our top element
-		//
-		// we cannot assume that the browser has any DOM loaded at all
-		$this->setTopElement($this->device);
-	}
+        // set our top element
+        //
+        // we cannot assume that the browser has any DOM loaded at all
+        $this->setTopElement($this->device);
+    }
 
-	public function __call($methodName, $params)
-	{
-		// this only gets called if there's no matching method
-		throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
-	}
+    public function __call($methodName, $params)
+    {
+        // this only gets called if there's no matching method
+        throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
+    }
 
-	public function getTopElement()
-	{
-		return $this->topElement;
-	}
+    public function getTopElement()
+    {
+        return $this->topElement;
+    }
 
-	public function setTopElement($element)
-	{
-		$this->topElement = $element;
-	}
+    public function setTopElement($element)
+    {
+        $this->topElement = $element;
+    }
 
-	protected function getTopXpath()
-	{
-		return $this->topXpath;
-	}
+    protected function getTopXpath()
+    {
+        return $this->topXpath;
+    }
 
-	/**
-	 * @param string $xpath
-	 */
-	protected function setTopXpath($xpath)
-	{
-		$this->topXpath = $xpath;
-	}
+    /**
+     * @param string $xpath
+     */
+    protected function setTopXpath($xpath)
+    {
+        $this->topXpath = $xpath;
+    }
 
-	// ====================================================================
-	//
-	// Convertors go here
-	//
-	// --------------------------------------------------------------------
+    // ====================================================================
+    //
+    // Convertors go here
+    //
+    // --------------------------------------------------------------------
 
-	public function toNum($string)
-	{
-		$final = str_replace(array(',', '$', ' '), '', $string);
+    public function toNum($string)
+    {
+        $final = str_replace(array(',', '$', ' '), '', $string);
 
-		return (double)$final;
-	}
+        return (double)$final;
+    }
 
     public function getSourceFilename()
     {
         $refObj = new ReflectionObject($this);
-    	return $refObj->getFileName();
+        return $refObj->getFileName();
     }
 
 

@@ -55,17 +55,17 @@ namespace DataSift\Storyplayer\PlayerLib;
  */
 class Script
 {
-	protected $filename;
-	protected $result;
+    protected $filename;
+    protected $result;
 
-	public function __construct($filename)
-	{
-		$this->filename = $filename;
-		$this->result = new PhaseGroup_Result();
-	}
+    public function __construct($filename)
+    {
+        $this->filename = $filename;
+        $this->result = new PhaseGroup_Result();
+    }
 
-	public function getResult()
-	{
-		return $this->result;
-	}
+    public function getResult()
+    {
+        return $this->result;
+    }
 }

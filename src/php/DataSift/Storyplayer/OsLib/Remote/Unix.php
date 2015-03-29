@@ -59,5 +59,5 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 
 class Remote_Unix extends Base_Unix
 {
-	use Connector_SshClient;
+    use Connector_SshClient;
 }

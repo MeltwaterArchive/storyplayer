@@ -59,42 +59,42 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class ListHostsTable_HostTypeSwitch extends CliSwitch
 {
-	/**
-	 * @param string $shortDesc
-	 * @param string $argDesc
-	 */
-	public function __construct($shortDesc, $argDesc)
-	{
-		// define our name, and our description
-		$this->setName('hosttype');
-		$this->setShortDescription($shortDesc);
+    /**
+     * @param string $shortDesc
+     * @param string $argDesc
+     */
+    public function __construct($shortDesc, $argDesc)
+    {
+        // define our name, and our description
+        $this->setName('hosttype');
+        $this->setShortDescription($shortDesc);
 
-		// what are the short switches?
-		$this->addShortSwitch('T');
+        // what are the short switches?
+        $this->addShortSwitch('T');
 
-		// what are the long switches?
-		$this->addLongSwitch('hosttype');
+        // what are the long switches?
+        $this->addLongSwitch('hosttype');
 
-		// what is the required argument?
-		$this->setRequiredArg('<hosttype>', $argDesc);
-		$this->setArgHasDefaultValueOf("EC2,OpenStack,PhysicalHost,ProxmoxContainer,ProxmoxVM,StatesmanVM,VagrantVM");
-		// all done
-	}
+        // what is the required argument?
+        $this->setRequiredArg('<hosttype>', $argDesc);
+        $this->setArgHasDefaultValueOf("EC2,OpenStack,PhysicalHost,ProxmoxContainer,ProxmoxVM,StatesmanVM,VagrantVM");
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->hosttype = explode(',', strtolower($params[0]));
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->hosttype = explode(',', strtolower($params[0]));
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

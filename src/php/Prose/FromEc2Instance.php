@@ -55,69 +55,69 @@ namespace Prose;
  */
 class FromEc2Instance extends Ec2InstanceBase
 {
-	public function getInstanceIsRunning()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("determine if EC2 VM '{$this->instanceName}' is running");
+    public function getInstanceIsRunning()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("determine if EC2 VM '{$this->instanceName}' is running");
 
-		// does the instance exist?
-		if (!$this->instance) {
-			$log->endAction("no: instance does not exist");
-			return false;
-		}
+        // does the instance exist?
+        if (!$this->instance) {
+            $log->endAction("no: instance does not exist");
+            return false;
+        }
 
-		// is the instance running?
-		if ($this->instance['State']['Code'] == 16) {
-			// yes, it is
-			$log->endAction("yes");
-			return true;
-		}
-		else {
-			// no, it is not
-			$log->endAction("no: state is '{$this->instance['State']['Name']}'");
-			return false;
-		}
-	}
+        // is the instance running?
+        if ($this->instance['State']['Code'] == 16) {
+            // yes, it is
+            $log->endAction("yes");
+            return true;
+        }
+        else {
+            // no, it is not
+            $log->endAction("no: state is '{$this->instance['State']['Name']}'");
+            return false;
+        }
+    }
 
-	public function getInstanceVolumes()
-	{
-		// make sure we have a host to work with
-		$this->requiresValidHost(__METHOD__);
+    public function getInstanceVolumes()
+    {
+        // make sure we have a host to work with
+        $this->requiresValidHost(__METHOD__);
 
-		// what are we doing?
-		$log = usingLog()->startAction("retrieve configuration for all volumes attached to EC2 VM '{$this->instanceName}'");
+        // what are we doing?
+        $log = usingLog()->startAction("retrieve configuration for all volumes attached to EC2 VM '{$this->instanceName}'");
 
-		// does this instance have any block devices?
-		if (isset($this->instance['BlockDeviceMappings'])) {
-			$log->endAction("found " . count($this->instance['BlockDeviceMappings']) . " volumes");
-			return $this->instance['BlockDeviceMappings'];
-		}
+        // does this instance have any block devices?
+        if (isset($this->instance['BlockDeviceMappings'])) {
+            $log->endAction("found " . count($this->instance['BlockDeviceMappings']) . " volumes");
+            return $this->instance['BlockDeviceMappings'];
+        }
 
-		// if we get here, the instance has no volumes, which is
-		// a little weird
-		$log->endAction("no volumes found");
-		return array();
-	}
+        // if we get here, the instance has no volumes, which is
+        // a little weird
+        $log->endAction("no volumes found");
+        return array();
+    }
 
-	public function getPublicDnsName()
-	{
-		// make sure we have a host to work with
-		$this->requiresValidHost(__METHOD__);
+    public function getPublicDnsName()
+    {
+        // make sure we have a host to work with
+        $this->requiresValidHost(__METHOD__);
 
-		// what are we doing?
-		$log = usingLog()->startAction("get the public DNS name for EC2 VM '{$this->instanceName}'");
+        // what are we doing?
+        $log = usingLog()->startAction("get the public DNS name for EC2 VM '{$this->instanceName}'");
 
-		// here are the details, as a string
-		$dnsName = $this->instance['PublicDnsName'];
+        // here are the details, as a string
+        $dnsName = $this->instance['PublicDnsName'];
 
-		// does it *have* a public DNS name?
-		if (empty($dnsName)) {
-			$log->endAction("EC2 VM does not have a public DNS name; has it finished booting?");
-			return null;
-		}
+        // does it *have* a public DNS name?
+        if (empty($dnsName)) {
+            $log->endAction("EC2 VM does not have a public DNS name; has it finished booting?");
+            return null;
+        }
 
-		// all done
-		$log->endAction("public DNS name is: '{$dnsName}'");
-		return $dnsName;
-	}
+        // all done
+        $log->endAction("public DNS name is: '{$dnsName}'");
+        return $dnsName;
+    }
 }

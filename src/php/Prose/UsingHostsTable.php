@@ -55,53 +55,53 @@ namespace Prose;
  */
 class UsingHostsTable extends Prose
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "hosts";
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "hosts";
 
-	/**
-	 * addHost
-	 *
-	 * @param string $hostId
-	 *        ID of the host to add to the table
-	 * @param object $hostDetails
-	 *        Details about this host
-	 *
-	 * @return void
-	 */
-	public function addHost($hostId, $hostDetails)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("add host '{$hostId}' to current test environment hosts table");
+    /**
+     * addHost
+     *
+     * @param string $hostId
+     *        ID of the host to add to the table
+     * @param object $hostDetails
+     *        Details about this host
+     *
+     * @return void
+     */
+    public function addHost($hostId, $hostDetails)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("add host '{$hostId}' to current test environment hosts table");
 
-		// add it
-		usingRuntimeTableForTargetEnvironment($this->entryKey)->addItem($hostId, $hostDetails);
+        // add it
+        usingRuntimeTableForTargetEnvironment($this->entryKey)->addItem($hostId, $hostDetails);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	/**
-	 * removeHost
-	 *
-	 * @param string $hostId
-	 *        ID of the host to remove
-	 *
-	 * @return void
-	 */
-	public function removeHost($hostId)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("remove host '{$hostId}' from current test environment hosts table");
+    /**
+     * removeHost
+     *
+     * @param string $hostId
+     *        ID of the host to remove
+     *
+     * @return void
+     */
+    public function removeHost($hostId)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("remove host '{$hostId}' from current test environment hosts table");
 
-		// remove it
-		usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItem($hostId);
+        // remove it
+        usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItem($hostId);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

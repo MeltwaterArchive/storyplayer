@@ -61,95 +61,95 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 {
-	/**
-	 *
-	 * @param  StoryTeller $st
-	 * @return void
-	 */
-	public function start(StoryTeller $st)
-	{
-		// are we using browsermob-proxy?
-		$useProxy = false;
-		if (fromConfig()->hasModuleSetting('device.browsermob.enable')) {
-			$useProxy = fromConfig()->getModuleSetting('device.browsermob.enable');
-		}
+    /**
+     *
+     * @param  StoryTeller $st
+     * @return void
+     */
+    public function start(StoryTeller $st)
+    {
+        // are we using browsermob-proxy?
+        $useProxy = false;
+        if (fromConfig()->hasModuleSetting('device.browsermob.enable')) {
+            $useProxy = fromConfig()->getModuleSetting('device.browsermob.enable');
+        }
 
-		try {
-			// by default, we have no proxy session
-			$this->proxySession = null;
+        try {
+            // by default, we have no proxy session
+            $this->proxySession = null;
 
-			// start the proxy if we want it
-			if ($useProxy) {
-				$httpProxy = new BrowserMobProxyClient();
-				$httpProxy->enableFeature('enhancedReplies');
+            // start the proxy if we want it
+            if ($useProxy) {
+                $httpProxy = new BrowserMobProxyClient();
+                $httpProxy->enableFeature('enhancedReplies');
 
-				$this->proxySession = $httpProxy->createProxy();
+                $this->proxySession = $httpProxy->createProxy();
 
-				// start recording
-				$this->proxySession->startHAR();
-			}
+                // start recording
+                $this->proxySession->startHAR();
+            }
 
-			// build our requirements for Selenium
-			$desiredCapabilities = $this->browserDetails->desiredCapabilities;
-			if (is_object($this->proxySession)) {
-				$desiredCapabilities['proxy'] = $this->proxySession->getWebDriverProxyConfig();
-			}
+            // build our requirements for Selenium
+            $desiredCapabilities = $this->browserDetails->desiredCapabilities;
+            if (is_object($this->proxySession)) {
+                $desiredCapabilities['proxy'] = $this->proxySession->getWebDriverProxyConfig();
+            }
 
-			// create the browser session
-			$webDriver = new WebDriverClient();
-			$this->browserSession = $webDriver->newSession(
-				$this->browserDetails->browser,
-				$desiredCapabilities
-			);
-		}
-		catch (Exception $e) {
-			// something went wrong
-			throw new E5xx_CannotStartDevice();
-		}
-	}
+            // create the browser session
+            $webDriver = new WebDriverClient();
+            $this->browserSession = $webDriver->newSession(
+                $this->browserDetails->browser,
+                $desiredCapabilities
+            );
+        }
+        catch (Exception $e) {
+            // something went wrong
+            throw new E5xx_CannotStartDevice();
+        }
+    }
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function stop()
-	{
-		// stop the web browser
-		if (is_object($this->browserSession))
-		{
-			$this->browserSession->close();
-			$this->browserSession = null;
-		}
+    /**
+     *
+     * @return void
+     */
+    public function stop()
+    {
+        // stop the web browser
+        if (is_object($this->browserSession))
+        {
+            $this->browserSession->close();
+            $this->browserSession = null;
+        }
 
-		// now stop the proxy
-		if (is_object($this->proxySession))
-		{
-			try {
-				$this->proxySession->close();
-			}
-			catch (Exception $e) {
-				// do nothing - we don't care!
-			}
-			$this->proxySession = null;
-		}
-	}
+        // now stop the proxy
+        if (is_object($this->proxySession))
+        {
+            try {
+                $this->proxySession->close();
+            }
+            catch (Exception $e) {
+                // do nothing - we don't care!
+            }
+            $this->proxySession = null;
+        }
+    }
 
-	/**
-	 *
-	 * @param  string $hostname
-	 * @param  string $url
-	 * @return string
-	 */
-	public function applyHttpBasicAuthForHost($hostname, $url)
-	{
-		// get the auth credentials
-		$credentials = $this->getHttpBasicAuthForHost($hostname);
+    /**
+     *
+     * @param  string $hostname
+     * @param  string $url
+     * @return string
+     */
+    public function applyHttpBasicAuthForHost($hostname, $url)
+    {
+        // get the auth credentials
+        $credentials = $this->getHttpBasicAuthForHost($hostname);
 
-		if (isset($this->proxySession)) {
-			$this->proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
-		}
+        if (isset($this->proxySession)) {
+            $this->proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
+        }
 
-		// all done
-		return $url;
-	}
+        // all done
+        return $url;
+    }
 }

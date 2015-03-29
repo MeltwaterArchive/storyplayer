@@ -57,8 +57,8 @@ namespace Prose;
  */
 class E5xx_NotImplemented extends E5xx_ProseException
 {
-	public function __construct($methodName) {
-		$msg = "Method '{$methodName}' has not been implemented yet";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct($methodName) {
+        $msg = "Method '{$methodName}' has not been implemented yet";
+        parent::__construct(500, $msg, $msg);
+    }
 }

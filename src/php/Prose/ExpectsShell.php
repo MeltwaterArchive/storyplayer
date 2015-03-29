@@ -58,8 +58,8 @@ namespace Prose;
  */
 class ExpectsShell extends ExpectsHost
 {
-	public function __construct($st)
-	{
-		parent::__construct($st, ['localhost']);
-	}
+    public function __construct($st)
+    {
+        parent::__construct($st, ['localhost']);
+    }
 }

@@ -58,30 +58,30 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class DelayedProvisioningDefinitionAction
 {
-	protected $def;
-	protected $action;
+    protected $def;
+    protected $action;
 
-	/**
-	 * @param \Closure $callback
-	 */
-	public function __construct(ProvisioningDefinition $def, $callback)
-	{
-		// remember for later
-		$this->def    = $def;
-		$this->action = $callback;
-	}
+    /**
+     * @param \Closure $callback
+     */
+    public function __construct(ProvisioningDefinition $def, $callback)
+    {
+        // remember for later
+        $this->def    = $def;
+        $this->action = $callback;
+    }
 
-	public function toHost($hostId)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->def, $hostId);
-	}
+    public function toHost($hostId)
+    {
+        // our embedded action does all the work
+        $action = $this->action;
+        $action($this->def, $hostId);
+    }
 
-	public function forHost($hostId)
-	{
-		// our embedded action does all the work
-		$action = $this->action;
-		$action($this->def, $hostId);
-	}
+    public function forHost($hostId)
+    {
+        // our embedded action does all the work
+        $action = $this->action;
+        $action($this->def, $hostId);
+    }
 }

@@ -58,46 +58,46 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class HostBase extends Prose
 {
-	protected $hostDetails;
+    protected $hostDetails;
 
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// call the parent constructor
-		parent::__construct($st, $args);
+    public function __construct(StoryTeller $st, $args = array())
+    {
+        // call the parent constructor
+        parent::__construct($st, $args);
 
-		// arg[0] is the name of the box
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name you've given to the machine");
-		}
-	}
+        // arg[0] is the name of the box
+        if (!isset($args[0])) {
+            throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name you've given to the machine");
+        }
+    }
 
-	protected function getHostDetails()
-	{
-		// shorthand
-		$hostId = $this->args[0];
+    protected function getHostDetails()
+    {
+        // shorthand
+        $hostId = $this->args[0];
 
-		// do we know anything about this host?
-		$hostsTable = fromHostsTable()->getHostsTable();
-		if (!isset($hostsTable->$hostId)) {
-			$hostDetails = new BaseObject();
-			$hostDetails->hostId = $hostId;
-			$hostDetails->osName = "unknown";
-			$hostDetails->nameInHostsTable = $hostId;
-			$hostDetails->invalidHost = true;
-		}
-		else {
-			$hostDetails = $hostsTable->$hostId;
-		}
+        // do we know anything about this host?
+        $hostsTable = fromHostsTable()->getHostsTable();
+        if (!isset($hostsTable->$hostId)) {
+            $hostDetails = new BaseObject();
+            $hostDetails->hostId = $hostId;
+            $hostDetails->osName = "unknown";
+            $hostDetails->nameInHostsTable = $hostId;
+            $hostDetails->invalidHost = true;
+        }
+        else {
+            $hostDetails = $hostsTable->$hostId;
+        }
 
-		return $hostDetails;
-	}
+        return $hostDetails;
+    }
 
-	protected function getIsLocalhost()
-	{
-		if (strtolower($this->args[0]) == 'localhost') {
-			return true;
-		}
+    protected function getIsLocalhost()
+    {
+        if (strtolower($this->args[0]) == 'localhost') {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

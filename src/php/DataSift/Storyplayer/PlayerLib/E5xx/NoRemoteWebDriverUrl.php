@@ -58,8 +58,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_NoRemoteWebDriverUrl extends Exxx_Exception
 {
-	public function __construct() {
-		$msg = "No 'url' in the 'remotewebdriver' section of the loaded config";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct() {
+        $msg = "No 'url' in the 'remotewebdriver' section of the loaded config";
+        parent::__construct(500, $msg, $msg);
+    }
 }

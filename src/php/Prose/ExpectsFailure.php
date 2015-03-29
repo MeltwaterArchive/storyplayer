@@ -55,26 +55,26 @@ namespace Prose;
  */
 class ExpectsFailure extends Prose
 {
-	public function when($what, $callback)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("expect {$what} to fail");
+    public function when($what, $callback)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("expect {$what} to fail");
 
-		// let's do it
-		try {
-			$callback();
-		}
-		catch (E5xx_ProseException $e) {
-			// do nothing
-			$log->endAction("{$what} failed (this is the expected behaviour)");
-			return;
-		}
-		// do not catch any other exceptions ... they are unexpected
-		// failures
+        // let's do it
+        try {
+            $callback();
+        }
+        catch (E5xx_ProseException $e) {
+            // do nothing
+            $log->endAction("{$what} failed (this is the expected behaviour)");
+            return;
+        }
+        // do not catch any other exceptions ... they are unexpected
+        // failures
 
 
-		// if we get here, then the action did not fail - and THAT
-		// is a failure
-		throw new E5xx_ExpectFailed(__METHOD__, "{$what} failed", "{$what} did not fail");
-	}
+        // if we get here, then the action did not fail - and THAT
+        // is a failure
+        throw new E5xx_ExpectFailed(__METHOD__, "{$what} failed", "{$what} did not fail");
+    }
 }

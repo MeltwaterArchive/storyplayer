@@ -59,7 +59,7 @@ class E4xx_ConfigFileContainsInvalidJson extends Exxx_Exception
 {
     public function __construct($pathToFile)
     {
-    	$msg = "Config file '{$pathToFile}' contains invalid JSON";
+        $msg = "Config file '{$pathToFile}' contains invalid JSON";
         parent::__construct(400, $msg, $msg);
     }
 }

@@ -58,123 +58,123 @@ use DataSift\Stone\TimeLib\DateInterval;
  */
 class UsingTimer extends Prose
 {
-	public function waitFor($callback, $timeout = 'PT5S')
-	{
-		// how long do we wait for?
-		if (is_string($timeout)) {
-			$interval = new DateInterval($timeout);
-			$seconds  = $interval->getTotalSeconds();
-		}
-		else {
-			$seconds = $timeout;
-		}
+    public function waitFor($callback, $timeout = 'PT5S')
+    {
+        // how long do we wait for?
+        if (is_string($timeout)) {
+            $interval = new DateInterval($timeout);
+            $seconds  = $interval->getTotalSeconds();
+        }
+        else {
+            $seconds = $timeout;
+        }
 
-		// when does this end?
-		$now = time();
-		$end = $now + $seconds;
+        // when does this end?
+        $now = time();
+        $end = $now + $seconds;
 
-		// what are we doing?
-		$log = usingLog()->startAction("polling for up to {$seconds} seconds");
+        // what are we doing?
+        $log = usingLog()->startAction("polling for up to {$seconds} seconds");
 
-		while ($now < $end) {
-			try {
-				$result = $callback($this->st);
+        while ($now < $end) {
+            try {
+                $result = $callback($this->st);
 
-				// if we get here, the actions inside the callback
-				// must have worked
-				$log->endAction();
-				return;
-			}
-			catch (Exception $e) {
-				// do nothing
-				$log->closeAllOpenSubActions();
-			}
+                // if we get here, the actions inside the callback
+                // must have worked
+                $log->endAction();
+                return;
+            }
+            catch (Exception $e) {
+                // do nothing
+                $log->closeAllOpenSubActions();
+            }
 
-			// has the action actually failed?
-			if (isset($result) && !$result) {
-				$log->endAction();
-				throw new E5xx_ActionFailed(__METHOD__);
-			}
+            // has the action actually failed?
+            if (isset($result) && !$result) {
+                $log->endAction();
+                throw new E5xx_ActionFailed(__METHOD__);
+            }
 
-			// we don't want to use all the CPU resources
-			sleep(1);
+            // we don't want to use all the CPU resources
+            sleep(1);
 
-			// update the timeout
-			$now = time();
-		}
+            // update the timeout
+            $now = time();
+        }
 
-		// if we get here, then the timeout happened
-		throw new E5xx_ActionFailed('timer()->waitFor()');
-	}
+        // if we get here, then the timeout happened
+        throw new E5xx_ActionFailed('timer()->waitFor()');
+    }
 
-	public function waitWhile($callback, $timeout = 'PT5S')
-	{
-		if (is_string($timeout)) {
-			$interval = new DateInterval($timeout);
-			$seconds  = $interval->getTotalSeconds();
-		}
-		else {
-			$seconds = $timeout;
-		}
+    public function waitWhile($callback, $timeout = 'PT5S')
+    {
+        if (is_string($timeout)) {
+            $interval = new DateInterval($timeout);
+            $seconds  = $interval->getTotalSeconds();
+        }
+        else {
+            $seconds = $timeout;
+        }
 
-		$now = time();
-		$end = $now + $seconds;
+        $now = time();
+        $end = $now + $seconds;
 
-		// what are we doing?
-		$log = usingLog()->startAction("polling for up to '{$seconds}' seconds");
+        // what are we doing?
+        $log = usingLog()->startAction("polling for up to '{$seconds}' seconds");
 
-		while ($now < $end) {
-			try {
-				$result = $callback($this->st);
+        while ($now < $end) {
+            try {
+                $result = $callback($this->st);
 
-				// if we get here, the actions inside the callback
-				// must have worked
-				//
-				// that means whatever we're waiting for hasn't happened
-				// yet
-				$log->closeAllOpenSubActions();
-			}
-			catch (Exception $e) {
-				// the conditions have changed - we can go ahead now
-				$log->endAction();
-				return;
-			}
+                // if we get here, the actions inside the callback
+                // must have worked
+                //
+                // that means whatever we're waiting for hasn't happened
+                // yet
+                $log->closeAllOpenSubActions();
+            }
+            catch (Exception $e) {
+                // the conditions have changed - we can go ahead now
+                $log->endAction();
+                return;
+            }
 
-			// has the action actually failed?
-			if (isset($result) && !$result) {
-				$log->endAction();
-				throw new E5xx_ActionFailed(__METHOD__);
-			}
+            // has the action actually failed?
+            if (isset($result) && !$result) {
+                $log->endAction();
+                throw new E5xx_ActionFailed(__METHOD__);
+            }
 
-			// we don't want to use all the CPU resources
-			sleep(1);
+            // we don't want to use all the CPU resources
+            sleep(1);
 
-			// update the timeout
-			$now = time();
-		}
+            // update the timeout
+            $now = time();
+        }
 
-		// if we get here, then the timeout happened
-		$log->endAction();
-		throw new E5xx_ActionFailed('timer()->waitWhile()');
-	}
+        // if we get here, then the timeout happened
+        $log->endAction();
+        throw new E5xx_ActionFailed('timer()->waitWhile()');
+    }
 
-	public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up")
-	{
-		if (is_string($timeout)) {
-			$interval = new DateInterval($timeout);
-			$seconds  = $interval->getTotalSeconds();
-		}
-		else {
-			$seconds = $timeout;
-		}
+    public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up")
+    {
+        if (is_string($timeout)) {
+            $interval = new DateInterval($timeout);
+            $seconds  = $interval->getTotalSeconds();
+        }
+        else {
+            $seconds = $timeout;
+        }
 
-		// what are we doing?
-		$log = usingLog()->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
+        // what are we doing?
+        $log = usingLog()->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
 
-		// zzzzz
-		sleep($seconds);
+        // zzzzz
+        sleep($seconds);
 
-		// all done
-		$log->endAction("finished sleeping");
-	}
+        // all done
+        $log->endAction("finished sleeping");
+    }
 }

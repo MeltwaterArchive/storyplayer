@@ -59,27 +59,27 @@ use PDOException;
  */
 class UsingPDO extends Prose
 {
-	public function connect($dsn, $username = null, $password = null, $options = [])
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("connect to database '{$dsn}'");
+    public function connect($dsn, $username = null, $password = null, $options = [])
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("connect to database '{$dsn}'");
 
-		// make the connection
-		try {
-			$db = new PDO($dsn, $username, $password, $options);
-		}
-		catch (PDOException $e) {
-			$log->endAction("connection failed: " . $e->getMessage());
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // make the connection
+        try {
+            $db = new PDO($dsn, $username, $password, $options);
+        }
+        catch (PDOException $e) {
+            $log->endAction("connection failed: " . $e->getMessage());
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// if we get here, all is good
-		//
-		// make sure that PDO throws exceptions when things go wrong
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // if we get here, all is good
+        //
+        // make sure that PDO throws exceptions when things go wrong
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		// all done
-		$log->endAction("connected");
-		return $db;
-	}
+        // all done
+        $log->endAction("connected");
+        return $db;
+    }
 }

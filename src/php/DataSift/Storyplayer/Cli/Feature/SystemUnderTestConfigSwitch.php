@@ -59,77 +59,77 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Feature_SystemUnderTestConfigSwitch extends CliSwitch
 {
-	/**
-	 * @param \DataSift\Storyplayer\ConfigLib\SystemsUnderTestList $sutList
-	 * @param string $defaultSutName
-	 */
-	public function __construct($sutList, $defaultSutName)
-	{
-		// define our name, and our description
-		$this->setName('sut');
-		$this->setShortDescription('set the system-under-test to test');
-		$this->setLongDesc(
-			"If you have a test repository that contains tests for multiple "
-			. "pieces of software, you can use this switch to choose which "
-			. "of those systems-under-test to deploy to the test environment."
-			. PHP_EOL
-			. PHP_EOL
-			. "If you omit this switch, Storyplayer will use the default system-under-test "
-			. "listed in your storyplayer.json[.dist] config file. And if you don't have "
-			. "a default system-under-test in your config file, then Storyplayer will "
-			. "remind you that you need to tell it which system-under-test to target."
-			. PHP_EOL
-			. PHP_EOL
-			. "If you only have one system-under-test defined, then this switch has no "
-			. "effect when used, and Storyplayer will always use the system-under-test "
-			. "that you have defined."
-			. PHP_EOL
-			. PHP_EOL
-			. "See http://datasift.github.io/storyplayer/ "
-			. "for how to define systems-under-test."
-		);
+    /**
+     * @param \DataSift\Storyplayer\ConfigLib\SystemsUnderTestList $sutList
+     * @param string $defaultSutName
+     */
+    public function __construct($sutList, $defaultSutName)
+    {
+        // define our name, and our description
+        $this->setName('sut');
+        $this->setShortDescription('set the system-under-test to test');
+        $this->setLongDesc(
+            "If you have a test repository that contains tests for multiple "
+            . "pieces of software, you can use this switch to choose which "
+            . "of those systems-under-test to deploy to the test environment."
+            . PHP_EOL
+            . PHP_EOL
+            . "If you omit this switch, Storyplayer will use the default system-under-test "
+            . "listed in your storyplayer.json[.dist] config file. And if you don't have "
+            . "a default system-under-test in your config file, then Storyplayer will "
+            . "remind you that you need to tell it which system-under-test to target."
+            . PHP_EOL
+            . PHP_EOL
+            . "If you only have one system-under-test defined, then this switch has no "
+            . "effect when used, and Storyplayer will always use the system-under-test "
+            . "that you have defined."
+            . PHP_EOL
+            . PHP_EOL
+            . "See http://datasift.github.io/storyplayer/ "
+            . "for how to define systems-under-test."
+        );
 
-		// what are the short switches?
-		$this->addShortSwitch('s');
+        // what are the short switches?
+        $this->addShortSwitch('s');
 
-		// what are the long switches?
-		$this->addLongSwitch('sut');
-		$this->addLongSwitch('system-under-test');
+        // what are the long switches?
+        $this->addLongSwitch('sut');
+        $this->addLongSwitch('system-under-test');
 
-		// what is the required argument?
-		$requiredArgMsg = "the system-under-test to test; one of:" . PHP_EOL . PHP_EOL;
-		foreach($sutList->getEntryNames() as $sutName) {
-			$requiredArgMsg .= "* $sutName" . PHP_EOL;
-		}
-		if ($defaultSutName) {
-			$requiredArgMsg .= PHP_EOL. ' ';
-		}
-		$this->setRequiredArg('<system-under-test>', $requiredArgMsg);
-		$this->setArgValidator(new Feature_SystemUnderTestConfigValidator($sutList, $defaultSutName));
-		if ($defaultSutName) {
-			$this->setArgHasDefaultValueOf($defaultSutName);
-		}
+        // what is the required argument?
+        $requiredArgMsg = "the system-under-test to test; one of:" . PHP_EOL . PHP_EOL;
+        foreach($sutList->getEntryNames() as $sutName) {
+            $requiredArgMsg .= "* $sutName" . PHP_EOL;
+        }
+        if ($defaultSutName) {
+            $requiredArgMsg .= PHP_EOL. ' ';
+        }
+        $this->setRequiredArg('<system-under-test>', $requiredArgMsg);
+        $this->setArgValidator(new Feature_SystemUnderTestConfigValidator($sutList, $defaultSutName));
+        if ($defaultSutName) {
+            $this->setArgHasDefaultValueOf($defaultSutName);
+        }
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// strip off .json if it is there
-		$params[0] = basename($params[0], '.json');
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // strip off .json if it is there
+        $params[0] = basename($params[0], '.json');
 
-		// remember the setting
-		$engine->options->sutName = $params[0];
+        // remember the setting
+        $engine->options->sutName = $params[0];
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

@@ -57,14 +57,14 @@ use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
  */
 class UsingProvisioning extends Prose
 {
-	public function createDefinition()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("create empty provisioning definition");
+    public function createDefinition()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("create empty provisioning definition");
 
-		// all done
-		$log->endAction();
+        // all done
+        $log->endAction();
 
-		return new ProvisioningDefinition();
-	}
+        return new ProvisioningDefinition();
+    }
 }

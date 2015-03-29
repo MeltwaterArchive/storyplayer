@@ -57,70 +57,70 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingRolesTable extends Prose
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "roles";
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "roles";
 
-	/**
-	 * addHost
-	 *
-	 * @param object $hostDetails
-	 *        Details about the host to add to the role
-	 * @param string $roleName
-	 *        Role name to add
-	 *
-	 * @return void
-	 */
-	public function addHostToRole($hostDetails, $roleName)
-	{
-		// shorthand
-		$hostId = $hostDetails->hostId;
+    /**
+     * addHost
+     *
+     * @param object $hostDetails
+     *        Details about the host to add to the role
+     * @param string $roleName
+     *        Role name to add
+     *
+     * @return void
+     */
+    public function addHostToRole($hostDetails, $roleName)
+    {
+        // shorthand
+        $hostId = $hostDetails->hostId;
 
-		// what are we doing?
-		$log = usingLog()->startAction("add host '{$hostId}' to role '{$roleName}'");
+        // what are we doing?
+        $log = usingLog()->startAction("add host '{$hostId}' to role '{$roleName}'");
 
-		// add it
-		usingRuntimeTableForTargetEnvironment($this->entryKey)->addItemToGroup($roleName, $hostId, $hostDetails);
+        // add it
+        usingRuntimeTableForTargetEnvironment($this->entryKey)->addItemToGroup($roleName, $hostId, $hostDetails);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	/**
-	 * removeRole
-	 *
-	 * @param string $hostId
-	 *        ID of the host to remove
-	 * @param string $roleName
-	 *        Role name to remove
-	 *
-	 * @return void
-	 */
-	public function removeHostFromRole($hostId, $roleName)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("remove host '{$hostId}' from '{$roleName}'");
+    /**
+     * removeRole
+     *
+     * @param string $hostId
+     *        ID of the host to remove
+     * @param string $roleName
+     *        Role name to remove
+     *
+     * @return void
+     */
+    public function removeHostFromRole($hostId, $roleName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("remove host '{$hostId}' from '{$roleName}'");
 
-		// remove it
-		usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromGroup($roleName, $hostId);
+        // remove it
+        usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromGroup($roleName, $hostId);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	public function removeHostFromAllRoles($hostId)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("remove host '{$hostId}' from all roles");
+    public function removeHostFromAllRoles($hostId)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("remove host '{$hostId}' from all roles");
 
-		// remove it
-		usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromAllGroups($hostId);
+        // remove it
+        usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromAllGroups($hostId);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

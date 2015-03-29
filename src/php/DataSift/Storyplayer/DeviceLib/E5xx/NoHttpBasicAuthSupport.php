@@ -57,8 +57,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_NoHttpBasicAuthSupport extends Exxx_Exception
 {
-	public function __construct() {
-		$msg = "no support for HTTP Basic Auth available; cannot continue";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct() {
+        $msg = "no support for HTTP Basic Auth available; cannot continue";
+        parent::__construct(500, $msg, $msg);
+    }
 }

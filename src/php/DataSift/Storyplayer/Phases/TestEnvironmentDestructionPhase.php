@@ -62,70 +62,70 @@ use Prose\E5xx_NotImplemented;
 
 class TestEnvironmentDestructionPhase extends InfrastructurePhase
 {
-	public function doPhase($thingBeingPlayed = null)
-	{
-		// shorthand
-		$st    = $this->st;
+    public function doPhase($thingBeingPlayed = null)
+    {
+        // shorthand
+        $st    = $this->st;
 
-		// our return value
-		$phaseResult = $this->getNewPhaseResult();
+        // our return value
+        $phaseResult = $this->getNewPhaseResult();
 
-		// find out what we need to be doing
-		$testEnvironmentConfig = $st->getTestEnvironmentConfig();
+        // find out what we need to be doing
+        $testEnvironmentConfig = $st->getTestEnvironmentConfig();
 
-		// are there any machines to destroy?
-		if (empty($testEnvironmentConfig)) {
-			// nothing to do
-			$phaseResult->setContinuePlaying();
-			return $phaseResult;
-		}
+        // are there any machines to destroy?
+        if (empty($testEnvironmentConfig)) {
+            // nothing to do
+            $phaseResult->setContinuePlaying();
+            return $phaseResult;
+        }
 
-		// destroy the environments
-		try {
-			foreach ($testEnvironmentConfig->groups as $env) {
-				// destroy the machine(s) in this environment, including:
-				//
-				// * destroying any virtual machines
-				// * de-registering in the Hosts table
-				// * de-registering in the Roles table
-				$hostAdapter = HostLib::getHostAdapter($st, $env->type);
-				$hostAdapter->destroyHost($env->details);
-			}
+        // destroy the environments
+        try {
+            foreach ($testEnvironmentConfig->groups as $env) {
+                // destroy the machine(s) in this environment, including:
+                //
+                // * destroying any virtual machines
+                // * de-registering in the Hosts table
+                // * de-registering in the Roles table
+                $hostAdapter = HostLib::getHostAdapter($st, $env->type);
+                $hostAdapter->destroyHost($env->details);
+            }
 
-			$st->usingTargetsTable()->removeCurrentTestEnvironment();
-			$phaseResult->setContinuePlaying();
-		}
-		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-		}
-		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-		}
-		// if anything is marked as incomplete, deal with that too
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-		}
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-		}
+            $st->usingTargetsTable()->removeCurrentTestEnvironment();
+            $phaseResult->setContinuePlaying();
+        }
+        catch (E5xx_ActionFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+        }
+        catch (E5xx_ExpectFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+        }
+        // if anything is marked as incomplete, deal with that too
+        catch (E5xx_NotImplemented $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+        }
+        catch (Exception $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                $e->getMessage(),
+                $e
+            );
+        }
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

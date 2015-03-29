@@ -64,257 +64,257 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class JsonReport extends Report
 {
-	protected $currentPhase;
-	protected $phaseNumber = 0;
-	protected $phaseMessages = array();
+    protected $currentPhase;
+    protected $phaseNumber = 0;
+    protected $phaseMessages = array();
 
-	/**
-	 * a list of the results we have received from stories
-	 * @var array
-	 */
-	protected $storyResults = [];
+    /**
+     * a list of the results we have received from stories
+     * @var array
+     */
+    protected $storyResults = [];
 
-	/**
-	 * are we running totally silently?
-	 * @var boolean
-	 */
-	protected $silentActivity = false;
+    /**
+     * are we running totally silently?
+     * @var boolean
+     */
+    protected $silentActivity = false;
 
-	/**
-	 * where will we write our report to?
-	 * @var string
-	 */
-	protected $filename = null;
+    /**
+     * where will we write our report to?
+     * @var string
+     */
+    protected $filename = null;
 
-	protected $results = null;
+    protected $results = null;
 
-	protected $currentPhaseGroup;
+    protected $currentPhaseGroup;
 
-	public function resetSilentMode()
-	{
-		$this->silentActivity = false;
-	}
+    public function resetSilentMode()
+    {
+        $this->silentActivity = false;
+    }
 
-	public function setSilentMode()
-	{
-		$this->silentActivity = true;
-	}
+    public function setSilentMode()
+    {
+        $this->silentActivity = true;
+    }
 
-	public function __construct($args) {
-		if (isset($args['filename'])) {
-			$this->filename = $args['filename'];
-		}
+    public function __construct($args) {
+        if (isset($args['filename'])) {
+            $this->filename = $args['filename'];
+        }
 
-		$this->results = new BaseObject;
-	}
+        $this->results = new BaseObject;
+    }
 
-	/**
-	 * called when storyplayer starts
-	 *
-	 * @param string $version
-	 * @param string $url
-	 * @param string $copyright
-	 * @param string $license
-	 * @return void
-	 */
-	public function startStoryplayer($version, $url, $copyright, $license)
-	{
-		$engine = new BaseObject;
-		$engine->name = "Storyplayer";
-		$engine->version = $version;
-		$engine->url = $url;
-		$engine->copyright = $copyright;
-		$engine->license = $license;
-		$this->results->engine = $engine;
+    /**
+     * called when storyplayer starts
+     *
+     * @param string $version
+     * @param string $url
+     * @param string $copyright
+     * @param string $license
+     * @return void
+     */
+    public function startStoryplayer($version, $url, $copyright, $license)
+    {
+        $engine = new BaseObject;
+        $engine->name = "Storyplayer";
+        $engine->version = $version;
+        $engine->url = $url;
+        $engine->copyright = $copyright;
+        $engine->license = $license;
+        $this->results->engine = $engine;
 
-		$testrun = new BaseObject;
-		$testrun->startTime = microtime(true);
-		$testrun->endTime = 0;
-		$testrun->duration = 0;
-		$testrun->results = [];
-		$this->results->testrun = $testrun;
-	}
+        $testrun = new BaseObject;
+        $testrun->startTime = microtime(true);
+        $testrun->endTime = 0;
+        $testrun->duration = 0;
+        $testrun->results = [];
+        $this->results->testrun = $testrun;
+    }
 
-	public function endStoryplayer($duration)
-	{
-		$this->results->testrun->endTime = microtime(true);
-		$this->results->testrun->duration = $this->results->testrun->endTime - $this->results->testrun->startTime;
-		file_put_contents($this->filename, json_encode($this->results));
-	}
+    public function endStoryplayer($duration)
+    {
+        $this->results->testrun->endTime = microtime(true);
+        $this->results->testrun->duration = $this->results->testrun->endTime - $this->results->testrun->startTime;
+        file_put_contents($this->filename, json_encode($this->results));
+    }
 
-	/**
-	 * called when we start a new set of phases
-	 *
-	 * @param  string $name
-	 * @return void
-	 */
-	public function startPhaseGroup($activity, $name)
-	{
-		$o = new BaseObject;
-		$o->name = $activity . ' ' . $name;
-		$o->details = [];
-		$this->currentPhaseGroup = $o;
-	}
+    /**
+     * called when we start a new set of phases
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function startPhaseGroup($activity, $name)
+    {
+        $o = new BaseObject;
+        $o->name = $activity . ' ' . $name;
+        $o->details = [];
+        $this->currentPhaseGroup = $o;
+    }
 
-	/**
-	 * called when we end a set of phases
-	 *
-	 * @param  PhaseGroup_Result $result
-	 * @return void
-	 */
-	public function endPhaseGroup($result)
-	{
-		$o = $this->currentPhaseGroup;
-		$o->result = $result->getResultString();
-		$o->duration = $result->getDuration();
-		if (isset($result->filename)) {
-			$o->filename = $result->filename;
-			$o->shortFilename = basename($result->filename);
-		}
+    /**
+     * called when we end a set of phases
+     *
+     * @param  PhaseGroup_Result $result
+     * @return void
+     */
+    public function endPhaseGroup($result)
+    {
+        $o = $this->currentPhaseGroup;
+        $o->result = $result->getResultString();
+        $o->duration = $result->getDuration();
+        if (isset($result->filename)) {
+            $o->filename = $result->filename;
+            $o->shortFilename = basename($result->filename);
+        }
 
-		$this->results->testrun->results[] = clone $o;
-	}
+        $this->results->testrun->results[] = clone $o;
+    }
 
-	/**
-	 * called when a story starts a new phase
-	 *
-	 * @return void
-	 */
-	public function startPhase($phase)
-	{
-	}
+    /**
+     * called when a story starts a new phase
+     *
+     * @return void
+     */
+    public function startPhase($phase)
+    {
+    }
 
-	/**
-	 * called when a story ends a phase
-	 *
-	 * @return void
-	 */
-	public function endPhase($phase, $phaseResult)
-	{
-		// we're only interested in telling the user about the
-		// phases of a story
-		if ($phase->getPhaseType() !== Phase::STORY_PHASE) {
-			return;
-		}
+    /**
+     * called when a story ends a phase
+     *
+     * @return void
+     */
+    public function endPhase($phase, $phaseResult)
+    {
+        // we're only interested in telling the user about the
+        // phases of a story
+        if ($phase->getPhaseType() !== Phase::STORY_PHASE) {
+            return;
+        }
 
-		// where to store the details
-		$o = $this->currentPhaseGroup;
+        // where to store the details
+        $o = $this->currentPhaseGroup;
 
-		$r = new BaseObject;
-		$r->name = $phase->getPhaseName();
-		$r->result = $phaseResult->getPhaseResultString();
+        $r = new BaseObject;
+        $r->name = $phase->getPhaseName();
+        $r->result = $phaseResult->getPhaseResultString();
 
-		$o->details[$phase->getPhaseSequenceNo()] = $r;
-	}
+        $o->details[$phase->getPhaseSequenceNo()] = $r;
+    }
 
-	/**
-	 * called when a story logs an action
-	 *
-	 * @param integer $level
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseActivity($msg, $codeLine = null)
-	{
-	}
+    /**
+     * called when a story logs an action
+     *
+     * @param integer $level
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseActivity($msg, $codeLine = null)
+    {
+    }
 
-	/**
-	 * called when a story logs the (possibly partial) output from
-	 * running a subprocess
-	 *
-	 * @param  string $msg the output to log
-	 * @return void
-	 */
-	public function logPhaseSubprocessOutput($msg)
-	{
-	}
+    /**
+     * called when a story logs the (possibly partial) output from
+     * running a subprocess
+     *
+     * @param  string $msg the output to log
+     * @return void
+     */
+    public function logPhaseSubprocessOutput($msg)
+    {
+    }
 
-	/**
-	 * called when a story logs an error
-	 *
-	 * @param string $phaseName
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseError($phaseName, $msg)
-	{
-	}
+    /**
+     * called when a story logs an error
+     *
+     * @param string $phaseName
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseError($phaseName, $msg)
+    {
+    }
 
-	/**
-	 * called when a story is skipped
-	 *
-	 * @param string $phaseName
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseSkipped($phaseName, $msg)
-	{
-	}
+    /**
+     * called when a story is skipped
+     *
+     * @param string $phaseName
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseSkipped($phaseName, $msg)
+    {
+    }
 
-	public function logPhaseCodeLine($codeLine)
-	{
-		// this is a no-op for us
-	}
+    public function logPhaseCodeLine($codeLine)
+    {
+        // this is a no-op for us
+    }
 
-	/**
-	 * called when the outer CLI shell encounters a fatal error
-	 *
-	 * @param  string $msg
-	 *         the error message to show the user
-	 *
-	 * @return void
-	 */
-	public function logCliError($msg)
-	{
-	}
+    /**
+     * called when the outer CLI shell encounters a fatal error
+     *
+     * @param  string $msg
+     *         the error message to show the user
+     *
+     * @return void
+     */
+    public function logCliError($msg)
+    {
+    }
 
-	/**
-	 *
-	 * @param  string $msg
-	 * @param  Exception $e
-	 * @return void
-	 */
-	public function logCliErrorWithException($msg, $e)
-	{
-	}
+    /**
+     *
+     * @param  string $msg
+     * @param  Exception $e
+     * @return void
+     */
+    public function logCliErrorWithException($msg, $e)
+    {
+    }
 
-	/**
-	 * called when the outer CLI shell needs to publish a warning
-	 *
-	 * @param  string $msg
-	 *         the warning message to show the user
-	 *
-	 * @return void
-	 */
-	public function logCliWarning($msg)
-	{
-	}
+    /**
+     * called when the outer CLI shell needs to publish a warning
+     *
+     * @param  string $msg
+     *         the warning message to show the user
+     *
+     * @return void
+     */
+    public function logCliWarning($msg)
+    {
+    }
 
-	/**
-	 * called when the outer CLI shell needs to tell the user something
-	 *
-	 * @param  string $msg
-	 *         the message to show the user
-	 *
-	 * @return void
-	 */
-	public function logCliInfo($msg)
-	{
-	}
+    /**
+     * called when the outer CLI shell needs to tell the user something
+     *
+     * @param  string $msg
+     *         the message to show the user
+     *
+     * @return void
+     */
+    public function logCliInfo($msg)
+    {
+    }
 
-	/**
-	 * an alternative to using PHP's built-in var_dump()
-	 *
-	 * @param  string $name
-	 *         a human-readable name to describe $var
-	 *
-	 * @param  mixed $var
-	 *         the variable to dump
-	 *
-	 * @return void
-	 */
-	public function logVardump($name, $var)
-	{
-		// this is a no-op for us
-	}
+    /**
+     * an alternative to using PHP's built-in var_dump()
+     *
+     * @param  string $name
+     *         a human-readable name to describe $var
+     *
+     * @param  mixed $var
+     *         the variable to dump
+     *
+     * @return void
+     */
+    public function logVardump($name, $var)
+    {
+        // this is a no-op for us
+    }
 }

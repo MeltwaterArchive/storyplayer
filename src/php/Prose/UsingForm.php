@@ -57,129 +57,129 @@ use Exception;
  */
 class UsingForm extends UsingBrowser
 {
-	protected $formId = null;
-	protected $formElement = null;
+    protected $formId = null;
+    protected $formElement = null;
 
-	protected function initActions()
-	{
-		// call our parent initActions() first
-		parent::initActions();
+    protected function initActions()
+    {
+        // call our parent initActions() first
+        parent::initActions();
 
-		// shorthand
-		$formId = $this->args[0];
+        // shorthand
+        $formId = $this->args[0];
 
-		// find the form
-		$formElement = fromBrowser()->get()->elementById($formId);
+        // find the form
+        $formElement = fromBrowser()->get()->elementById($formId);
 
-		// is it really a form?
-		if (strtolower($formElement->name()) !== 'form') {
-			throw new E5xx_ActionFailed(__METHOD__, "expected form element, got element '" . $formElement->name() . "'");
-		}
+        // is it really a form?
+        if (strtolower($formElement->name()) !== 'form') {
+            throw new E5xx_ActionFailed(__METHOD__, "expected form element, got element '" . $formElement->name() . "'");
+        }
 
-		// yes, it really is a form
-		$this->formId      = $formId;
-		$this->setTopElement($formElement);
-	}
+        // yes, it really is a form
+        $this->formId      = $formId;
+        $this->setTopElement($formElement);
+    }
 
-	// ==================================================================
-	//
-	// Mass form-filling goes here
-	//
-	// ------------------------------------------------------------------
+    // ==================================================================
+    //
+    // Mass form-filling goes here
+    //
+    // ------------------------------------------------------------------
 
-	public function clearFields($fields)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("clear " . count($fields) . " field(s) in the form '{$this->formId}'");
+    public function clearFields($fields)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("clear " . count($fields) . " field(s) in the form '{$this->formId}'");
 
-		foreach ($fields as $labelText => $fieldValue) {
-			usingForm($this->formId)->clear()->theFieldLabelled($labelText);
-		}
+        foreach ($fields as $labelText => $fieldValue) {
+            usingForm($this->formId)->clear()->theFieldLabelled($labelText);
+        }
 
-		$log->endAction();
-	}
+        $log->endAction();
+    }
 
-	public function fillInFields($fields)
-	{
-		// shorthand
-		$formId = $this->formId;
+    public function fillInFields($fields)
+    {
+        // shorthand
+        $formId = $this->formId;
 
-		// what are we doing?
-		$log = usingLog()->startAction("fill in " . count($fields) . " field(s) in the form '{$this->formId}'");
+        // what are we doing?
+        $log = usingLog()->startAction("fill in " . count($fields) . " field(s) in the form '{$this->formId}'");
 
-		foreach ($fields as $labelText => $fieldValue) {
-			// find the element
-			$element = fromForm($formId)->getElementByLabelIdOrName($labelText);
-			$tag     = $element->name();
+        foreach ($fields as $labelText => $fieldValue) {
+            // find the element
+            $element = fromForm($formId)->getElementByLabelIdOrName($labelText);
+            $tag     = $element->name();
 
-			switch ($tag) {
-				case 'input':
-				case 'textarea':
-					$this->type($fieldValue)->intoElement($element);
-					break;
+            switch ($tag) {
+                case 'input':
+                case 'textarea':
+                    $this->type($fieldValue)->intoElement($element);
+                    break;
 
-				case 'select':
-					$this->select($fieldValue)->fromElement($element);
-					break;
+                case 'select':
+                    $this->select($fieldValue)->fromElement($element);
+                    break;
 
-				case null:
-					$log->endAction("cannot find field labelled '{$labelText}'");
-					throw new E5xx_ActionFailed(__METHOD__);
+                case null:
+                    $log->endAction("cannot find field labelled '{$labelText}'");
+                    throw new E5xx_ActionFailed(__METHOD__);
 
-				default:
-					$log->endAction("* field labelled '{$labelText}' has unsupported tag '{$tag}' *");
-					throw new E5xx_ActionFailed(__METHOD__);
-			}
-		}
+                default:
+                    $log->endAction("* field labelled '{$labelText}' has unsupported tag '{$tag}' *");
+                    throw new E5xx_ActionFailed(__METHOD__);
+            }
+        }
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	public function fillInFieldsIfPresent($fields)
-	{
-		// shorthand
-		$formId = $this->formId;
+    public function fillInFieldsIfPresent($fields)
+    {
+        // shorthand
+        $formId = $this->formId;
 
-		// what are we doing?
-		$log = usingLog()->startAction("fill in " . count($fields) . " field(s) in form '{$formId}' if present");
+        // what are we doing?
+        $log = usingLog()->startAction("fill in " . count($fields) . " field(s) in form '{$formId}' if present");
 
-		foreach ($fields as $labelText => $fieldValue) {
-			// find the element
-			$element = $log->addStep("finding field with label, id or name '{$labelText}'", function($log) use($formId, $labelText) {
-				try {
-					return fromForm($formId)->getElementByLabelIdOrName($labelText);
-				}
-				catch (Exception $e) {
-					$log->endAction("field '{$labelText}' not present; ignoring!");
-					return null;
-				}
-			});
+        foreach ($fields as $labelText => $fieldValue) {
+            // find the element
+            $element = $log->addStep("finding field with label, id or name '{$labelText}'", function($log) use($formId, $labelText) {
+                try {
+                    return fromForm($formId)->getElementByLabelIdOrName($labelText);
+                }
+                catch (Exception $e) {
+                    $log->endAction("field '{$labelText}' not present; ignoring!");
+                    return null;
+                }
+            });
 
-			// did we get one?
-			if ($element == null) {
-				// missing field
-				continue;
-			}
+            // did we get one?
+            if ($element == null) {
+                // missing field
+                continue;
+            }
 
-			$tag = strtolower($element->name());
-			switch ($tag) {
-				case 'input':
-				case 'textarea':
-					$this->type($fieldValue)->intoElement($element);
-					break;
+            $tag = strtolower($element->name());
+            switch ($tag) {
+                case 'input':
+                case 'textarea':
+                    $this->type($fieldValue)->intoElement($element);
+                    break;
 
-				case 'select':
-					$this->select($fieldValue)->fromElement($element);
-					break;
+                case 'select':
+                    $this->select($fieldValue)->fromElement($element);
+                    break;
 
-				default:
-					$log->endAction("* field '{$labelText}' has unexpected tag '{$tag}' *");
-					throw new E5xx_ActionFailed(__METHOD__);
-			}
-		}
+                default:
+                    $log->endAction("* field '{$labelText}' has unexpected tag '{$tag}' *");
+                    throw new E5xx_ActionFailed(__METHOD__);
+            }
+        }
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

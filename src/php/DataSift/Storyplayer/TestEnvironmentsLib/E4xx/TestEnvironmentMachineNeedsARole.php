@@ -56,9 +56,9 @@ namespace DataSift\Storyplayer\TestEnvironmentsLib;
  */
 class E4xx_TestEnvironmentMachineNeedsARole extends E4xx_TestEnvironmentConfigError
 {
-	public function __construct($groupIndex, $hostId)
-	{
-		$msg = "machine '{$hostId}' in environment group #{$groupIndex} must define at least one role";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($groupIndex, $hostId)
+    {
+        $msg = "machine '{$hostId}' in environment group #{$groupIndex} must define at least one role";
+        parent::__construct(400, $msg, $msg);
+    }
 }

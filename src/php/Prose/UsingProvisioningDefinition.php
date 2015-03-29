@@ -61,123 +61,123 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingProvisioningDefinition extends Prose
 {
-	public function __construct(StoryTeller $st, $args)
-	{
-		// call our parent
-		parent::__construct($st, $args);
+    public function __construct(StoryTeller $st, $args)
+    {
+        // call our parent
+        parent::__construct($st, $args);
 
-		// $args[0] should be our provisioning block
-		if (!isset($args[0]) || ! $args[0] instanceof ProvisioningDefinition) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 must be a ProvisioningDefinition object");
-		}
-	}
+        // $args[0] should be our provisioning block
+        if (!isset($args[0]) || ! $args[0] instanceof ProvisioningDefinition) {
+            throw new E5xx_ActionFailed(__METHOD__, "Param #0 must be a ProvisioningDefinition object");
+        }
+    }
 
-	public function addHost($hostId)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("add host '{$hostId}' to provisioning definition");
+    public function addHost($hostId)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("add host '{$hostId}' to provisioning definition");
 
-		// create the host
-		if (!isset($this->args[0]->$hostId)) {
-			$this->args[0]->$hostId = new BaseObject();
-		}
+        // create the host
+        if (!isset($this->args[0]->$hostId)) {
+            $this->args[0]->$hostId = new BaseObject();
+        }
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	public function addRole($roleName)
-	{
-		// build our callable
-		$action = function($def, $hostId) use($roleName) {
-			// what are we doing?
-			$log = usingLog()->startAction("add role '{$roleName}' to host '{$hostId}'");
+    public function addRole($roleName)
+    {
+        // build our callable
+        $action = function($def, $hostId) use($roleName) {
+            // what are we doing?
+            $log = usingLog()->startAction("add role '{$roleName}' to host '{$hostId}'");
 
-			// make sure we have an entry for this host
-			if (!isset($def->$hostId)) {
-				$def->$hostId = new BaseObject();
-			}
+            // make sure we have an entry for this host
+            if (!isset($def->$hostId)) {
+                $def->$hostId = new BaseObject();
+            }
 
-			// create our list of roles if we don't have one
-			if (!isset($def->$hostId->roles)) {
-				$def->$hostId->roles = array();
-			}
+            // create our list of roles if we don't have one
+            if (!isset($def->$hostId->roles)) {
+                $def->$hostId->roles = array();
+            }
 
-			// add the role
-			$def->$hostId->roles[] = $roleName;
+            // add the role
+            $def->$hostId->roles[] = $roleName;
 
-			// all done
-			$log->endAction();
-		};
+            // all done
+            $log->endAction();
+        };
 
-		// build our return object
-		$return = new DelayedProvisioningDefinitionAction (
-			$this->args[0],
-			$action
-		);
+        // build our return object
+        $return = new DelayedProvisioningDefinitionAction (
+            $this->args[0],
+            $action
+        );
 
-		// all done
-		return $return;
-	}
+        // all done
+        return $return;
+    }
 
-	public function addParams($params)
-	{
-		// build our callable
-		$action = function($def, $hostId) use($params) {
-			// convert the params into something we can log
-			$printer = new DataPrinter();
-			$logParams = $printer->convertToString($params);
+    public function addParams($params)
+    {
+        // build our callable
+        $action = function($def, $hostId) use($params) {
+            // convert the params into something we can log
+            $printer = new DataPrinter();
+            $logParams = $printer->convertToString($params);
 
-			// what are we doing?
-			$log = usingLog()->startAction("add params '{$logParams}' to host '{$hostId}'");
+            // what are we doing?
+            $log = usingLog()->startAction("add params '{$logParams}' to host '{$hostId}'");
 
-			// make sure we have an entry for this host
-			if (!isset($def->$hostId)) {
-				$def->$hostId = new BaseObject();
-			}
+            // make sure we have an entry for this host
+            if (!isset($def->$hostId)) {
+                $def->$hostId = new BaseObject();
+            }
 
-			// add our params
-			$def->$hostId->params = $params;
+            // add our params
+            $def->$hostId->params = $params;
 
-			// all done
-			$log->endAction();
-		};
+            // all done
+            $log->endAction();
+        };
 
-		// build our return object
-		$return = new DelayedProvisioningDefinitionAction (
-			$this->args[0],
-			$action
-		);
+        // build our return object
+        $return = new DelayedProvisioningDefinitionAction (
+            $this->args[0],
+            $action
+        );
 
-		// all done
-		return $return;
-	}
+        // all done
+        return $return;
+    }
 
-	public function usePlaybook($playbookName)
-	{
-		// build our callable
-		$action = function($def, $hostId) use($playbookName) {
-			// what are we doing?
-			$log = usingLog()->startAction("use top-level playbook '{$playbookName}' to host '{$hostId}'");
+    public function usePlaybook($playbookName)
+    {
+        // build our callable
+        $action = function($def, $hostId) use($playbookName) {
+            // what are we doing?
+            $log = usingLog()->startAction("use top-level playbook '{$playbookName}' to host '{$hostId}'");
 
-			// make sure we have an entry for this host
-			if (!isset($def->$hostId)) {
-				$def->$hostId = new BaseObject();
-			}
+            // make sure we have an entry for this host
+            if (!isset($def->$hostId)) {
+                $def->$hostId = new BaseObject();
+            }
 
-			// add the playbook
-			$def->$hostId->playbook = $playbookName;
+            // add the playbook
+            $def->$hostId->playbook = $playbookName;
 
-			// all done
-			$log->endAction();
-		};
+            // all done
+            $log->endAction();
+        };
 
-		// build our return object
-		$return = new DelayedProvisioningDefinitionAction (
-			$this->args[0],
-			$action
-		);
+        // build our return object
+        $return = new DelayedProvisioningDefinitionAction (
+            $this->args[0],
+            $action
+        );
 
-		// all done
-		return $return;
-	}}
+        // all done
+        return $return;
+    }}

@@ -60,89 +60,89 @@ use DataSift\Stone\TextLib\TextHelper;
  */
 class AssertionsBase extends Prose
 {
-	protected $comparitor = null;
+    protected $comparitor = null;
 
-	public function __construct(StoryTeller $st, $comparitor)
-	{
-		$this->comparitor = $comparitor;
-		parent::__construct($st);
-	}
+    public function __construct(StoryTeller $st, $comparitor)
+    {
+        $this->comparitor = $comparitor;
+        parent::__construct($st);
+    }
 
-	public function __call($methodName, $params)
-	{
-		// what are we doing?
-		//
-		// let's try and make it a bit more useful to the reader
-		$msg = $this->getStartLogMessage($methodName, $params);
-		$log = usingLog()->startAction($msg);
-		$actual4Log = $this->getActualDataForLog();
-		usingLog()->writeToLog("checking data: " . $actual4Log);
+    public function __call($methodName, $params)
+    {
+        // what are we doing?
+        //
+        // let's try and make it a bit more useful to the reader
+        $msg = $this->getStartLogMessage($methodName, $params);
+        $log = usingLog()->startAction($msg);
+        $actual4Log = $this->getActualDataForLog();
+        usingLog()->writeToLog("checking data: " . $actual4Log);
 
-		// is the user trying to call a method that exists in our comparitor?
-		if (!method_exists($this->comparitor, $methodName)) {
-			$log->endAction("unsupported comparison '{$methodName}'");
-			throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
-		}
+        // is the user trying to call a method that exists in our comparitor?
+        if (!method_exists($this->comparitor, $methodName)) {
+            $log->endAction("unsupported comparison '{$methodName}'");
+            throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
+        }
 
-		// if we get here, then there's a comparitor we can call
-		$result = call_user_func_array(array($this->comparitor, $methodName), $params);
+        // if we get here, then there's a comparitor we can call
+        $result = call_user_func_array(array($this->comparitor, $methodName), $params);
 
-		// was the comparison successful?
-		if ($result->hasPassed()) {
-			$log->endAction("assertion passed!");
-			return true;
-		}
+        // was the comparison successful?
+        if ($result->hasPassed()) {
+            $log->endAction("assertion passed!");
+            return true;
+        }
 
-		// if we get here, then the comparison failed
-		usingLog()->writeToLog("expected outcome: " . $result->getExpected());
-		usingLog()->writeToLog("actual   outcome: " . $result->getActual());
-		$log->endAction("assertion failed!");
-		throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
-	}
+        // if we get here, then the comparison failed
+        usingLog()->writeToLog("expected outcome: " . $result->getExpected());
+        usingLog()->writeToLog("actual   outcome: " . $result->getActual());
+        $log->endAction("assertion failed!");
+        throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
+    }
 
-	protected function getStartLogMessage($methodName, $params)
-	{
-		$className = preg_replace('/^.*[\\\\_]([A-Za-z0-9]+)$/', "$1", get_class($this));
-		$words = TextHelper::convertCamelCaseToWords($className);
-		if (isset($words[1])) {
-			$msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
-		}
-		else {
-			$msg = "check data using $className::$methodName";
-		}
+    protected function getStartLogMessage($methodName, $params)
+    {
+        $className = preg_replace('/^.*[\\\\_]([A-Za-z0-9]+)$/', "$1", get_class($this));
+        $words = TextHelper::convertCamelCaseToWords($className);
+        if (isset($words[1])) {
+            $msg = "assert " . strtolower($words[1]) . ' ' . $methodName;
+        }
+        else {
+            $msg = "check data using $className::$methodName";
+        }
 
-		foreach ($params as $expected) {
-			if (is_string($expected)) {
-				$msg .= " '" . $expected . "'";
-			}
-			else {
-				$printer = new DataPrinter;
-				$msg .= ' ' . $printer->convertToStringWithTypeInformation($expected);
-			}
-		}
+        foreach ($params as $expected) {
+            if (is_string($expected)) {
+                $msg .= " '" . $expected . "'";
+            }
+            else {
+                $printer = new DataPrinter;
+                $msg .= ' ' . $printer->convertToStringWithTypeInformation($expected);
+            }
+        }
 
-		// all done
-		return $msg;
-	}
+        // all done
+        return $msg;
+    }
 
-	protected function getActualDataForLog()
-	{
-		// special case - our checkpoint object is a 'fake' object
-		$actual = $this->comparitor->getValue();
+    protected function getActualDataForLog()
+    {
+        // special case - our checkpoint object is a 'fake' object
+        $actual = $this->comparitor->getValue();
 
-		if ($actual instanceof Story_Checkpoint) {
-			$printer = new DataPrinter;
-			$actualLogMsg = $printer->convertToStringWithTypeInformation($actual->getData());
-		}
-		else {
-			$actualLogMsg = $this->comparitor->getValueForLogMessage();
-		}
+        if ($actual instanceof Story_Checkpoint) {
+            $printer = new DataPrinter;
+            $actualLogMsg = $printer->convertToStringWithTypeInformation($actual->getData());
+        }
+        else {
+            $actualLogMsg = $this->comparitor->getValueForLogMessage();
+        }
 
-		return $actualLogMsg;
-	}
+        return $actualLogMsg;
+    }
 
-	public function getComparitor()
-	{
-		return $this->comparitor;
-	}
+    public function getComparitor()
+    {
+        return $this->comparitor;
+    }
 }

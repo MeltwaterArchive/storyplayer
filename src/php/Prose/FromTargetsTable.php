@@ -55,80 +55,80 @@ namespace Prose;
  */
 class FromTargetsTable extends Prose
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "targets";
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "targets";
 
 
-	/**
-	 * getTargetsTable
-	 *
-	 *
-	 * @return object The targets table
-	 */
-	public function getCurrentTestEnvironment()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("get the current test environment from the targets table");
+    /**
+     * getTargetsTable
+     *
+     *
+     * @return object The targets table
+     */
+    public function getCurrentTestEnvironment()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the current test environment from the targets table");
 
-		// which test environment are we working with?
-		$testEnvName = $this->st->getTestEnvironmentName();
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// get the table
-		$table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+        // get the table
+        $table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
 
-		// all done
-		$log->endAction();
-		return $table;
-	}
+        // all done
+        $log->endAction();
+        return $table;
+    }
 
-	public function hasCurrentTestEnvironment()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("do we already have the test environment defined in the targets table?");
+    public function hasCurrentTestEnvironment()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("do we already have the test environment defined in the targets table?");
 
-		// which test environment are we working with?
-		$testEnvName = $this->st->getTestEnvironmentName();
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// get the full targets table
-		$targetsTable = fromRuntimeTable($this->entryKey)->getTable();
+        // get the full targets table
+        $targetsTable = fromRuntimeTable($this->entryKey)->getTable();
 
-		// does the test environment exist?
-		if (isset($targetsTable->$testEnvName)) {
-			$log->endAction("yes");
-			return true;
-		}
+        // does the test environment exist?
+        if (isset($targetsTable->$testEnvName)) {
+            $log->endAction("yes");
+            return true;
+        }
 
-		// no, it does not
-		$log->endAction("no");
-		return false;
-	}
+        // no, it does not
+        $log->endAction("no");
+        return false;
+    }
 
-	public function getCurrentTestEnvironmentSignature()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("do we already have the test environment defined in the targets table?");
+    public function getCurrentTestEnvironmentSignature()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("do we already have the test environment defined in the targets table?");
 
-		// which test environment are we working with?
-		$testEnvName = $this->st->getTestEnvironmentName();
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// get the full targets table
-		$targetsTable = fromRuntimeTable($this->entryKey)->getTable();
-		//var_dump($hostsTable);
+        // get the full targets table
+        $targetsTable = fromRuntimeTable($this->entryKey)->getTable();
+        //var_dump($hostsTable);
 
-		// does the test environment exist?
-		if (!isset($targetsTable->$testEnvName)) {
-			$log->endAction('no signature found');
-			return '';
-		}
+        // does the test environment exist?
+        if (!isset($targetsTable->$testEnvName)) {
+            $log->endAction('no signature found');
+            return '';
+        }
 
-		// no, it does not
-		$return = $targetsTable->$testEnvName;
-		$log->endAction($return);
-		return $return;
-	}
+        // no, it does not
+        $return = $targetsTable->$testEnvName;
+        $log->endAction($return);
+        return $return;
+    }
 }

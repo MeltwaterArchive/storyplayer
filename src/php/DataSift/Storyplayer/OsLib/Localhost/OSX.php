@@ -56,5 +56,5 @@ namespace DataSift\Storyplayer\OsLib;
 
 class Localhost_OSX extends Base_OSX
 {
-	use Connector_UnixShell;
+    use Connector_UnixShell;
 }

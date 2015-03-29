@@ -62,114 +62,114 @@ use Prose\E5xx_NotImplemented;
 
 class PostTestInspectionPhase extends StoryPhase
 {
-	protected $sequenceNo = 6;
+    protected $sequenceNo = 6;
 
-	public function doPhase($story)
-	{
-		// shorthand
-		$st          = $this->st;
-		$storyResult = $story->getResult();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st          = $this->st;
+        $storyResult = $story->getResult();
 
-		// our results object
-		$phaseResult = $this->getNewPhaseResult();
+        // our results object
+        $phaseResult = $this->getNewPhaseResult();
 
-		try {
-			// do we have anything to do?
-			if (!$story->hasPostTestInspection())
-			{
-				$phaseResult->setContinuePlaying(
-					$phaseResult::HASNOACTIONS,
-					"story has no post-test inspection instructions"
-				);
-				return $phaseResult;
-			}
+        try {
+            // do we have anything to do?
+            if (!$story->hasPostTestInspection())
+            {
+                $phaseResult->setContinuePlaying(
+                    $phaseResult::HASNOACTIONS,
+                    "story has no post-test inspection instructions"
+                );
+                return $phaseResult;
+            }
 
-			// do any necessary setup
-			$this->doPerPhaseSetup();
+            // do any necessary setup
+            $this->doPerPhaseSetup();
 
-			// make the call
-			$story = $st->getStory();
-			$callbacks = $story->getPostTestInspection();
-			foreach ($callbacks as $callback) {
-				if (is_callable($callback)) {
-					call_user_func($callback, $st);
-				}
-			}
+            // make the call
+            $story = $st->getStory();
+            $callbacks = $story->getPostTestInspection();
+            foreach ($callbacks as $callback) {
+                if (is_callable($callback)) {
+                    call_user_func($callback, $st);
+                }
+            }
 
-			// if we get here, the post-test inspection did not fail
-			// ... but should it have?
-			if ($storyResult->getStoryShouldFail()) {
-				$phaseResult->setPlayingFailed(
-					$phaseResult::SUCCEEDED,
-					"post-test inspection succeeded when it was expected to fail"
-				);
-				$storyResult->setStoryHasFailed($phaseResult);
-			}
-			else {
-				$phaseResult->setContinuePlaying();
-			}
-		}
-		catch (E5xx_ActionFailed $e) {
-			if ($storyResult->getStoryShouldFail()) {
-				$phaseResult->setContinuePlaying(
-					$phaseResult::SUCCEEDED,
-					$e->getMessage(),
-					$e
-				);
-			}
-			else {
-				$phaseResult->setPlayingFailed(
-					$phaseResult::FAILED,
-					$e->getMessage(),
-					$e
-				);
-				$storyResult->setStoryHasFailed($phaseResult);
-			}
-		}
-		catch (E5xx_ExpectFailed $e) {
-			if ($storyResult->getStoryShouldFail()) {
-				$phaseResult->setContinuePlaying(
-					$phaseResult::SUCCEEDED,
-					$e->getMessage(),
-					$e
-				);
-			}
-			else {
-				$phaseResult->setPlayingFailed(
-					$phaseResult::FAILED,
-					$e->getMessage(),
-					$e
-				);
-				$storyResult->setStoryHasFailed($phaseResult);
-			}
-		}
+            // if we get here, the post-test inspection did not fail
+            // ... but should it have?
+            if ($storyResult->getStoryShouldFail()) {
+                $phaseResult->setPlayingFailed(
+                    $phaseResult::SUCCEEDED,
+                    "post-test inspection succeeded when it was expected to fail"
+                );
+                $storyResult->setStoryHasFailed($phaseResult);
+            }
+            else {
+                $phaseResult->setContinuePlaying();
+            }
+        }
+        catch (E5xx_ActionFailed $e) {
+            if ($storyResult->getStoryShouldFail()) {
+                $phaseResult->setContinuePlaying(
+                    $phaseResult::SUCCEEDED,
+                    $e->getMessage(),
+                    $e
+                );
+            }
+            else {
+                $phaseResult->setPlayingFailed(
+                    $phaseResult::FAILED,
+                    $e->getMessage(),
+                    $e
+                );
+                $storyResult->setStoryHasFailed($phaseResult);
+            }
+        }
+        catch (E5xx_ExpectFailed $e) {
+            if ($storyResult->getStoryShouldFail()) {
+                $phaseResult->setContinuePlaying(
+                    $phaseResult::SUCCEEDED,
+                    $e->getMessage(),
+                    $e
+                );
+            }
+            else {
+                $phaseResult->setPlayingFailed(
+                    $phaseResult::FAILED,
+                    $e->getMessage(),
+                    $e
+                );
+                $storyResult->setStoryHasFailed($phaseResult);
+            }
+        }
 
-		// this is treated as a hard fail
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryIsIncomplete($phaseResult);
-		}
-		// this only happens when something has gone very badly wrong
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasError($phaseResult);
-		}
+        // this is treated as a hard fail
+        catch (E5xx_NotImplemented $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryIsIncomplete($phaseResult);
+        }
+        // this only happens when something has gone very badly wrong
+        catch (Exception $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasError($phaseResult);
+        }
 
-		// close off any open log actions
-		$st->closeAllOpenActions();
+        // close off any open log actions
+        $st->closeAllOpenActions();
 
-		// tidy up after ourselves
-		$this->doPerPhaseTeardown();
+        // tidy up after ourselves
+        $this->doPerPhaseTeardown();
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

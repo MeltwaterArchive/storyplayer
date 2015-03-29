@@ -55,18 +55,18 @@ namespace Prose;
  */
 class FromUuid extends Prose
 {
-	public function generateUuid()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("generate a UUID");
+    public function generateUuid()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("generate a UUID");
 
-		// do we have the UUID extension?
-		$uuid = uuid_create();
+        // do we have the UUID extension?
+        $uuid = uuid_create();
 
-		// log it
-		$log->endAction("'{$uuid}'");
+        // log it
+        $log->endAction("'{$uuid}'");
 
-		// all done
-		return $uuid;
-	}
+        // all done
+        return $uuid;
+    }
 }

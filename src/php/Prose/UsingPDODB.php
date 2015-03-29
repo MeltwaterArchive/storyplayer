@@ -62,120 +62,120 @@ use PDOStatement;
  */
 class UsingPDODB extends Prose
 {
-	public function __construct($st, $args)
-	{
-		// call our parent first
-		parent::__construct($st, $args);
+    public function __construct($st, $args)
+    {
+        // call our parent first
+        parent::__construct($st, $args);
 
-		// make sure we have a PDO connection to use
-		if (!isset($this->args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "param #1 must be a valid PDO connection");
-		}
-		if (!$this->args[0] instanceof PDO) {
-			throw new E5xx_ActionFailed(__METHOD__, "param #1 must be an instance of PDO");
-		}
-	}
+        // make sure we have a PDO connection to use
+        if (!isset($this->args[0])) {
+            throw new E5xx_ActionFailed(__METHOD__, "param #1 must be a valid PDO connection");
+        }
+        if (!$this->args[0] instanceof PDO) {
+            throw new E5xx_ActionFailed(__METHOD__, "param #1 must be an instance of PDO");
+        }
+    }
 
-	public function query($sql, $params = [], $driverParams = [])
-	{
-		// what are we doing?
-		$log = usingLog()->startAction(["run SQL query:", $sql, "/ with params:", $params, "and driver params:", $driverParams]);
+    public function query($sql, $params = [], $driverParams = [])
+    {
+        // what are we doing?
+        $log = usingLog()->startAction(["run SQL query:", $sql, "/ with params:", $params, "and driver params:", $driverParams]);
 
-		try
-		{
-			// create a prepared statement
-			//
-			// we do this so that we can inject the $params into the SQL statement
-			$stmt = $this->args[0]->prepare($sql, $driverParams);
+        try
+        {
+            // create a prepared statement
+            //
+            // we do this so that we can inject the $params into the SQL statement
+            $stmt = $this->args[0]->prepare($sql, $driverParams);
 
-			// execute the prepared statement
-			$stmt->execute($params);
+            // execute the prepared statement
+            $stmt->execute($params);
 
-			// all done
-			$log->endAction();
-			return $stmt;
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+            // all done
+            $log->endAction();
+            return $stmt;
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
-	public function rawQuery($sql, $driverParams = [])
-	{
-		// what are we doing?
-		$log = usingLog()->startAction(["run raw SQL query:", $sql, "with driver params: ", $driverParams]);
+    public function rawQuery($sql, $driverParams = [])
+    {
+        // what are we doing?
+        $log = usingLog()->startAction(["run raw SQL query:", $sql, "with driver params: ", $driverParams]);
 
-		try
-		{
-			// execute the prepared statement
-			//
-			// we do this directly so that you can (hopefully) attempt
-			// SQL injections for testing purposes
-			$stmt = $this->args[0]->query($sql, $driverParams);
+        try
+        {
+            // execute the prepared statement
+            //
+            // we do this directly so that you can (hopefully) attempt
+            // SQL injections for testing purposes
+            $stmt = $this->args[0]->query($sql, $driverParams);
 
-			// all done
-			$log->endAction();
-			return $stmt;
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+            // all done
+            $log->endAction();
+            return $stmt;
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
-	public function beginTransaction()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("begin PDO database transaction");
+    public function beginTransaction()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("begin PDO database transaction");
 
-		try
-		{
-			$this->args[0]->beginTransaction();
+        try
+        {
+            $this->args[0]->beginTransaction();
 
-			// all done
-			$log->endAction();
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+            // all done
+            $log->endAction();
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
-	public function commitTransaction()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("commit PDO database transaction");
+    public function commitTransaction()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("commit PDO database transaction");
 
-		try
-		{
-			$this->args[0]->commit();
+        try
+        {
+            $this->args[0]->commit();
 
-			// all done
-			$log->endAction();
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+            // all done
+            $log->endAction();
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
-	public function rollbackTransaction()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("rollback PDO database transaction");
+    public function rollbackTransaction()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("rollback PDO database transaction");
 
-		try
-		{
-			$this->args[0]->rollBack();
+        try
+        {
+            $this->args[0]->rollBack();
 
-			// all done
-			$log->endAction();
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+            // all done
+            $log->endAction();
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
 }

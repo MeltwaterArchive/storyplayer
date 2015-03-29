@@ -57,218 +57,218 @@ use DataSift\Storyplayer\PlayerLib\Story_Result;
  */
 class TapReport implements Report
 {
-	protected $filename;
-	protected $testCount = 0;
-	protected $tests = [];
+    protected $filename;
+    protected $testCount = 0;
+    protected $tests = [];
 
-	public function __construct($params)
-	{
-		$this->filename = $params['filename'];
-	}
+    public function __construct($params)
+    {
+        $this->filename = $params['filename'];
+    }
 
-	/**
-	 * @param string $version
-	 * @param string $url
-	 * @param string $copyright
-	 * @param string $license
-	 * @return void
-	 */
-	public function startStoryplayer($version, $url, $copyright, $license)
-	{
+    /**
+     * @param string $version
+     * @param string $url
+     * @param string $copyright
+     * @param string $license
+     * @return void
+     */
+    public function startStoryplayer($version, $url, $copyright, $license)
+    {
 
-	}
+    }
 
-	/**
-	 * @return void
-	 */
-	public function endStoryplayer($duration)
-	{
-		// right, now we need to report on what we've seen
-		$fp = fopen($this->filename, "w");
-		if (!$fp) {
-			throw new E5xx_CannotCreateReportFile($this->filename);
-		}
+    /**
+     * @return void
+     */
+    public function endStoryplayer($duration)
+    {
+        // right, now we need to report on what we've seen
+        $fp = fopen($this->filename, "w");
+        if (!$fp) {
+            throw new E5xx_CannotCreateReportFile($this->filename);
+        }
 
-		// write out the header
-		fwrite($fp, "TAP version 13" . PHP_EOL);
-		fwrite($fp, "1.." . $this->testCount . PHP_EOL);
+        // write out the header
+        fwrite($fp, "TAP version 13" . PHP_EOL);
+        fwrite($fp, "1.." . $this->testCount . PHP_EOL);
 
-		// write out each test in turn
-		$storyCounter = 1;
-		foreach ($this->tests as $storyResult) {
-			switch ($storyResult->resultCode) {
-				case $storyResult::PASS:
-					$this->writeOkay($fp, $storyCounter, $storyResult, 'Pass');
-					break;
+        // write out each test in turn
+        $storyCounter = 1;
+        foreach ($this->tests as $storyResult) {
+            switch ($storyResult->resultCode) {
+                case $storyResult::PASS:
+                    $this->writeOkay($fp, $storyCounter, $storyResult, 'Pass');
+                    break;
 
-				case $storyResult::FAIL:
-					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Fail');
-					break;
+                case $storyResult::FAIL:
+                    $this->writeNotOkay($fp, $storyCounter, $storyResult, 'Fail');
+                    break;
 
-				case $storyResult::INCOMPLETE:
-					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Incomplete');
-					break;
+                case $storyResult::INCOMPLETE:
+                    $this->writeNotOkay($fp, $storyCounter, $storyResult, 'Incomplete');
+                    break;
 
-				case $storyResult::BLACKLISTED:
-					$this->writeOkay($fp, $storyCounter, $storyResult, 'Blacklisted');
-					break;
+                case $storyResult::BLACKLISTED:
+                    $this->writeOkay($fp, $storyCounter, $storyResult, 'Blacklisted');
+                    break;
 
-				case $storyResult::ERROR:
-				default:
-					$this->writeNotOkay($fp, $storyCounter, $storyResult, 'Error');
-					break;
-			}
-		}
+                case $storyResult::ERROR:
+                default:
+                    $this->writeNotOkay($fp, $storyCounter, $storyResult, 'Error');
+                    break;
+            }
+        }
 
-		// all done
-		fclose($fp);
-	}
+        // all done
+        fclose($fp);
+    }
 
-	public function resetSilentMode()
-	{
-		// no-op
-	}
+    public function resetSilentMode()
+    {
+        // no-op
+    }
 
-	public function setSilentMode()
-	{
-		// no-op
-	}
+    public function setSilentMode()
+    {
+        // no-op
+    }
 
-	/**
-	 * @param string $storyName
-	 * @param string $storyCategory
-	 * @param string $storyGroup
-	 * @param string $envName
-	 * @param string $deviceName
-	 * @return void
-	 */
-	public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
-	{
-		// keep track of how many tests we have seen
-		$this->testCount++;
-	}
+    /**
+     * @param string $storyName
+     * @param string $storyCategory
+     * @param string $storyGroup
+     * @param string $envName
+     * @param string $deviceName
+     * @return void
+     */
+    public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
+    {
+        // keep track of how many tests we have seen
+        $this->testCount++;
+    }
 
-	/**
-	 * @return void
-	 */
-	public function endStory(Story_Result $storyResult)
-	{
-		$this->tests[] = $storyResult;
-	}
+    /**
+     * @return void
+     */
+    public function endStory(Story_Result $storyResult)
+    {
+        $this->tests[] = $storyResult;
+    }
 
-	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
-	 * @return void
-	 */
-	public function startPhase($phaseName, $phaseType)
-	{
+    /**
+     * @param string $phaseName
+     * @param integer $phaseType
+     * @return void
+     */
+    public function startPhase($phaseName, $phaseType)
+    {
 
-	}
+    }
 
-	/**
-	 * @param string $phaseName
-	 * @param integer $phaseType
-	 * @return void
-	 */
-	public function endPhase($phaseName, $phaseType)
-	{
+    /**
+     * @param string $phaseName
+     * @param integer $phaseType
+     * @return void
+     */
+    public function endPhase($phaseName, $phaseType)
+    {
 
-	}
+    }
 
-	/**
-	 * @param integer $level
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseActivity($msg)
-	{
+    /**
+     * @param integer $level
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseActivity($msg)
+    {
 
-	}
+    }
 
-	/**
-	 * @param string $phaseName
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseError($phaseName, $msg)
-	{
+    /**
+     * @param string $phaseName
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseError($phaseName, $msg)
+    {
 
-	}
+    }
 
-	/**
-	 * @param string $phaseName
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseSkipped($phaseName, $msg)
-	{
+    /**
+     * @param string $phaseName
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseSkipped($phaseName, $msg)
+    {
 
-	}
+    }
 
-	/**
-	 * @param string $msg
-	 *
-	 * @return void
-	 */
-	public function logCliWarning($msg)
-	{
+    /**
+     * @param string $msg
+     *
+     * @return void
+     */
+    public function logCliWarning($msg)
+    {
 
-	}
+    }
 
-	/**
-	 * @param string $msg
-	 *
-	 * @return void
-	 */
-	public function logCliError($msg)
-	{
+    /**
+     * @param string $msg
+     *
+     * @return void
+     */
+    public function logCliError($msg)
+    {
 
-	}
+    }
 
-	/**
-	 * @param string $msg
-	 *
-	 * @return void
-	 */
-	public function logCliInfo($msg)
-	{
+    /**
+     * @param string $msg
+     *
+     * @return void
+     */
+    public function logCliInfo($msg)
+    {
 
-	}
+    }
 
-	/**
-	 * @param string $name
-	 *
-	 * @return void
-	 */
-	public function logVardump($name, $var)
-	{
+    /**
+     * @param string $name
+     *
+     * @return void
+     */
+    public function logVardump($name, $var)
+    {
 
-	}
+    }
 
-	/**
-	 *
-	 * @param  resource $fp
-	 * @param  integer $storyCounter
-	 * @param  Story_Result $storyResult
-	 * @param  string $reason
-	 * @return void
-	 */
-	protected function writeOkay($fp, $storyCounter, Story_Result $storyResult, $reason)
-	{
-		fwrite($fp, 'ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
-	}
+    /**
+     *
+     * @param  resource $fp
+     * @param  integer $storyCounter
+     * @param  Story_Result $storyResult
+     * @param  string $reason
+     * @return void
+     */
+    protected function writeOkay($fp, $storyCounter, Story_Result $storyResult, $reason)
+    {
+        fwrite($fp, 'ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
+    }
 
-	/**
-	 *
-	 * @param  resource $fp
-	 * @param  integer $storyCounter
-	 * @param  Story_Result $storyResult
-	 * @param  string $reason
-	 * @return void
-	 */
-	protected function writeNotOkay($fp, $storyCounter, Story_Result $storyResult, $reason)
-	{
-		fwrite($fp, 'not ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
-	}
+    /**
+     *
+     * @param  resource $fp
+     * @param  integer $storyCounter
+     * @param  Story_Result $storyResult
+     * @param  string $reason
+     * @return void
+     */
+    protected function writeNotOkay($fp, $storyCounter, Story_Result $storyResult, $reason)
+    {
+        fwrite($fp, 'not ok ' . $storyCounter . ' - ' . $reason . ': ' . $storyResult->story->getName() . PHP_EOL);
+    }
 }

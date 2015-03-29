@@ -56,18 +56,18 @@ namespace DataSift\Storyplayer\Phases;
 
 abstract class InternalPrePhase extends Phase
 {
-	public function getPhaseType()
-	{
-		return self::INTERNALPRE_PHASE;
-	}
+    public function getPhaseType()
+    {
+        return self::INTERNALPRE_PHASE;
+    }
 
-	public function doPerPhaseSetup()
-	{
-		// this is a no-op for us
-	}
+    public function doPerPhaseSetup()
+    {
+        // this is a no-op for us
+    }
 
-	public function doPerPhaseTeardown()
-	{
-		// this is also a no-op for us
-	}
+    public function doPerPhaseTeardown()
+    {
+        // this is also a no-op for us
+    }
 }

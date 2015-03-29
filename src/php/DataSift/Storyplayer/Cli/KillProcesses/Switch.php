@@ -59,73 +59,73 @@ use Phix_Project\CliEngine\CliResult;
  */
 class KillProcesses_Switch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define the command
-		$this->setName('kill-processes');
-		$this->setShortDescription('kill any currently-running background processes');
-		$this->setLongDesc(
-			"Use this switch to stop any background processes that Storyplayer "
-			."has previously started in the background."
-			.PHP_EOL .PHP_EOL
-			."You can use the '--list-processes' switch to list these processes before they are killed."
-		);
-		$this->addShortSwitch('k');
-		$this->addLongSwitch('kill-processes');
-		$this->setSwitchActsAsCommand();
-	}
+    public function __construct()
+    {
+        // define the command
+        $this->setName('kill-processes');
+        $this->setShortDescription('kill any currently-running background processes');
+        $this->setLongDesc(
+            "Use this switch to stop any background processes that Storyplayer "
+            ."has previously started in the background."
+            .PHP_EOL .PHP_EOL
+            ."You can use the '--list-processes' switch to list these processes before they are killed."
+        );
+        $this->addShortSwitch('k');
+        $this->addLongSwitch('kill-processes');
+        $this->setSwitchActsAsCommand();
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false, $additionalContext = null)
-	{
-		// shorthand
-		$runtimeConfig = $additionalContext->getRuntimeConfig();
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  array     $params
+     * @param  mixed     $additionalContext
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false, $additionalContext = null)
+    {
+        // shorthand
+        $runtimeConfig = $additionalContext->getRuntimeConfig();
 
-		// are there any processes in the table?
-		if (!isset($runtimeConfig->processes)) {
-			// we're done
-			return new CliResult(0);
-		}
+        // are there any processes in the table?
+        if (!isset($runtimeConfig->processes)) {
+            // we're done
+            return new CliResult(0);
+        }
 
-		// let's walk through the table
-		foreach ($runtimeConfig->processes as $details) {
-			$this->killProcess($details->pid, $details->processName);
-		}
+        // let's walk through the table
+        foreach ($runtimeConfig->processes as $details) {
+            $this->killProcess($details->pid, $details->processName);
+        }
 
-		// all done
-		return new CliResult(CliResult::PROCESS_COMPLETE);
-	}
+        // all done
+        return new CliResult(CliResult::PROCESS_COMPLETE);
+    }
 
-	/**
-	 *
-	 * @param  integer $pid
-	 * @param  string  $processName
-	 * @return void
-	 */
-	public function killProcess($pid, $processName)
-	{
-		// is the process running?
-		if (!posix_kill($pid, 0)) {
-			return;
-		}
+    /**
+     *
+     * @param  integer $pid
+     * @param  string  $processName
+     * @return void
+     */
+    public function killProcess($pid, $processName)
+    {
+        // is the process running?
+        if (!posix_kill($pid, 0)) {
+            return;
+        }
 
-		echo "Killing $pid ($processName) ... ";
-		posix_kill($pid, SIGTERM);
-		if (posix_kill($pid, 0)) {
-			sleep(1);
-			posix_kill($pid, SIGKILL);
-		}
-		if (posix_kill($pid, 0)) {
-			echo "could not kill\n";
-		}
-		else {
-			echo "killed\n";
-		}
-	}
+        echo "Killing $pid ($processName) ... ";
+        posix_kill($pid, SIGTERM);
+        if (posix_kill($pid, 0)) {
+            sleep(1);
+            posix_kill($pid, SIGKILL);
+        }
+        if (posix_kill($pid, 0)) {
+            echo "could not kill\n";
+        }
+        else {
+            echo "killed\n";
+        }
+    }
 }

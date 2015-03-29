@@ -60,68 +60,68 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Feature_TestEnvironmentConfigSwitch extends CliSwitch
 {
-	/**
-	 * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
-	 * @param string $defaultEnvName
-	 */
-	public function __construct($envList, $defaultEnvName)
-	{
-		// define our name, and our description
-		$this->setName('target');
-		$this->setShortDescription('set the environment to test against');
-		$this->setLongDesc(
-			"If you have multiple test environments listed in your configuration files, "
-			. "you can use this switch to choose which test environment to run the test(s) "
-			. "against. If you omit this switch, Storyplayer will default to using your "
-			. "computer's hostname as the value for <environment>."
-			. PHP_EOL
-			. PHP_EOL
-			. "If you only have one test environment listed, then this switch has no "
-			. "effect when used, and Storyplayer will always use the test environment "
-			. "from your configuration file."
-			. PHP_EOL
-			. PHP_EOL
-			. "See http://datasift.github.io/storyplayer/ "
-			. "for how to configure and use multiple test environments."
-		);
+    /**
+     * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
+     * @param string $defaultEnvName
+     */
+    public function __construct($envList, $defaultEnvName)
+    {
+        // define our name, and our description
+        $this->setName('target');
+        $this->setShortDescription('set the environment to test against');
+        $this->setLongDesc(
+            "If you have multiple test environments listed in your configuration files, "
+            . "you can use this switch to choose which test environment to run the test(s) "
+            . "against. If you omit this switch, Storyplayer will default to using your "
+            . "computer's hostname as the value for <environment>."
+            . PHP_EOL
+            . PHP_EOL
+            . "If you only have one test environment listed, then this switch has no "
+            . "effect when used, and Storyplayer will always use the test environment "
+            . "from your configuration file."
+            . PHP_EOL
+            . PHP_EOL
+            . "See http://datasift.github.io/storyplayer/ "
+            . "for how to configure and use multiple test environments."
+        );
 
-		// what are the short switches?
-		$this->addShortSwitch('t');
+        // what are the short switches?
+        $this->addShortSwitch('t');
 
-		// what are the long switches?
-		$this->addLongSwitch('target');
-		$this->addLongSwitch('test-environment');
+        // what are the long switches?
+        $this->addLongSwitch('target');
+        $this->addLongSwitch('test-environment');
 
-		// what is the required argument?
-		$requiredArgMsg = "the environment to test against; one of:" . PHP_EOL . PHP_EOL;
-		foreach($envList->getEntryNames() as $envName) {
-			$requiredArgMsg .= "* $envName" . PHP_EOL;
-		}
-		$requiredArgMsg .= PHP_EOL. ' ';
-		$this->setRequiredArg('<environment>', $requiredArgMsg);
-		$this->setArgValidator(new Feature_TestEnvironmentConfigValidator($envList, $defaultEnvName));
-		$this->setArgHasDefaultValueOf($defaultEnvName);
+        // what is the required argument?
+        $requiredArgMsg = "the environment to test against; one of:" . PHP_EOL . PHP_EOL;
+        foreach($envList->getEntryNames() as $envName) {
+            $requiredArgMsg .= "* $envName" . PHP_EOL;
+        }
+        $requiredArgMsg .= PHP_EOL. ' ';
+        $this->setRequiredArg('<environment>', $requiredArgMsg);
+        $this->setArgValidator(new Feature_TestEnvironmentConfigValidator($envList, $defaultEnvName));
+        $this->setArgHasDefaultValueOf($defaultEnvName);
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// strip off .json if it is there
-		$params[0] = basename($params[0], '.json');
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // strip off .json if it is there
+        $params[0] = basename($params[0], '.json');
 
-		// remember the setting
-		$engine->options->testEnvironmentName = $params[0];
+        // remember the setting
+        $engine->options->testEnvironmentName = $params[0];
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

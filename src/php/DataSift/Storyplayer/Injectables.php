@@ -79,25 +79,25 @@ use DataSift\Storyplayer\Injectables\StoryplayerConfigSupport;
  */
 class Injectables extends BaseInjectables
 {
-	use ActiveConfigSupport;
-	use ActiveDeviceSupport;
-	use ActiveSystemUnderTestConfigSupport;
-	use ActiveTestEnvironmentConfigSupport;
-	use CodeParserSupport;
-	use DataFormatterSupport;
-	use DefaultCommandLineSupport;
-	use DefaultConfigSupport;
-	use DefaultSystemUnderTestName;
-	use DefaultTestEnvironmentName;
-	use KnownDevicesSupport;
-	use KnownSystemsUnderTestSupport;
-	use KnownTestEnvironmentsSupport;
-	use OutputSupport;
-	use PhaseLoaderSupport;
-	use ProseLoaderSupport;
-	use ReportLoaderSupport;
-	use RuntimeConfigSupport;
-	use StaticConfigManagerSupport;
-	use StoryplayerConfigFilenameSupport;
-	use StoryplayerConfigSupport;
+    use ActiveConfigSupport;
+    use ActiveDeviceSupport;
+    use ActiveSystemUnderTestConfigSupport;
+    use ActiveTestEnvironmentConfigSupport;
+    use CodeParserSupport;
+    use DataFormatterSupport;
+    use DefaultCommandLineSupport;
+    use DefaultConfigSupport;
+    use DefaultSystemUnderTestName;
+    use DefaultTestEnvironmentName;
+    use KnownDevicesSupport;
+    use KnownSystemsUnderTestSupport;
+    use KnownTestEnvironmentsSupport;
+    use OutputSupport;
+    use PhaseLoaderSupport;
+    use ProseLoaderSupport;
+    use ReportLoaderSupport;
+    use RuntimeConfigSupport;
+    use StaticConfigManagerSupport;
+    use StoryplayerConfigFilenameSupport;
+    use StoryplayerConfigSupport;
 }

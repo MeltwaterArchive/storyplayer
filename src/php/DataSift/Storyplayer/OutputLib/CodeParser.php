@@ -59,224 +59,224 @@ use PhpParser\Lexer;
  */
 class CodeParser
 {
-	/**
-	 * the raw parser tree of this story, and of any templates that we
-	 * use
-	 *
-	 * @var array
-	 */
-	protected $parserTrees = array();
+    /**
+     * the raw parser tree of this story, and of any templates that we
+     * use
+     *
+     * @var array
+     */
+    protected $parserTrees = array();
 
-	// ==================================================================
-	//
-	// Debugging / error reporting assistance
-	//
-	// ------------------------------------------------------------------
+    // ==================================================================
+    //
+    // Debugging / error reporting assistance
+    //
+    // ------------------------------------------------------------------
 
-	public function buildParseTreeForFile($filename)
-	{
-		// special case - do we already have this file parsed?
-		if (isset($this->parserTrees[$filename])) {
-			// yes - nothing to do
-			return;
-		}
+    public function buildParseTreeForFile($filename)
+    {
+        // special case - do we already have this file parsed?
+        if (isset($this->parserTrees[$filename])) {
+            // yes - nothing to do
+            return;
+        }
 
-		// we need a little bit of help here
-		$parser = new Parser(new Lexer);
+        // we need a little bit of help here
+        $parser = new Parser(new Lexer);
 
-		try {
-			$this->parserTrees[$filename] = $parser->parse(file_get_contents($filename));
+        try {
+            $this->parserTrees[$filename] = $parser->parse(file_get_contents($filename));
 
-			// tell the caller that this worked
-			return true;
-		}
-		catch (Exception $e) {
-			// something went wrong parsing the template
-			// nothing we can do about that
-			$this->parserTrees[$filename] = null;
+            // tell the caller that this worked
+            return true;
+        }
+        catch (Exception $e) {
+            // something went wrong parsing the template
+            // nothing we can do about that
+            $this->parserTrees[$filename] = null;
 
-			// tell the caller that this didn't work
-			return false;
-		}
-	}
+            // tell the caller that this didn't work
+            return false;
+        }
+    }
 
-	public function buildExecutingCodeLine($stackTrace)
-	{
-		static $ourPaths = [
-			"src/bin/storyplayer",
-			"src/php/DataSift/Storyplayer",
-			"vendor/aws",
-			"vendor/bin",
-			"vendor/composer",
-			"vendor/datasift",
-			"vendor/guzzle",
-			"vendor/nikic",
-			"vendor/phix",
-			"vendor/stuart",
-			"vendor/symfony",
-			"vendor/twig",
-		];
+    public function buildExecutingCodeLine($stackTrace)
+    {
+        static $ourPaths = [
+            "src/bin/storyplayer",
+            "src/php/DataSift/Storyplayer",
+            "vendor/aws",
+            "vendor/bin",
+            "vendor/composer",
+            "vendor/datasift",
+            "vendor/guzzle",
+            "vendor/nikic",
+            "vendor/phix",
+            "vendor/stuart",
+            "vendor/symfony",
+            "vendor/twig",
+        ];
 
-		// find the code that is executing
-		foreach ($stackTrace as $index => $stackEntry)
-		{
-			if (!isset($stackEntry['file'])) {
-				continue;
-			}
+        // find the code that is executing
+        foreach ($stackTrace as $index => $stackEntry)
+        {
+            if (!isset($stackEntry['file'])) {
+                continue;
+            }
 
-			// filter out our files
-			foreach ($ourPaths as $ourPath) {
-				if (strpos($stackEntry['file'], $ourPath) !== false) {
-					continue 2;
-				}
-			}
+            // filter out our files
+            foreach ($ourPaths as $ourPath) {
+                if (strpos($stackEntry['file'], $ourPath) !== false) {
+                    continue 2;
+                }
+            }
 
-			// do we have any code for this?
-			$code = $this->getCodeFor($stackEntry['file'], $stackEntry['line']);
-			if (!$code) {
-				continue;
-			}
+            // do we have any code for this?
+            $code = $this->getCodeFor($stackEntry['file'], $stackEntry['line']);
+            if (!$code) {
+                continue;
+            }
 
-			// because we chain multiple method calls on a single line,
-			// a PHP stack entry can contain duplicate entries
-			//
-			// we don't want to show duplicate entries, so we use the
-			// filename@line as a key in the array
-			$key = $stackEntry['file'] . '@' . $stackEntry['line'];
-			$codePoint = $stackEntry;
-			$codePoint['code'] = CodeFormatter::formatCode($code);
-			$codePoint['key']  = $key;
+            // because we chain multiple method calls on a single line,
+            // a PHP stack entry can contain duplicate entries
+            //
+            // we don't want to show duplicate entries, so we use the
+            // filename@line as a key in the array
+            $key = $stackEntry['file'] . '@' . $stackEntry['line'];
+            $codePoint = $stackEntry;
+            $codePoint['code'] = CodeFormatter::formatCode($code);
+            $codePoint['key']  = $key;
 
-			// deal with magic
-			if ($codePoint['function'] == '__call') {
-				$codePoint['args'] = $codePoint['args'][1];
-			}
+            // deal with magic
+            if ($codePoint['function'] == '__call') {
+                $codePoint['args'] = $codePoint['args'][1];
+            }
 
-			// we only care about code that is calling $st
-			// for debugging purposes
-			// if (strpos($codePoint['code'], '$st->') === false) {
-			// 	continue;
-			// }
+            // we only care about code that is calling $st
+            // for debugging purposes
+            // if (strpos($codePoint['code'], '$st->') === false) {
+            //  continue;
+            // }
 
-			// if we get here, we have code that's interesting
-			return $codePoint;
-		}
+            // if we get here, we have code that's interesting
+            return $codePoint;
+        }
 
-		// no success
-		return [];
-	}
+        // no success
+        return [];
+    }
 
-	public function getCodeFor($filename, $lineToFind)
-	{
-		// do we have a parser tree for this file?
-		if (!isset($this->parserTrees[$filename]))
-		{
-			// attempt to build a parse tree
-			if (!$this->buildParseTreeForFile($filename)) {
+    public function getCodeFor($filename, $lineToFind)
+    {
+        // do we have a parser tree for this file?
+        if (!isset($this->parserTrees[$filename]))
+        {
+            // attempt to build a parse tree
+            if (!$this->buildParseTreeForFile($filename)) {
 
-				// sadly, that didn't work
-				return null;
-			}
-		}
+                // sadly, that didn't work
+                return null;
+            }
+        }
 
-		// we have the parsed code
-		//
-		// find the line that the caller is looking for
-		//
-		// the line that we are looking for may well be inside one of
-		// the top-level statements, so we may need to recurse in order
-		// to find it
-		return $this->searchCodeStatementsFor($this->parserTrees[$filename], $lineToFind);
-	}
+        // we have the parsed code
+        //
+        // find the line that the caller is looking for
+        //
+        // the line that we are looking for may well be inside one of
+        // the top-level statements, so we may need to recurse in order
+        // to find it
+        return $this->searchCodeStatementsFor($this->parserTrees[$filename], $lineToFind);
+    }
 
-	protected function searchCodeStatementsFor($stmts, $lineToFind)
-	{
-		// remember the last thing we saw, as it may contain what
-		// we are looking for
-		$lastStmt = null;
+    protected function searchCodeStatementsFor($stmts, $lineToFind)
+    {
+        // remember the last thing we saw, as it may contain what
+        // we are looking for
+        $lastStmt = null;
 
-		foreach($stmts as $stmt) {
-			// where are we?
-			$currentLine = $stmt->getLine();
-			// var_dump($currentLine, $stmt->getType());
+        foreach($stmts as $stmt) {
+            // where are we?
+            $currentLine = $stmt->getLine();
+            // var_dump($currentLine, $stmt->getType());
 
-			// are we there yet?
-			if ($currentLine < $lineToFind) {
-				// still looking
-				$lastStmt = $stmt;
-				continue;
-			}
-			else if ($currentLine == $lineToFind) {
-				// an exact match!!
-				return $stmt;
-			}
-			else if ($lastStmt !== null) {
-				// we have overshot!
-				//
-				// this is where we have to start working quite hard!
-				return $this->searchCodeStatementFor($lastStmt, $lineToFind);
-			}
-			else {
-				// something unexpected has happened
-				return null;
-			}
-		}
+            // are we there yet?
+            if ($currentLine < $lineToFind) {
+                // still looking
+                $lastStmt = $stmt;
+                continue;
+            }
+            else if ($currentLine == $lineToFind) {
+                // an exact match!!
+                return $stmt;
+            }
+            else if ($lastStmt !== null) {
+                // we have overshot!
+                //
+                // this is where we have to start working quite hard!
+                return $this->searchCodeStatementFor($lastStmt, $lineToFind);
+            }
+            else {
+                // something unexpected has happened
+                return null;
+            }
+        }
 
-		if ($lastStmt !== null) {
-			return $this->searchCodeStatementFor($lastStmt, $lineToFind);
-		}
+        if ($lastStmt !== null) {
+            return $this->searchCodeStatementFor($lastStmt, $lineToFind);
+        }
 
-		// if we get here, then we have been unable to find the code at
-		// all
-		return null;
-	}
+        // if we get here, then we have been unable to find the code at
+        // all
+        return null;
+    }
 
-	protected function searchCodeStatementFor($stmt, $lineToFind)
-	{
-		// what are we looking at?
-		$nodeType = $stmt->getType();
+    protected function searchCodeStatementFor($stmt, $lineToFind)
+    {
+        // what are we looking at?
+        $nodeType = $stmt->getType();
 
-		switch ($nodeType)
-		{
-			case 'Arg':
-				// this is an argument to an expression
-				//
-				// its value may be a closure
-				return $this->searchCodeStatementFor($stmt->value, $lineToFind);
+        switch ($nodeType)
+        {
+            case 'Arg':
+                // this is an argument to an expression
+                //
+                // its value may be a closure
+                return $this->searchCodeStatementFor($stmt->value, $lineToFind);
 
-			case 'Expr_Closure':
-				// this is a closure
-				//
-				// the line we are looking for may be inside
-				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+            case 'Expr_Closure':
+                // this is a closure
+                //
+                // the line we are looking for may be inside
+                return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
 
-			case 'Expr_MethodCall':
-				// this is a method call
-				//
-				// one of the arguments to the method call may
-				// be a closure
-				return $this->searchCodeStatementsFor($stmt->args, $lineToFind);
+            case 'Expr_MethodCall':
+                // this is a method call
+                //
+                // one of the arguments to the method call may
+                // be a closure
+                return $this->searchCodeStatementsFor($stmt->args, $lineToFind);
 
-			case 'Stmt_Class':
-				// this is a PHP class
-				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+            case 'Stmt_Class':
+                // this is a PHP class
+                return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
 
-			case 'Stmt_ClassMethod':
-				// this is a method defined in a PHP class
-				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+            case 'Stmt_ClassMethod':
+                // this is a method defined in a PHP class
+                return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
 
-			case 'Stmt_Namespace':
-				// this is a file containing code
-				return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
+            case 'Stmt_Namespace':
+                // this is a file containing code
+                return $this->searchCodeStatementsFor($stmt->stmts, $lineToFind);
 
-			default:
-				// var_dump($nodeType);
-				// var_dump($stmt->getSubNodeNames());
-				// exit(0);
+            default:
+                // var_dump($nodeType);
+                // var_dump($stmt->getSubNodeNames());
+                // exit(0);
 
-				// if we get here, these statements don't contain the line number
-				// at all
-				return null;
-		}
-	}
+                // if we get here, these statements don't contain the line number
+                // at all
+                return null;
+        }
+    }
 }

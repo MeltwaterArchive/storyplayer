@@ -60,7 +60,7 @@ class E4xx_NeedIpAddress extends Exxx_Exception
 {
     public function __construct()
     {
-    	$msg = "No SSH IP address / hostname set; cannot run SSH command";
+        $msg = "No SSH IP address / hostname set; cannot run SSH command";
         parent::__construct(400, $msg, $msg);
     }
 }

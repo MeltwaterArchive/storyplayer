@@ -56,54 +56,54 @@ namespace DataSift\Storyplayer\Phases;
 
 class CheckBlacklistedPhase extends InternalPrePhase
 {
-	public function doPhase($story)
-	{
-		// shorthand
-		$st          = $this->st;
-		$storyResult = $story->getResult();
-		$testEnv     = $st->getTestEnvironmentConfig();
-		$testEnvName = $st->getTestEnvironmentName();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st          = $this->st;
+        $storyResult = $story->getResult();
+        $testEnv     = $st->getTestEnvironmentConfig();
+        $testEnvName = $st->getTestEnvironmentName();
 
-		// our result object
-		$phaseResult = $this->getNewPhaseResult();
+        // our result object
+        $phaseResult = $this->getNewPhaseResult();
 
-		// is this story allowed to run on the current environment?
-		$blacklistedEnvironment = false;
-		if ($testEnv->hasData('options.mustBeWhiteListed') && $testEnv->getData('options.mustBeWhiteListed')) {
-			// by default, stories are not allowed to run on this environment
-			$blacklistedEnvironment = true;
+        // is this story allowed to run on the current environment?
+        $blacklistedEnvironment = false;
+        if ($testEnv->hasData('options.mustBeWhiteListed') && $testEnv->getData('options.mustBeWhiteListed')) {
+            // by default, stories are not allowed to run on this environment
+            $blacklistedEnvironment = true;
 
-			// is this story allowed to run?
-			$whitelistedEnvironments = $story->getWhitelistedEnvironments();
-			if (isset($whitelistedEnvironments[$testEnvName]) && $whitelistedEnvironments[$testEnvName]) {
-				$blacklistedEnvironment = false;
-			}
-		}
+            // is this story allowed to run?
+            $whitelistedEnvironments = $story->getWhitelistedEnvironments();
+            if (isset($whitelistedEnvironments[$testEnvName]) && $whitelistedEnvironments[$testEnvName]) {
+                $blacklistedEnvironment = false;
+            }
+        }
 
-		// are we allowed to proceed?
-		if ($blacklistedEnvironment) {
-			// no, we are not
-			$phaseResult->setSkipPlaying(
-				$phaseResult::BLACKLISTED,
-				"Cannot run story against the environment '{$testEnvName}'"
-			);
-			$storyResult->setStoryHasBeenBlacklisted($phaseResult);
-			return $phaseResult;
-		}
+        // are we allowed to proceed?
+        if ($blacklistedEnvironment) {
+            // no, we are not
+            $phaseResult->setSkipPlaying(
+                $phaseResult::BLACKLISTED,
+                "Cannot run story against the environment '{$testEnvName}'"
+            );
+            $storyResult->setStoryHasBeenBlacklisted($phaseResult);
+            return $phaseResult;
+        }
 
-		// is this story compatible with the current version of Storyplayer?
-		$requiredStoryplayerVersion = $story->getRequiredStoryplayerVersion();
-		if ($requiredStoryplayerVersion != STORYPLAYER_MAJOR_VERSION) {
-			$phaseResult->setSkipPlaying(
-				$phaseResult::BLACKLISTED,
-				"Story requires Storyplayer v{$requiredStoryplayerVersion}"
-			);
-			$storyResult->setStoryHasBeenBlacklisted($phaseResult);
-			return $phaseResult;
-		}
+        // is this story compatible with the current version of Storyplayer?
+        $requiredStoryplayerVersion = $story->getRequiredStoryplayerVersion();
+        if ($requiredStoryplayerVersion != STORYPLAYER_MAJOR_VERSION) {
+            $phaseResult->setSkipPlaying(
+                $phaseResult::BLACKLISTED,
+                "Story requires Storyplayer v{$requiredStoryplayerVersion}"
+            );
+            $storyResult->setStoryHasBeenBlacklisted($phaseResult);
+            return $phaseResult;
+        }
 
-		// if we get here, all is well
-		$phaseResult->setContinuePlaying();
-		return $phaseResult;
-	}
+        // if we get here, all is well
+        $phaseResult->setContinuePlaying();
+        return $phaseResult;
+    }
 }

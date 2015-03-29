@@ -55,68 +55,68 @@ namespace Prose;
  */
 class UsingEc2Instance extends Ec2InstanceBase
 {
-	public function createImage($imageName)
-	{
-		$this->requiresValidHost(__METHOD__);
+    public function createImage($imageName)
+    {
+        $this->requiresValidHost(__METHOD__);
 
-		// what are we doing?
-		$log = usingLog()->startAction("create EBS AMI image '{$imageName}' from EC2 VM '{$this->instanceName}'");
+        // what are we doing?
+        $log = usingLog()->startAction("create EBS AMI image '{$imageName}' from EC2 VM '{$this->instanceName}'");
 
-		// get the AWS EC2 client to work with
-		$ec2Client = fromAws()->getEc2Client();
+        // get the AWS EC2 client to work with
+        $ec2Client = fromAws()->getEc2Client();
 
-		$response = $ec2Client->createImage(array(
-			"InstanceId" => $this->instance['InstanceId'],
-			"Name" => $imageName
-		));
+        $response = $ec2Client->createImage(array(
+            "InstanceId" => $this->instance['InstanceId'],
+            "Name" => $imageName
+        ));
 
-		// did we get an image ID back?
-		if (!isset($response['ImageId'])) {
-			throw new E5xx_ActionFailed(__METHOD__, "no ImageId returned from EC2 :(");
-		}
+        // did we get an image ID back?
+        if (!isset($response['ImageId'])) {
+            throw new E5xx_ActionFailed(__METHOD__, "no ImageId returned from EC2 :(");
+        }
 
-		// all done
-		$log->endAction("created AMI image '{$response['ImageId']}'");
-		return $response['ImageId'];
-	}
+        // all done
+        $log->endAction("created AMI image '{$response['ImageId']}'");
+        return $response['ImageId'];
+    }
 
-	public function markAllVolumesAsDeleteOnTermination()
-	{
-		$this->requiresValidHost(__METHOD__);
+    public function markAllVolumesAsDeleteOnTermination()
+    {
+        $this->requiresValidHost(__METHOD__);
 
-		// what are we doing?
-		$log = usingLog()->startAction("mark all volumes on EC2 VM '{$this->instanceName}' to be deleted on termination");
+        // what are we doing?
+        $log = usingLog()->startAction("mark all volumes on EC2 VM '{$this->instanceName}' to be deleted on termination");
 
-		// create a list of all of the volumes we're going to modify
-		$ebsVolumes = array();
-		foreach ($this->instance['BlockDeviceMappings'] as $origEbsVolume) {
-			$ebsVolume = array(
-				'DeviceName' => $origEbsVolume['DeviceName'],
-				'Ebs' => array (
-					'DeleteOnTermination' => true
-				)
-			);
+        // create a list of all of the volumes we're going to modify
+        $ebsVolumes = array();
+        foreach ($this->instance['BlockDeviceMappings'] as $origEbsVolume) {
+            $ebsVolume = array(
+                'DeviceName' => $origEbsVolume['DeviceName'],
+                'Ebs' => array (
+                    'DeleteOnTermination' => true
+                )
+            );
 
-			$ebsVolumes[] = $ebsVolume;
-		}
+            $ebsVolumes[] = $ebsVolume;
+        }
 
-		// get the AWS EC2 client to work with
-		$ec2Client = fromAws()->getEc2Client();
+        // get the AWS EC2 client to work with
+        $ec2Client = fromAws()->getEc2Client();
 
-		// let's mark all of the volumes as needing to be deleted
-		// on termination
-		$ec2Client->modifyInstanceAttribute(array(
-			'InstanceId' => $this->instance['InstanceId'],
-			'BlockDeviceMappings' => $ebsVolumes
-		));
+        // let's mark all of the volumes as needing to be deleted
+        // on termination
+        $ec2Client->modifyInstanceAttribute(array(
+            'InstanceId' => $this->instance['InstanceId'],
+            'BlockDeviceMappings' => $ebsVolumes
+        ));
 
-		// now, we need to make sure that actually worked
-		$this->instance = fromEc2()->getInstance($this->instanceName);
+        // now, we need to make sure that actually worked
+        $this->instance = fromEc2()->getInstance($this->instanceName);
 
-		// var_dump("\n\n\nAFTER MODIFY INSTANCE ATTRIBUTE\n\n");
-		// var_dump($this->instance);
+        // var_dump("\n\n\nAFTER MODIFY INSTANCE ATTRIBUTE\n\n");
+        // var_dump($this->instance);
 
-		// that should be that
-		$log->endAction();
-	}
+        // that should be that
+        $log->endAction();
+    }
 }

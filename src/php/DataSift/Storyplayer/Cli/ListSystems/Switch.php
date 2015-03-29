@@ -59,47 +59,47 @@ use Phix_Project\CliEngine\CliResult;
  */
 class ListSystems_Switch extends CliSwitch
 {
-	protected $sutList;
+    protected $sutList;
 
-	public function __construct($sutList)
-	{
-		// define the command
-		$this->setName('list-systems');
-		$this->setShortDescription('list the available systems-under-test');
-		$this->setLongDesc(
-			"Use this switch to get a list of all of the systems-under-test"
-			. " that are defined in the config files."
-		);
+    public function __construct($sutList)
+    {
+        // define the command
+        $this->setName('list-systems');
+        $this->setShortDescription('list the available systems-under-test');
+        $this->setLongDesc(
+            "Use this switch to get a list of all of the systems-under-test"
+            . " that are defined in the config files."
+        );
 
-		// what are the short switches?
-		$this->addShortSwitch('S');
+        // what are the short switches?
+        $this->addShortSwitch('S');
 
-		// what are the long switches?
-		$this->addLongSwitch('list-systems');
+        // what are the long switches?
+        $this->addLongSwitch('list-systems');
 
-		// we are actually a command, pretending to be a switch
-		$this->setSwitchActsAsCommand();
+        // we are actually a command, pretending to be a switch
+        $this->setSwitchActsAsCommand();
 
-		// remember the environments list
-		$this->sutList = $sutList;
-	}
+        // remember the environments list
+        $this->sutList = $sutList;
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  int $invokes
-	 * @param  array     $params
-	 * @param  boolean $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// list the systems-under-test (if any) in a machine-friendly way
-		foreach ($this->sutList as $sutName) {
-			echo "{$sutName}\n";
-		}
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  int $invokes
+     * @param  array     $params
+     * @param  boolean $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // list the systems-under-test (if any) in a machine-friendly way
+        foreach ($this->sutList as $sutName) {
+            echo "{$sutName}\n";
+        }
 
-		// all done
-		return new CliResult(CliResult::PROCESS_COMPLETE);
-	}
+        // all done
+        return new CliResult(CliResult::PROCESS_COMPLETE);
+    }
 }

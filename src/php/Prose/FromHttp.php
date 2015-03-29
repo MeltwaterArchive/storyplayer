@@ -62,53 +62,53 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  */
 class FromHttp extends Prose
 {
-	public function get($url, $params = array(), $headers = array(), $timeout = null)
-	{
-		// create the full URL
-		if (count($params) > 0) {
-			$url = $url . '?' . http_build_query($params);
-		}
+    public function get($url, $params = array(), $headers = array(), $timeout = null)
+    {
+        // create the full URL
+        if (count($params) > 0) {
+            $url = $url . '?' . http_build_query($params);
+        }
 
-		// what are we doing?
-		$log = usingLog()->startAction("HTTP GET '${url}'");
+        // what are we doing?
+        $log = usingLog()->startAction("HTTP GET '${url}'");
 
-		// build the HTTP request
-		$request = new HttpClientRequest($url);
-		$request->withUserAgent("Storyplayer")
-		        ->asGetRequest();
-		foreach ($headers as $key => $value) {
-			$request->withExtraHeader($key, $value);
-		}
+        // build the HTTP request
+        $request = new HttpClientRequest($url);
+        $request->withUserAgent("Storyplayer")
+                ->asGetRequest();
+        foreach ($headers as $key => $value) {
+            $request->withExtraHeader($key, $value);
+        }
 
         // special case - do we validate SSL certificates in this
         // test environment?
         $httpAddress = $request->getAddress();
         if ($httpAddress->scheme == "https") {
-	        $validateSsl = fromConfig()->getModuleSetting("http.validateSsl");
-	        if (null === $validateSsl) {
-	        	// default to TRUE if no setting present
-	        	$validateSsl = true;
-	        }
-	        if (!$validateSsl) {
-	        	$request->disableSslCertificateValidation();
-	        }
-	}
+            $validateSsl = fromConfig()->getModuleSetting("http.validateSsl");
+            if (null === $validateSsl) {
+                // default to TRUE if no setting present
+                $validateSsl = true;
+            }
+            if (!$validateSsl) {
+                $request->disableSslCertificateValidation();
+            }
+    }
 
-	if ($timeout !== null) {
-		$request->setReadTimeout($timeout);
-	}
+    if ($timeout !== null) {
+        $request->setReadTimeout($timeout);
+    }
 
-		// make the call
-		$client = new HttpClient();
-		$response = $client->newRequest($request);
+        // make the call
+        $client = new HttpClient();
+        $response = $client->newRequest($request);
 
-		// is this a valid response?
-		if (!$response instanceof HttpClientResponse) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // is this a valid response?
+        if (!$response instanceof HttpClientResponse) {
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// all done
-		$log->endAction($response);
-		return $response;
-	}
+        // all done
+        $log->endAction($response);
+        return $response;
+    }
 }

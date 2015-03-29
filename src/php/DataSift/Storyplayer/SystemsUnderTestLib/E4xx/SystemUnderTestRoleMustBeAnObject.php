@@ -58,9 +58,9 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_SystemUnderTestRoleMustBeAnObject extends E4xx_SystemUnderTestConfigError
 {
-	public function __construct($filename, $index)
-	{
-		$msg = "Config file '{$filename}': 'roles[{$index}]' must be an object";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($filename, $index)
+    {
+        $msg = "Config file '{$filename}': 'roles[{$index}]' must be an object";
+        parent::__construct(400, $msg, $msg);
+    }
 }

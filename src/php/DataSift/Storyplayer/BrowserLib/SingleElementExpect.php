@@ -60,123 +60,123 @@ use Prose\E5xx_ExpectFailed;
  */
 class SingleElementExpect
 {
-	protected $topElement;
-	protected $searchMethodName;
-	protected $searchMethodParams;
+    protected $topElement;
+    protected $searchMethodName;
+    protected $searchMethodParams;
 
-	/**
-	 * @param \DataSift\WebDriver\WebDriverElement $topElement
-	 * @param string $searchMethodName
-	 * @param array  $searchMethodParams
-	 */
-	public function __construct($topElement, $searchMethodName, $searchMethodParams)
-	{
-		$this->topElement         = $topElement;
-		$this->searchMethodName   = $searchMethodName;
-		$this->searchMethodParams = $searchMethodParams;
-	}
+    /**
+     * @param \DataSift\WebDriver\WebDriverElement $topElement
+     * @param string $searchMethodName
+     * @param array  $searchMethodParams
+     */
+    public function __construct($topElement, $searchMethodName, $searchMethodParams)
+    {
+        $this->topElement         = $topElement;
+        $this->searchMethodName   = $searchMethodName;
+        $this->searchMethodParams = $searchMethodParams;
+    }
 
-	public function isBlank()
-	{
-		$action = function($element, $elementName, $elementDesc) {
-			$log = usingLog()->startAction("$elementDesc '$elementName' must be blank");
+    public function isBlank()
+    {
+        $action = function($element, $elementName, $elementDesc) {
+            $log = usingLog()->startAction("$elementDesc '$elementName' must be blank");
 
-			// test it
-			if (strlen($element->attribute("value")) == 0) {
-				$log->endAction();
-				return true;
-			}
+            // test it
+            if (strlen($element->attribute("value")) == 0) {
+                $log->endAction();
+                return true;
+            }
 
-			throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is blank', $elementName . ' is not blank');
-		};
+            throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is blank', $elementName . ' is not blank');
+        };
 
-		$wrapper = new SingleElementAction(
-			$action,
-			"check",
-			$this->topElement
-		);
+        $wrapper = new SingleElementAction(
+            $action,
+            "check",
+            $this->topElement
+        );
 
-		$method = $this->searchMethodName;
-		$params = $this->searchMethodParams;
+        $method = $this->searchMethodName;
+        $params = $this->searchMethodParams;
 
-		call_user_func_array([$wrapper, $method], $params);
-	}
+        call_user_func_array([$wrapper, $method], $params);
+    }
 
-	public function isNotBlank()
-	{
-		$action = function($element, $elementName, $elementDesc) {
-			$log = usingLog()->startAction("$elementDesc '$elementName' must not be blank");
+    public function isNotBlank()
+    {
+        $action = function($element, $elementName, $elementDesc) {
+            $log = usingLog()->startAction("$elementDesc '$elementName' must not be blank");
 
-			// test it
-			if (strlen($element->attribute("value")) > 0) {
-				$log->endAction();
-				return true;
-			}
+            // test it
+            if (strlen($element->attribute("value")) > 0) {
+                $log->endAction();
+                return true;
+            }
 
-			throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is not blank', $elementName . ' is blank');
-		};
+            throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is not blank', $elementName . ' is blank');
+        };
 
-		$wrapper = new SingleElementAction(
-			$action,
-			"check",
-			$this->topElement
-		);
+        $wrapper = new SingleElementAction(
+            $action,
+            "check",
+            $this->topElement
+        );
 
-		$method = $this->searchMethodName;
-		$params = $this->searchMethodParams;
+        $method = $this->searchMethodName;
+        $params = $this->searchMethodParams;
 
-		call_user_func_array([$wrapper, $method], $params);
-	}
+        call_user_func_array([$wrapper, $method], $params);
+    }
 
-	public function isChecked()
-	{
-		$action = function($element, $elementName, $elementDesc) {
-			$log = usingLog()->startAction("$elementDesc '$elementName' must be checked");
+    public function isChecked()
+    {
+        $action = function($element, $elementName, $elementDesc) {
+            $log = usingLog()->startAction("$elementDesc '$elementName' must be checked");
 
-			// test it
-			if ($element->attribute("checked")) {
-				$log->endAction();
-				return true;
-			}
+            // test it
+            if ($element->attribute("checked")) {
+                $log->endAction();
+                return true;
+            }
 
-			throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is checked', $elementName . ' is not checked');
-		};
+            throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is checked', $elementName . ' is not checked');
+        };
 
-		$wrapper = new SingleElementAction(
-			$action,
-			"check",
-			$this->topElement
-		);
+        $wrapper = new SingleElementAction(
+            $action,
+            "check",
+            $this->topElement
+        );
 
-		$method = $this->searchMethodName;
-		$params = $this->searchMethodParams;
+        $method = $this->searchMethodName;
+        $params = $this->searchMethodParams;
 
-		call_user_func_array([$wrapper, $method], $params);
-	}
+        call_user_func_array([$wrapper, $method], $params);
+    }
 
-	public function isNotChecked()
-	{
-		$action = function($element, $elementName, $elementDesc) {
-			$log = usingLog()->startAction("$elementDesc '$elementName' must not be checked");
+    public function isNotChecked()
+    {
+        $action = function($element, $elementName, $elementDesc) {
+            $log = usingLog()->startAction("$elementDesc '$elementName' must not be checked");
 
-			// test it
-			if (!$element->attribute("checked")) {
-				$log->endAction();
-				return true;
-			}
+            // test it
+            if (!$element->attribute("checked")) {
+                $log->endAction();
+                return true;
+            }
 
-			throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is not checked', $elementName . ' is checked');
-		};
+            throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is not checked', $elementName . ' is checked');
+        };
 
-		$wrapper = new SingleElementAction(
-			$action,
-			"check",
-			$this->topElement
-		);
+        $wrapper = new SingleElementAction(
+            $action,
+            "check",
+            $this->topElement
+        );
 
-		$method = $this->searchMethodName;
-		$params = $this->searchMethodParams;
+        $method = $this->searchMethodName;
+        $params = $this->searchMethodParams;
 
-		call_user_func_array([$wrapper, $method], $params);
-	}
+        call_user_func_array([$wrapper, $method], $params);
+    }
 }

@@ -57,60 +57,60 @@ use Prose\E5xx_UnknownDomElementType;
  */
 trait VisibleElementFinder
 {
-	/**
-	 * @return \DataSift\WebDriver\WebDriverElement
-	 */
-	public function returnNthVisibleElement($nth, $elements)
-	{
-		// what are we doing?
-		$count = count($elements);
-		$log = usingLog()->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
+    /**
+     * @return \DataSift\WebDriver\WebDriverElement
+     */
+    public function returnNthVisibleElement($nth, $elements)
+    {
+        // what are we doing?
+        $count = count($elements);
+        $log = usingLog()->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
 
-		// special case - not enough elements, even if they were all
-		// visible
-		if ($nth >= count($elements)) {
-			$log->endAction("not enough elements :(");
-			throw new E5xx_ActionFailed(__METHOD__, "no matching element found");
-		}
+        // special case - not enough elements, even if they were all
+        // visible
+        if ($nth >= count($elements)) {
+            $log->endAction("not enough elements :(");
+            throw new E5xx_ActionFailed(__METHOD__, "no matching element found");
+        }
 
-		// let's track which visible element we're looking at
-		$checkedIndex = 0;
+        // let's track which visible element we're looking at
+        $checkedIndex = 0;
 
-		// if the page contains multiple matches, return the first one
-		// that the user can see
-		foreach ($elements as $element) {
-			if (!$element->displayed()) {
-				// DO NOT increment $checkedIndex here
-				//
-				// we only increment it for elements that are visible
-				continue;
-			}
+        // if the page contains multiple matches, return the first one
+        // that the user can see
+        foreach ($elements as $element) {
+            if (!$element->displayed()) {
+                // DO NOT increment $checkedIndex here
+                //
+                // we only increment it for elements that are visible
+                continue;
+            }
 
-			// skip hidden input fields
-			// if ($element->name() == 'input') {
-			// 	try {
-			// 		$typeAttr = $element->attribute('type');
-			// 		if ($typeAttr == 'hidden') {
-			// 			// skip this
-			// 			continue;
-			// 		}
-			// 	}
-			// 	catch (Exception $e) {
-			// 		// no 'type' attribute
-			// 		//
-			// 		// not fatal
-			// 	}
-			// }
+            // skip hidden input fields
+            // if ($element->name() == 'input') {
+            //  try {
+            //      $typeAttr = $element->attribute('type');
+            //      if ($typeAttr == 'hidden') {
+            //          // skip this
+            //          continue;
+            //      }
+            //  }
+            //  catch (Exception $e) {
+            //      // no 'type' attribute
+            //      //
+            //      // not fatal
+            //  }
+            // }
 
-			if ($checkedIndex == $nth) {
-				// a match!
-				$log->endAction();
-				return $element;
-			}
-		}
+            if ($checkedIndex == $nth) {
+                // a match!
+                $log->endAction();
+                return $element;
+            }
+        }
 
-		$msg = "no matching element found";
-		$log->endAction($msg);
-		throw new E5xx_ActionFailed(__METHOD__, $msg);
-	}
+        $msg = "no matching element found";
+        $log->endAction($msg);
+        throw new E5xx_ActionFailed(__METHOD__, $msg);
+    }
 }

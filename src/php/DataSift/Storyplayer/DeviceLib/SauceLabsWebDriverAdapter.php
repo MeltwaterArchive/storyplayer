@@ -61,117 +61,117 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class SauceLabsWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 {
-	/**
-	 *
-	 * @param  StoryTeller $st
-	 * @return void
-	 */
-	public function start(StoryTeller $st)
-	{
-		// Sauce Labs handles proxying for us (if required)
-		// via the Sauce Connect app
+    /**
+     *
+     * @param  StoryTeller $st
+     * @return void
+     */
+    public function start(StoryTeller $st)
+    {
+        // Sauce Labs handles proxying for us (if required)
+        // via the Sauce Connect app
 
-		// build the Sauce Labs url
-		$url = "http://"
-		     . urlencode($this->browserDetails->saucelabs->username)
-		     . ':'
-		     . urlencode($this->browserDetails->saucelabs->accesskey)
-		     . '@ondemand.saucelabs.com/wd/hub';
+        // build the Sauce Labs url
+        $url = "http://"
+             . urlencode($this->browserDetails->saucelabs->username)
+             . ':'
+             . urlencode($this->browserDetails->saucelabs->accesskey)
+             . '@ondemand.saucelabs.com/wd/hub';
 
-		// build the Sauce Labs capabilities array
-		$desiredCapabilities = $this->browserDetails->desiredCapabilities;
+        // build the Sauce Labs capabilities array
+        $desiredCapabilities = $this->browserDetails->desiredCapabilities;
 
-		// add the story's name, so that someone looking at the Sauce Labs
-		// list of jobs can see what this browser was used for
-		//
-		// due to encoding errors at SauceLabs, we can't use '>' as a
-		// delimiter in the story's name
-		$story = $st->getStory();
-		$desiredCapabilities['name'] = $st->getTestEnvironmentName() . ' / ' . $st->getCurrentPhase() . ': ' . $st->getCurrentPhaseName() . ' / '. $story->getName();
+        // add the story's name, so that someone looking at the Sauce Labs
+        // list of jobs can see what this browser was used for
+        //
+        // due to encoding errors at SauceLabs, we can't use '>' as a
+        // delimiter in the story's name
+        $story = $st->getStory();
+        $desiredCapabilities['name'] = $st->getTestEnvironmentName() . ' / ' . $st->getCurrentPhase() . ': ' . $st->getCurrentPhaseName() . ' / '. $story->getName();
 
-		// create the browser session
-		$webDriver = new WebDriverClient($url);
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			$desiredCapabilities
-		);
-	}
+        // create the browser session
+        $webDriver = new WebDriverClient($url);
+        $this->browserSession = $webDriver->newSession(
+            $this->browserDetails->browser,
+            $desiredCapabilities
+        );
+    }
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function stop()
-	{
-		// stop the web browser
-		if (is_object($this->browserSession))
-		{
-			$this->browserSession->close();
-			$this->browserSession = null;
-		}
+    /**
+     *
+     * @return void
+     */
+    public function stop()
+    {
+        // stop the web browser
+        if (is_object($this->browserSession))
+        {
+            $this->browserSession->close();
+            $this->browserSession = null;
+        }
 
-		// now stop the proxy
-		if (is_object($this->proxySession))
-		{
-			try {
-				$this->proxySession->close();
-			}
-			catch (Exception $e) {
-				// do nothing - we don't care!
-			}
-			$this->proxySession = null;
-		}
-	}
+        // now stop the proxy
+        if (is_object($this->proxySession))
+        {
+            try {
+                $this->proxySession->close();
+            }
+            catch (Exception $e) {
+                // do nothing - we don't care!
+            }
+            $this->proxySession = null;
+        }
+    }
 
-	/*
-	 * this code was written to embed the HTTP Basic Auth details
-	 * into the URL we are testing
-	 *
-	 * unfortunately, at the time of writing, although it's the
-	 * documented way of doing this, it isn't correctly supported
-	 * in any browser that I've tested
-	 *
-	 * there's a ticket in with SauceLabs on this one
-	 *
-	 * I'm leaving this code here in case we're able to switch to it
-	 * in future, as the approach we're using for now is a great big
-	 * dirty hack
-	 *
-	public function applyHttpBasicAuthForHost($hostname, $url)
-	{
-		// get the auth credentials
-		$credentials = $this->getHttpBasicAuthForHost($hostname);
+    /*
+     * this code was written to embed the HTTP Basic Auth details
+     * into the URL we are testing
+     *
+     * unfortunately, at the time of writing, although it's the
+     * documented way of doing this, it isn't correctly supported
+     * in any browser that I've tested
+     *
+     * there's a ticket in with SauceLabs on this one
+     *
+     * I'm leaving this code here in case we're able to switch to it
+     * in future, as the approach we're using for now is a great big
+     * dirty hack
+     *
+    public function applyHttpBasicAuthForHost($hostname, $url)
+    {
+        // get the auth credentials
+        $credentials = $this->getHttpBasicAuthForHost($hostname);
 
-		// we're going to embed them in the URL
-		$url = http_build_url($url, $credentials);
+        // we're going to embed them in the URL
+        $url = http_build_url($url, $credentials);
 
-		// all done
-		return $url;
-	}*/
+        // all done
+        return $url;
+    }*/
 
-	/**
-	 *
-	 * @param  string $hostname
-	 * @param  string $url
-	 * @return string
-	 */
-	public function applyHttpBasicAuthForHost($hostname, $url)
-	{
-		// get the auth credentials
-		$credentials = $this->getHttpBasicAuthForHost($hostname);
+    /**
+     *
+     * @param  string $hostname
+     * @param  string $url
+     * @return string
+     */
+    public function applyHttpBasicAuthForHost($hostname, $url)
+    {
+        // get the auth credentials
+        $credentials = $this->getHttpBasicAuthForHost($hostname);
 
-		// get the proxy server
-		//
-		// this is an absolutely *horrible* hack, as we're relying on
-		// there being absolutely no parallel testing going on for this
-		// to work
-		//
-		// that said, SauceConnect also relies on exactly the same hack,
-		// so as long as it works at all, so will this hack
-		$proxySession = new BrowserMobProxySession('http://localhost:9090', 9091);
-		$proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
+        // get the proxy server
+        //
+        // this is an absolutely *horrible* hack, as we're relying on
+        // there being absolutely no parallel testing going on for this
+        // to work
+        //
+        // that said, SauceConnect also relies on exactly the same hack,
+        // so as long as it works at all, so will this hack
+        $proxySession = new BrowserMobProxySession('http://localhost:9090', 9091);
+        $proxySession->setHttpBasicAuth($hostname, $credentials['user'], $credentials['pass']);
 
-		// all done
-		return $url;
-	}
+        // all done
+        return $url;
+    }
 }

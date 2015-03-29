@@ -56,5 +56,5 @@ namespace DataSift\Storyplayer\OsLib;
 
 class Remote_OSX extends Base_OSX
 {
-	use Connector_SshClient;
+    use Connector_SshClient;
 }

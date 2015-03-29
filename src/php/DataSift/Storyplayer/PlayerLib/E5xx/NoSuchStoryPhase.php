@@ -61,9 +61,9 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_NoSuchStoryPhase extends Exxx_Exception
 {
-	public function __construct($phase)
-	{
-		$msg = "No such story phase '{$phase}'";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct($phase)
+    {
+        $msg = "No such story phase '{$phase}'";
+        parent::__construct(500, $msg, $msg);
+    }
 }

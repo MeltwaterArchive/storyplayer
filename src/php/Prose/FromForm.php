@@ -55,23 +55,23 @@ namespace Prose;
  */
 class FromForm extends FromBrowser
 {
-	protected $formId;
+    protected $formId;
 
-	protected function initActions()
-	{
-		// shorthand
-		$formId = $this->args[0];
+    protected function initActions()
+    {
+        // shorthand
+        $formId = $this->args[0];
 
-		// find the form
-		$formElement = fromBrowser()->get()->elementById($formId);
+        // find the form
+        $formElement = fromBrowser()->get()->elementById($formId);
 
-		// is it really a form?
-		if (strtolower($formElement->name()) !== 'form') {
-			throw new E5xx_ActionFailed('form');
-		}
+        // is it really a form?
+        if (strtolower($formElement->name()) !== 'form') {
+            throw new E5xx_ActionFailed('form');
+        }
 
-		// yes, it really is a form
-		$this->formId      = $formId;
-		$this->setTopElement($formElement);
-	}
+        // yes, it really is a form
+        $this->formId      = $formId;
+        $this->setTopElement($formElement);
+    }
 }

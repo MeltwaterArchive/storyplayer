@@ -65,7 +65,7 @@ class E5xx_StoryCannotRun extends Exxx_Exception
      */
     public function __construct($msg)
     {
-    	$msg = "story cannot run: " . $msg;
+        $msg = "story cannot run: " . $msg;
         parent::__construct(500, $msg, $msg);
     }
 }

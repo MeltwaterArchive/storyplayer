@@ -56,46 +56,46 @@ namespace DataSift\Storyplayer\Phases;
 
 class CheckTestEnvironmentPhase extends InternalPrePhase
 {
-	public function doPhase($story)
-	{
-		// shorthand
-		$st          = $this->st;
-		$storyResult = $story->getResult();
-		$testEnvName = $st->getTestEnvironmentName();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st          = $this->st;
+        $storyResult = $story->getResult();
+        $testEnvName = $st->getTestEnvironmentName();
 
-		// our result object
-		$phaseResult = $this->getNewPhaseResult();
+        // our result object
+        $phaseResult = $this->getNewPhaseResult();
 
-		// does the story care about which roles the test environment
-		// defines?
-		$requiredRoles = $story->getRequiredTestEnvironmentRoles();
-		if (empty($requiredRoles)) {
-			$phaseResult->setContinuePlaying();
-			return $phaseResult;
-		}
+        // does the story care about which roles the test environment
+        // defines?
+        $requiredRoles = $story->getRequiredTestEnvironmentRoles();
+        if (empty($requiredRoles)) {
+            $phaseResult->setContinuePlaying();
+            return $phaseResult;
+        }
 
-		// does this environment define the roles that the story
-		// requires?
-		$missingRoles = [];
-		foreach ($requiredRoles as $requiredRole) {
-			$roleDetails = $st->fromRolesTable()->getDetailsForRole($requiredRole);
-			if (empty($roleDetails)) {
-				$missingRoles[] = $requiredRole;
-			}
-		}
+        // does this environment define the roles that the story
+        // requires?
+        $missingRoles = [];
+        foreach ($requiredRoles as $requiredRole) {
+            $roleDetails = $st->fromRolesTable()->getDetailsForRole($requiredRole);
+            if (empty($roleDetails)) {
+                $missingRoles[] = $requiredRole;
+            }
+        }
 
-		if (!empty($missingRoles)) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				"Test environment '{$testEnvName}' does not provide these role(s): " . implode(', ', $missingRoles)
-			);
-			$storyResult->setStoryHasFailed($phaseResult);
+        if (!empty($missingRoles)) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                "Test environment '{$testEnvName}' does not provide these role(s): " . implode(', ', $missingRoles)
+            );
+            $storyResult->setStoryHasFailed($phaseResult);
 
-			return $phaseResult;
-		}
+            return $phaseResult;
+        }
 
-		// if we get here, all is well
-		$phaseResult->setContinuePlaying();
-		return $phaseResult;
-	}
+        // if we get here, all is well
+        $phaseResult->setContinuePlaying();
+        return $phaseResult;
+    }
 }

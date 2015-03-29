@@ -61,67 +61,67 @@ use Prose\E5xx_NotImplemented;
 
 class AutomatePhase extends StoryPhase
 {
-	public function doPhase($script)
-	{
-		// shorthand
-		$st           = $this->st;
-		$scriptResult = $script->getResult();
+    public function doPhase($script)
+    {
+        // shorthand
+        $st           = $this->st;
+        $scriptResult = $script->getResult();
 
-		// keep track of what happens with the action
-		$phaseResult = $this->getNewPhaseResult();
+        // keep track of what happens with the action
+        $phaseResult = $this->getNewPhaseResult();
 
-		// run ONE of the actions, picked at random
-		try {
-			// run the script
-			include $script->getFilename();
+        // run ONE of the actions, picked at random
+        try {
+            // run the script
+            include $script->getFilename();
 
-			// if we get here, all is well
-			$phaseResult->setContinuePlaying();
-			$scriptResult->setPhaseGroupHasSucceeded();
-		}
+            // if we get here, all is well
+            $phaseResult->setContinuePlaying();
+            $scriptResult->setPhaseGroupHasSucceeded();
+        }
 
-		// if the set of actions fails, it will throw this exception
-		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$scriptResult->setPhaseGroupHasFailed($phaseResult);
-		}
-		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$scriptResult->setPhaseGroupHasFailed($phaseResult);
-		}
+        // if the set of actions fails, it will throw this exception
+        catch (E5xx_ActionFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $scriptResult->setPhaseGroupHasFailed($phaseResult);
+        }
+        catch (E5xx_ExpectFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $scriptResult->setPhaseGroupHasFailed($phaseResult);
+        }
 
-		// we treat this as a hard failure
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-			$scriptResult->setPhaseGroupIsIncomplete($phaseResult);
-		}
+        // we treat this as a hard failure
+        catch (E5xx_NotImplemented $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+            $scriptResult->setPhaseGroupIsIncomplete($phaseResult);
+        }
 
-		// if this happens, something has gone badly wrong
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-			$scriptResult->setPhaseGroupHasError($phaseResult);
-		}
+        // if this happens, something has gone badly wrong
+        catch (Exception $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                $e->getMessage(),
+                $e
+            );
+            $scriptResult->setPhaseGroupHasError($phaseResult);
+        }
 
-		// close off any open log actions
-		$st->closeAllOpenActions();
+        // close off any open log actions
+        $st->closeAllOpenActions();
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

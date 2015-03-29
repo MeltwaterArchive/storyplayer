@@ -60,8 +60,8 @@ class E4xx_NoSuchTestEnvironment extends Exxx_Exception
 {
     public function __construct($envName)
     {
-    	$msg = "Unknown test environment '{$envName}'; we have no config for it" . PHP_EOL . PHP_EOL
-    	     . "Use 'storyplayer list-test-environments' to see the list of known test environments";
+        $msg = "Unknown test environment '{$envName}'; we have no config for it" . PHP_EOL . PHP_EOL
+             . "Use 'storyplayer list-test-environments' to see the list of known test environments";
         parent::__construct(400, $msg, $msg);
     }
 }

@@ -57,37 +57,37 @@ namespace Prose;
 class ExpectsHostsTable extends Prose
 {
 
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "hosts";
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "hosts";
 
-	/**
-	 * hasEntryForHost
-	 *
-	 * @param string $hostId
-	 *        The host we're looking for
-	 *
-	 * @return void
-	 */
-	public function hasEntryForHost($hostId)
-	{
-		expectsRuntimeTable($this->entryKey)->hasEntry($hostId);
-	}
+    /**
+     * hasEntryForHost
+     *
+     * @param string $hostId
+     *        The host we're looking for
+     *
+     * @return void
+     */
+    public function hasEntryForHost($hostId)
+    {
+        expectsRuntimeTable($this->entryKey)->hasEntry($hostId);
+    }
 
-	/**
-	 * hasNoEntryForHost
-	 *
-	 * @param string $hostId
-	 *        The host we're looking for
-	 *
-	 * @return void
-	 */
-	public function hasNoEntryForHost($hostId)
-	{
-		expectsRuntimeTable($this->entryKey)->hasNoEntry($hostId);
-	}
+    /**
+     * hasNoEntryForHost
+     *
+     * @param string $hostId
+     *        The host we're looking for
+     *
+     * @return void
+     */
+    public function hasNoEntryForHost($hostId)
+    {
+        expectsRuntimeTable($this->entryKey)->hasNoEntry($hostId);
+    }
 }

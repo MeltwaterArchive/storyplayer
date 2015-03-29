@@ -59,55 +59,55 @@ use Phix_Project\CliEngine\CliResult;
  */
 class ListHostsTable_Command extends CliCommand
 {
-	public function __construct()
-	{
-		// define the command
-		$this->setName('list-hoststable');
-		$this->setShortDescription('list the current contents of the hoststable');
-		$this->setLongDescription(
-			"Use this command to get a list of all of the machines (physical or VM)"
-			. " that are currently listed in Storyplayer's hoststable."
-			.PHP_EOL .PHP_EOL
-			."This can help you to identify VMs that have been left running after "
-			."a test has completed."
-			.PHP_EOL
-		);
-		$this->setSwitches(array(
-			new ListHostsTable_HostTypeSwitch("list only hosts of a given type", "a comma-separated list of the types of hosts to include in the output")
-		));
-	}
+    public function __construct()
+    {
+        // define the command
+        $this->setName('list-hoststable');
+        $this->setShortDescription('list the current contents of the hoststable');
+        $this->setLongDescription(
+            "Use this command to get a list of all of the machines (physical or VM)"
+            . " that are currently listed in Storyplayer's hoststable."
+            .PHP_EOL .PHP_EOL
+            ."This can help you to identify VMs that have been left running after "
+            ."a test has completed."
+            .PHP_EOL
+        );
+        $this->setSwitches(array(
+            new ListHostsTable_HostTypeSwitch("list only hosts of a given type", "a comma-separated list of the types of hosts to include in the output")
+        ));
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return int
-	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
-	{
-		// shorthand
-		$runtimeConfig = $additionalContext->getRuntimeConfig();
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  array     $params
+     * @param  mixed     $additionalContext
+     * @return int
+     */
+    public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+    {
+        // shorthand
+        $runtimeConfig = $additionalContext->getRuntimeConfig();
 
-		// are there any hosts in the table?
-		if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables, $runtimeConfig->storyplayer->tables->hosts)) {
-			// we're done
-			return 0;
-		}
+        // are there any hosts in the table?
+        if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables, $runtimeConfig->storyplayer->tables->hosts)) {
+            // we're done
+            return 0;
+        }
 
-		// let's walk through the table
-		foreach ($runtimeConfig->storyplayer->tables->hosts as $envName => $hosts) {
-			foreach ($hosts as $hostid => $details) {
-				// is this in the list we are filtering against?
-				if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
-					continue;
-				}
+        // let's walk through the table
+        foreach ($runtimeConfig->storyplayer->tables->hosts as $envName => $hosts) {
+            foreach ($hosts as $hostid => $details) {
+                // is this in the list we are filtering against?
+                if (!in_array(strtolower($details->type), $engine->options->hosttype)) {
+                    continue;
+                }
 
-				echo "{$envName}:{$details->id}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
-			}
-		}
+                echo "{$envName}:{$details->id}:{$details->ipAddress}:{$details->type}:{$details->osName}\n";
+            }
+        }
 
-		// all done
-		return 0;
-	}
+        // all done
+        return 0;
+    }
 }

@@ -57,8 +57,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_StoryShouldFail extends Exxx_Exception
 {
-	public function __construct() {
-		$msg = "Story should fail";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct() {
+        $msg = "Story should fail";
+        parent::__construct(400, $msg, $msg);
+    }
 }

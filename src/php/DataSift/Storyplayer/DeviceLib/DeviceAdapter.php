@@ -57,50 +57,50 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 interface DeviceAdapter
 {
-	/**
-	 * @param \DataSift\Stone\ObjectLib\BaseObject $browserDetails
- 	 * @return void
-	 */
-	public function init($browserDetails);
+    /**
+     * @param \DataSift\Stone\ObjectLib\BaseObject $browserDetails
+     * @return void
+     */
+    public function init($browserDetails);
 
-	/**
-	 * @return void
-	 */
-	public function start(StoryTeller $st);
+    /**
+     * @return void
+     */
+    public function start(StoryTeller $st);
 
-	/**
-	 * @return void
-	 */
-	public function stop();
+    /**
+     * @return void
+     */
+    public function stop();
 
-	/**
-	 * @return \DataSift\WebDriver\WebDriverSession|null
-	 */
-	public function getDevice();
+    /**
+     * @return \DataSift\WebDriver\WebDriverSession|null
+     */
+    public function getDevice();
 
-	/**
-	 * @param   string $url
-	 *
-	 * @return void
-	 */
-	public function applyHttpBasicAuthForHost($hostname, $url);
+    /**
+     * @param   string $url
+     *
+     * @return void
+     */
+    public function applyHttpBasicAuthForHost($hostname, $url);
 
-	/**
-	 * @return boolean
-	 */
-	public function hasHttpBasicAuthForHost($hostname);
+    /**
+     * @return boolean
+     */
+    public function hasHttpBasicAuthForHost($hostname);
 
-	/**
-	 *
-	 * @param  string $hostname
-	 * @return array<string>|null
-	 */
-	public function getHttpBasicAuthForHost($hostname);
+    /**
+     *
+     * @param  string $hostname
+     * @return array<string>|null
+     */
+    public function getHttpBasicAuthForHost($hostname);
 
-	/**
-	 * @param string $username
-	 * @param string $password
-	 * @return void
-	 */
-	public function setHttpBasicAuthForHost($hostname, $username, $password);
+    /**
+     * @param string $username
+     * @param string $password
+     * @return void
+     */
+    public function setHttpBasicAuthForHost($hostname, $username, $password);
 }

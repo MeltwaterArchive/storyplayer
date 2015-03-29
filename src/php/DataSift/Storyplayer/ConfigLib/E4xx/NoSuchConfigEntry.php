@@ -60,7 +60,7 @@ class E4xx_NoSuchConfigEntry extends Exxx_Exception
 {
     public function __construct($name)
     {
-    	$msg = "Config entry '{$name}' not in the list";
+        $msg = "Config entry '{$name}' not in the list";
         parent::__construct(400, $msg, $msg);
     }
 }

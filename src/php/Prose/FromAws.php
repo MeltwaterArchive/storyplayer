@@ -57,45 +57,45 @@ use Aws\Common\Aws;
  */
 class FromAws extends Prose
 {
-	public function getAwsClientFactory()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("create AWS client factory using official SDK");
+    public function getAwsClientFactory()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("create AWS client factory using official SDK");
 
-		// get the settings for Aws
-		$awsSettings = fromConfig()->getModuleSetting('aws');
+        // get the settings for Aws
+        $awsSettings = fromConfig()->getModuleSetting('aws');
 
-		// create the AWS client factory
-		$awsFactory = Aws::factory(array(
-			'key' => $awsSettings->key,
-			'secret' => $awsSettings->secret,
-			'region' => $awsSettings->region
-		));
+        // create the AWS client factory
+        $awsFactory = Aws::factory(array(
+            'key' => $awsSettings->key,
+            'secret' => $awsSettings->secret,
+            'region' => $awsSettings->region
+        ));
 
-		// all done
-		$log->endAction();
-		return $awsFactory;
-	}
+        // all done
+        $log->endAction();
+        return $awsFactory;
+    }
 
-	public function getEc2Client()
-	{
-		// the client to return
-		static $ec2Client = null;
+    public function getEc2Client()
+    {
+        // the client to return
+        static $ec2Client = null;
 
-		if (!$ec2Client) {
-			// what are we doing?
-			$log = usingLog()->startAction("create AWS client for EC2");
+        if (!$ec2Client) {
+            // what are we doing?
+            $log = usingLog()->startAction("create AWS client for EC2");
 
-			// get the Aws client factory
-			$awsFactory = fromAws()->getAwsClientFactory();
+            // get the Aws client factory
+            $awsFactory = fromAws()->getAwsClientFactory();
 
-			// create the EC2 client
-			$ec2Client = $awsFactory->get('ec2');
+            // create the EC2 client
+            $ec2Client = $awsFactory->get('ec2');
 
-			$log->endAction();
-		}
+            $log->endAction();
+        }
 
-		// all done
-		return $ec2Client;
-	}
+        // all done
+        return $ec2Client;
+    }
 }

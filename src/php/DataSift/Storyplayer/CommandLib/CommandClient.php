@@ -56,10 +56,10 @@ namespace DataSift\Storyplayer\CommandLib;
 
 interface CommandClient
 {
-	/**
-	 *
-	 * @param  string $command
-	 * @return CommandResult
-	 */
-	public function runCommand($command);
+    /**
+     *
+     * @param  string $command
+     * @return CommandResult
+     */
+    public function runCommand($command);
 }

@@ -60,41 +60,41 @@ use DataSift\Storyplayer\ValidationLib\MustBeValidStoryTemplate;
  */
 class CreateStory_BasedOnSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('basedOn');
-		$this->setShortDescription('base your new story on a StoryTemplate');
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('basedOn');
+        $this->setShortDescription('base your new story on a StoryTemplate');
 
-		// what are the short switches?
-		$this->addShortSwitch('b');
+        // what are the short switches?
+        $this->addShortSwitch('b');
 
-		// what are the long switches?
-		$this->addLongSwitch('based-on');
+        // what are the long switches?
+        $this->addLongSwitch('based-on');
 
-		// what is the required argument?
-		$this->setRequiredArg('<classname>', "the StoryTemplate class to base your new story on");
-		$this->setArgValidator(new MustBeValidStoryTemplate);
+        // what is the required argument?
+        $this->setRequiredArg('<classname>', "the StoryTemplate class to base your new story on");
+        $this->setArgValidator(new MustBeValidStoryTemplate);
 
-		// this argument is repeatable
-		$this->setSwitchIsRepeatable();
+        // this argument is repeatable
+        $this->setSwitchIsRepeatable();
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->basedOn = $params;
+    /**
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->basedOn = $params;
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

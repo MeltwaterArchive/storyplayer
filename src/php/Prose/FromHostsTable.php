@@ -55,82 +55,82 @@ namespace Prose;
  */
 class FromHostsTable extends Prose
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "hosts";
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "hosts";
 
 
-	/**
-	 * getHostsTable
-	 *
-	 *
-	 * @return object The hosts table
-	 */
-	public function getHostsTable()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("get the hosts table for the current test environment");
+    /**
+     * getHostsTable
+     *
+     *
+     * @return object The hosts table
+     */
+    public function getHostsTable()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the hosts table for the current test environment");
 
-		// which test environment are we working with?
-		$testEnvName = $this->st->getTestEnvironmentName();
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// get the table
-		$table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+        // get the table
+        $table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
 
-		// all done
-		$log->endAction();
-		return $table;
-	}
+        // all done
+        $log->endAction();
+        return $table;
+    }
 
-	/**
-	 * getDetailsForHost
-	 *
-	 * @param string $hostId
-	 *        The host we're looking for
-	 *
-	 * @return object
-	 *         Details about $hostId
-	 */
-	public function getDetailsForHost($hostId)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("get details for host '{$hostId}' from the current test environment");
+    /**
+     * getDetailsForHost
+     *
+     * @param string $hostId
+     *        The host we're looking for
+     *
+     * @return object
+     *         Details about $hostId
+     */
+    public function getDetailsForHost($hostId)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get details for host '{$hostId}' from the current test environment");
 
-		// which test environment are we working with?
-		$testEnvName = $this->st->getTestEnvironmentName();
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// get the details
-		$hostDetails = fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostId);
+        // get the details
+        $hostDetails = fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostId);
 
-		// all done
-		$log->endAction();
-		return $hostDetails;
-	}
+        // all done
+        $log->endAction();
+        return $hostDetails;
+    }
 
-	public function hasTestEnvironment()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("do we already have the test environment defined in the hosts table?");
+    public function hasTestEnvironment()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("do we already have the test environment defined in the hosts table?");
 
-		// which test environment are we working with?
-		$testEnvName = $this->st->getTestEnvironmentName();
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// get the hosts table
-		$hostsTable = fromRuntimeTable($this->entryKey)->getTable();
-		//var_dump($hostsTable);
+        // get the hosts table
+        $hostsTable = fromRuntimeTable($this->entryKey)->getTable();
+        //var_dump($hostsTable);
 
-		// does the test environment exist?
-		if (isset($hostsTable->$testEnvName) && $hostsTable->$testEnvName->hasProperties()) {
-			$log->endAction("yes");
-			return true;
-		}
+        // does the test environment exist?
+        if (isset($hostsTable->$testEnvName) && $hostsTable->$testEnvName->hasProperties()) {
+            $log->endAction("yes");
+            return true;
+        }
 
-		// no, it does not
-		$log->endAction("no");
-		return false;
-	}
+        // no, it does not
+        $log->endAction("no");
+        return false;
+    }
 }

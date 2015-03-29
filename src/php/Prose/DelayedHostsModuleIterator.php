@@ -55,33 +55,33 @@ namespace Prose;
  */
 class DelayedHostsModuleIterator
 {
-	protected $st;
-	protected $hostsDetails;
-	protected $moduleName;
+    protected $st;
+    protected $hostsDetails;
+    protected $moduleName;
 
-	public function __construct($st, $hostsDetails, $moduleName)
-	{
-		$this->st = $st;
-		$this->hostsDetails = $hostsDetails;
-		$this->moduleName   = $moduleName;
-	}
+    public function __construct($st, $hostsDetails, $moduleName)
+    {
+        $this->st = $st;
+        $this->hostsDetails = $hostsDetails;
+        $this->moduleName   = $moduleName;
+    }
 
-	public function __call($methodName, $params)
-	{
-		// shorthand
-		$st         = $this->st;
-		$moduleName = $this->moduleName;
+    public function __call($methodName, $params)
+    {
+        // shorthand
+        $st         = $this->st;
+        $moduleName = $this->moduleName;
 
-		// our (potentially empty) return result
-		$return = [];
+        // our (potentially empty) return result
+        $return = [];
 
-		// make sure each host is up and running
-		foreach ($this->hostsDetails as $hostDetails) {
-			$module = $st->$moduleName($hostDetails->hostId);
-			$return[$hostDetails->hostId] = call_user_func_array([$module, $methodName], $params);
-		}
+        // make sure each host is up and running
+        foreach ($this->hostsDetails as $hostDetails) {
+            $module = $st->$moduleName($hostDetails->hostId);
+            $return[$hostDetails->hostId] = call_user_func_array([$module, $methodName], $params);
+        }
 
-		// all done
-		return $return;
-	}
+        // all done
+        return $return;
+    }
 }

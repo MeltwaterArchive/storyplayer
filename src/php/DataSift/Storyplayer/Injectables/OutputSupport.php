@@ -57,16 +57,16 @@ use DataSift\Storyplayer\Output;
  */
 trait OutputSupport
 {
-	public $output;
+    public $output;
 
-	/**
-	 *
-	 * @return Output
-	 */
-	public function initOutputSupport()
-	{
-		$this->output = new Output();
+    /**
+     *
+     * @return Output
+     */
+    public function initOutputSupport()
+    {
+        $this->output = new Output();
 
-		return $this->output;
-	}
+        return $this->output;
+    }
 }

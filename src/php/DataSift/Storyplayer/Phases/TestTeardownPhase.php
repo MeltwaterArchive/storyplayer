@@ -61,86 +61,86 @@ use Prose\E5xx_NotImplemented;
 
 class TestTeardownPhase extends StoryPhase
 {
-	protected $sequenceNo = 7;
+    protected $sequenceNo = 7;
 
-	public function doPhase($story)
-	{
-		// shorthand
-		$st          = $this->st;
-		$storyResult = $story->getResult();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st          = $this->st;
+        $storyResult = $story->getResult();
 
-		// our result
-		$phaseResult = $this->getNewPhaseResult();
+        // our result
+        $phaseResult = $this->getNewPhaseResult();
 
-		// do we have anything to do?
-		if (!$story->hasTestTeardown())
-		{
-			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no test teardown instructions"
-			);
-			return $phaseResult;
-		}
+        // do we have anything to do?
+        if (!$story->hasTestTeardown())
+        {
+            $phaseResult->setContinuePlaying(
+                $phaseResult::HASNOACTIONS,
+                "story has no test teardown instructions"
+            );
+            return $phaseResult;
+        }
 
-		// get the callback to call
-		$callbacks = $story->getTestTeardown();
+        // get the callback to call
+        $callbacks = $story->getTestTeardown();
 
-		// make the call
-		try {
-			foreach ($callbacks as $callback) {
-				call_user_func($callback, $st);
-			}
+        // make the call
+        try {
+            foreach ($callbacks as $callback) {
+                call_user_func($callback, $st);
+            }
 
-			// all is good
-			$phaseResult->setContinuePlaying();
-		}
-		catch (E5xx_ActionFailed $e) {
-			// we always continue at this point, even though the phase
-			// itself failed
-			$phaseResult->setContinuePlaying(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasFailed($phaseResult);
-		}
-		catch (E5xx_ExpectFailed $e) {
-			// we always continue at this point, even though the phase
-			// itself failed
-			$phaseResult->setContinuePlaying(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasFailed($phaseResult);
-		}
-		catch (E5xx_NotImplemented $e) {
-			// we always continue at this point, even though the phase
-			// itself failed
-			$phaseResult->setContinuePlaying(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryIsIncomplete($phaseResult);
-		}
-		catch (Exception $e)
-		{
-			// we still want to continue at this stage
-			$phaseResult->setContinuePlaying(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-		}
+            // all is good
+            $phaseResult->setContinuePlaying();
+        }
+        catch (E5xx_ActionFailed $e) {
+            // we always continue at this point, even though the phase
+            // itself failed
+            $phaseResult->setContinuePlaying(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasFailed($phaseResult);
+        }
+        catch (E5xx_ExpectFailed $e) {
+            // we always continue at this point, even though the phase
+            // itself failed
+            $phaseResult->setContinuePlaying(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasFailed($phaseResult);
+        }
+        catch (E5xx_NotImplemented $e) {
+            // we always continue at this point, even though the phase
+            // itself failed
+            $phaseResult->setContinuePlaying(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryIsIncomplete($phaseResult);
+        }
+        catch (Exception $e)
+        {
+            // we still want to continue at this stage
+            $phaseResult->setContinuePlaying(
+                $phaseResult::ERROR,
+                $e->getMessage(),
+                $e
+            );
+        }
 
-		// close off any open log actions
-		$st->closeAllOpenActions();
+        // close off any open log actions
+        $st->closeAllOpenActions();
 
-		// tidy up after ourselves
-		$this->doPerPhaseTeardown();
+        // tidy up after ourselves
+        $this->doPerPhaseTeardown();
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

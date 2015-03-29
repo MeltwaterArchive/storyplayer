@@ -57,56 +57,56 @@ use ZMQ;
  */
 class ExpectsZmqSocket extends ZmqSocketBase
 {
-	public function canSendNonBlocking($message)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("make sure ZMQ::send() does not block");
+    public function canSendNonBlocking($message)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure ZMQ::send() does not block");
 
-		// send the data
-		$sent = $this->args[0]->send($message, ZMQ::MODE_NOBLOCK);
+        // send the data
+        $sent = $this->args[0]->send($message, ZMQ::MODE_NOBLOCK);
 
-		// would it have blocked?
-		if (!$sent) {
-			throw new E5xx_ExpectFailed(__METHOD__, "send() would not block", "send() would have blocked");
-		}
+        // would it have blocked?
+        if (!$sent) {
+            throw new E5xx_ExpectFailed(__METHOD__, "send() would not block", "send() would have blocked");
+        }
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	public function canSendmultiNonBlocking($message)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("make sure ZMQ::sendmulti() does not block");
+    public function canSendmultiNonBlocking($message)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure ZMQ::sendmulti() does not block");
 
-		// send the data
-		$sent = $this->args[0]->sendmulti($message, ZMQ::MODE_NOBLOCK);
+        // send the data
+        $sent = $this->args[0]->sendmulti($message, ZMQ::MODE_NOBLOCK);
 
-		// would it have blocked?
-		if (!$sent) {
-			throw new E5xx_ExpectFailed(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
-		}
+        // would it have blocked?
+        if (!$sent) {
+            throw new E5xx_ExpectFailed(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
+        }
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	public function isConnectedToHost($hostId, $portNumber)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("make sure ZMQ socket is connected to host '{$hostId}':{$portNumber}");
+    public function isConnectedToHost($hostId, $portNumber)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure ZMQ socket is connected to host '{$hostId}':{$portNumber}");
 
-		// build the address that we should be connected to
-		$ipAddress = fromHost($hostId)->getIpAddress();
-		$zmqAddress = "tcp://{$ipAddress}:{$portNumber}";
+        // build the address that we should be connected to
+        $ipAddress = fromHost($hostId)->getIpAddress();
+        $zmqAddress = "tcp://{$ipAddress}:{$portNumber}";
 
-		// where are we connected to?
-		$connections = fromZmqSocket($this->args[0])->getEndpoints();
+        // where are we connected to?
+        $connections = fromZmqSocket($this->args[0])->getEndpoints();
 
-		// make sure we're connected
-		assertsArray($connections['connect'])->containsValue($zmqAddress);
+        // make sure we're connected
+        assertsArray($connections['connect'])->containsValue($zmqAddress);
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

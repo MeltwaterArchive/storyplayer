@@ -57,25 +57,25 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class Ec2ImageBase extends Prose
 {
-	protected $image = null;
-	protected $amiId = '**unknown**';
+    protected $image = null;
+    protected $amiId = '**unknown**';
 
-	public function __construct(StoryTeller $st, $params = array())
-	{
-		// call our parent
-		parent::__construct($st, $params);
+    public function __construct(StoryTeller $st, $params = array())
+    {
+        // call our parent
+        parent::__construct($st, $params);
 
-		// remember the name of this VM
-		$this->amiId = $params[0];
+        // remember the name of this VM
+        $this->amiId = $params[0];
 
-		// get the data about the instance from EC2
-		$this->image = fromEc2()->getImage($this->amiId);
-	}
+        // get the data about the instance from EC2
+        $this->image = fromEc2()->getImage($this->amiId);
+    }
 
-	protected function requiresValidImage($method)
-	{
-		if (!$this->image) {
-			throw new E5xx_ActionFailed($method, "No such EC2 image '{$this->amiId}' at AWS");
-		}
-	}
+    protected function requiresValidImage($method)
+    {
+        if (!$this->image) {
+            throw new E5xx_ActionFailed($method, "No such EC2 image '{$this->amiId}' at AWS");
+        }
+    }
 }

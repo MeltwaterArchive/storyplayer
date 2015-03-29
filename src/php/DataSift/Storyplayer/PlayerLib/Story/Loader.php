@@ -56,49 +56,49 @@ namespace DataSift\Storyplayer\PlayerLib;
  */
 class Story_Loader
 {
-	/**
-	 * singleton - do not instantiate
-	 * @codeCoverageIgnore
-	 */
-	protected function __construct()
-	{
-		// do nothing
-	}
+    /**
+     * singleton - do not instantiate
+     * @codeCoverageIgnore
+     */
+    protected function __construct()
+    {
+        // do nothing
+    }
 
-	/**
-	 * load a story, throwing exceptions if problems are detected
-	 *
-	 * @param  string $filename
-	 *         path to the PHP file containing the story
-	 * @return Story
-	 *         the story object
-	 */
-	static public function loadStory($filename)
-	{
-		if (!file_exists($filename)) {
-			throw new E5xx_InvalidStoryFile("Cannot find file '{$filename}' to load");
-		}
+    /**
+     * load a story, throwing exceptions if problems are detected
+     *
+     * @param  string $filename
+     *         path to the PHP file containing the story
+     * @return Story
+     *         the story object
+     */
+    static public function loadStory($filename)
+    {
+        if (!file_exists($filename)) {
+            throw new E5xx_InvalidStoryFile("Cannot find file '{$filename}' to load");
+        }
 
-		// load the story
-		include($filename);
+        // load the story
+        include($filename);
 
-		// there should now be a $story in scope
-		if (!isset($story)) {
-			throw new E5xx_InvalidStoryFile("Story file '{$filename}' did not create the \$story variable");
-		}
+        // there should now be a $story in scope
+        if (!isset($story)) {
+            throw new E5xx_InvalidStoryFile("Story file '{$filename}' did not create the \$story variable");
+        }
 
-		// make sure we have the right story
-		if (!$story instanceof Story) {
-			throw new E5xx_InvalidStoryFile("Story file '{$filename}' did create a \$story variable, but it is of type '" . get_class($story) . "' instead of type 'DataSift\Storyplayer\PlayerLib\Story'");
-		}
+        // make sure we have the right story
+        if (!$story instanceof Story) {
+            throw new E5xx_InvalidStoryFile("Story file '{$filename}' did create a \$story variable, but it is of type '" . get_class($story) . "' instead of type 'DataSift\Storyplayer\PlayerLib\Story'");
+        }
 
-		// now that the story is built, we want to parse the source code
-		//
-		// we're going to use the source code if we need to explain why
-		// a story failed or errored
-		$story->buildParseTrees(realpath($filename));
+        // now that the story is built, we want to parse the source code
+        //
+        // we're going to use the source code if we need to explain why
+        // a story failed or errored
+        $story->buildParseTrees(realpath($filename));
 
-		// all done
-		return $story;
-	}
+        // all done
+        return $story;
+    }
 }

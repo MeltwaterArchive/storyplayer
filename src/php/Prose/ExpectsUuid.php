@@ -57,26 +57,26 @@ use DataSift\Stone\TokenLib\TokenGenerator;
  */
 class ExpectsUuid extends Prose
 {
-	public function requirementsAreMet()
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("make sure the UUID module's requirements are installed");
+    public function requirementsAreMet()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure the UUID module's requirements are installed");
 
-		// do we have the UUID extension?
-		if (!function_exists('uuid_create')) {
-			// we really want this
-			$log->endAction("PECL uuid extension missing");
-			throw new E5xx_ExpectFailed(__METHOD__, "PECL uuid extension installed", "extension is not installed");
-		}
+        // do we have the UUID extension?
+        if (!function_exists('uuid_create')) {
+            // we really want this
+            $log->endAction("PECL uuid extension missing");
+            throw new E5xx_ExpectFailed(__METHOD__, "PECL uuid extension installed", "extension is not installed");
+        }
 
-		// is Stone's TokenLib available?
-		if (!class_exists('DataSift\Stone\TokenLib\TokenGenerator')) {
-			// we really want this
-			$log->endAction("DataSift\Stone\TokenLib missing");
-			throw new E5xx_ExpectFailed(__METHOD__, "DataSift's Stone library includes TokenLib", "TokenLib not found");
-		}
+        // is Stone's TokenLib available?
+        if (!class_exists('DataSift\Stone\TokenLib\TokenGenerator')) {
+            // we really want this
+            $log->endAction("DataSift\Stone\TokenLib missing");
+            throw new E5xx_ExpectFailed(__METHOD__, "DataSift's Stone library includes TokenLib", "TokenLib not found");
+        }
 
-		// if we get here, we are good
-		$log->endAction();
-	}
+        // if we get here, we are good
+        $log->endAction();
+    }
 }

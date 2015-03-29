@@ -58,48 +58,48 @@ use DataSift\Storyplayer\Cli\RuntimeConfigManager;
  */
 trait RuntimeConfigSupport
 {
-	protected $runtimeConfigManager = null;
-	protected $runtimeConfig = null;
+    protected $runtimeConfigManager = null;
+    protected $runtimeConfig = null;
 
-	/**
-	 * @return RuntimeConfigManager
-	 */
-	public function initRuntimeConfigSupport(Injectables $injectables)
-	{
-		// create the runtime config's manager
-		$this->runtimeConfigManager = new RuntimeConfigManager();
+    /**
+     * @return RuntimeConfigManager
+     */
+    public function initRuntimeConfigSupport(Injectables $injectables)
+    {
+        // create the runtime config's manager
+        $this->runtimeConfigManager = new RuntimeConfigManager();
 
-		// create the folder where we will store the persistent config
-		$this->runtimeConfigManager->makeConfigDir($injectables->output);
+        // create the folder where we will store the persistent config
+        $this->runtimeConfigManager->makeConfigDir($injectables->output);
 
-		// load any config from the last time Storyplayer ran
-		$this->runtimeConfig = $this->runtimeConfigManager->loadRuntimeConfig($injectables->output);
+        // load any config from the last time Storyplayer ran
+        $this->runtimeConfig = $this->runtimeConfigManager->loadRuntimeConfig($injectables->output);
 
-		// all done
-		return $this->runtimeConfigManager;
-	}
+        // all done
+        return $this->runtimeConfigManager;
+    }
 
-	/**
-	 * @return \DataSift\Storyplayer\Cli\RuntimeConfigManager
-	 */
-	public function getRuntimeConfigManager()
-	{
-		if ($this->runtimeConfigManager === null) {
-			throw new E4xx_NotInitialised('runtimeConfigManager');
-		}
+    /**
+     * @return \DataSift\Storyplayer\Cli\RuntimeConfigManager
+     */
+    public function getRuntimeConfigManager()
+    {
+        if ($this->runtimeConfigManager === null) {
+            throw new E4xx_NotInitialised('runtimeConfigManager');
+        }
 
-		return $this->runtimeConfigManager;
-	}
+        return $this->runtimeConfigManager;
+    }
 
-	/**
-	 * @return object
-	 */
-	public function getRuntimeConfig()
-	{
-		if ($this->runtimeConfig === null) {
-			throw new E4xx_NotInitialised('runtimeConfig');
-		}
+    /**
+     * @return object
+     */
+    public function getRuntimeConfig()
+    {
+        if ($this->runtimeConfig === null) {
+            throw new E4xx_NotInitialised('runtimeConfig');
+        }
 
-		return $this->runtimeConfig;
-	}
+        return $this->runtimeConfig;
+    }
 }

@@ -58,9 +58,9 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_SystemUnderTestRoleMustSayWhichRoleItIs extends E4xx_SystemUnderTestConfigError
 {
-	public function __construct($filename, $index)
-	{
-		$msg = "Config file '{$filename}': 'role[{$index}]' must have 'role' setting";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($filename, $index)
+    {
+        $msg = "Config file '{$filename}': 'role[{$index}]' must have 'role' setting";
+        parent::__construct(400, $msg, $msg);
+    }
 }

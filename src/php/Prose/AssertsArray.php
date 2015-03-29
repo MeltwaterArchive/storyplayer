@@ -73,8 +73,8 @@ use DataSift\Stone\ComparisonLib\ArrayComparitor;
  */
 class AssertsArray extends AssertionsBase
 {
-	public function __construct(StoryTeller $st, $params)
-	{
-		parent::__construct($st, new ArrayComparitor($params[0]));
-	}
+    public function __construct(StoryTeller $st, $params)
+    {
+        parent::__construct($st, new ArrayComparitor($params[0]));
+    }
 }

@@ -238,37 +238,37 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class SingleElementAction extends BaseElementAction
 {
-	protected $action;
-	protected $actionDesc;
+    protected $action;
+    protected $actionDesc;
 
-	/**
-	 * @param \Closure $action
-	 * @param string $actionDesc
-	 */
-	public function __construct($action, $actionDesc, $baseElement = null)
-	{
-		parent::__construct($baseElement);
+    /**
+     * @param \Closure $action
+     * @param string $actionDesc
+     */
+    public function __construct($action, $actionDesc, $baseElement = null)
+    {
+        parent::__construct($baseElement);
 
-		$this->action      = $action;
-		$this->actionDesc  = $actionDesc;
-	}
+        $this->action      = $action;
+        $this->actionDesc  = $actionDesc;
+    }
 
-	/**
-	 * @param  string $methodName
-	 * @param  array $methodArgs
-	 * @return mixed
-	 */
-	public function __call($methodName, $methodArgs)
-	{
-		// retrieve the element, using the fake method name to figure out
-		// which element the caller is looking for
-		$element = $this->retrieveElement($methodName, $methodArgs);
+    /**
+     * @param  string $methodName
+     * @param  array $methodArgs
+     * @return mixed
+     */
+    public function __call($methodName, $methodArgs)
+    {
+        // retrieve the element, using the fake method name to figure out
+        // which element the caller is looking for
+        $element = $this->retrieveElement($methodName, $methodArgs);
 
-		// now that we have our element, let's apply the action to it
-		$action = $this->action;
-		$return = $action($element, $methodArgs[0], $methodName);
+        // now that we have our element, let's apply the action to it
+        $action = $this->action;
+        $return = $action($element, $methodArgs[0], $methodName);
 
-		// all done
-		return $return;
-	}
+        // all done
+        return $return;
+    }
 }

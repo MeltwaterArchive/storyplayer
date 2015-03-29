@@ -59,17 +59,17 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class BaseRedisConn extends Prose
 {
-	public function __construct(StoryTeller $st, $args)
-	{
-		// call our parent first
-		parent::__construct($st, $args);
+    public function __construct(StoryTeller $st, $args)
+    {
+        // call our parent first
+        parent::__construct($st, $args);
 
-		// make sure we have a Redis connection
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "param #1 needs to be a valid Redis connection");
-		}
-		if (!$args[0] instanceof PredisClient) {
-			throw new E5xx_ActionFailed(__METHOD__, "param #1 needs to be an instance of Predis\\Client");
-		}
-	}
+        // make sure we have a Redis connection
+        if (!isset($args[0])) {
+            throw new E5xx_ActionFailed(__METHOD__, "param #1 needs to be a valid Redis connection");
+        }
+        if (!$args[0] instanceof PredisClient) {
+            throw new E5xx_ActionFailed(__METHOD__, "param #1 needs to be an instance of Predis\\Client");
+        }
+    }
 }

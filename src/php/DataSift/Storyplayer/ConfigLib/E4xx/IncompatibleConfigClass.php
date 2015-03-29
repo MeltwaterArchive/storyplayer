@@ -60,7 +60,7 @@ class E4xx_IncompatibleConfigClass extends Exxx_Exception
 {
     public function __construct($expectedClassname, $actualClassname)
     {
-    	$msg = "Cannot add configs of type '{$actualClassname}' into a list of type '{$expectedClassname}'";
+        $msg = "Cannot add configs of type '{$actualClassname}' into a list of type '{$expectedClassname}'";
         parent::__construct(400, $msg, $msg);
     }
 }

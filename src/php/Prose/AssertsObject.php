@@ -76,11 +76,11 @@ use DataSift\Stone\ComparisonLib\ObjectComparitor;
  */
 class AssertsObject extends AssertionsBase
 {
-	/**
-	 * @param \stdClass[] $params
-	 */
-	public function __construct(StoryTeller $st, $params)
-	{
-		parent::__construct($st, new ObjectComparitor($params[0]));
-	}
+    /**
+     * @param \stdClass[] $params
+     */
+    public function __construct(StoryTeller $st, $params)
+    {
+        parent::__construct($st, new ObjectComparitor($params[0]));
+    }
 }

@@ -63,34 +63,34 @@ use Phix_Project\ValidationLib4\Type_MustBeString;
  */
 class Feature_PersistTargetSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('persisttarget');
-		$this->setShortDescription('do not destroy the test environment after the test');
-		$this->setLongDesc(
-			"Use this switch if you want the test environment to continue to exist "
-			."after Storyplayer has finished running."
-			. PHP_EOL . PHP_EOL
-			."Use the --reuse-target switch on subsequent runs to avoid rebuilding the "
-			."test environment."
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('persisttarget');
+        $this->setShortDescription('do not destroy the test environment after the test');
+        $this->setLongDesc(
+            "Use this switch if you want the test environment to continue to exist "
+            ."after Storyplayer has finished running."
+            . PHP_EOL . PHP_EOL
+            ."Use the --reuse-target switch on subsequent runs to avoid rebuilding the "
+            ."test environment."
+        );
 
-		// what are the short switches?
-		$this->addShortSwitch('P');
+        // what are the short switches?
+        $this->addShortSwitch('P');
 
-		// what are the long switches?
-		$this->addLongSwitch('persist-target');
+        // what are the long switches?
+        $this->addLongSwitch('persist-target');
 
-		// all done
-	}
+        // all done
+    }
 
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->persistTarget = true;
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->persistTarget = true;
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

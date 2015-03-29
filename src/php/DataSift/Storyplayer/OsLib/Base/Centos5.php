@@ -59,105 +59,105 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 
 abstract class Base_Centos5 extends Base_Unix
 {
-	/**
-	 *
-	 * @param  HostDetails $hostDetails
-	 * @param  SupportedHost $host
-	 * @return string
-	 */
-	public function determineIpAddress($hostDetails, SupportedHost $host)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
+    /**
+     *
+     * @param  HostDetails $hostDetails
+     * @param  SupportedHost $host
+     * @return string
+     */
+    public function determineIpAddress($hostDetails, SupportedHost $host)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
 
-		if (empty($hostDetails->ifaces)) {
-			// set default network interfaces
-			$hostDetails->ifaces = array('eth1', 'eth0');
-		}
+        if (empty($hostDetails->ifaces)) {
+            // set default network interfaces
+            $hostDetails->ifaces = array('eth1', 'eth0');
+        }
 
-		// how do we do this?
-		foreach ($hostDetails->ifaces as $iface) {
-			$command = "/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'";
-			$result = $host->runCommandViaHostManager($hostDetails, $command);
+        // how do we do this?
+        foreach ($hostDetails->ifaces as $iface) {
+            $command = "/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'";
+            $result = $host->runCommandViaHostManager($hostDetails, $command);
 
-			// NOTE: the above command will return the exit code 0 even if the interface is not found
-			if ($result->didCommandSucceed() && (strpos($result->output, 'error') === false)) {
-				$lines = explode("\n", $result->output);
-				$ipAddress = trim($lines[0]);
-				$log->endAction("IP address is '{$ipAddress}'");
-				return $ipAddress;
-			}
-		}
+            // NOTE: the above command will return the exit code 0 even if the interface is not found
+            if ($result->didCommandSucceed() && (strpos($result->output, 'error') === false)) {
+                $lines = explode("\n", $result->output);
+                $ipAddress = trim($lines[0]);
+                $log->endAction("IP address is '{$ipAddress}'");
+                return $ipAddress;
+            }
+        }
 
-		// if we get here, we do not know what the IP address is
-		$msg = "could not determine IP address";
-		$log->endAction($msg);
-		throw new E5xx_ActionFailed(__METHOD__, $msg);
-	}
+        // if we get here, we do not know what the IP address is
+        $msg = "could not determine IP address";
+        $log->endAction($msg);
+        throw new E5xx_ActionFailed(__METHOD__, $msg);
+    }
 
-	public function determineHostname($hostDetails, SupportedHost $host)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
+    public function determineHostname($hostDetails, SupportedHost $host)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
 
-		// how do we do this?
-		$command = "hostname --fqdn";
-		$result = $host->runCommandViaHostManager($hostDetails, $command);
+        // how do we do this?
+        $command = "hostname --fqdn";
+        $result = $host->runCommandViaHostManager($hostDetails, $command);
 
-		if ($result->didCommandSucceed()) {
-			$lines = explode("\n", $result->output);
-			$hostname = trim($lines[0]);
-			$hostname = $this->runHostnameSafeguards($hostDetails, $hostname);
-			$log->endAction("hostname is '{$hostname}'");
-			return $hostname;
-		}
+        if ($result->didCommandSucceed()) {
+            $lines = explode("\n", $result->output);
+            $hostname = trim($lines[0]);
+            $hostname = $this->runHostnameSafeguards($hostDetails, $hostname);
+            $log->endAction("hostname is '{$hostname}'");
+            return $hostname;
+        }
 
-		// if we get here, we do not know what the hostname is
-		$msg = "could not determine hostname";
-		$log->endAction($msg);
-		throw new E5xx_ActionFailed(__METHOD__, $msg);
-	}
+        // if we get here, we do not know what the hostname is
+        $msg = "could not determine hostname";
+        $log->endAction($msg);
+        throw new E5xx_ActionFailed(__METHOD__, $msg);
+    }
 
-	/**
-	 *
-	 * @param  HostDetails $hostDetails
-	 * @param  string $packageName
-	 * @return BaseObject
-	 */
-	public function getInstalledPackageDetails($hostDetails, $packageName)
-	{
-		// what are we doing?
-		$log = usingLog()->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
+    /**
+     *
+     * @param  HostDetails $hostDetails
+     * @param  string $packageName
+     * @return BaseObject
+     */
+    public function getInstalledPackageDetails($hostDetails, $packageName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
 
-		// get the details
-		$command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";
-		$result    = $this->runCommand($hostDetails, $command);
+        // get the details
+        $command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";
+        $result    = $this->runCommand($hostDetails, $command);
 
-		// any luck?
-		if ($result->didCommandFail()) {
-			$log->endAction("could not get details ... package not installed?");
-			return new BaseObject();
-		}
+        // any luck?
+        if ($result->didCommandFail()) {
+            $log->endAction("could not get details ... package not installed?");
+            return new BaseObject();
+        }
 
-		// study the output
-		$parts = explode(' ', $result->output);
-		if (count($parts) < 3) {
-			$log->endAction("could not get details ... package not installed?");
-			return new BaseObject();
-		}
-		if (strtolower($parts[0]) == 'error:') {
-			$log->endAction("could not get details ... package not installed?");
-			return new BaseObject();
-		}
+        // study the output
+        $parts = explode(' ', $result->output);
+        if (count($parts) < 3) {
+            $log->endAction("could not get details ... package not installed?");
+            return new BaseObject();
+        }
+        if (strtolower($parts[0]) == 'error:') {
+            $log->endAction("could not get details ... package not installed?");
+            return new BaseObject();
+        }
 
-		// we have some information to return
-		$return = new BaseObject();
-		$return->name = $parts[0];
-		$return->version = $parts[1];
-		$return->repo = $parts[2];
+        // we have some information to return
+        $return = new BaseObject();
+        $return->name = $parts[0];
+        $return->version = $parts[1];
+        $return->repo = $parts[2];
 
-		// all done
-		$log->endAction();
-		return $return;
-	}
+        // all done
+        $log->endAction();
+        return $return;
+    }
 }
