@@ -62,6 +62,9 @@ class Prose_Loader
         "DataSift\\Storyplayer\\Prose"
     );
 
+    /**
+     * @return void
+     */
     public function setNamespaces($namespaces = array())
     {
         // a list of the namespaces we're going to search for this class
@@ -80,6 +83,9 @@ class Prose_Loader
         $this->namespaces[] = "DataSift\\Storyplayer\\Prose";
     }
 
+    /**
+     * @return string
+     */
     public function determineProseClassFor($methodName)
     {
         // this new, simplified naming scheme was introduced for
@@ -132,8 +138,8 @@ class Prose_Loader
      * this needs moving into its own trait perhaps, or into a static
      * inside the Stone library
      *
-     * @param  [type] $methodName [description]
-     * @return [type]             [description]
+     * @param  string $methodName
+     * @return array<string>
      */
     protected function convertMethodNameToWords($methodName)
     {

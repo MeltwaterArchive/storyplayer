@@ -289,6 +289,9 @@ class Story
         return $this;
     }
 
+    /**
+     * @return Story
+     */
     public function called($userStoryText)
     {
         $this->setName($userStoryText);
@@ -501,6 +504,9 @@ class Story
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getParams()
     {
         // our return value
@@ -524,18 +530,24 @@ class Story
         //
         // our params always take precedence over the params set
         // in the template(s)
-        $return = $this->params + $return;
+        $return = array_merge($this->params, $return);
 
         // all done
         return $return;
     }
 
+    /**
+     * @return void
+     */
     public function determineStoryFilename()
     {
         $trace = debug_backtrace();
         $this->storyFilename = $trace[1]['file'];
     }
 
+    /**
+     * @return string
+     */
     public function getStoryFilename()
     {
         return $this->storyFilename;
@@ -649,11 +661,17 @@ class Story
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return int
+     */
     public function getRequiredStoryplayerVersion()
     {
         return $this->compatibleVersion;
     }
 
+    /**
+     * @return Story
+     */
     public function requiresStoryplayerVersion($version)
     {
         $this->compatibleVersion = $version;
@@ -666,28 +684,43 @@ class Story
     //
     // --------------------------------------------------------------------
 
+    /**
+     * @return Story
+     */
     public function runsOn($envName)
     {
         $this->whitelistedEnvironments[$envName] = true;
         return $this;
     }
 
+    /**
+     * @return Story
+     */
     public function andOn($envName)
     {
         $this->whitelistedEnvironments[$envName] = true;
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getWhitelistedEnvironments()
     {
         return $this->whitelistedEnvironments;
     }
 
+    /**
+     * @return void
+     */
     public function requiresTestEnvironmentWithRoles($roles)
     {
         $this->requiredTestEnvRoles = $roles;
     }
 
+    /**
+     * @return array
+     */
     public function getRequiredTestEnvironmentRoles()
     {
         return $this->requiredTestEnvRoles;
@@ -747,6 +780,9 @@ class Story
         return count($this->testCanRunCheckCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addTestCanRunCheck($newCallback)
     {
         $this->testCanRunCheckCallback[] = $newCallback;
@@ -831,6 +867,9 @@ class Story
         return count($this->testTeardownCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addTestTeardown($newCallback)
     {
         $this->testTeardownCallback[] = $newCallback;
@@ -862,6 +901,9 @@ class Story
         return count($this->perPhaseSetupCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addPerPhaseSetup($newCallback)
     {
         $this->perPhaseSetupCallback[] = $newCallback;
@@ -887,6 +929,9 @@ class Story
         return count($this->perPhaseTeardownCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addPerPhaseTeardown($newCallback)
     {
         $this->perPhaseTeardownCallback[] = $newCallback;
@@ -918,6 +963,9 @@ class Story
         return count($this->deviceSetupCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addDeviceSetup($newCallback)
     {
         $this->deviceSetupCallback[] = $newCallback;
@@ -943,6 +991,9 @@ class Story
         return count($this->deviceTeardownCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addDeviceTeardown($newCallback)
     {
         $this->deviceTeardownCallback[] = $newCallback;
@@ -974,11 +1025,17 @@ class Story
         return count($this->hintsCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function setHints($newCallback)
     {
         $this->hintsCallback = array($newCallback);
     }
 
+    /**
+     * @return void
+     */
     public function addHints($newCallback)
     {
         $this->hintsCallback[] = $newCallback;
@@ -1009,6 +1066,9 @@ class Story
         return count($this->preTestPredictionCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addPreTestPrediction($newCallback)
     {
         $this->preTestPredictionCallback[] = $newCallback;
@@ -1039,6 +1099,9 @@ class Story
         return count($this->preTestInspectionCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addPreTestInspection($newCallback)
     {
         $this->preTestInspectionCallback[] = $newCallback;
@@ -1050,11 +1113,17 @@ class Story
     //
     // --------------------------------------------------------------------
 
+    /**
+     * @return void
+     */
     public function addAction($newCallback)
     {
         $this->actionsCallbacks[] = $newCallback;
     }
 
+    /**
+     * @return void
+     */
     public function addActions($newCallback)
     {
         $this->actionsCallbacks[] = $newCallback;
@@ -1106,11 +1175,17 @@ class Story
         return $this->postTestInspectionCallback;
     }
 
+    /**
+     * @return bool
+     */
     public function hasPostTestInspection()
     {
         return count($this->postTestInspectionCallback) > 0;
     }
 
+    /**
+     * @return void
+     */
     public function addPostTestInspection($newCallback)
     {
         $this->postTestInspectionCallback[] = $newCallback;
@@ -1122,6 +1197,9 @@ class Story
     //
     // --------------------------------------------------------------------
 
+    /**
+     * @return void
+     */
     public function setDefaultCallbacks()
     {
         // 1: test setup
@@ -1189,6 +1267,9 @@ class Story
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return void
+     */
     public function buildParseTrees($storyFilename)
     {
         // parse our own source code
@@ -1204,6 +1285,9 @@ class Story
         }
     }
 
+    /**
+     * @return void
+     */
     public function buildParseTreeForFile($filename)
     {
         // special case - do we already have this file parsed?
@@ -1331,6 +1415,9 @@ class Story
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return Story_Result
+     */
     public function getResult()
     {
         if (!isset($this->storyResult)) {

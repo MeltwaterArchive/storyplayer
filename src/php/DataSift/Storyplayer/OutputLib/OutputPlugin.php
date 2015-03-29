@@ -111,7 +111,7 @@ abstract class OutputPlugin
 
     /**
      * @param  string $output
-     * @param  string $style
+     * @param  array|null $style
      * @return void
      */
     public function write($output, $style = null)
