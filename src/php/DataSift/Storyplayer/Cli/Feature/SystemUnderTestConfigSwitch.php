@@ -60,7 +60,7 @@ use Phix_Project\CliEngine\CliSwitch;
 class Feature_SystemUnderTestConfigSwitch extends CliSwitch
 {
 	/**
-	 * @param array $sutList
+	 * @param \DataSift\Storyplayer\ConfigLib\SystemsUnderTestList $sutList
 	 * @param string $defaultSutName
 	 */
 	public function __construct($sutList, $defaultSutName)

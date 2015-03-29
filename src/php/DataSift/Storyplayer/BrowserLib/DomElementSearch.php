@@ -539,7 +539,7 @@ class DomElementSearch
 	// ------------------------------------------------------------------
 
 	/**
-	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 * @return \DataSift\WebDriver\WebDriverElement
 	 */
 	public function getTopElement()
 	{

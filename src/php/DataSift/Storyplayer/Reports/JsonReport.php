@@ -204,7 +204,7 @@ class JsonReport extends Report
 		$r->name = $phase->getPhaseName();
 		$r->result = $phaseResult->getPhaseResultString();
 
-		$this->currentPhaseGroup->details[$phase->getPhaseSequenceNo()] = $r;
+		$o->details[$phase->getPhaseSequenceNo()] = $r;
 	}
 
 	/**

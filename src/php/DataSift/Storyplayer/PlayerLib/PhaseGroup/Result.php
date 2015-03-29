@@ -104,6 +104,12 @@ class PhaseGroup_Result
 	 */
 	public $durationTime    = null;
 
+	/**
+	 * which file is this PhaseGroup_Result associated with?
+	 * @var string
+	 */
+	public $filename        = null;
+
 	const UNKNOWN     = 0;
 	const OKAY        = 1;
 	const FAIL        = 2;
