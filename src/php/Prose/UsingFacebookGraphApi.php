@@ -100,9 +100,9 @@ class UsingFacebookGraphApi extends Prose
      *
      * @return stdClass
      */
-    private function makeGraphApiRequest($path){
-        $environment  = $this->st->getEnvironment();
-        $access_token = $environment->facebookAccessToken;
+    private function makeGraphApiRequest($path)
+    {
+        $access_token = fromConfig()->getModuleSetting('facebook.access_token');
 
         // GET $path/?access_token=$access_token
         $resp = fromCurl()->get($this->base_path.$path.'?access_token='. $access_token);
