@@ -59,7 +59,7 @@ use Prose\E5xx_NotImplemented;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class AutomatePhase extends StoryPhase
+class ScriptPhase extends StoryPhase
 {
     public function doPhase($script)
     {

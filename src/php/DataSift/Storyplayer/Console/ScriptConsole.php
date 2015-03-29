@@ -99,41 +99,26 @@ EOS;
     }
 
     /**
-     * called when a new story starts
+     * called when we start a new set of phases
      *
-     * a single copy of Storyplayer may execute multiple tests
-     *
-     * @param string $storyName
-     * @param string $storyCategory
-     * @param string $storyGroup
-     * @param string $envName
-     * @param string $deviceName
      * @return void
      */
-    public function startStory($storyName, $storyCategory, $storyGroup, $envName, $deviceName)
+    public function startPhaseGroup($activity, $name)
+    {
+        // no-op
+    }
+
+    public function endPhaseGroup($result)
     {
         // no-op
     }
 
     /**
-     * called when a story finishes
-     *
-     * @param Story_Result $storyResult
-     * @return void
-     */
-    public function endStory(Story_Result $storyResult)
-    {
-        // no-op for now
-    }
-
-    /**
      * called when a story starts a new phase
      *
-     * @param string $phaseName
-     * @param integer $phaseType
      * @return void
      */
-    public function startPhase($phaseName, $phaseType)
+    public function startPhase($phase)
     {
         // no-op
     }
@@ -141,28 +126,34 @@ EOS;
     /**
      * called when a story ends a phase
      *
-     * @param string $phaseName
-     * @param integer $phaseType
      * @return void
      */
-    public function endPhase($phaseName, $phaseType)
+    public function endPhase($phase, $phaseResult)
     {
-        // this is a no-op for us
+        // no-op
     }
 
     /**
      * called when a story logs an action
      *
-     * @param integer $level
      * @param string $msg
      * @return void
      */
-    public function logPhaseActivity($level, $msg)
+    public function logPhaseActivity($msg, $codeLine = null)
     {
-        if ($this->verbosityLevel > 0) {
-            // send this to the default logger
-            Log::write($level, $msg);
-        }
+        // no-op
+    }
+
+    /**
+     * called when a story logs the (possibly partial) output from
+     * running a subprocess
+     *
+     * @param  string $msg the output to log
+     * @return void
+     */
+    public function logPhaseSubprocessOutput($msg)
+    {
+        // no-op
     }
 
     /**
@@ -189,6 +180,11 @@ EOS;
     {
         // send this to the default logger
         Log::write(Log::LOG_NOTICE, $msg);
+    }
+
+    public function logPhaseCodeLine($codeLine)
+    {
+        // this is a no-op for us
     }
 
     /**
@@ -270,49 +266,5 @@ EOS;
 
         // send the output to the default logger
         Log::write(Log::LOG_DEBUG, $name . ' => ' . $output);
-    }
-
-    /**
-     * called when we start to create a test environment
-     *
-     * @param  string $testEnvName
-     * @return void
-     */
-    public function startTestEnvironmentCreation($testEnvName)
-    {
-        // no-op
-    }
-
-    /**
-     * called when we have finished making the test environment
-     *
-     * @param  string $testEnvName
-     * @return void
-     */
-    public function endTestEnvironmentCreation($testEnvName)
-    {
-        // no-op
-    }
-
-    /**
-     * called when we start to destroy a test environment
-     *
-     * @param  string $testEnvName
-     * @return void
-     */
-    public function startTestEnvironmentDestruction($testEnvName)
-    {
-        // no-op
-    }
-
-    /**
-     * called when we have finished destroying a test environment
-     *
-     * @param  string $testEnvName
-     * @return void
-     */
-    public function endTestEnvironmentDestruction($testEnvName)
-    {
-        // no-op
     }
 }

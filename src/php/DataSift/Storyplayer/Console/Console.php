@@ -69,6 +69,27 @@ abstract class Console extends OutputPlugin
     protected $results;
 
     /**
+     * are we running totally silently?
+     * @var boolean
+     */
+    private $silentActivity = false;
+
+    public function resetSilentMode()
+    {
+        $this->silentActivity = false;
+    }
+
+    public function setSilentMode()
+    {
+        $this->silentActivity = true;
+    }
+
+    public function isSilent()
+    {
+        return $this->silentActivity;
+    }
+
+    /**
      * called when Storyplayer exits
      *
      * @return void

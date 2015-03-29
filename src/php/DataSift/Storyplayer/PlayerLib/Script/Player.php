@@ -106,6 +106,7 @@ class Script_Player
 
         // run the phases
         $phasesPlayer->playPhases(
+            "Running script",
             $st,
             $injectables,
             $this->scriptPhases,

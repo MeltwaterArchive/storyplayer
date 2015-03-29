@@ -57,7 +57,7 @@ use DataSift\Storyplayer\Output;
  */
 trait OutputSupport
 {
-    public $output;
+    public $output = null;
 
     /**
      *
@@ -66,6 +66,15 @@ trait OutputSupport
     public function initOutputSupport()
     {
         $this->output = new Output();
+
+        return $this->output;
+    }
+
+    public function getOutput()
+    {
+        if ($this->output === null) {
+            throw new E4xx_NotInitialised('output');
+        }
 
         return $this->output;
     }

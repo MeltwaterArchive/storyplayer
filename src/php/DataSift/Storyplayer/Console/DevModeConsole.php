@@ -62,12 +62,6 @@ class DevModeConsole extends Console
 {
     protected $resultStrings  = array();
 
-    /**
-     * are we running totally silently?
-     * @var boolean
-     */
-    protected $silentActivity = false;
-
     public function __construct()
     {
         parent::__construct();
@@ -80,16 +74,6 @@ class DevModeConsole extends Console
             PhaseGroup_Result::BLACKLISTED => "Result: BLACKLISTED",
             PhaseGroup_Result::SKIPPED     => "Result: SKIPPED",
         ];
-    }
-
-    public function resetSilentMode()
-    {
-        $this->silentActivity = false;
-    }
-
-    public function setSilentMode()
-    {
-        $this->silentActivity = true;
     }
 
     /**
@@ -215,7 +199,7 @@ class DevModeConsole extends Console
      */
     public function logPhaseActivity($msg, $codeLine = null)
     {
-        if (!$this->silentActivity) {
+        if (!$this->isSilent()) {
             $this->writeActivity($msg, $codeLine);
         }
     }
@@ -230,7 +214,7 @@ class DevModeConsole extends Console
     public function logPhaseSubprocessOutput($msg)
     {
         // show the user that *something* happened
-        if (!$this->silentActivity) {
+        if (!$this->isSilent()) {
             $this->write(rtrim($msg) . PHP_EOL);
         }
     }

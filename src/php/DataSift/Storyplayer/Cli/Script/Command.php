@@ -59,7 +59,7 @@ use DataSift\Storyplayer\Console\ScriptConsole;
 use DataSift\Storyplayer\Injectables;
 
 /**
- * A command to play an automation
+ * A command to play a script
  *
  * @category  Libraries
  * @package   Storyplayer/Cli
@@ -68,7 +68,7 @@ use DataSift\Storyplayer\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Automate_Command extends CliCommand
+class Script_Command extends BaseCommand implements CliSignalHandler
 {
     /**
      * should we let background processes survive when we shutdown?
@@ -91,8 +91,10 @@ class Automate_Command extends CliCommand
 
     public function __construct($injectables)
     {
+        parent::__construct($injectables);
+
         // define the command
-        $this->setName('automate');
+        $this->setName('script');
         $this->setShortDescription('run an automation script');
         $this->setLongDescription(
             "Use this command to play an automation script."
@@ -103,6 +105,19 @@ class Automate_Command extends CliCommand
         ));
 
         // the switches that this command supports
+        $this->addFeature(new Feature_ConsoleSupport);
+        $this->addFeature(new Feature_DeviceSupport);
+        $this->addFeature(new Feature_TestEnvironmentConfigSupport);
+        $this->addFeature(new Feature_SystemUnderTestConfigSupport);
+        $this->addFeature(new Feature_LocalhostSupport);
+        $this->addFeature(new Feature_ActiveConfigSupport);
+        $this->addFeature(new Feature_DefinesSupport);
+        $this->addFeature(new Feature_PhaseLoaderSupport);
+        $this->addFeature(new Feature_ProseLoaderSupport);
+        $this->addFeature(new Feature_TestUsersSupport);
+
+        // now setup all of the switches that we support
+        $this->addFeatureSwitches();
     }
 
     /**
@@ -132,51 +147,19 @@ class Automate_Command extends CliCommand
 
     public function processInsideLegacyHandler(CliEngine $engine, $params = array(), $injectables = null)
     {
-        // the order we do things:
-        //
-        // 1. build up the config we're going to use
-        //    a. storyplayer.json (already done)
-        //    c. any additional config file
-        //    c. test-environment config file
-        //    d. per-device config file
-        //
-        // 2. override from the command-line
-        //    a. -D switches
-        //    b. persistent processes
-        //
-        // 3. build up the list of stories to run
-        //    a. test environment setup
-        //    b. one or more stories
-        //    c. test environment teardown
-        //
-        // 4. setup any remaining services
-        //    a. phase loading
-        //    b. prose loading
-        //    c. report loader
-        //
-        // 5. setup the output channels
-        //    a. the console (i.e. --dev mode)
-        //    b. report-to-file plugins
-
         // make sure we're using the ScriptConsole by default
         $injectables->output->usePluginInSlot(new ScriptConsole, 'console');
 
         // process the common functionality
-        $this->applyCommonFunctionalitySupport($engine, $this, $injectables);
+        $this->initFeaturesBeforeModulesAvailable($engine);
 
         // now it is safe to create our shorthand
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $runtimeConfig        = $injectables->getRuntimeConfig();
+        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
         $output               = $injectables->output;
 
         // save the output for use in other methods
         $this->output = $output;
-
-        // initialise process persistence
-        $this->initProcessPersistence($engine, $injectables);
-
-        // build our list of stories to run
-        $this->initScriptList($engine, $injectables, $params);
 
         // at this point, all of the services / data held in $injectables
         // has been initialised and is ready for use
@@ -188,10 +171,17 @@ class Automate_Command extends CliCommand
         // shutdown function
         $this->st = $st;
 
+        // now that we have $st, we can initialise any feature that
+        // wants to use our modules
+        $this->initFeaturesAfterModulesAvailable($st, $engine, $injectables);
+
         // install signal handling, now that $this->st is defined
         //
         // we wouldn't want signal handling called out of order :)
         $this->initSignalHandling($injectables);
+
+        // build our list of stories to run
+        $this->initScriptList($engine, $injectables, $params);
 
         // and we're ready to tell the world that we're here
         $output->startStoryplayer(
@@ -214,7 +204,7 @@ class Automate_Command extends CliCommand
         $runtimeConfigManager->saveRuntimeConfig($runtimeConfig, $output);
 
         // tell the output plugins that we're all done
-        $output->endStoryplayer();
+        $output->endStoryplayer(0);
 
         // all done
         return 0;
@@ -228,23 +218,6 @@ class Automate_Command extends CliCommand
     // CommonFunctionalitySupport trait have been initialised
     //
     // ------------------------------------------------------------------
-
-    /**
-     *
-     * @param  CliEngine   $engine
-     * @param  Injectables $injectables
-     * @return void
-     */
-    protected function initProcessPersistence(CliEngine $engine, Injectables $injectables)
-    {
-        // by default, no persistence
-        $this->persistProcesses = false;
-
-        // are we persisting processes?
-        if (isset($engine->options->persistProcesses) && $engine->options->persistProcesses) {
-            $this->persistProcesses = true;
-        }
-    }
 
     /**
      *

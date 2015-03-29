@@ -73,22 +73,6 @@ class DefaultConsole extends Console
     protected $storyResults = [];
 
     /**
-     * are we running totally silently?
-     * @var boolean
-     */
-    protected $silentActivity = false;
-
-    public function resetSilentMode()
-    {
-        $this->silentActivity = false;
-    }
-
-    public function setSilentMode()
-    {
-        $this->silentActivity = true;
-    }
-
-    /**
      * called when storyplayer starts
      *
      * @param string $version
@@ -207,7 +191,7 @@ class DefaultConsole extends Console
     public function logPhaseActivity($msg, $codeLine = null)
     {
         // show the user that *something* happened
-        if (!$this->silentActivity) {
+        if (!$this->isSilent()) {
             $this->write(".", $this->writer->miniActivityStyle);
         }
     }
@@ -222,7 +206,7 @@ class DefaultConsole extends Console
     public function logPhaseSubprocessOutput($msg)
     {
         // show the user that *something* happened
-        if (!$this->silentActivity) {
+        if (!$this->isSilent()) {
             $this->write(".", $this->writer->miniActivityStyle);
         }
     }

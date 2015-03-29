@@ -61,11 +61,16 @@ class Script
     public function __construct($filename)
     {
         $this->filename = $filename;
-        $this->result = new PhaseGroup_Result();
+        $this->result = new PhaseGroup_Result($this);
     }
 
     public function getResult()
     {
         return $this->result;
+    }
+
+    public function getFilename()
+    {
+        return $this->filename;
     }
 }
