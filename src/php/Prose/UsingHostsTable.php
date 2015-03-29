@@ -68,7 +68,7 @@ class UsingHostsTable extends Prose
 	 *
 	 * @param string $hostId
 	 *        ID of the host to add to the table
-	 * @param string $hostDetails
+	 * @param object $hostDetails
 	 *        Details about this host
 	 *
 	 * @return void

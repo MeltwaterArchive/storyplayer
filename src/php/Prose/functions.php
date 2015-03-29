@@ -519,12 +519,14 @@ function expectsRolesTable()
  * This module is for internal use inside Storyplayer. You shouldn't need to
  * use it from your own stories.
  *
+ * @param  string $tableName
+ *         which table do we want to test?
  * @return \Prose\ExpectsRuntimeTable
  * @throws \Prose\E5xx_ExpectFailed
  */
-function expectsRuntimeTable()
+function expectsRuntimeTable($tableName)
 {
-    return new ExpectsRuntimeTable(StoryTeller::instance());
+    return new ExpectsRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**

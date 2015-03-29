@@ -263,7 +263,7 @@ class Ec2Vm implements SupportedHost
 	public function stopHost($vmDetails)
 	{
 		// what are we doing?
-		usingLog()->startAction("stop VM");
+		$log = usingLog()->startAction("stop VM");
 
 		// is the VM actually running?
 		if (!$this->isRunning($vmDetails)) {
@@ -426,9 +426,9 @@ class Ec2Vm implements SupportedHost
 			$log->endAction("no such instance");
 			return false;
 		}
-		$state = fromEc2Instance($vmDetails->ec2Name)->getInstanceState();
-		if ($state != 'running') {
-			$log->endAction("VM is not running; state is '{$state}'");
+		$isRunning = fromEc2InstanceIsRunning($vmDetails->ec2Name)->getInstanceIsRunning();
+		if (!$isRunning) {
+			$log->endAction("VM is not running");
 			return false;
 		}
 

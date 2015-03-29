@@ -86,7 +86,7 @@ class AnsibleProvisioner extends Provisioner
 			if (isset($machine->params)) {
 				$params = [];
 				foreach ($machine->params as $paramName => $paramValue) {
-					$params[$paramName]  = fromTestEnvironment()->getSetting('hosts.' . $hostId . '.params.'.$paramName);
+					$params[$paramName] = fromConfig()->get('hosts.' . $hostId . '.params.'.$paramName);
 				}
 				if (count($params)) {
 					usingProvisioningDefinition($provDef)->addParams($params)->toHost($hostId);
@@ -104,7 +104,7 @@ class AnsibleProvisioner extends Provisioner
 		$log = usingLog()->startAction("use Ansible to provision host(s)");
 
 		// get our ansible configuration
-		$ansibleSettings = fromTestEnvironment()->getSetting('storyplayer.modules.ansible');
+		$ansibleSettings = fromConfig()->getModuleSettings('ansible');
 
 		// our reverse list of roles => hosts
 		$rolesToHosts = array();
@@ -235,7 +235,7 @@ class AnsibleProvisioner extends Provisioner
 		}
 
 		// write the data
-		$st->usingYamlFile($filename)->writeDataToFile($vars);
+		usingYamlFile($filename)->writeDataToFile($vars);
 
 		// all done
 		$log->endAction("written to file '{$filename}'");
@@ -271,7 +271,7 @@ class AnsibleProvisioner extends Provisioner
 		$log = usingLog()->startAction("determine host_vars filename for host '{$hostId}'");
 
 		// get our ansible settings
-		$ansibleSettings = fromTestEnvironment()->getSetting('storyplayer.modules.ansible');
+		$ansibleSettings = fromConfig()->getModuleSettings('ansible');
 
 		// get our inventory folder
 		$invFolder = $this->getInventoryFolder($ansibleSettings, $inventoryFolder);

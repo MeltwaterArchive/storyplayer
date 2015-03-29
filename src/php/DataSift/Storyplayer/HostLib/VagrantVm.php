@@ -451,7 +451,7 @@ class VagrantVm implements SupportedHost
 
 		foreach ($keyFilenames as $keyFilename)
 		{
-			$st->usingLog()->writeToLog("checking if {$keyFilename} exists");
+			usingLog()->writeToLog("checking if {$keyFilename} exists");
 			if (file_exists($keyFilename)) {
 				$log->endAction($keyFilename);
 				return $keyFilename;

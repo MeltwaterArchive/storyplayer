@@ -68,7 +68,7 @@ class UsingRolesTable extends Prose
 	/**
 	 * addHost
 	 *
-	 * @param string $hostDetails
+	 * @param object $hostDetails
 	 *        Details about the host to add to the role
 	 * @param string $roleName
 	 *        Role name to add
