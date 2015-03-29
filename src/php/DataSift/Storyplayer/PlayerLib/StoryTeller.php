@@ -218,6 +218,7 @@ class StoryTeller
 
     // our repository of parsed code, for printing code statements
     private $codeParser = null;
+    private $lastSeenCodeLine = null;
 
     // our data formatter
     private $dataFormatter = null;

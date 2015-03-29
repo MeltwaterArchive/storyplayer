@@ -176,7 +176,7 @@ class DsbuildProvisioner extends Provisioner
     }
 
     /**
-     * @param string $inventoryFolder
+     * @param object $vars
      */
     protected function writeDsbuildParamsYamlFile($vars)
     {
@@ -194,7 +194,7 @@ class DsbuildProvisioner extends Provisioner
     }
 
     /**
-     * @param string $inventoryFolder
+     * @param object $vars
      */
     protected function writeDsbuildParamsShellFile($vars)
     {

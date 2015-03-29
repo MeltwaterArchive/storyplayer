@@ -85,7 +85,7 @@ class UsingProcessesTable extends Prose
      *
      * @param string $hostId
      *        ID of the host where the process was running
-     * @param int $pid
+     * @param object $processDetails
      *        The process ID we're working with
      *
      * @return void

@@ -73,6 +73,10 @@ class CodeParser
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @param  string $filename
+     * @return bool
+     */
     public function buildParseTreeForFile($filename)
     {
         // special case - do we already have this file parsed?

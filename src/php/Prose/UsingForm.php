@@ -109,7 +109,7 @@ class UsingForm extends UsingBrowser
 
         foreach ($fields as $labelText => $fieldValue) {
             // find the element
-            $element = fromForm($formId)->getElementByLabelIdOrName($labelText);
+            $element = fromForm($formId)->get()->elementByLabelIdOrName($labelText);
             $tag     = $element->name();
 
             switch ($tag) {
@@ -148,7 +148,7 @@ class UsingForm extends UsingBrowser
             // find the element
             $element = $log->addStep("finding field with label, id or name '{$labelText}'", function($log) use($formId, $labelText) {
                 try {
-                    return fromForm($formId)->getElementByLabelIdOrName($labelText);
+                    return fromForm($formId)->get()->elementByLabelIdOrName($labelText);
                 }
                 catch (Exception $e) {
                     $log->endAction("field '{$labelText}' not present; ignoring!");

@@ -234,7 +234,6 @@ class JUnitReport extends Report
     /**
      * called when a story logs an action
      *
-     * @param integer $level
      * @param string $msg
      * @return void
      */

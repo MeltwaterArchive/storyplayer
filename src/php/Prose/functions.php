@@ -373,9 +373,9 @@ function expectsFailure()
  * @return \Prose\ExpectsHost
  * @throws \Prose\E5xx_ExpectFailed
  */
-function expectsFirstHostWithRole($role)
+function expectsFirstHostWithRole($roleName)
 {
-    return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$role]);
+    return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
 /**
@@ -1856,7 +1856,8 @@ function firstHostWithRole($roleName)
     $log = usingLog()->startAction("for the first host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $hostDetails = array_pop(get_object_vars($listOfHosts));
+    $hostsAsArray = get_object_vars($listOfHosts);
+    $hostDetails  = array_pop($hostsAsArray);
     yield($hostDetails->hostId);
 
     // all done
@@ -1883,8 +1884,8 @@ function lastHostWithRole($roleName)
     $log = usingLog()->startAction("for the last host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $keys = array_keys($listOfHosts);
-    $hostDetails = $listOfHosts[end($keys)];
+    $hostsAsArray = get_object_vars($listOfHosts);
+    $hostDetails = end($hostsAsArray);
     yield($hostDetails->hostId);
 
     // all done

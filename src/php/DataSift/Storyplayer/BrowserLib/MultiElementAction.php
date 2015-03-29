@@ -49,6 +49,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 /**
  * Helper class for finding multiple DOM elements to act upon
  *
+ * @method mixed elementWithId
+ *
  * @category  Libraries
  * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
