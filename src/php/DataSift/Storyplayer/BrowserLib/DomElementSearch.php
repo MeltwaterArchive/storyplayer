@@ -100,6 +100,11 @@ class DomElementSearch
 	//
 	// ------------------------------------------------------------------
 
+	/**
+	 * @param  string $text
+	 * @param  string $tags
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByAltText($text, $tags = '*')
 	{
 		// what are we doing?
@@ -127,6 +132,11 @@ class DomElementSearch
 		return $elements;
 	}
 
+	/**
+	 * @param  string $class
+	 * @param  string $tags
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByClass($class, $tags = '*')
 	{
 		// what are we doing?
@@ -154,6 +164,11 @@ class DomElementSearch
 		return $elements;
 	}
 
+	/**
+	 * @param  string $id
+	 * @param  string $tags
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsById($id, $tags = '*')
 	{
 		// what are we doing?
@@ -181,6 +196,10 @@ class DomElementSearch
 		return $elements;
 	}
 
+	/**
+	 * @param  string $labelText
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByLabel($labelText)
 	{
 		// what are we doing?
@@ -226,6 +245,11 @@ class DomElementSearch
 		return $retval;
 	}
 
+	/**
+	 * @param  \DataSift\WebDriver\WebDriverElement $labelElement
+	 * @param  string $labelText
+	 * @return \DataSift\WebDriver\WebDriverElement
+	 */
 	protected function getElementAssociatedWithLabelElement($labelElement, $labelText)
 	{
 		// shorthand
@@ -292,6 +316,11 @@ class DomElementSearch
 		}
 	}
 
+	/**
+	 * @param  string $searchTerm
+	 * @param  string $tags
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByLabelIdOrName($searchTerm, $tags = '*')
 	{
 		// what are we doing?
@@ -327,6 +356,11 @@ class DomElementSearch
 		return $retval;
 	}
 
+	/**
+	 * @param  string $name
+	 * @param  string $tags
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByName($name, $tags = '*')
 	{
 		// what are we doing?
@@ -354,7 +388,11 @@ class DomElementSearch
 		return $elements;
 	}
 
-
+	/**
+	 * @param  string $text
+	 * @param  string $tags
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByPlaceholder($text, $tags = '*')
 	{
 		// what are we doing?
@@ -382,6 +420,11 @@ class DomElementSearch
 		return $elements;
 	}
 
+	/**
+	 * @param  string $text
+	 * @param  string $tags
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByText($text, $tags = '*')
 	{
 		// what are we doing?
@@ -417,6 +460,11 @@ class DomElementSearch
 		return $elements;
 	}
 
+	/**
+	 * @param  string $title
+	 * @param  string $tags
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByTitle($title, $tags = '*')
 	{
 		// what are we doing?
@@ -444,6 +492,10 @@ class DomElementSearch
 		return $elements;
 	}
 
+	/**
+	 * @param  array<string> $xpathList
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getElementsByXpath($xpathList)
 	{
 		// shorthand
@@ -486,16 +538,25 @@ class DomElementSearch
 	//
 	// ------------------------------------------------------------------
 
+	/**
+	 * @return array<\DataSift\WebDriver\WebDriverElement>
+	 */
 	public function getTopElement()
 	{
 		return $this->topElement;
 	}
 
+	/**
+	 * @param \DataSift\WebDriver\WebDriverElement $element
+	 */
 	public function setTopElement($element)
 	{
 		$this->topElement = $element;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function getTopXpath()
 	{
 		return $this->topXpath;

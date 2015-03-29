@@ -252,6 +252,11 @@ class SingleElementAction extends BaseElementAction
 		$this->actionDesc  = $actionDesc;
 	}
 
+	/**
+	 * @param  string $methodName
+	 * @param  array $methodArgs
+	 * @return mixed
+	 */
 	public function __call($methodName, $methodArgs)
 	{
 		// retrieve the element, using the fake method name to figure out
