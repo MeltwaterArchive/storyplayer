@@ -58,6 +58,8 @@ use DataSift\Stone\ComparisonLib\ArrayComparitor;
  * @method void hasLength(int $expected)
  * @method void hasKey(mixed $key)
  * @method void isEmpty()
+ * @method void isNotEmpty()
+ * @method void isExpectedType()
  * @method void isNull()
  * @method void isNotNull()
  * @method void isSameLengthAs(array $expected)

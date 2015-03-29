@@ -69,7 +69,7 @@ class FromProcessesTable extends Prose
 	 *
 	 * Get the entire processes table from the runtime config
 	 *
-	 * @return void
+	 * @return object
 	 */
 	public function getProcessesTable()
 	{
@@ -83,7 +83,7 @@ class FromProcessesTable extends Prose
 	 *
 	 * @param mixed $pid The pid we're working with
 	 *
-	 * @return void
+	 * @return object
 	 */
 	public function getDetailsForPid($pid)
 	{

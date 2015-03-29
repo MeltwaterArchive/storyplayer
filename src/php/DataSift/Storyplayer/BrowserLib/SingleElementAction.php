@@ -121,6 +121,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @method void dropdownsWithPlaceholder(string $text)
  * @method void dropdownsWithTitle(string $title)
  * @method void dropdownsWithLabelTextOrId(string $labelTextOrId)
+ * @method mixed elementById(string $id)
  * @method void elementWithId(string $id)
  * @method void elementWithLabel(string $label)
  * @method void elementLabelled(string $label)
@@ -130,6 +131,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @method void elementWithPlaceholder(string $text)
  * @method void elementWithTitle(string $title)
  * @method void elementWithLabelTextOrId(string $labelTextOrId)
+ * @method void elementByXpath(string $xpath)
  * @method void elementsWithId(string $id)
  * @method void elementsWithLabel(string $label)
  * @method void elementsLabelled(string $label)
@@ -222,6 +224,9 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @method void unorderedlistWithLabelTextOrId(string $labelTextOrId)
  * @method void intoElement($element)
  * @method void fromElement($element)
+ *
+ * @method mixed fromFieldWithId(string $id)
+ * @method void  intoFieldWithId(string $id)
  *
  * @category  Libraries
  * @package   Storyplayer/BrowserLib
