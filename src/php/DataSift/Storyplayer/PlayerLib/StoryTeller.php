@@ -202,7 +202,7 @@ class StoryTeller
     private $currentPhase = null;
 
     // test device support
-    private $device = null;
+    private $deviceDetails = null;
     private $deviceName = null;
     private $deviceAdapter = null;
     private $persistDevice = false;
@@ -818,7 +818,7 @@ class StoryTeller
     // ------------------------------------------------------------------
 
     /**
-     * @return void
+     * @return Action_LogItem
      */
     public function startAction($text)
     {
@@ -864,11 +864,11 @@ class StoryTeller
     }
 
     /**
-     * @return \DataSift\WebDriver\WebDriverSession
+     * @return BaseObject
      */
     public function getDeviceDetails()
     {
-        return $this->device;
+        return $this->deviceDetails;
     }
 
     /**
@@ -919,10 +919,14 @@ class StoryTeller
         return $this->deviceAdapter->getDevice();
     }
 
-    public function setDevice($deviceName, $device)
+    /**
+     * @param string $deviceName
+     * @param BaseObject $deviceDetails
+     */
+    public function setDevice($deviceName, $deviceDetails)
     {
-        $this->deviceName = $deviceName;
-        $this->device     = $device;
+        $this->deviceName    = $deviceName;
+        $this->deviceDetails = $deviceDetails;
     }
 
     /**
@@ -1059,7 +1063,7 @@ class StoryTeller
      */
     public function getEnvironment()
     {
-        return $this->fromEnvironment();
+        return new \Prose\FromEnvironment($this);
     }
 
     /**
