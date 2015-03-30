@@ -49,7 +49,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 /**
  * Helper class for finding multiple DOM elements to act upon
  *
- * @method mixed elementWithId
+ * @method mixed elementWithId(string $id)
  *
  * @category  Libraries
  * @package   Storyplayer/BrowserLib

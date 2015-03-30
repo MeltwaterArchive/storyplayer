@@ -85,7 +85,6 @@ class ExpectsBrowser extends Prose
                         return;
                     }
                     throw new E5xx_ExpectFailed(__METHOD__, "0 element(s) to exist", "$actualCount element(s) exist");
-                    break;
 
                 case 'several':
                     if ($actualCount < 3 || $actualCount > 9) {
@@ -94,7 +93,6 @@ class ExpectsBrowser extends Prose
                     }
 
                     throw new E5xx_ExpectFailed(__METHOD__, "must not be several element(s)", "several element(s) exist");
-                    break;
 
                 // this satisfies something like:
                 //
@@ -135,7 +133,6 @@ class ExpectsBrowser extends Prose
                     }
 
                     throw new E5xx_ExpectFailed(__METHOD__, "at least one element to exist", "$actualCount element(s) exist");
-                    break;
 
                 case 'several':
                     if ($actualCount > 2 && $actualCount < 10) {
@@ -144,7 +141,6 @@ class ExpectsBrowser extends Prose
                     }
 
                     throw new E5xx_ExpectFailed(__METHOD__, "several element to exist", "$actualCount element(s) exist");
-                    break;
 
                 // this satisfies something like:
                 //

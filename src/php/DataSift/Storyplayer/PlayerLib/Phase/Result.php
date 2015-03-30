@@ -90,7 +90,7 @@ class Phase_Result
     const BLACKLISTED  = 7;
     const CANNOTRUN    = 8;
 
-    var $RESULT_STRING = [
+    protected $resultTextMap = [
         1 => "SUCCEEDED",
         2 => "FAILED",
         3 => "INCOMPLETE",
@@ -127,7 +127,7 @@ class Phase_Result
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMessage()
     {
@@ -135,7 +135,7 @@ class Phase_Result
     }
 
     /**
-     * @return \Exception
+     * @return \Exception|null
      */
     public function getException()
     {
@@ -155,8 +155,8 @@ class Phase_Result
      */
     public function getPhaseResultString()
     {
-        if (isset($this->RESULT_STRING[$this->result])) {
-            return $this->RESULT_STRING[$this->result];
+        if (isset($this->resultTextMap[$this->result])) {
+            return $this->resultTextMap[$this->result];
         }
 
         return "UNKNOWN";
@@ -268,8 +268,8 @@ class Phase_Result
 
     /**
      * @param integer $result
-     * @param string $msg
-     * @param Exception $e
+     * @param string|null $msg
+     * @param Exception|null $e
      * @return void
      */
     public function setContinuePlaying($result = 1, $msg = null, $e = null)
@@ -283,7 +283,7 @@ class Phase_Result
     /**
      * @param integer $result
      * @param string $msg
-     * @param Exception $e
+     * @param Exception|null $e
      * @return void
      */
     public function setPlayingFailed($result, $msg, $e = null)

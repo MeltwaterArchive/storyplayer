@@ -60,6 +60,6 @@ trait Connector_UnixShell
 {
     public function getClient($st, $hostDetails)
     {
-        return new LocalClient($st, $hostDetails);
+        return new LocalClient($st);
     }
 }

@@ -71,7 +71,7 @@ class UsingEc2 extends VmActionsBase
         $log = usingLog()->startAction("start EC2 VM '{$vmName}', running guest OS '{$osName}', using AMI ID '{$amiId}' and security group '{$securityGroup}'");
 
         // get the aws settings
-        $awsSettings = fromEnvironment()->getAppSettings('aws');
+        $awsSettings = fromConfig()->getModuleSetting('aws');
 
         // put the details into an array
         $vmDetails = new Ec2VmDetails;

@@ -431,7 +431,7 @@ function expectsGraphite()
  *
  * @param  string $hostId
  *         the ID of the host to use
- * @return \Prose\UsingHost
+ * @return \Prose\ExpectsHost
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsHost($hostId)
@@ -631,7 +631,7 @@ function expectsZmqSocket($zmqSocket)
  *
  * @param  string $roleName
  *         the role that you want to work with
- * @return \Prose\DelayedHostsModuleIterator
+ * @return \Prose\ForeachHostWithRole
  */
 function foreachHostWithRole($roleName)
 {
@@ -744,7 +744,7 @@ function fromEc2()
  *
  * @param  string $amiId
  *         the AMI ID that you want to work with
- * @return \Prose\FromEnvironment
+ * @return \Prose\FromEc2Instance
  */
 function fromEc2Instance($amiId)
 {
@@ -892,7 +892,7 @@ function fromHost($hostId)
  * This module is intended for internal use by Storyplayer. You should not
  * need to call this module from your own stories.
  *
- * @return \Prose\UsingHostsTable
+ * @return \Prose\FromHostsTable
  */
 function fromHostsTable()
 {
@@ -1297,7 +1297,7 @@ function usingEc2()
  */
 function usingEc2Instance($amiId)
 {
-    return new UsingEc2Instance(StoryTeller::instance());
+    return new UsingEc2Instance(StoryTeller::instance(), [$amiId]);
 }
 
 /**
@@ -1842,7 +1842,7 @@ function usingZmqSocket($zmqSocket)
  * @param  string $roleName
  *         The role that we want
  *
- * @return string
+ * @return Iterator
  *         a hostid that matches the role
  */
 function firstHostWithRole($roleName)
@@ -1870,7 +1870,7 @@ function firstHostWithRole($roleName)
  * @param  string $roleName
  *         The role that we want
  *
- * @return string
+ * @return Iterator
  *         a hostid that matches the role
  */
 function lastHostWithRole($roleName)
@@ -1898,7 +1898,7 @@ function lastHostWithRole($roleName)
  * @param  string $roleName
  *         The role that we want
  *
- * @return string
+ * @return Iterator
  *         a hostid that matches the role
  */
 function hostWithRole($roleName)

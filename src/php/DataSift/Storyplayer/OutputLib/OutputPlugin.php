@@ -121,7 +121,7 @@ abstract class OutputPlugin
 
     /**
      * @param  float $duration
-     * @param  string $style
+     * @param  array|null $style
      * @return void
      */
     public function writeDuration($duration, $style = null)

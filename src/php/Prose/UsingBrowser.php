@@ -73,7 +73,7 @@ class UsingBrowser extends Prose
     /**
      * tick a checkbox or radio button if it has not yet been checked
      *
-     * @return \DataSift\BrowserLib\SingleElementAction
+     * @return \DataSift\Storyplayer\BrowserLib\SingleElementAction
      */
     public function check()
     {
@@ -102,7 +102,7 @@ class UsingBrowser extends Prose
      * remove any content from an input box, or untick a checkbox or
      * radio button
      *
-     * @return \DataSift\BrowserLib\SingleElementAction
+     * @return \DataSift\Storyplayer\BrowserLib\SingleElementAction
      */
     public function clear()
     {
@@ -133,7 +133,7 @@ class UsingBrowser extends Prose
     /**
      * Send a 'click' to the selected element
      *
-     * @return \DataSift\BrowserLib\SingleElementAction
+     * @return \DataSift\Storyplayer\BrowserLib\SingleElementAction
      */
     public function click()
     {
@@ -155,7 +155,7 @@ class UsingBrowser extends Prose
      *
      * @param  string $label
      *         the human-readable text of the option to select
-     * @return \DataSift\BrowserLib\SingleElementAction
+     * @return \DataSift\Storyplayer\BrowserLib\SingleElementAction
      */
     public function select($label)
     {
@@ -186,7 +186,7 @@ class UsingBrowser extends Prose
      *
      * @param  string $text
      *         the text to type
-     * @return \DataSift\BrowserLib\SingleElementAction
+     * @return \DataSift\Storyplayer\BrowserLib\SingleElementAction
      */
     public function type($text)
     {

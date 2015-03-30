@@ -194,7 +194,7 @@ class DsbuildProvisioner extends Provisioner
     }
 
     /**
-     * @param object $vars
+     * @param array $vars
      */
     protected function writeDsbuildParamsShellFile($vars)
     {
@@ -252,7 +252,7 @@ class DsbuildProvisioner extends Provisioner
      *         the "provisioning" section from the test environment config
      * @param  string $hostId
      *         the ID of the host that we are provisioning
-     * @return string
+     * @return string|null
      *         path to the file to execute
      */
     protected function getDsbuildFilename($provConfig, $hostId)

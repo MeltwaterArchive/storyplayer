@@ -65,11 +65,10 @@ class UsingSavageD extends HostBase
         $url = $this->getSavagedUrl() . "/stats/prefix";
 
         // make the request
-        usingHttp()->delete($url);
+        $response = usingHttp()->delete($url);
 
         // did it work?
-        $newPrefix = fromHttp()->get($url);
-        assertsString($newPrefix)->equals('');
+        expectsHttpResponse($response)->hasStatusCode(200);
 
         // all done
         $log->endAction();
@@ -84,7 +83,7 @@ class UsingSavageD extends HostBase
         $url = $this->getSavagedUrl() . "/stats/prefix";
 
         // make the request
-        usingHttp()->post($url, null, array("prefix" => $prefix));
+        usingHttp()->post($url, [], array("prefix" => $prefix));
 
         // did it work?
         $response = fromHttp()->get($url);
@@ -106,7 +105,7 @@ class UsingSavageD extends HostBase
         $url = $this->getSavagedUrl() . "/process/{$safeProcessName}/pid";
 
         // make the request
-        usingHttp()->post($url, null, array("pid" => $pid));
+        usingHttp()->post($url, [], array("pid" => $pid));
 
         // did it work?
         $response = fromHttp()->get($url);

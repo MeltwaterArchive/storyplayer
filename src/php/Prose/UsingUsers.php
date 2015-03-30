@@ -125,7 +125,6 @@ class UsingUsers extends Prose
         $log = usingLog()->startAction("save test users to file '{$filename}'");
 
         // save the contents
-        $users = $this->st->getTestUsers();
         file_put_contents($filename, json_encode($users, JSON_PRETTY_PRINT));
 
         // all done

@@ -107,7 +107,7 @@ class BaseAdapter
      *
      * @param  string $hostname
      * @param  string $url
-     * @return
+     * @return string
      */
     public function applyHttpBasicAuthForHost($hostname, $url)
     {

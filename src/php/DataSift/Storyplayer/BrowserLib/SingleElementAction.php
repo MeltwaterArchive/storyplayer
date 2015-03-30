@@ -130,6 +130,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  * @method mixed elementWithClass(string $class)
  * @method mixed elementWithPlaceholder(string $text)
  * @method mixed elementWithTitle(string $title)
+ * @method mixed elementByLabelIdOrName(string $text)
  * @method mixed elementWithLabelTextOrId(string $labelTextOrId)
  * @method mixed elementByXpath(string $xpath)
  * @method mixed elementsWithId(string $id)
