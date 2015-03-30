@@ -202,7 +202,7 @@ class BuildTestEnvironment_Command extends BaseCommand implements CliSignalHandl
         $this->initSignalHandling($injectables);
 
         // build our list of players to run
-        $this->initPlayerList($engine, $injectables, $params);
+        $this->initPlayerList($injectables);
 
         // let's keep score :)
         $startTime = microtime(true);
@@ -277,7 +277,7 @@ class BuildTestEnvironment_Command extends BaseCommand implements CliSignalHandl
      * @param  array       $cliParams
      * @return void
      */
-    protected function initPlayerList(CliEngine $cliEngine, Injectables $injectables, $cliParams)
+    protected function initPlayerList(Injectables $injectables)
     {
         // we just want a TestEnvironment
         $this->playerList[] = new TestEnvironment_Player([], $injectables);

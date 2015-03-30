@@ -61,6 +61,9 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class FromHost extends HostBase
 {
+    /**
+     * @return object
+     */
     public function getDetails()
     {
         // what are we doing?
@@ -156,6 +159,10 @@ class FromHost extends HostBase
         return $hostDetails->ipAddress;
     }
 
+    /**
+     * @param  string $packageName
+     * @return object
+     */
     public function getInstalledPackageDetails($packageName)
     {
         // what are we doing?
@@ -175,6 +182,10 @@ class FromHost extends HostBase
         return $return;
     }
 
+    /**
+     * @param  int $pid
+     * @return bool
+     */
     public function getPidIsRunning($pid)
     {
         // what are we doing?
@@ -199,6 +210,10 @@ class FromHost extends HostBase
         return false;
     }
 
+    /**
+     * @param  string $processName
+     * @return bool
+     */
     public function getProcessIsRunning($processName)
     {
         // what are we doing?
@@ -223,6 +238,10 @@ class FromHost extends HostBase
         return false;
     }
 
+    /**
+     * @param  string $processName
+     * @return int
+     */
     public function getPid($processName)
     {
         // log some info to the user
@@ -242,6 +261,9 @@ class FromHost extends HostBase
         return $return;
     }
 
+    /**
+     * @return string
+     */
     public function getSshUsername()
     {
         // what are we doing?
@@ -258,6 +280,9 @@ class FromHost extends HostBase
         return $return;
     }
 
+    /**
+     * @return string
+     */
     public function getSshKeyFile()
     {
         // what are we doing?
@@ -274,11 +299,19 @@ class FromHost extends HostBase
         return $return;
     }
 
+    /**
+     * @param  string $sessionName
+     * @return bool
+     */
     public function getIsScreenRunning($sessionName)
     {
         return $this->getScreenIsRunning($sessionName);
     }
 
+    /**
+     * @param  string $sessionName
+     * @return bool
+     */
     public function getScreenIsRunning($sessionName)
     {
         // what are we doing?
@@ -298,6 +331,10 @@ class FromHost extends HostBase
         }
     }
 
+    /**
+     * @param  string $sessionName
+     * @return object
+     */
     public function getScreenSessionDetails($sessionName)
     {
         // what are we doing?
@@ -325,6 +362,9 @@ class FromHost extends HostBase
         return $processDetails;
     }
 
+    /**
+     * @return array<object>
+     */
     public function getAllScreenSessions()
     {
         // what are we doing?
@@ -359,6 +399,10 @@ class FromHost extends HostBase
         return $retval;
     }
 
+    /**
+     * @param  string $appName
+     * @return mixed
+     */
     public function getAppSettings($appName)
     {
         // what are we doing?
@@ -385,6 +429,11 @@ class FromHost extends HostBase
         return $value;
     }
 
+    /**
+     * @param  string $path
+     * @param  string|null $settingName
+     * @return mixed
+     */
     public function getAppSetting($path, $settingName = null)
     {
         // are we operating in legacy mode (for DataSift), or are we using
@@ -423,6 +472,11 @@ class FromHost extends HostBase
         return $data;
     }
 
+    /**
+     * @param  string $path
+     * @param  string $settingName
+     * @return mixed
+     */
     protected function getLegacyAppSetting($appName, $settingName)
     {
         // what are we doing?
@@ -457,6 +511,10 @@ class FromHost extends HostBase
         return $value;
     }
 
+    /**
+     * @param  string $path
+     * @return mixed
+     */
     public function getStorySetting($path)
     {
         // what are we doing?
@@ -486,6 +544,11 @@ class FromHost extends HostBase
         return $data;
     }
 
+    /**
+     * @param  string $sourceFilename
+     * @param  string $destFilename
+     * @return \DataSift\Storyplayer\CommandLib\CommandResult
+     */
     public function downloadFile($sourceFilename, $destFilename)
     {
         // what are we doing?
@@ -512,6 +575,10 @@ class FromHost extends HostBase
         return $result;
     }
 
+    /**
+     * @param  string $filename
+     * @return object
+     */
     public function getFileDetails($filename)
     {
         // what are we doing?

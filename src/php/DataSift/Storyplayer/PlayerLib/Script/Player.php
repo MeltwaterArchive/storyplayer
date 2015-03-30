@@ -95,9 +95,6 @@ class Script_Player
 
     public function play(StoryTeller $st, Injectables $injectables)
     {
-        // shorthand
-        $output = $st->getOutput();
-
         // we are playing this script
         $script = new Script($this->scriptFilename);
 
