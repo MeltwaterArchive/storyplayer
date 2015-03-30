@@ -333,7 +333,7 @@ class FromHost extends HostBase
 
     /**
      * @param  string $sessionName
-     * @return object
+     * @return BaseObject|null
      */
     public function getScreenSessionDetails($sessionName)
     {
@@ -439,7 +439,7 @@ class FromHost extends HostBase
         // are we operating in legacy mode (for DataSift), or are we using
         // the new dot.notation.support that we want everywhere in v2?
         $parts = explode(".", $path);
-        if (count($parts) == 1 && $settingName != null) {
+        if (count($parts) === 1 && $settingName !== null) {
             return $this->getLegacyAppSetting($path, $settingName);
         }
 
@@ -473,7 +473,7 @@ class FromHost extends HostBase
     }
 
     /**
-     * @param  string $path
+     * @param  string $appName
      * @param  string $settingName
      * @return mixed
      */
