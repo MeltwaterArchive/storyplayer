@@ -57,6 +57,10 @@ use DataSift\Storyplayer\Output;
  */
 trait OutputSupport
 {
+    /**
+     * the output proxy
+     * @var Output
+     */
     public $output = null;
 
     /**
@@ -70,6 +74,9 @@ trait OutputSupport
         return $this->output;
     }
 
+    /**
+     * @return Output
+     */
     public function getOutput()
     {
         if ($this->output === null) {

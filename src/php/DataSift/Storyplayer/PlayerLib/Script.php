@@ -55,7 +55,16 @@ namespace DataSift\Storyplayer\PlayerLib;
  */
 class Script
 {
+    /**
+     * which file contains this script?
+     * @var string
+     */
     protected $filename;
+
+    /**
+     * what is the result of playing this script?
+     * @var PhaseGroup_Result
+     */
     protected $result;
 
     public function __construct($filename)
@@ -64,11 +73,21 @@ class Script
         $this->result = new PhaseGroup_Result($this);
     }
 
+    /**
+     * get the PhaseGroup_Result for this script
+     *
+     * @return PhaseGroup_Result
+     */
     public function getResult()
     {
         return $this->result;
     }
 
+    /**
+     * get the filename that contains this script
+     *
+     * @return string
+     */
     public function getFilename()
     {
         return $this->filename;
