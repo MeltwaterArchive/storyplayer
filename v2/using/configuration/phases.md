@@ -5,7 +5,7 @@ next: '<a href="../../using/configuration/device-config.html">Next: Per-Device C
 prev: '<a href="../../using/configuration/overriding-from-the-command-line.html">Prev: Overriding From The Command-Line</a>'
 ---
 
-# Test Phases Configuration
+# Phases Configuration
 
 By default, Storyplayer will execute every [test execution phase](../stories/phases.html) in order.  However, when you are creating a complex test (especially one involving virtual machines), you can save a lot of time by temporarily disabling some of the test phases.
 
