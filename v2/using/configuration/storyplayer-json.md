@@ -10,6 +10,10 @@ updated_for_v2: true
 
 `storyplayer.json` is the main configuration file for your tests.  You should place `storyplayer.json` in the top-level folder of the repository containing your tests.
 
+## Location
+
+The `storyplayer.json` file goes in your project's top-level folder - the same folder where your `composer.json` file goes.
+
 ## Contents
 
 `storyplayer.json` is a JSON file. It must define an object. The following sections are permitted:

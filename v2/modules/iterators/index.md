@@ -1,7 +1,7 @@
 ---
 layout: v2/modules-iterators
 title: Iterators
-prev: '<a href="../../modules/http/usingHttp.html">Prev: usingHttp()</a>'
+prev: '<a href="../../modules/imap/index.html">Prev: The IMAP Module</a>'
 next: '<a href="../../modules/iterators/hostWithRole.html">Next: foreach(hostWithRole())</a>'
 updated_for_v2: true
 ---

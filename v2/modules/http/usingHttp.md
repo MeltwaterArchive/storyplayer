@@ -2,7 +2,7 @@
 layout: v2/modules-http
 title: usingHttp()
 prev: '<a href="../../modules/http/fromHttp.html">Prev: fromHttp()</a>'
-next: '<a href="../../modules/iterators/index.html">Next: Iterators</a>'
+next: '<a href="../../modules/imap/index.html">Next: The IMAP Module</a>'
 updated_for_v2: true
 ---
 
