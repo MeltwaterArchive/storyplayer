@@ -69,11 +69,11 @@ use DataSift\Stone\ComparisonLib\DoubleComparitor;
  */
 class AssertsDouble extends AssertionsBase
 {
-	/**
-	 * @param string[] $params
-	 */
-	public function __construct(StoryTeller $st, $params)
-	{
-		parent::__construct($st, new DoubleComparitor($params[0]));
-	}
+    /**
+     * @param string[] $params
+     */
+    public function __construct(StoryTeller $st, $params)
+    {
+        parent::__construct($st, new DoubleComparitor($params[0]));
+    }
 }

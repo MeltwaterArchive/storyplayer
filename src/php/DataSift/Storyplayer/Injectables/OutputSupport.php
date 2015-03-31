@@ -57,16 +57,32 @@ use DataSift\Storyplayer\Output;
  */
 trait OutputSupport
 {
-	public $output;
+    /**
+     * the output proxy
+     * @var Output
+     */
+    public $output = null;
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initOutputSupport()
-	{
-		$this->output = new Output();
+    /**
+     *
+     * @return Output
+     */
+    public function initOutputSupport()
+    {
+        $this->output = new Output();
 
-		return $this->output;
-	}
+        return $this->output;
+    }
+
+    /**
+     * @return Output
+     */
+    public function getOutput()
+    {
+        if ($this->output === null) {
+            throw new E4xx_NotInitialised('output');
+        }
+
+        return $this->output;
+    }
 }

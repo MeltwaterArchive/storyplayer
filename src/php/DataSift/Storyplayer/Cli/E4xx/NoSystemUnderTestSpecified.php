@@ -60,8 +60,8 @@ class E4xx_NoSystemUnderTestSpecified extends Exxx_Exception
 {
     public function __construct()
     {
-    	$msg = "You need to use -s to specify which system to test." . PHP_EOL . PHP_EOL
-    	     . "Use 'storyplayer --list-systems' to see the list of known systems under test.";
+        $msg = "You need to use -s to specify which system to test." . PHP_EOL . PHP_EOL
+             . "Use 'storyplayer --list-systems' to see the list of known systems under test.";
         parent::__construct(400, $msg, $msg);
     }
 }

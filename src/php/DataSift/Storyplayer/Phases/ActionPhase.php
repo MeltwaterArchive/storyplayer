@@ -61,112 +61,112 @@ use Prose\E5xx_NotImplemented;
 
 class ActionPhase extends StoryPhase
 {
-	protected $sequenceNo = 5;
+    protected $sequenceNo = 5;
 
-	public function doPhase($story)
-	{
-		// shorthand
-		$st          = $this->st;
-		$storyResult = $story->getResult();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st          = $this->st;
+        $storyResult = $story->getResult();
 
-		// keep track of what happens with the action
-		$phaseResult = $this->getNewPhaseResult();
+        // keep track of what happens with the action
+        $phaseResult = $this->getNewPhaseResult();
 
-		// do we have anything to do?
-		if (!$story->hasActions())
-		{
-			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no action instructions"
-			);
-			return $phaseResult;
-		}
+        // do we have anything to do?
+        if (!$story->hasActions())
+        {
+            $phaseResult->setContinuePlaying(
+                $phaseResult::HASNOACTIONS,
+                "story has no action instructions"
+            );
+            return $phaseResult;
+        }
 
-		// run ONE of the actions, picked at random
-		try {
-			// do any setup
-			$this->doPerPhaseSetup();
+        // run ONE of the actions, picked at random
+        try {
+            // do any setup
+            $this->doPerPhaseSetup();
 
-			// make the call
-			$action = $story->getOneAction();
-			$action($st);
+            // make the call
+            $action = $story->getOneAction();
+            $action($st);
 
-			// if we get here, all is well
-			if ($storyResult->getStoryShouldFail()) {
-				$phaseResult->setPlayingFailed(
-					$phaseResult::COMPLETED,
-					"action completed successfully; was expected to fail"
-				);
-				$storyResult->setStoryHasFailed($phaseResult);
-			}
-			else {
-				$phaseResult->setContinuePlaying();
-			}
-		}
+            // if we get here, all is well
+            if ($storyResult->getStoryShouldFail()) {
+                $phaseResult->setPlayingFailed(
+                    $phaseResult::COMPLETED,
+                    "action completed successfully; was expected to fail"
+                );
+                $storyResult->setStoryHasFailed($phaseResult);
+            }
+            else {
+                $phaseResult->setContinuePlaying();
+            }
+        }
 
-		// if the set of actions fails, it will throw this exception
-		catch (E5xx_ActionFailed $e) {
-			if ($storyResult->getStoryShouldFail()) {
-				$phaseResult->setContinuePlaying(
-					$phaseResult::FAILED,
-					$e->getMessage(),
-					$e
-				);
-			}
-			else {
-				$phaseResult->setPlayingFailed(
-					$phaseResult::FAILED,
-					$e->getMessage(),
-					$e
-				);
-				$storyResult->setStoryHasFailed($phaseResult);
-			}
-		}
-		catch (E5xx_ExpectFailed $e) {
-			if ($storyResult->getStoryShouldFail()) {
-				$phaseResult->setContinuePlaying(
-					$phaseResult::FAILED,
-					$e->getMessage(),
-					$e
-				);
-			}
-			else {
-				$phaseResult->setPlayingFailed(
-					$phaseResult::FAILED,
-					$e->getMessage(),
-					$e
-				);
-				$storyResult->setStoryHasFailed($phaseResult);
-			}
-		}
+        // if the set of actions fails, it will throw this exception
+        catch (E5xx_ActionFailed $e) {
+            if ($storyResult->getStoryShouldFail()) {
+                $phaseResult->setContinuePlaying(
+                    $phaseResult::FAILED,
+                    $e->getMessage(),
+                    $e
+                );
+            }
+            else {
+                $phaseResult->setPlayingFailed(
+                    $phaseResult::FAILED,
+                    $e->getMessage(),
+                    $e
+                );
+                $storyResult->setStoryHasFailed($phaseResult);
+            }
+        }
+        catch (E5xx_ExpectFailed $e) {
+            if ($storyResult->getStoryShouldFail()) {
+                $phaseResult->setContinuePlaying(
+                    $phaseResult::FAILED,
+                    $e->getMessage(),
+                    $e
+                );
+            }
+            else {
+                $phaseResult->setPlayingFailed(
+                    $phaseResult::FAILED,
+                    $e->getMessage(),
+                    $e
+                );
+                $storyResult->setStoryHasFailed($phaseResult);
+            }
+        }
 
-		// we treat this as a hard failure
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryIsIncomplete($phaseResult);
-		}
+        // we treat this as a hard failure
+        catch (E5xx_NotImplemented $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryIsIncomplete($phaseResult);
+        }
 
-		// if this happens, something has gone badly wrong
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasError($phaseResult);
-		}
+        // if this happens, something has gone badly wrong
+        catch (Exception $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasError($phaseResult);
+        }
 
-		// close off any open log actions
-		$st->closeAllOpenActions();
+        // close off any open log actions
+        $st->closeAllOpenActions();
 
-		// tidy up after ourselves
-		$this->doPerPhaseTeardown();
+        // tidy up after ourselves
+        $this->doPerPhaseTeardown();
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

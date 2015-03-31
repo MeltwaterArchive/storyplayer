@@ -42,8 +42,8 @@ $story->addTestTeardown(function() {
 $story->addAction(function() {
     foreach (hostWithRole('upload_target') as $hostname) {
         // get the default user details for this test environment
-        $hostUser  = fromHost($hostname)->getAppSetting("user", "username");
-        $hostGroup = fromHost($hostname)->getAppSetting("user", "group");
+        $hostUser  = fromHost($hostname)->getStorySetting("user.username");
+        $hostGroup = fromHost($hostname)->getStorySetting("user.group");
 
         // get the details for this file
         $details = fromHost($hostname)->getFileDetails('testfile.txt');
@@ -66,10 +66,10 @@ $story->addAction(function() {
 $story->addPostTestInspection(function() {
     foreach (hostWithRole('upload_target') as $hostname) {
         // get the default user details for this test environment
-        $hostUser  = fromHost($hostname)->getAppSetting("user", "username");
-        $hostGroup = fromHost($hostname)->getAppSetting("user", "group");
+        $hostUser  = fromHost($hostname)->getStorySetting("user.username");
+        $hostGroup = fromHost($hostname)->getStorySetting("user.group");
 
-        // get the details for this file
-        $details = expectsHost($hostname)->hasFileWithPermissions('testfile.txt', $hostUser, $hostGroup, 0644);
+        // check the details for this file
+        expectsHost($hostname)->hasFileWithPermissions('testfile.txt', $hostUser, $hostGroup, 0644);
     }
 });

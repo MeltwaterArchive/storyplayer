@@ -55,91 +55,82 @@ namespace Prose;
  */
 class FromHostsTable extends Prose
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "hosts";
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "hosts";
 
 
-	/**
-	 * getHostsTable
-	 *
-	 *
-	 * @return object The hosts table
-	 */
-	public function getHostsTable()
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * getHostsTable
+     *
+     *
+     * @return object The hosts table
+     */
+    public function getHostsTable()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the hosts table for the current test environment");
 
-		// what are we doing?
-		$log = $st->startAction("get the hosts table for the current test environment");
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
+        // get the table
+        $table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
 
-		// get the table
-		$table = $st->fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+        // all done
+        $log->endAction();
+        return $table;
+    }
 
-		// all done
-		$log->endAction();
-		return $table;
-	}
+    /**
+     * getDetailsForHost
+     *
+     * @param string $hostId
+     *        The host we're looking for
+     *
+     * @return object
+     *         Details about $hostId
+     */
+    public function getDetailsForHost($hostId)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get details for host '{$hostId}' from the current test environment");
 
-	/**
-	 * getDetailsForHost
-	 *
-	 * @param string $hostId
-	 *        The host we're looking for
-	 *
-	 * @return object
-	 *         Details about $hostId
-	 */
-	public function getDetailsForHost($hostId)
-	{
-		// shorthand
-		$st = $this->st;
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// what are we doing?
-		$log = $st->startAction("get details for host '{$hostId}' from the current test environment");
+        // get the details
+        $hostDetails = fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostId);
 
-		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
+        // all done
+        $log->endAction();
+        return $hostDetails;
+    }
 
-		// get the details
-		$hostDetails = $st->fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostId);
+    public function hasTestEnvironment()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("do we already have the test environment defined in the hosts table?");
 
-		// all done
-		$log->endAction();
-		return $hostDetails;
-	}
+        // which test environment are we working with?
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-	public function hasTestEnvironment()
-	{
-		// shorthand
-		$st = $this->st;
+        // get the hosts table
+        $hostsTable = fromRuntimeTable($this->entryKey)->getTable();
+        //var_dump($hostsTable);
 
-		// what are we doing?
-		$log = $st->startAction("do we already have the test environment defined in the hosts table?");
+        // does the test environment exist?
+        if (isset($hostsTable->$testEnvName) && $hostsTable->$testEnvName->hasProperties()) {
+            $log->endAction("yes");
+            return true;
+        }
 
-		// which test environment are we working with?
-		$testEnvName = $st->getTestEnvironmentName();
-
-		// get the hosts table
-		$hostsTable = $st->fromRuntimeTable($this->entryKey)->getTable();
-		//var_dump($hostsTable);
-
-		// does the test environment exist?
-		if (isset($hostsTable->$testEnvName) && $hostsTable->$testEnvName->hasProperties()) {
-			$log->endAction("yes");
-			return true;
-		}
-
-		// no, it does not
-		$log->endAction("no");
-		return false;
-	}
+        // no, it does not
+        $log->endAction("no");
+        return false;
+    }
 }

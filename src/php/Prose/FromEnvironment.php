@@ -58,83 +58,74 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class FromEnvironment extends Prose
 {
-	public function getAppSetting($appName, $settingName)
-	{
-		// shorthand
-		$st = $this->st;
+    public function getAppSetting($appName, $settingName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get $settingName for '{$appName}'");
 
-		// what are we doing?
-		$log = $st->startAction("get $settingName for '{$appName}'");
+        // do we have any settings anywhere for this app?
+        $appSettings = $this->getAppSettings($appName);
 
-		// do we have any settings anywhere for this app?
-		$appSettings = $this->getAppSettings($appName);
+        // do we have the setting we want?
+        if (!isset($appSettings->$settingName)) {
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// do we have the setting we want?
-		if (!isset($appSettings->$settingName)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // if we get here, then we have what we want
+        $value = $appSettings->$appName;
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("setting for '{$appName}' is '{$logValue}'");
 
-		// if we get here, then we have what we want
-		$value = $appSettings->$appName;
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("setting for '{$appName}' is '{$logValue}'");
+        // all done
+        return $value;
+    }
 
-		// all done
-		return $value;
-	}
+    public function getAppSettings($appName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get all settings for $appName");
 
-	public function getAppSettings($appName)
-	{
-		// shorthand
-		$st = $this->st;
+        // do we have any in the storyplayer.json file?
+        $config = $this->st->getConfig();
+        if (isset($config->storyplayer, $config->storyplayer->appSettings, $config->storyplayer->appSettings->$appName)) {
+            // success!
+            $value = $config->storyplayer->appSettings->$appName;
 
-		// what are we doing?
-		$log = $st->startAction("get all settings for $appName");
+            // log the settings
+            $printer  = new DataPrinter();
+            $logValue = $printer->convertToString($value);
+            $log->endAction("settings for '{$appName}' are '{$logValue}'");
 
-		// do we have any in the storyplayer.json file?
-		$config = $st->getConfig();
-		if (isset($config->storyplayer, $config->storyplayer->appSettings, $config->storyplayer->appSettings->$appName)) {
-			// success!
-			$value = $config->storyplayer->appSettings->$appName;
+            // all done
+            return $value;
+        }
 
-			// log the settings
-			$printer  = new DataPrinter();
-			$logValue = $printer->convertToString($value);
-			$log->endAction("settings for '{$appName}' are '{$logValue}'");
+        // TODO: search test environments too?
 
-			// all done
-			return $value;
-		}
+        // if we get here, then we could not find the settings
+        throw new E5xx_ActionFailed(__METHOD__);
+    }
 
-		// TODO: search test environments too?
+    public function __get($appName)
+    {
+        return $this->getAppSettings($appName);
+    }
 
-		// if we get here, then we could not find the settings
-		throw new E5xx_ActionFailed(__METHOD__);
-	}
+    public function __isset($appName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("check to see if the config contains '$appName'");
 
-	public function __get($appName)
-	{
-		return $this->getAppSettings($appName);
-	}
-
-	public function __isset($appName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("check to see if the config contains '$appName'");
-
-		// do we have this setting in the config?
-		$config = $st->getConfig();
-		if (isset($config->storyplayer, $config->storyplayer->appSettings, $config->storyplayer->appSettings->$appName)) {
-			$log->endAction("it does");
-			return true;
-		}
-		else {
-			$log->endAction("it doesn't");
-			return false;
-		}
-	}
+        // do we have this setting in the config?
+        $config = $this->st->getConfig();
+        if (isset($config->storyplayer, $config->storyplayer->appSettings, $config->storyplayer->appSettings->$appName)) {
+            $log->endAction("it does");
+            return true;
+        }
+        else {
+            $log->endAction("it doesn't");
+            return false;
+        }
+    }
 }

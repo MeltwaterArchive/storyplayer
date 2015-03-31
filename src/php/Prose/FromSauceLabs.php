@@ -56,63 +56,63 @@ namespace Prose;
 
 class FromSauceLabs extends Prose
 {
-	public function getAccountDetails()
-	{
+    public function getAccountDetails()
+    {
 
-	}
+    }
 
-	public function getAccountLimits()
-	{
+    public function getAccountLimits()
+    {
 
-	}
+    }
 
-	public function getCurrentActivity()
-	{
+    public function getCurrentActivity()
+    {
 
-	}
+    }
 
-	public function getHistoricalActivity()
-	{
+    public function getHistoricalActivity()
+    {
 
-	}
+    }
 
-	public function getJobs()
-	{
+    public function getJobs()
+    {
 
-	}
+    }
 
-	public function getJobAssetsList()
-	{
+    public function getJobAssetsList()
+    {
 
-	}
+    }
 
-	public function getJobAsset()
-	{
+    public function getJobAsset()
+    {
 
-	}
+    }
 
-	public function getSauceConnectTunnels()
-	{
+    public function getSauceConnectTunnels()
+    {
 
-	}
+    }
 
-	public function getSauceConnectTunnel()
-	{
+    public function getSauceConnectTunnel()
+    {
 
-	}
+    }
 
-	public function getServiceStatus()
-	{
+    public function getServiceStatus()
+    {
 
-	}
+    }
 
-	public function getAvailableBrowsers()
-	{
+    public function getAvailableBrowsers()
+    {
 
-	}
+    }
 
-	public function getPublicTestsExecutedCounter()
-	{
+    public function getPublicTestsExecutedCounter()
+    {
 
-	}
+    }
 }

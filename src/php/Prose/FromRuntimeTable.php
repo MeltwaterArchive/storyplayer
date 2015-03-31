@@ -61,14 +61,11 @@ class FromRuntimeTable extends BaseRuntimeTable
      */
     public function getTable()
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = $st->startAction("get '{$tableName}' table from runtime config");
+        $log = usingLog()->startAction("get '{$tableName}' table from runtime config");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -85,14 +82,11 @@ class FromRuntimeTable extends BaseRuntimeTable
 
     public function getGroupFromTable($group)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = $st->startAction("get '{$tableName}->{$group}' table group from runtime config");
+        $log = usingLog()->startAction("get '{$tableName}->{$group}' table group from runtime config");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -120,16 +114,13 @@ class FromRuntimeTable extends BaseRuntimeTable
      *
      * @return object The details stored under $key
      */
-    public function getDetails($key){
-
-        // shorthand
-        $st = $this->st;
-
+    public function getDetails($key)
+    {
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = $st->startAction("get details for '{$key}' from {$tableName} table");
+        $log = usingLog()->startAction("get details for '{$key}' from {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -154,7 +145,6 @@ class FromRuntimeTable extends BaseRuntimeTable
         return $tables->$tableName->$key;
     }
 
-
     /**
      * Get details for a specific key from a group
      *
@@ -165,14 +155,11 @@ class FromRuntimeTable extends BaseRuntimeTable
      */
     public function getDetailsFromGroup($group, $key)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = $st->startAction("get details for '{$group}->{$key}' from {$tableName} table");
+        $log = usingLog()->startAction("get details for '{$group}->{$key}' from {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();

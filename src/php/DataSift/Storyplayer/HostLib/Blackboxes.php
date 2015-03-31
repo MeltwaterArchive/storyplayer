@@ -62,200 +62,194 @@ use Prose\E5xx_ActionFailed;
  */
 class Blackboxes implements SupportedHost
 {
-	/**
-	 *
-	 * @var StoryTeller
-	 */
-	protected $st;
+    /**
+     *
+     * @var StoryTeller
+     */
+    protected $st;
 
-	/**
-	 *
-	 * @param StoryTeller $st
-	 */
-	public function __construct(StoryTeller $st)
-	{
-		// remember
-		$this->st = $st;
-	}
+    /**
+     *
+     * @param StoryTeller $st
+     */
+    public function __construct(StoryTeller $st)
+    {
+        // remember
+        $this->st = $st;
+    }
 
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @param  array $provisioningVars
-	 * @return void
-	 */
-	public function createHost($envDetails, $provisioningVars = array())
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @param  array $provisioningVars
+     * @return void
+     */
+    public function createHost($envDetails, $provisioningVars = array())
+    {
+        // what are we doing?
+        $log = usingLog()->startAction('register blackbox(es)');
 
-		// what are we doing?
-		$log = $st->startAction('register blackbox(es)');
+        // make sure we like the provided details
+        if (!isset($envDetails->machines)) {
+            throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines");
+        }
+        if (empty($envDetails->machines)) {
+            throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
+        }
+        foreach($envDetails->machines as $hostId => $machine) {
+            // TODO: it would be great to autodetect this one day
+            if (!isset($machine->roles)) {
+                throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->roles");
+            }
+        }
 
-		// make sure we like the provided details
-		if (!isset($envDetails->machines)) {
-			throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines");
-		}
-		if (empty($envDetails->machines)) {
-			throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
-		}
-		foreach($envDetails->machines as $hostId => $machine) {
-			// TODO: it would be great to autodetect this one day
-			if (!isset($machine->roles)) {
-				throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->roles");
-			}
-		}
+        // remove any existing hosts table entry
+        foreach ($envDetails->machines as $hostId => $machine) {
+            usingHostsTable()->removeHost($hostId);
 
-		// remove any existing hosts table entry
-		foreach ($envDetails->machines as $hostId => $machine) {
-			$st->usingHostsTable()->removeHost($hostId);
+            // remove any roles
+            usingRolesTable()->removeHostFromAllRoles($hostId);
+        }
 
-			// remove any roles
-			$st->usingRolesTable()->removeHostFromAllRoles($hostId);
-		}
+        // there's nothing to start ... we assume that each host is
+        // already up and running
+        //
+        // if it is not, that is NOT our responsibility
 
-		// there's nothing to start ... we assume that each host is
-		// already up and running
-		//
-		// if it is not, that is NOT our responsibility
+        // store the details
+        foreach($envDetails->machines as $hostId => $machine)
+        {
+            // we want all the details from the config file
+            $vmDetails = clone $machine;
 
-		// store the details
-		foreach($envDetails->machines as $hostId => $machine)
-		{
-			// we want all the details from the config file
-			$vmDetails = clone $machine;
+            // this allows the story to perform actions against a single
+            // machine if required
+            //
+            // that said, there isn't much you can do with a PhysicalHost
+            $vmDetails->type        = 'PhysicalHost';
 
-			// this allows the story to perform actions against a single
-			// machine if required
-			//
-			// that said, there isn't much you can do with a PhysicalHost
-			$vmDetails->type        = 'PhysicalHost';
+            // remember the name of this machine
+            $vmDetails->hostId      = $hostId;
 
-			// remember the name of this machine
-			$vmDetails->hostId      = $hostId;
+            // mark the box as provisioned
+            //
+            // this stops Storyplayer thinking that the machine is an
+            // invalid host
+            $vmDetails->provisioned = true;
 
-			// mark the box as provisioned
-			//
-			// this stops Storyplayer thinking that the machine is an
-			// invalid host
-			$vmDetails->provisioned = true;
+            // remember this blackbox
+            usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
+            foreach ($vmDetails->roles as $role) {
+                usingRolesTable()->addHostToRole($vmDetails, $role);
+            }
+        }
 
-			// remember this blackbox
-			$st->usingHostsTable()->addHost($vmDetails->hostId, $vmDetails);
-			foreach ($vmDetails->roles as $role) {
-				$st->usingRolesTable()->addHostToRole($vmDetails, $role);
-			}
-		}
+        // all done
+        $log->endAction(count($envDetails->machines) . ' machine(s) registered');
+    }
 
-		// all done
-		$log->endAction(count($envDetails->machines) . ' machine(s) registered');
-	}
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @return void
+     */
+    public function startHost($envDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+    }
 
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @return void
-	 */
-	public function startHost($envDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
-	}
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @return void
+     */
+    public function stopHost($envDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+    }
 
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @return void
-	 */
-	public function stopHost($envDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
-	}
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @return void
+     */
+    public function restartHost($envDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+    }
 
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @return void
-	 */
-	public function restartHost($envDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
-	}
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @return void
+     */
+    public function powerOffHost($envDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+    }
 
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @return void
-	 */
-	public function powerOffHost($envDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
-	}
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @return void
+     */
+    public function destroyHost($envDetails)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("de-register blackbox(es)");
 
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @return void
-	 */
-	public function destroyHost($envDetails)
-	{
-		// shorthand
-		$st = $this->st;
+        // de-register all the hosts
+        foreach ($envDetails->machines as $hostId => $machine)
+        {
+            foreach ($machine->roles as $role) {
+                usingRolesTable()->removeHostFromAllRoles($hostId);
+            }
+            usingHostsTable()->removeHost($hostId);
+        }
 
-		// what are we doing?
-		$log = $st->startAction("de-register blackbox(es)");
+        // all done
+        $log->endAction();
+    }
 
-		// de-register all the hosts
-		foreach ($envDetails->machines as $hostId => $machine)
-		{
-			foreach ($machine->roles as $role) {
-				$st->usingRolesTable()->removeHostFromAllRoles($hostId);
-			}
-			$st->usingHostsTable()->removeHost($hostId);
-		}
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @param  string $command
+     * @return CommandResult
+     */
+    public function runCommandAgainstHostManager($envDetails, $command)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+    }
 
-		// all done
-		$log->endAction();
-	}
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @param  string $command
+     * @return CommandResult
+     */
+    public function runCommandViaHostManager($envDetails, $command)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+    }
 
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @param  string $command
-	 * @return CommandResult
-	 */
-	public function runCommandAgainstHostManager($envDetails, $command)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
-	}
+    /**
+     *
+     * @param  stdClass $vmDetails
+     * @return boolean
+     */
+    public function isRunning($vmDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+    }
 
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @param  string $command
-	 * @return CommandResult
-	 */
-	public function runCommandViaHostManager($envDetails, $command)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
-	}
-
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @return boolean
-	 */
-	public function isRunning($vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
-	}
-
-	/**
-	 *
-	 * @param  stdClass $envDetails
-	 * @return string
-	 */
-	public function determineIpAddress($envDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
-	}
+    /**
+     *
+     * @param  stdClass $envDetails
+     * @return string
+     */
+    public function determineIpAddress($envDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+    }
 }

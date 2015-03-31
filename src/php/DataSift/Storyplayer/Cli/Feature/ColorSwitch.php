@@ -59,9 +59,9 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Feature_ColorSwitch extends CliSwitch
 {
-	const NO_COLOR = 0;
-	const ALWAYS_COLOR = 1;
-	const AUTO_COLOR = 2;
+    const NO_COLOR = 0;
+    const ALWAYS_COLOR = 1;
+    const AUTO_COLOR = 2;
 
     static public $supportedValues = [
         "none" => 0,
@@ -75,48 +75,48 @@ class Feature_ColorSwitch extends CliSwitch
         "auto" => 2
     ];
 
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('color');
-		$this->setShortDescription('set when to use color in the output');
-		$this->setLongDesc(
-			"Storyplayer can use color to make it easier to understand the output at a glance. "
-			. "By default, Storyplayer will use color when stdout / stderr are connected to a terminal. "
-			. "You can use this switch to override the default behaviour (for example, when piping the "
-			. "output into less(1)."
-			. PHP_EOL . PHP_EOL
-			. "The default behaviour relies on PHP's posix_isatty() function. This should be built into "
-			. "your copy of PHP, but your operating system may require you to install an additional "
-			. "package to get it (grrr)."
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('color');
+        $this->setShortDescription('set when to use color in the output');
+        $this->setLongDesc(
+            "Storyplayer can use color to make it easier to understand the output at a glance. "
+            . "By default, Storyplayer will use color when stdout / stderr are connected to a terminal. "
+            . "You can use this switch to override the default behaviour (for example, when piping the "
+            . "output into less(1)."
+            . PHP_EOL . PHP_EOL
+            . "The default behaviour relies on PHP's posix_isatty() function. This should be built into "
+            . "your copy of PHP, but your operating system may require you to install an additional "
+            . "package to get it (grrr)."
+        );
 
-		// what are the long switches?
-		$this->addLongSwitch('color');
-		$this->addLongSwitch('colour');
+        // what are the long switches?
+        $this->addLongSwitch('color');
+        $this->addLongSwitch('colour');
 
-		// what is the required argument?
-		$this->setRequiredArg('<when>', "when to use colour; possible values are 'none', 'always' and 'auto'");
-		$this->setArgValidator(new Feature_ColorValidator());
-		$this->setArgHasDefaultValueOf('auto');
+        // what is the required argument?
+        $this->setRequiredArg('<when>', "when to use colour; possible values are 'none', 'always' and 'auto'");
+        $this->setArgValidator(new Feature_ColorValidator());
+        $this->setArgHasDefaultValueOf('auto');
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->color = self::$supportedValues[strtolower($params[0])];
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->color = self::$supportedValues[strtolower($params[0])];
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

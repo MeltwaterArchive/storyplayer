@@ -58,15 +58,15 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 trait DefaultCommandLineSupport
 {
-	public $defaultCommandLine;
+    public $defaultCommandLine;
 
-	public function initDefaultCommandLineSupport($storyplayerConfig, $injectables)
-	{
-		if (isset($storyplayerConfig->defaults)) {
-			$this->defaultCommandLine = $storyplayerConfig->defaults;
-		}
-		else {
-			$this->defaultCommandLine = [];
-		}
-	}
+    public function initDefaultCommandLineSupport($storyplayerConfig, $injectables)
+    {
+        if (isset($storyplayerConfig->defaults)) {
+            $this->defaultCommandLine = $storyplayerConfig->defaults;
+        }
+        else {
+            $this->defaultCommandLine = [];
+        }
+    }
 }

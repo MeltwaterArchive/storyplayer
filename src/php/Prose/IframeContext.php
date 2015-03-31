@@ -57,11 +57,11 @@ use DataSift\Storyplayer\PlayerLib\Story_Context;
  */
 class IframeContext extends PageContext
 {
-	public function __construct($iframeId) {
-		$this->pageContextAction = function(Story_Context $context) use($iframeId) {
-			$browser = $context->browserSession;
+    public function __construct($iframeId) {
+        $this->pageContextAction = function(Story_Context $context) use($iframeId) {
+            $browser = $context->browserSession;
 
-			$browser->frame(array('id' => $iframeId));
-		};
-	}
+            $browser->frame(array('id' => $iframeId));
+        };
+    }
 }

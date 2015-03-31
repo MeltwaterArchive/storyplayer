@@ -55,37 +55,37 @@ namespace DataSift\Storyplayer\ConfigLib;
  */
 class StoryplayerConfig extends WrappedConfig
 {
-	public function validateConfig()
-	{
-		$this->validateIsObject();
-		$this->validateDefaultsSection();
-	}
+    public function validateConfig()
+    {
+        $this->validateIsObject();
+        $this->validateDefaultsSection();
+    }
 
-	public function validateIsObject()
-	{
-		$config = $this->getConfig();
-		if (!is_object($config)) {
-			throw new E4xx_StoryplayerConfigMustBeAnObject($this->getFilename());
-		}
-	}
+    public function validateIsObject()
+    {
+        $config = $this->getConfig();
+        if (!is_object($config)) {
+            throw new E4xx_StoryplayerConfigMustBeAnObject($this->getFilename());
+        }
+    }
 
-	public function validateDefaultsSection()
-	{
-		$config = $this->getConfig();
-		if (!isset($config->defaults)) {
-			// defaults is optional
-			return;
-		}
+    public function validateDefaultsSection()
+    {
+        $config = $this->getConfig();
+        if (!isset($config->defaults)) {
+            // defaults is optional
+            return;
+        }
 
-		if (!is_array($config->defaults)) {
-			// defaults must be an array
-			throw new E4xx_StoryplayerDefaultsSectionMustBeAnArray($this->getFilename());
-		}
+        if (!is_array($config->defaults)) {
+            // defaults must be an array
+            throw new E4xx_StoryplayerDefaultsSectionMustBeAnArray($this->getFilename());
+        }
 
-		foreach($config->defaults as $defaultValue) {
-			if (!is_string($defaultValue)) {
-				throw new E4xx_StoryplayerDefaultsMustBeStrings($this->getFilename());
-			}
-		}
-	}
+        foreach($config->defaults as $defaultValue) {
+            if (!is_string($defaultValue)) {
+                throw new E4xx_StoryplayerDefaultsMustBeStrings($this->getFilename());
+            }
+        }
+    }
 }

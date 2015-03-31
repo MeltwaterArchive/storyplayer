@@ -58,15 +58,15 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_NoResultForPhase extends Exxx_Exception
 {
-	public function __construct($phaseName)
-	{
-		// do the right thing if we're given the object rather than
-		// its name
-		if ($phaseName instanceof Phase) {
-			$phaseName = $phaseName->getPhaseName();
-		}
-		$msg = "No result available for phase '$phaseName'";
+    public function __construct($phaseName)
+    {
+        // do the right thing if we're given the object rather than
+        // its name
+        if ($phaseName instanceof Phase) {
+            $phaseName = $phaseName->getPhaseName();
+        }
+        $msg = "No result available for phase '$phaseName'";
 
-		parent::__construct(500, $msg, $msg);
-	}
+        parent::__construct(500, $msg, $msg);
+    }
 }

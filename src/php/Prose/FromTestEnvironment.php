@@ -47,7 +47,7 @@ use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\DataLib\DotNotationConvertor;
 
 /**
- * Get information from the environment defined for the test environment
+ * Get information from the active test environment config
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -58,93 +58,125 @@ use DataSift\Stone\DataLib\DotNotationConvertor;
  */
 class FromTestEnvironment extends Prose
 {
-	public function getName()
-	{
-		// shorthand
-		$st = $this->st;
+    public function get($name)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get '$name' from the test environment config");
 
-		// what are we doing?
-		$log = $st->startAction("get current test environment name");
+        // what is the full path to this data?
+        $fullPath = 'target';
+        if (!empty($name)) {
+            $fullPath = $fullPath . '.' . $name;
+        }
 
-		// get the details
-		$config = $st->getConfig();
-		$value   = $config->getData('target.name');
+        // get the details
+        $config = $this->st->getActiveConfig();
 
-		// all done
-		$log->endAction($value);
-		return $value;
-	}
+        if (!$config->hasData($fullPath)) {
+            $log->endAction("no such setting '{$name}'");
+            return null;
+        }
 
-	public function getOption($optionName)
-	{
-		// shorthand
-		$st = $this->st;
+        // if we get here, then success \o/
+        $value = $config->getData($fullPath);
 
-		// what are we doing?
-		$log = $st->startAction("get option '{$optionName}' from test environment");
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("value is: '{$logValue}'");
 
-		// get the details
-		$config = $st->getConfig();
-		$fullPath = 'target.options.' . $optionName;
-		$value = null;
-		if ($config->hasData($fullPath)) {
-			$value = $config->getData($fullPath);
-		}
+        // all done
+        return $value;
+    }
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction($logValue);
+    public function getName()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get current test environment name");
 
-		// all done
-		return $value;
-	}
+        // get the details
+        $config = $this->st->getConfig();
+        $value  = $config->getData('target.name');
 
-	public function getModuleSetting($setting)
-	{
-		// shorthand
-		$st = $this->st;
+        // all done
+        $log->endAction($value);
+        return $value;
+    }
 
-		// what are we doing?
-		$log = $st->startAction("get '{$setting}' from test environment's module settings");
+    public function getOption($optionName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get option '{$optionName}' from test environment");
 
-		// get the details
-		$fullPath = 'target.moduleSettings.' . $setting;
-		$config  = $st->getConfig();
+        // get the details
+        $config = $this->st->getConfig();
+        $fullPath = 'target.options.' . $optionName;
+        $value = null;
+        if ($config->hasData($fullPath)) {
+            $value = $config->getData($fullPath);
+        }
 
-		$value = null;
-		if ($config->hasData($fullPath)) {
-			$value = $config->getData($fullPath);
-		}
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction($logValue);
 
-		// log the settings
-		$printer = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("setting is: '{$logValue}'");
+        // all done
+        return $value;
+    }
 
-		// all done
-		return $value;
-	}
+    public function getModuleSetting($setting)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get '{$setting}' from test environment's module settings");
 
-	public function getAllSettings()
-	{
-		// shorthand
-		$st = $this->st;
+        // get the details
+        $fullPath = 'target.moduleSettings.' . $setting;
+        $config  = $this->st->getConfig();
 
-		// what are we doing?
-		$log = $st->startAction("get all settings from the test environment");
+        $value = null;
+        if ($config->hasData($fullPath)) {
+            $value = $config->getData($fullPath);
+        }
 
-		// get the details
-		$testEnv = $st->getTestEnvironmentConfig();
+        // log the settings
+        $printer = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("setting is: '{$logValue}'");
 
-		// var_dump($testEnv);
+        // all done
+        return $value;
+    }
 
-		// convert into dot notation
-		$convertor = new DotNotationConvertor();
-		$return    = $convertor->convertToArray($testEnv->getExpandedData($st->getConfig()));
+    /**
+     * I think this is used internally at DataSift.
+     *
+     * We've standardised on 'getConfig()' as the documented name for this
+     * functionality across all three of the config-related modules.
+     *
+     * @return object
+     */
+    public function getAllSettings()
+    {
+        return $this->getConfig();
+    }
 
-		// all done
-		$log->endAction();
-		return $return;
-	}
+    public function getConfig()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the test environment config");
+
+        // get the details
+        $testEnv = $this->st->getTestEnvironmentConfig();
+
+        // var_dump($testEnv);
+
+        // convert into dot notation
+        $convertor = new DotNotationConvertor();
+        $return    = $convertor->convertToArray($testEnv->getExpandedData($this->st->getConfig()));
+
+        // all done
+        $log->endAction();
+        return $return;
+    }
 }

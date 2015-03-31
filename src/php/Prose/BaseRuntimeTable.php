@@ -89,12 +89,9 @@ class BaseRuntimeTable extends Prose
      */
     public function getAllTables()
     {
-        // shorthand
-        $st = $this->st;
-
         // get the runtime config
-        $runtimeConfig = $st->getRuntimeConfig();
-        $runtimeConfigManager = $st->getRuntimeConfigManager();
+        $runtimeConfig = $this->st->getRuntimeConfig();
+        $runtimeConfigManager = $this->st->getRuntimeConfigManager();
 
         return $runtimeConfigManager->getAllTables($runtimeConfig);
     }

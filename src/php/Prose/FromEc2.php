@@ -55,80 +55,74 @@ namespace Prose;
  */
 class FromEc2 extends Prose
 {
-	public function getImage($amiId)
-	{
-		// shorthand
-		$st = $this->st;
+    public function getImage($amiId)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get data for EC2 image '{$amiId}'");
 
-		// what are we doing?
-		$log = $st->startAction("get data for EC2 image '{$amiId}'");
+        // get the client
+        $client = fromAws()->getEc2Client();
 
-		// get the client
-		$client = $st->fromAws()->getEc2Client();
+        // get the list of registered images
+        $result = $client->describeImages();
 
-		// get the list of registered images
-		$result = $client->describeImages();
+        // is our image in there?
+        foreach ($result['Images'] as $image) {
+            if ($image['ImageId'] == $amiId) {
+                // success!
+                $log->endAction("image found");
+                return $image;
+            }
+        }
 
-		// is our image in there?
-		foreach ($result['Images'] as $image) {
-			if ($image['ImageId'] == $amiId) {
-				// success!
-				$log->endAction("image found");
-				return $image;
-			}
-		}
+        // if we get here, then we don't have the image
+        $log->endAction("image does not exist");
+        return null;
+    }
 
-		// if we get here, then we don't have the image
-		$log->endAction("image does not exist");
-		return null;
-	}
+    public function getInstance($instanceName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get data for EC2 VM '{$instanceName}'");
 
-	public function getInstance($instanceName)
-	{
-		// shorthand
-		$st = $this->st;
+        // get the client
+        $client = fromAws()->getEc2Client();
 
-		// what are we doing?
-		$log = $st->startAction("get data for EC2 VM '{$instanceName}'");
+        // get the list of running instances
+        $result = $client->describeInstances();
 
-		// get the client
-		$client = $st->fromAws()->getEc2Client();
+        // loop through, and see if the instance is running
+        foreach ($result['Reservations'] as $reservation) {
+            foreach ($reservation['Instances'] as $instance) {
+                $foundInstanceName = '';
 
-		// get the list of running instances
-		$result = $client->describeInstances();
+                if (!isset($instance['Tags'])) {
+                    // no tags at all means no name to match against
+                    continue;
+                }
 
-		// loop through, and see if the instance is running
-		foreach ($result['Reservations'] as $reservation) {
-			foreach ($reservation['Instances'] as $instance) {
-				$foundInstanceName = '';
+                // skip terminated instances
+                if ($instance['State']['Code'] == 48) {
+                    continue;
+                }
 
-				if (!isset($instance['Tags'])) {
-					// no tags at all means no name to match against
-					continue;
-				}
+                foreach ($instance['Tags'] as $tag) {
+                    if ($tag['Key'] == 'Name') {
+                        $foundInstanceName = $tag['Value'];
+                    }
+                }
 
-				// skip terminated instances
-				if ($instance['State']['Code'] == 48) {
-					continue;
-				}
+                if ($instanceName == $foundInstanceName) {
+                    // we're done here
+                    $instanceId = $instance['InstanceId'];
+                    $log->endAction("instance is running as ID '{$instanceId}'");
+                    return $instance;
+                }
+            }
+        }
 
-				foreach ($instance['Tags'] as $tag) {
-					if ($tag['Key'] == 'Name') {
-						$foundInstanceName = $tag['Value'];
-					}
-				}
-
-				if ($instanceName == $foundInstanceName) {
-					// we're done here
-					$instanceId = $instance['InstanceId'];
-					$log->endAction("instance is running as ID '{$instanceId}'");
-					return $instance;
-				}
-			}
-		}
-
-		// if we get here, the instance currently does not exist at EC2
-		$log->endAction("instance does not exist");
-		return null;
-	}
+        // if we get here, the instance currently does not exist at EC2
+        $log->endAction("instance does not exist");
+        return null;
+    }
 }

@@ -55,8 +55,8 @@ namespace DataSift\Storyplayer\HostLib;
  */
 class PhysicalHostDetails extends HostDetails
 {
-	public $hostId;
-	public $osName;
-	public $ipAddress;
-	public $provisioned = false;
+    public $hostId;
+    public $osName;
+    public $ipAddress;
+    public $provisioned = false;
 }

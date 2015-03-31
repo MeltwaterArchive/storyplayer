@@ -34,4 +34,5 @@ $story->addPostTestInspection(function() {
     assertsObject($appSettings)->isNotNull();
     assertsObject($appSettings)->hasAttribute('name');
     assertsObject($appSettings)->hasAttribute('version');
+    assertsObject($appSettings)->hasAttribute('isAppSettings');
 });

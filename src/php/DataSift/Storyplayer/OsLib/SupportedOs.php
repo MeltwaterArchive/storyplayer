@@ -59,87 +59,87 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
  */
 interface SupportedOs
 {
-	/**
-	 *
-	 * @param  HostDetails   $hostDetails
-	 * @param  SupportedHost $vm
-	 * @return string
-	 */
-	public function determineIpAddress($hostDetails, SupportedHost $vm);
+    /**
+     *
+     * @param  HostDetails   $hostDetails
+     * @param  SupportedHost $vm
+     * @return string
+     */
+    public function determineIpAddress($hostDetails, SupportedHost $vm);
 
-	/**
-	 *
-	 * @param  HostDetails   $hostDetails
-	 * @param  SupportedHost $vm
-	 * @return string
-	 */
-	public function determineHostname($hostDetails, SupportedHost $vm);
+    /**
+     *
+     * @param  HostDetails   $hostDetails
+     * @param  SupportedHost $vm
+     * @return string
+     */
+    public function determineHostname($hostDetails, SupportedHost $vm);
 
-	/**
-	 * @param HostDetails $hostDetails
-	 * @param string $packageName
-	 * @return stdClass
-	 */
-	public function getInstalledPackageDetails($hostDetails, $packageName);
+    /**
+     * @param HostDetails $hostDetails
+     * @param string $packageName
+     * @return stdClass
+     */
+    public function getInstalledPackageDetails($hostDetails, $packageName);
 
-	/**
-	 * @param HostDetails $hostDetails
-	 * @param string $processName
-	 * @return boolean
-	 */
-	public function getProcessIsRunning($hostDetails, $processName);
+    /**
+     * @param HostDetails $hostDetails
+     * @param string $processName
+     * @return boolean
+     */
+    public function getProcessIsRunning($hostDetails, $processName);
 
-	/**
-	 * @param HostDetails $hostDetails
-	 * @param string $processName
-	 * @return integer
-	 */
-	public function getPid($hostDetails, $processName);
+    /**
+     * @param HostDetails $hostDetails
+     * @param string $processName
+     * @return integer
+     */
+    public function getPid($hostDetails, $processName);
 
-	/**
-	 * @param HostDetails $hostDetails
-	 * @param string $command
-	 *
-	 * @return \DataSift\Storyplayer\CommandLib\CommandResult
-	 */
-	public function runCommand($hostDetails, $command);
+    /**
+     * @param HostDetails $hostDetails
+     * @param string $command
+     *
+     * @return \DataSift\Storyplayer\CommandLib\CommandResult
+     */
+    public function runCommand($hostDetails, $command);
 
-	/**
-	 * download a file from a (possibly) remote host to wherever
-	 * Storyplayer is running
-	 *
-	 * @param  HostDetails $hostDetails
-	 *         the details of the host to upload to
-	 * @param  string $sourceFilename
-	 *         path to the file to download
-	 * @param  string $destFilename
-	 *         path to download the file to
-	 * @return void
-	 */
-	public function downloadFile($hostDetails, $sourceFilename, $destFilename);
+    /**
+     * download a file from a (possibly) remote host to wherever
+     * Storyplayer is running
+     *
+     * @param  HostDetails $hostDetails
+     *         the details of the host to upload to
+     * @param  string $sourceFilename
+     *         path to the file to download
+     * @param  string $destFilename
+     *         path to download the file to
+     * @return void
+     */
+    public function downloadFile($hostDetails, $sourceFilename, $destFilename);
 
-	/**
-	 * upload a file from wherever Storyplayer is running to the
-	 * (possibly) remote host
-	 *
-	 * @param  HostDetails $hostDetails
-	 *         the details of the host to upload to
-	 * @param  string $sourceFilename
-	 *         path to the file to upload
-	 * @param  string $destFilename
-	 *         path to upload the file to
-	 * @return void
-	 */
-	public function uploadFile($hostDetails, $sourceFilename, $destFilename);
+    /**
+     * upload a file from wherever Storyplayer is running to the
+     * (possibly) remote host
+     *
+     * @param  HostDetails $hostDetails
+     *         the details of the host to upload to
+     * @param  string $sourceFilename
+     *         path to the file to upload
+     * @param  string $destFilename
+     *         path to upload the file to
+     * @return void
+     */
+    public function uploadFile($hostDetails, $sourceFilename, $destFilename);
 
-	/**
-	 * get details about a filesystem entry
-	 *
-	 * @param  HostDetails $hostDetails
-	 *         the details of the host to query
-	 * @param  string $filename
-	 *         path to the file/folder to query
-	 * @return stdClass
-	 */
-	public function getFileDetails($hostDetails, $filename);
+    /**
+     * get details about a filesystem entry
+     *
+     * @param  HostDetails $hostDetails
+     *         the details of the host to query
+     * @param  string $filename
+     *         path to the file/folder to query
+     * @return stdClass
+     */
+    public function getFileDetails($hostDetails, $filename);
 }

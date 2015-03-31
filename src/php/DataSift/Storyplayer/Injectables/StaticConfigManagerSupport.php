@@ -57,14 +57,14 @@ use DataSift\Storyplayer\Cli\StaticConfigManager;
  */
 trait StaticConfigManagerSupport
 {
-	public $staticConfigManager;
+    public $staticConfigManager;
 
-	public function initStaticConfigManagerSupport()
-	{
-		// create an object to manage the static config
-		$this->staticConfigManager = new StaticConfigManager;
+    public function initStaticConfigManagerSupport()
+    {
+        // create an object to manage the static config
+        $this->staticConfigManager = new StaticConfigManager;
 
-		// all done
-		return $this->staticConfigManager;
-	}
+        // all done
+        return $this->staticConfigManager;
+    }
 }

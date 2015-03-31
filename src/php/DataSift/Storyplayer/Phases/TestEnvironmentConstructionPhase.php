@@ -63,80 +63,80 @@ use Prose\E5xx_NotImplemented;
 
 class TestEnvironmentConstructionPhase extends InfrastructurePhase
 {
-	public function doPhase($thingBeingPlayed = null)
-	{
-		// shorthand
-		$st = $this->st;
+    public function doPhase($thingBeingPlayed = null)
+    {
+        // shorthand
+        $st = $this->st;
 
-		// our return value
-		$phaseResult = $this->getNewPhaseResult();
+        // our return value
+        $phaseResult = $this->getNewPhaseResult();
 
-		// find out what we need to be doing
-		$testEnvironmentConfig = $st->getTestEnvironmentConfig();
+        // find out what we need to be doing
+        $testEnvironmentConfig = $st->getTestEnvironmentConfig();
 
-		// are there any machines to create?
-		if (empty($testEnvironmentConfig)) {
-			// nothing to do
-			$phaseResult->setContinuePlaying();
-			return $phaseResult;
-		}
+        // are there any machines to create?
+        if (empty($testEnvironmentConfig)) {
+            // nothing to do
+            $phaseResult->setContinuePlaying();
+            return $phaseResult;
+        }
 
-		// create the environments
-		try {
-			foreach ($testEnvironmentConfig->groups as $env) {
-				// create the machine(s) in this environment, including:
-				//
-				// * building any virtual machines
-				// * registering in the Hosts table
-				// * registering in the Roles table
-				$hostAdapter = HostLib::getHostAdapter($st, $env->type);
-				$hostAdapter->createHost($env->details);
+        // create the environments
+        try {
+            foreach ($testEnvironmentConfig->groups as $env) {
+                // create the machine(s) in this environment, including:
+                //
+                // * building any virtual machines
+                // * registering in the Hosts table
+                // * registering in the Roles table
+                $hostAdapter = HostLib::getHostAdapter($st, $env->type);
+                $hostAdapter->createHost($env->details);
 
-				// provision software onto the machines we've just
-				// created
-				if (isset($env->provisioning)) {
-					$provAdapter = ProvisioningLib::getProvisioner($st, $env->provisioning->engine);
-					$provDef = $provAdapter->buildDefinitionFor($env);
+                // provision software onto the machines we've just
+                // created
+                if (isset($env->provisioning)) {
+                    $provAdapter = ProvisioningLib::getProvisioner($st, $env->provisioning->engine);
+                    $provDef = $provAdapter->buildDefinitionFor($env);
 
-					$provAdapter->provisionHosts($provDef, $env->provisioning);
-				}
-			}
+                    $provAdapter->provisionHosts($provDef, $env->provisioning);
+                }
+            }
 
-			$st->usingTargetsTable()->addCurrentTestEnvironment();
-			$phaseResult->setContinuePlaying();
+            $st->usingTargetsTable()->addCurrentTestEnvironment();
+            $phaseResult->setContinuePlaying();
 
-		}
-		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-		}
-		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-		}
-		// if anythin is marked as incomplete, deal with that too
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-		}
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString(),
-				$e
-			);
-		}
+        }
+        catch (E5xx_ActionFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+        }
+        catch (E5xx_ExpectFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+        }
+        // if anythin is marked as incomplete, deal with that too
+        catch (E5xx_NotImplemented $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+        }
+        catch (Exception $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString(),
+                $e
+            );
+        }
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

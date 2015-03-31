@@ -108,11 +108,8 @@ abstract class BaseCleanup extends Prose
 
     protected function getTable()
     {
-        // shorthand
-        $st = $this->st;
-
         // get the table, if we have one
-        $runtimeConfig = $st->getRuntimeConfig();
+        $runtimeConfig = $this->st->getRuntimeConfig();
         $key = $this->key;
 
         if (!isset($runtimeConfig->storyplayer, $runtimeConfig->storyplayer->tables, $runtimeConfig->storyplayer->tables->$key)) {

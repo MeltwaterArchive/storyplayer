@@ -44,6 +44,7 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
+use Prose\E4xx_StoryShouldFail;
 use Prose\E5xx_ActionFailed;
 use Prose\E5xx_ExpectFailed;
 use Prose\E5xx_NotImplemented;
@@ -61,88 +62,97 @@ use Prose\E5xx_NotImplemented;
 
 class PreTestPredictionPhase extends StoryPhase
 {
-	protected $sequenceNo = 3;
+    protected $sequenceNo = 3;
 
-	public function doPhase($story)
-	{
-		// shorthand
-		$st          = $this->st;
-		$storyResult = $story->getResult();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st          = $this->st;
+        $storyResult = $story->getResult();
 
-		// our return value
-		$phaseResult = $this->getNewPhaseResult();
+        // our return value
+        $phaseResult = $this->getNewPhaseResult();
 
-		try {
-			// do we have anything to do?
-			if (!$story->hasPreTestPrediction())
-			{
-				$phaseResult->setContinuePlaying(
-					$phaseResult::HASNOACTIONS,
-					"story has no pre-test prediction instructions; skipping"
-				);
-				return $phaseResult;
-			}
+        try {
+            // do we have anything to do?
+            if (!$story->hasPreTestPrediction())
+            {
+                $phaseResult->setContinuePlaying(
+                    $phaseResult::HASNOACTIONS,
+                    "story has no pre-test prediction instructions; skipping"
+                );
+                return $phaseResult;
+            }
 
-			// setup the phase
-			$this->doPerPhaseSetup();
+            // setup the phase
+            $this->doPerPhaseSetup();
 
-			// make the call
-			$callbacks = $story->getPreTestPrediction();
+            // make the call
+            $callbacks = $story->getPreTestPrediction();
 
-			foreach ($callbacks as $callback) {
-				if (is_callable($callback)) {
-					call_user_func($callback, $st);
-				}
-			}
+            foreach ($callbacks as $callback) {
+                if (is_callable($callback)) {
+                    call_user_func($callback, $st);
+                }
+            }
 
-			// if we get here, the PreTestPrediction worked with
-			// no problems at all
-			$phaseResult->setContinuePlaying();
-		}
-		// in any of the expects() calls in the preflight checks fails,
-		// an E5xx_ActionFailed will be thrown
-		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setContinuePlaying(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryShouldFail();
-		}
-		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setContinuePlaying(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryShouldFail();
-		}
-		// if any of the tests are incomplete, deal with that too
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryIsIncomplete($phaseResult);
-		}
-		// deal with the things that go wrong
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasError($phaseResult);
-		}
+            // if we get here, the PreTestPrediction worked with
+            // no problems at all
+            $phaseResult->setContinuePlaying();
+        }
+        // in any of the expects() calls in the preflight checks fails,
+        // an E5xx_ActionFailed will be thrown
+        catch (E5xx_ActionFailed $e) {
+            $phaseResult->setContinuePlaying(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryShouldFail();
+        }
+        catch (E5xx_ExpectFailed $e) {
+            $phaseResult->setContinuePlaying(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryShouldFail();
+        }
+        // users can throw this to tell us that the story should fail
+        catch (E4xx_StoryShouldFail $e) {
+            $phaseResult->setContinuePlaying(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryShouldFail();
+        }
+        // if any of the tests are incomplete, deal with that too
+        catch (E5xx_NotImplemented $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryIsIncomplete($phaseResult);
+        }
+        // deal with the things that go wrong
+        catch (Exception $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasError($phaseResult);
+        }
 
-		// close off any open log actions
-		$st->closeAllOpenActions();
+        // close off any open log actions
+        $st->closeAllOpenActions();
 
-		// tidy up after ourselves
-		$this->doPerPhaseTeardown();
+        // tidy up after ourselves
+        $this->doPerPhaseTeardown();
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

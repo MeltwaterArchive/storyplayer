@@ -57,15 +57,15 @@ use DataSift\Storyplayer\Cli\DefaultConfig;
  */
 trait DefaultConfigSupport
 {
-	public $defaultConfig;
+    public $defaultConfig;
 
-	public function initDefaultConfigSupport()
-	{
-		// create our default config - the config that we'll use
-		// unless the config file on disk overrides it
-		$this->defaultConfig = new DefaultConfig();
+    public function initDefaultConfigSupport()
+    {
+        // create our default config - the config that we'll use
+        // unless the config file on disk overrides it
+        $this->defaultConfig = new DefaultConfig();
 
-		// all done
-		return $this->defaultConfig;
-	}
+        // all done
+        return $this->defaultConfig;
+    }
 }

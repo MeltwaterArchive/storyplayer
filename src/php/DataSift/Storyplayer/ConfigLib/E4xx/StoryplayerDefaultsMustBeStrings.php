@@ -58,7 +58,7 @@ class E4xx_StoryplayerDefaultsMustBeStrings extends E4xx_StoryplayerConfigInvali
 {
     public function __construct($pathToFile)
     {
-    	$msg = "'defaults' array in storyplayer config file '{$pathToFile}' can only contain strings";
+        $msg = "'defaults' array in storyplayer config file '{$pathToFile}' can only contain strings";
         parent::__construct(400, $msg, $msg);
     }
 }

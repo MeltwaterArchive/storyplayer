@@ -74,10 +74,8 @@ class StaticConfigManager extends ConfigManagerBase
 	}
 
 	/**
-	 * [loadUserConfig description]
-	 * @param  [type] $config  [description]
-	 * @param  [type] $appName [description]
-	 * @return [type]          [description]
+	 * @param  StaticConfig $config
+	 * @return void
 	 */
 	public function loadUserConfig($config)
 	{

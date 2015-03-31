@@ -74,11 +74,8 @@ class UsingUsers extends Prose
      */
     public function loadUsersFromFile($filename)
     {
-        // shorthand
-        $st = $this->st;
-
         // what are we doing?
-        $log = $st->startAction("load test users from '{$filename}'");
+        $log = usingLog()->startAction("load test users from '{$filename}'");
 
         // load the file
         $raw = @file_get_contents($filename);
@@ -98,7 +95,7 @@ class UsingUsers extends Prose
         $users->mergeFrom($plainUsers);
 
         // remember what we've loaded
-        $st->setTestUsers($users);
+        $this->st->setTestUsers($users);
 
         // all done
         $count = count(get_object_vars($users));
@@ -124,14 +121,10 @@ class UsingUsers extends Prose
      */
     public function saveUsersToFile($users, $filename)
     {
-        // shorthand
-        $st = $this->st;
-
         // what are we doing?
-        $log = $st->startAction("save test users to file '{$filename}'");
+        $log = usingLog()->startAction("save test users to file '{$filename}'");
 
         // save the contents
-        $users = $st->getTestUsers();
         file_put_contents($filename, json_encode($users, JSON_PRETTY_PRINT));
 
         // all done
@@ -153,14 +146,11 @@ class UsingUsers extends Prose
      */
     public function setUsersFileIsReadOnly()
     {
-        // shorthand
-        $st = $this->st;
-
         // what are we doing?
-        $log = $st->startAction("mark test users file as read-only");
+        $log = usingLog()->startAction("mark test users file as read-only");
 
         // track the state change
-        $st->setTestUsersFileIsReadOnly(true);
+        $this->st->setTestUsersFileIsReadOnly(true);
 
         // all done
         $log->endAction();

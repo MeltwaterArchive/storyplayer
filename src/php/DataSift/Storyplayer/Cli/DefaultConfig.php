@@ -130,7 +130,7 @@ class DefaultConfig extends BaseObject
         ];
 
         $phases->script = [
-            'Automate' => true,
+            'Script' => true,
         ];
 
         // what to do when a user presses CTRL+C

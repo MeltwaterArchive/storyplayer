@@ -58,24 +58,31 @@ use DataSift\Storyplayer\PlayerLib\Report_Loader;
  */
 trait ReportLoaderSupport
 {
-	public $reportLoader;
+    public $reportLoader;
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initReportLoaderSupport(Injectables $injectables)
-	{
-		// we will use this to load different reports
-		$this->reportLoader = new Report_Loader();
+    /**
+     *
+     * @return void
+     */
+    public function initReportLoaderSupport(Injectables $injectables)
+    {
+        // we will use this to load different reports
+        $this->reportLoader = new Report_Loader();
 
-		// does the user have any namespaces of their own that they
-		// want to search?
-		if (isset($injectables->staticConfig->reports, $injectables->staticConfig->reports->namespaces) && is_array($injectables->staticConfig->reports->namespaces)) {
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			$this->reportLoader->setNamespaces($injectables->staticConfig->reports->namespaces);
-		}
+        // does the user have any namespaces of their own that they
+        // want to search?
+        $configPath = 'storyplayer.reports.namespaces';
+        if (!$injectables->activeConfig->hasData($configPath)) {
+            return;
+        }
 
-	}
+        $reportsList = $injectables->activeConfig->getData($configPath);
+        if (!is_array($reportsList)) {
+            $injectables->output->logCliError("'reports.namespaces' must be an array in your storyplayer.json config file");
+            exit(1);
+        }
+
+        // if we get here, then we have some namespaces to use
+        $this->reportLoader->setNamespaces($reportsList);
+    }
 }

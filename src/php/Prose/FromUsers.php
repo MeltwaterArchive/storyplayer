@@ -66,14 +66,11 @@ class FromUsers extends Prose
      */
     public function getUser($userId)
     {
-        // shorthand
-        $st = $this->st;
-
         // what are we doing?
-        $log = $st->startAction("get user ID '{$userId}'");
+        $log = usingLog()->startAction("get user ID '{$userId}'");
 
         // do we have this user?
-        $users = $st->getTestUsers();
+        $users = $this->st->getTestUsers();
         if (!isset($users->$userId)) {
             $msg = "user ID '{$userId}' not found";
             $log->endAction($msg);

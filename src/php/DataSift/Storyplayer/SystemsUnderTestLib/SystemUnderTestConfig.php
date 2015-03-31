@@ -57,70 +57,70 @@ use DataSift\Storyplayer\ConfigLib\WrappedConfig;
  */
 class SystemUnderTestConfig extends WrappedConfig
 {
-	public function validateConfig()
-	{
-		// the config we are checking
-		$config = $this->getConfig();
+    public function validateConfig()
+    {
+        // the config we are checking
+        $config = $this->getConfig();
 
-		// make sure it is an object, and not an array
-		if (!is_object($config)) {
-			throw new E4xx_SystemUnderTestConfigMustBeAnObject($this->getFilename());
-		}
+        // make sure it is an object, and not an array
+        if (!is_object($config)) {
+            throw new E4xx_SystemUnderTestConfigMustBeAnObject($this->getFilename());
+        }
 
-		$this->validateAppSettings();
-		$this->validateRoles();
-	}
+        $this->validateAppSettings();
+        $this->validateRoles();
+    }
 
-	protected function validateAppSettings()
-	{
-		// do we have any app settings to validate?
-		if (!$this->hasData('appSettings')) {
-			// nothing to see here, move along
-			return;
-		}
+    protected function validateAppSettings()
+    {
+        // do we have any app settings to validate?
+        if (!$this->hasData('appSettings')) {
+            // nothing to see here, move along
+            return;
+        }
 
-		$appSettings = $this->getData('appSettings');
-		if (!is_object($appSettings)) {
-			throw new E4xx_SystemUnderTestAppSettingsMustBeAnObject($this->getFilename());
-		}
+        $appSettings = $this->getData('appSettings');
+        if (!is_object($appSettings)) {
+            throw new E4xx_SystemUnderTestAppSettingsMustBeAnObject($this->getFilename());
+        }
 
-		// we don't care what (if anything) is inside the appSettings
-		// section
-		//
-		// all done
-	}
+        // we don't care what (if anything) is inside the appSettings
+        // section
+        //
+        // all done
+    }
 
-	protected function validateRoles()
-	{
-		// do we have any roles to validate?
-		if (!$this->hasData('roles')) {
-			// nothing to see here, move along
-			return;
-		}
+    protected function validateRoles()
+    {
+        // do we have any roles to validate?
+        if (!$this->hasData('roles')) {
+            // nothing to see here, move along
+            return;
+        }
 
-		// roles is meant to be an array of objects
-		$roles = $this->getData('roles');
-		if (!is_array($roles)) {
-			throw new E4xx_SystemUnderTestRolesMustBeAnArray($this->getFilename());
-		}
+        // roles is meant to be an array of objects
+        $roles = $this->getData('roles');
+        if (!is_array($roles)) {
+            throw new E4xx_SystemUnderTestRolesMustBeAnArray($this->getFilename());
+        }
 
-		// make sure each role in the list fits what we want
-		foreach ($roles as $index => $roleObj) {
-			if (!is_object($roleObj)) {
-				throw new E4xx_SystemUnderTestRoleMustBeAnObject($this->getFilename(), $index);
-			}
-			if (!isset($roleObj->role)) {
-				throw new E4xx_SystemUnderTestRoleMustSayWhichRoleItIs($this->getFilename(), $index);
-			}
-			if (!is_string($roleObj->role)) {
-				throw new E4xx_SystemUnderTestRoleNameMustBeString($this->getFilename(), $index);
-			}
-			if (!isset($roleObj->params)) {
-				throw new E4xx_SystemUnderTestRoleMustHaveParams($this->getFilename(), $index);
-			}
-			if (!is_object($roleObj->params)) {
-				throw new E4xx_SystemUnderTestRoleParamsMustBeAnObject($this->getFilename(), $index);
-			}
-		}
-	}
+        // make sure each role in the list fits what we want
+        foreach ($roles as $index => $roleObj) {
+            if (!is_object($roleObj)) {
+                throw new E4xx_SystemUnderTestRoleMustBeAnObject($this->getFilename(), $index);
+            }
+            if (!isset($roleObj->role)) {
+                throw new E4xx_SystemUnderTestRoleMustSayWhichRoleItIs($this->getFilename(), $index);
+            }
+            if (!is_string($roleObj->role)) {
+                throw new E4xx_SystemUnderTestRoleNameMustBeString($this->getFilename(), $index);
+            }
+            if (!isset($roleObj->params)) {
+                throw new E4xx_SystemUnderTestRoleMustHaveParams($this->getFilename(), $index);
+            }
+            if (!is_object($roleObj->params)) {
+                throw new E4xx_SystemUnderTestRoleParamsMustBeAnObject($this->getFilename(), $index);
+            }
+        }
+    }
 }

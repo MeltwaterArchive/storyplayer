@@ -55,7 +55,7 @@ namespace DataSift\Storyplayer\Injectables;
  */
 class HostnameHelper
 {
-    static public function getHostname()
+    public static function getHostname()
     {
         $hostname = getHostname();
 

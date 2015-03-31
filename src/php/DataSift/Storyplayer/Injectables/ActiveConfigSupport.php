@@ -63,10 +63,10 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 trait ActiveConfigSupport
 {
-	public $activeConfig;
+    public $activeConfig;
 
-	public function initActiveConfigSupport(Injectables $injectables)
-	{
+    public function initActiveConfigSupport(Injectables $injectables)
+    {
         $this->activeConfig = new ActiveConfig;
         $this->activeConfig->init($injectables);
 
@@ -74,9 +74,9 @@ trait ActiveConfigSupport
         $this->activeConfig->mergeSystemUnderTestConfig($injectables, $injectables->activeSystemUnderTestConfig);
         $this->activeConfig->mergeTestEnvironmentConfig($injectables, $injectables->activeTestEnvironmentConfig);
 
-		// all done
-		return $this->activeConfig;
-	}
+        // all done
+        return $this->activeConfig;
+    }
 
 
 }

@@ -61,51 +61,45 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingSupervisor extends HostBase
 {
-	public function startProgram($programName)
-	{
-		// shorthand
-		$st = $this->st;
+    public function startProgram($programName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("start program '{$programName}' on host '{$this->args[0]}'");
 
-		// what are we doing?
-		$log = $st->startAction("start program '{$programName}' on host '{$this->args[0]}'");
+        // get the host details
+        $hostDetails = $this->getHostDetails();
 
-		// get the host details
-		$hostDetails = $this->getHostDetails();
+        // start the program
+        $result = usingHost($hostDetails->hostId)->runCommand("sudo supervisorctl start '{$programName}'");
 
-		// start the program
-		$result = $st->usingHost($hostDetails->hostId)->runCommand("sudo supervisorctl start '{$programName}'");
+        // did the command succeed?
+        if ($result->didCommandFail()) {
+            throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
+        }
 
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
-		}
+        // all done
+        $log->endAction();
+        return true;
+    }
 
-		// all done
-		$log->endAction();
-		return true;
-	}
+    public function stopProgram($programName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("stop program '{$programName}' on host '{$this->args[0]}'");
 
-	public function stopProgram($programName)
-	{
-		// shorthand
-		$st = $this->st;
+        // get the host details
+        $hostDetails = $this->getHostDetails();
 
-		// what are we doing?
-		$log = $st->startAction("stop program '{$programName}' on host '{$this->args[0]}'");
+        // stop the program
+        $result = usingHost($hostDetails->hostId)->runCommand("sudo supervisorctl stop '{$programName}'");
 
-		// get the host details
-		$hostDetails = $this->getHostDetails();
+        // did the command succeed?
+        if ($result->didCommandFail()) {
+            throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
+        }
 
-		// stop the program
-		$result = $st->usingHost($hostDetails->hostId)->runCommand("sudo supervisorctl stop '{$programName}'");
-
-		// did the command succeed?
-		if ($result->didCommandFail()) {
-			throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
-		}
-
-		// all done
-		$log->endAction();
-		return true;
-	}
+        // all done
+        $log->endAction();
+        return true;
+    }
 }

@@ -58,40 +58,31 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class HostsByRoleBase extends Prose
 {
-	protected $roleName;
+    protected $roleName;
 
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// call the parent constructor
-		parent::__construct($st, $args);
+    public function __construct(StoryTeller $st, $args = array())
+    {
+        // call the parent constructor
+        parent::__construct($st, $args);
 
-		// arg[0] is the name of the box
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
-		}
+        // arg[0] is the name of the box
+        if (!isset($args[0])) {
+            throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
+        }
 
-		$this->roleName = $args[0];
-	}
+        $this->roleName = $args[0];
+    }
 
-	protected function retrieveHostsDetails()
-	{
-		// shorthand
-		$st = $this->st;
-		$roleName = $this->roleName;
+    protected function retrieveHostsDetails()
+    {
+        // shorthand
+        $roleName = $this->roleName;
 
-		// do we have this role?
-		$role = $st->fromRolesTable()->getDetailsForRole($roleName);
-		if (!count(get_object_vars($role))) {
-			throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
-		}
-		return $role;
-	}
-
-	protected function requireValidRoleDetails($caller)
-	{
-		// do we have valid host details?
-		if (!count(get_object_vars($this->hostsDetails))) {
-			throw new E5xx_ActionFailed($caller, "no hosts left in role {$this->roleName}");
-		}
-	}
+        // do we have this role?
+        $role = fromRolesTable()->getDetailsForRole($roleName);
+        if (!count(get_object_vars($role))) {
+            throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
+        }
+        return $role;
+    }
 }

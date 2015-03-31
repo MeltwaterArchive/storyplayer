@@ -58,31 +58,28 @@ use Predis\Client as PredisClient;
  */
 class UsingRedisConn extends BaseRedisConn
 {
-	public function __call($methodName, $params)
-	{
-		// shorthand
-		$st = $this->st;
+    public function __call($methodName, $params)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction(["run redis command", $methodName, "with params:", $params]);
 
-		// what are we doing?
-		$log = $st->startAction(["run redis command", $methodName, "with params:", $params]);
+        // do we have such a redis call?
+        if (!method_exists($this->args[0], $methodName)) {
+            throw new E5xx_ActionFailed(__METHOD__, "no such redis command '{$methodName}'");
+        }
 
-		// do we have such a redis call?
-		if (!method_exists($this->args[0], $methodName)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no such redis command '{$methodName}'");
-		}
+        // make the call
+        try {
+            $return = call_user_method_array($methodName, $this->args[0], $params);
 
-		// make the call
-		try {
-			$return = call_user_method_array($methodName, $this->args[0], $params);
+            // all done
+            $log->endAction($return);
 
-			// all done
-			$log->endAction($return);
-
-			return $return;
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+            return $return;
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 }

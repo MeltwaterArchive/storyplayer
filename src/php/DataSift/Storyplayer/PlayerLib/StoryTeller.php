@@ -104,6 +104,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @method Prose\FromRuntimeTableForTargetEnvironment fromRuntimeTableForTargetEnvironment()
  * @method Prose\FromSauceLabs fromSauceLabs()
  * @method Prose\FromShell fromShell()
+ * @method Prose\FromStoryplayer fromStoryplayer()
  * @method Prose\FromSupervisor fromSupervisor()
  * @method Prose\FromTargetsTable fromTargetsTable()
  * @method Prose\FromTestEnvironment fromTestEnvironment()
@@ -201,7 +202,7 @@ class StoryTeller
     private $currentPhase = null;
 
     // test device support
-    private $device = null;
+    private $deviceDetails = null;
     private $deviceName = null;
     private $deviceAdapter = null;
     private $persistDevice = false;
@@ -217,6 +218,7 @@ class StoryTeller
 
     // our repository of parsed code, for printing code statements
     private $codeParser = null;
+    private $lastSeenCodeLine = null;
 
     // our data formatter
     private $dataFormatter = null;
@@ -257,8 +259,8 @@ class StoryTeller
         $this->setConfig($injectables->activeConfig);
 
         // our runtime config
-        $this->setRuntimeConfig($injectables->runtimeConfig);
-        $this->setRuntimeConfigManager($injectables->runtimeConfigManager);
+        $this->setRuntimeConfig($injectables->getRuntimeConfig());
+        $this->setRuntimeConfigManager($injectables->getRuntimeConfigManager());
 
         self::$self = $this;
     }
@@ -277,7 +279,7 @@ class StoryTeller
     /**
      *
      *
-     * @return ActionLogger
+     * @return Action_Logger
      */
     public function getActionLogger() {
         return $this->actionLogger;
@@ -360,7 +362,7 @@ class StoryTeller
     {
         // are we already tracking this story?
         if ($this->story == $story) {
-            return;
+            return $this;
         }
 
         // we're now tracking this story
@@ -370,11 +372,17 @@ class StoryTeller
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getScriptFilename()
     {
         return $this->scriptFilename;
     }
 
+    /**
+     * @return void
+     */
     public function setScriptFilename($filename)
     {
         $this->scriptFilename = $filename;
@@ -491,6 +499,9 @@ class StoryTeller
     //
     // --------------------------------------------------------------------
 
+    /**
+     * @return object
+     */
     public function getConfig()
     {
         // get our config
@@ -500,27 +511,41 @@ class StoryTeller
         return $return;
     }
 
+    /**
+     * @return \DataSift\Storyplayer\ConfigLib\ActiveConfig
+     */
     public function getActiveConfig()
     {
         return $this->config;
     }
 
+    /**
+     * @return void
+     */
     public function setConfig($config)
     {
         $this->config = $config;
     }
 
-
+    /**
+     * @return object
+     */
     public function getRuntimeConfig()
     {
         return $this->runtimeConfig;
     }
 
+    /**
+     * @return void
+     */
     public function setRuntimeConfig($runtimeConfig)
     {
         $this->runtimeConfig = $runtimeConfig;
     }
 
+    /**
+     * @return void
+     */
     public function saveRuntimeConfig()
     {
         if (!isset($this->runtimeConfigManager)) {
@@ -547,28 +572,43 @@ class StoryTeller
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return object
+     */
     public function getTestEnvironmentConfig()
     {
         $retval = $this->config->getExpandedConfig();
         return $retval->target;
     }
 
+    /**
+     * @return string
+     */
     public function getTestEnvironmentName()
     {
         $envConfig = $this->getTestEnvironmentConfig();
         return $envConfig->name;
     }
 
+    /**
+     * @return string
+     */
     public function getTestEnvironmentSignature()
     {
         return md5(json_encode($this->getTestEnvironmentConfig()));
     }
 
+    /**
+     * @return bool
+     */
     public function getPersistTestEnvironment()
     {
         return $this->persistTestEnvironment;
     }
 
+    /**
+     * @return void
+     */
     public function setPersistTestEnvironment()
     {
         $this->persistTestEnvironment = true;
@@ -714,6 +754,9 @@ class StoryTeller
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return array
+     */
     public function getParams()
     {
         // get the current parameters from the story
@@ -738,9 +781,9 @@ class StoryTeller
 
     /**
      *
-     * @param  [type] $methodName [description]
-     * @param  [type] $methodArgs [description]
-     * @return [type]             [description]
+     * @param  string $methodName
+     * @param  array  $methodArgs
+     * @return mixed
      */
     public function __call($methodName, $methodArgs)
     {
@@ -774,16 +817,25 @@ class StoryTeller
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return Action_LogItem
+     */
     public function startAction($text)
     {
         return $this->actionLogger->startAction($text, $this->lastSeenCodeLine);
     }
 
+    /**
+     * @return void
+     */
     public function closeAllOpenActions()
     {
         return $this->actionLogger->closeAllOpenActions();
     }
 
+    /**
+     * @return void
+     */
     public function convertDataForOutput($data)
     {
         return $this->dataFormatter->convertData($data);
@@ -795,21 +847,33 @@ class StoryTeller
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return bool
+     */
     public function getPersistDevice()
     {
         return $this->persistDevice;
     }
 
+    /**
+     * @return void
+     */
     public function setPersistDevice()
     {
         $this->persistDevice = true;
     }
 
+    /**
+     * @return BaseObject
+     */
     public function getDeviceDetails()
     {
-        return $this->device;
+        return $this->deviceDetails;
     }
 
+    /**
+     * @return \DataSift\Storyplayer\DeviceLib\DeviceAdapter
+     */
     public function getDeviceAdapter()
     {
         if (!isset($this->deviceAdapter)) {
@@ -837,6 +901,9 @@ class StoryTeller
         return $this->deviceName;
     }
 
+    /**
+     * @return \DataSift\WebDriver\WebDriverSession
+     */
     public function getRunningDevice()
     {
         if (!is_object($this->deviceAdapter))
@@ -852,12 +919,19 @@ class StoryTeller
         return $this->deviceAdapter->getDevice();
     }
 
-    public function setDevice($deviceName, $device)
+    /**
+     * @param string $deviceName
+     * @param BaseObject $deviceDetails
+     */
+    public function setDevice($deviceName, $deviceDetails)
     {
-        $this->deviceName = $deviceName;
-        $this->device     = $device;
+        $this->deviceName    = $deviceName;
+        $this->deviceDetails = $deviceDetails;
     }
 
+    /**
+     * @return void
+     */
     public function startDevice()
     {
         // what are we doing?
@@ -897,6 +971,9 @@ class StoryTeller
         $log->endAction();
     }
 
+    /**
+     * @return void
+     */
     public function stopDevice()
     {
         // get the browser adapter
@@ -945,11 +1022,17 @@ class StoryTeller
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return bool
+     */
     public function getPersistProcesses()
     {
         return $this->persistProcesses;
     }
 
+    /**
+     * @return void
+     */
     public function setPersistProcesses()
     {
         $this->persistProcesses = true;
@@ -961,6 +1044,9 @@ class StoryTeller
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return CommandRunner
+     */
     public function getNewCommandRunner()
     {
         return new CommandRunner();
@@ -972,11 +1058,17 @@ class StoryTeller
     //
     // ------------------------------------------------------------------
 
+    /**
+     * @return \Prose\FromEnvironment
+     */
     public function getEnvironment()
     {
-        return $this->fromEnvironment();
+        return new \Prose\FromEnvironment($this);
     }
 
+    /**
+     * @return void
+     */
     public function getEnvironmentName()
     {
         throw new E4xx_ObsoleteProse(

@@ -58,105 +58,105 @@ use DataSift\Storyplayer\Output;
  */
 class RuntimeConfigManager extends ConfigManagerBase
 {
-	const RUNTIME_FILENAME = "runtime-v2.json";
+    const RUNTIME_FILENAME = "runtime-v2.json";
 
-	/**
-	 *
-	 * @return string
-	 */
-	public function getConfigDir()
-	{
-		static $configDir = null;
+    /**
+     *
+     * @return string
+     */
+    public function getConfigDir()
+    {
+        static $configDir = null;
 
-		// do we have a configDir remembered yet?
-		if (!$configDir)
-		{
-			$configDir = getcwd() . '/.storyplayer';
-		}
+        // do we have a configDir remembered yet?
+        if (!$configDir)
+        {
+            $configDir = getcwd() . '/.storyplayer';
+        }
 
-		return $configDir;
-	}
+        return $configDir;
+    }
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function makeConfigDir(Output $output)
-	{
-		// what is the path to the config directory?
-		$configDir = $this->getConfigDir();
+    /**
+     *
+     * @return void
+     */
+    public function makeConfigDir(Output $output)
+    {
+        // what is the path to the config directory?
+        $configDir = $this->getConfigDir();
 
-		// does it exist?
-		if (!file_exists($configDir))
-		{
-			$success = mkdir($configDir, 0700, true);
-			if (!$success)
-			{
-				// cannot create it - bail out now
-				$output->logCliError("unable to create config directory '{$configDir}'");
-				exit(1);
-			}
-		}
-	}
+        // does it exist?
+        if (!file_exists($configDir))
+        {
+            $success = mkdir($configDir, 0700, true);
+            if (!$success)
+            {
+                // cannot create it - bail out now
+                $output->logCliError("unable to create config directory '{$configDir}'");
+                exit(1);
+            }
+        }
+    }
 
-	/**
-	 *
-	 * @return stdClass
-	 */
-	public function loadRuntimeConfig(Output $output)
-	{
-		// where is the config file?
-		$configDir = $this->getConfigDir();
-		$filename = $configDir . "/" . self::RUNTIME_FILENAME;
+    /**
+     *
+     * @return \DataSift\Stone\ObjectLib\BaseObject
+     */
+    public function loadRuntimeConfig(Output $output)
+    {
+        // where is the config file?
+        $configDir = $this->getConfigDir();
+        $filename = $configDir . "/" . self::RUNTIME_FILENAME;
 
-		// does the file exist?
-		if (!is_file($filename)) {
-			return new BaseObject;
-		}
+        // does the file exist?
+        if (!is_file($filename)) {
+            return new BaseObject;
+        }
 
-		// at this point, we should be able to load the config
-		$raw = @file_get_contents($filename);
-		if (FALSE === $raw) {
-			$output->logCliError("unable to read config file '{$filename}'; permissions error?");
-			exit(1);
-		}
+        // at this point, we should be able to load the config
+        $raw = @file_get_contents($filename);
+        if (FALSE === $raw) {
+            $output->logCliError("unable to read config file '{$filename}'; permissions error?");
+            exit(1);
+        }
 
-		// the config file may be empty
-		if (strlen(rtrim($raw)) === 0) {
-			return new BaseObject;
-		}
+        // the config file may be empty
+        if (strlen(rtrim($raw)) === 0) {
+            return new BaseObject;
+        }
 
-		$config = @json_decode($raw);
-		if (NULL === $config) {
-			$output->logCliError("unable to parse JSON in config file '{$filename}'");
-			exit(1);
-		}
+        $config = @json_decode($raw);
+        if (NULL === $config) {
+            $output->logCliError("unable to parse JSON in config file '{$filename}'");
+            exit(1);
+        }
 
-		// we need to convert the loaded config into our more powerful config
-		// (at least for now)
-		$enhancedConfig = new BaseObject;
-		$enhancedConfig->mergeFrom($config);
+        // we need to convert the loaded config into our more powerful config
+        // (at least for now)
+        $enhancedConfig = new BaseObject;
+        $enhancedConfig->mergeFrom($config);
 
-		// all done
-		return $enhancedConfig;
-	}
+        // all done
+        return $enhancedConfig;
+    }
 
-	/**
-	 *
-	 * @param stdClass $config
-	 * @return void
-	 */
-	public function saveRuntimeConfig($config, Output $output)
-	{
-		$this->makeConfigDir($output);
-		$raw = json_encode($config);
+    /**
+     *
+     * @param stdClass $config
+     * @return void
+     */
+    public function saveRuntimeConfig($config, Output $output)
+    {
+        $this->makeConfigDir($output);
+        $raw = json_encode($config);
 
-		$filename = $this->getConfigDir() .	"/" . self::RUNTIME_FILENAME;
-		if (FALSE === file_put_contents($filename, $raw)) {
-			$output->logCliError("unable to write config file '{$filename}'");
-			exit(1);
-		}
-	}
+        $filename = $this->getConfigDir() . "/" . self::RUNTIME_FILENAME;
+        if (FALSE === file_put_contents($filename, $raw)) {
+            $output->logCliError("unable to write config file '{$filename}'");
+            exit(1);
+        }
+    }
 
     /**
      * getAllTables
@@ -179,33 +179,33 @@ class RuntimeConfigManager extends ConfigManagerBase
         }
 
         return $runtimeConfig->storyplayer->tables;
-	}
+    }
 
-	/**
-	 * return a single table from the persistent config
-	 *
-	 * if the table does not exist, this will create an empty table
-	 * before returning it to the caller
-	 *
-	 * @param  BaseObject $runtimeConfig
-	 *         our persistent config
-	 * @param  string $tableName
-	 *         the name of the table we want
-	 * @return BaseObject
-	 */
-	public function getTable($runtimeConfig, $tableName)
-	{
-		// normalise!
-		$tableName = lcfirst($tableName);
+    /**
+     * return a single table from the persistent config
+     *
+     * if the table does not exist, this will create an empty table
+     * before returning it to the caller
+     *
+     * @param  BaseObject $runtimeConfig
+     *         our persistent config
+     * @param  string $tableName
+     *         the name of the table we want
+     * @return BaseObject
+     */
+    public function getTable($runtimeConfig, $tableName)
+    {
+        // normalise!
+        $tableName = lcfirst($tableName);
 
-		// find it
-		$tables = $this->getAllTables($runtimeConfig);
-		if (!isset($tables->$tableName)) {
-			// make sure the caller gets a table
-			$tables->$tableName = new BaseObject;
-		}
+        // find it
+        $tables = $this->getAllTables($runtimeConfig);
+        if (!isset($tables->$tableName)) {
+            // make sure the caller gets a table
+            $tables->$tableName = new BaseObject;
+        }
 
-		// all done
-		return $tables->$tableName;
-	}
+        // all done
+        return $tables->$tableName;
+    }
 }

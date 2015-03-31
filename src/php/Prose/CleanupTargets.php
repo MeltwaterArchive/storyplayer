@@ -58,13 +58,10 @@ class CleanupTargets extends BaseCleanup
 
     public function shutdown()
     {
-    	// shorthand
-    	$st = $this->st;
-
         // cleanup the tables
         $this->removeTablesIfEmpty();
 
         // save the runtimeConfig
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
     }
 }

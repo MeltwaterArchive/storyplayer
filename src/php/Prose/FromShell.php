@@ -48,7 +48,7 @@ namespace Prose;
  *
  * as of Storyplayer v2, this is now just an alias for:
  *
- *   $st->fromHost('localhost')
+ *   fromHost('localhost')
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -59,8 +59,8 @@ namespace Prose;
  */
 class FromShell extends FromHost
 {
-	public function __construct($st)
-	{
-		parent::__construct($st, ['localhost']);
-	}
+    public function __construct($st)
+    {
+        parent::__construct($st, ['localhost']);
+    }
 }

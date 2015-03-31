@@ -56,8 +56,8 @@ namespace DataSift\Storyplayer\Phases;
 
 abstract class StoryPhase extends Phase
 {
-	public function getPhaseType()
-	{
-		return self::STORY_PHASE;
-	}
+    public function getPhaseType()
+    {
+        return self::STORY_PHASE;
+    }
 }

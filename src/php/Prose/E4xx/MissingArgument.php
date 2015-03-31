@@ -57,11 +57,11 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_MissingArgument extends Exxx_Exception
 {
-	public function __construct($method, $reason = '', $params = array()) {
-		$msg = "Missing argument in '$method'";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
-		}
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($method, $reason = '', $params = array()) {
+        $msg = "Missing argument in '$method'";
+        if (strlen($reason) > 0) {
+            $msg .= "; reason is '{$reason}'";
+        }
+        parent::__construct(400, $msg, $msg);
+    }
 }

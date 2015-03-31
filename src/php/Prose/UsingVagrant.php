@@ -59,79 +59,73 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 class UsingVagrant extends VmActionsBase
 {
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// call the parent constructor
-		parent::__construct($st, $args);
-	}
+    public function __construct(StoryTeller $st, $args = array())
+    {
+        // call the parent constructor
+        parent::__construct($st, $args);
+    }
 
-	public function createVm($vmName, $osName, $homeFolder)
-	{
-		// shorthand
-		$st = $this->st;
+    public function createVm($vmName, $osName, $homeFolder)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("start vagrant VM '{$vmName}', running guest OS '{$osName}', using Vagrantfile in '{$homeFolder}'");
 
-		// what are we doing?
-		$log = $st->startAction("start vagrant VM '{$vmName}', running guest OS '{$osName}', using Vagrantfile in '{$homeFolder}'");
+        // put the details into an array
+        $vmDetails = new BaseObject();
+        $vmDetails->hostId      = $vmName;
+        $vmDetails->osName      = $osName;
+        $vmDetails->homeFolder  = $homeFolder;
+        $vmDetails->type        = 'VagrantVm';
+        $vmDetails->sshUsername = 'vagrant';
+        $vmDetails->sshKeyFile  = $this->determinePrivateKey($vmDetails);
+        $vmDetails->sshOptions  = [
+            "-i '" . $vmDetails->sshKeyFile . "'",
+            "-o StrictHostKeyChecking=no",
+            "-o UserKnownHostsFile=/dev/null",
+            "-o LogLevel=quiet",
+        ];
+        $vmDetails->scpOptions  = [
+            "-i '" . $vmDetails->sshKeyFile . "'",
+            "-o StrictHostKeyChecking=no",
+        ];
 
-		// put the details into an array
-		$vmDetails = new BaseObject();
-		$vmDetails->hostId      = $vmName;
-		$vmDetails->osName      = $osName;
-		$vmDetails->homeFolder  = $homeFolder;
-		$vmDetails->type        = 'VagrantVm';
-		$vmDetails->sshUsername = 'vagrant';
-		$vmDetails->sshKeyFile  = $this->determinePrivateKey($vmDetails);
-		$vmDetails->sshOptions  = [
-			"-i '" . $vmDetails->sshKeyFile . "'",
-			"-o StrictHostKeyChecking=no",
-			"-o UserKnownHostsFile=/dev/null",
-			"-o LogLevel=quiet",
-		];
-		$vmDetails->scpOptions  = [
-			"-i '" . $vmDetails->sshKeyFile . "'",
-			"-o StrictHostKeyChecking=no",
-		];
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+        // create our virtual machine
+        $host->createHost($vmDetails);
 
-		// create our virtual machine
-		$host->createHost($vmDetails);
+        // all done
+        $log->endAction();
+    }
 
-		// all done
-		$log->endAction();
-	}
+    public function determinePrivateKey($vmDetails)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
-	public function determinePrivateKey($vmDetails)
-	{
-		// shorthand
-		$st = $this->st;
+        // the key will be in one of two places, in this order:
+        //
+        // cwd()/.vagrant/machines/:name/virtualbox/private_key
+        // $HOME/.vagrant.d/insecure_private_key
+        //
+        // we use the first that we can find
+        $keyFilenames = [
+            getcwd() . "/.vagrant/machines/{$vmDetails->hostId}/virtualbox/private_key",
+            getenv("HOME") . "/.vagrant.d/insecure_private_key"
+        ];
 
-		// what are we doing?
-		$log = $st->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
+        foreach ($keyFilenames as $keyFilename)
+        {
+            usingLog()->writeToLog("checking if {$keyFilename} exists");
+            if (file_exists($keyFilename)) {
+                $log->endAction($keyFilename);
+                return $keyFilename;
+            }
+        }
 
-		// the key will be in one of two places, in this order:
-		//
-		// cwd()/.vagrant/machines/:name/virtualbox/private_key
-		// $HOME/.vagrant.d/insecure_private_key
-		//
-		// we use the first that we can find
-		$keyFilenames = [
-			getcwd() . "/.vagrant/machines/{$vmDetails->hostId}/virtualbox/private_key",
-			getenv("HOME") . "/.vagrant.d/insecure_private_key"
-		];
-
-		foreach ($keyFilenames as $keyFilename)
-		{
-			$st->usingLog()->writeToLog("checking if {$keyFilename} exists");
-			if (file_exists($keyFilename)) {
-				$log->endAction($keyFilename);
-				return $keyFilename;
-			}
-		}
-
-		// if we get here, then we do not know where the private key is
-		$log->endAction("unable to find Vagrant private key for VM");
-		throw new E5xx_ActionFailed(__METHOD__);
-	}
+        // if we get here, then we do not know where the private key is
+        $log->endAction("unable to find Vagrant private key for VM");
+        throw new E5xx_ActionFailed(__METHOD__);
+    }
 }

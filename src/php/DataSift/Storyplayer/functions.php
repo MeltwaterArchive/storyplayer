@@ -59,53 +59,18 @@ use Prose\E5xx_ProseException;
  */
 function first($arrayToSearch)
 {
-	if (!is_array($arrayToSearch)) {
-		return null;
-	}
+    if (!is_array($arrayToSearch)) {
+        return null;
+    }
 
-	if (count($arrayToSearch) == 0) {
-		return null;
-	}
+    if (count($arrayToSearch) == 0) {
+        return null;
+    }
 
-	$keys = array_keys($arrayToSearch);
-	$key = reset($keys);
+    $keys = array_keys($arrayToSearch);
+    $key = reset($keys);
 
-	return $arrayToSearch[$key];
-}
-
-/**
- * iterate over all hosts that match the given role
- *
- * @param  string $roleName
- *         The role that we want
- *
- * @return string
- *         a hostid that matches the role
- */
-function hostWithRole($roleName)
-{
-	// special case
-	if ($roleName instanceof StoryTeller) {
-		throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
-	}
-
-	// shorthand
-	$st = StoryTeller::instance();
-
-	$listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
-	if (!count(get_object_vars($listOfHosts))) {
-		throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
-	}
-
-	// what are we doing?
-	$log = $st->startAction("for each host with role '{$roleName}' ... ");
-
-	foreach ($listOfHosts as $hostDetails) {
-		yield($hostDetails->hostId);
-	}
-
-	// all done
-	$log->endAction();
+    return $arrayToSearch[$key];
 }
 
 /**
@@ -116,14 +81,14 @@ function hostWithRole($roleName)
  */
 function newStoryFor($category)
 {
-	$story = new Story();
-	$story->setCategory($category);
+    $story = new Story();
+    $story->setCategory($category);
 
-	// our output reports may need to know which file the story itself
-	// is defined in
-	$story->determineStoryFilename();
+    // our output reports may need to know which file the story itself
+    // is defined in
+    $story->determineStoryFilename();
 
-	return $story;
+    return $story;
 }
 
 /**
@@ -133,10 +98,10 @@ function newStoryFor($category)
  * @return void
  */
 function tryTo($callback) {
-	try {
-		$callback();
-	}
-	catch (E5xx_ProseException $e) {
-		// do nothing
-	}
+    try {
+        $callback();
+    }
+    catch (E5xx_ProseException $e) {
+        // do nothing
+    }
 }

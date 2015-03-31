@@ -55,27 +55,27 @@ namespace DataSift\Storyplayer\Injectables;
  */
 trait DefaultSystemUnderTestName
 {
-	public $defaultSystemUnderTestName;
+    public $defaultSystemUnderTestName;
 
-	public function initDefaultSystemUnderTestName($injectables)
-	{
-		// special case - if there's only one defined, use that
-		if (count($injectables->knownSystemsUnderTestFilenames) == 1) {
-			reset($injectables->knownSystemsUnderTestFilenames);
-			$this->defaultSystemUnderTestName = current($injectables->knownSystemsUnderTestFilenames);
-			return;
-		}
+    public function initDefaultSystemUnderTestName($injectables)
+    {
+        // special case - if there's only one defined, use that
+        if (count($injectables->knownSystemsUnderTestFilenames) == 1) {
+            reset($injectables->knownSystemsUnderTestFilenames);
+            $this->defaultSystemUnderTestName = current($injectables->knownSystemsUnderTestFilenames);
+            return;
+        }
 
-		// special case - is there one in the storyplayer.json[.dist]
-		// config that we've already loaded?
-		// do we have any defaults in the storyplayer.json file?
-		$config = $injectables->storyplayerConfig;
-		if (isset($config->defaults, $config->defaults->{'system-under-test'})) {
-			$this->defaultSystemUnderTestName = $config->defaults->{'system-under-test'};
-			return;
-		}
+        // special case - is there one in the storyplayer.json[.dist]
+        // config that we've already loaded?
+        // do we have any defaults in the storyplayer.json file?
+        $config = $injectables->storyplayerConfig;
+        if (isset($config->defaults, $config->defaults->{'system-under-test'})) {
+            $this->defaultSystemUnderTestName = $config->defaults->{'system-under-test'};
+            return;
+        }
 
-		// if we get here, then we do not know what the default should be
-		$this->defaultSystemUnderTestName = null;
-	}
+        // if we get here, then we do not know what the default should be
+        $this->defaultSystemUnderTestName = null;
+    }
 }

@@ -61,7 +61,7 @@ class E5xx_NoStoryActions extends Exxx_Exception
      */
     public function __construct($storyName)
     {
-    	$msg = "No actions for story '$storyName'";
+        $msg = "No actions for story '$storyName'";
         parent::__construct(500, $msg, $msg);
     }
 }

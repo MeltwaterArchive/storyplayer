@@ -57,27 +57,27 @@ use DataSift\Storyplayer\DeviceLib\KnownDevices;
  */
 trait ActiveDeviceSupport
 {
-	public $activeDevice;
-	public $activeDeviceName;
+    public $activeDevice;
+    public $activeDeviceName;
 
-	/**
-	 * @param  string $deviceName
-	 *         the name of the device to make active
-	 * @param  \DataSift\Storyplayer\Injectables $injectables
-	 *         our DI container, which contains the list of known devices
-	 * @return void
-	 */
-	public function initActiveDevice($deviceName, $injectables)
-	{
+    /**
+     * @param  string $deviceName
+     *         the name of the device to make active
+     * @param  \DataSift\Storyplayer\Injectables $injectables
+     *         our DI container, which contains the list of known devices
+     * @return void
+     */
+    public function initActiveDevice($deviceName, $injectables)
+    {
         // does the device exist?
         if (!$injectables->knownDevicesList->hasEntry($deviceName)) {
             throw new E4xx_NoSuchDevice($deviceName);
         }
 
         // yes it does
-    	$this->activeDevice = $injectables->knownDevicesList->getEntry($deviceName)->getConfig();
+        $this->activeDevice = $injectables->knownDevicesList->getEntry($deviceName)->getConfig();
 
         // remember the device name
         $this->activeDeviceName = $deviceName;
-	}
+    }
 }

@@ -25,7 +25,7 @@
 		"phix/autoloader": "4.*",
 		"phix/cliengine": ">=1.3.0",
 		"phix/validationlib": ">=4.2.0",
-		"datasift/stone": ">=1.9.11, <2.0.0",
+		"datasift/stone": "^1.9.14",
 		"datasift/webdriver": ">=1.5.0",
 		"aws/aws-sdk-php": "2.*",
 		"datasift/netifaces": "*",
@@ -33,7 +33,8 @@
 		"symfony/yaml": "2.*",
 		"nikic/php-parser": "dev-master",
 		"twig/twig": "1.*",
-		"predis/predis": "~1.0"
+		"predis/predis": "~1.0",
+		"stuart/myversion": "^1.0.1"
 	},
 	"require-dev": {
 		"stuart/phingtasks": "1.0.0",

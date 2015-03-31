@@ -62,268 +62,251 @@ use DataSift\Storyplayer\PlayerLib\Story;
  */
 class DefaultConsole extends Console
 {
-	protected $currentPhase;
-	protected $phaseNumber = 0;
-	protected $phaseMessages = array();
+    protected $currentPhase;
+    protected $phaseNumber = 0;
+    protected $phaseMessages = array();
 
-	/**
-	 * a list of the results we have received from stories
-	 * @var array
-	 */
-	protected $storyResults = [];
+    /**
+     * a list of the results we have received from stories
+     * @var array
+     */
+    protected $storyResults = [];
 
-	/**
-	 * are we running totally silently?
-	 * @var boolean
-	 */
-	protected $silentActivity = false;
+    /**
+     * called when storyplayer starts
+     *
+     * @param string $version
+     * @param string $url
+     * @param string $copyright
+     * @param string $license
+     * @return void
+     */
+    public function startStoryplayer($version, $url, $copyright, $license)
+    {
+        $this->write("Storyplayer {$version}", $this->writer->highlightStyle);
+        $this->write(" - ");
+        $this->write($url, $this->writer->urlStyle);
+        $this->write(PHP_EOL);
+        $this->write($copyright . PHP_EOL);
+        $this->write($license . PHP_EOL . PHP_EOL);
+    }
 
-	public function resetSilentMode()
-	{
-		$this->silentActivity = false;
-	}
+    public function endStoryplayer($duration)
+    {
+        $this->writeFinalReport($duration, true);
+    }
 
-	public function setSilentMode()
-	{
-		$this->silentActivity = true;
-	}
+    /**
+     * called when we start a new set of phases
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function startPhaseGroup($activity, $name)
+    {
+        $this->write($activity . ' ', $this->writer->activityStyle);
+        $this->write($name, $this->writer->nameStyle);
+        $this->write(': ', $this->writer->punctuationStyle);
+    }
 
-	/**
-	 * called when storyplayer starts
-	 *
-	 * @param string $version
-	 * @param string $url
-	 * @param string $copyright
-	 * @param string $license
-	 * @return void
-	 */
-	public function startStoryplayer($version, $url, $copyright, $license)
-	{
-		$this->write("Storyplayer {$version}", $this->writer->highlightStyle);
-		$this->write(" - ");
-		$this->write($url, $this->writer->urlStyle);
-		$this->write(PHP_EOL);
-		$this->write($copyright . PHP_EOL);
-		$this->write($license . PHP_EOL . PHP_EOL);
-	}
+    public function endPhaseGroup($result)
+    {
+        // tell the user what happened
+        $this->write(' ');
+        if ($result->getPhaseGroupSkipped()) {
+            $this->writePhaseGroupSkipped($result->getResultString());
+        }
+        else if ($result->getPhaseGroupSucceeded()) {
+            $this->writePhaseGroupSucceeded($result->getResultString());
+        }
+        else {
+            $this->writePhaseGroupFailed($result->getResultString());
+        }
 
-	public function endStoryplayer($duration)
-	{
-		$this->writeFinalReport($duration, true);
-	}
+        // write out the duration too
+        $this->write(' (', $this->writer->punctuationStyle);
+        $this->writeDuration($result->getDuration());
+        $this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
 
-	/**
-	 * called when we start a new set of phases
-	 *
-	 * @param  string $name
-	 * @return void
-	 */
-	public function startPhaseGroup($activity, $name)
-	{
-		$this->write($activity . ' ', $this->writer->activityStyle);
-		$this->write($name, $this->writer->nameStyle);
-		$this->write(': ', $this->writer->punctuationStyle);
-	}
+        // remember the result for the final report
+        //
+        // we have to clone as the result object apparently changes
+        // afterwards. no idea why (yet)
+        $this->results[] = clone $result;
 
-	public function endPhaseGroup($result)
-	{
-		// tell the user what happened
-		$this->write(' ');
-		if ($result->getPhaseGroupSkipped()) {
-			$this->writePhaseGroupSkipped($result->getResultString());
-		}
-		else if ($result->getPhaseGroupSucceeded()) {
-			$this->writePhaseGroupSucceeded($result->getResultString());
-		}
-		else {
-			$this->writePhaseGroupFailed($result->getResultString());
-		}
+        // if we are not connected to a terminal, we need to write out
+        // a detailed error report
+        if (!function_exists("posix_isatty") || !posix_isatty(STDOUT)) {
+            $this->writeDetailedErrorReport($result);
+        }
+    }
 
-		// write out the duration too
-		$this->write(' (', $this->writer->punctuationStyle);
-		$this->writeDuration($result->getDuration());
-		$this->write(')' . PHP_EOL, $this->writer->punctuationStyle);
+    /**
+     * called when a story starts a new phase
+     *
+     * @return void
+     */
+    public function startPhase($phase)
+    {
+        // shorthand
+        $phaseType  = $phase->getPhaseType();
+        $phaseSeqNo = $phase->getPhaseSequenceNo();
 
-		// remember the result for the final report
-		//
-		// we have to clone as the result object apparently changes
-		// afterwards. no idea why (yet)
-		$this->results[] = clone $result;
+        // we're only interested in telling the user about the
+        // phases of a story
+        if ($phaseType !== Phase::STORY_PHASE) {
+            return;
+        }
 
-		// if we are not connected to a terminal, we need to write out
-		// a detailed error report
-		if (!function_exists("posix_isatty") || !posix_isatty(STDOUT)) {
-			$this->writeDetailedErrorReport($result);
-		}
-	}
+        // tell the user
+        $this->write($phaseSeqNo, $this->writer->miniPhaseNameStyle);
+    }
 
-	/**
-	 * called when a story starts a new phase
-	 *
-	 * @return void
-	 */
-	public function startPhase($phase)
-	{
-		// shorthand
-		$phaseType  = $phase->getPhaseType();
-		$phaseSeqNo = $phase->getPhaseSequenceNo();
+    /**
+     * called when a story ends a phase
+     *
+     * @return void
+     */
+    public function endPhase($phase, $phaseResult)
+    {
+        // shorthand
+        $phaseType = $phase->getPhaseType();
 
-		// we're only interested in telling the user about the
-		// phases of a story
-		if ($phaseType !== Phase::STORY_PHASE) {
-			return;
-		}
+        // we're only interested in telling the user about the
+        // phases of a story
+        if ($phaseType !== Phase::STORY_PHASE) {
+            return;
+        }
 
-		// tell the user
-		$this->write($phaseSeqNo, $this->writer->miniPhaseNameStyle);
-	}
+        // tell the user
+        $this->write(' ');
+    }
 
-	/**
-	 * called when a story ends a phase
-	 *
-	 * @return void
-	 */
-	public function endPhase($phase, $phaseResult)
-	{
-		// shorthand
-		$phaseType = $phase->getPhaseType();
+    /**
+     * called when a story logs an action
+     *
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseActivity($msg, $codeLine = null)
+    {
+        // show the user that *something* happened
+        if (!$this->isSilent()) {
+            $this->write(".", $this->writer->miniActivityStyle);
+        }
+    }
 
-		// we're only interested in telling the user about the
-		// phases of a story
-		if ($phaseType !== Phase::STORY_PHASE) {
-			return;
-		}
+    /**
+     * called when a story logs the (possibly partial) output from
+     * running a subprocess
+     *
+     * @param  string $msg the output to log
+     * @return void
+     */
+    public function logPhaseSubprocessOutput($msg)
+    {
+        // show the user that *something* happened
+        if (!$this->isSilent()) {
+            $this->write(".", $this->writer->miniActivityStyle);
+        }
+    }
 
-		// tell the user
-		$this->write(' ');
-	}
+    /**
+     * called when a story logs an error
+     *
+     * @param string $phaseName
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseError($phaseName, $msg)
+    {
+        // we have to show this now, and save it for final output later
+        $this->write("e", $this->writer->failStyle);
+    }
 
-	/**
-	 * called when a story logs an action
-	 *
-	 * @param integer $level
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseActivity($msg, $codeLine = null)
-	{
-		// show the user that *something* happened
-		if (!$this->silentActivity) {
-			$this->write(".", $this->writer->miniActivityStyle);
-		}
-	}
+    /**
+     * called when a story is skipped
+     *
+     * @param string $phaseName
+     * @param string $msg
+     * @return void
+     */
+    public function logPhaseSkipped($phaseName, $msg)
+    {
+        // we have to show this now, and save it for final output later
+        $this->write("s", $this->writer->skippedStyle);
+    }
 
-	/**
-	 * called when a story logs the (possibly partial) output from
-	 * running a subprocess
-	 *
-	 * @param  string $msg the output to log
-	 * @return void
-	 */
-	public function logPhaseSubprocessOutput($msg)
-	{
-		// show the user that *something* happened
-		if (!$this->silentActivity) {
-			$this->write(".", $this->writer->miniActivityStyle);
-		}
-	}
+    public function logPhaseCodeLine($codeLine)
+    {
+        // this is a no-op for us
+    }
 
-	/**
-	 * called when a story logs an error
-	 *
-	 * @param string $phaseName
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseError($phaseName, $msg)
-	{
-		// we have to show this now, and save it for final output later
-		$this->write("e", $this->writer->failStyle);
-	}
+    /**
+     * called when the outer CLI shell encounters a fatal error
+     *
+     * @param  string $msg
+     *         the error message to show the user
+     *
+     * @return void
+     */
+    public function logCliError($msg)
+    {
+        $this->write("*** error: $msg" . PHP_EOL);
+    }
 
-	/**
-	 * called when a story is skipped
-	 *
-	 * @param string $phaseName
-	 * @param string $msg
-	 * @return void
-	 */
-	public function logPhaseSkipped($phaseName, $msg)
-	{
-		// we have to show this now, and save it for final output later
-		$this->write("s", $this->writer->skippedStyle);
-	}
+    /**
+     *
+     * @param  string $msg
+     * @param  Exception $e
+     * @return void
+     */
+    public function logCliErrorWithException($msg, $e)
+    {
+        $this->write("*** error: $msg" . PHP_EOL . PHP_EOL
+             . "This was caused by an unexpected exception " . get_class($e) . PHP_EOL . PHP_EOL
+             . $e->getTraceAsString() . PHP_EOL);
+    }
 
-	public function logPhaseCodeLine($codeLine)
-	{
-		// this is a no-op for us
-	}
+    /**
+     * called when the outer CLI shell needs to publish a warning
+     *
+     * @param  string $msg
+     *         the warning message to show the user
+     *
+     * @return void
+     */
+    public function logCliWarning($msg)
+    {
+        $this->write("*** warning: $msg" . PHP_EOL);
+    }
 
-	/**
-	 * called when the outer CLI shell encounters a fatal error
-	 *
-	 * @param  string $msg
-	 *         the error message to show the user
-	 *
-	 * @return void
-	 */
-	public function logCliError($msg)
-	{
-		$this->write("*** error: $msg" . PHP_EOL);
-	}
+    /**
+     * called when the outer CLI shell needs to tell the user something
+     *
+     * @param  string $msg
+     *         the message to show the user
+     *
+     * @return void
+     */
+    public function logCliInfo($msg)
+    {
+        $this->write($msg . PHP_EOL);
+    }
 
-	/**
-	 *
-	 * @param  string $msg
-	 * @param  Exception $e
-	 * @return void
-	 */
-	public function logCliErrorWithException($msg, $e)
-	{
-		$this->write("*** error: $msg" . PHP_EOL . PHP_EOL
-		     . "This was caused by an unexpected exception " . get_class($e) . PHP_EOL . PHP_EOL
-		     . $e->getTraceAsString() . PHP_EOL);
-	}
-
-	/**
-	 * called when the outer CLI shell needs to publish a warning
-	 *
-	 * @param  string $msg
-	 *         the warning message to show the user
-	 *
-	 * @return void
-	 */
-	public function logCliWarning($msg)
-	{
-		$this->write("*** warning: $msg" . PHP_EOL);
-	}
-
-	/**
-	 * called when the outer CLI shell needs to tell the user something
-	 *
-	 * @param  string $msg
-	 *         the message to show the user
-	 *
-	 * @return void
-	 */
-	public function logCliInfo($msg)
-	{
-		$this->write($msg . PHP_EOL);
-	}
-
-	/**
-	 * an alternative to using PHP's built-in var_dump()
-	 *
-	 * @param  string $name
-	 *         a human-readable name to describe $var
-	 *
-	 * @param  mixed $var
-	 *         the variable to dump
-	 *
-	 * @return void
-	 */
-	public function logVardump($name, $var)
-	{
-		// this is a no-op for us
-	}
+    /**
+     * an alternative to using PHP's built-in var_dump()
+     *
+     * @param  string $name
+     *         a human-readable name to describe $var
+     *
+     * @param  mixed $var
+     *         the variable to dump
+     *
+     * @return void
+     */
+    public function logVardump($name, $var)
+    {
+        // this is a no-op for us
+    }
 }

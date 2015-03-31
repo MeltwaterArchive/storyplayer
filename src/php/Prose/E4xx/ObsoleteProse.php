@@ -57,8 +57,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_ObsoleteProse extends Exxx_Exception
 {
-	public function __construct($oldProse, $newProse) {
-		$msg = "Support for '$oldProse' has been removed; please use $newProse instead";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($oldProse, $newProse) {
+        $msg = "Support for '$oldProse' has been removed; please use $newProse instead";
+        parent::__construct(400, $msg, $msg);
+    }
 }

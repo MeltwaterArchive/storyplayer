@@ -59,79 +59,79 @@ use Phix_Project\ContractLib2\Contract;
 
 class CommandRunner
 {
-	public function runSilently(StoryTeller $st, $cmd)
-	{
-		// enforce our inputs
-		Contract::RequiresValue($cmd, is_string($cmd));
+    public function runSilently($cmd)
+    {
+        // enforce our inputs
+        Contract::RequiresValue($cmd, is_string($cmd));
 
-		// what are we doing?
-		$log = $st->startAction("run command: $cmd");
+        // what are we doing?
+        $log = usingLog()->startAction("run command: $cmd");
 
-		// the output that we will return to the caller
-		$output = '';
+        // the output that we will return to the caller
+        $output = '';
 
-		// how we will talk with the command
-		$pipesSpec = [
-			[ 'file', 'php://stdin', 'r' ],
-			[ 'pipe', 'w' ],
-			[ 'pipe', 'w' ]
-		];
-		$pipes = [];
+        // how we will talk with the command
+        $pipesSpec = [
+            [ 'file', 'php://stdin', 'r' ],
+            [ 'pipe', 'w' ],
+            [ 'pipe', 'w' ]
+        ];
+        $pipes = [];
 
-		// start the process
-		$process = proc_open($cmd, $pipesSpec, $pipes);
+        // start the process
+        $process = proc_open($cmd, $pipesSpec, $pipes);
 
-		// was there a problem?
-		//
-		// NOTE: this only occurs when something like a fork() failure
-		// happens, which makes it very difficult to test for in a
-		// unit test
+        // was there a problem?
+        //
+        // NOTE: this only occurs when something like a fork() failure
+        // happens, which makes it very difficult to test for in a
+        // unit test
 
-		// @codeCoverageIgnoreStart
-		if (!$process) {
-			$return = new CommandResult(255, '');
-			return $return;
-		}
-		// @codeCoverageIgnoreEnd
+        // @codeCoverageIgnoreStart
+        if (!$process) {
+            $return = new CommandResult(255, '');
+            return $return;
+        }
+        // @codeCoverageIgnoreEnd
 
-		// we do not want to block whilst reading from the child process's
-		// stdout and stderr
-		stream_set_blocking($pipes[1], 0);
-		stream_set_blocking($pipes[2], 0);
+        // we do not want to block whilst reading from the child process's
+        // stdout and stderr
+        stream_set_blocking($pipes[1], 0);
+        stream_set_blocking($pipes[2], 0);
 
-		// at this point, our command may be running ...
-		// OR our command may have failed with an error
-		//
-		// best thing to do is to keep reading from our pipes until
-		// the pipes no longer exist
-		while (!feof($pipes[1]) || !feof($pipes[2]))
-		{
-			// block until there is something to read, or until the
-			// timeout has happened
-			//
-			// this makes sure that we do not burn CPU for the sake of it
-			$readable = [ $pipes[1], $pipes[2] ];
-			$writeable = $except = [];
-			stream_select($readable, $writeable, $except, 1);
+        // at this point, our command may be running ...
+        // OR our command may have failed with an error
+        //
+        // best thing to do is to keep reading from our pipes until
+        // the pipes no longer exist
+        while (!feof($pipes[1]) || !feof($pipes[2]))
+        {
+            // block until there is something to read, or until the
+            // timeout has happened
+            //
+            // this makes sure that we do not burn CPU for the sake of it
+            $readable = [ $pipes[1], $pipes[2] ];
+            $writeable = $except = [];
+            stream_select($readable, $writeable, $except, 1);
 
-			// check all the streams for output
-			if ($line = fgets($pipes[1])) {
-				$log->captureOutput(rtrim($line));
-				$output = $output . $line;
-			}
-			if ($line = fgets($pipes[2])) {
-				$log->captureOutput(rtrim($line));
-				$output = $output . $line;
-			}
-		}
+            // check all the streams for output
+            if ($line = fgets($pipes[1])) {
+                $log->captureOutput(rtrim($line));
+                $output = $output . $line;
+            }
+            if ($line = fgets($pipes[2])) {
+                $log->captureOutput(rtrim($line));
+                $output = $output . $line;
+            }
+        }
 
-		// at this point, our pipes have been closed
-		// we can assume that the child process has finished
-		$retval = proc_close($process);
+        // at this point, our pipes have been closed
+        // we can assume that the child process has finished
+        $retval = proc_close($process);
 
-		// all done
-		$log->endAction("return code is '$retval'");
-		$result = new CommandResult($retval, $output);
-		return $result;
-	}
+        // all done
+        $log->endAction("return code is '$retval'");
+        $result = new CommandResult($retval, $output);
+        return $result;
+    }
 }

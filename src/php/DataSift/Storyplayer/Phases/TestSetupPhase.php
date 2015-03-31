@@ -61,79 +61,79 @@ use Prose\E5xx_NotImplemented;
 
 class TestSetupPhase extends StoryPhase
 {
-	protected $sequenceNo = 2;
+    protected $sequenceNo = 2;
 
-	public function doPhase($story)
-	{
-		// shorthand
-		$st          = $this->st;
-		$storyResult = $story->getResult();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st          = $this->st;
+        $storyResult = $story->getResult();
 
-		// our return value
-		$phaseResult = $this->getNewPhaseResult();
+        // our return value
+        $phaseResult = $this->getNewPhaseResult();
 
-		// do we have anything to do?
-		if (!$story->hasTestSetup())
-		{
-			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no test setup instructions"
-			);
+        // do we have anything to do?
+        if (!$story->hasTestSetup())
+        {
+            $phaseResult->setContinuePlaying(
+                $phaseResult::HASNOACTIONS,
+                "story has no test setup instructions"
+            );
 
-			// as far as the rest of the test is concerned, the setup was
-			// a success
-			return $phaseResult;
-		}
+            // as far as the rest of the test is concerned, the setup was
+            // a success
+            return $phaseResult;
+        }
 
-		// get the callback to call
-		$callbacks = $story->getTestSetup();
+        // get the callback to call
+        $callbacks = $story->getTestSetup();
 
-		// make the call
-		try {
-			foreach ($callbacks as $callback) {
-				call_user_func($callback, $st);
-			}
+        // make the call
+        try {
+            foreach ($callbacks as $callback) {
+                call_user_func($callback, $st);
+            }
 
-			// if we get here, then all is well
-			$phaseResult->setContinuePlaying();
-		}
-		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasFailed($phaseResult);
-		}
-		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasFailed($phaseResult);
-		}
-		// if any of the tests are incomplete, deal with that too
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryIsIncomplete($phaseResult);
-		}
-		catch (Exception $e)
-		{
-			// something went wrong ... the test cannot continue
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasFailed($phaseResult);
-		}
+            // if we get here, then all is well
+            $phaseResult->setContinuePlaying();
+        }
+        catch (E5xx_ActionFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasFailed($phaseResult);
+        }
+        catch (E5xx_ExpectFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasFailed($phaseResult);
+        }
+        // if any of the tests are incomplete, deal with that too
+        catch (E5xx_NotImplemented $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryIsIncomplete($phaseResult);
+        }
+        catch (Exception $e)
+        {
+            // something went wrong ... the test cannot continue
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasFailed($phaseResult);
+        }
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

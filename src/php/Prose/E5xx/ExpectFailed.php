@@ -55,8 +55,8 @@ namespace Prose;
  */
 class E5xx_ExpectFailed extends E5xx_ProseException
 {
-	public function __construct($actionName, $expected, $found) {
-		$msg = "Action '$actionName' failed; expected '$expected', found '$found'";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct($actionName, $expected, $found) {
+        $msg = "Action '$actionName' failed; expected '$expected', found '$found'";
+        parent::__construct(500, $msg, $msg);
+    }
 }

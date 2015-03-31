@@ -84,6 +84,7 @@ use Prose\ExpectsShell;
 use Prose\ExpectsSupervisor;
 use Prose\ExpectsUuid;
 use Prose\ExpectsZmq;
+use Prose\ExpectsZmqSocket;
 use Prose\ForeachHostWithRole;
 use Prose\FromAws;
 use Prose\FromBrowser;
@@ -110,12 +111,14 @@ use Prose\FromRuntimeTable;
 use Prose\FromRuntimeTableForTargetEnvironment;
 use Prose\FromSauceLabs;
 use Prose\FromShell;
+use Prose\FromStoryplayer;
 use Prose\FromSupervisor;
 use Prose\FromSystemUnderTest;
 use Prose\FromTargetsTable;
 use Prose\FromTestEnvironment;
 use Prose\FromUsers;
 use Prose\FromUuid;
+use Prose\FromZmqSocket;
 use Prose\UsingBrowser;
 use Prose\UsingCheckpoint;
 use Prose\UsingEc2;
@@ -153,6 +156,8 @@ use Prose\UsingUsers;
 use Prose\UsingVagrant;
 use Prose\UsingYamlFile;
 use Prose\UsingZmq;
+use Prose\UsingZmqContext;
+use Prose\UsingZmqSocket;
 use Prose\UsingZookeeper;
 
 /**
@@ -368,9 +373,9 @@ function expectsFailure()
  * @return \Prose\ExpectsHost
  * @throws \Prose\E5xx_ExpectFailed
  */
-function expectsFirstHostWithRole($role)
+function expectsFirstHostWithRole($roleName)
 {
-    return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$role]);
+    return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
 /**
@@ -426,7 +431,7 @@ function expectsGraphite()
  *
  * @param  string $hostId
  *         the ID of the host to use
- * @return \Prose\UsingHost
+ * @return \Prose\ExpectsHost
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsHost($hostId)
@@ -514,12 +519,14 @@ function expectsRolesTable()
  * This module is for internal use inside Storyplayer. You shouldn't need to
  * use it from your own stories.
  *
+ * @param  string $tableName
+ *         which table do we want to test?
  * @return \Prose\ExpectsRuntimeTable
  * @throws \Prose\E5xx_ExpectFailed
  */
-function expectsRuntimeTable()
+function expectsRuntimeTable($tableName)
 {
-    return new ExpectsRuntimeTable(StoryTeller::instance());
+    return new ExpectsRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -585,6 +592,20 @@ function expectsZmq()
 }
 
 /**
+ * returns the ExpectsZmqSocket module
+ *
+ * This module provides support for testing ZeroMQ sockets
+ *
+ * @param  \ZMQSocket
+ *         the ZMQSocket to test
+ * @return \Prose\ExpectsZmqSocket
+ */
+function expectsZmqSocket($zmqSocket)
+{
+    return new ExpectsZmqSocket(StoryTeller::instance(), [$zmqSocket]);
+}
+
+/**
  * iterates over each host in your test environment that has been assigned
  * the given role
  *
@@ -610,7 +631,7 @@ function expectsZmq()
  *
  * @param  string $roleName
  *         the role that you want to work with
- * @return \Prose\DelayedHostsModuleIterator
+ * @return \Prose\ForeachHostWithRole
  */
 function foreachHostWithRole($roleName)
 {
@@ -723,7 +744,7 @@ function fromEc2()
  *
  * @param  string $amiId
  *         the AMI ID that you want to work with
- * @return \Prose\FromEnvironment
+ * @return \Prose\FromEc2Instance
  */
 function fromEc2Instance($amiId)
 {
@@ -871,7 +892,7 @@ function fromHost($hostId)
  * This module is intended for internal use by Storyplayer. You should not
  * need to call this module from your own stories.
  *
- * @return \Prose\UsingHostsTable
+ * @return \Prose\FromHostsTable
  */
 function fromHostsTable()
 {
@@ -977,11 +998,13 @@ function fromRolesTable()
  * This module is intended for internal use only. You shouldn't need to call
  * this module from your own stories.
  *
+ * @param  string $tableName
+ *         which runtime table do you want?
  * @return \Prose\FromRuntimeTable
  */
-function fromRuntimeTable()
+function fromRuntimeTable($tableName)
 {
-    return new FromRuntimeTable(StoryTeller::instance());
+    return new FromRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -995,9 +1018,9 @@ function fromRuntimeTable()
  *
  * @return \Prose\FromRuntimeTableForTargetEnvironment
  */
-function fromRuntimeTableForTargetEnvironment()
+function fromRuntimeTableForTargetEnvironment($tableName)
 {
-    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance());
+    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1033,6 +1056,21 @@ function fromSauceLabs()
 function fromShell()
 {
     return new FromShell(StoryTeller::instance());
+}
+
+/**
+ * returns the FromStoryplayer module
+ *
+ * This module provides access to Storyplayer's loaded config. This is a
+ * combination of your storyplayer.json[.dist] file and additional information
+ * about Storyplayer (such as the local computer's IP address) that are
+ * detected at runtime.
+ *
+ * @return \Prose\FromStoryplayer
+ */
+function fromStoryplayer()
+{
+    return new FromStoryplayer(StoryTeller::instance());
 }
 
 /**
@@ -1145,6 +1183,20 @@ function fromUuid()
 }
 
 /**
+ * returns the FromZmqSocket module
+ *
+ * This module adds support for receiving data via a ZeroMQ socket.
+ *
+ * @param  \ZMQSocket $zmqSocket
+ *         the ZeroMQ socket you want to receive data from
+ * @return \Prose\FromZmqSocket
+ */
+function fromZmqSocket($zmqSocket)
+{
+    return new FromZmqSocket(StoryTeller::instance(), [$zmqSocket]);
+}
+
+/**
  * return the Checkpoint object
  *
  * The Checkpoint is a 'data bag' - an object that you can store anything
@@ -1245,7 +1297,7 @@ function usingEc2()
  */
 function usingEc2Instance($amiId)
 {
-    return new UsingEc2Instance(StoryTeller::instance());
+    return new UsingEc2Instance(StoryTeller::instance(), [$amiId]);
 }
 
 /**
@@ -1573,9 +1625,9 @@ function usingRolesTable()
  *
  * @return \Prose\UsingRuntimeTable
  */
-function usingRuntimeTable()
+function usingRuntimeTable($tableName)
 {
-    return new UsingRolesTable(StoryTeller::instance());
+    return new UsingRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1586,9 +1638,9 @@ function usingRuntimeTable()
  *
  * @return \Prose\UsingRuntimeTableForTargetEnvironment
  */
-function usingRuntimeTableForTargetEnvironment()
+function usingRuntimeTableForTargetEnvironment($tableName)
 {
-    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance());
+    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1617,9 +1669,9 @@ function usingSauceLabs()
  *
  * @return \Prose\UsingSavageD
  */
-function usingSavageD()
+function usingSavageD($hostId)
 {
-    return new UsingSavageD(StoryTeller::instance());
+    return new UsingSavageD(StoryTeller::instance(), [$hostId]);
 }
 
 /**
@@ -1747,4 +1799,127 @@ function usingYamlFile($filename)
 function usingZmq()
 {
     return new UsingZmq(StoryTeller::instance());
+}
+
+/**
+ * returns the UsingZmqContext module
+ *
+ * This module provides support for creating ZeroMQ sockets
+ *
+ * @param  \ZMQContext|null $zmqContext
+ *         the ZMQContext to use when creating the socket
+ *         (leave empty and we'll create a context for you)
+ * @return \Prose\UsingZmqContext
+ */
+function usingZmqContext($zmqContext = null, $ioThreads = 1)
+{
+    return new UsingZmqContext(StoryTeller::instance(), [$zmqContext, $ioThreads]);
+}
+
+/**
+ * returns the UsingZmqSocket module
+ *
+ * This module provides support for sending messages via a ZeroMQ socket
+ *
+ * @param  \ZMQSocket $zmqSocket
+ *         the socket to send on
+ * @return \Prose\UsingZmqSocket
+ */
+function usingZmqSocket($zmqSocket)
+{
+    return new UsingZmqSocket(StoryTeller::instance(), [$zmqSocket]);
+}
+
+// ==================================================================
+//
+// Iterators go here
+//
+// ------------------------------------------------------------------
+
+/**
+ * iterate over all hosts that match the given role, and return only the first one
+ *
+ * @param  string $roleName
+ *         The role that we want
+ *
+ * @return Iterator
+ *         a hostid that matches the role
+ */
+function firstHostWithRole($roleName)
+{
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
+    if (!count(get_object_vars($listOfHosts))) {
+        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+    }
+
+    // what are we doing?
+    $log = usingLog()->startAction("for the first host with role '{$roleName}' ... ");
+
+    // we yield a single host ID ...
+    $hostsAsArray = get_object_vars($listOfHosts);
+    $hostDetails  = array_pop($hostsAsArray);
+    yield($hostDetails->hostId);
+
+    // all done
+    $log->endAction();
+}
+
+/**
+ * iterate over all hosts that match the given role, and return only the last one
+ *
+ * @param  string $roleName
+ *         The role that we want
+ *
+ * @return Iterator
+ *         a hostid that matches the role
+ */
+function lastHostWithRole($roleName)
+{
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
+    if (!count(get_object_vars($listOfHosts))) {
+        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+    }
+
+    // what are we doing?
+    $log = usingLog()->startAction("for the last host with role '{$roleName}' ... ");
+
+    // we yield a single host ID ...
+    $hostsAsArray = get_object_vars($listOfHosts);
+    $hostDetails = end($hostsAsArray);
+    yield($hostDetails->hostId);
+
+    // all done
+    $log->endAction();
+}
+
+/**
+ * iterate over all hosts that match the given role
+ *
+ * @param  string $roleName
+ *         The role that we want
+ *
+ * @return Iterator
+ *         a hostid that matches the role
+ */
+function hostWithRole($roleName)
+{
+    // special case
+    if ($roleName instanceof StoryTeller) {
+        throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
+    }
+
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
+    if (!count(get_object_vars($listOfHosts))) {
+        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+    }
+
+    // what are we doing?
+    $log = usingLog()->startAction("for each host with role '{$roleName}' ... ");
+
+    foreach ($listOfHosts as $hostDetails) {
+        yield($hostDetails->hostId);
+    }
+
+    // all done
+    $log->endAction();
 }

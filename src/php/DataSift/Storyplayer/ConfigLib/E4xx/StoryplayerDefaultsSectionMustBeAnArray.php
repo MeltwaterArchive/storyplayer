@@ -58,7 +58,7 @@ class E4xx_StoryplayerDefaultsSectionMustBeAnArray extends E4xx_StoryplayerConfi
 {
     public function __construct($pathToFile)
     {
-    	$msg = "Storyplayer config file '{$pathToFile}' must be a JSON object";
+        $msg = "Storyplayer config file '{$pathToFile}' must be a JSON object";
         parent::__construct(400, $msg, $msg);
     }
 }

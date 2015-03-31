@@ -60,7 +60,7 @@ class E4xx_NeedSshUsername extends Exxx_Exception
 {
     public function __construct()
     {
-    	$msg = "No SSH username set; cannot run SSH command";
+        $msg = "No SSH username set; cannot run SSH command";
         parent::__construct(400, $msg, $msg);
     }
 }

@@ -68,6 +68,7 @@ class OutputWriter
     public $urlStyle = null;
     public $successStyle = null;
     public $failStyle = null;
+    public $activityStyle = null;
     public $skippedStyle = null;
     public $nameStyle = null;
     public $durationStyle = null;
@@ -81,117 +82,117 @@ class OutputWriter
     public $argumentsHeadingStyle = null;
     public $failedPhaseStyle = null;
 
-	protected $outputHandles  = [];
+    protected $outputHandles  = [];
 
-	public function __construct()
-	{
-		// generate our colour styles
-		$this->setupColourStyles();
-	}
+    public function __construct()
+    {
+        // generate our colour styles
+        $this->setupColourStyles();
+    }
 
-	// ==================================================================
-	//
-	// Support for outputting to various places
-	//
-	// ------------------------------------------------------------------
+    // ==================================================================
+    //
+    // Support for outputting to various places
+    //
+    // ------------------------------------------------------------------
 
-	public function addOutputToStdout()
-	{
-		$handle = fopen('php://stdout', 'w');
-		$colour = true;
+    public function addOutputToStdout()
+    {
+        $handle = fopen('php://stdout', 'w');
+        $colour = true;
 
-		// special case - check for writing to a pipe
-		if (!function_exists('posix_isatty') || !posix_isatty($handle)) {
-			$colour = false;
-		}
+        // special case - check for writing to a pipe
+        if (!function_exists('posix_isatty') || !posix_isatty($handle)) {
+            $colour = false;
+        }
 
-		$this->outputHandles['stdout'] = [
-			'handle' => $handle,
-			'colour' => $colour
-		];
-	}
+        $this->outputHandles['stdout'] = [
+            'handle' => $handle,
+            'colour' => $colour
+        ];
+    }
 
-	public function addOutputToStderr()
-	{
-		$handle = fopen('php://stderr', 'w');
-		$colour = true;
+    public function addOutputToStderr()
+    {
+        $handle = fopen('php://stderr', 'w');
+        $colour = true;
 
-		// special case - check for writing to a pipe
-		if (!function_exists('posix_isatty') || !posix_isatty($handle)) {
-			$colour = false;
-		}
+        // special case - check for writing to a pipe
+        if (!function_exists('posix_isatty') || !posix_isatty($handle)) {
+            $colour = false;
+        }
 
-		$this->outputHandles['stderr'] = [
-			'handle' => $handle,
-			'colour' => $colour
-		];
-	}
+        $this->outputHandles['stderr'] = [
+            'handle' => $handle,
+            'colour' => $colour
+        ];
+    }
 
-	public function addOutputToFile($filename)
-	{
-		// can we open the file?
-		$fp = fopen($filename, 'w');
-		if (!$fp) {
-			throw new E4xx_CannotOpenOutputFile($filename);
-		}
+    public function addOutputToFile($filename)
+    {
+        // can we open the file?
+        $fp = fopen($filename, 'w');
+        if (!$fp) {
+            throw new E4xx_CannotOpenOutputFile($filename);
+        }
 
-		// add the file to our list to write to
-		$this->outputHandles[$filename] = [
-			'handle' => $fp,
-			'colour' => false
-		];
-	}
+        // add the file to our list to write to
+        $this->outputHandles[$filename] = [
+            'handle' => $fp,
+            'colour' => false
+        ];
+    }
 
-	public function write($output, $style = null)
-	{
-		foreach ($this->outputHandles as $outputHandle) {
-			// do we need to colour the output?
-			if ($style && $outputHandle['colour']) {
-				$msg = $this->colourize($output, $style);
-			}
-			else {
-				$msg = $output;
-			}
+    public function write($output, $style = null)
+    {
+        foreach ($this->outputHandles as $outputHandle) {
+            // do we need to colour the output?
+            if ($style && $outputHandle['colour']) {
+                $msg = $this->colourize($output, $style);
+            }
+            else {
+                $msg = $output;
+            }
 
-			// send the output
-			fwrite($outputHandle['handle'], $msg);
+            // send the output
+            fwrite($outputHandle['handle'], $msg);
 
-			// force the output to appear, in case where we are sending
-			// it to has some sort of buffering in operation
-			fflush($outputHandle['handle']);
-		}
-	}
+            // force the output to appear, in case where we are sending
+            // it to has some sort of buffering in operation
+            fflush($outputHandle['handle']);
+        }
+    }
 
-	// ==================================================================
-	//
-	// Colour support
-	//
-	// ------------------------------------------------------------------
+    // ==================================================================
+    //
+    // Colour support
+    //
+    // ------------------------------------------------------------------
 
-	public function setColourMode($mode)
-	{
-		switch ($mode)
-		{
-			case OutputPlugin::COLOUR_MODE_OFF:
-				foreach ($this->outputHandles as $index => $outputHandle) {
-					if ($outputHandle['colour']) {
-						$this->outputHandles[$index]['colour'] = false;
-					}
-				}
-				break;
+    public function setColourMode($mode)
+    {
+        switch ($mode)
+        {
+            case OutputPlugin::COLOUR_MODE_OFF:
+                foreach ($this->outputHandles as $index => $outputHandle) {
+                    if ($outputHandle['colour']) {
+                        $this->outputHandles[$index]['colour'] = false;
+                    }
+                }
+                break;
 
-			case OutputPlugin::COLOUR_MODE_ON:
-				foreach ($this->outputHandles as $index => $outputHandle) {
-					switch ($index)
-					{
-						case 'stdout':
-						case 'stderr':
-							$this->outputHandles[$index]['colour'] = true;
-					}
-				}
-				break;
-		}
-	}
+            case OutputPlugin::COLOUR_MODE_ON:
+                foreach ($this->outputHandles as $index => $outputHandle) {
+                    switch ($index)
+                    {
+                        case 'stdout':
+                        case 'stderr':
+                            $this->outputHandles[$index]['colour'] = true;
+                    }
+                }
+                break;
+        }
+    }
 
     protected function setupColourStyles()
     {
@@ -225,44 +226,44 @@ class OutputWriter
         $this->failedPhaseStyle = [ConsoleColor::GREEN_FG];
     }
 
-	protected function colourize($output, $style)
-	{
-		// if we get here, then yes we do
+    protected function colourize($output, $style)
+    {
+        // if we get here, then yes we do
         return sprintf(ConsoleColor::ESCAPE_SEQUENCE, \implode(';', $style))
                . $output
                . sprintf(ConsoleColor::ESCAPE_SEQUENCE, ConsoleColor::NONE);
-	}
+    }
 
-	// ==================================================================
-	//
-	// Additional helpers for testing etc
-	//
-	// ------------------------------------------------------------------
+    // ==================================================================
+    //
+    // Additional helpers for testing etc
+    //
+    // ------------------------------------------------------------------
 
-	public function getIsUsingStdout()
-	{
-		if (isset($this->outputHandles['stdout'])) {
-			return true;
-		}
+    public function getIsUsingStdout()
+    {
+        if (isset($this->outputHandles['stdout'])) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getIsUsingStderr()
-	{
-		if (isset($this->outputHandles['stderr'])) {
-			return true;
-		}
+    public function getIsUsingStderr()
+    {
+        if (isset($this->outputHandles['stderr'])) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getIsUsingOutputFile($filename)
-	{
-		if (isset($this->outputHandles[$filename])) {
-			return true;
-		}
+    public function getIsUsingOutputFile($filename)
+    {
+        if (isset($this->outputHandles[$filename])) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

@@ -59,43 +59,43 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Feature_PersistProcessesSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('persistprocess');
-		$this->setShortDescription('do not auto-kill background processes on exit');
-		$this->setLongDesc(
-			"Storyplayer's usingShell() module allows you to start background processes as "
-			."part of your test.  When your story finishes, Storyplayer normally terminates "
-			."any background processes that your story hasn't already terminated."
-			. PHP_EOL . PHP_EOL
-			."When developing or debugging a story, it can be useful for these background processes "
-			."to continue running after the story has finished."
-			. PHP_EOL . PHP_EOL
-			."Use this switch to avoid auto-killing any background processes when a story "
-			."finishes running"
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('persistprocess');
+        $this->setShortDescription('do not auto-kill background processes on exit');
+        $this->setLongDesc(
+            "Storyplayer's usingShell() module allows you to start background processes as "
+            ."part of your test.  When your story finishes, Storyplayer normally terminates "
+            ."any background processes that your story hasn't already terminated."
+            . PHP_EOL . PHP_EOL
+            ."When developing or debugging a story, it can be useful for these background processes "
+            ."to continue running after the story has finished."
+            . PHP_EOL . PHP_EOL
+            ."Use this switch to avoid auto-killing any background processes when a story "
+            ."finishes running"
+        );
 
-		// what are the long switches?
-		$this->addLongSwitch('persist-processes');
+        // what are the long switches?
+        $this->addLongSwitch('persist-processes');
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->persistProcesses = true;
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->persistProcesses = true;
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

@@ -60,7 +60,7 @@ class E4xx_ConfigPathNotFound extends Exxx_Exception
 {
     public function __construct($fullPath)
     {
-    	$msg = "Path '{$fullPath}' not found";
+        $msg = "Path '{$fullPath}' not found";
         parent::__construct(400, $msg, $msg);
     }
 }

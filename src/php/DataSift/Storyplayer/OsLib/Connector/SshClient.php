@@ -58,41 +58,41 @@ use DataSift\Storyplayer\CommandLib\SshClient;
 
 trait Connector_SshClient
 {
-	// keep track of sshClients so that we can reuse them
-	private $sshClients = [];
+    // keep track of sshClients so that we can reuse them
+    private $sshClients = [];
 
-	/**
-	 * get an SSH client to contact this host
-	 *
-	 * @param  \DataSift\Storyplayer\PlayerLib\StoryTeller $st
-	 *         our ubiquitous state object
-	 * @param  \DataSift\Storyplayer\HostLib\HostDetails $hostDetails
-	 *         details about the host that you want a client for
-	 * @return \DataSift\Storyplayer\CommandLib\SshClient
-	 *         the SSH client for you to use
-	 */
-	public function getClient($st, $hostDetails)
-	{
-		// shorthand
-		$hostId = $hostDetails->hostId;
+    /**
+     * get an SSH client to contact this host
+     *
+     * @param  \DataSift\Storyplayer\PlayerLib\StoryTeller $st
+     *         our ubiquitous state object
+     * @param  \DataSift\Storyplayer\HostLib\HostDetails $hostDetails
+     *         details about the host that you want a client for
+     * @return \DataSift\Storyplayer\CommandLib\SshClient
+     *         the SSH client for you to use
+     */
+    public function getClient($st, $hostDetails)
+    {
+        // shorthand
+        $hostId = $hostDetails->hostId;
 
-		// do we already have a client?
-		if (isset($this->sshClients[$hostId])) {
-			// yes - reuse it
-			return $this->sshClients[$hostId];
-		}
+        // do we already have a client?
+        if (isset($this->sshClients[$hostId])) {
+            // yes - reuse it
+            return $this->sshClients[$hostId];
+        }
 
-		// if we get here, we need to make a new client
-		$sshClient = new SshClient($st, $hostDetails->sshOptions, $hostDetails->scpOptions);
-		$sshClient->setIpAddress($hostDetails->ipAddress);
-		$sshClient->setSshUsername($hostDetails->sshUsername);
+        // if we get here, we need to make a new client
+        $sshClient = new SshClient($st, $hostDetails->sshOptions, $hostDetails->scpOptions);
+        $sshClient->setIpAddress($hostDetails->ipAddress);
+        $sshClient->setSshUsername($hostDetails->sshUsername);
 
-		if (isset($hostDetails->sshKey)) {
-			$sshClient->setSshKey($hostDetails->sshKey);
-		}
+        if (isset($hostDetails->sshKey)) {
+            $sshClient->setSshKey($hostDetails->sshKey);
+        }
 
-		// all done
-		$this->sshClients[$hostId] = $sshClient;
-		return $sshClient;
-	}
+        // all done
+        $this->sshClients[$hostId] = $sshClient;
+        return $sshClient;
+    }
 }

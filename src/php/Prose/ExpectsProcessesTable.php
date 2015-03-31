@@ -57,36 +57,36 @@ namespace Prose;
 class ExpectsProcessesTable extends Prose
 {
 
-	/**
-	 * tableName
-	 *
-	 * The key that this table stores it's data in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $tableName = "processes";
+    /**
+     * tableName
+     *
+     * The key that this table stores it's data in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $tableName = "processes";
 
-	/**
-	 * hasEntryForProcess
-	 *
-	 * @param mixed $pid The pid we're working with
-	 *
-	 * @return void
-	 */
-	public function hasEntryForProcess($pid)
-	{
-		$this->st->expectsRuntimeTable($this->tableName)->hasEntry($pid);
-	}
+    /**
+     * hasEntryForProcess
+     *
+     * @param mixed $pid The pid we're working with
+     *
+     * @return void
+     */
+    public function hasEntryForProcess($pid)
+    {
+        expectsRuntimeTable($this->tableName)->hasEntry($pid);
+    }
 
-	/**
-	 * hasNoEntryForProcess
-	 *
-	 * @param mixed $pid The pid we're working with
-	 *
-	 * @return void
-	 */
-	public function hasNoEntryForProcess($pid)
-	{
-		$this->st->expectsRuntimeTable($this->tableName)->hasNoEntry($pid);
-	}
+    /**
+     * hasNoEntryForProcess
+     *
+     * @param mixed $pid The pid we're working with
+     *
+     * @return void
+     */
+    public function hasNoEntryForProcess($pid)
+    {
+        expectsRuntimeTable($this->tableName)->hasNoEntry($pid);
+    }
 }

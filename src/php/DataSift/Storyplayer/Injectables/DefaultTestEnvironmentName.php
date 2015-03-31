@@ -55,35 +55,35 @@ namespace DataSift\Storyplayer\Injectables;
  */
 trait DefaultTestEnvironmentName
 {
-	public $defaultTestEnvironmentName;
+    public $defaultTestEnvironmentName;
 
-	public function initDefaultTestEnvironmentName($injectables)
-	{
-		// what are the candidates?
-		$searchList = [];
+    public function initDefaultTestEnvironmentName($injectables)
+    {
+        // what are the candidates?
+        $searchList = [];
 
-		// do we have any defaults in the storyplayer.json file?
-		$config = $injectables->storyplayerConfig;
-		if (isset($config->defaults, $config->defaults->target)) {
-			$searchList[] = $config->defaults->target;
-		}
+        // do we have any defaults in the storyplayer.json file?
+        $config = $injectables->storyplayerConfig;
+        if (isset($config->defaults, $config->defaults->target)) {
+            $searchList[] = $config->defaults->target;
+        }
 
-		// our user might have a test environment for this specific host
-		$searchList[] = HostnameHelper::getHostname();
+        // our user might have a test environment for this specific host
+        $searchList[] = HostnameHelper::getHostname();
 
-		// this is our fallback when all else fails
-		$searchList[] = "localhost";
+        // this is our fallback when all else fails
+        $searchList[] = "localhost";
 
-		// do any of these environments exist?
-		foreach ($searchList as $testEnvName) {
-			if ($injectables->knownTestEnvironmentsList->hasEntry($testEnvName)) {
-				$this->defaultTestEnvironmentName = $testEnvName;
-				// all done
-				return;
-			}
-		}
+        // do any of these environments exist?
+        foreach ($searchList as $testEnvName) {
+            if ($injectables->knownTestEnvironmentsList->hasEntry($testEnvName)) {
+                $this->defaultTestEnvironmentName = $testEnvName;
+                // all done
+                return;
+            }
+        }
 
-		// if we get here, then none of the environments exist
-		$this->defaultTestEnvironmentName = end($searchList);
-	}
+        // if we get here, then none of the environments exist
+        $this->defaultTestEnvironmentName = end($searchList);
+    }
 }

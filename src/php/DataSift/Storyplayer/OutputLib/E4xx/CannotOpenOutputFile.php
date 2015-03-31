@@ -57,8 +57,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_CannotOpenOutputFile extends Exxx_Exception
 {
-	public function __construct($filename) {
-		$msg = "cannot open '{$filename}' to write to";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($filename) {
+        $msg = "cannot open '{$filename}' to write to";
+        parent::__construct(400, $msg, $msg);
+    }
 }

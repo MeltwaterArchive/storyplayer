@@ -59,5 +59,5 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 
 class Remote_Centos5 extends Base_Centos5
 {
-	use Connector_SshClient;
+    use Connector_SshClient;
 }

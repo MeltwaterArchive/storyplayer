@@ -55,8 +55,8 @@ namespace Prose;
  */
 class E5xx_UnknownDomElementType extends E5xx_ProseException
 {
-	public function __construct($elementType) {
-		$msg = "Unknown DOM element type '{$elementType}'";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct($elementType) {
+        $msg = "Unknown DOM element type '{$elementType}'";
+        parent::__construct(500, $msg, $msg);
+    }
 }

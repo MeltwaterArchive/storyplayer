@@ -58,43 +58,32 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 trait HostsByRoleTrait
 {
-	protected function retrieveHostsDetails($roleName)
-	{
-		// shorthand
-		$st = $this->st;
+    protected function retrieveHostsDetails($roleName)
+    {
+        // do we have this role?
+        $role = fromRolesTable()->getDetailsForRole($roleName);
+        if (!count(get_object_vars($role))) {
+            throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
+        }
+        return $role;
+    }
 
-		// do we have this role?
-		$role = $st->fromRolesTable()->getDetailsForRole($roleName);
-		if (!count(get_object_vars($role))) {
-			throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
-		}
-		return $role;
-	}
+    protected function retrieveFirstHost($roleName)
+    {
+        $hostsDetails = $this->retrieveHostsDetails($roleName);
 
-	protected function retrieveFirstHost($roleName)
-	{
-		$hostsDetails = $this->retrieveHostsDetails($roleName);
+        // isolate the first host to use
+        if (is_object($hostsDetails)) {
+            $list = get_object_vars($hostsDetails);
+            $hostDetails = array_pop($list);
+        }
+        else if (is_array($hostsDetails)) {
+            $hostDetails = array_pop($hostsDetails);
+        }
+        else {
+            throw new E5xx_ActionFailed(__METHOD__, "unexpected list of host details");
+        }
 
-		// isolate the first host to use
-		if (is_object($hostsDetails)) {
-			$list = get_object_vars($hostsDetails);
-			$hostDetails = array_pop($list);
-		}
-		else if (is_array($hostsDetails)) {
-			$hostDetails = array_pop($hostsDetails);
-		}
-		else {
-			throw new E5xx_ActionFailed(__METHOD__, "unexpected list of host details");
-		}
-
-		return $hostDetails;
-	}
-
-	protected function requireValidRoleDetails($caller)
-	{
-		// do we have valid host details?
-		if (!count(get_object_vars($this->hostsDetails))) {
-			throw new E5xx_ActionFailed($caller, "no hosts left in role {$this->roleName}");
-		}
-	}
+        return $hostDetails;
+    }
 }

@@ -59,25 +59,25 @@ use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
  */
 class UsingProvisioningEngine extends Prose
 {
-	protected $adapter;
+    protected $adapter;
 
-	public function __construct(StoryTeller $st, $args)
-	{
-		// call our parent
-		parent::__construct($st, $args);
+    public function __construct(StoryTeller $st, $args)
+    {
+        // call our parent
+        parent::__construct($st, $args);
 
-		// $args[0] should contain the name of a valid provisioning helper
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 must be the name of the provisioning engine you want to use");
-		}
+        // $args[0] should contain the name of a valid provisioning helper
+        if (!isset($args[0])) {
+            throw new E5xx_ActionFailed(__METHOD__, "Param #0 must be the name of the provisioning engine you want to use");
+        }
 
-		// remember the provisioner for later
-		$this->adapter = ProvisioningLib::getProvisioner($st, $args[0]);
-	}
+        // remember the provisioner for later
+        $this->adapter = ProvisioningLib::getProvisioner($st, $args[0]);
+    }
 
-	public function provisionHosts(ProvisioningDefinition $def)
-	{
-		// use the adapter to do all the work
-		$this->adapter->provisionHosts($def);
-	}
+    public function provisionHosts(ProvisioningDefinition $def)
+    {
+        // use the adapter to do all the work
+        $this->adapter->provisionHosts($def);
+    }
 }

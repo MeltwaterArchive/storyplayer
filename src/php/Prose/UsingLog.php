@@ -56,27 +56,28 @@ namespace Prose;
  */
 class UsingLog extends Prose
 {
-	public function writeToLog($msg)
-	{
-		// shorthand
-		$st = $this->st;
+    public function writeToLog($msg)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction($msg);
 
-		// what are we doing?
-		$log = $st->startAction($msg);
+        // all done
+        $log->endAction();
+    }
 
-		// all done
-		$log->endAction();
-	}
+    public function vardump($name, $var)
+    {
+        // shorthand
+        $output = $this->st->getOutput();
 
-	public function vardump($name, $var)
-	{
-		// shorthand
-		$st = $this->st;
-		$output = $st->getOutput();
+        // dump our variable
+        $output->logVardump($name, $var);
 
-		// dump our variable
-		$output->logVardump($name, $var);
+        // all done
+    }
 
-		// all done
-	}
+    public function startAction($msg)
+    {
+        return $this->st->startAction($msg);
+    }
 }

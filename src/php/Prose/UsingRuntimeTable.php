@@ -59,18 +59,16 @@ class UsingRuntimeTable extends BaseRuntimeTable
      * Add an item to a module's runtime config table
      *
      * @param string $key The key to save data under
-     * @param string $value The value to save
+     * @param mixed $value The value to save
      *
      * @return void
      */
     public function addItem($key, $value)
     {
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
 
-        $log = $st->startAction("add entry '{$key}' to {$tableName} table");
+        $log = usingLog()->startAction("add entry '{$key}' to {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -93,8 +91,8 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tables->$tableName->$key = $value;
 
         // save the updated runtime config
-        $log->addStep("saving runtime config to disk", function() use ($st){
-            $st->saveRuntimeConfig();
+        $log->addStep("saving runtime config to disk", function() {
+            $this->st->saveRuntimeConfig();
         });
 
         // all done
@@ -110,16 +108,13 @@ class UsingRuntimeTable extends BaseRuntimeTable
      *
      * @return void
      */
-    public function removeItem($key){
-
-        // shorthand
-        $st = $this->st;
-
+    public function removeItem($key)
+    {
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = $st->startAction("remove entry '{$key}' from {$tableName} table");
+        $log = usingLog()->startAction("remove entry '{$key}' from {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -149,7 +144,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         }
 
         // save the changes
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
 
         // all done
         $log->endAction();
@@ -167,12 +162,10 @@ class UsingRuntimeTable extends BaseRuntimeTable
      */
     public function addItemToGroup($group, $key, $value)
     {
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
 
-        $log = $st->startAction("add entry '{$group}->{$key}' to {$tableName} table");
+        $log = usingLog()->startAction("add entry '{$group}->{$key}' to {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -200,12 +193,12 @@ class UsingRuntimeTable extends BaseRuntimeTable
         //
         // NOTE: any code that adds groups to tables by hand does NOT
         //       get this guarantee
-        $activeConfig = $st->getActiveConfig();
+        $activeConfig = $this->st->getActiveConfig();
         $activeConfig->setData($tableName, $tables->$tableName);
 
         // save the updated runtime config
-        $log->addStep("saving runtime config to disk", function() use ($st){
-            $st->saveRuntimeConfig();
+        $log->addStep("saving runtime config to disk", function() {
+            $this->st->saveRuntimeConfig();
         });
 
         // all done
@@ -221,14 +214,11 @@ class UsingRuntimeTable extends BaseRuntimeTable
      */
     public function removeItemFromGroup($group, $key)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = $st->startAction("remove entry '{$group}->{$key}' from {$tableName} table");
+        $log = usingLog()->startAction("remove entry '{$group}->{$key}' from {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -261,7 +251,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         }
 
         // save the changes
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
 
         // all done
         $log->endAction();
@@ -277,14 +267,11 @@ class UsingRuntimeTable extends BaseRuntimeTable
      */
     public function removeItemFromAllGroups($key)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = $st->startAction("remove entry '{$key}' from all groups in {$tableName} table");
+        $log = usingLog()->startAction("remove entry '{$key}' from all groups in {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -315,10 +302,9 @@ class UsingRuntimeTable extends BaseRuntimeTable
             }
         }
         // save the changes
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
 
         // all done
         $log->endAction();
-
     }
 }
