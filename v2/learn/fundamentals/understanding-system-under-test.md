@@ -54,15 +54,15 @@ However, if there are any settings that might change from version to version of 
 
 You can put any or all of these types of settings into your system under test config file(s):
 
-* application settings
+* story settings
 * module settings
 * test environment parameters
 
 Most of the time, you'll use them for storing application settings that change from version to version of your system under test. You'll rarely use the other settings; for details about them, see [the System Under Test Config File](../../using/configuration/system-under-test-config.html).
 
-### Application Settings
+### Story Settings
 
-Use application settings to avoid hard-coding variables into your stories.
+Use [story settings](../../using/configuration/story-settings.html) to avoid hard-coding variables into your stories.
 
 For example, if your system-under-test is a web application, it will have URLs for landing pages such as registration, logging in, the user's account page, the backend admin page, and so on.  You could just hard code this into your story:
 
