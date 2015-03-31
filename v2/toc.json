@@ -156,6 +156,7 @@
 		"modules/http/expectsHttpResponse",
 		"modules/http/fromHttp",
 		"modules/http/usingHttp",
+		"modules/imap/index",
 		"modules/iterators/index",
 		"modules/iterators/hostWithRole",
 		"modules/iterators/firstHostWithRole",
