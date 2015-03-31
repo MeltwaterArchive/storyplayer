@@ -66,7 +66,7 @@ foreach(firstHostWithRole('pdf_queue') as $hostId) {
 
 ## An Example Config
 
-Look at these files on GitHub to see how Storyplayer uses `storySettings` in its own config files:
+Look at these files on GitHub to see how Storyplayer uses `storySettings` in the config files we use to test Storyplayer:
 
 * [systems-under-test config file](https://github.com/datasift/storyplayer/blob/develop/.storyplayer/systems-under-test/storyplayer-2.x.json)
 * [test environment config file](https://github.com/datasift/storyplayer/blob/develop/.storyplayer/test-environments/vagrant-centos6-ssl.json)
