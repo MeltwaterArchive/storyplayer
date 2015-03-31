@@ -39,9 +39,9 @@ Which one to choose?
 
 Use the `storySettings` section of your `storyplayer.json` file only for settings that you use to change the behaviour of your tests (e.g. [smoke testing](../../tips/test-types/smoke-testing.html)).
 
-## Accessing The storySettings
+## Accessing The storySettings From Your System Under Test
 
-You can access your storySettings using _[fromSystemUnderTest()->getStorySetting()](../modules/systemundertest/fromSystemUnderTest.html#getstorysetting)_ in your tests:
+You can access your storySettings using _[fromSystemUnderTest()->getStorySetting()](../../modules/systemundertest/fromSystemUnderTest.html#getstorysetting)_ in your tests:
 
 {% highlight php startinline %}
 $settings = fromSystemUnderTest()->getStorySetting('pages');
@@ -51,6 +51,17 @@ You can also use [dot.notation.support](dot.notation.support.html) to access ind
 
 {% highlight php startinline %}
 $loginPagePath = fromSystemUnderTest()->getStorySetting('pages.login');
+{% endhighlight %}
+
+## Accessing The storySettings From Your Test Environment
+
+Use _[fromHost()->getStorySetting()](../../modules/host/fromHost.html#getstorysetting)_ to access any story settings in your test environment:
+
+{% highlight php startinline %}
+foreach(firstHostWithRole('pdf_queue') as $hostId) {
+    // get the ZMQ ports on this host
+    $ports = fromHost($hostId)->getStorySetting('pdf_queue.zmq');
+}
 {% endhighlight %}
 
 ## An Example Config
