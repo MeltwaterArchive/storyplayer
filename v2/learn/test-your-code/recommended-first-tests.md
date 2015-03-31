@@ -41,7 +41,9 @@ $story->addAction(function() {
 
 $story->addPostTestInspection(function() {
     // this checks every host in turn
-    foreachHostWithRole('web-server')->expectsHost()->packageIsInstalled('my_app');
+    foreach(hostWithRole('web-server') as $hostId) {
+        expectsHost($hostId)->packageIsInstalled('my_app');
+    }
 });
 {% endhighlight %}
 
@@ -183,7 +185,9 @@ $story->addAction(function() {
 
 $story->addPostTestInspection(function() {
     // make sure nginx is running everywhere
-    foreachHostWithRole('web-server')->expectsHost()->processIsRunning('nginx');
+    foreach(hostWithRole('web-server') as $hostId) {
+        expectsHost($hostId)->processIsRunning('nginx');
+    }
 });
 {% endhighlight %}
 
