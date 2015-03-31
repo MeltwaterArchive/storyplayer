@@ -176,7 +176,7 @@ class DsbuildProvisioner extends Provisioner
     }
 
     /**
-     * @param object $vars
+     * @param array $vars
      */
     protected function writeDsbuildParamsYamlFile($vars)
     {

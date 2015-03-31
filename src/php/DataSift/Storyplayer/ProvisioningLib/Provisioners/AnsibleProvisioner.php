@@ -150,7 +150,6 @@ class AnsibleProvisioner extends Provisioner
         $inventoryFolder = dirname($inventoryFile);
 
         // we set these in the foreach() loop
-        $ipAddress   = null;
         $sshUsername = null;
         $sshKeyFile  = null;
 

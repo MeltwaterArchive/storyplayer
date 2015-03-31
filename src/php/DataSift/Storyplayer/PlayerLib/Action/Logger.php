@@ -70,7 +70,7 @@ class Action_Logger
      *
      * @param  mixed $message
      *         the message to write to the log
-     * @param  array $codeLine
+     * @param  array|null $codeLine
      *         details about the line of code we are currently executing
      * @return Action_LogItem
      *         the object that tracks this log entry
