@@ -57,14 +57,14 @@ use DataSift\Storyplayer\OutputLib\CodeParser;
  */
 trait CodeParserSupport
 {
-	public $codeParser;
+    public $codeParser;
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initCodeParserSupport()
-	{
-		$this->codeParser = new CodeParser();
-	}
+    /**
+     *
+     * @return void
+     */
+    public function initCodeParserSupport()
+    {
+        $this->codeParser = new CodeParser();
+    }
 }

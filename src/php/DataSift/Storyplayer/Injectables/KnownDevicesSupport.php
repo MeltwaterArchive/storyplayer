@@ -57,14 +57,14 @@ use DataSift\Storyplayer\ConfigLib\DevicesList;
  */
 trait KnownDevicesSupport
 {
-	public $knownDevicesList;
+    public $knownDevicesList;
 
-	/**
-	 * @param  DevicesList $devicesList
-	 * @return void
-	 */
-	public function initKnownDevicesSupport($devicesList)
-	{
-		$this->knownDevicesList = $devicesList;
-	}
+    /**
+     * @param  DevicesList $devicesList
+     * @return void
+     */
+    public function initKnownDevicesSupport($devicesList)
+    {
+        $this->knownDevicesList = $devicesList;
+    }
 }

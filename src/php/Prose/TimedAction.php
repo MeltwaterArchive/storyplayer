@@ -78,11 +78,8 @@ class TimedAction
 
     public function forExactly($duration)
     {
-        // shorthand
-        $st = $this->st;
-
         // what are we doing?
-        $log = $st->startAction("run for exactly '{$duration}'");
+        $log = usingLog()->startAction("run for exactly '{$duration}'");
 
         // remember the duration
         //
@@ -110,11 +107,8 @@ class TimedAction
 
     public function handleSigAlarm()
     {
-        // shorthand
-        $st = $this->st;
-
         // what are we doing?
-        $log = $st->startAction("SIGALRM received");
+        $log = usingLog()->startAction("SIGALRM received");
 
         // try and terminate the running code
         $this->terminate = true;

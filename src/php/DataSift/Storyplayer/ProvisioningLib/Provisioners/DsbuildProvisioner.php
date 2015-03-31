@@ -63,232 +63,221 @@ use Prose\E5xx_ActionFailed;
  */
 class DsbuildProvisioner extends Provisioner
 {
-	public function __construct(StoryTeller $st)
-	{
-		// remember for the future
-		$this->st = $st;
-	}
+    public function __construct(StoryTeller $st)
+    {
+        // remember for the future
+        $this->st = $st;
+    }
 
-	public function buildDefinitionFor($env)
-	{
-		// our return value
-		$provDef = new ProvisioningDefinition;
+    public function buildDefinitionFor($env)
+    {
+        // our return value
+        $provDef = new ProvisioningDefinition;
 
-		// shorthand
-		$st = $this->st;
+        // what are we doing?
+        $log = usingLog()->startAction("build dsbuild provisioning definition");
 
-		// what are we doing?
-		$log = $st->startAction("build dsbuild provisioning definition");
+        // add in each machine in the environment
+        foreach ($env->details->machines as $hostId => $machine) {
+            usingProvisioningDefinition($provDef)->addHost($hostId);
 
-		// add in each machine in the environment
-		foreach ($env->details->machines as $hostId => $machine) {
-			$st->usingProvisioningDefinition($provDef)->addHost($hostId);
+            foreach ($machine->roles as $role) {
+                usingProvisioningDefinition($provDef)->addRole($role)->toHost($hostId);
+            }
 
-			foreach ($machine->roles as $role) {
-				$st->usingProvisioningDefinition($provDef)->addRole($role)->toHost($hostId);
-			}
+            if (isset($machine->params)) {
+                $params = [];
+                foreach ($machine->params as $paramName => $paramValue) {
+                    $params[$paramName]  = fromConfig()->get('hosts.' . $hostId . '.params.'.$paramName);
+                }
+                if (count($params)) {
+                    usingProvisioningDefinition($provDef)->addParams($params)->toHost($hostId);
+                }
+            }
+        }
 
-			if (isset($machine->params)) {
-				$params = [];
-				foreach ($machine->params as $paramName => $paramValue) {
-					$params[$paramName]  = $st->fromConfig()->get('hosts.' . $hostId . '.params.'.$paramName);
-				}
-				if (count($params)) {
-					$st->usingProvisioningDefinition($provDef)->addParams($params)->toHost($hostId);
-				}
-			}
-		}
+        // all done
+        $log->endAction($provDef);
+        return $provDef;
+    }
 
-		// all done
-		return $provDef;
-	}
+    public function provisionHosts(ProvisioningDefinition $hosts, $provConfig)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("use dsbuild to provision host(s)");
 
-	public function provisionHosts(ProvisioningDefinition $hosts, $provConfig)
-	{
-		// shorthand
-		$st = $this->st;
+        // the params file that we are going to output
+        $dsbuildParams = new BaseObject;
 
-		// what are we doing?
-		$log = $st->startAction("use dsbuild to provision host(s)");
+        // build up the list of settings to write out
+        foreach($hosts as $hostId => $hostProps) {
+            // what is the host's IP address?
+            $ipAddress = fromHost($hostId)->getIpAddress();
 
-		// the params file that we are going to output
-		$dsbuildParams = new BaseObject;
+            $propName = $hostId . '_ipv4Address';
+            $dsbuildParams->$propName = $ipAddress;
+            if (isset($hostProps->params)) {
+                $dsbuildParams->mergeFrom($hostProps->params);
+            }
+        }
 
-		// build up the list of settings to write out
-		foreach($hosts as $hostId => $hostProps) {
-			// what is the host's IP address?
-			$ipAddress = $st->fromHost($hostId)->getIpAddress();
+        // add in all the config settings that we know about
+        $dsbuildParams->storyplayer_ipv4Address = fromConfig()->get('storyplayer.ipAddress');
+        $dsbuildParams->mergeFrom($this->flattenData($this->st->getActiveConfig()->getData('')));
 
-			$propName = $hostId . '_ipv4Address';
-			$dsbuildParams->$propName = $ipAddress;
-			if (isset($hostProps->params)) {
-				$dsbuildParams->mergeFrom($hostProps->params);
-			}
-		}
+        // write them out
+        $this->writeDsbuildParamsShellFile((array)$dsbuildParams);
+        $this->writeDsbuildParamsYamlFile((array)$dsbuildParams);
 
-		// add in all the config settings that we know about
-		$dsbuildParams->storyplayer_ipv4Address = $st->fromConfig()->get('storyplayer.ipAddress');
-		$dsbuildParams->mergeFrom($this->flattenData($st->getActiveConfig()->getData('')));
+        // at this point, we are ready to attempt provisioning
+        //
+        // provision each host in the order that they're listed
+        foreach($hosts as $hostId => $hostProps) {
+            // which dsbuildfile are we going to run?
+            $dsbuildFilename = $this->getDsbuildFilename($provConfig, $hostId);
+            if ($dsbuildFilename === null) {
+                // there is no dsbuildfile at all to run
+                $log->endAction("cannot find dsbuildfile to run :(");
+                throw new E5xx_ActionFailed(__METHOD__, "no dsbuildfile to run");
+            }
 
-		// write them out
-		$this->writeDsbuildParamsShellFile((array)$dsbuildParams);
-		$this->writeDsbuildParamsYamlFile((array)$dsbuildParams);
+            // at this point, we are ready to provision
+            $commandRunner = new CommandRunner();
 
-		// at this point, we are ready to attempt provisioning
-		//
-		// provision each host in the order that they're listed
-		foreach($hosts as $hostId => $hostProps) {
-			// which dsbuildfile are we going to run?
-			$dsbuildFilename = $this->getDsbuildFilename($provConfig, $hostId);
-			if ($dsbuildFilename === null) {
-				// there is no dsbuildfile at all to run
-				$log->endAction("cannot find dsbuildfile to run :(");
-				throw new E5xx_ActionFailed(__METHOD__, "no dsbuildfile to run");
-			}
+            // copy the dsbuildparams files to the target machine using scp
+            // NOTE: the "vagrant rsync" command seems not working with some Vagrant provisioners (e.g. OpenStack)
+            $command = 'scp'
+                .' '.$dsbuildParams->{'hosts_'.$hostId.'_scpOptions_0'}
+                .' '.$dsbuildParams->{'hosts_'.$hostId.'_scpOptions_1'}
+                .' dsbuildparams.*'
+                .' '.$dsbuildParams->{'hosts_'.$hostId.'_sshUsername'}
+                .'@'.$dsbuildParams->{'hosts_'.$hostId.'_ipAddress'}
+                .':/vagrant/';
+            $result = $commandRunner->runSilently($command);
 
-			// at this point, we are ready to provision
-			$commandRunner = new CommandRunner();
+            if (!$result->didCommandSucceed()) {
+                // try to rsync folders in case of scp fail
+                $command = 'vagrant rsync ' . $hostId;
+                $commandRunner->runSilently($command);
+            }
 
-			// copy the dsbuildparams files to the target machine using scp
-			// NOTE: the "vagrant rsync" command seems not working with some Vagrant provisioners (e.g. OpenStack)
-			$command = 'scp'
-				.' '.$dsbuildParams->{'hosts_'.$hostId.'_scpOptions_0'}
-				.' '.$dsbuildParams->{'hosts_'.$hostId.'_scpOptions_1'}
-				.' dsbuildparams.*'
-				.' '.$dsbuildParams->{'hosts_'.$hostId.'_sshUsername'}
-				.'@'.$dsbuildParams->{'hosts_'.$hostId.'_ipAddress'}
-				.':/vagrant/';
-			$result = $commandRunner->runSilently($st, $command);
+            // provision
+            $command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '" "' . $hostId . '"';
+            $result = $commandRunner->runSilently($command);
 
-			if (!$result->didCommandSucceed()) {
-				// try to rsync folders in case of scp fail
-				$command = 'vagrant rsync ' . $hostId;
-				$result = $commandRunner->runSilently($st, $command);
-			}
+            // what happened?
+            if (!$result->didCommandSucceed()) {
+                throw new E5xx_ActionFailed(__METHOD__, "provisioning failed");
+            }
+        }
 
-			// provision
-			$command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '" "' . $hostId . '"';
-			$result = $commandRunner->runSilently($st, $command);
+        // all done
+        $log->endAction();
+    }
 
-			// what happened?
-			if (!$result->didCommandSucceed()) {
-				throw new E5xx_ActionFailed(__METHOD__, "provisioning failed");
-			}
-		}
+    /**
+     * @param array $vars
+     */
+    protected function writeDsbuildParamsYamlFile($vars)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("write dsbuildparams.yml");
 
-		// all done
-		$log->endAction();
-	}
+        // what is the path to the file?
+        $filename = "dsbuildparams.yml";
 
-	/**
-	 * @param string $inventoryFolder
-	 */
-	protected function writeDsbuildParamsYamlFile($vars)
-	{
-		// shorthand
-		$st = $this->st;
+        // write the data
+        usingYamlFile($filename)->writeDataToFile($vars);
 
-		// what are we doing?
-		$log = $st->startAction("write dsbuildparams.yml");
+        // all done
+        $log->endAction();
+    }
 
-		// what is the path to the file?
-		$filename = "dsbuildparams.yml";
+    /**
+     * @param array $vars
+     */
+    protected function writeDsbuildParamsShellFile($vars)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("write dsbuildparams.sh");
 
-		// write the data
-		$st->usingYamlFile($filename)->writeDataToFile($vars);
+        // what is the path to the file?
+        $filename = "dsbuildparams.sh";
 
-		// all done
-		$log->endAction();
-	}
+        // build the data to write
+        $output = "";
+        foreach ($vars as $name => $value) {
+            $name = str_replace("-", "_", $name);
+            $output .= strtoupper($name) . "='" . $value . "';" . PHP_EOL;
+        }
 
-	/**
-	 * @param string $inventoryFolder
-	 */
-	protected function writeDsbuildParamsShellFile($vars)
-	{
-		// shorthand
-		$st = $this->st;
+        // write the data
+        file_put_contents($filename, $output);
 
-		// what are we doing?
-		$log = $st->startAction("write dsbuildparams.sh");
+        // all done
+        $log->endAction();
+    }
 
-		// what is the path to the file?
-		$filename = "dsbuildparams.sh";
+    /**
+     * converts a tree of data into underscore_notation
+     *
+     * @param  mixed $inputData
+     *         the data to flatten
+     * @param  string $prefix
+     *         the path to the parent of the inputData
+     * @return array
+     *         the flattened data
+     */
+    protected function flattenData($inputData, $prefix="")
+    {
+        $retval = [];
 
-		// build the data to write
-		$output = "";
-		foreach ($vars as $name => $value) {
-			$name = str_replace("-", "_", $name);
-			$output .= strtoupper($name) . "='" . $value . "';" . PHP_EOL;
-		}
+        foreach ($inputData as $name => $dataToFlatten)
+        {
+            if (is_object($dataToFlatten) || is_array($dataToFlatten)) {
+                $retval = array_merge($retval, $this->flattenData($dataToFlatten, $prefix . $name . "_"));
+            }
+            else {
+                $retval[$prefix . $name] = $dataToFlatten;
+            }
+        }
 
-		// write the data
-		file_put_contents($filename, $output);
+        return $retval;
+    }
 
-		// all done
-		$log->endAction();
-	}
+    /**
+     * find the provisioning script to run for a given hostId
+     *
+     * @param  BaseObject $provConfig
+     *         the "provisioning" section from the test environment config
+     * @param  string $hostId
+     *         the ID of the host that we are provisioning
+     * @return string|null
+     *         path to the file to execute
+     */
+    protected function getDsbuildFilename($provConfig, $hostId)
+    {
+        if (isset($provConfig->execute)) {
+            $basename = dirname($provConfig->execute) . "/" . basename($provConfig->execute, '.sh');
+        }
+        else {
+            $basename = "dsbuildfile";
+        }
 
-	/**
-	 * converts a tree of data into underscore_notation
-	 *
-	 * @param  mixed $inputData
-	 *         the data to flatten
-	 * @param  string $prefix
-	 *         the path to the parent of the inputData
-	 * @return array
-	 *         the flattened data
-	 */
-	protected function flattenData($inputData, $prefix="")
-	{
-		$retval = [];
+        $candidateFilenames = [
+            $basename . "-" . $hostId . '.sh',
+            $basename . "-" . $hostId,
+            $basename . ".sh",
+            $basename,
+        ];
 
-		foreach ($inputData as $name => $dataToFlatten)
-		{
-			if (is_object($dataToFlatten) || is_array($dataToFlatten)) {
-				$retval = array_merge($retval, $this->flattenData($dataToFlatten, $prefix . $name . "_"));
-			}
-			else {
-				$retval[$prefix . $name] = $dataToFlatten;
-			}
-		}
+        foreach ($candidateFilenames as $candidateFilename) {
+            if (file_exists($candidateFilename)) {
+                return $candidateFilename;
+            }
+        }
 
-		return $retval;
-	}
-
-	/**
-	 * find the provisioning script to run for a given hostId
-	 *
-	 * @param  BaseObject $provConfig
-	 *         the "provisioning" section from the test environment config
-	 * @param  string $hostId
-	 *         the ID of the host that we are provisioning
-	 * @return string
-	 *         path to the file to execute
-	 */
-	protected function getDsbuildFilename($provConfig, $hostId)
-	{
-		if (isset($provConfig->execute)) {
-			$basename = dirname($provConfig->execute) . "/" . basename($provConfig->execute, '.sh');
-		}
-		else {
-			$basename = "dsbuildfile";
-		}
-
-		$candidateFilenames = [
-			$basename . "-" . $hostId . '.sh',
-			$basename . "-" . $hostId,
-			$basename . ".sh",
-			$basename,
-		];
-
-		foreach ($candidateFilenames as $candidateFilename) {
-			if (file_exists($candidateFilename)) {
-				return $candidateFilename;
-			}
-		}
-
-		// no file found
-		return null;
-	}
+        // no file found
+        return null;
+    }
 }

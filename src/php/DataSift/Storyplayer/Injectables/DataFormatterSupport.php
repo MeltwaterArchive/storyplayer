@@ -57,14 +57,14 @@ use DataSift\Storyplayer\OutputLib\DataFormatter;
  */
 trait DataFormatterSupport
 {
-	public $dataFormatter;
+    public $dataFormatter;
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initDataFormatterSupport()
-	{
-		$this->dataFormatter = new DataFormatter();
-	}
+    /**
+     *
+     * @return void
+     */
+    public function initDataFormatterSupport()
+    {
+        $this->dataFormatter = new DataFormatter();
+    }
 }

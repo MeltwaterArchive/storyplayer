@@ -60,197 +60,173 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class UsingZmq extends Prose
 {
-	protected $socketMap = array (
-		ZMQ::SOCKET_PUB => "ZMQ::SOCKET_PUB",
-		ZMQ::SOCKET_SUB => "ZMQ::SOCKET_SUB",
-		ZMQ::SOCKET_REQ => "ZMQ::SOCKET_REQ",
-		ZMQ::SOCKET_REP => "ZMQ::SOCKET_REP",
-		ZMQ::SOCKET_XREQ => "ZMQ::SOCKET_XREQ",
-		ZMQ::SOCKET_XREP => "ZMQ::SOCKET_XREP",
-		ZMQ::SOCKET_PUSH => "ZMQ::SOCKET_PUSH",
-		ZMQ::SOCKET_PULL => "ZMQ::SOCKET_PULL",
-		ZMQ::SOCKET_ROUTER => "ZMQ::SOCKET_ROUTER",
-		ZMQ::SOCKET_DEALER => "ZMQ::SOCKET_DEALER"
-	);
+    protected $socketMap = array (
+        ZMQ::SOCKET_PUB => "ZMQ::SOCKET_PUB",
+        ZMQ::SOCKET_SUB => "ZMQ::SOCKET_SUB",
+        ZMQ::SOCKET_REQ => "ZMQ::SOCKET_REQ",
+        ZMQ::SOCKET_REP => "ZMQ::SOCKET_REP",
+        ZMQ::SOCKET_XREQ => "ZMQ::SOCKET_XREQ",
+        ZMQ::SOCKET_XREP => "ZMQ::SOCKET_XREP",
+        ZMQ::SOCKET_PUSH => "ZMQ::SOCKET_PUSH",
+        ZMQ::SOCKET_PULL => "ZMQ::SOCKET_PULL",
+        ZMQ::SOCKET_ROUTER => "ZMQ::SOCKET_ROUTER",
+        ZMQ::SOCKET_DEALER => "ZMQ::SOCKET_DEALER"
+    );
 
-	public function bind($address, $socketType)
-	{
-		// shorthand
-		$st = $this->st;
+    public function bind($address, $socketType)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("bind() to '{$this->socketMap[$socketType]}' at address '{$address}'");
 
-		// what are we doing?
-		$log = $st->startAction("bind() to '{$this->socketMap[$socketType]}' at address '{$address}'");
+        // make the connection
+        $socket = new ZMQSocket(new ZMQContext(), $socketType);
+        if (!$socket) {
+            throw new E5xx_ActionFailed(__METHOD__, "unable to create ZMQ socket");
+        }
+        $socket->bind($address);
 
-		// make the connection
-		$socket = new ZMQSocket(new ZMQContext(), $socketType);
-		if (!$socket) {
-			throw new E5xx_ActionFailed(__METHOD__, "unable to create ZMQ socket");
-		}
-		$socket->bind($address);
+        // all done
+        $log->endAction();
+        return $socket;
+    }
 
-		// all done
-		$log->endAction();
-		return $socket;
-	}
+    public function connect($address, $socketType, $sendHwm = 100, $recvHwm = 100)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("connect() to '{$this->socketMap[$socketType]}' at address '{$address}'");
 
-	public function connect($address, $socketType, $sendHwm = 100, $recvHwm = 100)
-	{
-		// shorthand
-		$st = $this->st;
+        // create the socket
+        $socket = new ZMQSocket(new ZMQContext(), $socketType);
+        if (!$socket) {
+            throw new E5xx_ActionFailed(__METHOD__, "unable to create ZMQ socket");
+        }
 
-		// what are we doing?
-		$log = $st->startAction("connect() to '{$this->socketMap[$socketType]}' at address '{$address}'");
+        // set high-water marks now
+        $socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
+        $socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
 
-		// create the socket
-		$socket = new ZMQSocket(new ZMQContext(), $socketType);
-		if (!$socket) {
-			throw new E5xx_ActionFailed(__METHOD__, "unable to create ZMQ socket");
-		}
+        $socket->connect($address);
 
-		// set high-water marks now
-		$socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
-		$socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
+        // all done
+        $log->endAction();
+        return $socket;
+    }
 
-		$socket->connect($address);
+    public function send($socket, $message, $timeout = -1)
+    {
+        // what are we doing?
+        if ($timeout == -1) {
+            $log = usingLog()->startAction("send() to ZMQ socket; no timeout");
+            $socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
+        }
+        else {
+            $log = usingLog()->startAction("send() to ZMQ socket; timeout is {$timeout} seconds");
+            $socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
+        }
 
-		// all done
-		$log->endAction();
-		return $socket;
-	}
+        // do it
+        $socket->send($message);
 
-	public function send($socket, $message, $timeout = -1)
-	{
-		// shorthand
-		$st = $this->st;
+        // all done
+        $log->endAction();
+    }
 
-		// what are we doing?
-		if ($timeout == -1) {
-			$log = $st->startAction("send() to ZMQ socket; no timeout");
-			$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
-		}
-		else {
-			$log = $st->startAction("send() to ZMQ socket; timeout is {$timeout} seconds");
-			$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
-		}
+    public function recv($socket, $timeout = -1)
+    {
+        // what are we doing?
+        if ($timeout == -1) {
+            $log = usingLog()->startAction("recv() from ZMQ socket; no timeout");
+            $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
+        }
+        else {
+            $log = usingLog()->startAction("recv() from ZMQ socket; timeout is {$timeout} seconds");
+            $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
+        }
 
-		// do it
-		$socket->send($message);
+        // do it
+        $return = $socket->recv();
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+        return $return;
+    }
 
-	public function recv($socket, $timeout = -1)
-	{
-		// shorthand
-		$st = $this->st;
+    public function recvNonBlocking($socket)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("recv() from ZMQ socket");
 
-		// what are we doing?
-		if ($timeout == -1) {
-			$log = $st->startAction("recv() from ZMQ socket; no timeout");
-			$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
-		}
-		else {
-			$log = $st->startAction("recv() from ZMQ socket; timeout is {$timeout} seconds");
-			$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
-		}
+        // do it
+        $return = $socket->recv(ZMQ::MODE_NOBLOCK);
 
-		// do it
-		$return = $socket->recv();
+        // all done
+        if ($return === false) {
+            $log->endAction("receive attempt would have blocked");
+        }
+        else {
+            $log->endAction();
+        }
+        return $return;
+    }
 
-		// all done
-		$log->endAction();
-		return $return;
-	}
+    public function sendMulti($socket, $message, $timeout = -1)
+    {
+        // what are we doing?
+        if ($timeout == -1) {
+            $log = usingLog()->startAction("sendmulti() to ZMQ socket; no timeout");
+            $socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
+        }
+        else {
+            $log = usingLog()->startAction("sendmulti() to ZMQ socket; timeout is {$timeout} seconds");
+            $socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
+        }
 
-	public function recvNonBlocking($socket)
-	{
-		// shorthand
-		$st = $this->st;
+        // do it
+        $socket->sendmulti($message);
 
-		// what are we doing?
-		$log = $st->startAction("recv() from ZMQ socket");
+        // all done
+        $log->endAction();
+    }
 
-		// do it
-		$return = $socket->recv(ZMQ::MODE_NOBLOCK);
+    public function recvMulti($socket, $timeout = -1)
+    {
+        // what are we doing?
+        if ($timeout == -1) {
+            $log = usingLog()->startAction("recvmulti() from ZMQ socket; no timeout");
+            $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
+        }
+        else {
+            $log = usingLog()->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
+            $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
+        }
 
-		// all done
-		if ($return === false) {
-			$log->endAction("receive attempt would have blocked");
-		}
-		else {
-			$log->endAction();
-		}
-		return $return;
-	}
+        // do it
+        $return = $socket->recvmulti();
 
-	public function sendMulti($socket, $message, $timeout = -1)
-	{
-		// shorthand
-		$st = $this->st;
+        // we need to look at the received value
+        $printer = new DataPrinter();
+        $msg     = $printer->convertToString($return);
 
-		// what are we doing?
-		if ($timeout == -1) {
-			$log = $st->startAction("sendmulti() to ZMQ socket; no timeout");
-			$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
-		}
-		else {
-			$log = $st->startAction("sendmulti() to ZMQ socket; timeout is {$timeout} seconds");
-			$socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
-		}
+        // all done
+        $log->endAction("result is: {$msg}");
+        return $return;
+    }
 
-		// do it
-		$socket->sendmulti($message);
+    public function recvMultiNonBlocking($socket)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("recvmulti() from ZMQ socket");
 
-		// all done
-		$log->endAction();
-	}
+        // do it
+        $return = $socket->recvmulti(ZMQ::MODE_NOBLOCK);
 
-	public function recvMulti($socket, $timeout = -1)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		if ($timeout == -1) {
-			$log = $st->startAction("recvmulti() from ZMQ socket; no timeout");
-			$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
-		}
-		else {
-			$log = $st->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
-			$socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
-		}
-
-		// do it
-		$return = $socket->recvmulti();
-
-		// we need to look at the received value
-		$printer = new DataPrinter();
-		$msg     = $printer->convertToString($return);
-
-		// all done
-		$log->endAction("result is: {$msg}");
-		return $return;
-	}
-
-	public function recvMultiNonBlocking($socket)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("recvmulti() from ZMQ socket");
-
-		// do it
-		$return = $socket->recvmulti(ZMQ::MODE_NOBLOCK);
-
-		// all done
-		if ($return === false) {
-			$log->endAction("receive attempt would have blocked");
-		}
-		else {
-			$log->endAction();
-		}
-		return $return;
-	}
+        // all done
+        if ($return === false) {
+            $log->endAction("receive attempt would have blocked");
+        }
+        else {
+            $log->endAction();
+        }
+        return $return;
+    }
 }

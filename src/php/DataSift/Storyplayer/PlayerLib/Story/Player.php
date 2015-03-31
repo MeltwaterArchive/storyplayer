@@ -57,48 +57,48 @@ use DataSift\Storyplayer\Injectables;
  */
 class Story_Player
 {
-	/**
-	 * path to the story that we are going to play
-	 *
-	 * @var string
-	 */
-	protected $storyFilename;
+    /**
+     * path to the story that we are going to play
+     *
+     * @var string
+     */
+    protected $storyFilename;
 
-	/**
-	 * a list of the phases we need to run to get everything ready to
-	 * run the actual story
-	 *
-	 * @var array
-	 */
-	protected $startupPhases;
+    /**
+     * a list of the phases we need to run to get everything ready to
+     * run the actual story
+     *
+     * @var array
+     */
+    protected $startupPhases;
 
-	/**
-	 * a list of the phases that make up the story
-	 *
-	 * @var array
-	 */
-	protected $storyPhases;
+    /**
+     * a list of the phases that make up the story
+     *
+     * @var array
+     */
+    protected $storyPhases;
 
-	/**
-	 * a list of the phases that we need to run once the story has
-	 * finished
-	 *
-	 * @var array
-	 */
-	protected $shutdownPhases;
+    /**
+     * a list of the phases that we need to run once the story has
+     * finished
+     *
+     * @var array
+     */
+    protected $shutdownPhases;
 
-	public function __construct($storyFilename, Injectables $injectables)
-	{
-		$this->storyFilename  = $storyFilename;
-		$this->startupPhases  = $injectables->activeConfig->getArray('storyplayer.phases.beforeStory');
-		$this->storyPhases    = $injectables->activeConfig->getArray('storyplayer.phases.story');
-		$this->shutdownPhases = $injectables->activeConfig->getArray('storyplayer.phases.afterStory');
-	}
+    public function __construct($storyFilename, Injectables $injectables)
+    {
+        $this->storyFilename  = $storyFilename;
+        $this->startupPhases  = $injectables->activeConfig->getArray('storyplayer.phases.beforeStory');
+        $this->storyPhases    = $injectables->activeConfig->getArray('storyplayer.phases.story');
+        $this->shutdownPhases = $injectables->activeConfig->getArray('storyplayer.phases.afterStory');
+    }
 
-	public function play(StoryTeller $st, Injectables $injectables)
-	{
-		// shorthand
-		$output = $st->getOutput();
+    public function play(StoryTeller $st, Injectables $injectables)
+    {
+        // shorthand
+        $output = $st->getOutput();
 
         // we're going to use this to play our setup and teardown phases
         $phasesPlayer = new PhaseGroup_Player();
@@ -110,75 +110,75 @@ class Story_Player
         // does our story want to keep the test device open between
         // phases?
         if ($story->getPersistDevice()) {
-        	$st->setPersistDevice();
+            $st->setPersistDevice();
         }
 
-		// set default callbacks up
-		$story->setDefaultCallbacks();
+        // set default callbacks up
+        $story->setDefaultCallbacks();
 
-		// make sure we start with a brand new checkpoint
-		$st->setCheckpoint(new Story_Checkpoint($st));
+        // make sure we start with a brand new checkpoint
+        $st->setCheckpoint(new Story_Checkpoint($st));
 
-		// tell the outside world what we're doing
-		$activity = "Running story";
-		$name     = $story->getCategory() . ' > ' . $story->getGroupAsString() . ' > ' . $story->getName();
-		$output->startPhaseGroup($activity, $name);
+        // tell the outside world what we're doing
+        $activity = "Running story";
+        $name     = $story->getCategory() . ' > ' . $story->getGroupAsString() . ' > ' . $story->getName();
+        $output->startPhaseGroup($activity, $name);
 
-		// run the phases before the story truly starts
-		$phasesPlayer->playPhases(
-			$activity,
-			$st,
-			$injectables,
-			$this->startupPhases,
-			$story
-		);
-
-		// what happened?
-		$result = $story->getResult();
-		if (!$result->getPhaseGroupSucceeded()) {
-			// make sure the result has the story's filename in
-			$result->filename = $this->storyFilename;
-
-			// announce the results
-			$output->endPhaseGroup($result);
-
-			// all done
-			return;
-		}
-
-		// run the phases in the 'story' section
-		$phasesPlayer->playPhases(
-			$activity,
-			$st,
-			$injectables,
-			$this->storyPhases,
-			$story
-		);
-
-		// grab the result at this point
-		$result = clone $story->getResult();
-
-		// run the shutdown phase
+        // run the phases before the story truly starts
         $phasesPlayer->playPhases(
-        	$activity,
-			$st,
-			$injectables,
-			$this->shutdownPhases,
-			$story
+            $activity,
+            $st,
+            $injectables,
+            $this->startupPhases,
+            $story
+        );
+
+        // what happened?
+        $result = $story->getResult();
+        if (!$result->getPhaseGroupSucceeded()) {
+            // make sure the result has the story's filename in
+            $result->filename = $this->storyFilename;
+
+            // announce the results
+            $output->endPhaseGroup($result);
+
+            // all done
+            return;
+        }
+
+        // run the phases in the 'story' section
+        $phasesPlayer->playPhases(
+            $activity,
+            $st,
+            $injectables,
+            $this->storyPhases,
+            $story
+        );
+
+        // grab the result at this point
+        $result = clone $story->getResult();
+
+        // run the shutdown phase
+        $phasesPlayer->playPhases(
+            $activity,
+            $st,
+            $injectables,
+            $this->shutdownPhases,
+            $story
         );
 
         // do we also need to look at any failures that happened during
         // the shutdown phase?
         if ($result->getPhaseGroupSucceeded()) {
-        	$result = $story->getResult();
+            $result = $story->getResult();
         }
 
-		// make sure the result has the story's filename in
-		$result->filename = $this->storyFilename;
+        // make sure the result has the story's filename in
+        $result->filename = $this->storyFilename;
 
-		// announce the results
-		$output->endPhaseGroup($result);
+        // announce the results
+        $output->endPhaseGroup($result);
 
-		// all done
-	}
+        // all done
+    }
 }

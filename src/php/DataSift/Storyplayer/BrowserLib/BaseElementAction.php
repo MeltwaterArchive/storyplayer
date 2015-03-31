@@ -62,295 +62,282 @@ use Prose\E5xx_UnknownDomElementType;
  */
 class BaseElementAction
 {
-	const SINGLE_TARGET = 1;
-	const PLURAL_TARGET = 2;
+    use VisibleElementFinder;
 
-	protected $countTypes = array(
-		"any"		=> "any",
-		"several"   => "several",
-		"no"		=> 0,
-		"zero"		=> 0,
-		"one"       => 1,
-		"a"			=> 1,
-		"an"		=> 2,
-		"two"       => 2,
-		"three"     => 3,
-		"four"      => 4,
-		"five"      => 5,
-		"six"       => 6,
-		"seven"     => 7,
-		"eight"     => 8,
-		"nine"      => 9,
-		"ten"       => 10,
-		"eleven"    => 11,
-		"twelve"    => 12,
-		"thirteen"  => 13,
-		"fourteen"  => 14,
-		"fifteen"   => 15,
-		"sixteen"   => 16,
-		"seventeen" => 17,
-		"eighteen"  => 18,
-		"nineteen"  => 19,
-		"twenty"    => 20,
-	);
+    const SINGLE_TARGET = 1;
+    const PLURAL_TARGET = 2;
 
-	protected $indexTypes = array(
-		"first"       => 0,
-		"second"      => 1,
-		"third"       => 2,
-		"fourth"      => 3,
-		"fifth"       => 4,
-		"sixth"       => 5,
-		"seventh"     => 6,
-		"eighth"      => 7,
-		"ninth"       => 8,
-		"tenth"       => 9,
-		"eleventh"    => 10,
-		"twelfth"     => 11,
-		"thirteenth"  => 12,
-		"fourteenth"  => 13,
-		"fifteenth"   => 14,
-		"sixteenth"   => 15,
-		"seventeenth" => 16,
-		"eighteenth"  => 17,
-		"nineteenth"  => 18,
-		"twentieth"   => 19,
-	);
+    protected $countTypes = array(
+        "any"       => "any",
+        "several"   => "several",
+        "no"        => 0,
+        "zero"      => 0,
+        "one"       => 1,
+        "a"         => 1,
+        "an"        => 2,
+        "two"       => 2,
+        "three"     => 3,
+        "four"      => 4,
+        "five"      => 5,
+        "six"       => 6,
+        "seven"     => 7,
+        "eight"     => 8,
+        "nine"      => 9,
+        "ten"       => 10,
+        "eleven"    => 11,
+        "twelve"    => 12,
+        "thirteen"  => 13,
+        "fourteen"  => 14,
+        "fifteen"   => 15,
+        "sixteen"   => 16,
+        "seventeen" => 17,
+        "eighteen"  => 18,
+        "nineteen"  => 19,
+        "twenty"    => 20,
+    );
 
-	protected $tagTypes = array(
-		'button'        => array('input', 'button'),
-		'buttons'       => array('input','button'),
-		'cell'          => 'td',
-		'cells'         => 'td',
-		'heading'		=> array('h1', 'h2', 'h3', 'h4', 'h5','h6'),
-		'headings'		=> array('h1', 'h2', 'h3', 'h4', 'h5','h6'),
-		'link'          => 'a',
-		'links'         => 'a',
-		'orderedlist'   => 'ol',
-		'unorderedlist' => 'ul'
-	);
+    protected $indexTypes = array(
+        "first"       => 0,
+        "second"      => 1,
+        "third"       => 2,
+        "fourth"      => 3,
+        "fifth"       => 4,
+        "sixth"       => 5,
+        "seventh"     => 6,
+        "eighth"      => 7,
+        "ninth"       => 8,
+        "tenth"       => 9,
+        "eleventh"    => 10,
+        "twelfth"     => 11,
+        "thirteenth"  => 12,
+        "fourteenth"  => 13,
+        "fifteenth"   => 14,
+        "sixteenth"   => 15,
+        "seventeenth" => 16,
+        "eighteenth"  => 17,
+        "nineteenth"  => 18,
+        "twentieth"   => 19,
+    );
 
-	protected $targetTypes = array(
-		'box'           => self::SINGLE_TARGET,
-		'boxes'         => self::PLURAL_TARGET,
-		'button'        => self::SINGLE_TARGET,
-		'buttons'       => self::PLURAL_TARGET,
-		'cell'          => self::SINGLE_TARGET,
-		'cells'         => self::PLURAL_TARGET,
-		'dropdown'      => self::SINGLE_TARGET,
-		'dropdowns'     => self::PLURAL_TARGET,
-		'element'       => self::SINGLE_TARGET,
-		'elements'      => self::PLURAL_TARGET,
-		'field'         => self::SINGLE_TARGET,
-		'fields'        => self::PLURAL_TARGET,
-		'heading'		=> self::SINGLE_TARGET,
-		'headings'		=> self::PLURAL_TARGET,
-		'link'          => self::SINGLE_TARGET,
-		'links'         => self::PLURAL_TARGET,
-		'orderedlist'   => self::SINGLE_TARGET,
-		'span'          => self::SINGLE_TARGET,
-		'unorderedlist' => self::SINGLE_TARGET
-	);
+    protected $tagTypes = array(
+        'button'        => array('input', 'button'),
+        'buttons'       => array('input','button'),
+        'cell'          => 'td',
+        'cells'         => 'td',
+        'heading'       => array('h1', 'h2', 'h3', 'h4', 'h5','h6'),
+        'headings'      => array('h1', 'h2', 'h3', 'h4', 'h5','h6'),
+        'link'          => 'a',
+        'links'         => 'a',
+        'orderedlist'   => 'ol',
+        'unorderedlist' => 'ul'
+    );
 
-	protected $searchTypes = array (
-		'id'            => 'ById',
-		'label'         => 'ByLabel',
-		'labelled'      => 'ByLabel',
-		'named'         => 'ByName',
-		'name'			=> 'ByName',
-		'text'          => 'ByText',
-		'class'         => 'ByClass',
-		'placeholder'   => 'ByPlaceholder',
-		'title'			=> 'ByTitle',
-		'labelidortext' => 'ByLabelIdText',
-	);
+    protected $targetTypes = array(
+        'box'           => self::SINGLE_TARGET,
+        'boxes'         => self::PLURAL_TARGET,
+        'button'        => self::SINGLE_TARGET,
+        'buttons'       => self::PLURAL_TARGET,
+        'cell'          => self::SINGLE_TARGET,
+        'cells'         => self::PLURAL_TARGET,
+        'dropdown'      => self::SINGLE_TARGET,
+        'dropdowns'     => self::PLURAL_TARGET,
+        'element'       => self::SINGLE_TARGET,
+        'elements'      => self::PLURAL_TARGET,
+        'field'         => self::SINGLE_TARGET,
+        'fields'        => self::PLURAL_TARGET,
+        'heading'       => self::SINGLE_TARGET,
+        'headings'      => self::PLURAL_TARGET,
+        'link'          => self::SINGLE_TARGET,
+        'links'         => self::PLURAL_TARGET,
+        'orderedlist'   => self::SINGLE_TARGET,
+        'span'          => self::SINGLE_TARGET,
+        'unorderedlist' => self::SINGLE_TARGET
+    );
 
-	protected function convertMethodNameToWords($methodName)
-	{
-		// turn the method name into an array of words
-		$words = explode(' ', strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1 $2", $methodName)));
+    protected $searchTypes = array (
+        'id'            => 'ById',
+        'label'         => 'ByLabel',
+        'labelled'      => 'ByLabel',
+        'named'         => 'ByName',
+        'name'          => 'ByName',
+        'text'          => 'ByText',
+        'class'         => 'ByClass',
+        'placeholder'   => 'ByPlaceholder',
+        'title'         => 'ByTitle',
+        'labelidortext' => 'ByLabelIdText',
+    );
 
-		// all done
-		return $words;
-	}
+    protected $baseElement;
 
-	protected function determineCountType($words)
-	{
-		foreach ($words as $word) {
-			if (isset($this->countTypes[$word])) {
-				return $this->countTypes[$word];
-			}
-		}
+    public function __construct($baseElement)
+    {
+        $this->baseElement = $baseElement;
+    }
 
-		// if we do not recognise the word, tell the caller
-		return null;
-	}
+    /**
+     * @param  string $methodName
+     *         camelCase string to parse
+     * @return array<string>
+     *         $methodName broken into individual words, all lower-cased
+     */
+    protected function convertMethodNameToWords($methodName)
+    {
+        // turn the method name into an array of words
+        $words = explode(' ', strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1 $2", $methodName)));
 
-	protected function determineIndexType($words)
-	{
-		foreach ($words as $word) {
-			if (isset($this->indexTypes[$word])) {
-				return $this->indexTypes[$word];
-			}
-		}
+        // all done
+        return $words;
+    }
 
-		// if we do not recognise the word, we want the first match
-		return 0;
-	}
+    /**
+     * @param  array<string> $words
+     *         a list of words to examine
+     * @return int|null
+     */
+    protected function determineCountType($words)
+    {
+        foreach ($words as $word) {
+            if (isset($this->countTypes[$word])) {
+                return $this->countTypes[$word];
+            }
+        }
 
-	protected function determineSearchType($words)
-	{
-		foreach ($words as $word) {
-			if (isset($this->searchTypes[$word])) {
-				return $this->searchTypes[$word];
-			}
-		}
+        // if we do not recognise the word, tell the caller
+        return null;
+    }
 
-		// if we do not recognise the word, tell the caller
-		return null;
-	}
+    /**
+     * @param  array<string> $words
+     *         a list of words to examine
+     * @return int|null
+     */
+    protected function determineIndexType($words)
+    {
+        foreach ($words as $word) {
+            if (isset($this->indexTypes[$word])) {
+                return $this->indexTypes[$word];
+            }
+        }
 
-	protected function determineTargetType($words)
-	{
-		foreach ($words as $word) {
-			if (isset($this->targetTypes[$word])) {
-				return $word;
-			}
-		}
+        // if we do not recognise the word, we want the first match
+        return 0;
+    }
 
-		// if we do not recognise the word, substitute a suitable default
-		return 'field';
-	}
+    /**
+     * @param  array<string> $words
+     *         a list of words to examine
+     * @return string|null
+     */
+    protected function determineSearchType($words)
+    {
+        foreach ($words as $word) {
+            if (isset($this->searchTypes[$word])) {
+                return $this->searchTypes[$word];
+            }
+        }
 
-	protected function determineTagType($targetType)
-	{
-		// do we have a specific tag to look for?
-		if (isset($this->tagTypes[$targetType])) {
-			return $this->tagTypes[$targetType];
-		}
+        // if we do not recognise the word, tell the caller
+        return null;
+    }
 
-		// no, so return the default to feed into xpath
-		return '*';
-	}
+    /**
+     * @param  array<string> $words
+     *         a list of words to examine
+     * @return string
+     */
+    protected function determineTargetType($words)
+    {
+        foreach ($words as $word) {
+            if (isset($this->targetTypes[$word])) {
+                return $word;
+            }
+        }
 
-	protected function isPluralTarget($targetType)
-	{
-		// is this a valid target type?
-		if (!isset($this->targetTypes[$targetType])) {
-			throw new E5xx_UnknownDomElementType($targetType);
-		}
+        // if we do not recognise the word, substitute a suitable default
+        return 'field';
+    }
 
-		// is this a plural target?
-		if ($this->targetTypes[$targetType] == self::PLURAL_TARGET) {
-			return true;
-		}
+    /**
+     * @param  string $targetType
+     * @return string
+     */
+    protected function determineTagType($targetType)
+    {
+        // do we have a specific tag to look for?
+        if (isset($this->tagTypes[$targetType])) {
+            return $this->tagTypes[$targetType];
+        }
 
-		// no, it is not
-		return false;
-	}
+        // no, so return the default to feed into xpath
+        return '*';
+    }
 
-	protected function retrieveElement($methodName, $methodArgs)
-	{
-		// we need to know which element they want
-		$words = $this->convertMethodNameToWords($methodName);
-		$indexType  = $this->determineIndexType($words);
+    /**
+     * @param  string $targetType
+     * @return bool
+     */
+    protected function isPluralTarget($targetType)
+    {
+        // is this a valid target type?
+        if (!isset($this->targetTypes[$targetType])) {
+            throw new E5xx_UnknownDomElementType($targetType);
+        }
 
-		// get all the elements that match
-		$elements = $this->retrieveElements($methodName, $methodArgs);
+        // is this a plural target?
+        if ($this->targetTypes[$targetType] == self::PLURAL_TARGET) {
+            return true;
+        }
 
-		// reduce the list down to a single matching element
-		$element = $this->returnNthVisibleElement($indexType, $elements);
+        // no, it is not
+        return false;
+    }
 
-		// all done
-		return $element;
-	}
+    protected function retrieveElement($methodName, $methodArgs)
+    {
+        // we need to know which element they want
+        $words = $this->convertMethodNameToWords($methodName);
+        $indexType  = $this->determineIndexType($words);
 
-	protected function retrieveElements($methodName, $methodArgs)
-	{
-		$words = $this->convertMethodNameToWords($methodName);
+        // get all the elements that match
+        $elements = $this->retrieveElements($methodName, $methodArgs);
 
-		$targetType = $this->determineTargetType($words);
+        // reduce the list down to a single matching element
+        $element = $this->returnNthVisibleElement($indexType, $elements);
 
-		// what are we searching for?
-		$searchTerm = $methodArgs[0];
+        // all done
+        return $element;
+    }
 
-		$searchType = $this->determineSearchType($words);
-		if ($searchType == null) {				// we do not understand how to find the target field
-			throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
-		}
+    /**
+     * @param  string $methodName
+     * @param  array<mixed> $methodArgs
+     * @return array
+     */
+    protected function retrieveElements($methodName, $methodArgs)
+    {
+        $words = $this->convertMethodNameToWords($methodName);
 
-		// what tag(s) do we want to narrow our search to?
-		$tag = $this->determineTagType($targetType);
+        $targetType = $this->determineTargetType($words);
 
-		// how are we searching for matching elements?
-		$searchMethod = 'getElements' . $searchType;
+        // what are we searching for?
+        $searchTerm = $methodArgs[0];
 
-		// let's go find our element
-		$searchObject = new DomElementSearch($this->st, $this->baseElement);
-		$elements = $searchObject->$searchMethod($searchTerm, $tag);
+        $searchType = $this->determineSearchType($words);
+        if ($searchType === null) {             // we do not understand how to find the target field
+            throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
+        }
 
-		// all done
-		return $elements;
-	}
+        // what tag(s) do we want to narrow our search to?
+        $tag = $this->determineTagType($targetType);
 
-	/**
-	 * @param string $successMsg
-	 * @param string $failureMsg
-	 */
-	public function returnNthVisibleElement($nth, $elements)
-	{
-		// shorthand
-		$st = $this->st;
+        // how are we searching for matching elements?
+        $searchMethod = 'getElements' . $searchType;
 
-		// what are we doing?
-		$count = count($elements);
-		$log = $st->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
+        // let's go find our element
+        $searchObject = new DomElementSearch($this->baseElement);
+        $elements = $searchObject->$searchMethod($searchTerm, $tag);
 
-		// special case - not enough elements, even if they were all
-		// visible
-		if ($nth >= count($elements)) {
-			$log->endAction("not enough elements :(");
-			throw new E5xx_ActionFailed(__METHOD__, "no matching element found");
-		}
-
-		// let's track which visible element we're looking at
-		$checkedIndex = 0;
-
-		// if the page contains multiple matches, return the first one
-		// that the user can see
-		foreach ($elements as $element) {
-			if (!$element->displayed()) {
-				// DO NOT increment $checkedIndex here
-				//
-				// we only increment it for elements that are visible
-				continue;
-			}
-
-			// skip hidden input fields
-			// if ($element->name() == 'input') {
-			// 	try {
-			// 		$typeAttr = $element->attribute('type');
-			// 		if ($typeAttr == 'hidden') {
-			// 			// skip this
-			// 			continue;
-			// 		}
-			// 	}
-			// 	catch (Exception $e) {
-			// 		// no 'type' attribute
-			// 		//
-			// 		// not fatal
-			// 	}
-			// }
-
-			if ($checkedIndex == $nth) {
-				// a match!
-				$log->endAction();
-				return $element;
-			}
-		}
-
-		$msg = "no matching element found";
-		$log->endAction($msg);
-		throw new E5xx_ActionFailed(__METHOD__, $msg);
-	}
+        // all done
+        return $elements;
+    }
 }

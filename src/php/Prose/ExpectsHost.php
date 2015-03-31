@@ -56,274 +56,248 @@ namespace Prose;
  */
 class ExpectsHost extends HostBase
 {
-	public function hostIsRunning()
-	{
-		// shorthand
-		$st = $this->st;
+    public function hostIsRunning()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure host '{$this->args[0]}' is running");
 
-		// what are we doing?
-		$log = $st->startAction("make sure host '{$this->args[0]}' is running");
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // is it running?
+        $running = fromHost($hostDetails->hostId)->getHostIsRunning();
+        if (!$running) {
+            $log->endAction();
+            throw new E5xx_ExpectFailed(__METHOD__, 'host is running', 'host is not running');
+        }
 
-		// is it running?
-		$running = $st->fromHost($hostDetails->hostId)->getHostIsRunning();
-		if (!$running) {
-			$log->endAction();
-			throw new E5xx_ExpectFailed(__METHOD__, 'host is running', 'host is not running');
-		}
+        // all done
+        $log->endAction();
+    }
 
-		// all done
-		$log->endAction();
-	}
+    public function hostIsNotRunning()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure host '{$this->args[0]}' is not running");
 
-	public function hostIsNotRunning()
-	{
-		// shorthand
-		$st = $this->st;
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// what are we doing?
-		$log = $st->startAction("make sure host '{$this->args[0]}' is not running");
+        // is it running?
+        $running = fromHost($hostDetails->hostId)->getHostIsRunning();
+        if ($running) {
+            $log->endAction();
+            throw new E5xx_ExpectFailed(__METHOD__, 'host is not running', 'host is running');
+        }
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // all done
+        $log->endAction();
+    }
 
-		// is it running?
-		$running = $st->fromHost($hostDetails->hostId)->getHostIsRunning();
-		if ($running) {
-			$log->endAction();
-			throw new E5xx_ExpectFailed(__METHOD__, 'host is not running', 'host is running');
-		}
+    public function packageIsInstalled($packageName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure package '{$packageName}' is installed on host '{$this->args[0]}'");
 
-		// all done
-		$log->endAction();
-	}
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-	public function packageIsInstalled($packageName)
-	{
-		// shorthand
-		$st = $this->st;
+        // is it installed?
+        $details = fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
+        if (!isset($details->version)) {
+            $log->endAction();
+            throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
+        }
 
-		// what are we doing?
-		$log = $st->startAction("make sure package '{$packageName}' is installed on host '{$this->args[0]}'");
+        // all done
+        $log->endAction();
+    }
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+    public function packageIsNotInstalled($packageName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure package '{$packageName}' is not installed on host '{$this->args[0]}'");
 
-		// is it installed?
-		$details = $st->fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
-		if (!isset($details->version)) {
-			$log->endAction();
-			throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
-		}
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// all done
-		$log->endAction();
-	}
+        // is it installed?
+        $details = fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
 
-	public function packageIsNotInstalled($packageName)
-	{
-		// shorthand
-		$st = $this->st;
+        if (isset($details->version)) {
+            $log->endAction();
+            throw new E5xx_ExpectFailed(__METHOD__, "package not installed", "package is installed");
+        }
 
-		// what are we doing?
-		$log = $st->startAction("make sure package '{$packageName}' is not installed on host '{$this->args[0]}'");
+        // all done
+        $log->endAction();
+    }
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+    public function processIsRunning($processName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
 
-		// is it installed?
-		$details = $st->fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		if (isset($details->version)) {
-			$log->endAction();
-			throw new E5xx_ExpectFailed(__METHOD__, "package not installed", "package is installed");
-		}
+        // is the process running?
+        $isRunning = fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
 
-		// all done
-		$log->endAction();
-	}
+        if (!$isRunning) {
+            throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' running", "process '{$processName}' is not running");
+        }
 
-	public function processIsRunning($processName)
-	{
-		// shorthand
-		$st = $this->st;
+        // all done
+        $log->endAction();
+    }
 
-		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
+    public function processIsNotRunning($processName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// is the process running?
-		$isRunning = $st->fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
+        // is the process running?
+        $isRunning = fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
 
-		if (!$isRunning) {
-			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' running", "process '{$processName}' is not running");
-		}
+        if ($isRunning) {
+            throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");
+        }
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
-	public function processIsNotRunning($processName)
-	{
-		// shorthand
-		$st = $this->st;
+    public function screenIsRunning($sessionName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure screen session '{$sessionName}' is running on host '{$this->args[0]}'");
 
-		// what are we doing?
-		$log = $st->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
+        // is this session still running?
+        if (fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
+            $log->endAction();
+            return;
+        }
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        $log->endAction("session is not running");
+        throw new E5xx_ExpectFailed(__METHOD__, "session '{$sessionName}' running", "session '{$sessionName}' not running");
+    }
 
-		// is the process running?
-		$isRunning = $st->fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
+    public function screenIsNotRunning($sessionName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("make sure screen session '{$sessionName}' is not running on host '{$this->args[0]}'");
 
-		if ($isRunning) {
-			throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");
-		}
+        // get the details
+        if (!fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
+            $log->endAction("session is not running");
+            return;
+        }
 
-		// all done
-		$log->endAction();
-	}
+        $log->endAction("session is running");
+        throw new E5xx_ExpectFailed(__METHOD__, "session not running", "session running as PID {$processDetails->pid}");
+    }
 
-	public function screenIsRunning($sessionName)
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * the old SPv1 call, when this was part of expectsShell()
+     *
+     * @deprecated use $this->screenIsRunning() instead
+     *
+     * @param  string $sessionName
+     *         name of the screen session to check on
+     * @return void
+     */
+    public function isRunningInScreen($sessionName)
+    {
+        return $this->screenIsRunning($sessionName);
+    }
 
-		// what are we doing?
-		$log = $st->startAction("make sure screen session '{$sessionName}' is running on host '{$this->args[0]}'");
+    /**
+     * the old SPv1 call, when this was part of expectsShell()
+     *
+     * @deprecated use $this->screenIsNotRunning() instead
+     *
+     * @param  string $sessionName
+     *         name of the screen session to check on
+     * @return void
+     */
+    public function isNotRunningInScreen($sessionName)
+    {
+        return $this->screenIsNotRunning($sessionName);
+    }
 
-		// is this session still running?
-		if ($st->fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
-			$log->endAction();
-			return;
-		}
+    public function hasFileWithPermissions($filename, $owner, $group, $mode)
+    {
+        // shorthand
+        $octMode = decoct($mode);
 
-		$log->endAction("session is not running");
-		throw new E5xx_ExpectFailed(__METHOD__, "session '{$sessionName}' running", "session '{$sessionName}' not running");
-	}
+        // what are we doing?
+        $log = usingLog()->startAction("make sure file '{$filename}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
 
-	public function screenIsNotRunning($sessionName)
-	{
-		// shorthand
-		$st = $this->st;
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// what are we doing?
-		$log = $st->startAction("make sure screen session '{$sessionName}' is not running on host '{$this->args[0]}'");
+        // get the file details
+        $details = fromHost($hostDetails->hostId)->getFileDetails($filename);
 
-		// get the details
-		if (!$st->fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
-			$log->endAction("session is not running");
-			return;
-		}
+        // validate the details
+        if ($details === null) {
+            throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' exists", "'{$filename}' does not exist");
+        }
 
-		$log->endAction("session is running");
-		throw new E5xx_ExpectFailed(__METHOD__, "session not running", "session running as PID {$processDetails->pid}");
-	}
+        if ($details->type != 'file') {
+            throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' is a file", "'{$filename}' is type '{$details->type}'");
+        }
 
-	/**
-	 * the old SPv1 call, when this was part of expectsShell()
-	 *
-	 * @deprecated use $this->screenIsRunning() instead
-	 *
-	 * @param  string $sessionName
-	 *         name of the screen session to check on
-	 * @return void
-	 */
-	public function isRunningInScreen($sessionName)
-	{
-		return $this->screenIsRunning($sessionName);
-	}
+        if ($details->mode != $mode) {
+            $theirOctMode = decoct($details->mode);
+            throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' has permissions '{$octMode}'", "'{$filename}' has permissions '{$theirOctMode}'");
+        }
 
-	/**
-	 * the old SPv1 call, when this was part of expectsShell()
-	 *
-	 * @deprecated use $this->screenIsNotRunning() instead
-	 *
-	 * @param  string $sessionName
-	 *         name of the screen session to check on
-	 * @return void
-	 */
-	public function isNotRunningInScreen($sessionName)
-	{
-		return $this->screenIsNotRunning($sessionName);
-	}
+        if ($details->user != $owner || $details->group != $group) {
+            throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' has ownership '{$owner}:{$group}'", "'{$filename}' has ownership '{$details->user}:{$details->group}'");
+        }
 
-	public function hasFileWithPermissions($filename, $owner, $group, $mode)
-	{
-		// shorthand
-		$st = $this->st;
-		$octMode = decoct($mode);
+        // if we get here, then all is good
+        $log->endAction();
+    }
 
-		// what are we doing?
-		$log = $st->startAction("make sure file '{$filename}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
+    public function hasFolderWithPermissions($folder, $owner, $group, $mode)
+    {
+        // shorthand
+        $octMode = decoct($mode);
 
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
+        // what are we doing?
+        $log = usingLog()->startAction("make sure folder '{$folder}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
 
-		// get the file details
-		$details = $st->fromHost($hostDetails->hostId)->getFileDetails($filename);
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
 
-		// validate the details
-		if ($details === null) {
-			throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' exists", "'{$filename}' does not exist");
-		}
+        // get the file details
+        $details = fromHost($hostDetails->hostId)->getFileDetails($folder);
 
-		if ($details->type != 'file') {
-			throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' is a file", "'{$filename}' is type '{$details->type}'");
-		}
+        // validate the details
+        if ($details === null) {
+            throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' exists", "'{$folder}' does not exist");
+        }
 
-		if ($details->mode != $mode) {
-			$theirOctMode = decoct($details->mode);
-			throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' has permissions '{$octMode}'", "'{$filename}' has permissions '{$theirOctMode}'");
-		}
+        if ($details->type != 'dir') {
+            throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' is a file", "'{$folder}' is type '{$details->type}'");
+        }
 
-		if ($details->user != $owner || $details->group != $group) {
-			throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' has ownership '{$owner}:{$group}'", "'{$filename}' has ownership '{$details->user}:{$details->group}'");
-		}
+        if ($details->mode != $mode) {
+            $theirOctMode = decoct($details->mode);
+            throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' has permissions '{$octMode}'", "'{$folder}' has permissions '{$theirOctMode}'");
+        }
 
-		// if we get here, then all is good
-		$log->endAction();
-	}
+        if ($details->user != $owner || $details->group != $group) {
+            throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' has ownership '{$owner}:{$group}'", "'{$folder}' has ownership '{$details->user}:{$details->group}'");
+        }
 
-	public function hasFolderWithPermissions($folder, $owner, $group, $mode)
-	{
-		// shorthand
-		$st = $this->st;
-		$octMode = decoct($mode);
-
-		// what are we doing?
-		$log = $st->startAction("make sure folder '{$folder}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
-
-		// make sure we have valid host details
-		$hostDetails = $this->getHostDetails();
-
-		// get the file details
-		$details = $st->fromHost($hostDetails->hostId)->getFileDetails($folder);
-
-		// validate the details
-		if ($details === null) {
-			throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' exists", "'{$folder}' does not exist");
-		}
-
-		if ($details->type != 'dir') {
-			throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' is a file", "'{$folder}' is type '{$details->type}'");
-		}
-
-		if ($details->mode != $mode) {
-			$theirOctMode = decoct($details->mode);
-			throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' has permissions '{$octMode}'", "'{$folder}' has permissions '{$theirOctMode}'");
-		}
-
-		if ($details->user != $owner || $details->group != $group) {
-			throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' has ownership '{$owner}:{$group}'", "'{$folder}' has ownership '{$details->user}:{$details->group}'");
-		}
-
-		// if we get here, then all is good
-		$log->endAction();
-	}
+        // if we get here, then all is good
+        $log->endAction();
+    }
 }

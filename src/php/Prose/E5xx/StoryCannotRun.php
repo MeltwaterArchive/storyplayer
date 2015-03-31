@@ -61,11 +61,11 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 class E5xx_StoryCannotRun extends Exxx_Exception
 {
     /**
-     * @param string $storyName
+     * @param string $msg
      */
     public function __construct($msg)
     {
-    	$msg = "story cannot run: " . $msg;
+        $msg = "story cannot run: " . $msg;
         parent::__construct(500, $msg, $msg);
     }
 }

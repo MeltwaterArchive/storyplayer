@@ -56,22 +56,19 @@ namespace Prose;
  */
 class ForeachHostWithRole extends HostsByRoleBase
 {
-	public function __call($moduleName, $params)
-	{
-		// shorthand
-		$st = $this->st;
+    public function __call($moduleName, $params)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("for each host with role '{$this->roleName}' ...");
 
-		// what are we doing?
-		$log = $st->startAction("for each host with role '{$this->roleName}' ...");
+        // get the hosts details
+        $hostsDetails = $this->retrieveHostsDetails();
 
-		// get the hosts details
-		$hostsDetails = $this->retrieveHostsDetails();
+        // build the iterator that we're going to use
+        $return = new DelayedHostsModuleIterator($this->st, $hostsDetails, $moduleName);
 
-		// build the iterator that we're going to use
-		$return = new DelayedHostsModuleIterator($st, $hostsDetails, $moduleName);
-
-		// all done
-		$log->endAction();
-		return $return;
-	}
+        // all done
+        $log->endAction();
+        return $return;
+    }
 }

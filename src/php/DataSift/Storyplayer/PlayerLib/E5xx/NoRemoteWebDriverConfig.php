@@ -58,8 +58,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_NoRemoteWebDriverConfig extends Exxx_Exception
 {
-	public function __construct() {
-		$msg = "No 'remotewebdriver' config section found in loaded config files";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct() {
+        $msg = "No 'remotewebdriver' config section found in loaded config files";
+        parent::__construct(500, $msg, $msg);
+    }
 }

@@ -55,61 +55,61 @@ namespace DataSift\Storyplayer\OutputLib;
  */
 class CodeFormatter
 {
-	static public function formatCode($parsedCode)
-	{
-		// special case - make sure we have code to format
-		if ($parsedCode === null) {
-			return 'no code' . PHP_EOL;
-		}
+    static public function formatCode($parsedCode)
+    {
+        // special case - make sure we have code to format
+        if ($parsedCode === null) {
+            return 'no code' . PHP_EOL;
+        }
 
-		// we have the parsed code
-		// we're going to need something to turn the parsed code back
-		// into source code
-		$prettyPrinter = new \PhpParser\PrettyPrinter\Standard;
+        // we have the parsed code
+        // we're going to need something to turn the parsed code back
+        // into source code
+        $prettyPrinter = new \PhpParser\PrettyPrinter\Standard;
 
-		// convert the parsed code into a string
-		//
-		// this string may contain more than just the code we are
-		// interested in
-		$codeToPrint = $prettyPrinter->prettyPrint([$parsedCode]);
+        // convert the parsed code into a string
+        //
+        // this string may contain more than just the code we are
+        // interested in
+        $codeToPrint = $prettyPrinter->prettyPrint([$parsedCode]);
 
-		// let's strip stuff
-		$codeToPrint = self::stripComments($codeToPrint);
+        // let's strip stuff
+        $codeToPrint = self::stripComments($codeToPrint);
 
-		// all done
-		return $codeToPrint;
-	}
+        // all done
+        return $codeToPrint;
+    }
 
-	/**
-	 *
-	 * @param  string $codeToPrint
-	 * @return string
-	 */
-	static public function stripComments($codeToPrint)
-	{
-		// now, strip out any comment lines
-		$return = trim(preg_replace('|^(//.*)|m', '', $codeToPrint));
+    /**
+     *
+     * @param  string $codeToPrint
+     * @return string
+     */
+    static public function stripComments($codeToPrint)
+    {
+        // now, strip out any comment lines
+        $return = trim(preg_replace('|^(//.*)|m', '', $codeToPrint));
 
-		// all done
-		return $return;
-	}
+        // all done
+        return $return;
+    }
 
-	/**
-	 *
-	 * @param  string  $codeToPrint
-	 * @param  integer $indentAmount
-	 * @return string
-	 */
-	static public function indentBySpaces($codeToPrint, $indentAmount)
-	{
-		// the string to indent with
-		$spaces = str_repeat(' ', $indentAmount);
+    /**
+     *
+     * @param  string  $codeToPrint
+     * @param  integer $indentAmount
+     * @return string
+     */
+    static public function indentBySpaces($codeToPrint, $indentAmount)
+    {
+        // the string to indent with
+        $spaces = str_repeat(' ', $indentAmount);
 
-		// do the indentation
-		$return = preg_replace('|^(.*)|m', $spaces . '\\1', $codeToPrint);
+        // do the indentation
+        $return = preg_replace('|^(.*)|m', $spaces . '\\1', $codeToPrint);
 
-		// all done
-		return $return;
+        // all done
+        return $return;
 
-	}
+    }
 }

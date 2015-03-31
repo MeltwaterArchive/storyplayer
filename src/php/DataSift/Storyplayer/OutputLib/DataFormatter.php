@@ -57,103 +57,103 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class DataFormatter
 {
-	/**
-	 * are we allowing the full length of the output?
-	 *
-	 * @var boolean
-	 */
-	private $isVerbose = false;
+    /**
+     * are we allowing the full length of the output?
+     *
+     * @var boolean
+     */
+    private $isVerbose = false;
 
-	/**
-	 * are we allowing the full length of the output?
-	 *
-	 * @return bool
-	 */
-	public function getIsVerbose()
-	{
-		return $this->isVerbose;
-	}
+    /**
+     * are we allowing the full length of the output?
+     *
+     * @return bool
+     */
+    public function getIsVerbose()
+    {
+        return $this->isVerbose;
+    }
 
-	/**
-	 * we want to allow the full length of the output
-	 *
-	 * @param boolean $isVerbose
-	 *        should we allow the full length of the output?
-	 */
-	public function setIsVerbose($isVerbose = true)
-	{
-		$this->isVerbose = $isVerbose;
-	}
+    /**
+     * we want to allow the full length of the output
+     *
+     * @param boolean $isVerbose
+     *        should we allow the full length of the output?
+     */
+    public function setIsVerbose($isVerbose = true)
+    {
+        $this->isVerbose = $isVerbose;
+    }
 
-	/**
-	 * convert data of any time to be a string, and truncate if required
-	 *
-	 * this string can then be safely written to the log file
-	 *
-	 * @param  mixed  $data
-	 *         the data to be converted
-	 * @return string
-	 *         the converted data
-	 */
-	public function convertData($data)
-	{
-		$printer = new DataPrinter();
-		$logValue = $printer->convertToString($data);
+    /**
+     * convert data of any time to be a string, and truncate if required
+     *
+     * this string can then be safely written to the log file
+     *
+     * @param  mixed  $data
+     *         the data to be converted
+     * @return string
+     *         the converted data
+     */
+    public function convertData($data)
+    {
+        $printer = new DataPrinter();
+        $logValue = $printer->convertToString($data);
 
-		return $this->truncateIfRequired($logValue);
-	}
+        return $this->truncateIfRequired($logValue);
+    }
 
-	/**
-	 * convert an array of data to a single string for output, and
-	 * truncate if required
-	 *
-	 * @param  array<mixed>|object $message
-	 *         the data set to convert
-	 * @return string
-	 *         the converted data
-	 */
-	public function convertMessageArray($message)
-	{
-		$printer = new DataPrinter();
-		$parts = false;
+    /**
+     * convert an array of data to a single string for output, and
+     * truncate if required
+     *
+     * @param  array<mixed>|object $message
+     *         the data set to convert
+     * @return string
+     *         the converted data
+     */
+    public function convertMessageArray($message)
+    {
+        $printer = new DataPrinter();
+        $parts = false;
 
-		foreach ($message as $part) {
-			$parts[] = $printer->convertToString($part);
-		}
+        foreach ($message as $part) {
+            $parts[] = $printer->convertToString($part);
+        }
 
-		$logValue = implode(' ', $parts);
+        $logValue = implode(' ', $parts);
 
-		return $this->truncateIfRequired($logValue);
-	}
+        return $this->truncateIfRequired($logValue);
+    }
 
-	/**
-	 * truncate a string if it is too long
-	 *
-	 * truncates the input string to a maximum of 100 chars, unless either:
-	 * - $alwaysVerbose is TRUE, or
-	 * - $this->getIsVerbose() is TRUE
-	 *
-	 * we use this to avoid filling the log file with megabytes of output
-	 * when var_dump()ing some internal objects
-	 *
-	 * @param  string $logValue
-	 *         the input data that might need truncating
-	 * @param  boolean $alwaysVerbose
-	 *         if TRUE, overrides $this->getIsVerbose()
-	 * @return string
-	 *         the (possibly) truncated input string
-	 */
-	protected function truncateIfRequired($logValue, $alwaysVerbose = false)
-	{
-		$isVerbose = $alwaysVerbose;
-		if (!$isVerbose) {
-			$isVerbose = $this->isVerbose;
-		}
+    /**
+     * truncate a string if it is too long
+     *
+     * truncates the input string to a maximum of 100 chars, unless either:
+     * - $alwaysVerbose is TRUE, or
+     * - $this->getIsVerbose() is TRUE
+     *
+     * we use this to avoid filling the log file with megabytes of output
+     * when var_dump()ing some internal objects
+     *
+     * @param  string $logValue
+     *         the input data that might need truncating
+     * @param  boolean $alwaysVerbose
+     *         if TRUE, overrides $this->getIsVerbose()
+     * @return string
+     *         the (possibly) truncated input string
+     */
+    protected function truncateIfRequired($logValue, $alwaysVerbose = false)
+    {
+        $isVerbose = $alwaysVerbose;
+        if (!$isVerbose) {
+            $isVerbose = $this->isVerbose;
+        }
 
-		if (!$isVerbose && strlen($logValue) > 100) {
-			$logValue = substr($logValue, 0, 100) . ' ...';
-		}
+        if (!$isVerbose && strlen($logValue) > 100) {
+            $logValue = substr($logValue, 0, 100) . ' ...';
+        }
 
-		return $logValue;
-	}
+        return $logValue;
+    }
 }

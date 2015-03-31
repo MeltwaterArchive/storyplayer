@@ -74,7 +74,7 @@ use DataSift\Storyplayer\Injectables;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class PlayStory_Command extends BaseCommand
+class PlayStory_Command extends BaseCommand implements CliSignalHandler
 {
     /**
      * should we let background processes survive when we shutdown?
@@ -150,7 +150,7 @@ class PlayStory_Command extends BaseCommand
      *
      * @param  CliEngine $engine
      * @param  array     $params
-     * @param  Injectables $injectables
+     * @param  Injectables|null $injectables
      * @return integer
      */
     public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
@@ -212,8 +212,8 @@ class PlayStory_Command extends BaseCommand
         $this->initFeaturesBeforeModulesAvailable($engine);
 
         // now it is safe to create our shorthand
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $runtimeConfig        = $injectables->getRuntimeConfig();
+        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
         $output               = $injectables->output;
 
         // save the output for use in other methods
@@ -346,7 +346,7 @@ class PlayStory_Command extends BaseCommand
 
     /**
      *
-     * @param  CliEngine   $engine
+     * @param  CliEngine   $cliEngine
      * @param  Injectables $injectables
      * @param  array       $cliParams
      * @return void

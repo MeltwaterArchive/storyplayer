@@ -57,23 +57,23 @@ use Prose\E5xx_ActionFailed;
  */
 class ProvisioningLib
 {
-	/**
-	 * @param PlayerLib\StoryTeller $st
-	 */
-	static public function getProvisioner($st, $type)
-	{
-		// what are we looking for?
-		$className = 'DataSift\Storyplayer\ProvisioningLib\Provisioners\\' . ucfirst($type) . 'Provisioner';
+    /**
+     * @param PlayerLib\StoryTeller $st
+     */
+    static public function getProvisioner($st, $type)
+    {
+        // what are we looking for?
+        $className = 'DataSift\Storyplayer\ProvisioningLib\Provisioners\\' . ucfirst($type) . 'Provisioner';
 
-		// does it exist?
-		if (!class_exists($className)) {
-			throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' to use for provisioning via '{$type}'");
-		}
+        // does it exist?
+        if (!class_exists($className)) {
+            throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' to use for provisioning via '{$type}'");
+        }
 
-		// create the adapter
-		$adapter = new $className($st);
+        // create the adapter
+        $adapter = new $className($st);
 
-		// all done
-		return $adapter;
-	}
+        // all done
+        return $adapter;
+    }
 }

@@ -49,6 +49,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 /**
  * Helper class for finding multiple DOM elements to act upon
  *
+ * @method mixed elementWithId(string $id)
+ *
  * @category  Libraries
  * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
@@ -58,40 +60,43 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class MultiElementAction extends BaseElementAction
 {
-	protected $st;
-	protected $pageContext;
-	protected $action;
-	protected $actionDesc;
-	protected $baseElement;
+    protected $pageContext;
+    protected $action;
+    protected $actionDesc;
 
-	/**
-	 * @param \Closure $action
-	 * @param string $actionDesc
-	 */
-	public function __construct(StoryTeller $st, $action, $actionDesc, $baseElement = null)
-	{
-		$this->st          = $st;
-		$this->action      = $action;
-		$this->actionDesc  = $actionDesc;
-		$this->baseElement = $baseElement;
-	}
+    /**
+     * @param \Closure $action
+     * @param string $actionDesc
+     */
+    public function __construct($action, $actionDesc, $baseElement = null)
+    {
+        parent::__construct($baseElement);
 
-	public function __call($methodName, $methodArgs)
-	{
-		// turn the method name into an array of words
-		$words = $this->convertMethodNameToWords($methodName);
+        $this->action      = $action;
+        $this->actionDesc  = $actionDesc;
+    }
 
-		// how many elements are we searching for?
-		$countType  = $this->determineCountType($words);
+    /**
+     * @param  string $methodName
+     * @param  array $methodArgs
+     * @return mixed
+     */
+    public function __call($methodName, $methodArgs)
+    {
+        // turn the method name into an array of words
+        $words = $this->convertMethodNameToWords($methodName);
 
-		// get the elements we need
-		$elements = $this->retrieveElements($methodName, $methodArgs);
+        // how many elements are we searching for?
+        $countType  = $this->determineCountType($words);
 
-		// now that we have our elements, let's apply the action to them
-		$action = $this->action;
-		$return = $action($this->st, $countType, $elements, $methodArgs[0], $methodName);
+        // get the elements we need
+        $elements = $this->retrieveElements($methodName, $methodArgs);
 
-		// all done
-		return $return;
-	}
+        // now that we have our elements, let's apply the action to them
+        $action = $this->action;
+        $return = $action($countType, $elements, $methodArgs[0], $methodName);
+
+        // all done
+        return $return;
+    }
 }

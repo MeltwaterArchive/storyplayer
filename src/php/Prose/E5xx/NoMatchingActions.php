@@ -56,8 +56,8 @@ namespace Prose;
  */
 class E5xx_NoMatchingActions extends E5xx_ProseException
 {
-	public function __construct($methodName) {
-		$msg = "Cannot find a suitable class for actions of type '$methodName'";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct($methodName) {
+        $msg = "Cannot find a suitable class for actions of type '$methodName'";
+        parent::__construct(500, $msg, $msg);
+    }
 }

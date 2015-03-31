@@ -59,7 +59,7 @@ use Phix_Project\ExceptionsLib1\Legacy_ErrorException;
  */
 class JsonFileLoader
 {
-    static public function loadFile($filename)
+    public static function loadFile($filename)
     {
         // does the file exist?
         if (!file_exists($filename)) {

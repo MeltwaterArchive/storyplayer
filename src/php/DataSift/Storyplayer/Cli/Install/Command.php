@@ -64,27 +64,27 @@ use stdClass;
  */
 class Install_Command extends CliCommand
 {
-	public function __construct()
-	{
-		// define the command
-		$this->setName('install');
-		$this->setShortDescription('download optional dependencies');
-		$this->setLongDescription(
-			"Use this command to download any optional dependencies"
-			. " that you might need e.g. chromedriver for selenium."
-			.PHP_EOL
-		);
-	}
+    public function __construct()
+    {
+        // define the command
+        $this->setName('install');
+        $this->setShortDescription('download optional dependencies');
+        $this->setLongDescription(
+            "Use this command to download any optional dependencies"
+            . " that you might need e.g. chromedriver for selenium."
+            .PHP_EOL
+        );
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return void
-	 */
-	public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
-	{
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  array     $params
+     * @param  mixed     $injectables
+     * @return void
+     */
+    public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
+    {
         // we need to wrap our code to catch old-style PHP errors
         $legacyHandler = new Legacy_ErrorHandler();
         try {
@@ -95,73 +95,73 @@ class Install_Command extends CliCommand
             $injectables->output->logCliError($e->getMessage());
             exit(1);
         }
-	}
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return void
-	 */
-	public function processInsideLegacyHandler(CliEngine $engine, $params = array(), $additionalContext = null)
-	{
-		// tell the user what is happening
-		echo "Additional files will be added to the vendor/ folder\n";
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  array     $params
+     * @param  mixed     $additionalContext
+     * @return void
+     */
+    public function processInsideLegacyHandler(CliEngine $engine, $params = array(), $additionalContext = null)
+    {
+        // tell the user what is happening
+        echo "Additional files will be added to the vendor/ folder\n";
 
-		// find a list of files that we need to download
-		$wdConfig = new WebDriverConfiguration;
-		$filesToDownload = $wdConfig->getDependencies();
+        // find a list of files that we need to download
+        $wdConfig = new WebDriverConfiguration;
+        $filesToDownload = $wdConfig->getDependencies();
 
-		// add in the Sauce Connect JAR
-		$sauceConnect = new stdClass;
-		$sauceConnect->name = "Sauce-Connect.jar";
-		$sauceConnect->url  = "http://saucelabs.com/downloads/Sauce-Connect-latest.zip";
-		$filesToDownload[] = $sauceConnect;
+        // add in the Sauce Connect JAR
+        $sauceConnect = new stdClass;
+        $sauceConnect->name = "Sauce-Connect.jar";
+        $sauceConnect->url  = "http://saucelabs.com/downloads/Sauce-Connect-latest.zip";
+        $filesToDownload[] = $sauceConnect;
 
-		// helper for downloading files
-		$downloader = new FileDownloader();
+        // helper for downloading files
+        $downloader = new FileDownloader();
 
-		// let's get the files downloaded
-		foreach ($filesToDownload as $file){
+        // let's get the files downloaded
+        foreach ($filesToDownload as $file){
 
-			if (!is_object($file->url)){
-				$url = $file->url;
-			} else {
-				$platform = strtolower(php_uname("s") . '/' . php_uname("m"));
-				if (isset($file->url->{$platform})){
-					$url = $file->url->{$platform};
-				} else if (isset($file->url->generic)){
-					$url =  $file->url->generic;
-				}
-			}
+            if (!is_object($file->url)){
+                $url = $file->url;
+            } else {
+                $platform = strtolower(php_uname("s") . '/' . php_uname("m"));
+                if (isset($file->url->{$platform})){
+                    $url = $file->url->{$platform};
+                } else if (isset($file->url->generic)){
+                    $url =  $file->url->generic;
+                }
+            }
 
-			if (!isset($url)){
-				throw new Exception("No supported downloads for ".$file->name);
-			}
+            if (!isset($url)){
+                throw new Exception("No supported downloads for ".$file->name);
+            }
 
-			// How big is the file?
-			// via http://www.php.net/manual/en/function.filesize.php#84130
-			$headers = array_change_key_case(get_headers($url, 1),CASE_LOWER);
-			if ( !preg_match('/HTTP\/1\.(0|1) 200 OK/', $headers[0] ) ) {
-				$fileSize = $headers['content-length'][1];
-			} else {
-				$fileSize = $headers['content-length'];
-			}
+            // How big is the file?
+            // via http://www.php.net/manual/en/function.filesize.php#84130
+            $headers = array_change_key_case(get_headers($url, 1),CASE_LOWER);
+            if ( !preg_match('/HTTP\/1\.(0|1) 200 OK/', $headers[0] ) ) {
+                $fileSize = $headers['content-length'][1];
+            } else {
+                $fileSize = $headers['content-length'];
+            }
 
-			// Update the user on what's going on
-			echo "Downloading: " . $url.' ('.round($fileSize/1024/1024, 3).'mb)'.PHP_EOL;
+            // Update the user on what's going on
+            echo "Downloading: " . $url.' ('.round($fileSize/1024/1024, 3).'mb)'.PHP_EOL;
 
-			// Download it
-			$fileBase = basename($url);
-			$downloader->download($url, "./vendor/bin/".$fileBase);
+            // Download it
+            $fileBase = basename($url);
+            $downloader->download($url, "./vendor/bin/".$fileBase);
 
-			// Make sure that the relevant files are executable
-			if (isset($file->makeExecutable)) {
-				foreach ($file->makeExecutable as $exec){
-					chmod("./vendor/bin/".$exec, 0755);
-				}
-			}
-		}
-	}
+            // Make sure that the relevant files are executable
+            if (isset($file->makeExecutable)) {
+                foreach ($file->makeExecutable as $exec){
+                    chmod("./vendor/bin/".$exec, 0755);
+                }
+            }
+        }
+    }
 }

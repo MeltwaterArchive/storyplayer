@@ -73,7 +73,9 @@ class HardCodedSystemsUnderTest extends HardCodedList
     public function initDefaultConfig()
     {
         // defaults for the local computer
-        $config = $this->newConfig('localhost')->getConfig();
+        //
+        // we create it with no settings
+        $this->newConfig('localhost');
 
         // all done
     }

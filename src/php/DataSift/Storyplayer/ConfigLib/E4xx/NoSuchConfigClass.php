@@ -60,7 +60,7 @@ class E4xx_NoSuchConfigClass extends Exxx_Exception
 {
     public function __construct($classname)
     {
-    	$msg = "No such config class '{$classname}'";
+        $msg = "No such config class '{$classname}'";
         parent::__construct(400, $msg, $msg);
     }
 }

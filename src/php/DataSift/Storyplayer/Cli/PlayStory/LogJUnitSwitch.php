@@ -60,47 +60,47 @@ use Phix_Project\ValidationLib4\File_MustBeFileOrHaveValidParent;
  */
 class PlayStory_LogJUnitSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('junit');
-		$this->setShortDescription('output a test report in JUnit XML format');
-		$this->setLongDesc(
-			"Use this switch to generate a test report file in JUnit XML format."
-			. PHP_EOL . PHP_EOL
-			. "Popular Continuous Integration servers such as Jenkins come with plugins that"
-			. " can parse and report on the JUnit XML format."
-			. PHP_EOL . PHP_EOL
-			. "See http://phpunit.de/manual/current/en/logging.html#logging.xml for the spec that we've implemented for Storyplayer."
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('junit');
+        $this->setShortDescription('output a test report in JUnit XML format');
+        $this->setLongDesc(
+            "Use this switch to generate a test report file in JUnit XML format."
+            . PHP_EOL . PHP_EOL
+            . "Popular Continuous Integration servers such as Jenkins come with plugins that"
+            . " can parse and report on the JUnit XML format."
+            . PHP_EOL . PHP_EOL
+            . "See http://phpunit.de/manual/current/en/logging.html#logging.xml for the spec that we've implemented for Storyplayer."
+        );
 
-		// what are the long switches?
-		$this->addLongSwitch('log-junit');
+        // what are the long switches?
+        $this->addLongSwitch('log-junit');
 
-		// what is our parameter?
-		$this->setRequiredArg('<file>', "the file to write the report to");
-		$this->setArgValidator(new File_MustBeFileOrHaveValidParent());
+        // what is our parameter?
+        $this->setRequiredArg('<file>', "the file to write the report to");
+        $this->setArgValidator(new File_MustBeFileOrHaveValidParent());
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		if (!isset($engine->options->reports)) {
-			$engine->options->reports = [];
-		}
-		$engine->options->reports['JUnit'] = $params[0];
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        if (!isset($engine->options->reports)) {
+            $engine->options->reports = [];
+        }
+        $engine->options->reports['JUnit'] = $params[0];
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

@@ -55,84 +55,86 @@ namespace DataSift\Storyplayer\PlayerLib;
  */
 class Story_Result extends PhaseGroup_Result
 {
-	/**
-	 *
-	 * @var Story
-	 */
-	public $story           = null;
+    /**
+     *
+     * @var Story
+     */
+    public $story           = null;
 
-	/**
-	 * is this a story where a failure is the expected outcome?
-	 * @var boolean
-	 */
-	public $storyShouldFail = false;
+    /**
+     * is this a story where a failure is the expected outcome?
+     * @var boolean
+     */
+    public $storyShouldFail = false;
 
-	public $resultStrings = [
-		'UNKNOWN',
-		'PASS',
-		'FAIL',
-		'ERROR',
-		'INCOMPLETE',
-		'BLACKLISTED',
-		'SKIPPED',
-	];
+    public $filename = null;
 
-	const PASS = 1;
+    public $resultStrings = [
+        'UNKNOWN',
+        'PASS',
+        'FAIL',
+        'ERROR',
+        'INCOMPLETE',
+        'BLACKLISTED',
+        'SKIPPED',
+    ];
 
-	public function __construct(Story $story)
-	{
-		// initialise our parent first
-		parent::__construct($story->getCategory() . ' > ' . $story->getGroupAsString() . ' > ' . $story->getName());
+    const PASS = 1;
 
-		// remember the story we are reporting on
-		$this->story = $story;
+    public function __construct(Story $story)
+    {
+        // initialise our parent first
+        parent::__construct($story->getCategory() . ' > ' . $story->getGroupAsString() . ' > ' . $story->getName());
 
-		// we want success to say 'PASS' rather than 'OKAY'
-		$this->resultStrings[self::OKAY] = 'PASS';
-	}
+        // remember the story we are reporting on
+        $this->story = $story;
 
-	public function getStoryShouldFail()
-	{
-		return $this->storyShouldFail;
-	}
+        // we want success to say 'PASS' rather than 'OKAY'
+        $this->resultStrings[self::OKAY] = 'PASS';
+    }
 
-	public function setStoryShouldFail()
-	{
-		$this->storyShouldFail = true;
-	}
+    public function getStoryShouldFail()
+    {
+        return $this->storyShouldFail;
+    }
 
-	public function setStoryHasSucceeded()
-	{
-		$this->setPhaseGroupHasSucceeded();
-	}
+    public function setStoryShouldFail()
+    {
+        $this->storyShouldFail = true;
+    }
 
-	public function setStoryHasBeenBlacklisted($phaseResult)
-	{
-		$this->setPhaseGroupHasBeenBlacklisted($phaseResult);
-	}
+    public function setStoryHasSucceeded()
+    {
+        $this->setPhaseGroupHasSucceeded();
+    }
 
-	public function setStoryIsIncomplete($phaseResult)
-	{
-		$this->setPhaseGroupIsIncomplete($phaseResult);
-	}
+    public function setStoryHasBeenBlacklisted($phaseResult)
+    {
+        $this->setPhaseGroupHasBeenBlacklisted($phaseResult);
+    }
 
-	public function setStoryHasFailed($phaseResult)
-	{
-		$this->setPhaseGroupHasFailed($phaseResult);
-	}
+    public function setStoryIsIncomplete($phaseResult)
+    {
+        $this->setPhaseGroupIsIncomplete($phaseResult);
+    }
 
-	public function setStoryHasError($phaseResult)
-	{
-		$this->setPhaseGroupHasError($phaseResult);
-	}
+    public function setStoryHasFailed($phaseResult)
+    {
+        $this->setPhaseGroupHasFailed($phaseResult);
+    }
 
-	public function setStoryHasBeenSkipped($phaseResult)
-	{
-		$this->setPhaseGroupHasBeenSkipped($phaseResult);
-	}
+    public function setStoryHasError($phaseResult)
+    {
+        $this->setPhaseGroupHasError($phaseResult);
+    }
 
-	public function calculateStoryResult()
-	{
-		// no-op
-	}
+    public function setStoryHasBeenSkipped($phaseResult)
+    {
+        $this->setPhaseGroupHasBeenSkipped($phaseResult);
+    }
+
+    public function calculateStoryResult()
+    {
+        // no-op
+    }
 }

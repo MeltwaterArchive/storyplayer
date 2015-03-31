@@ -55,69 +55,60 @@ namespace Prose;
  */
 class ExpectsEc2Image extends Ec2ImageBase
 {
-	public function isAvailable()
-	{
-		$this->requiresValidImage(__METHOD__);
+    public function isAvailable()
+    {
+        $this->requiresValidImage(__METHOD__);
 
-		// shorthand
-		$st = $this->st;
+        // what are we doing?
+        $log = usingLog()->startAction("make sure EC2 image '{$this->amiId}' is available");
 
-		// what are we doing?
-		$log = $st->startAction("make sure EC2 image '{$this->amiId}' is available");
+        // get the state of the image
+        $imageState = $this->image['State'];
 
-		// get the state of the image
-		$imageState = $this->image['State'];
+        if ($imageState != 'available') {
+            $log->endAction("image state is '{$imageState}'");
+            throw new E5xx_ExpectFailed(__METHOD__, "state is 'available'", "state is '{$imageState}'");
+        }
 
-		if ($imageState != 'available') {
-			$log->endAction("image state is '{$imageState}'");
-			throw new E5xx_ExpectFailed(__METHOD__, "state is 'available'", "state is '{$imageState}'");
-		}
+        // if we get here, all is well
+        $log->endAction();
+    }
 
-		// if we get here, all is well
-		$log->endAction();
-	}
+    public function hasFailed()
+    {
+        $this->requiresValidImage(__METHOD__);
 
-	public function hasFailed()
-	{
-		$this->requiresValidImage(__METHOD__);
+        // what are we doing?
+        $log = usingLog()->startAction("make sure EC2 image '{$this->amiId}' has failed");
 
-		// shorthand
-		$st = $this->st;
+        // get the state of the image
+        $imageState = $this->image['State'];
 
-		// what are we doing?
-		$log = $st->startAction("make sure EC2 image '{$this->amiId}' has failed");
+        if ($imageState != 'failed') {
+            $log->endAction("image state is '{$imageState}'");
+            throw new E5xx_ExpectFailed(__METHOD__, "state is 'failed'", "state is '{$imageState}'");
+        }
 
-		// get the state of the image
-		$imageState = $this->image['State'];
+        // if we get here, all is well
+        $log->endAction();
+    }
 
-		if ($imageState != 'failed') {
-			$log->endAction("image state is '{$imageState}'");
-			throw new E5xx_ExpectFailed(__METHOD__, "state is 'failed'", "state is '{$imageState}'");
-		}
+    public function isPending()
+    {
+        $this->requiresValidImage(__METHOD__);
 
-		// if we get here, all is well
-		$log->endAction();
-	}
+        // what are we doing?
+        $log = usingLog()->startAction("make sure EC2 image '{$this->amiId}' is pending");
 
-	public function isPending()
-	{
-		$this->requiresValidImage(__METHOD__);
+        // get the state of the image
+        $imageState = $this->image['State'];
 
-		// shorthand
-		$st = $this->st;
+        if ($imageState != 'pending') {
+            $log->endAction("image state is '{$imageState}'");
+            throw new E5xx_ExpectFailed(__METHOD__, "state is 'pending'", "state is '{$imageState}'");
+        }
 
-		// what are we doing?
-		$log = $st->startAction("make sure EC2 image '{$this->amiId}' is pending");
-
-		// get the state of the image
-		$imageState = $this->image['State'];
-
-		if ($imageState != 'pending') {
-			$log->endAction("image state is '{$imageState}'");
-			throw new E5xx_ExpectFailed(__METHOD__, "state is 'pending'", "state is '{$imageState}'");
-		}
-
-		// if we get here, all is well
-		$log->endAction();
-	}
+        // if we get here, all is well
+        $log->endAction();
+    }
 }

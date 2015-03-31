@@ -64,28 +64,28 @@ use DataSift\Storyplayer\HostLib\VagrantVms;
  */
 class LocalVagrantVms extends VagrantVms implements SupportedHost
 {
-	/**
-	 * Check environmental details
-	 *
-	 * @param  stdClass $envDetails
-	 */
-	protected function checkEnvDetails($envDetails)
-	{
-		// make sure we have a Vagrantfile
-		if (!file_exists('Vagrantfile')) {
-			throw new E5xx_ActionFailed(__METHOD__, 'no Vagrantfile in current working directory');
-		}
-	}
+    /**
+     * Check environmental details
+     *
+     * @param  stdClass $envDetails
+     */
+    protected function checkEnvDetails($envDetails)
+    {
+        // make sure we have a Vagrantfile
+        if (!file_exists('Vagrantfile')) {
+            throw new E5xx_ActionFailed(__METHOD__, 'no Vagrantfile in current working directory');
+        }
+    }
 
-	/**
-	 * Get the Vagrant directory
-	 *
-	 * @param  stdClass $envDetails
-	 *
-	 * @return string
-	 */
-	protected function getVagrantDir($envDetails)
-	{
-		return getcwd();
-	}
+    /**
+     * Get the Vagrant directory
+     *
+     * @param  stdClass $envDetails
+     *
+     * @return string
+     */
+    protected function getVagrantDir($envDetails)
+    {
+        return getcwd();
+    }
 }

@@ -62,125 +62,110 @@ use PDOStatement;
  */
 class FromPDOStatement extends Prose
 {
-	public function __construct($st, $args)
-	{
-		// call our parent first
-		parent::__construct($st, $args);
+    public function __construct($st, $args)
+    {
+        // call our parent first
+        parent::__construct($st, $args);
 
-		// make sure we have a PDO connection to use
-		if (!isset($this->args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "param #1 must be a valid PDOStatement object");
-		}
-		if (!$this->args[0] instanceof PDOStatement) {
-			throw new E5xx_ActionFailed(__METHOD__, "param #1 must be an instance of PDOStatement");
-		}
-	}
+        // make sure we have a PDO connection to use
+        if (!isset($this->args[0])) {
+            throw new E5xx_ActionFailed(__METHOD__, "param #1 must be a valid PDOStatement object");
+        }
+        if (!$this->args[0] instanceof PDOStatement) {
+            throw new E5xx_ActionFailed(__METHOD__, "param #1 must be an instance of PDOStatement");
+        }
+    }
 
-	public function fetchAll()
-	{
-		// shorthand
-		$st = $this->st;
+    public function fetchAll()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("fetch all rows from the PDO query result");
 
-		// what are we doing?
-		$log = $st->startAction("fetch all rows from the PDO query result");
+        try
+        {
+            $rows = $this->args[0]->fetchAll();
 
-		try
-		{
-			$rows = $this->args[0]->fetchAll();
+            // all done
+            $log->endAction($rows);
 
-			// all done
-			$log->endAction($rows);
+            return $rows;
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
-			return $rows;
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+    public function fetchAssoc()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("fetch 1 row from the PDO query result");
 
-	public function fetchAssoc()
-	{
-		// shorthand
-		$st = $this->st;
+        try
+        {
+            $row = $this->args[0]->fetch(PDO::FETCH_ASSOC);
 
-		// what are we doing?
-		$log = $st->startAction("fetch 1 row from the PDO query result");
+            // all done
+            $log->endAction($row);
 
-		try
-		{
-			$row = $this->args[0]->fetch(PDO::FETCH_ASSOC);
+            return $row;
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
-			// all done
-			$log->endAction($row);
+    public function fetchNum()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("fetch 1 row from the PDO query result");
 
-			return $row;
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+        try
+        {
+            $row = $this->args[0]->fetch(PDO::FETCH_NUM);
 
-	public function fetchNum()
-	{
-		// shorthand
-		$st = $this->st;
+            // all done
+            $log->endAction($row);
 
-		// what are we doing?
-		$log = $st->startAction("fetch 1 row from the PDO query result");
+            return $row;
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
-		try
-		{
-			$row = $this->args[0]->fetch(PDO::FETCH_NUM);
+    public function fetchObj()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("fetch 1 row from the PDO query result");
 
-			// all done
-			$log->endAction($row);
+        try
+        {
+            $row = $this->args[0]->fetch(PDO::FETCH_OBJ);
 
-			return $row;
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
+            // all done
+            $log->endAction($row);
 
-	public function fetchObj()
-	{
-		// shorthand
-		$st = $this->st;
+            return $row;
+        }
+        catch (Exception $e)
+        {
+            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+        }
+    }
 
-		// what are we doing?
-		$log = $st->startAction("fetch 1 row from the PDO query result");
+    public function getRowCount()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("how many rows were affected by the last SQL query?");
 
-		try
-		{
-			$row = $this->args[0]->fetch(PDO::FETCH_OBJ);
+        // get the answer
+        $rowCount = $this->args[0]->rowCount();
 
-			// all done
-			$log->endAction($row);
-
-			return $row;
-		}
-		catch (Exception $e)
-		{
-			throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
-		}
-	}
-
-	public function getRowCount()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("how many rows were affected by the last SQL query?");
-
-		// get the answer
-		$rowCount = $this->args[0]->rowCount();
-
-		// all done
-		$log->endAction($rowCount);
-		return $rowCount;
-	}
+        // all done
+        $log->endAction($rowCount);
+        return $rowCount;
+    }
 }

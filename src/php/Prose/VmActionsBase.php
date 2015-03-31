@@ -58,114 +58,99 @@ use DataSift\Storyplayer\HostLib;
  */
 class VmActionsBase extends Prose
 {
-	public function __construct(StoryTeller $st, $args = array())
-	{
-		// call the parent constructor
-		parent::__construct($st, $args);
-	}
+    public function __construct(StoryTeller $st, $args = array())
+    {
+        // call the parent constructor
+        parent::__construct($st, $args);
+    }
 
-	public function destroyVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
+    public function destroyVm($vmName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("destroy VM '{$vmName}'");
 
-		// what are we doing?
-		$log = $st->startAction("destroy VM '{$vmName}'");
+        // get the VM details
+        $vmDetails = fromHost($vmName)->getDetails();
 
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+        // stop the VM
+        $host->destroyHost($vmDetails);
 
-		// stop the VM
-		$host->destroyHost($vmDetails);
+        // all done
+        $log->endAction();
+    }
 
-		// all done
-		$log->endAction();
-	}
+    public function stopVm($vmName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("stop VM '{$vmName}'");
 
-	public function stopVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
+        // get the VM details
+        $vmDetails = fromHost($vmName)->getDetails();
 
-		// what are we doing?
-		$log = $st->startAction("stop VM '{$vmName}'");
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+        // stop the VM
+        $host->stopHost($vmDetails);
 
-		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+        // all done
+        $log->endAction();
+    }
 
-		// stop the VM
-		$host->stopHost($vmDetails);
+    public function powerOffVm($vmName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("power off VM '{$vmName}'");
 
-		// all done
-		$log->endAction();
-	}
+        // get the VM details
+        $vmDetails = fromHost($vmName)->getDetails();
 
-	public function powerOffVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-		// what are we doing?
-		$log = $st->startAction("power off VM '{$vmName}'");
+        // stop the VM
+        $host->stopHost($vmDetails);
 
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+        // all done
+        $log->endAction();
+    }
 
-		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+    public function restartVm($vmName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("restart VM '{$vmName}'");
 
-		// stop the VM
-		$host->stopHost($vmDetails);
+        // get the VM details
+        $vmDetails = fromHost($vmName)->getDetails();
 
-		// all done
-		$log->endAction();
-	}
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-	public function restartVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
+        // restart our virtual machine
+        $host->restartHost($vmDetails);
 
-		// what are we doing?
-		$log = $st->startAction("restart VM '{$vmName}'");
+        // all done
+        $log->endAction();
+    }
 
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
+    public function startVm($vmName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("start VM '{$vmName}'");
 
-		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
+        // get the VM details
+        $vmDetails = fromHost($vmName)->getDetails();
 
-		// restart our virtual machine
-		$host->restartHost($vmDetails);
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-		// all done
-		$log->endAction();
-	}
+        // restart our virtual machine
+        $host->startHost($vmDetails);
 
-	public function startVm($vmName)
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("start VM '{$vmName}'");
-
-		// get the VM details
-		$vmDetails = $st->fromHost($vmName)->getDetails();
-
-		// create our host adapter
-		$host = HostLib::getHostAdapter($st, $vmDetails->type);
-
-		// restart our virtual machine
-		$host->startHost($vmDetails);
-
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

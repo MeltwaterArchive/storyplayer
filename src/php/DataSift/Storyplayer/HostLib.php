@@ -57,23 +57,23 @@ use Prose\E5xx_ActionFailed;
  */
 class HostLib
 {
-	/**
-	 * @param PlayerLib\StoryTeller $st
-	 */
-	static public function getHostAdapter($st, $hostType)
-	{
-		// what are we looking for?
-		$className = 'DataSift\Storyplayer\HostLib\\' . $hostType;
+    /**
+     * @param PlayerLib\StoryTeller $st
+     */
+    public static function getHostAdapter($st, $hostType)
+    {
+        // what are we looking for?
+        $className = 'DataSift\Storyplayer\HostLib\\' . $hostType;
 
-		// does it exist?
-		if (!class_exists($className)) {
-			throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' for host type '{$hostType}'");
-		}
+        // does it exist?
+        if (!class_exists($className)) {
+            throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' for host type '{$hostType}'");
+        }
 
-		// create the adapter
-		$adapter = new $className($st);
+        // create the adapter
+        $adapter = new $className($st);
 
-		// all done
-		return $adapter;
-	}
+        // all done
+        return $adapter;
+    }
 }

@@ -68,194 +68,242 @@ use Exception;
 
 class Phase_Result
 {
-	protected $phaseName;
-	protected $message;
-	protected $nextAction;
-	protected $result;
-	protected $exception;
+    protected $phaseName;
+    protected $message;
+    protected $nextAction;
+    protected $result;
+    protected $exception;
 
-	public $activityLog = [];
+    public $activityLog = [];
 
-	const MIN_RESULT = 1;
-	const MAX_RESULT = 8;
+    const MIN_RESULT = 1;
+    const MAX_RESULT = 8;
 
-	const COMPLETED    = 1;
-	// success is an alias for completed!
-	const SUCCEEDED    = 1;
-	const FAILED       = 2;
-	const INCOMPLETE   = 3;
-	const ERROR        = 4;
-	const HASNOACTIONS = 5;
-	const SKIPPED      = 6;
-	const BLACKLISTED  = 7;
-	const CANNOTRUN    = 8;
+    const COMPLETED    = 1;
+    // success is an alias for completed!
+    const SUCCEEDED    = 1;
+    const FAILED       = 2;
+    const INCOMPLETE   = 3;
+    const ERROR        = 4;
+    const HASNOACTIONS = 5;
+    const SKIPPED      = 6;
+    const BLACKLISTED  = 7;
+    const CANNOTRUN    = 8;
 
-	var $RESULT_STRING = [
-		1 => "SUCCEEDED",
-		2 => "FAILED",
-		3 => "INCOMPLETE",
-		4 => "ERROR",
-		5 => "HASNOACTIONS",
-		6 => "SKIPPED",
-		7 => "BLACKLISTED",
-		8 => "CANNOTRUN",
-	];
+    protected $resultTextMap = [
+        1 => "SUCCEEDED",
+        2 => "FAILED",
+        3 => "INCOMPLETE",
+        4 => "ERROR",
+        5 => "HASNOACTIONS",
+        6 => "SKIPPED",
+        7 => "BLACKLISTED",
+        8 => "CANNOTRUN",
+    ];
 
-	public function __construct($phaseName)
-	{
-		$this->phaseName = $phaseName;
-	}
+    public function __construct($phaseName)
+    {
+        $this->phaseName = $phaseName;
+    }
 
-	public function getPhaseName()
-	{
-		return $this->phaseName;
-	}
+    /**
+     * @return string
+     */
+    public function getPhaseName()
+    {
+        return $this->phaseName;
+    }
 
-	public function hasMessage()
-	{
-		if (isset($this->message)) {
-			return true;
-		}
+    /**
+     * @return boolean
+     */
+    public function hasMessage()
+    {
+        if (isset($this->message)) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getMessage()
-	{
-		return $this->message;
-	}
+    /**
+     * @return string|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-	public function getException()
-	{
-		return $this->exception;
-	}
+    /**
+     * @return \Exception|null
+     */
+    public function getException()
+    {
+        return $this->exception;
+    }
 
-	public function getPhaseResult()
-	{
-		return $this->result;
-	}
+    /**
+     * @return int
+     */
+    public function getPhaseResult()
+    {
+        return $this->result;
+    }
 
-	public function getPhaseResultString()
-	{
-		if (isset($this->RESULT_STRING[$this->result])) {
-			return $this->RESULT_STRING[$this->result];
-		}
+    /**
+     * @return string
+     */
+    public function getPhaseResultString()
+    {
+        if (isset($this->resultTextMap[$this->result])) {
+            return $this->resultTextMap[$this->result];
+        }
 
-		return "UNKNOWN";
-	}
+        return "UNKNOWN";
+    }
 
-	public function getPhaseCompleted()
-	{
-		if ($this->result == self::COMPLETED) {
-			return true;
-		}
+    /**
+     * @return bool
+     */
+    public function getPhaseCompleted()
+    {
+        if ($this->result == self::COMPLETED) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getPhaseSucceeded()
-	{
-		if ($this->result == self::COMPLETED) {
-			return true;
-		}
+    /**
+     * @return bool
+     */
+    public function getPhaseSucceeded()
+    {
+        if ($this->result == self::COMPLETED) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getPhaseFailed()
-	{
-		if ($this->result == self::FAILED) {
-			return true;
-		}
+    /**
+     * @return bool
+     */
+    public function getPhaseFailed()
+    {
+        if ($this->result == self::FAILED) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getPhaseIsIncomplete()
-	{
-		if ($this->result == self::INCOMPLETE) {
-			return true;
-		}
+    /**
+     * @return bool
+     */
+    public function getPhaseIsIncomplete()
+    {
+        if ($this->result == self::INCOMPLETE) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getPhaseHasNoActions()
-	{
-		if ($this->result == self::HASNOACTIONS) {
-			return true;
-		}
+    /**
+     * @return bool
+     */
+    public function getPhaseHasNoActions()
+    {
+        if ($this->result == self::HASNOACTIONS) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getPhaseIsBlacklisted()
-	{
-		if ($this->result == self::BLACKLISTED) {
-			return true;
-		}
+    /**
+     * @return bool
+     */
+    public function getPhaseIsBlacklisted()
+    {
+        if ($this->result == self::BLACKLISTED) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getPhaseHasBeenSkipped()
-	{
-		if ($this->result == self::SKIPPED) {
-			return true;
-		}
+    /**
+     * @return bool
+     */
+    public function getPhaseHasBeenSkipped()
+    {
+        if ($this->result == self::SKIPPED) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getPhaseCannotRun()
-	{
-		if ($this->result == self::CANNOTRUN) {
-			return true;
-		}
+    /**
+     * @return bool
+     */
+    public function getPhaseCannotRun()
+    {
+        if ($this->result == self::CANNOTRUN) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function getNextAction()
-	{
-		return $this->nextAction;
-	}
+    /**
+     * @return int
+     */
+    public function getNextAction()
+    {
+        return $this->nextAction;
+    }
 
-	/**
-	 * @param integer $result
-	 * @param string $msg
-	 * @param Exception $e
-	 */
-	public function setContinuePlaying($result = 1, $msg = null, $e = null)
-	{
-		$this->nextAction = PhaseGroup_Player::NEXT_CONTINUE;
-		$this->result     = $result;
-		$this->message    = $msg;
-		$this->exception  = $e;
-	}
+    /**
+     * @param integer $result
+     * @param string|null $msg
+     * @param Exception|null $e
+     * @return void
+     */
+    public function setContinuePlaying($result = 1, $msg = null, $e = null)
+    {
+        $this->nextAction = PhaseGroup_Player::NEXT_CONTINUE;
+        $this->result     = $result;
+        $this->message    = $msg;
+        $this->exception  = $e;
+    }
 
-	/**
-	 * @param integer $result
-	 * @param string $msg
-	 * @param Exception $e
-	 */
-	public function setPlayingFailed($result, $msg, $e = null)
-	{
-		$this->nextAction = PhaseGroup_Player::NEXT_FAIL;
-		$this->result     = $result;
-		$this->message    = $msg;
-		$this->exception  = $e;
-	}
+    /**
+     * @param integer $result
+     * @param string $msg
+     * @param Exception|null $e
+     * @return void
+     */
+    public function setPlayingFailed($result, $msg, $e = null)
+    {
+        $this->nextAction = PhaseGroup_Player::NEXT_FAIL;
+        $this->result     = $result;
+        $this->message    = $msg;
+        $this->exception  = $e;
+    }
 
-	/**
-	 * @param integer $result
-	 * @param string $msg
-	 */
-	public function setSkipPlaying($result, $msg, $e = null)
-	{
-		$this->nextAction = PhaseGroup_Player::NEXT_SKIP;
-		$this->result     = $result;
-		$this->message    = $msg;
-		$this->exception  = $e;
-	}
+    /**
+     * @param integer $result
+     * @param string $msg
+     * @return void
+     */
+    public function setSkipPlaying($result, $msg, $e = null)
+    {
+        $this->nextAction = PhaseGroup_Player::NEXT_SKIP;
+        $this->result     = $result;
+        $this->message    = $msg;
+        $this->exception  = $e;
+    }
 }

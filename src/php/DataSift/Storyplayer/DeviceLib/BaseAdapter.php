@@ -55,100 +55,100 @@ namespace DataSift\Storyplayer\DeviceLib;
  */
 class BaseAdapter
 {
-	/**
-	 * details about the web browser that we want to use
-	 *
-	 * @var stdClass
-	 */
-	protected $browserDetails;
+    /**
+     * details about the web browser that we want to use
+     *
+     * @var stdClass
+     */
+    protected $browserDetails;
 
-	protected $browserSession;
+    protected $browserSession;
 
-	protected $proxySession;
+    protected $proxySession;
 
-	/**
-	 *
-	 * @var array
-	 */
-	protected $httpAuthDetails = array();
+    /**
+     *
+     * @var array
+     */
+    protected $httpAuthDetails = array();
 
-	/**
-	 *
-	 * @param  stdClass $browserDetails
-	 * @return void
-	 */
-	public function init($browserDetails)
-	{
-		// remember the browser to use
-		$this->browserDetails = $browserDetails;
+    /**
+     *
+     * @param  stdClass $browserDetails
+     * @return void
+     */
+    public function init($browserDetails)
+    {
+        // remember the browser to use
+        $this->browserDetails = $browserDetails;
 
-		// make sure this exists, as the adapters rely on it
-		if (!isset($browserDetails->desiredCapabilities)) {
-			$browserDetails->desiredCapabilities = array();
-		}
-		// make sure it is an array, as that is what the
-		// underlying WebDriver library requires
-		else if (is_object($browserDetails->desiredCapabilities)) {
-			$browserDetails->desiredCapabilities = (array) ($browserDetails->desiredCapabilities);
-		}
-	}
+        // make sure this exists, as the adapters rely on it
+        if (!isset($browserDetails->desiredCapabilities)) {
+            $browserDetails->desiredCapabilities = array();
+        }
+        // make sure it is an array, as that is what the
+        // underlying WebDriver library requires
+        else if (is_object($browserDetails->desiredCapabilities)) {
+            $browserDetails->desiredCapabilities = (array) ($browserDetails->desiredCapabilities);
+        }
+    }
 
-	public function getProxy()
-	{
-		return $this->proxySession;
-	}
+    public function getProxy()
+    {
+        return $this->proxySession;
+    }
 
-	public function getDevice()
-	{
-		return $this->browserSession;
-	}
+    public function getDevice()
+    {
+        return $this->browserSession;
+    }
 
-	/**
-	 *
-	 * @param  string $hostname
-	 * @param  string $url
-	 * @return
-	 */
-	public function applyHttpBasicAuthForHost($hostname, $url)
-	{
-		throw new E5xx_NoHttpBasicAuthSupport();
-	}
+    /**
+     *
+     * @param  string $hostname
+     * @param  string $url
+     * @return string
+     */
+    public function applyHttpBasicAuthForHost($hostname, $url)
+    {
+        throw new E5xx_NoHttpBasicAuthSupport();
+    }
 
-	/**
-	 *
-	 * @param  string  $hostname
-	 * @return boolean
-	 */
-	public function hasHttpBasicAuthForHost($hostname)
-	{
-		return (isset($this->httpAuthDetails[$hostname]));
-	}
+    /**
+     *
+     * @param  string  $hostname
+     * @return boolean
+     */
+    public function hasHttpBasicAuthForHost($hostname)
+    {
+        return (isset($this->httpAuthDetails[$hostname]));
+    }
 
-	/**
-	 * @param string $hostname
-	 * @return array<string>|null
-	 */
-	public function getHttpBasicAuthForHost($hostname)
-	{
-		if (!isset($this->httpAuthDetails[$hostname])) {
-			return null;
-		}
+    /**
+     * @param string $hostname
+     * @return array<string>|null
+     */
+    public function getHttpBasicAuthForHost($hostname)
+    {
+        if (!isset($this->httpAuthDetails[$hostname])) {
+            return null;
+        }
 
-		return $this->httpAuthDetails[$hostname];
-	}
+        return $this->httpAuthDetails[$hostname];
+    }
 
-	/**
-	 *
-	 * @param string $hostname
-	 * @param string $username
-	 * @param string $password
-	 * @return void
-	 */
-	public function setHttpBasicAuthForHost($hostname, $username, $password)
-	{
-		$this->httpAuthDetails[$hostname] = array(
-			'user' => $username,
-			'pass' => $password
-		);
-	}
+    /**
+     *
+     * @param string $hostname
+     * @param string $username
+     * @param string $password
+     * @return void
+     */
+    public function setHttpBasicAuthForHost($hostname, $username, $password)
+    {
+        $this->httpAuthDetails[$hostname] = array(
+            'user' => $username,
+            'pass' => $password
+        );
+    }
 }

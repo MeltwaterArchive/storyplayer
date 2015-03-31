@@ -88,8 +88,8 @@ class ActiveConfig extends WrappedConfig
 		// we also want to link in the hosts and roles tables, to make
 		// it a lot easier for Prose modules
 		$activeConfig         = $this->getConfig();
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $runtimeConfig        = $injectables->getRuntimeConfig();
+        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
         $testEnvName          = $injectables->activeTestEnvironmentName;
 
 		$hostsTable = $runtimeConfigManager->getTable($runtimeConfig, 'hosts');
@@ -184,7 +184,7 @@ class ActiveConfig extends WrappedConfig
                     // success!
                     //
                     // but wait - is it actually the loopback interface?
-                    if (in_array($adapterToTest, ['lo0', 'lo']) && ($loopback == null)) {
+                    if (in_array($adapterToTest, ['lo0', 'lo']) && ($loopback === null)) {
                         $loopback = $ipAddress;
                     }
                     else {
@@ -196,7 +196,7 @@ class ActiveConfig extends WrappedConfig
             // we didn't find any adapters with an IP address
             //
             // but is the loopback up and running?
-            if ($loopback != null) {
+            if ($loopback !== null) {
                 // this is better than throwing an error
                 return $loopback;
             }

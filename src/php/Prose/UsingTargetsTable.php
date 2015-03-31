@@ -55,54 +55,48 @@ namespace Prose;
  */
 class UsingTargetsTable extends Prose
 {
-	/**
-	 * entryKey
-	 * The key that this table interacts with in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $entryKey = "targets";
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "targets";
 
-	/**
-	 * @return void
-	 */
-	public function addCurrentTestEnvironment()
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * @return void
+     */
+    public function addCurrentTestEnvironment()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("add current test environment to targets table");
 
-		// what are we doing?
-		$log = $st->startAction("add current test environment to targets table");
+        // get the details to add
+        $testEnvName = $this->st->getTestEnvironmentName();
+        $testEnvSig  = $this->st->getTestEnvironmentSignature();
 
-		// get the details to add
-		$testEnvName = $st->getTestEnvironmentName();
-		$testEnvSig  = $st->getTestEnvironmentSignature();
+        // add it
+        usingRuntimeTable($this->entryKey)->addItem($testEnvName, $testEnvSig);
 
-		// add it
-		$st->usingRuntimeTable($this->entryKey)->addItem($testEnvName, $testEnvSig);
+        // all done
+        $log->endAction();
+    }
 
-		// all done
-		$log->endAction();
-	}
+    /**
+     * @return void
+     */
+    public function removeCurrentTestEnvironment()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("remove current test environment from targets table");
 
-	/**
-	 * @return void
-	 */
-	public function removeCurrentTestEnvironment()
-	{
-		// shorthand
-		$st = $this->st;
+        // get the details to remove
+        $testEnvName = $this->st->getTestEnvironmentName();
 
-		// what are we doing?
-		$log = $st->startAction("remove current test environment from targets table");
+        // remove it
+        usingRuntimeTable($this->entryKey)->removeItem($testEnvName);
 
-		// get the details to remove
-		$testEnvName = $st->getTestEnvironmentName();
-
-		// remove it
-		$st->usingRuntimeTable($this->entryKey)->removeItem($testEnvName);
-
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

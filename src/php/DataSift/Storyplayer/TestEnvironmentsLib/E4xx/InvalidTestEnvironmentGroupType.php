@@ -55,9 +55,9 @@ namespace DataSift\Storyplayer\TestEnvironmentsLib;
  */
 class E4xx_InvalidTestEnvironmentGroupType extends E4xx_TestEnvironmentConfigError
 {
-	public function __construct($groupIndex, $type, $expectedClass)
-	{
-		$msg = "environment group #{$groupIndex} is invalid type '{$type}'; no matching class '{$expectedClass}'";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($groupIndex, $type, $expectedClass)
+    {
+        $msg = "environment group #{$groupIndex} is invalid type '{$type}'; no matching class '{$expectedClass}'";
+        parent::__construct(400, $msg, $msg);
+    }
 }

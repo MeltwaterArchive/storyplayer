@@ -57,25 +57,22 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class UsingCheckpoint extends Prose
 {
-	public function set($fieldName, $value)
-	{
-		// shorthand
-		$st = $this->st;
+    public function set($fieldName, $value)
+    {
+        // convert $value into something that can appear in our logs
+        $convertor = new DataPrinter();
+        $printable = $convertor->convertToString($value);
 
-		// convert $value into something that can appear in our logs
-		$convertor = new DataPrinter();
-		$printable = $convertor->convertToString($value);
+        // what are we doing?
+        $log = usingLog()->startAction("set checkpoint field '{$fieldName}' to '{$printable}'");
 
-		// what are we doing?
-		$log = $st->startAction("set checkpoint field '{$fieldName}' to '{$printable}'");
+        // get the checkpoint
+        $checkpoint = getCheckpoint();
 
-		// get the checkpoint
-		$checkpoint = $st->getCheckpoint();
+        // set the value
+        $checkpoint->$fieldName = $value;
 
-		// set the value
-		$checkpoint->$fieldName = $value;
-
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

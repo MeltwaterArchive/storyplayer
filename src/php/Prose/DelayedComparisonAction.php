@@ -50,7 +50,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  *
  * For example, this class makes it possible to write Prose like this:
  *
- * 	   $newStats = $st->fromCppDaemon()->getStats();
+ *     $newStats = $st->fromCppDaemon()->getStats();
  *     $st->expectsCppDaemonStats($newStats)->counter('no_of_tweets')->hasIncreasedBy(1)->since($oldStats);
  *
  * @category  Libraries
@@ -62,20 +62,20 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class DelayedComparisonAction
 {
-	protected $st;
-	protected $newStats;
-	protected $action;
+    protected $st;
+    protected $newStats;
+    protected $action;
 
-	public function __construct(StoryTeller $st, $newStats, $action)
-	{
-		$this->st = $st;
-		$this->newStats = $newStats;
-		$this->action   = $action;
-	}
+    public function __construct(StoryTeller $st, $newStats, $action)
+    {
+        $this->st = $st;
+        $this->newStats = $newStats;
+        $this->action   = $action;
+    }
 
-	public function since($oldStats)
-	{
-		$action = $this->action;
-		$action($this->st, $oldStats, $this->newStats);
-	}
+    public function since($oldStats)
+    {
+        $action = $this->action;
+        $action($this->st, $oldStats, $this->newStats);
+    }
 }

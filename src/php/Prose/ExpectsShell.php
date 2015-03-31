@@ -47,7 +47,7 @@ namespace Prose;
  * test processes on the host machine using the UNIX shell
  * as of Storyplayer v2, this is now just an alias for:
  *
- *   $st->usingHost('localhost')
+ *   usingHost('localhost')
  *
  * @category  Libraries
  * @package   Storyplayer/Prose
@@ -58,8 +58,8 @@ namespace Prose;
  */
 class ExpectsShell extends ExpectsHost
 {
-	public function __construct($st)
-	{
-		parent::__construct($st, ['localhost']);
-	}
+    public function __construct($st)
+    {
+        parent::__construct($st, ['localhost']);
+    }
 }

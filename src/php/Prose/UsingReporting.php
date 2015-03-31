@@ -55,28 +55,22 @@ namespace Prose;
  */
 class UsingReporting extends Prose
 {
-	public function reportNotRequired()
-	{
-		// shorthand
-		$st  = $this->st;
+    public function reportNotRequired()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("this phase is not required by this story");
 
-		// what are we doing?
-		$log = $st->startAction("this phase is not required by this story");
+        // all done
+        $log->endAction();
+    }
 
-		// all done
-		$log->endAction();
-	}
+    public function reportShouldAlwaysSucceed()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("this story is expected to always succeed");
 
-	public function reportShouldAlwaysSucceed()
-	{
-		// shorthand
-		$st  = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("this story is expected to always succeed");
-
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 
 }

@@ -59,7 +59,7 @@ class E4xx_NoSuchReport extends Exxx_Exception
 {
     public function __construct($reportName)
     {
-    	$msg = "Unknown report '{$reportName}'; we can find no matching PHP class for it";
+        $msg = "Unknown report '{$reportName}'; we can find no matching PHP class for it";
         parent::__construct(400, $msg, $msg);
     }
 }

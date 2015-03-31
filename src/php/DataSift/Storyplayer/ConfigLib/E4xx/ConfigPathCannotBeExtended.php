@@ -60,7 +60,7 @@ class E4xx_ConfigPathCannotBeExtended extends Exxx_Exception
 {
     public function __construct($fullPath, $pathSoFar, $leafType)
     {
-    	$msg = "Invalid path '{$fullPath}'; '{$pathSoFar}' is type '{$leafType}'";
+        $msg = "Invalid path '{$fullPath}'; '{$pathSoFar}' is type '{$leafType}'";
         parent::__construct(400, $msg, $msg);
     }
 }

@@ -59,46 +59,47 @@ use Phix_Project\CliEngine\CliResult;
  */
 class ListTargets_Switch extends CliSwitch
 {
-	protected $envList;
+    protected $envList;
 
-	public function __construct($envList)
-	{
-		// define the command
-		$this->setName('list-targets');
-		$this->setShortDescription('list the available test environments');
-		$this->setLongDesc(
-			"Use this switch to get a list of all of the test environments"
-			. " that are defined in the config files."
-		);
+    public function __construct($envList)
+    {
+        // define the command
+        $this->setName('list-targets');
+        $this->setShortDescription('list the available test environments');
+        $this->setLongDesc(
+            "Use this switch to get a list of all of the test environments"
+            . " that are defined in the config files."
+        );
 
-		// what are the short switches?
-		$this->addShortSwitch('T');
+        // what are the short switches?
+        $this->addShortSwitch('T');
 
-		// what are the long switches?
-		$this->addLongSwitch('list-targets');
+        // what are the long switches?
+        $this->addLongSwitch('list-targets');
 
-		// we are actually a command, pretending to be a switch
-		$this->setSwitchActsAsCommand();
+        // we are actually a command, pretending to be a switch
+        $this->setSwitchActsAsCommand();
 
-		// remember the environments list
-		$this->envList = $envList;
-	}
+        // remember the environments list
+        $this->envList = $envList;
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// list the environments (if any) in a machine-friendly way
-		foreach ($this->envList as $envName) {
-			echo "{$envName}\n";
-		}
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  int $invokes
+     * @param  array     $params
+     * @param  bool $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // list the environments (if any) in a machine-friendly way
+        foreach ($this->envList as $envName) {
+            echo "{$envName}\n";
+        }
 
-		// all done
-		return new CliResult(CliResult::PROCESS_COMPLETE);
-	}
+        // all done
+        return new CliResult(CliResult::PROCESS_COMPLETE);
+    }
 }

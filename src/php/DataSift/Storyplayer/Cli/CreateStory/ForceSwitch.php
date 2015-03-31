@@ -59,35 +59,35 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class CreateStory_ForceSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('force');
-		$this->setShortDescription('force the action to happen');
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('force');
+        $this->setShortDescription('force the action to happen');
 
-		// what are the short switches?
-		$this->addShortSwitch('f');
+        // what are the short switches?
+        $this->addShortSwitch('f');
 
-		// what are the long switches?
-		$this->addLongSwitch('force');
+        // what are the long switches?
+        $this->addLongSwitch('force');
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->force = true;
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->force = true;
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

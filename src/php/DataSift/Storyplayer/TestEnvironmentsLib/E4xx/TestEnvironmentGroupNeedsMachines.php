@@ -55,9 +55,9 @@ namespace DataSift\Storyplayer\TestEnvironmentsLib;
  */
 class E4xx_TestEnvironmentGroupNeedsMachines extends E4xx_TestEnvironmentConfigError
 {
-	public function __construct($groupIndex)
-	{
-		$msg = "environment group #{$groupIndex} must define at least one machine";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($groupIndex)
+    {
+        $msg = "environment group #{$groupIndex} must define at least one machine";
+        parent::__construct(400, $msg, $msg);
+    }
 }

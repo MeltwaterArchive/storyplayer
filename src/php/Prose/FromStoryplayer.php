@@ -58,193 +58,172 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class FromStoryplayer extends Prose
 {
-	public function getAppSetting($path)
-	{
-		// shorthand
-		$st = $this->st;
+    public function getAppSetting($path)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get app setting '{$path}' from the storyplayer config");
 
-		// what are we doing?
-		$log = $st->startAction("get app setting '{$path}' from the storyplayer config");
+        // what is the full path to this data?
+        $fullPath = 'storyplayer.appSettings.' . $path;
 
-		// what is the full path to this data?
-		$fullPath = 'storyplayer.appSettings.' . $path;
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
+        $value = $config->getData($fullPath);
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $config->getData($fullPath);
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("setting for '{$path}' is '{$logValue}'");
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("setting for '{$path}' is '{$logValue}'");
+        // all done
+        return $value;
+    }
 
-		// all done
-		return $value;
-	}
+    public function getAppSettings($app)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get all settings for '{$app}' from the storyplayer config");
 
-	public function getAppSettings($app)
-	{
-		// shorthand
-		$st = $this->st;
+        // what is the full path to this data?
+        $fullPath = 'storyplayer.appSettings.' . $app;
 
-		// what are we doing?
-		$log = $st->startAction("get all settings for '{$app}' from the storyplayer config");
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
+        $value = $config->getData($fullPath);
 
-		// what is the full path to this data?
-		$fullPath = 'storyplayer.appSettings.' . $app;
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("settings for '{$app}' are '{$logValue}'");
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $config->getData($fullPath);
+        // all done
+        return $value;
+    }
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("settings for '{$app}' are '{$logValue}'");
+    public function getStorySetting($path)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get storySetting '{$path}' from the storyplayer config");
 
-		// all done
-		return $value;
-	}
+        // what is the full path to this data?
+        $fullPath = 'storyplayer.storySettings.' . $path;
 
-	public function getStorySetting($path)
-	{
-		// shorthand
-		$st = $this->st;
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
+        $value = $config->getData($fullPath);
 
-		// what are we doing?
-		$log = $st->startAction("get storySetting '{$path}' from the storyplayer config");
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("setting for '{$path}' is '{$logValue}'");
 
-		// what is the full path to this data?
-		$fullPath = 'storyplayer.storySettings.' . $path;
+        // all done
+        return $value;
+    }
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
-		$value = $config->getData($fullPath);
+    public function getModuleSetting($path)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get module setting '{$path}' from the storyplayer config");
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("setting for '{$path}' is '{$logValue}'");
+        // what is the full path to this data?
+        $fullPath = 'storyplayer.moduleSettings.' . $path;
 
-		// all done
-		return $value;
-	}
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            throw new E5xx_ActionFailed(__METHOD__, "module setting '$path' not found");
+        }
 
-	public function getModuleSetting($path)
-	{
-		// shorthand
-		$st = $this->st;
+        // success!
+        $value = $config->getData($fullPath);
 
-		// what are we doing?
-		$log = $st->startAction("get module setting '{$path}' from the storyplayer config");
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("setting for '{$path}' is '{$logValue}'");
 
-		// what is the full path to this data?
-		$fullPath = 'storyplayer.moduleSettings.' . $path;
+        // all done
+        return $value;
+    }
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__, "module setting '$path' not found");
-		}
+    public function getModuleSettings($module)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get all settings for '{$module}' from the storyplayer config");
 
-		// success!
-		$value = $config->getData($fullPath);
+        // what is the full path to this data?
+        $fullPath = 'storyplayer.moduleSettings.' . $module;
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("setting for '{$path}' is '{$logValue}'");
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            throw new E5xx_ActionFailed(__METHOD__, "no module '$module' found in the config");
+        }
 
-		// all done
-		return $value;
-	}
+        // success!
+        $value = $config->getData($fullPath);
 
-	public function getModuleSettings($module)
-	{
-		// shorthand
-		$st = $this->st;
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("settings for '{$module}' are '{$logValue}'");
 
-		// what are we doing?
-		$log = $st->startAction("get all settings for '{$module}' from the storyplayer config");
+        // all done
+        return $value;
+    }
 
-		// what is the full path to this data?
-		$fullPath = 'storyplayer.moduleSettings.' . $module;
+    public function get($name)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get '$name' from the storyplayer config");
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			throw new E5xx_ActionFailed(__METHOD__, "no module '$module' found in the config");
-		}
+        // what is the full path to this data?
+        $fullPath = 'storyplayer';
+        if (!empty($name)) {
+            $fullPath = $fullPath . '.' . $name;
+        }
 
-		// success!
-		$value = $config->getData($fullPath);
+        // get the details
+        $config = $this->st->getActiveConfig();
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("settings for '{$module}' are '{$logValue}'");
+        if (!$config->hasData($fullPath)) {
+            $log->endAction("no such setting '{$name}'");
+            return null;
+        }
 
-		// all done
-		return $value;
-	}
+        // if we get here, then success \o/
+        $value = $config->getData($fullPath);
 
-	public function get($name)
-	{
-		// shorthand
-		$st = $this->st;
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("value is: '{$logValue}'");
 
-		// what are we doing?
-		$log = $st->startAction("get '$name' from the storyplayer config");
+        // all done
+        return $value;
+    }
 
-		// what is the full path to this data?
-		$fullPath = 'storyplayer';
-		if (!empty($name)) {
-			$fullPath = $fullPath . '.' . $name;
-		}
+    public function getConfig()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the storyplayer.json config");
 
-		// get the details
-		$config = $st->getActiveConfig();
+        // get the details
+        $config = $this->st->getActiveConfig();
+        $retval = $config->getData("storyplayer");
 
-		if (!$config->hasData($fullPath)) {
-			$log->endAction("no such setting '{$name}'");
-			return null;
-		}
-
-		// if we get here, then success \o/
-		$value = $config->getData($fullPath);
-
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("value is: '{$logValue}'");
-
-		// all done
-		return $value;
-	}
-
-	public function getConfig()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get the storyplayer.json config");
-
-		// get the details
-		$config = $st->getActiveConfig();
-		$retval = $config->getData("storyplayer");
-
-		// all done
-		$log->endAction($retval);
-		return $retval;
-	}
+        // all done
+        $log->endAction($retval);
+        return $retval;
+    }
 }

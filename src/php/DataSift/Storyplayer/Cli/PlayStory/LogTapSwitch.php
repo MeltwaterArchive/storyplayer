@@ -59,49 +59,49 @@ use Phix_Project\ValidationLib4\File_MustBeFileOrHaveValidParent;
  */
 class PlayStory_LogTapSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('tap');
-		$this->setShortDescription('output a test report in TAP13 format');
-		$this->setLongDesc(
-			"Use this switch to generate a test report file in TAP13 format."
-			. PHP_EOL . PHP_EOL
-			. "The Test Anything Protocol is a simple text-based interface between"
-			. " testing modules and a test harness.  TAP started life as part of the"
-			. " test harness for Perl and today is supported by a variety of testing"
-			. " tools."
-			. PHP_EOL . PHP_EOL
-			. "See http://podwiki.hexten.net/TAP/TAP13.html?page=TAP13 for the spec."
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('tap');
+        $this->setShortDescription('output a test report in TAP13 format');
+        $this->setLongDesc(
+            "Use this switch to generate a test report file in TAP13 format."
+            . PHP_EOL . PHP_EOL
+            . "The Test Anything Protocol is a simple text-based interface between"
+            . " testing modules and a test harness.  TAP started life as part of the"
+            . " test harness for Perl and today is supported by a variety of testing"
+            . " tools."
+            . PHP_EOL . PHP_EOL
+            . "See http://podwiki.hexten.net/TAP/TAP13.html?page=TAP13 for the spec."
+        );
 
-		// what are the long switches?
-		$this->addLongSwitch('log-tap');
+        // what are the long switches?
+        $this->addLongSwitch('log-tap');
 
-		// what is our parameter?
-		$this->setRequiredArg('<file>', "the file to write the report to");
-		$this->setArgValidator(new File_MustBeFileOrHaveValidParent());
+        // what is our parameter?
+        $this->setRequiredArg('<file>', "the file to write the report to");
+        $this->setArgValidator(new File_MustBeFileOrHaveValidParent());
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		if (!isset($engine->options->reports)) {
-			$engine->options->reports = [];
-		}
-		$engine->options->reports['Tap'] = $params[0];
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        if (!isset($engine->options->reports)) {
+            $engine->options->reports = [];
+        }
+        $engine->options->reports['Tap'] = $params[0];
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

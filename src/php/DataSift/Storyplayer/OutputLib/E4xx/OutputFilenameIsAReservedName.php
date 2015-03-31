@@ -58,8 +58,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_OutputFilenameIsAReservedName extends Exxx_Exception
 {
-	public function __construct($filename) {
-		$msg = "'{$filename}' is reserved for internal use; please use a different filename";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($filename) {
+        $msg = "'{$filename}' is reserved for internal use; please use a different filename";
+        parent::__construct(400, $msg, $msg);
+    }
 }

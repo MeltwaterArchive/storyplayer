@@ -61,116 +61,107 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class UsingZmqContext extends Prose
 {
-	protected $socketMap = [
-		"PUB"    => ZMQ::SOCKET_PUB,
-		"SUB"    => ZMQ::SOCKET_SUB,
-		"REQ"    => ZMQ::SOCKET_REQ,
-		"REP"    => ZMQ::SOCKET_REP,
-		"XREQ"   => ZMQ::SOCKET_XREQ,
-		"XREP"   => ZMQ::SOCKET_XREP,
-		"PUSH"   => ZMQ::SOCKET_PUSH,
-		"PULL"   => ZMQ::SOCKET_PULL,
-		"ROUTER" => ZMQ::SOCKET_ROUTER,
-		"DEALER" => ZMQ::SOCKET_DEALER,
-	];
+    protected $socketMap = [
+        "PUB"    => ZMQ::SOCKET_PUB,
+        "SUB"    => ZMQ::SOCKET_SUB,
+        "REQ"    => ZMQ::SOCKET_REQ,
+        "REP"    => ZMQ::SOCKET_REP,
+        "XREQ"   => ZMQ::SOCKET_XREQ,
+        "XREP"   => ZMQ::SOCKET_XREP,
+        "PUSH"   => ZMQ::SOCKET_PUSH,
+        "PULL"   => ZMQ::SOCKET_PULL,
+        "ROUTER" => ZMQ::SOCKET_ROUTER,
+        "DEALER" => ZMQ::SOCKET_DEALER,
+    ];
 
-	public function __construct(Storyteller $st, $params = [])
-	{
-		// make sure we have a ZMQContext
-		//
-		// $params[0] is null when we need to create a ZMQContext
-		if (!isset($params[0])) {
-			$params[0] = new ZMQContext();
-		}
+    public function __construct(Storyteller $st, $params = [])
+    {
+        // make sure we have a ZMQContext
+        //
+        // $params[0] is null when we need to create a ZMQContext
+        if (!isset($params[0])) {
+            $params[0] = new ZMQContext();
+        }
 
-		// now we're ready to call the parent constructor
-		parent::__construct($st, $params);
-	}
+        // now we're ready to call the parent constructor
+        parent::__construct($st, $params);
+    }
 
-	public function getZmqContext()
-	{
-		// shorthand
-		$st = $this->st;
+    public function getZmqContext()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get a ZMQContext object");
 
-		// what are we doing?
-		$log = $st->startAction("get a ZMQContext object");
+        // all done
+        $log->endAction();
+        return $this->args[0];
+    }
 
-		// all done
-		$log->endAction();
-		return $this->args[0];
-	}
+    public function bindToPort($port, $socketType, $sendHwm = 100, $recvHwm = 100)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("bind() to ZMQ tcp '{$socketType}' socket at host 'localhost':{$port}");
 
-	public function bindToPort($port, $socketType, $sendHwm = 100, $recvHwm = 100)
-	{
-		// shorthand
-		$st = $this->st;
+        // do we have a supported socket?
+        if (!isset($this->socketMap[$socketType])) {
+            $msg = "unknown ZMQ socket type '{$socketType}'";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-		// what are we doing?
-		$log = $st->startAction("bind() to ZMQ tcp '{$socketType}' socket at host 'localhost':{$port}");
+        // make the connection
+        $socket = new ZMQSocket($this->args[0], $this->socketMap[$socketType]);
+        if (!$socket) {
+            $msg = "unable to create ZMQ socket";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
+        $socket->bind("tcp://*:{$port}");
 
-		// do we have a supported socket?
-		if (!isset($this->socketMap[$socketType])) {
-			$msg = "unknown ZMQ socket type '{$socketType}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+        // set high-water marks now
+        $socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
+        $socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
 
-		// make the connection
-		$socket = new ZMQSocket($this->args[0], $this->socketMap[$socketType]);
-		if (!$socket) {
-			$msg = "unable to create ZMQ socket";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-		$socket->bind("tcp://*:{$port}");
+        // all done
+        $log->endAction();
+        return $socket;
+    }
 
-		// set high-water marks now
-		$socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
-		$socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
+    public function connectToHost($hostId, $port, $socketType, $sendHwm = 100, $recvHwm = 100)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("connect() to ZMQ '{$socketType}' socket on host '{$hostId}':{$port}");
 
-		// all done
-		$log->endAction();
-		return $socket;
-	}
+        // do we have a supported socket?
+        if (!isset($this->socketMap[$socketType])) {
+            $msg = "unknown ZMQ socket type '{$socketType}'";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-	public function connectToHost($hostId, $port, $socketType, $sendHwm = 100, $recvHwm = 100)
-	{
-		// shorthand
-		$st = $this->st;
+        // where are we connecting to?
+        $ipAddress = fromHost($hostId)->getIpAddress();
 
-		// what are we doing?
-		$log = $st->startAction("connect() to ZMQ '{$socketType}' socket on host '{$hostId}':{$port}");
+        // create the socket
+        $socket = new ZMQSocket($this->args[0], $this->socketMap[$socketType]);
+        if (!$socket) {
+            $msg = "unable to create ZMQ socket";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-		// do we have a supported socket?
-		if (!isset($this->socketMap[$socketType])) {
-			$msg = "unknown ZMQ socket type '{$socketType}'";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+        // set high-water marks now
+        $socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
+        $socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
 
-		// where are we connecting to?
-		$ipAddress = fromHost($hostId)->getIpAddress();
+        // make the connection
+        //
+        // NOTE: we use the 'force' parameter here to avoid Storyplayer
+        // hanging if the remote end is not available
+        $socket->connect("tcp://{$ipAddress}:{$port}", true);
 
-		// create the socket
-		$socket = new ZMQSocket($this->args[0], $this->socketMap[$socketType]);
-		if (!$socket) {
-			$msg = "unable to create ZMQ socket";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-
-		// set high-water marks now
-		$socket->setSockOpt(ZMQ::SOCKOPT_SNDHWM, $sendHwm);
-		$socket->setSockOpt(ZMQ::SOCKOPT_RCVHWM, $recvHwm);
-
-		// make the connection
-		//
-		// NOTE: we use the 'force' parameter here to avoid Storyplayer
-		// hanging if the remote end is not available
-		$socket->connect("tcp://{$ipAddress}:{$port}", true);
-
-		// all done
-		$log->endAction();
-		return $socket;
-	}
+        // all done
+        $log->endAction();
+        return $socket;
+    }
 }

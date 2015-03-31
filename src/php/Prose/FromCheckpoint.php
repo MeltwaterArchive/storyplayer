@@ -55,25 +55,22 @@ namespace Prose;
  */
 class FromCheckpoint extends Prose
 {
-	public function get($fieldName)
-	{
-		// shorthand
-		$st = $this->st;
+    public function get($fieldName)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get value of checkpoint field '{$fieldName}'");
 
-		// what are we doing?
-		$log = $st->startAction("get value of checkpoint field '{$fieldName}'");
+        // get the checkpoint
+        $checkpoint = getCheckpoint();
 
-		// get the checkpoint
-		$checkpoint = $st->getCheckpoint();
+        // does the value exist?
+        if (!isset($checkpoint->$fieldName)) {
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// does the value exist?
-		if (!isset($checkpoint->$fieldName)) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // all done
+        $log->endAction();
 
-		// all done
-		$log->endAction();
-
-		return $checkpoint->$fieldName;
-	}
+        return $checkpoint->$fieldName;
+    }
 }

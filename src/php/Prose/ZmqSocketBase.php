@@ -61,16 +61,16 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class ZmqSocketBase extends Prose
 {
-	static public $defaultTimeout = 5;
+    static public $defaultTimeout = 5;
 
-	public function __construct(Storyteller $st, $params = [])
-	{
-		// call our parent first
-		parent::__construct($st, $params);
+    public function __construct(Storyteller $st, $params = [])
+    {
+        // call our parent first
+        parent::__construct($st, $params);
 
-		// make sure that we have a ZMQ socket
-		if (!isset($params[0]) || !$params[0] instanceof ZMQSocket) {
-			throw new E5xx_ActionFailed(__METHOD__, "first param must be a ZMQ socket");
-		}
-	}
+        // make sure that we have a ZMQ socket
+        if (!isset($params[0]) || !$params[0] instanceof ZMQSocket) {
+            throw new E5xx_ActionFailed(__METHOD__, "first param must be a ZMQ socket");
+        }
+    }
 }

@@ -57,10 +57,10 @@ use DataSift\Storyplayer\Cli\KnownTestEnvironments;
  */
 trait KnownTestEnvironmentsSupport
 {
-	public $knownTestEnvironmentsList;
+    public $knownTestEnvironmentsList;
 
-	public function initKnownTestEnvironmentsSupport($envsList)
-	{
-		$this->knownTestEnvironmentsList = $envsList;
-	}
+    public function initKnownTestEnvironmentsSupport($envsList)
+    {
+        $this->knownTestEnvironmentsList = $envsList;
+    }
 }

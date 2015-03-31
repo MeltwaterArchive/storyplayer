@@ -58,62 +58,58 @@ namespace Prose;
  */
 class FromCurl extends Prose
 {
-	/**
-	 * get
-	 *
-	 * @param mixed $url URL to request
-	 * @param array $params GET params to add to the URL
-	 * @param array $headers HTTP headers to use
-	 *
-	 * @return object|string Response sent by the server. If it's JSON, we'll decode it
-	 */
-	public function get($url, $params = array(), $headers = array())
-	{
+    /**
+     * get
+     *
+     * @param mixed $url URL to request
+     * @param array $params GET params to add to the URL
+     * @param array $headers HTTP headers to use
+     *
+     * @return object|string Response sent by the server. If it's JSON, we'll decode it
+     */
+    public function get($url, $params = array(), $headers = array())
+    {
+        if (count($headers)){
+            // "FromCurl does not support headers yet"
+            throw new E5xx_NotImplemented(__METHOD__);
+        }
 
-		if (count($headers)){
-			// "FromCurl does not support headers yet"
-			throw new E5xx_NotImplemented(__METHOD__);
-		}
+        // create the full URL
+        if (count($params) > 0) {
+            $url = $url . '?' . http_build_query($params);
+        }
 
-		// shorthand
-		$st = $this->st;
+        // what are we doing?
+        $log = usingLog()->startAction("HTTP GET '${url}'");
 
-		// create the full URL
-		if (count($params) > 0) {
-			$url = $url . '?' . http_build_query($params);
-		}
+        // create a new cURL resource
+        $ch = curl_init();
 
-		// what are we doing?
-		$log = $st->startAction("HTTP GET '${url}'");
+        // set URL and other appropriate options
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
 
-		// create a new cURL resource
-		$ch = curl_init();
+        // grab URL and pass it to the browser
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
 
-		// set URL and other appropriate options
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
+        // close cURL resource, and free up system resources
+        curl_close($ch);
 
-		// grab URL and pass it to the browser
-		$response = curl_exec($ch);
-		$error = curl_error($ch);
+        if ($error){
+            throw new E5xx_ActionFailed(__METHOD__.': '.$error);
+        }
 
-		// close cURL resource, and free up system resources
-		curl_close($ch);
+        // Try and decode it
+        $decoded = json_decode($response);
 
-		if ($error){
-			throw new E5xx_ActionFailed(__METHOD__.': '.$error);
-		}
+        if ($decoded){
+            $response = $decoded;
+        }
 
-		// Try and decode it
-		$decoded = json_decode($response);
-
-		if ($decoded){
-			$response = $decoded;
-		}
-
-		// all done
-		$log->endAction();
-		return $response;
-	}
+        // all done
+        $log->endAction();
+        return $response;
+    }
 }

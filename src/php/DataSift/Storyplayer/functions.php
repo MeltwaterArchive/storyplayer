@@ -59,18 +59,18 @@ use Prose\E5xx_ProseException;
  */
 function first($arrayToSearch)
 {
-	if (!is_array($arrayToSearch)) {
-		return null;
-	}
+    if (!is_array($arrayToSearch)) {
+        return null;
+    }
 
-	if (count($arrayToSearch) == 0) {
-		return null;
-	}
+    if (count($arrayToSearch) == 0) {
+        return null;
+    }
 
-	$keys = array_keys($arrayToSearch);
-	$key = reset($keys);
+    $keys = array_keys($arrayToSearch);
+    $key = reset($keys);
 
-	return $arrayToSearch[$key];
+    return $arrayToSearch[$key];
 }
 
 /**
@@ -81,14 +81,14 @@ function first($arrayToSearch)
  */
 function newStoryFor($category)
 {
-	$story = new Story();
-	$story->setCategory($category);
+    $story = new Story();
+    $story->setCategory($category);
 
-	// our output reports may need to know which file the story itself
-	// is defined in
-	$story->determineStoryFilename();
+    // our output reports may need to know which file the story itself
+    // is defined in
+    $story->determineStoryFilename();
 
-	return $story;
+    return $story;
 }
 
 /**
@@ -98,10 +98,10 @@ function newStoryFor($category)
  * @return void
  */
 function tryTo($callback) {
-	try {
-		$callback();
-	}
-	catch (E5xx_ProseException $e) {
-		// do nothing
-	}
+    try {
+        $callback();
+    }
+    catch (E5xx_ProseException $e) {
+        // do nothing
+    }
 }

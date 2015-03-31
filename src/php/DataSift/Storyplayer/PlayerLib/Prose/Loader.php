@@ -57,90 +57,96 @@ use Prose\Prose;
  */
 class Prose_Loader
 {
-	private $namespaces = array(
-		"Prose",
-		"DataSift\\Storyplayer\\Prose"
-	);
+    private $namespaces = array(
+        "Prose",
+        "DataSift\\Storyplayer\\Prose"
+    );
 
-	public function setNamespaces($namespaces = array())
-	{
-		// a list of the namespaces we're going to search for this class
-		//
-		// we always search the generic 'Prose' namespace first, in case
-		// users don't want to uniquely namespace their Prose classes
-		$this->namespaces = array ("Prose");
+    /**
+     * @return void
+     */
+    public function setNamespaces($namespaces = array())
+    {
+        // a list of the namespaces we're going to search for this class
+        //
+        // we always search the generic 'Prose' namespace first, in case
+        // users don't want to uniquely namespace their Prose classes
+        $this->namespaces = array ("Prose");
 
-		// append the namespaces we've been asked to search
-		foreach ($namespaces as $namespace) {
-			$this->namespaces[] = $namespace;
-		}
+        // append the namespaces we've been asked to search
+        foreach ($namespaces as $namespace) {
+            $this->namespaces[] = $namespace;
+        }
 
-		// we search our own namespace last, as it allows the user to
-		// replace our Prose with their own if they prefer
-		$this->namespaces[] = "DataSift\\Storyplayer\\Prose";
-	}
+        // we search our own namespace last, as it allows the user to
+        // replace our Prose with their own if they prefer
+        $this->namespaces[] = "DataSift\\Storyplayer\\Prose";
+    }
 
-	public function determineProseClassFor($methodName)
-	{
-		// this new, simplified naming scheme was introduced for
-		// Storyplayer 1.4
-		//
-		// it isn't considered a b/c break, because we didn't document
-		// how to create modules until v1.4 was released
-		$className = ucfirst($methodName);
+    /**
+     * @return string
+     */
+    public function determineProseClassFor($methodName)
+    {
+        // this new, simplified naming scheme was introduced for
+        // Storyplayer 1.4
+        //
+        // it isn't considered a b/c break, because we didn't document
+        // how to create modules until v1.4 was released
+        $className = ucfirst($methodName);
 
-		// all done
-		return $className;
-	}
+        // all done
+        return $className;
+    }
 
-	/**
-	 * @param string $className
-	 */
-	public function loadProse(StoryTeller $st, $className, $constructorArgs)
-	{
-		// can we find the class?
-		foreach ($this->namespaces as $namespace) {
-			// what is the full name of the class (inc namespace) to
-			// search for?
-			$namespacedClassName = $namespace . "\\" . $className;
+    /**
+     * @param string $className
+     */
+    public function loadProse(StoryTeller $st, $className, $constructorArgs)
+    {
+        // can we find the class?
+        foreach ($this->namespaces as $namespace) {
+            // what is the full name of the class (inc namespace) to
+            // search for?
+            $namespacedClassName = $namespace . "\\" . $className;
 
-			// is there such a class?
-			if (class_exists($namespacedClassName)) {
-				// yes there is!!
-				//
-				// create an instance of the class
-				$return = new $namespacedClassName(
-					$st,
-					$constructorArgs);
+            // is there such a class?
+            if (class_exists($namespacedClassName)) {
+                // yes there is!!
+                //
+                // create an instance of the class
+                $return = new $namespacedClassName(
+                    $st,
+                    $constructorArgs);
 
-				// make sure our new object is an instance of 'Prose'
-				if (!$return instanceof Prose) {
-					throw new E5xx_NotAProseClass($namespacedClassName);
-				}
+                // make sure our new object is an instance of 'Prose'
+                if (!$return instanceof Prose) {
+                    throw new E5xx_NotAProseClass($namespacedClassName);
+                }
 
-				// return our newly-minted object
-				return $return;
-			}
-		}
+                // return our newly-minted object
+                return $return;
+            }
+        }
 
-		// if we get there, then we cannot find a suitable class in
-		// any of the namespaces that we know about
-		return null;
-	}
+        // if we get there, then we cannot find a suitable class in
+        // any of the namespaces that we know about
+        return null;
+    }
 
-	/**
-	 * this needs moving into its own trait perhaps, or into a static
-	 * inside the Stone library
-	 *
-	 * @param  [type] $methodName [description]
-	 * @return [type]             [description]
-	 */
-	protected function convertMethodNameToWords($methodName)
-	{
-		// turn the method name into an array of words
-		$words = explode(' ', strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1 $2", $methodName)));
+    /**
+     * this needs moving into its own trait perhaps, or into a static
+     * inside the Stone library
+     *
+     * @param  string $methodName
+     * @return array<string>
+     */
+    protected function convertMethodNameToWords($methodName)
+    {
+        // turn the method name into an array of words
+        $words = explode(' ', strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1 $2", $methodName)));
 
-		// all done
-		return $words;
-	}
+        // all done
+        return $words;
+    }
 }

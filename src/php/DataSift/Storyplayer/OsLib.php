@@ -57,31 +57,31 @@ use Prose\E5xx_ActionFailed;
  */
 class OsLib
 {
-	/**
-	 * @param PlayerLib\StoryTeller $st
-	 */
-	static public function getHostAdapter($st, $osName)
-	{
+    /**
+     * @param PlayerLib\StoryTeller $st
+     */
+    public static function getHostAdapter($st, $osName)
+    {
 
-		// Make sure that osName is capitalised correctly
-		$osNameFixed = array();
-		foreach (explode("_", $osName) as $part) {
-			$osNameFixed[] = ucfirst(strtolower($part));
-		}
-		$osName = implode("_", $osNameFixed);
+        // Make sure that osName is capitalised correctly
+        $osNameFixed = array();
+        foreach (explode("_", $osName) as $part) {
+            $osNameFixed[] = ucfirst(strtolower($part));
+        }
+        $osName = implode("_", $osNameFixed);
 
-		// what are we looking for?
-		$className = 'DataSift\Storyplayer\OsLib\\' . $osName;
+        // what are we looking for?
+        $className = 'DataSift\Storyplayer\OsLib\\' . $osName;
 
-		// does it exist?
-		if (!class_exists($className)) {
-			throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' for host OS '{$osName}'");
-		}
+        // does it exist?
+        if (!class_exists($className)) {
+            throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' for host OS '{$osName}'");
+        }
 
-		// create the adapter
-		$adapter = new $className($st);
+        // create the adapter
+        $adapter = new $className($st);
 
-		// all done
-		return $adapter;
-	}
+        // all done
+        return $adapter;
+    }
 }

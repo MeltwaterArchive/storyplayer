@@ -61,15 +61,12 @@ class FromRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      */
     public function getTable()
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
         // what are we doing?
-        $log = $st->startAction("get '{$tableName}' table from runtime config");
+        $log = usingLog()->startAction("get '{$tableName}' table from runtime config");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -89,15 +86,12 @@ class FromRuntimeTableForTargetEnvironment extends BaseRuntimeTable
 
     public function getGroupFromTable($group)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
         // what are we doing?
-        $log = $st->startAction("get '{$tableName}->{$targetEnv}->{$group}' table group from runtime config");
+        $log = usingLog()->startAction("get '{$tableName}->{$targetEnv}->{$group}' table group from runtime config");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -130,15 +124,12 @@ class FromRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      */
     public function getDetails($key)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
         // what are we doing?
-        $log = $st->startAction("get details for '{$key}' from {$tableName}->{$targetEnv} table");
+        $log = usingLog()->startAction("get details for '{$key}' from {$tableName}->{$targetEnv} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -181,15 +172,12 @@ class FromRuntimeTableForTargetEnvironment extends BaseRuntimeTable
      */
     public function getDetailsFromGroup($group, $key)
     {
-        // shorthand
-        $st = $this->st;
-
         // get our table name from the constructor
         $tableName = $this->args[0];
-        $targetEnv = $st->getTestEnvironmentName();
+        $targetEnv = $this->st->getTestEnvironmentName();
 
         // what are we doing?
-        $log = $st->startAction("get details for '{$group}->{$key}' from {$tableName}->{$targetEnv} table");
+        $log = usingLog()->startAction("get details for '{$group}->{$key}' from {$tableName}->{$targetEnv} table");
 
         // get the table config
         $tables = $this->getAllTables();

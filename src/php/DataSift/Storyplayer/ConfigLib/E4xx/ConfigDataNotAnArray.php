@@ -60,7 +60,7 @@ class E4xx_ConfigDataNotAnArray extends Exxx_Exception
 {
     public function __construct($fullPath)
     {
-    	$msg = "'{$fullPath}' is not an array";
+        $msg = "'{$fullPath}' is not an array";
         parent::__construct(400, $msg, $msg);
     }
 }

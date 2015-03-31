@@ -55,21 +55,18 @@ namespace Prose;
  */
 class FromFile extends Prose
 {
-	public function getTmpFileName()
-	{
-		// shorthand
-		$st = $this->st;
+    public function getTmpFileName()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("generate a temporary filename");
 
-		// what are we doing?
-		$log = $st->startAction("generate a temporary filename");
+        // create it
+        $filename = tempnam(null, 'storyplayer-data-');
 
-		// create it
-		$filename = tempnam(null, 'storyplayer-data-');
+        // log it
+        $log->endAction("'{$filename}'");
 
-		// log it
-		$log->endAction("'{$filename}'");
-
-		// all done
-		return $filename;
-	}
+        // all done
+        return $filename;
+    }
 }

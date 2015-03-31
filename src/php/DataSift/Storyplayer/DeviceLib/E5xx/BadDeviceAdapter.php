@@ -58,11 +58,11 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_BadDeviceAdapter extends Exxx_Exception
 {
-	/**
-	 * @param string $classname
-	 */
-	public function __construct($classname) {
-		$msg = "Unable to use class '{$classname}' as a device adapter; it does not implement the DeviceAdapter interface";
-		parent::__construct(500, $msg, $msg);
-	}
+    /**
+     * @param string $classname
+     */
+    public function __construct($classname) {
+        $msg = "Unable to use class '{$classname}' as a device adapter; it does not implement the DeviceAdapter interface";
+        parent::__construct(500, $msg, $msg);
+    }
 }

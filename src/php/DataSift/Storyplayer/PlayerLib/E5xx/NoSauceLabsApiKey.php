@@ -58,8 +58,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_NoSauceLabsApiKey extends Exxx_Exception
 {
-	public function __construct() {
-		$msg = "'apikey' is missing from the 'saucelabs' section of the loaded config";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct() {
+        $msg = "'apikey' is missing from the 'saucelabs' section of the loaded config";
+        parent::__construct(500, $msg, $msg);
+    }
 }

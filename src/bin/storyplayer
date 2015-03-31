@@ -22,7 +22,6 @@ use Phix_Project\CliEngine\Commands\HelpCommand;
 
 use DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\Cli\Automate_Command;
 use DataSift\Storyplayer\Cli\BuildTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\CreateStory_Command;
 use DataSift\Storyplayer\Cli\DeviceListHelper;
@@ -35,6 +34,7 @@ use DataSift\Storyplayer\Cli\ListSystems_Switch;
 use DataSift\Storyplayer\Cli\ListTargets_Switch;
 use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
+use DataSift\Storyplayer\Cli\Script_Command;
 use DataSift\Storyplayer\Cli\ShowTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\StaticConfigManager;
 
@@ -215,7 +215,7 @@ function main($argv)
 		// create our runtime config folder, and load any pre-existing
 		// runtime config
 		$runtimeConfigManager = $injectables->initRuntimeConfigSupport($injectables);
-		$runtimeConfig        = $injectables->runtimeConfig;
+		$runtimeConfig        = $injectables->getRuntimeConfig();
 
 		// a list of the additional files that the user can select from
 		$sutList = new SystemsUnderTestList();
@@ -291,12 +291,12 @@ function main($argv)
 	// note - we do not have to add the default command a 2nd time
 	// note - if we add no additional commands, the default command is implied
 	//        and the user does not have to type it on the command line
-	$engine->addCommand(new Automate_Command($injectables));
 	$engine->addCommand(new BuildTestEnvironment_Command($injectables));
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new CreateStory_Command);
 	$engine->addCommand(new Install_Command);
 	$engine->addCommand(new ListHostsTable_Command);
+	$engine->addCommand(new Script_Command($injectables));
 	$engine->addCommand(new ShowTestEnvironment_Command);
 
 	// all set - let's go

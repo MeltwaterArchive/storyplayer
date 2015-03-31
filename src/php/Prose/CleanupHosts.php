@@ -58,9 +58,6 @@ class CleanupHosts extends BaseCleanup
 
     public function shutdown()
     {
-    	// shorthand
-    	$st = $this->st;
-
         // get the hosts table, if we have one
         $hostsTable = $this->getTable();
         if (!$hostsTable) {
@@ -78,6 +75,6 @@ class CleanupHosts extends BaseCleanup
         $this->removeTablesIfEmpty();
 
         // save the runtimeConfig
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
     }
 }

@@ -57,261 +57,286 @@ use DataSift\Storyplayer\Injectables;
  */
 class Action_LogItem
 {
-	private $nestLevel;
-	private $text;
-	private $startTime;
-	private $endTime;
-	private $nestedAction = null;
-	private $steps = array();
-	private $injectables;
-	private $output;
-	private $dataFormatter;
+    private $nestLevel;
+    private $text;
+    private $startTime;
+    private $endTime;
+    private $nestedAction = null;
+    private $steps = array();
+    private $injectables;
+    private $output;
+    private $dataFormatter;
 
-	/**
-	 * @param integer $nestLevel
-	 */
-	public function __construct(Injectables $injectables, $nestLevel)
-	{
-		$this->nestLevel     = $nestLevel;
-		$this->injectables   = $injectables;
-		$this->output        = $injectables->output;
-		$this->dataFormatter = $injectables->dataFormatter;
-	}
+    /**
+     * @param integer $nestLevel
+     */
+    public function __construct(Injectables $injectables, $nestLevel)
+    {
+        $this->nestLevel     = $nestLevel;
+        $this->injectables   = $injectables;
+        $this->output        = $injectables->output;
+        $this->dataFormatter = $injectables->dataFormatter;
+    }
 
-	/**
-	 *
-	 * @param  mixed $message
-	 *         the message to log. if it isn't a string, we'll convert it
-	 *         and apply the user's -V preference before logging
-	 * @param  array $codeLine
-	 *         metadata about the line of code that we're logging about
-	 * @return Action_LogItem
-	 *         return $this for fluent interfaces
-	 */
-	public function startAction($message, $codeLine = null)
-	{
-		// when did this happen?
-		$this->startTime = microtime(true);
-		$this->endTime   = null;
+    /**
+     *
+     * @param  mixed $message
+     *         the message to log. if it isn't a string, we'll convert it
+     *         and apply the user's -V preference before logging
+     * @param  array|null $codeLine
+     *         metadata about the line of code that we're logging about
+     * @return Action_LogItem
+     *         return $this for fluent interfaces
+     */
+    public function startAction($message, $codeLine = null)
+    {
+        // when did this happen?
+        $this->startTime = microtime(true);
+        $this->endTime   = null;
 
-		// only log the top-level item
-		if ($this->nestLevel > 1) {
-			$codeLine = null;
-		}
+        // only log the top-level item
+        if ($this->nestLevel > 1) {
+            $codeLine = null;
+        }
 
-		// convert to string if required
-		//
-		// if the user hasn't used -V from the command-line, then this
-		// will also truncate the output
-		if (is_array($message)) {
-			$text = $this->dataFormatter->convertMessageArray($message);
-		}
-		else {
-			$text = $this->dataFormatter->convertData($message);
-		}
+        // convert to string if required
+        //
+        // if the user hasn't used -V from the command-line, then this
+        // will also truncate the output
+        if (is_array($message)) {
+            $text = $this->dataFormatter->convertMessageArray($message);
+        }
+        else {
+            $text = $this->dataFormatter->convertData($message);
+        }
 
-		// write to screen
-		$this->writeToLog($text, $codeLine);
+        // write to screen
+        $this->writeToLog($text, $codeLine);
 
-		// all done
-		return $this;
-	}
+        // all done
+        return $this;
+    }
 
-	/**
-	 * @param mixed $message
-	 */
-	public function endAction($message = null)
-	{
-		// close any open sub-actions
-		$this->closeAllOpenSubActions();
+    /**
+     * @param mixed $message
+     */
+    public function endAction($message = null)
+    {
+        // close any open sub-actions
+        $this->closeAllOpenSubActions();
 
-		// remember when the action completed
-		$this->endTime = microtime(true);
+        // remember when the action completed
+        $this->endTime = microtime(true);
 
-		// do we any output to log?
-		if ($message == null || empty($message)) {
-			return;
-		}
-		// convert to string if required
-		//
-		// if the user hasn't used -V from the command-line, then this
-		// will also truncate the output
-		$text = $this->dataFormatter->convertData($message);
+        // do we any output to log?
+        if ($message == null || empty($message)) {
+            return;
+        }
+        // convert to string if required
+        //
+        // if the user hasn't used -V from the command-line, then this
+        // will also truncate the output
+        $text = $this->dataFormatter->convertData($message);
 
-		// log the result
-		$this->writeToLog('... ' . $text);
-	}
+        // log the result
+        $this->writeToLog('... ' . $text);
+    }
 
-	/**
-	 * @return Action_LogItem
-	 */
-	public function newNestedAction()
-	{
-		// do we have a nested action open?
-		if (!isset($this->nestedAction) || $this->nestedAction->getIsComplete()) {
-			// we have no open actions - start a new one
-			$openItem = $this->nestedAction = new Action_LogItem($this->injectables, $this->nestLevel + 1);
-		}
-		else {
-			// we have an open action - nest something inside
-			$openItem = $this->nestedAction->newNestedAction();
-		}
+    /**
+     * @return Action_LogItem
+     */
+    public function newNestedAction()
+    {
+        // do we have a nested action open?
+        if (!isset($this->nestedAction) || $this->nestedAction->getIsComplete()) {
+            // we have no open actions - start a new one
+            $openItem = $this->nestedAction = new Action_LogItem($this->injectables, $this->nestLevel + 1);
+        }
+        else {
+            // we have an open action - nest something inside
+            $openItem = $this->nestedAction->newNestedAction();
+        }
 
-		// all done
-		return $openItem;
-	}
+        // all done
+        return $openItem;
+    }
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function closeAllOpenSubActions()
-	{
-		if (!isset($this->nestedAction)) {
-			return;
-		}
+    /**
+     *
+     * @return void
+     */
+    public function closeAllOpenSubActions()
+    {
+        if (!isset($this->nestedAction)) {
+            return;
+        }
 
-		$this->nestedAction->endAction();
-		unset($this->nestedAction);
-	}
+        $this->nestedAction->endAction();
+        unset($this->nestedAction);
+    }
 
-	/**
-	 *
-	 * @return boolean
-	 *         TRUE if the action is complete
-	 *         FALSE if the action is currently in progress or has never
-	 *               been started
-	 */
-	public function getIsComplete()
-	{
-		if (isset($this->endTime) && $this->endTime !== null) {
-			return true;
-		}
+    /**
+     *
+     * @return boolean
+     *         TRUE if the action is complete
+     *         FALSE if the action is currently in progress or has never
+     *               been started
+     */
+    public function getIsComplete()
+    {
+        if (isset($this->endTime) && $this->endTime !== null) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 *
-	 * @return boolean
-	 *         TRUE if the action is currently in progress
-	 *         FALSE if the action is complete or has never been started
-	 */
-	public function getIsOpen()
-	{
-		if (isset($this->startTime) && $this->startTime !== null && !isset($this->endTime)) {
-			return true;
-		}
+    /**
+     *
+     * @return boolean
+     *         TRUE if the action is currently in progress
+     *         FALSE if the action is complete or has never been started
+     */
+    public function getIsOpen()
+    {
+        if (isset($this->startTime) && $this->startTime !== null && !isset($this->endTime)) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 *
-	 * @param string $text
-	 *        the message to write
-	 * @param callback $callable
-	 *        the function / lambda to call
-	 */
-	public function addStep($text, $callable)
-	{
-		// make sure any nested action has completed
-		$this->closeAllOpenSubActions();
+    /**
+     *
+     * @param string $text
+     *        the message to write
+     * @param callback $callable
+     *        the function / lambda to call
+     * @return mixed
+     */
+    public function addStep($text, $callable)
+    {
+        // make sure any nested action has completed
+        $this->closeAllOpenSubActions();
 
-		// create a log item for this step
-		$action = $this->newNestedAction();
-		$action->startAction($text);
+        // create a log item for this step
+        $action = $this->newNestedAction();
+        $action->startAction($text);
 
-		// call the callback
-		$return = $callable($action);
+        // call the callback
+        $return = $callable($action);
 
-		// mark this action as complete
-		$action->endAction();
-		unset($this->nestedAction);
+        // mark this action as complete
+        $action->endAction();
+        unset($this->nestedAction);
 
-		// all done
-		return $return;
-	}
+        // all done
+        return $return;
+    }
 
-	public function startStep($text)
-	{
-		// make sure any nested action has completed
-		$this->closeAllOpenSubActions();
+    /**
+     * @return void
+     */
+    public function startStep($text)
+    {
+        // make sure any nested action has completed
+        $this->closeAllOpenSubActions();
 
-		// create a log item for this step
-		$action = new Action_LogItem($this->injectables, $this->nestLevel + 1);
-		$action->startAction($text);
+        // create a log item for this step
+        $action = new Action_LogItem($this->injectables, $this->nestLevel + 1);
+        $action->startAction($text);
 
-		// add the action to our collection
-		$this->nestedAction = $action;
-	}
+        // add the action to our collection
+        $this->nestedAction = $action;
+    }
 
-	public function endStep()
-	{
-		$this->closeAllOpenSubActions();
-	}
+    /**
+     * @return void
+     */
+    public function endStep()
+    {
+        $this->closeAllOpenSubActions();
+    }
 
-	public function captureOutput($text)
-	{
-		// trick the logger into indenting the output one more
-		$this->nestLevel++;
+    /**
+     * @return void
+     */
+    public function captureOutput($text)
+    {
+        // trick the logger into indenting the output one more
+        $this->nestLevel++;
 
-		// NOTE: output captured from sub-processes is NEVER subjected
-		// to truncation if -V is not used from the command-line
-		$this->output->logPhaseSubprocessOutput($text);
+        // NOTE: output captured from sub-processes is NEVER subjected
+        // to truncation if -V is not used from the command-line
+        $this->output->logPhaseSubprocessOutput($text);
 
-		// restore our original output nesting level
-		$this->nestLevel--;
-	}
+        // restore our original output nesting level
+        $this->nestLevel--;
+    }
 
-	protected function writeToLog($text, $codeLine = null)
-	{
-		$this->output->logPhaseActivity(str_repeat("  ", $this->nestLevel - 1) . $text, $codeLine);
-	}
+    /**
+     * @return void
+     */
+    protected function writeToLog($text, $codeLine = null)
+    {
+        $this->output->logPhaseActivity(str_repeat("  ", $this->nestLevel - 1) . $text, $codeLine);
+    }
 
-	public function getNestLevel()
-	{
-		return $this->nestLevel;
-	}
+    /**
+     * @return int
+     */
+    public function getNestLevel()
+    {
+        return $this->nestLevel;
+    }
 
-	// ==================================================================
-	//
-	// Helpers for testing etc go here
-	//
-	// ------------------------------------------------------------------
+    // ==================================================================
+    //
+    // Helpers for testing etc go here
+    //
+    // ------------------------------------------------------------------
 
-	public function getOpenAction()
-	{
-		// do we have an active nested action?
-		if (isset($this->nestedAction) && $this->nestedAction->getIsOpen()) {
-			// ask it to figure out what to return
-			return $this->nestedAction->getOpenAction();
-		}
+    /**
+     * @return Action_LogItem|null
+     */
+    public function getOpenAction()
+    {
+        // do we have an active nested action?
+        if (isset($this->nestedAction) && $this->nestedAction->getIsOpen()) {
+            // ask it to figure out what to return
+            return $this->nestedAction->getOpenAction();
+        }
 
-		// are we the open action?
-		if ($this->getIsOpen()) {
-			return $this;
-		}
+        // are we the open action?
+        if ($this->getIsOpen()) {
+            return $this;
+        }
 
-		// if we get here, then there is no current open action
-		return null;
-	}
+        // if we get here, then there is no current open action
+        return null;
+    }
 
-	public function getStartTime()
-	{
-		if (!isset($this->startTime)) {
-			return null;
-		}
+    /**
+     * @return float|null
+     */
+    public function getStartTime()
+    {
+        if (!isset($this->startTime)) {
+            return null;
+        }
 
-		return $this->startTime;
-	}
+        return $this->startTime;
+    }
 
-	public function getEndTime()
-	{
-		if (!isset($this->endTime)) {
-			return null;
-		}
+    /**
+     * @return float|null
+     */
+    public function getEndTime()
+    {
+        if (!isset($this->endTime)) {
+            return null;
+        }
 
-		return $this->endTime;
-	}
+        return $this->endTime;
+    }
 }

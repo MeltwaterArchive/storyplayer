@@ -63,32 +63,32 @@ use Phix_Project\ValidationLib4\Type_MustBeString;
  */
 class Feature_PersistDeviceSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('persistdevice');
-		$this->setShortDescription('do not auto-kill the test device between phases');
-		$this->setLongDesc(
-			"Use this switch if you want the test device (such as a web browser) to remain open "
-			."between your test phases."
-			. PHP_EOL . PHP_EOL
-			."Be aware that if the test device times out and shuts itself down during one of "
-			."your phases, your test *is* going to fail, because Storyplayer has no way to "
-			."detect that your test device has gone away by itself."
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('persistdevice');
+        $this->setShortDescription('do not auto-kill the test device between phases');
+        $this->setLongDesc(
+            "Use this switch if you want the test device (such as a web browser) to remain open "
+            ."between your test phases."
+            . PHP_EOL . PHP_EOL
+            ."Be aware that if the test device times out and shuts itself down during one of "
+            ."your phases, your test *is* going to fail, because Storyplayer has no way to "
+            ."detect that your test device has gone away by itself."
+        );
 
-		// what are the long switches?
-		$this->addLongSwitch('persist-device');
+        // what are the long switches?
+        $this->addLongSwitch('persist-device');
 
-		// all done
-	}
+        // all done
+    }
 
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->persistDevice = true;
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->persistDevice = true;
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

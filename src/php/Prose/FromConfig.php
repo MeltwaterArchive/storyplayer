@@ -58,48 +58,104 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class FromConfig extends Prose
 {
-	public function get($name)
-	{
-		// shorthand
-		$st = $this->st;
+    public function get($name)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get '$name' from the active config");
 
-		// what are we doing?
-		$log = $st->startAction("get '$name' from the active config");
+        // get the details
+        $config = $this->st->getActiveConfig();
 
-		// get the details
-		$config = $st->getActiveConfig();
+        if (!$config->hasData($name)) {
+            $log->endAction("no such setting '{$name}'");
+            return null;
+        }
 
-		if (!$config->hasData($name)) {
-			$log->endAction("no such setting '{$name}'");
-			return null;
-		}
+        // if we get here, then success \o/
+        $value = $config->getData($name);
 
-		// if we get here, then success \o/
-		$value = $config->getData($name);
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("value is: '{$logValue}'");
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("value is: '{$logValue}'");
+        // all done
+        return $value;
+    }
 
-		// all done
-		return $value;
-	}
+    public function getAll()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the full active config");
 
-	public function getAll()
-	{
-		// shorthand
-		$st = $this->st;
+        // get the details
+        $config = $this->st->getActiveConfig();
+        $retval = $config->getData("");
 
-		// what are we doing?
-		$log = $st->startAction("get the full active config");
+        // all done
+        $log->endAction($retval);
+        return $retval;
+    }
 
-		// get the details
-		$config = $st->getActiveConfig();
-		$retval = $config->getData("");
+    public function getModuleSetting($settingPath)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get module setting '{$settingPath}'");
 
-		// all done
-		$log->endAction($retval);
-		return $retval;
-	}
+        // get the active config
+        $config = $this->st->getActiveConfig();
+
+        // we search the config in this order
+        $pathsToSearch = [
+            "user.moduleSettings.{$settingPath}"            => "user's .storyplayer file",
+            "systemundertest.moduleSettings.{$settingPath}" => "system under test config file",
+            "target.moduleSettings.{$settingPath}"          => "test environment config file",
+            "storyplayer.moduleSettings.{$settingPath}"     => "storyplayer.json config file",
+        ];
+
+        foreach ($pathsToSearch as $searchPath => $origin) {
+            if ($config->hasData($searchPath)) {
+                $value = $config->getData($searchPath);
+
+                // log the settings
+                $printer  = new DataPrinter();
+                $logValue = $printer->convertToString($value);
+                $log->endAction("found in $origin: '{$logValue}'");
+
+                return $value;
+            }
+        }
+
+        // if we get here, the module setting does not exist
+        throw new E5xx_ActionFailed(__METHOD__, "unable to find moduleSetting '{$settingPath}'");
+    }
+
+    public function hasModuleSetting($settingPath)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("check if module setting '{$settingPath}' exists");
+
+        // get the active config
+        $config = $this->st->getActiveConfig();
+
+        // we search the config in this order
+        $pathsToSearch = [
+            "user.moduleSettings.{$settingPath}"            => "user's .storyplayer file",
+            "systemundertest.moduleSettings.{$settingPath}" => "system under test config file",
+            "target.moduleSettings.{$settingPath}"          => "test environment config file",
+            "storyplayer.moduleSettings.{$settingPath}"     => "storyplayer.json config file",
+        ];
+
+        foreach ($pathsToSearch as $searchPath => $origin) {
+            if ($config->hasData($searchPath)) {
+                $log->endAction("found in $origin");
+
+                return true;
+            }
+        }
+
+        // if we get here, the module setting does not exist
+        $log->endAction("not found");
+        return false;
+    }
 }

@@ -65,45 +65,45 @@ use DataSift\Storyplayer\ConfigLib\E4xx_StoryplayerDefaultsSectionMustBeAnArray;
  */
 trait StoryplayerConfigSupport
 {
-	public $storyplayerConfig;
+    public $storyplayerConfig;
 
-	public function initStoryplayerConfigSupport(Injectables $injectables, $configFilename)
-	{
-		// shorthand
-		$output = $injectables->output;
+    public function initStoryplayerConfigSupport(Injectables $injectables, $configFilename)
+    {
+        // shorthand
+        $output = $injectables->output;
 
-		// we start with an empty object
-		$config = new StoryplayerConfig();
+        // we start with an empty object
+        $config = new StoryplayerConfig();
 
-		try {
-			// try to load our main config file
-			$config->loadConfigFromFile($configFilename);
-		}
-		catch (E4xx_ConfigFileNotFound $e) {
-			// there is no default config file
-			//
-			// it isn't fatal, but we do want to tell people about it
-			$output->logCliWarning("storyplayer config file '$configFilename' not found or unreadable");
-		}
-		catch (E4xx_ConfigFileContainsInvalidJson $e) {
-			// that is fatal
-			$output->logCliError("storyplayer config file '$configFilename' is not valid JSON");
-			exit(1);
-		}
-		catch (E4xx_StoryplayerConfigInvalid $e) {
-			$output->logCliError($e->getMessage());
-		}
-		catch (Exception $e) {
-			$output->logCliErrorWithException("unexpected error: " . $e->getMessage(), $e);
-		}
+        try {
+            // try to load our main config file
+            $config->loadConfigFromFile($configFilename);
+        }
+        catch (E4xx_ConfigFileNotFound $e) {
+            // there is no default config file
+            //
+            // it isn't fatal, but we do want to tell people about it
+            $output->logCliWarning("storyplayer config file '$configFilename' not found or unreadable");
+        }
+        catch (E4xx_ConfigFileContainsInvalidJson $e) {
+            // that is fatal
+            $output->logCliError("storyplayer config file '$configFilename' is not valid JSON");
+            exit(1);
+        }
+        catch (E4xx_StoryplayerConfigInvalid $e) {
+            $output->logCliError($e->getMessage());
+        }
+        catch (Exception $e) {
+            $output->logCliErrorWithException("unexpected error: " . $e->getMessage(), $e);
+        }
 
-		// special case - deprecated details in the config file
-		if ($config->hasData('appSettings')) {
-			$output->logCliWarning("'appSettings' in storyplayer config file is deprecated");
-			$output->logCliWarning("please move to your system-under-test config file(s)");
-		}
+        // special case - deprecated details in the config file
+        if ($config->hasData('appSettings')) {
+            $output->logCliWarning("'appSettings' in storyplayer config file is deprecated");
+            $output->logCliWarning("please move to your system-under-test config file(s)");
+        }
 
-		// all done
-		$this->storyplayerConfig = $config->getConfig();
-	}
+        // all done
+        $this->storyplayerConfig = $config->getConfig();
+    }
 }

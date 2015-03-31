@@ -56,28 +56,28 @@ namespace DataSift\Storyplayer\Phases;
 
 class StartupHandlersPhase extends InternalPostPhase
 {
-	public function getPhaseName()
-	{
-		return "StartupHandlers";
-	}
+    public function getPhaseName()
+    {
+        return "StartupHandlers";
+    }
 
-	public function doPhase($phaseResults)
-	{
-		// shorthand
-		$st      = $this->st;
+    public function doPhase($phaseResults)
+    {
+        // shorthand
+        $st      = $this->st;
 
-		// our result object
-		$phaseResult = $this->getNewPhaseResult();
+        // our result object
+        $phaseResult = $this->getNewPhaseResult();
 
-		// we're going to use a helper to do the work
-		//
-		// if the helper encounters a serious problem, it will abort
-		// the whole program itself
-		$helper = new TableHandlersHelper();
-		$helper->runHandlers($st, 'startup');
+        // we're going to use a helper to do the work
+        //
+        // if the helper encounters a serious problem, it will abort
+        // the whole program itself
+        $helper = new TableHandlersHelper();
+        $helper->runHandlers($st, 'startup');
 
-		// if we get here, then all is well
-		$phaseResult->setContinuePlaying();
-		return $phaseResult;
-	}
+        // if we get here, then all is well
+        $phaseResult->setContinuePlaying();
+        return $phaseResult;
+    }
 }

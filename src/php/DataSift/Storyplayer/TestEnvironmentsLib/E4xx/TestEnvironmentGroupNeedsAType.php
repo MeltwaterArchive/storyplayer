@@ -56,9 +56,9 @@ namespace DataSift\Storyplayer\TestEnvironmentsLib;
  */
 class E4xx_TestEnvironmentGroupNeedsAType extends E4xx_TestEnvironmentConfigError
 {
-	public function __construct($groupIndex)
-	{
-		$msg = "environment group #{$groupIndex} needs to set 'type' field";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($groupIndex)
+    {
+        $msg = "environment group #{$groupIndex} needs to set 'type' field";
+        parent::__construct(400, $msg, $msg);
+    }
 }

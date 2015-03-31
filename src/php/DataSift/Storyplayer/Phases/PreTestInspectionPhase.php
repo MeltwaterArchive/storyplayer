@@ -61,83 +61,83 @@ use Prose\E5xx_NotImplemented;
 
 class PreTestInspectionPhase extends StoryPhase
 {
-	protected $sequenceNo = 4;
+    protected $sequenceNo = 4;
 
-	public function doPhase($story)
-	{
-		// shorthand
-		$st          = $this->st;
-		$storyResult = $story->getResult();
+    public function doPhase($story)
+    {
+        // shorthand
+        $st          = $this->st;
+        $storyResult = $story->getResult();
 
-		// our result
-		$phaseResult = $this->getNewPhaseResult();
+        // our result
+        $phaseResult = $this->getNewPhaseResult();
 
-		// do we have anything to do?
-		if (!$story->hasPreTestInspection())
-		{
-			$phaseResult->setContinuePlaying(
-				$phaseResult::HASNOACTIONS,
-				"story has no pre-test inspection instructions"
-			);
-			return $phaseResult;
-		}
+        // do we have anything to do?
+        if (!$story->hasPreTestInspection())
+        {
+            $phaseResult->setContinuePlaying(
+                $phaseResult::HASNOACTIONS,
+                "story has no pre-test inspection instructions"
+            );
+            return $phaseResult;
+        }
 
-		// this could all go horribly wrong ... so wrap it up and deal
-		// with it if it explodes
-		try {
-			// do any required setup
-			$this->doPerPhaseSetup();
+        // this could all go horribly wrong ... so wrap it up and deal
+        // with it if it explodes
+        try {
+            // do any required setup
+            $this->doPerPhaseSetup();
 
-			// if the callback exists, use it
-			$story     = $st->getStory();
-			$callbacks = $story->getPreTestInspection();
-			foreach ($callbacks as $callback) {
-				call_user_func($callback, $st);
-			}
+            // if the callback exists, use it
+            $story     = $st->getStory();
+            $callbacks = $story->getPreTestInspection();
+            foreach ($callbacks as $callback) {
+                call_user_func($callback, $st);
+            }
 
-			// if we get here, the pre-test inspection was successful
-			$phaseResult->setContinuePlaying();
-		}
-		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasError($phaseResult);
-		}
-		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasError($phaseResult);
-		}
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryIsIncomplete($phaseResult);
-		}
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-			$storyResult->setStoryHasError($phaseResult);
-		}
+            // if we get here, the pre-test inspection was successful
+            $phaseResult->setContinuePlaying();
+        }
+        catch (E5xx_ActionFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasError($phaseResult);
+        }
+        catch (E5xx_ExpectFailed $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::FAILED,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasError($phaseResult);
+        }
+        catch (E5xx_NotImplemented $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::INCOMPLETE,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryIsIncomplete($phaseResult);
+        }
+        catch (Exception $e) {
+            $phaseResult->setPlayingFailed(
+                $phaseResult::ERROR,
+                $e->getMessage(),
+                $e
+            );
+            $storyResult->setStoryHasError($phaseResult);
+        }
 
-		// close off any open log actions
-		$st->closeAllOpenActions();
+        // close off any open log actions
+        $st->closeAllOpenActions();
 
-		// tidy up after ourselves
-		$this->doPerPhaseTeardown();
+        // tidy up after ourselves
+        $this->doPerPhaseTeardown();
 
-		// all done
-		return $phaseResult;
-	}
+        // all done
+        return $phaseResult;
+    }
 }

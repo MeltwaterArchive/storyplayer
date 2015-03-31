@@ -54,7 +54,7 @@ $story->addAction(function() {
 	foreach(firstHostWithRole("zmq_target") as $hostId) {
 		// we need to connect
 		$context = usingZmqContext()->getZmqContext();
-		$inPort  = fromHost($hostId)->getAppSetting("zmq.multi.inPort");
+		$inPort  = fromHost($hostId)->getStorySetting("zmq.multi.inPort");
 		$inSocket  = usingZmqContext($context)->connectToHost($hostId, $inPort, 'PUSH');
 
 		// now let's make sure we are connected

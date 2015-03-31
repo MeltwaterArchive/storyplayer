@@ -59,114 +59,114 @@ use DataSift\Storyplayer\PlayerLib\Phase_Result;
 
 abstract class Phase
 {
-	const INTERNALPRE_PHASE    = 1;
-	const STORY_PHASE          = 2;
-	const STORY_SUPPORT_PHASE  = 3;
-	const INTERNALPOST_PHASE   = 4;
-	const INFRASTRUCTURE_PHASE = 5;
+    const INTERNALPRE_PHASE    = 1;
+    const STORY_PHASE          = 2;
+    const STORY_SUPPORT_PHASE  = 3;
+    const INTERNALPOST_PHASE   = 4;
+    const INFRASTRUCTURE_PHASE = 5;
 
-	protected $st;
-	protected $sequenceNo = null;
+    protected $st;
+    protected $sequenceNo = null;
 
-	public function __construct(StoryTeller $st)
-	{
-		$this->st = $st;
-	}
+    public function __construct(StoryTeller $st)
+    {
+        $this->st = $st;
+    }
 
 
-	/**
-	 * get the name of this phase
-	 *
-	 * @return string
-	 */
-	public function getPhaseName()
-	{
-		static $phaseName = null;
+    /**
+     * get the name of this phase
+     *
+     * @return string
+     */
+    public function getPhaseName()
+    {
+        static $phaseName = null;
 
-		if (!isset($phaseName)) {
-			$parts = explode('\\', get_class($this));
-			$phaseName = str_replace('Phase', '', end($parts));
-		}
+        if (!isset($phaseName)) {
+            $parts = explode('\\', get_class($this));
+            $phaseName = str_replace('Phase', '', end($parts));
+        }
 
-		return $phaseName;
-	}
+        return $phaseName;
+    }
 
-	/**
-	 * what number is assigned to this phase?
-	 *
-	 * @return int|null
-	 */
-	public function getPhaseSequenceNo()
-	{
-		return $this->sequenceNo;
-	}
+    /**
+     * what number is assigned to this phase?
+     *
+     * @return int|null
+     */
+    public function getPhaseSequenceNo()
+    {
+        return $this->sequenceNo;
+    }
 
-	public function getNewPhaseResult()
-	{
-		return new Phase_Result($this->getPhaseName());
-	}
+    public function getNewPhaseResult()
+    {
+        return new Phase_Result($this->getPhaseName());
+    }
 
-	public function doPerPhaseSetup()
-	{
-		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+    public function doPerPhaseSetup()
+    {
+        // shorthand
+        $st    = $this->st;
+        $story = $st->getStory();
 
-		// do we have anything to do?
-		if (!$story->hasPerPhaseSetup())
-		{
-			return;
-		}
+        // do we have anything to do?
+        if (!$story->hasPerPhaseSetup())
+        {
+            return;
+        }
 
-		// get the callback to call
-		$callbacks = $story->getPerPhaseSetup();
+        // get the callback to call
+        $callbacks = $story->getPerPhaseSetup();
 
-		// make the call
-		foreach ($callbacks as $callback) {
-			call_user_func($callback, $st);
-		}
+        // make the call
+        foreach ($callbacks as $callback) {
+            call_user_func($callback, $st);
+        }
 
-		// all done
-	}
+        // all done
+    }
 
-	public function doPerPhaseTeardown()
-	{
-		// shorthand
-		$st    = $this->st;
-		$story = $st->getStory();
+    public function doPerPhaseTeardown()
+    {
+        // shorthand
+        $st    = $this->st;
+        $story = $st->getStory();
 
-		// do we have anything to do?
-		if ($story->hasPerPhaseTeardown())
-		{
-			// get the callback to call
-			$callbacks = $story->getPerPhaseTeardown();
+        // do we have anything to do?
+        if ($story->hasPerPhaseTeardown())
+        {
+            // get the callback to call
+            $callbacks = $story->getPerPhaseTeardown();
 
-			// make the call
-			foreach ($callbacks as $callback) {
-				call_user_func($callback, $st);
-			}
-		}
+            // make the call
+            foreach ($callbacks as $callback) {
+                call_user_func($callback, $st);
+            }
+        }
 
-		// stop the test device, if it is still running
-		if (!$st->getPersistDevice()) {
-			$st->stopDevice();
-		}
+        // stop the test device, if it is still running
+        if (!$st->getPersistDevice()) {
+            $st->stopDevice();
+        }
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 * @return int
-	 */
-	abstract public function getPhaseType();
+    /**
+     * @return int
+     */
+    abstract public function getPhaseType();
 
-	/**
-	 * execute a phase, and return the results for further analysis
-	 *
-	 * @param  mixed $thingBeingPlayed
-	 *         what is the phase executing against?
-	 *
-	 * @return DataSift\Storyplayer\PlayerLib\PhaseGroup_Result
-	 */
-	abstract public function doPhase($thingBeingPlayed);
+    /**
+     * execute a phase, and return the results for further analysis
+     *
+     * @param  mixed $thingBeingPlayed
+     *         what is the phase executing against?
+     *
+     * @return DataSift\Storyplayer\PlayerLib\PhaseGroup_Result
+     */
+    abstract public function doPhase($thingBeingPlayed);
 }

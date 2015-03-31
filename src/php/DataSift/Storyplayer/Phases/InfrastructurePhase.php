@@ -56,8 +56,8 @@ namespace DataSift\Storyplayer\Phases;
 
 abstract class InfrastructurePhase extends Phase
 {
-	public function getPhaseType()
-	{
-		return self::INFRASTRUCTURE_PHASE;
-	}
+    public function getPhaseType()
+    {
+        return self::INFRASTRUCTURE_PHASE;
+    }
 }

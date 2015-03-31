@@ -55,187 +55,175 @@ namespace Prose;
  */
 class ExpectsGraphite extends Prose
 {
-	public function metricIsAlwaysZero($metric, $startTime, $endTime)
-	{
-		// shorthand
-		$st = $this->st;
+    public function metricIsAlwaysZero($metric, $startTime, $endTime)
+    {
+        // when are we looking for?
+        $humanStartTime = date('Y-m-d H:i:s', $startTime);
+        $humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
-		// when are we looking for?
-		$humanStartTime = date('Y-m-d H:i:s', $startTime);
-		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
+        // what are we doing?
+        $log = usingLog()->startAction("ensure metric '{$metric}' is zero between '{$humanStartTime}' and '{$humanEndTime}'");
 
-		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' is zero between '{$humanStartTime}' and '{$humanEndTime}'");
+        // get the data from graphite
+        $data = fromGraphite()->getDataFor($metric, $startTime, $endTime);
 
-		// get the data from graphite
-		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
+        // do we *have* any data?
+        if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
+            // graphite returns an empty data set when there is no data
+            //
+            // NOTE: this can also happen when the test is asking for
+            //       the wrong metric :(
 
-		// do we *have* any data?
-		if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
-			// graphite returns an empty data set when there is no data
-			//
-			// NOTE: this can also happen when the test is asking for
-			//       the wrong metric :(
+            $log->endAction("no data available for metric '{$metric}'; assuming success");
+            return;
+        }
 
-			$log->endAction("no data available for metric '{$metric}'; assuming success");
-			return;
-		}
+        // we have data ... let's make sure we're happy with it
+        foreach ($data[0]->datapoints as $datapoint) {
+            if ($datapoint[0] > 0) {
+                throw new E5xx_ExpectFailed(__METHOD__, 0, $datapoint[0]);
+            }
+        }
 
-		// we have data ... let's make sure we're happy with it
-		foreach ($data[0]->datapoints as $datapoint) {
-			if ($datapoint[0] > 0) {
-				throw new E5xx_ExpectFailed(__METHOD__, 0, $datapoint[0]);
-			}
-		}
+        // all done
+        $log->endAction("data was available, metric '{$metric}' was always zero");
+        return;
+    }
 
-		// all done
-		$log->endAction("data was available, metric '{$metric}' was always zero");
-		return;
-	}
+    public function metricSumIs($metric, $expectedTotal, $startTime, $endTime)
+    {
+        // when are we looking for?
+        $humanStartTime = date('Y-m-d H:i:s', $startTime);
+        $humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
-	public function metricSumIs($metric, $expectedTotal, $startTime, $endTime)
-	{
-		// shorthand
-		$st = $this->st;
+        // what are we doing?
+        $log = usingLog()->startAction("ensure metric '{$metric}' sums to '{$expectedTotal}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
-		// when are we looking for?
-		$humanStartTime = date('Y-m-d H:i:s', $startTime);
-		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
+        // get the data from graphite
+        $data = fromGraphite()->getDataFor($metric, $startTime, $endTime);
 
-		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' sums to '{$expectedTotal}' between '{$humanStartTime}' and '{$humanEndTime}'");
+        // do we *have* any data?
+        if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
+            // graphite returns an empty data set when there is no data
+            //
+            // NOTE: this can also happen when the test is asking for
+            //       the wrong metric :(
+            if ($expectedTotal !== 0) {
+                // we were expecting there to be some data
+                throw new E5xx_ExpectFailed(__METHOD__, "data available for metric '{$metric}'", "no data available for metric '{$metric}'");
+            }
 
-		// get the data from graphite
-		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
+            // if we get here, it's reasonable to assume that everything is
+            // as it should be
+            $log->endAction("no data available for metric '{$metric}'; assuming success");
+            return;
+        }
 
-		// do we *have* any data?
-		if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
-			// graphite returns an empty data set when there is no data
-			//
-			// NOTE: this can also happen when the test is asking for
-			//       the wrong metric :(
-		 	if ($expectedTotal !== 0) {
-		 		// we were expecting there to be some data
-				throw new E5xx_ExpectFailed(__METHOD__, "data available for metric '{$metric}'", "no data available for metric '{$metric}'");
-			}
+        // we have data ... let's make sure we're happy with it
+        $actualTotal = 0;
+        foreach ($data[0]->datapoints as $datapoint) {
+            if ($datapoint[0] !== null) {
+                $actualTotal += $datapoint[0];
+            }
+        }
 
-			// if we get here, it's reasonable to assume that everything is
-			// as it should be
-			$log->endAction("no data available for metric '{$metric}'; assuming success");
-			return;
-		}
+        // do we have the total we expected?
+        assertsDouble($actualTotal)->equals($expectedTotal);
 
-		// we have data ... let's make sure we're happy with it
-		$actualTotal = 0;
-		foreach ($data[0]->datapoints as $datapoint) {
-			if ($datapoint[0] !== null) {
-				$actualTotal += $datapoint[0];
-			}
-		}
+        // all done
+        $log->endAction("data was available, metric '{$metric}' sums to '{$actualTotal}'");
+        return;
+    }
 
-		// do we have the total we expected?
-		$st->assertsDouble($actualTotal)->equals($expectedTotal);
+    public function metricNeverExceeds($metric, $expectedMax, $startTime, $endTime)
+    {
+        // when are we looking for?
+        $humanStartTime = date('Y-m-d H:i:s', $startTime);
+        $humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
-		// all done
-		$log->endAction("data was available, metric '{$metric}' sums to '{$actualTotal}'");
-		return;
-	}
+        // what are we doing?
+        $log = usingLog()->startAction("ensure metric '{$metric}' never exceeds value '{$expectedMax}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
-	public function metricNeverExceeds($metric, $expectedMax, $startTime, $endTime)
-	{
-		// shorthand
-		$st = $this->st;
+        // get the data from graphite
+        $data = fromGraphite()->getDataFor($metric, $startTime, $endTime);
 
-		// when are we looking for?
-		$humanStartTime = date('Y-m-d H:i:s', $startTime);
-		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
+        // do we *have* any data?
+        if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
+            // graphite returns an empty data set when there is no data
+            //
+            // NOTE: this can also happen when the test is asking for
+            //       the wrong metric :(
+            if ($expectedMax !== 0) {
+                // we were expecting there to be some data
+                throw new E5xx_ExpectFailed(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
+            }
 
-		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' never exceeds value '{$expectedMax}' between '{$humanStartTime}' and '{$humanEndTime}'");
+            // if we get here, it's reasonable to assume that everything is
+            // as it should be
+            $log->endAction("no data available for metric '{$metric}'; assuming success");
+            return;
+        }
 
-		// get the data from graphite
-		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
+        // we have data ... let's make sure we're happy with it
+        foreach ($data[0]->datapoints as $datapoint) {
+            if ($datapoint[0] !== null) {
+                assertsDouble($datapoint[0])->isLessThanOrEqualTo($expectedMax);
+            }
+        }
 
-		// do we *have* any data?
-		if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
-			// graphite returns an empty data set when there is no data
-			//
-			// NOTE: this can also happen when the test is asking for
-			//       the wrong metric :(
-		 	if ($expectedMax !== 0) {
-		 		// we were expecting there to be some data
-				throw new E5xx_ExpectFailed(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
-			}
+        // all done
+        $log->endAction("data was available, metric '{$metric}' never exceeds '{$expectedMax}'");
+        return;
+    }
 
-			// if we get here, it's reasonable to assume that everything is
-			// as it should be
-			$log->endAction("no data available for metric '{$metric}'; assuming success");
-			return;
-		}
+    public function metricAverageDoesntExceed($metric, $expectedAverage, $startTime, $endTime)
+    {
+        // when are we looking for?
+        $humanStartTime = date('Y-m-d H:i:s', $startTime);
+        $humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
-		// we have data ... let's make sure we're happy with it
-		foreach ($data[0]->datapoints as $datapoint) {
-			if ($datapoint[0] !== null) {
-				$st->assertsDouble($datapoint[0])->isLessThanOrEqualTo($expectedMax);
-			}
-		}
+        // what are we doing?
+        $log = usingLog()->startAction("ensure metric '{$metric}' average never exceeds value '{$expectedAverage}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
-		// all done
-		$log->endAction("data was available, metric '{$metric}' never exceeds '{$expectedMax}'");
-		return;
-	}
+        // get the data from graphite
+        $data = fromGraphite()->getDataFor($metric, $startTime, $endTime);
 
-	public function metricAverageDoesntExceed($metric, $expectedAverage, $startTime, $endTime)
-	{
-		// shorthand
-		$st = $this->st;
+        // do we *have* any data?
+        if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
+            // graphite returns an empty data set when there is no data
+            //
+            // NOTE: this can also happen when the test is asking for
+            //       the wrong metric :(
+            if ($expectedAverage !== 0) {
+                // we were expecting there to be some data
+                throw new E5xx_ExpectFailed(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
+            }
 
-		// when are we looking for?
-		$humanStartTime = date('Y-m-d H:i:s', $startTime);
-		$humanEndTime   = date('Y-m-d H:i:s', $endTime);
+            // if we get here, it's reasonable to assume that everything is
+            // as it should be
+            $log->endAction("no data available for metric '{$metric}'; assuming success");
+            return;
+        }
 
-		// what are we doing?
-		$log = $st->startAction("ensure metric '{$metric}' average never exceeds value '{$expectedAverage}' between '{$humanStartTime}' and '{$humanEndTime}'");
+        // we have data ... let's make sure we're happy with it
+        $total = 0;
+        $count = 0;
+        foreach ($data[0]->datapoints as $datapoint) {
+            if ($datapoint[0] !== null) {
+                $total += $datapoint[0];
+                $count++;
+            }
+        }
 
-		// get the data from graphite
-		$data = $st->fromGraphite()->getDataFor($metric, $startTime, $endTime);
+        // what is the average?
+        $average = $total/$count;
 
-		// do we *have* any data?
-		if (empty($data) || !isset($data[0]->target, $data[0]->datapoints)) {
-			// graphite returns an empty data set when there is no data
-			//
-			// NOTE: this can also happen when the test is asking for
-			//       the wrong metric :(
-		 	if ($expectedAverage !== 0) {
-		 		// we were expecting there to be some data
-				throw new E5xx_ExpectFailed(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
-			}
+        // are we happy?
+        assertsDouble($average)->isLessThanOrEqualTo($expectedAverage);
 
-			// if we get here, it's reasonable to assume that everything is
-			// as it should be
-			$log->endAction("no data available for metric '{$metric}'; assuming success");
-			return;
-		}
-
-		// we have data ... let's make sure we're happy with it
-		$total = 0;
-		$count = 0;
-		foreach ($data[0]->datapoints as $datapoint) {
-			if ($datapoint[0] !== null) {
-				$total += $datapoint[0];
-				$count++;
-			}
-		}
-
-		// what is the average?
-		$average = $total/$count;
-
-		// are we happy?
-		$st->assertsDouble($average)->isLessThanOrEqualTo($expectedAverage);
-
-		// all done
-		$log->endAction("data was available, metric '{$metric}' never exceeds '{$expectedAverage}'");
-		return;
-	}
+        // all done
+        $log->endAction("data was available, metric '{$metric}' never exceeds '{$expectedAverage}'");
+        return;
+    }
 
 }

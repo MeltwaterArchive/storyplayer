@@ -57,9 +57,9 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_SystemUnderTestConfigMustBeAnObject extends E4xx_SystemUnderTestConfigError
 {
-	public function __construct($filename)
-	{
-		$msg = "Config file '{$filename}': top-level must be an object";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($filename)
+    {
+        $msg = "Config file '{$filename}': top-level must be an object";
+        parent::__construct(400, $msg, $msg);
+    }
 }

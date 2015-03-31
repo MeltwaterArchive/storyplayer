@@ -58,9 +58,9 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E4xx_E4xx_SystemUnderTestRoleNameMustBeString extends E4xx_SystemUnderTestConfigError
 {
-	public function __construct($filename, $index)
-	{
-		$msg = "Config file '{$filename}': 'roles[{$index}].role' must be a string";
-		parent::__construct(400, $msg, $msg);
-	}
+    public function __construct($filename, $index)
+    {
+        $msg = "Config file '{$filename}': 'roles[{$index}].role' must be a string";
+        parent::__construct(400, $msg, $msg);
+    }
 }

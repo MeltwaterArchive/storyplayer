@@ -57,8 +57,8 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  */
 class E5xx_CannotStartDevice extends Exxx_Exception
 {
-	public function __construct() {
-		$msg = "Cannot start the test device; are both browsermob-proxy and selenium running?";
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct() {
+        $msg = "Cannot start the test device; are both browsermob-proxy and selenium running?";
+        parent::__construct(500, $msg, $msg);
+    }
 }

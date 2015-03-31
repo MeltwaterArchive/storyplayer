@@ -59,119 +59,107 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class TargettedBrowserExpects
 {
-	protected $st;
-	protected $searchFunction;
-	protected $searchTerm;
-	protected $element;
-	protected $elementType;
-	protected $elementDesc;
+    protected $st;
+    protected $searchFunction;
+    protected $searchTerm;
+    protected $element;
+    protected $elementType;
+    protected $elementDesc;
 
-	/**
-	 * @param string $elementDesc
-	 */
-	public function __construct(StoryTeller $st, callable $searchFunction, $searchTerm, $elementDesc)
-	{
-		$this->st             = $st;
-		$this->searchFunction = $searchFunction;
-		$this->searchTerm     = $searchTerm;
-		$this->elementDesc    = $elementDesc;
-	}
+    /**
+     * @param string $elementDesc
+     */
+    public function __construct(StoryTeller $st, callable $searchFunction, $searchTerm, $elementDesc)
+    {
+        $this->st             = $st;
+        $this->searchFunction = $searchFunction;
+        $this->searchTerm     = $searchTerm;
+        $this->elementDesc    = $elementDesc;
+    }
 
-	public function isBlank()
-	{
-		// shorthand
-		$st = $this->st;
+    public function isBlank()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("{$this->elementDesc} '{$this->searchTerm}' must be blank");
 
-		// what are we doing?
-		$log = $st->startAction("{$this->elementDesc} '{$this->searchTerm}' must be blank");
+        // get the element
+        $element = $this->getElement();
 
-		// get the element
-		$element = $this->getElement();
+        // test it
+        if (strlen($element->attribute("value")) > 0) {
+            throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' is blank', $this->searchTerm . ' is not blank');
+        }
 
-		// test it
-		if (strlen($element->attribute("value")) > 0) {
-			throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' is blank', $this->searchTerm . ' is not blank');
-		}
+        // all done
+        $log->endAction();
+        return true;
+    }
 
-		// all done
-		$log->endAction();
-		return true;
-	}
+    public function isNotBlank()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("{$this->elementDesc} '{$this->searchTerm}' must not be blank");
 
-	public function isNotBlank()
-	{
-		// shorthand
-		$st = $this->st;
+        // get the element
+        $element = $this->getElement();
 
-		// what are we doing?
-		$log = $st->startAction("{$this->elementDesc} '{$this->searchTerm}' must not be blank");
+        // test it
+        if (strlen($element->attribute("value")) > 0) {
+            $log->endAction();
+            return true;
+        }
 
-		// get the element
-		$element = $this->getElement();
+        throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' is not blank', $this->searchTerm . ' is blank');
+    }
 
-		// test it
-		if (strlen($element->attribute("value")) > 0) {
-			$log->endAction();
-			return true;
-		}
+    public function isChecked()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("{$this->elementDesc} '{$this->searchTerm}' must be checked");
 
-		throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' is not blank', $this->searchTerm . ' is blank');
-	}
+        // get the element
+        $element = $this->getElement();
 
-	public function isChecked()
-	{
-		// shorthand
-		$st = $this->st;
+        // test it
+        if ($element->attribute("checked")) {
+            $log->endAction();
+            return true;
+        }
 
-		// what are we doing?
-		$log = $st->startAction("{$this->elementDesc} '{$this->searchTerm}' must be checked");
+        throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' checked', $this->searchTerm . ' not checked');
+    }
 
-		// get the element
-		$element = $this->getElement();
+    public function isNotChecked()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("{$this->elementDesc} '{$this->searchTerm}' must not be checked");
 
-		// test it
-		if ($element->attribute("checked")) {
-			$log->endAction();
-			return true;
-		}
+        // get the element
+        $element = $this->getElement();
 
-		throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' checked', $this->searchTerm . ' not checked');
-	}
+        // test it
+        if ($element->attribute("checked")) {
+            throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' not checked', $this->searchTerm . ' checked');
+        }
 
-	public function isNotChecked()
-	{
-		// shorthand
-		$st = $this->st;
+        // all done
+        $log->endAction();
+        return true;
+    }
 
-		// what are we doing?
-		$log = $st->startAction("{$this->elementDesc} '{$this->searchTerm}' must not be checked");
+    protected function getElement()
+    {
+        $callable = $this->searchFunction;
 
-		// get the element
-		$element = $this->getElement();
+        $log = usingLog()->startAction("Find element on page with label, id or name '{$this->searchTerm}'");
+        try {
+            $element = $callable();
+            $log->endAction();
 
-		// test it
-		if ($element->attribute("checked")) {
-			throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' not checked', $this->searchTerm . ' checked');
-		}
-
-		// all done
-		$log->endAction();
-		return true;
-	}
-
-	protected function getElement()
-	{
-		$callable = $this->searchFunction;
-
-		$log = $this->st->startAction("Find element on page with label, id or name '{$this->searchTerm}'");
-		try {
-			$element = $callable();
-			$log->endAction();
-
-			return $element;
-		}
-		catch (Exception $e) {
-			throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' exists', 'does not exist');
-		}
-	}
+            return $element;
+        }
+        catch (Exception $e) {
+            throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' exists', 'does not exist');
+        }
+    }
 }

@@ -59,176 +59,161 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
  */
 class ExpectsBrowser extends Prose
 {
-	protected function initActions()
-	{
-		$this->initDevice();
-	}
+    protected function initActions()
+    {
+        $this->initDevice();
+    }
 
-	public function doesntHave()
-	{
-		$action = function(StoryTeller $st, $requiredCount, $elements, $elementName, $elementDesc) {
+    public function doesntHave()
+    {
+        $action = function($requiredCount, $elements, $elementName, $elementDesc) {
 
-			$log = $st->startAction("$elementDesc '$elementName' must not exist");
+            $log = usingLog()->startAction("$elementDesc '$elementName' must not exist");
 
-			// how many elements actually exist?
-			$actualCount = count($elements);
+            // how many elements actually exist?
+            $actualCount = count($elements);
 
-			// this gets a little complicated
-			switch ($requiredCount) {
-				// this satisfies something like:
-				//
-				// expectsBrowser()->doesntHave()->anyFieldsWithId('XXX');
-				case null:
-				case 'any':
-					if ($actualCount === 0) {
-						$log->endAction("0 element(s) found");
-						return;
-					}
-					throw new E5xx_ExpectFailed(__METHOD__, "0 element(s) to exist", "$actualCount element(s) exist");
-					break;
+            // this gets a little complicated
+            switch ($requiredCount) {
+                // this satisfies something like:
+                //
+                // expectsBrowser()->doesntHave()->anyFieldsWithId('XXX');
+                case null:
+                case 'any':
+                    if ($actualCount === 0) {
+                        $log->endAction("0 element(s) found");
+                        return;
+                    }
+                    throw new E5xx_ExpectFailed(__METHOD__, "0 element(s) to exist", "$actualCount element(s) exist");
 
-				case 'several':
-					if ($actualCount < 3 || $actualCount > 9) {
-						$log->endAction($actualCount . " element(s) found");
-						return true;
-					}
+                case 'several':
+                    if ($actualCount < 3 || $actualCount > 9) {
+                        $log->endAction($actualCount . " element(s) found");
+                        return true;
+                    }
 
-					throw new E5xx_ExpectFailed(__METHOD__, "must not be several element(s)", "several element(s) exist");
-					break;
+                    throw new E5xx_ExpectFailed(__METHOD__, "must not be several element(s)", "several element(s) exist");
 
-				// this satisfies something like:
-				//
-				// expectsBrowser()->doesntHave()->fiveFieldsWithId('XX');
-				default:
-					if ($actualCount != $requiredCount) {
-						$log->endAction($actualCount . " element(s) found");
-						return true;
-					}
+                // this satisfies something like:
+                //
+                // expectsBrowser()->doesntHave()->fiveFieldsWithId('XX');
+                default:
+                    if ($actualCount != $requiredCount) {
+                        $log->endAction($actualCount . " element(s) found");
+                        return true;
+                    }
 
-					throw new E5xx_ExpectFailed(__METHOD__, "$requiredCount element(s) must not exist", "$actualCount element(s) exist");
-			}
-		};
+                    throw new E5xx_ExpectFailed(__METHOD__, "$requiredCount element(s) must not exist", "$actualCount element(s) exist");
+            }
+        };
 
-		return new MultiElementAction(
-			$this->st,
-			$action,
-			"doesntHave",
-			$this->getTopElement()
-		);
-	}
+        return new MultiElementAction(
+            $action,
+            "doesntHave",
+            $this->getTopElement()
+        );
+    }
 
-	public function has()
-	{
-		$action = function(StoryTeller $st, $requiredCount, $elements, $elementName, $elementDesc) {
+    public function has()
+    {
+        $action = function($requiredCount, $elements, $elementName, $elementDesc) {
 
-			$log = $st->startAction("$elementDesc '$elementName' must exist");
+            $log = usingLog()->startAction("$elementDesc '$elementName' must exist");
 
-			$actualCount = count($elements);
-			switch($requiredCount) {
-				// this satisfies something like:
-				//
-				// expectsBrowser()->has()->fieldWithId('XX');
-				case null:
-				case 'any':
-					if ($actualCount > 0) {
-						$log->endAction($actualCount . " element(s) found");
-						return true;
-					}
+            $actualCount = count($elements);
+            switch($requiredCount) {
+                // this satisfies something like:
+                //
+                // expectsBrowser()->has()->fieldWithId('XX');
+                case null:
+                case 'any':
+                    if ($actualCount > 0) {
+                        $log->endAction($actualCount . " element(s) found");
+                        return true;
+                    }
 
-					throw new E5xx_ExpectFailed(__METHOD__, "at least one element to exist", "$actualCount element(s) exist");
-					break;
+                    throw new E5xx_ExpectFailed(__METHOD__, "at least one element to exist", "$actualCount element(s) exist");
 
-				case 'several':
-					if ($actualCount > 2 && $actualCount < 10) {
-						$log->endAction($actualCount . " element(s) found");
-						return true;
-					}
+                case 'several':
+                    if ($actualCount > 2 && $actualCount < 10) {
+                        $log->endAction($actualCount . " element(s) found");
+                        return true;
+                    }
 
-					throw new E5xx_ExpectFailed(__METHOD__, "several element to exist", "$actualCount element(s) exist");
-					break;
+                    throw new E5xx_ExpectFailed(__METHOD__, "several element to exist", "$actualCount element(s) exist");
 
-				// this satisfies something like:
-				//
-				// expectsBrowser()->has()->oneFieldWithId('XX');
-				default:
-					if ($actualCount == $requiredCount) {
-						$log->endAction($actualCount . " element(s) found");
-						return true;
-					}
+                // this satisfies something like:
+                //
+                // expectsBrowser()->has()->oneFieldWithId('XX');
+                default:
+                    if ($actualCount == $requiredCount) {
+                        $log->endAction($actualCount . " element(s) found");
+                        return true;
+                    }
 
-					throw new E5xx_ExpectFailed(__METHOD__, "$requiredCount element(s) to exist", "$actualCount element(s) exist");
-			}
-		};
+                    throw new E5xx_ExpectFailed(__METHOD__, "$requiredCount element(s) to exist", "$actualCount element(s) exist");
+            }
+        };
 
-		return new MultiElementAction(
-			$this->st,
-			$action,
-			"has",
-			$this->getTopElement()
-		);
-	}
+        return new MultiElementAction(
+            $action,
+            "has",
+            $this->getTopElement()
+        );
+    }
 
-	public function hasTitle($title)
-	{
-		// shorthand
-		$st = $this->st;
+    public function hasTitle($title)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("page title must be {$title}");
 
-		// what are we doing?
-		$log = $st->startAction("page title must be {$title}");
+        // get the browser title
+        $browserTitle = fromBrowser()->getTitle();
 
-		// get the browser title
-		$browserTitle = $st->fromBrowser()->getTitle();
+        if ($title != $browserTitle) {
+            throw new E5xx_ExpectFailed('BrowserExpects::title', $title, $browserTitle);
+        }
 
-		if ($title != $browserTitle) {
-			throw new E5xx_ExpectFailed('BrowserExpects::title', $title, $browserTitle);
-		}
+        // all done
+        $log->endAction();
+    }
 
-		// all done
-		$log->endAction();
-	}
+    public function hasTitles($titles)
+    {
+        // what are we doing?
+        $titlesString = implode('; or ', $titles);
+        $log = usingLog()->startAction("page title must be one of: {$titlesString}");
 
-	public function hasTitles($titles)
-	{
-		// shorthand
-		$st = $this->st;
+        // get the browser title
+        $browserTitle = fromBrowser()->getTitle();
 
-		// what are we doing?
-		$titlesString = implode('; or ', $titles);
-		$log = $st->startAction("page title must be one of: {$titlesString}");
+        if (!in_array($browserTitle, $titles)) {
+            throw new E5xx_ExpectFailed(__METHOD__, $titlesString, $browserTitle);
+        }
 
-		// get the browser title
-		$browserTitle = $st->fromBrowser()->getTitle();
+        // all done
+        $log->endAction();
+    }
 
-		if (!in_array($browserTitle, $titles)) {
-			throw new E5xx_ExpectFailed(__METHOD__, $titlesString, $browserTitle);
-		}
+    public function currentWindowSizeIs($width, $height)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("current browser window dimensions must be '{$width}' x '{$height}' (w x h)");
 
-		// all done
-		$log->endAction();
-	}
+        // get the dimensions
+        $dimensions = fromBrowser()->getCurrentWindowSize();
 
-	public function currentWindowSizeIs($width, $height)
-	{
-		// shorthand
-		$st = $this->st;
+        // are they right?
+        if ($dimensions['width'] != $width || $dimensions['height'] != $height) {
+            throw new E5xx_ExpectFailed(__METHOD__, "$width x $height", "{$dimensions['width']} x {$dimensions['height']}");
+        }
 
-		// what are we doing?
-		$log = $st->startAction("current browser window dimensions must be '{$width}' x '{$height}' (w x h)");
+        // all done
+        $log->endAction();
+    }
 
-		// get the dimensions
-		$dimensions = $st->fromBrowser()->getCurrentWindowSize();
-
-		// are they right?
-		if ($dimensions['width'] != $width || $dimensions['height'] != $height) {
-			throw new E5xx_ExpectFailed(__METHOD__, "$width x $height", "{$dimensions['width']} x {$dimensions['height']}");
-		}
-
-		// all done
-		$log->endAction();
-	}
-
-	public function __call($methodName, $methodParams)
-	{
-		return new SingleElementExpect($this->st, $this->getTopElement(), $methodName, $methodParams);
-	}
+    public function __call($methodName, $methodParams)
+    {
+        return new SingleElementExpect($this->getTopElement(), $methodName, $methodParams);
+    }
 }

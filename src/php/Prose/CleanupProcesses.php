@@ -72,11 +72,8 @@ class CleanupProcesses extends BaseCleanup
      */
     private function pruneProcessList()
     {
-        // shorthand
-        $st = $this->st;
-
         // should the processes persist?
-        if ($st->getPersistProcesses()) {
+        if ($this->st->getPersistProcesses()) {
             return;
         }
 
@@ -99,17 +96,16 @@ class CleanupProcesses extends BaseCleanup
         }
 
         $this->removeTablesIfEmpty();
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
 
         return;
 
         /*
                 // shorthand
-        $st     = $this->st;
         $output = $this->output;
 
         // do we have anything to shutdown?
-        $screenSessions = $st->fromShell()->getAllScreenSessions();
+        $screenSessions = fromShell()->getAllScreenSessions();
         if (count($screenSessions) == 0) {
             // nothing to do
             return;

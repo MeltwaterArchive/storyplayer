@@ -59,49 +59,48 @@ use Symfony\Component\Yaml\Dumper;
  */
 class UsingYamlFile extends Prose
 {
-	public function __construct(StoryTeller $st, $args)
-	{
-		// call our parent constructor
-		parent::__construct($st, $args);
+    public function __construct(StoryTeller $st, $args)
+    {
+        // call our parent constructor
+        parent::__construct($st, $args);
 
-		// $args[0] will be our filename
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name of the file to work with");
-		}
-	}
+        // $args[0] will be our filename
+        if (!isset($args[0])) {
+            throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name of the file to work with");
+        }
+    }
 
-	public function writeDataToFile($params)
-	{
-		// shorthand
-		$st = $this->st;
-		$filename = $this->args[0];
+    public function writeDataToFile($params)
+    {
+        // shorthand
+        $filename = $this->args[0];
 
-		// what are we doing?
-		$printer = new DataPrinter();
-		$logParams = $printer->convertToString($params);
-		$log = $st->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
+        // what are we doing?
+        $printer = new DataPrinter();
+        $logParams = $printer->convertToString($params);
+        $log = usingLog()->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
 
-		// create an instance of the Symfony YAML writer
-		$writer = new Dumper();
+        // create an instance of the Symfony YAML writer
+        $writer = new Dumper();
 
-		// create the YAML data
-		$yamlData = $writer->dump($params, 2);
-		if (!is_string($yamlData) || strlen($yamlData) < 6) {
-			throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
-		}
+        // create the YAML data
+        $yamlData = $writer->dump($params, 2);
+        if (!is_string($yamlData) || strlen($yamlData) < 6) {
+            throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
+        }
 
-		// prepend the YAML marker
-		$yamlData = '---' . PHP_EOL . $yamlData;
+        // prepend the YAML marker
+        $yamlData = '---' . PHP_EOL . $yamlData;
 
-		// write the file
-		//
-		// the loose FALSE test here is exactly what we want, because we want to catch
-		// both the situation when the write fails, and when there's zero bytes written
-		if (!file_put_contents($filename, $yamlData)) {
-			throw new E5xx_ActionFailed(__METHOD__, "unable to write file '{$filename}'");
-		}
+        // write the file
+        //
+        // the loose FALSE test here is exactly what we want, because we want to catch
+        // both the situation when the write fails, and when there's zero bytes written
+        if (!file_put_contents($filename, $yamlData)) {
+            throw new E5xx_ActionFailed(__METHOD__, "unable to write file '{$filename}'");
+        }
 
-		// all done
-		$log->endAction();
-	}
+        // all done
+        $log->endAction();
+    }
 }

@@ -59,29 +59,31 @@ use Phix_Project\CliEngine\CliCommand;
  */
 class ShowTestEnvironment_Command extends CliCommand
 {
-	public function __construct()
-	{
-		// define the command
-		$this->setName('show-test-environment');
-		$this->setShortDescription('display the default test environment');
-		$this->setLongDescription(
-			"Use this command to see what Storyplayer will use as the default "
-			."environment to test against."
-			.PHP_EOL.PHP_EOL
-			."This command mostly exists to assist tab-completion scripts for UNIX shells."
-		);
-	}
+    public function __construct()
+    {
+        // define the command
+        $this->setName('show-test-environment');
+        $this->setShortDescription('display the default test environment');
+        $this->setLongDescription(
+            "Use this command to see what Storyplayer will use as the default "
+            ."environment to test against."
+            .PHP_EOL.PHP_EOL
+            ."This command mostly exists to assist tab-completion scripts for UNIX shells."
+        );
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  array     $params
-	 * @param  mixed     $additionalContext
-	 * @return Phix_Project\CliEngine\CliResult
-	 */
-	public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
-	{
-		// output the default environment name
-		echo $additionalContext->defaultTestEnvironmentName . PHP_EOL;
-	}
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  array     $params
+     * @param  mixed     $additionalContext
+     * @return int
+     */
+    public function processCommand(CliEngine $engine, $params = array(), $additionalContext = null)
+    {
+        // output the default environment name
+        echo $additionalContext->defaultTestEnvironmentName . PHP_EOL;
+
+        return 0;
+    }
 }

@@ -60,8 +60,8 @@ $story->addAction(function() {
 
 	foreach(firstHostWithRole("zmq_target") as $hostId) {
 		$context = usingZmqContext()->getZmqContext();
-		$inPort  = fromHost($hostId)->getAppSetting("zmq.single.inPort");
-		$outPort = fromHost($hostId)->getAppSetting("zmq.single.outPort");
+		$inPort  = fromHost($hostId)->getStorySetting("zmq.single.inPort");
+		$outPort = fromHost($hostId)->getStorySetting("zmq.single.outPort");
 
 		$inSocket  = usingZmqContext($context)->connectToHost($hostId, $inPort, 'PUSH');
 		$outSocket = usingZmqContext($context)->connectToHost($hostId, $outPort, 'PULL');

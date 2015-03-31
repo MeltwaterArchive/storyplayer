@@ -88,7 +88,7 @@ use DataSift\Storyplayer\Cli\Feature\VerboseSupport;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class BuildTestEnvironment_Command extends BaseCommand
+class BuildTestEnvironment_Command extends BaseCommand implements CliSignalHandler
 {
     // we need to track this for handling CTRL-C
     protected $st;
@@ -172,8 +172,8 @@ class BuildTestEnvironment_Command extends BaseCommand
         $this->initFeaturesBeforeModulesAvailable($engine);
 
         // now it is safe to create our shorthand
-        $runtimeConfig        = $injectables->runtimeConfig;
-        $runtimeConfigManager = $injectables->runtimeConfigManager;
+        $runtimeConfig        = $injectables->getRuntimeConfig();
+        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
         $output               = $injectables->output;
 
         // save the output for use in other methods
@@ -202,7 +202,7 @@ class BuildTestEnvironment_Command extends BaseCommand
         $this->initSignalHandling($injectables);
 
         // build our list of players to run
-        $this->initPlayerList($engine, $injectables, $params);
+        $this->initPlayerList($injectables);
 
         // let's keep score :)
         $startTime = microtime(true);
@@ -272,12 +272,10 @@ class BuildTestEnvironment_Command extends BaseCommand
 
     /**
      *
-     * @param  CliEngine   $cliEngine
      * @param  Injectables $injectables
-     * @param  array       $cliParams
      * @return void
      */
-    protected function initPlayerList(CliEngine $cliEngine, Injectables $injectables, $cliParams)
+    protected function initPlayerList(Injectables $injectables)
     {
         // we just want a TestEnvironment
         $this->playerList[] = new TestEnvironment_Player([], $injectables);

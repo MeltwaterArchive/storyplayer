@@ -60,7 +60,7 @@ class E4xx_ConfigDataNotAnObject extends Exxx_Exception
 {
     public function __construct($fullPath)
     {
-    	$msg = "'{$fullPath}' is not an object";
+        $msg = "'{$fullPath}' is not an object";
         parent::__construct(400, $msg, $msg);
     }
 }

@@ -52,6 +52,10 @@ $story->addAction(function() {
 $story->addPostTestInspection(function() {
 	$checkpoint = getCheckpoint();
 
-	assertsObject($checkpoint)->hasAttribute("title");
-	assertsString($checkpoint->title)->equals("BBC News - Home");
+	// what title are we expecting?
+	$expectedTitle = fromStoryplayer()->getStorySetting("modules.http.remotePage.title");
+
+	// do we have the title we expected?
+	assertsObject($checkpoint)->hasAttribute('title');
+	assertsString($checkpoint->title)->equals($expectedTitle);
 });

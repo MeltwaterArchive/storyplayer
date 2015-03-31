@@ -58,27 +58,24 @@ use Predis\Client as PredisClient;
  */
 class UsingRedis extends Prose
 {
-	public function connect($dsn)
-	{
-		// shorthand
-		$st = $this->st;
+    public function connect($dsn)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("connect to Redis server '{$dsn}'");
 
-		// what are we doing?
-		$log = $st->startAction("connect to Redis server '{$dsn}'");
+        // make the connection
+        try {
+            $conn = new PredisClient($dsn);
+        }
+        catch (Exception $e) {
+            $log->endAction("connection failed: " . $e->getMessage());
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// make the connection
-		try {
-			$conn = new PredisClient($dsn);
-		}
-		catch (Exception $e) {
-			$log->endAction("connection failed: " . $e->getMessage());
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // if we get here, all is good
 
-		// if we get here, all is good
-
-		// all done
-		$log->endAction("connected");
-		return $conn;
-	}
+        // all done
+        $log->endAction("connected");
+        return $conn;
+    }
 }

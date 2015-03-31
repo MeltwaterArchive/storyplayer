@@ -56,23 +56,23 @@ namespace Prose;
 
 class UsingSauceLabs extends SauceLabsRestApi
 {
-	public function createSubAccount()
-	{
+    public function createSubAccount()
+    {
 
-	}
+    }
 
-	public function updateJob()
-	{
+    public function updateJob()
+    {
 
-	}
+    }
 
-	public function stopJob()
-	{
+    public function stopJob()
+    {
 
-	}
+    }
 
-	public function stopSauceConnectTunnel()
-	{
+    public function stopSauceConnectTunnel()
+    {
 
-	}
+    }
 }

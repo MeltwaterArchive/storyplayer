@@ -57,9 +57,6 @@ class CleanupRoles extends BaseCleanup
 
     public function shutdown()
     {
-    	// shorthand
-    	$st = $this->st;
-
         // get the roles table, if we have one
         $rolesTable = $this->getTable();
         if (!$rolesTable) {
@@ -77,6 +74,6 @@ class CleanupRoles extends BaseCleanup
         $this->removeTablesIfEmpty();
 
         // save the runtimeConfig
-        $st->saveRuntimeConfig();
+        $this->st->saveRuntimeConfig();
     }
 }

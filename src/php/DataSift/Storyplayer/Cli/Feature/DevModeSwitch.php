@@ -59,39 +59,39 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Feature_DevModeSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('dev');
-		$this->setShortDescription('enable story development mode');
-		$this->setLongDesc(
-			"'dev' mode currently does the following:"
-			. PHP_EOL . PHP_EOL
-			. "* displays the full story log on stdout"
-			. PHP_EOL . PHP_EOL
-			. "The full story log is also available in storyplayer.log."
-		);
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('dev');
+        $this->setShortDescription('enable story development mode');
+        $this->setLongDesc(
+            "'dev' mode currently does the following:"
+            . PHP_EOL . PHP_EOL
+            . "* displays the full story log on stdout"
+            . PHP_EOL . PHP_EOL
+            . "The full story log is also available in storyplayer.log."
+        );
 
-		// what are the long switches?
-		$this->addLongSwitch('dev');
+        // what are the long switches?
+        $this->addLongSwitch('dev');
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		// remember the setting
-		$engine->options->dev = true;
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        // remember the setting
+        $engine->options->dev = true;
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

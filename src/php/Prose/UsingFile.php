@@ -55,24 +55,21 @@ namespace Prose;
  */
 class UsingFile extends Prose
 {
-	public function removeFile($filename)
-	{
-		// shorthand
-		$st = $this->st;
+    public function removeFile($filename)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("delete the file '{$filename}'");
 
-		// what are we doing?
-		$log = $st->startAction("delete the file '{$filename}'");
+        // remove the file
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+        else {
+            $log->endAction("file not found");
+        }
 
-		// remove the file
-		if (file_exists($filename)) {
-			unlink($filename);
-		}
-		else {
-			$log->endAction("file not found");
-		}
-
-		// all done
-		$log->endAction();
-		return $this;
-	}
+        // all done
+        $log->endAction();
+        return $this;
+    }
 }

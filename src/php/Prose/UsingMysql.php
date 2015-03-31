@@ -58,55 +58,52 @@ use mysqli;
  */
 class UsingMysql extends Prose
 {
-	public function __construct($st, $args)
-	{
-		parent::__construct($st, $args);
+    public function __construct($st, $args)
+    {
+        parent::__construct($st, $args);
 
-		if (!isset($args[0])) {
-			throw new E5xx_ActionFailed(__METHOD__, "param 1 must be the host of the MySQL server");
-		}
-		if (!isset($args[1])) {
-			throw new E5xx_ActionFailed(__METHOD__, "param 2 must be the MySQL user to use");
-		}
-		if (!isset($args[2])) {
-			throw new E5xx_ActionFailed(__METHOD__, "param 2 must be the password for the MySQL user");
-		}
-	}
+        if (!isset($args[0])) {
+            throw new E5xx_ActionFailed(__METHOD__, "param 1 must be the host of the MySQL server");
+        }
+        if (!isset($args[1])) {
+            throw new E5xx_ActionFailed(__METHOD__, "param 2 must be the MySQL user to use");
+        }
+        if (!isset($args[2])) {
+            throw new E5xx_ActionFailed(__METHOD__, "param 2 must be the password for the MySQL user");
+        }
+    }
 
-	public function query($sql)
-	{
-		// shorthand
-		$st = $this->st;
+    public function query($sql)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction(["run SQL against '{$this->args[0]}':", $sql]);
 
-		// what are we doing?
-		$log = $st->startAction(["run SQL against '{$this->args[0]}':", $sql]);
+        // connect
+        $conn = new mysqli($this->args[0], $this->args[1], $this->args[2]);
+        if ($conn->connect_errno) {
+            $log->endAction('unable to connect to database :( - ' . $conn->connect_error);
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// connect
-		$conn = new mysqli($this->args[0], $this->args[1], $this->args[2]);
-		if ($conn->connect_errno) {
-			$log->endAction('unable to connect to database :( - ' . $conn->connect_error);
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // switch database
+        if (isset($this->args[2])) {
+            if (!$conn->select_db($this->args[3])) {
+                $log->endAction("unable to switch to database '{$this->args[2]}' - " . $conn->error);
+                throw new E5xx_ActionFailed(__METHOD__);
+            }
+        }
 
-		// switch database
-		if (isset($this->args[2])) {
-			if (!$conn->select_db($this->args[3])) {
-				$log->endAction("unable to switch to database '{$this->args[2]}' - " . $conn->error);
-				throw new E5xx_ActionFailed(__METHOD__);
-			}
-		}
+        // run the SQL
+        $result = $conn->query($sql);
 
-		// run the SQL
-		$result = $conn->query($sql);
+        // what happened?
+        if (!$result) {
+            $log->endAction("failed to run query");
+            throw new E5xx_ActionFailed(__METHOD__, "query failed - " . $conn->error);
+        }
 
-		// what happened?
-		if (!$result) {
-			$log->endAction("failed to run query");
-			throw new E5xx_ActionFailed(__METHOD__, "query failed - " . $conn->error);
-		}
-
-		// success
-		$log->endAction();
-		return $result;
-	}
+        // success
+        $log->endAction();
+        return $result;
+    }
 }

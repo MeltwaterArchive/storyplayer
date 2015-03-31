@@ -60,7 +60,7 @@ class E4xx_NoSuchDevice extends Exxx_Exception
 {
     public function __construct($deviceName)
     {
-    	$msg = "Unknown device '{$deviceName}'; we have no config for it";
+        $msg = "Unknown device '{$deviceName}'; we have no config for it";
         parent::__construct(400, $msg, $msg);
     }
 }

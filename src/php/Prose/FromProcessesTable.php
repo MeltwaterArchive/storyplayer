@@ -55,38 +55,38 @@ namespace Prose;
  */
 class FromProcessesTable extends Prose
 {
-	/**
-	 * tableName
-	 *
-	 * The key that this table stores it's data in the RuntimeConfig
-	 *
-	 * @var string
-	 */
-	protected $tableName = "processes";
+    /**
+     * tableName
+     *
+     * The key that this table stores it's data in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $tableName = "processes";
 
-	/**
-	 * getProcessesTable
-	 *
-	 * Get the entire processes table from the runtime config
-	 *
-	 * @return void
-	 */
-	public function getProcessesTable()
-	{
-		return $this->st->fromRuntimeTable($this->tableName)->getTable();
-	}
+    /**
+     * getProcessesTable
+     *
+     * Get the entire processes table from the runtime config
+     *
+     * @return object
+     */
+    public function getProcessesTable()
+    {
+        return fromRuntimeTable($this->tableName)->getTable();
+    }
 
-	/**
-	 * getDetailsForPid
-	 *
-	 * Get the get a specific pid's details from the processes table
-	 *
-	 * @param mixed $pid The pid we're working with
-	 *
-	 * @return void
-	 */
-	public function getDetailsForPid($pid)
-	{
-		return $this->st->fromRuntimeTable($this->tableName)->getDetails($pid);
-	}
+    /**
+     * getDetailsForPid
+     *
+     * Get the get a specific pid's details from the processes table
+     *
+     * @param mixed $pid The pid we're working with
+     *
+     * @return object
+     */
+    public function getDetailsForPid($pid)
+    {
+        return fromRuntimeTable($this->tableName)->getDetails($pid);
+    }
 }

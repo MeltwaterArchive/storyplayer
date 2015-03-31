@@ -69,7 +69,7 @@ $story->addPostTestInspection(function() {
         $hostUser  = fromHost($hostname)->getStorySetting("user.username");
         $hostGroup = fromHost($hostname)->getStorySetting("user.group");
 
-        // get the details for this file
-        $details = expectsHost($hostname)->hasFileWithPermissions('testfile.txt', $hostUser, $hostGroup, 0644);
+        // check the details for this file
+        expectsHost($hostname)->hasFileWithPermissions('testfile.txt', $hostUser, $hostGroup, 0644);
     }
 });

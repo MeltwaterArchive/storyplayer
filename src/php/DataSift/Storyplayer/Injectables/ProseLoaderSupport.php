@@ -58,24 +58,31 @@ use DataSift\Storyplayer\PlayerLib\Prose_Loader;
  */
 trait ProseLoaderSupport
 {
-	public $proseLoader;
+    public $proseLoader;
 
-	/**
-	 *
-	 * @return void
-	 */
-	public function initProseLoaderSupport(Injectables $injectables)
-	{
-		// $st will use this to load modules
-		$this->proseLoader = new Prose_Loader();
+    /**
+     *
+     * @return void
+     */
+    public function initProseLoaderSupport(Injectables $injectables)
+    {
+        // $st will use this to load modules
+        $this->proseLoader = new Prose_Loader();
 
-		// does the user have any namespaces of their own that they
-		// want to search?
-		if (isset($injectables->staticConfig->prose, $injectables->staticConfig->prose->namespaces) && is_array($injectables->staticConfig->prose->namespaces)) {
-			// yes, the user does have some namespaces
-			// copy them across into our list
-			$this->proseLoader->setNamespaces($injectables->staticConfig->prose->namespaces);
-		}
+        // does the user have any namespaces of their own that they
+        // want to search?
+        $configPath = 'storyplayer.prose.namespaces';
+        if (!$injectables->activeConfig->hasData($configPath)) {
+            return;
+        }
 
-	}
+        $proseList = $injectables->activeConfig->getData($configPath);
+        if (!is_array($proseList)) {
+            $injectables->output->logCliError("'prose.namespaces' must be an array in your storyplayer.json config file");
+            exit(1);
+        }
+
+        // if we get here, then we have some namespaces to use
+        $this->proseLoader->setNamespaces($proseList);
+    }
 }

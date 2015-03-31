@@ -373,9 +373,9 @@ function expectsFailure()
  * @return \Prose\ExpectsHost
  * @throws \Prose\E5xx_ExpectFailed
  */
-function expectsFirstHostWithRole($role)
+function expectsFirstHostWithRole($roleName)
 {
-    return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$role]);
+    return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$roleName]);
 }
 
 /**
@@ -431,7 +431,7 @@ function expectsGraphite()
  *
  * @param  string $hostId
  *         the ID of the host to use
- * @return \Prose\UsingHost
+ * @return \Prose\ExpectsHost
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsHost($hostId)
@@ -519,12 +519,14 @@ function expectsRolesTable()
  * This module is for internal use inside Storyplayer. You shouldn't need to
  * use it from your own stories.
  *
+ * @param  string $tableName
+ *         which table do we want to test?
  * @return \Prose\ExpectsRuntimeTable
  * @throws \Prose\E5xx_ExpectFailed
  */
-function expectsRuntimeTable()
+function expectsRuntimeTable($tableName)
 {
-    return new ExpectsRuntimeTable(StoryTeller::instance());
+    return new ExpectsRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -629,7 +631,7 @@ function expectsZmqSocket($zmqSocket)
  *
  * @param  string $roleName
  *         the role that you want to work with
- * @return \Prose\DelayedHostsModuleIterator
+ * @return \Prose\ForeachHostWithRole
  */
 function foreachHostWithRole($roleName)
 {
@@ -742,7 +744,7 @@ function fromEc2()
  *
  * @param  string $amiId
  *         the AMI ID that you want to work with
- * @return \Prose\FromEnvironment
+ * @return \Prose\FromEc2Instance
  */
 function fromEc2Instance($amiId)
 {
@@ -890,7 +892,7 @@ function fromHost($hostId)
  * This module is intended for internal use by Storyplayer. You should not
  * need to call this module from your own stories.
  *
- * @return \Prose\UsingHostsTable
+ * @return \Prose\FromHostsTable
  */
 function fromHostsTable()
 {
@@ -996,11 +998,13 @@ function fromRolesTable()
  * This module is intended for internal use only. You shouldn't need to call
  * this module from your own stories.
  *
+ * @param  string $tableName
+ *         which runtime table do you want?
  * @return \Prose\FromRuntimeTable
  */
-function fromRuntimeTable()
+function fromRuntimeTable($tableName)
 {
-    return new FromRuntimeTable(StoryTeller::instance());
+    return new FromRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1014,9 +1018,9 @@ function fromRuntimeTable()
  *
  * @return \Prose\FromRuntimeTableForTargetEnvironment
  */
-function fromRuntimeTableForTargetEnvironment()
+function fromRuntimeTableForTargetEnvironment($tableName)
 {
-    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance());
+    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1293,7 +1297,7 @@ function usingEc2()
  */
 function usingEc2Instance($amiId)
 {
-    return new UsingEc2Instance(StoryTeller::instance());
+    return new UsingEc2Instance(StoryTeller::instance(), [$amiId]);
 }
 
 /**
@@ -1621,9 +1625,9 @@ function usingRolesTable()
  *
  * @return \Prose\UsingRuntimeTable
  */
-function usingRuntimeTable()
+function usingRuntimeTable($tableName)
 {
-    return new UsingRolesTable(StoryTeller::instance());
+    return new UsingRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1634,9 +1638,9 @@ function usingRuntimeTable()
  *
  * @return \Prose\UsingRuntimeTableForTargetEnvironment
  */
-function usingRuntimeTableForTargetEnvironment()
+function usingRuntimeTableForTargetEnvironment($tableName)
 {
-    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance());
+    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
 }
 
 /**
@@ -1838,24 +1842,22 @@ function usingZmqSocket($zmqSocket)
  * @param  string $roleName
  *         The role that we want
  *
- * @return string
+ * @return Iterator
  *         a hostid that matches the role
  */
 function firstHostWithRole($roleName)
 {
-    // shorthand
-    $st = StoryTeller::instance();
-
-    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count(get_object_vars($listOfHosts))) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
-    $log = $st->startAction("for the first host with role '{$roleName}' ... ");
+    $log = usingLog()->startAction("for the first host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $hostDetails = array_pop(get_object_vars($listOfHosts));
+    $hostsAsArray = get_object_vars($listOfHosts);
+    $hostDetails  = array_pop($hostsAsArray);
     yield($hostDetails->hostId);
 
     // all done
@@ -1868,25 +1870,22 @@ function firstHostWithRole($roleName)
  * @param  string $roleName
  *         The role that we want
  *
- * @return string
+ * @return Iterator
  *         a hostid that matches the role
  */
 function lastHostWithRole($roleName)
 {
-    // shorthand
-    $st = StoryTeller::instance();
-
-    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count(get_object_vars($listOfHosts))) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
-    $log = $st->startAction("for the last host with role '{$roleName}' ... ");
+    $log = usingLog()->startAction("for the last host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $keys = array_keys($listOfHosts);
-    $hostDetails = $listOfHosts[end($keys)];
+    $hostsAsArray = get_object_vars($listOfHosts);
+    $hostDetails = end($hostsAsArray);
     yield($hostDetails->hostId);
 
     // all done
@@ -1899,7 +1898,7 @@ function lastHostWithRole($roleName)
  * @param  string $roleName
  *         The role that we want
  *
- * @return string
+ * @return Iterator
  *         a hostid that matches the role
  */
 function hostWithRole($roleName)
@@ -1909,16 +1908,13 @@ function hostWithRole($roleName)
         throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
     }
 
-    // shorthand
-    $st = StoryTeller::instance();
-
-    $listOfHosts = $st->fromRolesTable()->getDetailsForRole($roleName);
+    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count(get_object_vars($listOfHosts))) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
-    $log = $st->startAction("for each host with role '{$roleName}' ... ");
+    $log = usingLog()->startAction("for each host with role '{$roleName}' ... ");
 
     foreach ($listOfHosts as $hostDetails) {
         yield($hostDetails->hostId);

@@ -58,20 +58,20 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 class SauceLabsRestApi extends Prose
 {
-	protected $sauceLabsUsername;
-	protected $sauceLabsAccessKey;
+    protected $sauceLabsUsername;
+    protected $sauceLabsAccessKey;
 
-	public function __construct(StoryTeller $st, $params = array())
-	{
-		// call our parent
-		parent::__construct($st, $params);
+    public function __construct(StoryTeller $st, $params = array())
+    {
+        // call our parent
+        parent::__construct($st, $params);
 
-		// get the SauceLabs auth details
-		// they are part of the test device details available from $st
-		$deviceDetails = $st->getDeviceDetails();
+        // get the SauceLabs auth details
+        // they are part of the test device details available from $st
+        $deviceDetails = $st->getDeviceDetails();
 
-		// remember the auth details
-		$this->sauceLabsUsername  = $deviceDetails->saucelabs->username;
-		$this->sauceLabsAccessKey = $deviceDetails->saucelabs->accesskey;
-	}
+        // remember the auth details
+        $this->sauceLabsUsername  = $deviceDetails->saucelabs->username;
+        $this->sauceLabsAccessKey = $deviceDetails->saucelabs->accesskey;
+    }
 }

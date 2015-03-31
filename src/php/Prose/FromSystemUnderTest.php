@@ -57,231 +57,207 @@ use DataSift\Stone\DataLib\DataPrinter;
  */
 class FromSystemUnderTest extends Prose
 {
-	public function getAppSetting($path)
-	{
-		// shorthand
-		$st = $this->st;
+    public function getAppSetting($path)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get app setting '{$path}' from the system-under-test config");
 
-		// what are we doing?
-		$log = $st->startAction("get app setting '{$path}' from the system-under-test config");
+        // what is the full path to this data?
+        $fullPath = 'systemundertest.appSettings.' . $path;
 
-		// what is the full path to this data?
-		$fullPath = 'systemundertest.appSettings.' . $path;
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            $msg = "module setting '$path' not found";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
+        $value = $config->getData($fullPath);
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			$msg = "module setting '$path' not found";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-		$value = $config->getData($fullPath);
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("setting for '{$path}' is '{$logValue}'");
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("setting for '{$path}' is '{$logValue}'");
+        // all done
+        return $value;
+    }
 
-		// all done
-		return $value;
-	}
+    public function getAppSettings($app)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get all settings for '{$app}' from the system-under-test config");
 
-	public function getAppSettings($app)
-	{
-		// shorthand
-		$st = $this->st;
+        // what is the full path to this data?
+        $fullPath = 'systemundertest.appSettings.' . $app;
 
-		// what are we doing?
-		$log = $st->startAction("get all settings for '{$app}' from the system-under-test config");
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            $msg = "no app '$app' found in the config";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
+        $value = $config->getData($fullPath);
 
-		// what is the full path to this data?
-		$fullPath = 'systemundertest.appSettings.' . $app;
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("settings for '{$app}' are '{$logValue}'");
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			$msg = "no app '$app' found in the config";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-		$value = $config->getData($fullPath);
+        // all done
+        return $value;
+    }
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("settings for '{$app}' are '{$logValue}'");
+    public function getStorySetting($path)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get storySetting '{$path}' from the system-under-test config");
 
-		// all done
-		return $value;
-	}
+        // what is the full path to this data?
+        $fullPath = 'systemundertest.storySettings.' . $path;
 
-	public function getStorySetting($path)
-	{
-		// shorthand
-		$st = $this->st;
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            $msg = "module setting '$path' not found";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
+        $value = $config->getData($fullPath);
 
-		// what are we doing?
-		$log = $st->startAction("get storySetting '{$path}' from the system-under-test config");
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("setting for '{$path}' is '{$logValue}'");
 
-		// what is the full path to this data?
-		$fullPath = 'systemundertest.storySettings.' . $path;
+        // all done
+        return $value;
+    }
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			$msg = "module setting '$path' not found";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
-		$value = $config->getData($fullPath);
+    public function getModuleSetting($path)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get module setting '{$path}' from the system-under-test config");
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("setting for '{$path}' is '{$logValue}'");
+        // what is the full path to this data?
+        $fullPath = 'systemundertest.moduleSettings.' . $path;
 
-		// all done
-		return $value;
-	}
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            $msg = "module setting '$path' not found";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-	public function getModuleSetting($path)
-	{
-		// shorthand
-		$st = $this->st;
+        // success!
+        $value = $config->getData($fullPath);
 
-		// what are we doing?
-		$log = $st->startAction("get module setting '{$path}' from the system-under-test config");
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("setting for '{$path}' is '{$logValue}'");
 
-		// what is the full path to this data?
-		$fullPath = 'systemundertest.moduleSettings.' . $path;
+        // all done
+        return $value;
+    }
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			$msg = "module setting '$path' not found";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+    public function getModuleSettings($module)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get all settings for '{$module}' from the system-under-test config");
 
-		// success!
-		$value = $config->getData($fullPath);
+        // what is the full path to this data?
+        $fullPath = 'systemundertest.moduleSettings.' . $module;
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("setting for '{$path}' is '{$logValue}'");
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            $msg = "no module '$module' found in the config";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-		// all done
-		return $value;
-	}
+        // success!
+        $value = $config->getData($fullPath);
 
-	public function getModuleSettings($module)
-	{
-		// shorthand
-		$st = $this->st;
+        // log the settings
+        $printer  = new DataPrinter();
+        $logValue = $printer->convertToString($value);
+        $log->endAction("settings for '{$module}' are '{$logValue}'");
 
-		// what are we doing?
-		$log = $st->startAction("get all settings for '{$module}' from the system-under-test config");
+        // all done
+        return $value;
+    }
 
-		// what is the full path to this data?
-		$fullPath = 'systemundertest.moduleSettings.' . $module;
+    public function getName()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the name of the actve system-under-test");
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			$msg = "no module '$module' found in the config";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+        // what is the full path to this data?
+        $fullPath = 'systemundertest.name';
 
-		// success!
-		$value = $config->getData($fullPath);
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            $msg = "no system-under-test name found; internal Storyplayer bug!";
+            $log->endAction($msg);
+            throw new E5xx_ActionFailed(__METHOD__, $msg);
+        }
 
-		// log the settings
-		$printer  = new DataPrinter();
-		$logValue = $printer->convertToString($value);
-		$log->endAction("settings for '{$module}' are '{$logValue}'");
+        // success!
+        $value = $config->getData($fullPath);
 
-		// all done
-		return $value;
-	}
+        // log the settings
+        $log->endAction($value);
 
-	public function getName()
-	{
-		// shorthand
-		$st = $this->st;
+        // all done
+        return $value;
+    }
 
-		// what are we doing?
-		$log = $st->startAction("get the name of the actve system-under-test");
+    public function get($path)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the setting '{$path}' from the actve system-under-test");
 
-		// what is the full path to this data?
-		$fullPath = 'systemundertest.name';
+        // what is the full path to this data?
+        if (empty($path)) {
+            $fullPath = 'systemundertest';
+        }
+        else {
+            $fullPath = 'systemundertest.' . $path;
+        }
 
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			$msg = "no system-under-test name found; internal Storyplayer bug!";
-			$log->endAction($msg);
-			throw new E5xx_ActionFailed(__METHOD__, $msg);
-		}
+        // get the details
+        $config = $this->st->getActiveConfig();
+        if (!$config->hasData($fullPath)) {
+            $log->endAction("no settings found");
+            throw new E5xx_ActionFailed(__METHOD__, "no settings found");
+        }
 
-		// success!
-		$value = $config->getData($fullPath);
+        // success!
+        $value = $config->getData($fullPath);
 
-		// log the settings
-		$log->endAction($value);
+        // log the settings
+        $log->endAction($value);
 
-		// all done
-		return $value;
-	}
+        // all done
+        return $value;
+    }
 
-	public function get($path)
-	{
-		// shorthand
-		$st = $this->st;
+    public function getConfig()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get the system under test config");
 
-		// what are we doing?
-		$log = $st->startAction("get the setting '{$path}' from the actve system-under-test");
+        // get the details
+        $config = $this->st->getActiveConfig();
+        $retval = $config->getData("systemundertest");
 
-		// what is the full path to this data?
-		if (empty($path)) {
-			$fullPath = 'systemundertest';
-		}
-		else {
-			$fullPath = 'systemundertest.' . $path;
-		}
-
-		// get the details
-		$config = $st->getActiveConfig();
-		if (!$config->hasData($fullPath)) {
-			$log->endAction("no settings found");
-			throw new E5xx_ActionFailed(__METHOD__, "no settings found");
-		}
-
-		// success!
-		$value = $config->getData($fullPath);
-
-		// log the settings
-		$log->endAction($value);
-
-		// all done
-		return $value;
-	}
-
-	public function getConfig()
-	{
-		// shorthand
-		$st = $this->st;
-
-		// what are we doing?
-		$log = $st->startAction("get the system under test config");
-
-		// get the details
-		$config = $st->getActiveConfig();
-		$retval = $config->getData("systemundertest");
-
-		// all done
-		$log->endAction($retval);
-		return $retval;
-	}
+        // all done
+        $log->endAction($retval);
+        return $retval;
+    }
 }

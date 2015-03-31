@@ -62,89 +62,86 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  */
 class UsingHttp extends Prose
 {
-	public function delete($url, $params = array(), $headers = array(), $timeout = null)
-	{
-		return $this->makeHttpRequest($url, "DELETE", $params, null, $headers, $timeout);
-	}
+    public function delete($url, $params = array(), $headers = array(), $timeout = null)
+    {
+        return $this->makeHttpRequest($url, "DELETE", $params, null, $headers, $timeout);
+    }
 
-	public function post($url, $params = array(), $body = null, $headers = array(), $timeout = null)
-	{
-		return $this->makeHttpRequest($url, "POST", $params, $body, $headers, $timeout);
-	}
+    public function post($url, $params = array(), $body = null, $headers = array(), $timeout = null)
+    {
+        return $this->makeHttpRequest($url, "POST", $params, $body, $headers, $timeout);
+    }
 
-	public function put($url, $params = array(), $body = null, $headers = array(), $timeout = null)
-	{
-		return $this->makeHttpRequest($url, "PUT", $params, $body, $headers, $timeout);
-	}
+    public function put($url, $params = array(), $body = null, $headers = array(), $timeout = null)
+    {
+        return $this->makeHttpRequest($url, "PUT", $params, $body, $headers, $timeout);
+    }
 
-	/**
-	 * @param string $verb
-	 */
-	protected function makeHttpRequest($url, $verb, $params, $body, $headers = array(), $timeout = null)
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     * @param string $verb
+     */
+    protected function makeHttpRequest($url, $verb, $params, $body, $headers = array(), $timeout = null)
+    {
+        // create the full URL
+        if (count($params) > 0) {
+            $url = $url . '?' . http_build_query($params);
+        }
 
-		// create the full URL
-		if (count($params) > 0) {
-			$url = $url . '?' . http_build_query($params);
-		}
+        // what are we doing?
+        $logMsg = [ "HTTP " . strtoupper($verb) . " '${url}'" ];
+        if ($body != null) {
+            $logMsg[] = $body;
+        }
+        if (count($headers) > 0) {
+            $logMsg[] = $headers;
+        }
+        $log = usingLog()->startAction($logMsg);
 
-		// what are we doing?
-		$logMsg = [ "HTTP " . strtoupper($verb) . " '${url}'" ];
-		if ($body != null) {
-			$logMsg[] = $body;
-		}
-		if (count($headers) > 0) {
-			$logMsg[] = $headers;
-		}
-		$log = $st->startAction($logMsg);
+        // build the HTTP request
+        $request = new HttpClientRequest($url);
+        $request->withUserAgent("Storyplayer")
+                ->withHttpVerb($verb);
 
-		// build the HTTP request
-		$request = new HttpClientRequest($url);
-		$request->withUserAgent("Storyplayer")
-				->withHttpVerb($verb);
+        if (is_array($headers)) {
+            foreach ($headers as $key => $value) {
+                $request->withExtraHeader($key, $value);
+            }
+        }
 
-		if (is_array($headers)) {
-			foreach ($headers as $key => $value) {
-				$request->withExtraHeader($key, $value);
-			}
-		}
-
-		if (is_array($body)) {
-			foreach ($body as $key => $value) {
-				$request->addData($key, $value);
-			}
-		}else{
+        if (is_array($body)) {
+            foreach ($body as $key => $value) {
+                $request->addData($key, $value);
+            }
+        }else{
             $request->setPayload($body);
         }
 
         // special case - do we validate SSL certificates in this
         // test environment?
-        $validateSsl = $st->fromTestEnvironment()->getModuleSetting("http.validateSsl");
+        $validateSsl = fromConfig()->getModuleSetting("http.validateSsl");
         if (null === $validateSsl) {
-        	// default to TRUE if no setting present
-        	$validateSsl = true;
+            // default to TRUE if no setting present
+            $validateSsl = true;
         }
         if (!$validateSsl) {
-        	$request->disableSslCertificateValidation();
+            $request->disableSslCertificateValidation();
         }
 
-	if ($timeout !== null) {
-		$request->setReadTimeout($timeout);
-	}
+        if ($timeout !== null) {
+            $request->setReadTimeout($timeout);
+        }
 
-		// make the call
-		$client = new HttpClient();
-		$response = $client->newRequest($request);
+        // make the call
+        $client = new HttpClient();
+        $response = $client->newRequest($request);
 
-		// is this a valid response?
-		if (!$response instanceof HttpClientResponse) {
-			throw new E5xx_ActionFailed(__METHOD__);
-		}
+        // is this a valid response?
+        if (!$response instanceof HttpClientResponse) {
+            throw new E5xx_ActionFailed(__METHOD__);
+        }
 
-		// all done
-		$log->endAction($response);
-		return $response;
-	}
+        // all done
+        $log->endAction($response);
+        return $response;
+    }
 }

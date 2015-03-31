@@ -61,72 +61,72 @@ use Phix_Project\ValidationLib4\Type_MustBeKeyValuePair;
  */
 class Feature_DefineSwitch extends CliSwitch
 {
-	public function __construct()
-	{
-		// define our name, and our description
-		$this->setName('define');
-		$this->setShortDescription('override a setting in your story');
+    public function __construct()
+    {
+        // define our name, and our description
+        $this->setName('define');
+        $this->setShortDescription('override a setting in your story');
 
-		// what are the short switches?
-		$this->addShortSwitch('D');
+        // what are the short switches?
+        $this->addShortSwitch('D');
 
-		// what is the required argument?
-		$this->setRequiredArg('<key=value>', "the setting you want to set in your story");
-		$this->setArgValidator(new Type_MustBeKeyValuePair);
+        // what is the required argument?
+        $this->setRequiredArg('<key=value>', "the setting you want to set in your story");
+        $this->setArgValidator(new Type_MustBeKeyValuePair);
 
-		// this argument is repeatable
-		$this->setSwitchIsRepeatable();
+        // this argument is repeatable
+        $this->setSwitchIsRepeatable();
 
-		// all done
-	}
+        // all done
+    }
 
-	/**
-	 *
-	 * @param  CliEngine $engine
-	 * @param  integer   $invokes
-	 * @param  array     $params
-	 * @param  boolean   $isDefaultParam
-	 * @return CliResult
-	 */
-	public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
-	{
-		if (!isset($engine->options->defines)) {
-			$engine->options->defines = new stdClass;
-		}
+    /**
+     *
+     * @param  CliEngine $engine
+     * @param  integer   $invokes
+     * @param  array     $params
+     * @param  boolean   $isDefaultParam
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    {
+        if (!isset($engine->options->defines)) {
+            $engine->options->defines = new stdClass;
+        }
 
-		foreach ($params as $param)
-		{
-			// split up the setting
-			$parts = explode('=', $param);
-			$key   = array_shift($parts);
-			$value = implode('=', $parts);
+        foreach ($params as $param)
+        {
+            // split up the setting
+            $parts = explode('=', $param);
+            $key   = array_shift($parts);
+            $value = implode('=', $parts);
 
-			// do we want to convert the type of $value?
-			$lowerValue = strtolower($value);
-			if ($lowerValue == 'false') {
-				$value = false;
-			}
-			else if ($lowerValue == 'true') {
-				$value = true;
-			}
-			else if ($lowerValue == 'null') {
-				$value = null;
-			}
+            // do we want to convert the type of $value?
+            $lowerValue = strtolower($value);
+            if ($lowerValue == 'false') {
+                $value = false;
+            }
+            else if ($lowerValue == 'true') {
+                $value = true;
+            }
+            else if ($lowerValue == 'null') {
+                $value = null;
+            }
 
-			// expand dot notation
-			$parts = explode('.', $key);
-			$currentLevel = $engine->options->defines;
-			$lastPart = array_pop($parts);
+            // expand dot notation
+            $parts = explode('.', $key);
+            $currentLevel = $engine->options->defines;
+            $lastPart = array_pop($parts);
 
-			foreach ($parts as $part) {
-				$currentLevel->$part = new stdClass;
-				$currentLevel = $currentLevel->$part;
-			}
-			// store the value into the tree
-			$currentLevel->$lastPart = $value;
-		}
+            foreach ($parts as $part) {
+                $currentLevel->$part = new stdClass;
+                $currentLevel = $currentLevel->$part;
+            }
+            // store the value into the tree
+            $currentLevel->$lastPart = $value;
+        }
 
-		// tell the engine that it is done
-		return new CliResult(CliResult::PROCESS_CONTINUE);
-	}
+        // tell the engine that it is done
+        return new CliResult(CliResult::PROCESS_CONTINUE);
+    }
 }

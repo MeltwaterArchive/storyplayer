@@ -56,42 +56,42 @@ namespace DataSift\Storyplayer\CommandLib;
 
 class CommandResult
 {
-	public $returnCode;
-	public $output;
+    public $returnCode;
+    public $output;
 
-	/**
-	 * @param integer|null $returnCode
-	 * @param string|null $output
-	 */
-	public function __construct($returnCode, $output)
-	{
-		$this->returnCode = $returnCode;
-		$this->output     = $output;
-	}
+    /**
+     * @param integer|null $returnCode
+     * @param string|null $output
+     */
+    public function __construct($returnCode, $output)
+    {
+        $this->returnCode = $returnCode;
+        $this->output     = $output;
+    }
 
-	/**
-	 *
-	 * @return boolean
-	 */
-	public function didCommandFail()
-	{
-		if ($this->returnCode != 0) {
-			return true;
-		}
+    /**
+     *
+     * @return boolean
+     */
+    public function didCommandFail()
+    {
+        if ($this->returnCode !== 0) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 *
-	 * @return boolean
-	 */
-	public function didCommandSucceed()
-	{
-		if ($this->returnCode == 0) {
-			return true;
-		}
+    /**
+     *
+     * @return boolean
+     */
+    public function didCommandSucceed()
+    {
+        if ($this->returnCode === 0) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

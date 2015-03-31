@@ -59,160 +59,154 @@ use Prose\E5xx_ActionFailed;
  */
 class PhysicalHost implements SupportedHost
 {
-	/**
-	 *
-	 * @var StoryTeller
-	 */
-	protected $st;
+    /**
+     *
+     * @var StoryTeller
+     */
+    protected $st;
 
-	/**
-	 *
-	 * @param StoryTeller $st
-	 */
-	public function __construct(StoryTeller $st)
-	{
-		// remember
-		$this->st = $st;
-	}
+    /**
+     *
+     * @param StoryTeller $st
+     */
+    public function __construct(StoryTeller $st)
+    {
+        // remember
+        $this->st = $st;
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @param  array $provisioningVars
-	 * @return void
-	 */
-	public function createHost($vmDetails, $provisioningVars = array())
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot create a physical host");
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @param  array $provisioningVars
+     * @return void
+     */
+    public function createHost($vmDetails, $provisioningVars = array())
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "cannot create a physical host");
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return void
-	 */
-	public function startHost($vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot start a physical host");
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return void
+     */
+    public function startHost($vmDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "cannot start a physical host");
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return void
-	 */
-	public function stopHost($vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot stop a physical host");
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return void
+     */
+    public function stopHost($vmDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "cannot stop a physical host");
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return void
-	 */
-	public function restartHost($vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot restart a physical host");
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return void
+     */
+    public function restartHost($vmDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "cannot restart a physical host");
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return void
-	 */
-	public function powerOffHost($vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot power off a physical host");
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return void
+     */
+    public function powerOffHost($vmDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "cannot power off a physical host");
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return void
-	 */
-	public function destroyHost($vmDetails)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "cannot destroy a physical host");
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return void
+     */
+    public function destroyHost($vmDetails)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "cannot destroy a physical host");
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return void
-	 */
-	public function runCommandAgainstHostManager($vmDetails, $command)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands against");
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return void
+     */
+    public function runCommandAgainstHostManager($vmDetails, $command)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands against");
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return void
-	 */
-	public function runCommandViaHostManager($vmDetails, $command)
-	{
-		throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands via");
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return void
+     */
+    public function runCommandViaHostManager($vmDetails, $command)
+    {
+        throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands via");
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return boolean
-	 */
-	public function isRunning($vmDetails)
-	{
-		return true;
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return boolean
+     */
+    public function isRunning($vmDetails)
+    {
+        return true;
+    }
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return string
-	 */
-	public function determineIpAddress($vmDetails)
-	{
-		// shorthand
-		$st = $this->st;
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return string
+     */
+    public function determineIpAddress($vmDetails)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("determine IP address of physical host '{$vmDetails->hostId}'");
 
-		// what are we doing?
-		$log = $st->startAction("determine IP address of physical host '{$vmDetails->hostId}'");
+        // create an adapter to talk to the host operating system
+        $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
-		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
+        // get the IP address
+        $ipAddress = $host->determineIpAddress($vmDetails, $this);
+        $vmDetails->ipAddress = $ipAddress;
 
-		// get the IP address
-		$ipAddress = $host->determineIpAddress($vmDetails, $this);
-		$vmDetails->ipAddress = $ipAddress;
+        // all done
+        $log->endAction("IP address is '{$ipAddress}'");
+        return $ipAddress;
+    }
 
-		// all done
-		$log->endAction("IP address is '{$ipAddress}'");
-		return $ipAddress;
-	}
+    /**
+     *
+     * @param  PhysicalHostDetails $vmDetails
+     * @return string
+     */
+    public function determineHostname($vmDetails)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("determine hostname of physical host '{$vmDetails->hostId}'");
 
-	/**
-	 *
-	 * @param  PhysicalHostDetails $vmDetails
-	 * @return string
-	 */
-	public function determineHostname($vmDetails)
-	{
-		// shorthand
-		$st = $this->st;
+        // create an adapter to talk to the host operating system
+        $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
-		// what are we doing?
-		$log = $st->startAction("determine hostname of physical host '{$vmDetails->hostId}'");
+        // get the hostname
+        $hostname = $host->determineHostname($vmDetails, $this);
+        $vmDetails->hostname = $hostname;
 
-		// create an adapter to talk to the host operating system
-		$host = OsLib::getHostAdapter($st, $vmDetails->osName);
-
-		// get the hostname
-		$hostname = $host->determineHostname($vmDetails, $this);
-		$vmDetails->hostname = $hostname;
-
-		// all done
-		$log->endAction("hostname is '{$hostname}'");
-		return $hostname;
-	}
+        // all done
+        $log->endAction("hostname is '{$hostname}'");
+        return $hostname;
+    }
 }

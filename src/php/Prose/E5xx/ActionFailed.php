@@ -55,11 +55,11 @@ namespace Prose;
  */
 class E5xx_ActionFailed extends E5xx_ProseException
 {
-	public function __construct($actionName, $reason = '', $params = array()) {
-		$msg = "Action '$actionName' failed";
-		if (strlen($reason) > 0) {
-			$msg .= "; reason is '{$reason}'";
-		}
-		parent::__construct(500, $msg, $msg);
-	}
+    public function __construct($actionName, $reason = '', $params = array()) {
+        $msg = "Action '$actionName' failed";
+        if (strlen($reason) > 0) {
+            $msg .= "; reason is '{$reason}'";
+        }
+        parent::__construct(500, $msg, $msg);
+    }
 }

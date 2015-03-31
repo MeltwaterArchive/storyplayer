@@ -76,11 +76,11 @@ use DataSift\Stone\ComparisonLib\StringComparitor;
  */
 class AssertsString extends AssertionsBase
 {
-	/**
-	 * @param string[] $params
-	 */
-	public function __construct(StoryTeller $st, $params)
-	{
-		parent::__construct($st, new StringComparitor($params[0]));
-	}
+    /**
+     * @param string[] $params
+     */
+    public function __construct(StoryTeller $st, $params)
+    {
+        parent::__construct($st, new StringComparitor($params[0]));
+    }
 }

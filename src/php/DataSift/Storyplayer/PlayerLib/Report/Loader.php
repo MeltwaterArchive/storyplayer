@@ -57,67 +57,67 @@ use DataSift\Storyplayer\Reports\Report;
  */
 class Report_Loader
 {
-	private $namespaces = array(
-		"Reports",
-		"DataSift\\Storyplayer\\Reports"
-	);
+    private $namespaces = array(
+        "Reports",
+        "DataSift\\Storyplayer\\Reports"
+    );
 
-	public function setNamespaces($namespaces = array())
-	{
-		// a list of the namespaces we're going to search for this class
-		//
-		// we always search the generic 'Reports' namespace first, in case
-		// users don't want to uniquely namespace their Report classes
-		$this->namespaces = array ("Reports");
+    public function setNamespaces($namespaces = array())
+    {
+        // a list of the namespaces we're going to search for this class
+        //
+        // we always search the generic 'Reports' namespace first, in case
+        // users don't want to uniquely namespace their Report classes
+        $this->namespaces = array ("Reports");
 
-		// add in any additional namespaces we've been asked to search
-		foreach ($namespaces as $namespace) {
-			$this->namespaces[] = $namespace;
-		}
+        // add in any additional namespaces we've been asked to search
+        foreach ($namespaces as $namespace) {
+            $this->namespaces[] = $namespace;
+        }
 
-		// we search our own namespace last, as it allows the user to
-		// replace our Reports with their own if they prefer
-		$this->namespaces[] = "DataSift\\Storyplayer\\Reports";
-	}
+        // we search our own namespace last, as it allows the user to
+        // replace our Reports with their own if they prefer
+        $this->namespaces[] = "DataSift\\Storyplayer\\Reports";
+    }
 
-	public function determineReportClassFor($reportName)
-	{
-		$className = ucfirst($reportName) . 'Report';
+    public function determineReportClassFor($reportName)
+    {
+        $className = ucfirst($reportName) . 'Report';
 
-		// all done
-		return $className;
-	}
+        // all done
+        return $className;
+    }
 
-	public function loadReport($reportName, $constructorArgs = null)
-	{
-		// can we find the class?
-		foreach ($this->namespaces as $namespace) {
-			// what is the full name of the class (inc namespace) to
-			// search for?
-			$className           = $this->determineReportClassFor($reportName);
-			$namespacedClassName = $namespace . "\\" . $className;
+    public function loadReport($reportName, $constructorArgs = null)
+    {
+        // can we find the class?
+        foreach ($this->namespaces as $namespace) {
+            // what is the full name of the class (inc namespace) to
+            // search for?
+            $className           = $this->determineReportClassFor($reportName);
+            $namespacedClassName = $namespace . "\\" . $className;
 
-			// is there such a class?
-			if (class_exists($namespacedClassName)) {
-				// yes there is!!
-				//
-				// create an instance of the class
-				$return = new $namespacedClassName(
-					$constructorArgs
-				);
+            // is there such a class?
+            if (class_exists($namespacedClassName)) {
+                // yes there is!!
+                //
+                // create an instance of the class
+                $return = new $namespacedClassName(
+                    $constructorArgs
+                );
 
-				// make sure our new object is an instance of 'Report'
-				if (!$return instanceof Report) {
-					throw new E5xx_NotAReportClass($namespacedClassName);
-				}
+                // make sure our new object is an instance of 'Report'
+                if (!$return instanceof Report) {
+                    throw new E5xx_NotAReportClass($namespacedClassName);
+                }
 
-				// return our newly-minted object
-				return $return;
-			}
-		}
+                // return our newly-minted object
+                return $return;
+            }
+        }
 
-		// if we get there, then we cannot find a suitable class in
-		// any of the namespaces that we know about
-		throw new E4xx_NoSuchReport($reportName);
-	}
+        // if we get there, then we cannot find a suitable class in
+        // any of the namespaces that we know about
+        throw new E4xx_NoSuchReport($reportName);
+    }
 }

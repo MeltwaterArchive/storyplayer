@@ -60,28 +60,28 @@ use DataSift\WebDriver\WebDriverClient;
  */
 class RemoteWebDriverAdapter extends LocalWebDriverAdapter
 {
-	/**
-	 *
-	 * @param  StoryTeller $st
-	 * @return void
-	 */
-	public function start(StoryTeller $st)
-	{
-		$httpProxy = new BrowserMobProxyClient();
-		$httpProxy->enableFeature('enhancedReplies');
+    /**
+     *
+     * @param  StoryTeller $st
+     * @return void
+     */
+    public function start(StoryTeller $st)
+    {
+        $httpProxy = new BrowserMobProxyClient();
+        $httpProxy->enableFeature('enhancedReplies');
 
-		$this->proxySession = $httpProxy->createProxy();
+        $this->proxySession = $httpProxy->createProxy();
 
-		// start recording
-		$this->proxySession->startHAR();
+        // start recording
+        $this->proxySession->startHAR();
 
-		// create the browser session
-		$webDriver = new WebDriverClient($this->browserDetails->url);
-		$this->browserSession = $webDriver->newSession(
-			$this->browserDetails->browser,
-			array(
-				'proxy' => $this->proxySession->getWebDriverProxyConfig()
-			) + $this->browserDetails->desiredCapabilities
-		);
-	}
+        // create the browser session
+        $webDriver = new WebDriverClient($this->browserDetails->url);
+        $this->browserSession = $webDriver->newSession(
+            $this->browserDetails->browser,
+            array(
+                'proxy' => $this->proxySession->getWebDriverProxyConfig()
+            ) + $this->browserDetails->desiredCapabilities
+        );
+    }
 }

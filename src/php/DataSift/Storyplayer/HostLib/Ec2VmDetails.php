@@ -55,19 +55,19 @@ namespace DataSift\Storyplayer\HostLib;
  */
 class Ec2VmDetails extends HostDetails
 {
-	public $ec2Name;
-	public $environment;
-	public $osName;
-	public $securityGroup;
-	public $hostId;
-	public $amiId;
-	public $keyPairName;
-	public $instanceType;
-	public $ec2Instance;
-	public $ipAddress;
-	public $provisioned = false;
-	public $type;
-	public $sshUserName;
-	public $sshKeyFile;
-	public $sshOptions;
+    public $ec2Name;
+    public $environment;
+    public $osName;
+    public $securityGroup;
+    public $hostId;
+    public $amiId;
+    public $keyPairName;
+    public $instanceType;
+    public $ec2Instance;
+    public $ipAddress;
+    public $provisioned = false;
+    public $type;
+    public $sshUserName;
+    public $sshKeyFile;
+    public $sshOptions;
 }

@@ -58,10 +58,10 @@ use DataSift\Stone\ObjectLib\BaseObject;
  */
 trait KnownSystemsUnderTestSupport
 {
-	public $knownSystemsUnderTestList;
+    public $knownSystemsUnderTestList;
 
-	public function initKnownSystemsUnderTestSupport($sutList)
-	{
-		$this->knownSystemsUnderTestList = $sutList;
-	}
+    public function initKnownSystemsUnderTestSupport($sutList)
+    {
+        $this->knownSystemsUnderTestList = $sutList;
+    }
 }

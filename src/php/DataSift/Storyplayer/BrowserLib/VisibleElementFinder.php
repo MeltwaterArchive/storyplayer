@@ -34,94 +34,83 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Phases;
+namespace DataSift\Storyplayer\BrowserLib;
 
-use Exception;
 use Prose\E5xx_ActionFailed;
-use Prose\E5xx_ExpectFailed;
-use Prose\E5xx_NotImplemented;
+use Prose\E5xx_UnknownDomElementType;
 
 /**
- * the Automate phase, for scripts
- *
+ * Trait for assisting with finding a visible element from a larger list
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-
-class AutomatePhase extends StoryPhase
+trait VisibleElementFinder
 {
-	public function doPhase($script)
-	{
-		// shorthand
-		$st           = $this->st;
-		$scriptResult = $script->getResult();
+    /**
+     * @return \DataSift\WebDriver\WebDriverElement
+     */
+    public function returnNthVisibleElement($nth, $elements)
+    {
+        // what are we doing?
+        $count = count($elements);
+        $log = usingLog()->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
 
-		// keep track of what happens with the action
-		$phaseResult = $this->getNewPhaseResult();
+        // special case - not enough elements, even if they were all
+        // visible
+        if ($nth >= count($elements)) {
+            $log->endAction("not enough elements :(");
+            throw new E5xx_ActionFailed(__METHOD__, "no matching element found");
+        }
 
-		// run ONE of the actions, picked at random
-		try {
-			// run the script
-			include $script->getFilename();
+        // let's track which visible element we're looking at
+        $checkedIndex = 0;
 
-			// if we get here, all is well
-			$phaseResult->setContinuePlaying();
-			$scriptResult->setPhaseGroupHasSucceeded();
-		}
+        // if the page contains multiple matches, return the first one
+        // that the user can see
+        foreach ($elements as $element) {
+            if (!$element->displayed()) {
+                // DO NOT increment $checkedIndex here
+                //
+                // we only increment it for elements that are visible
+                continue;
+            }
 
-		// if the set of actions fails, it will throw this exception
-		catch (E5xx_ActionFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$scriptResult->setPhaseGroupHasFailed($phaseResult);
-		}
-		catch (E5xx_ExpectFailed $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::FAILED,
-				$e->getMessage(),
-				$e
-			);
-			$scriptResult->setPhaseGroupHasFailed($phaseResult);
-		}
+            // skip hidden input fields
+            // if ($element->name() == 'input') {
+            //  try {
+            //      $typeAttr = $element->attribute('type');
+            //      if ($typeAttr == 'hidden') {
+            //          // skip this
+            //          continue;
+            //      }
+            //  }
+            //  catch (Exception $e) {
+            //      // no 'type' attribute
+            //      //
+            //      // not fatal
+            //  }
+            // }
 
-		// we treat this as a hard failure
-		catch (E5xx_NotImplemented $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::INCOMPLETE,
-				$e->getMessage(),
-				$e
-			);
-			$scriptResult->setPhaseGroupIsIncomplete($phaseResult);
-		}
+            if ($checkedIndex == $nth) {
+                // a match!
+                $log->endAction();
+                return $element;
+            }
+        }
 
-		// if this happens, something has gone badly wrong
-		catch (Exception $e) {
-			$phaseResult->setPlayingFailed(
-				$phaseResult::ERROR,
-				$e->getMessage(),
-				$e
-			);
-			$scriptResult->setPhaseGroupHasError($phaseResult);
-		}
-
-		// close off any open log actions
-		$st->closeAllOpenActions();
-
-		// all done
-		return $phaseResult;
-	}
+        $msg = "no matching element found";
+        $log->endAction($msg);
+        throw new E5xx_ActionFailed(__METHOD__, $msg);
+    }
 }

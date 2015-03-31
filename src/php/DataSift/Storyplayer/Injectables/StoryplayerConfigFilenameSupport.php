@@ -55,30 +55,30 @@ namespace DataSift\Storyplayer\Injectables;
  */
 trait StoryplayerConfigFilenameSupport
 {
-	public $storyplayerConfigFilename;
+    public $storyplayerConfigFilename;
 
-	public function initStoryplayerConfigFilenameSupport()
-	{
-		// what are the candidates?
-		$searchList = [
-			"storyplayer.json",
-			"storyplayer.json.dist"
-		];
+    public function initStoryplayerConfigFilenameSupport()
+    {
+        // what are the candidates?
+        $searchList = [
+            "storyplayer.json",
+            "storyplayer.json.dist"
+        ];
 
-		// do we have them?
-		foreach ($searchList as $filename) {
-			if (is_file($filename)) {
-				// YES!!
-				$this->storyplayerConfigFilename = $filename;
-				return;
-			}
-		}
+        // do we have them?
+        foreach ($searchList as $filename) {
+            if (is_file($filename)) {
+                // YES!!
+                $this->storyplayerConfigFilename = $filename;
+                return;
+            }
+        }
 
-		// we have nothing
-		//
-		// the best we can do is return our preferred file, and let
-		// the wider app decide what to do about the fact that it is
-		// missing
-		$this->storyplayerConfigFilename = end($searchList);
-	}
+        // we have nothing
+        //
+        // the best we can do is return our preferred file, and let
+        // the wider app decide what to do about the fact that it is
+        // missing
+        $this->storyplayerConfigFilename = end($searchList);
+    }
 }

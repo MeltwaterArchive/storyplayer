@@ -57,16 +57,16 @@ use DataSift\Stone\ConfigLib\ConfigHelper;
  */
 class ConfigManagerBase
 {
-	const APP_NAME = 'storyplayer';
+    const APP_NAME = 'storyplayer';
 
-	/**
-	 * @var \DataSift\Stone\ConfigLib\ConfigHelper
-	 */
-	protected $configHelper;
+    /**
+     * @var \DataSift\Stone\ConfigLib\ConfigHelper
+     */
+    protected $configHelper;
 
-	public function __construct()
-	{
-		// create our config loader
-		$this->configHelper = new ConfigHelper();
-	}
+    public function __construct()
+    {
+        // create our config loader
+        $this->configHelper = new ConfigHelper();
+    }
 }

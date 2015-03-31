@@ -59,7 +59,7 @@ class E5xx_CannotCreateReportFile extends Exxx_Exception
 {
     public function __construct($filename)
     {
-    	$msg = "cannot create report file '{$filename}'; permissions or path problem?";
+        $msg = "cannot create report file '{$filename}'; permissions or path problem?";
         parent::__construct(500, $msg, $msg);
     }
 }
