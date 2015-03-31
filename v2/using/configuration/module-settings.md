@@ -66,3 +66,27 @@ The answer is to use a `moduleSetting` in the test environment config file for y
     }
 }
 {% endhighlight %}
+
+## Accessing moduleSettings
+
+<div class="callout warning" markdown="1">
+#### For Modules Only
+
+`moduleSettings` are configuration for Storyplayer's modules - and for any modules of your own that you create.
+
+You should never need to access `moduleSettings` from your stories.
+</div>
+
+Use _[fromConfig()->getModuleSetting()](../../modules/fromConfig.html#getmodulesetting)_ to retrieve a module's settings:
+
+{% highlight php startinline %}
+$settings = fromConfig()->getModuleSetting('aws');
+{% endhighlight %}
+
+You can also use [dot.notation.support](dot.notation.support.html) to access individual settings:
+
+{% highlight php startinline %}
+$validateSsl = fromConfig()->getModuleSetting('http.validateSsl');
+{% endhighlight %}
+
+`fromConfig()->getModuleSetting()` will search through all of the loaded config files in order (see the top of this page for the search order), and return the first setting found.
