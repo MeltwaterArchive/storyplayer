@@ -1,7 +1,7 @@
 ---
 layout: v2/using-configuration
 title: Per-Device Configuration
-prev: '<a href="../../using/configuration/test-phases.html">Prev: Test Phases Configuration</a>'
+prev: '<a href="../../using/configuration/overriding-from-the-command-line.html">Prev: Overriding From The Command-Line</a>'
 next: '<a href="../../using/configuration/prose-namespaces.html">Next: Prose Namespaces</a>'
 ---
 

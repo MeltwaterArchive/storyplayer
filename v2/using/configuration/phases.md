@@ -1,8 +1,8 @@
 ---
 layout: v2/using-configuration
 title:  Test Phases Configuration
-next: '<a href="../../using/configuration/device-config.html">Next: Per-Device Configuration</a>'
-prev: '<a href="../../using/configuration/overriding-from-the-command-line.html">Prev: Overriding From The Command-Line</a>'
+next: '<a href="../../using/configuration/system-under-test-config.html">Next: System Under Test Configuration</a>'
+prev: '<a href="../../using/configuration/module-settings.html">Prev: moduleSettings Section</a>'
 ---
 
 # Phases Configuration
