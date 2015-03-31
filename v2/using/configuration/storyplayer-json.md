@@ -30,6 +30,8 @@ where:
 * `moduleSettings` are [configuration settings for Storyplayer modules to use](module-settings.html)
 * `phases` are used to [change the steps Storyplayer executes when running a story](phases.html)
 
+__All sections are optional.__  You are encouraged to always have a `defaults` section, simply to make it easier for other people to run your tests.
+
 ## The defaults Section
 
 `defaults` is an array of strings. It contains the command-line arguments for Storyplayer to use. Put one argument per string.  For example:
