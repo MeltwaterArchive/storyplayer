@@ -67,8 +67,11 @@ For each machine in each group, Storyplayer needs to know the machine's _name_, 
 Every machine can have an `storySettings` section. You can use this to store settings that are different from machine to machine:
 
 {% highlight php startinline %}
-$loginUrl = fromFirstHostWithRole('web-server')->getStorySetting('storyplanner.loginUrl');
-usingBrowser()->gotoPage('http://{$loginUrl}');
+foreach(firstHostWithRole('web-server') as $hostId) {
+    $loginHost = fromHost($hostId)->getHostname();
+    $loginPath = fromHost($hostId)->getStorySetting('storyplanner.pages.login');
+    usingBrowser()->gotoPage("http://{$loginHost}{$loginPath}");
+}
 {% endhighlight %}
 
 If you don't want Storyplayer to create and destroy your test environment, each machine will need an `ipAddress` and `hostname` setting, so that Storyplayer knows where to find the machine on your network.
