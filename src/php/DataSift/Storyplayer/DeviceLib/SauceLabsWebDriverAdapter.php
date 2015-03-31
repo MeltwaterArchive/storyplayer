@@ -71,6 +71,11 @@ class SauceLabsWebDriverAdapter extends BaseAdapter implements DeviceAdapter
 		// Sauce Labs handles proxying for us (if required)
 		// via the Sauce Connect app
 
+		// Merge the default saucelabs config into browseDetails
+		if (!isset($this->browserDetails->saucelabs)) {
+			$this->browserDetails->saucelabs = $st->getEnvironment()->saucelabs;
+		}
+
 		// build the Sauce Labs url
 		$url = "http://"
 		     . urlencode($this->browserDetails->saucelabs->username)
