@@ -66,25 +66,26 @@ and add settings as your test suite grows.
 
 ## The roles Section
 
-The `roles` section
+The `roles` section provides you with a way to inject provisioning parameters (or `params` for short) into your test environment.
 
-<pre>
+{% highlight json %}
 {
-    "storySettings": {
-        ...
-    },
-    "moduleSettings": {
-        ...
-    },
     "roles": [
         {
-            "role": "&lt;role-name&gt;",
+            "role": "<role-name>",
             "params": {
-                "&lt;param1&gt;": &lt;param-value&gt;,
-                "&lt;param2&gt;": &lt;param-value&gt;,
+                "<param1>": <param-value>,
+                "<param2>": <param-value>,
                 ...
             }
         }
     ]
 }
-</pre>
+{% endhighlight %}
+
+`roles` is an array of JSON objects. Each object contains two attributes:
+
+* `role` is the name of the test-environment role that you want to inject one or more params into
+* `params` is an object containing a list of the params you want to inject
+
+Any `params` that you specify here are added to your test environment config before Storyplayer runs your chosen provisioning engine.
