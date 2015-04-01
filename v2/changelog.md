@@ -12,17 +12,17 @@ For the very latest list of changes in upcoming releases, see the [CHANGELOG](ht
 
 ## v2.2.0
 
-Currently in progress in the `develop` branch on GitHub.
-
-### Important:
-
-* We've dropped support for browsermob-proxy for the moment. We're going to make it optional before we tag v2.2.0.
+Released Tuesday 31st March 2015.
 
 ### Backwards-compatibility Breaks:
 
 These are SPv1 features that have been upgraded to support SPv2's new features such as test environments.
 
 * [SavageD module](https://datasift.github.io/storyplayer/v2/modules/savaged/index.html) overhauled to support SPv2 test environments and host IDs
+
+Other changes you need to know about:
+
+* `browsermob-proxy` is now optional, and switched off by default. You can switch it back on if you [add these config settings](https://datasift.github.io/storyplayer/using/configuration/browsermob-proxy.html).
 
 ### New:
 
@@ -33,6 +33,8 @@ These are SPv1 features that have been upgraded to support SPv2's new features s
   * [expectsBrowser()->isNotChecked()](https://datasift.github.io/storyplayer/v2/modules/browser/expectsBrowser.html#isnotchecked) / [expectsForm()->isNotChecked()](https://datasift.github.io/storyplayer/v2/modules/form/expectsForm.html#isnotchecked)
 * New `usingBrowser()->click()->firstXXX` et al [ordinal prefix for search terms](https://datasift.github.io/storyplayer/v2/modules/browser/ordinal-prefixes.html)
 * New `expectsBrowser()->has()->oneXXX` et al [ordinal prefix for search terms](https://datasift.github.io/storyplayer/v2/modules/browser/ordinal-prefixes.html)
+* [fromConfig()->getModuleSetting()](https://datasift.github.io/storyplayer/v2/modules/config/fromConfig.html#getmodulesetting) is now the preferred way for a module to get any `moduleSettings` config.
+* [fromConfig()->hasModuleSetting()](https://datasift.github.io/storyplayer/v2/modules/config/fromConfig.html#hasmodulesetting) added.
 * [Host module](https://datasift.github.io/storyplayer/v2/modules/host/index.html) can now start/stop any screen session in your test environment
 * You can now override the default grace period in `usingHost()->stopProcess()`
 * [fromStoryplayer() module](https://datasift.github.io/storyplayer/v2/modules/storyplayer/index.html)
@@ -47,6 +49,14 @@ These are SPv1 features that have been upgraded to support SPv2's new features s
 * the [Graphite module](https://datasift.github.io/storyplayer/v2/modules/graphite/index.html) now looks in your test environment config file for its settings. You can have different Graphite servers for different test environments now :)
 * [usingHost()->delete()](https://datasift/github.io/storyplayer/v2/modules/http/usingHttp.html#delete) no longer takes a `$body` parameter (violated the HTTP protocol standard)
 * the PreTestPrediction phase works once more
+
+### Deprecated
+
+The following are now deprecated, and will be removed in Storyplayer v3.0.
+
+* [appSettings](https://datasift.github.io/storyplayer/v2/using/deprecated/appSettings.html)
+
+Full details, including migration instructions, are included with each link above.
 
 ## v2.1.2
 
