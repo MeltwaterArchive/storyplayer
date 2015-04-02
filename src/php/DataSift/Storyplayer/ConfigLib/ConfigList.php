@@ -118,16 +118,11 @@ class ConfigList
      */
     public function findConfigs()
     {
-        // look on disk
-        $filenames = $this->findConfigFilenames();
+        // find our SPv2.0-style config files
+        $this->list = $this->findJsonConfigs();
 
-        // let's get them processed
-        foreach ($filenames as $filename) {
-            $config = $this->newWrappedConfigObject();
-            $config->loadConfigFromFile($filename);
-            $config->validateConfig();
-            $this->list[$config->getName()] = $config;
-        }
+        // find our SPv2.3-style config files
+        $this->list = array_merge($this->list, $this->findPhpConfigs());
 
         // we want our list of configs to be sorted, to make presentation
         // to end-users easier
@@ -137,11 +132,84 @@ class ConfigList
     }
 
     /**
+     * find a list of SPv2.0-style JSON configs
+     *
+     * @return array
+     */
+    protected function findJsonConfigs()
+    {
+        // our return value
+        $configs = [];
+
+        // look on disk
+        $filenames = $this->findJsonConfigFilenames();
+
+        // let's get them processed
+        foreach ($filenames as $filename) {
+            $config = $this->newWrappedConfigObject();
+            $config->loadConfigFromFile($filename);
+            $config->validateConfig();
+            $configs[$config->getName()] = $config;
+        }
+
+        // all done
+        return $configs;
+    }
+
+    /**
      * build a list of the config files in the $searchFolder
      *
      * @return array<string>
      */
-    protected function findConfigFilenames()
+    protected function findJsonConfigFilenames()
+    {
+        // where are we looking?
+        $searchFolder = $this->getSearchFolder();
+
+        // do we have somewhere to look?
+        if (null === $searchFolder || !is_dir($searchFolder)) {
+            return [];
+        }
+
+        // build our list
+        $helper = new ConfigHelper();
+        $filenames = $helper->getListOfConfigFilesIn($searchFolder, 'json');
+
+        // all done
+        return $filenames;
+    }
+
+    /**
+     * find a list of SPv2.3-style PHP configs
+     *
+     * @return array
+     */
+    protected function findPhpConfigs()
+    {
+        // our return value
+        $configs = [];
+
+        // look on disk
+        $filenames = $this->findPhpConfigFilenames();
+
+        // let's get them processed
+        foreach ($filenames as $filename) {
+            $config = $this->newWrappedConfigObject();
+            $config->loadConfigFromFile($filename);
+            $config->validateConfig();
+            $configs[$config->getName()] = $config;
+        }
+
+        // all done
+        return $configs;
+    }
+
+    /**
+     * build a list of the config files in the $searchFolder
+     *
+     * @return array<string>
+     */
+    protected function findPhpConfigFilenames()
     {
         // where are we looking?
         $searchFolder = $this->getSearchFolder();
