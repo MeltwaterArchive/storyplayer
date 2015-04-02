@@ -43,6 +43,7 @@
 
 use DataSift\Storyplayer\PlayerLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Datasift\Storyplayer\PlayerLib\TestEnvironment;
 use Prose\E5xx_ActionFailed;
 use Prose\E5xx_ProseException;
 
@@ -89,6 +90,20 @@ function newStoryFor($category)
     $story->determineStoryFilename();
 
     return $story;
+}
+
+/**
+ * Create a new test environment object
+ *
+ * @return TestEnvironment
+ *         the test environment object to use in the script
+ */
+function newTestEnvironmentCalled()
+{
+    $testEnv = new TestEnvironment('unknown');
+    $testEnv->determineName();
+
+    return $testEnv;
 }
 
 /**
