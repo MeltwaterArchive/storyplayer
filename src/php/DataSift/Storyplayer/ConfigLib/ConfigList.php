@@ -44,7 +44,6 @@
 namespace DataSift\Storyplayer\ConfigLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\ConfigLib\ConfigHelper;
 
 /**
  * tracks a list of available configs of a given type
@@ -119,7 +118,7 @@ class ConfigList
     public function findConfigs()
     {
         // find our SPv2.0-style config files
-        $this->list = $this->findJsonConfigs();
+        $this->list = array_merge($this->list, $this->findJsonConfigs());
 
         // find our SPv2.3-style config files
         $this->list = array_merge($this->list, $this->findPhpConfigs());
@@ -142,7 +141,7 @@ class ConfigList
         $configs = [];
 
         // look on disk
-        $filenames = $this->findJsonConfigFilenames();
+        $filenames = $this->findConfigFilenames('\.json');
 
         // let's get them processed
         foreach ($filenames as $filename) {
@@ -154,29 +153,6 @@ class ConfigList
 
         // all done
         return $configs;
-    }
-
-    /**
-     * build a list of the config files in the $searchFolder
-     *
-     * @return array<string>
-     */
-    protected function findJsonConfigFilenames()
-    {
-        // where are we looking?
-        $searchFolder = $this->getSearchFolder();
-
-        // do we have somewhere to look?
-        if (null === $searchFolder || !is_dir($searchFolder)) {
-            return [];
-        }
-
-        // build our list
-        $helper = new ConfigHelper();
-        $filenames = $helper->getListOfConfigFilesIn($searchFolder, 'json');
-
-        // all done
-        return $filenames;
     }
 
     /**
@@ -190,15 +166,16 @@ class ConfigList
         $configs = [];
 
         // look on disk
-        $filenames = $this->findPhpConfigFilenames();
+        $filenames = $this->findConfigFilenames("main.php");
 
         // let's get them processed
-        foreach ($filenames as $filename) {
-            $config = $this->newWrappedConfigObject();
-            $config->loadConfigFromFile($filename);
-            $config->validateConfig();
-            $configs[$config->getName()] = $config;
-        }
+        // foreach ($filenames as $filename) {
+
+        //     $config = $this->newWrappedConfigObject();
+        //     $config->loadConfigFromFile($filename);
+        //     $config->validateConfig();
+        //     $configs[$config->getName()] = $config;
+        // }
 
         // all done
         return $configs;
@@ -209,7 +186,7 @@ class ConfigList
      *
      * @return array<string>
      */
-    protected function findPhpConfigFilenames()
+    protected function findConfigFilenames($searchPattern)
     {
         // where are we looking?
         $searchFolder = $this->getSearchFolder();
@@ -220,8 +197,8 @@ class ConfigList
         }
 
         // build our list
-        $helper = new ConfigHelper();
-        $filenames = $helper->getListOfConfigFilesIn($searchFolder, 'json');
+        $configFinder = new ConfigFinder();
+        $filenames = $configFinder->getListOfConfigFilesIn($searchFolder, $searchPattern);
 
         // all done
         return $filenames;
