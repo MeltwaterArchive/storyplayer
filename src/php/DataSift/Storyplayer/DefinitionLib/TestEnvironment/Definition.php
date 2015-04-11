@@ -58,11 +58,22 @@ namespace DataSift\Storyplayer\DefinitionLib;
  */
 class TestEnvironment_Definition
 {
+    /**
+     * the name of this test environment
+     *
+     * @var string
+     */
     protected $name;
 
+    /**
+     * create a new test environment definition
+     *
+     * @param string $name
+     *        the name to assign to this test environment
+     */
     public function __construct($name)
     {
-        $this->name   = $name;
+        $this->name = $name;
     }
 
     /**
