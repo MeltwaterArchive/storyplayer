@@ -98,11 +98,14 @@ function newStoryFor($category)
  * @return TestEnvironment
  *         the test environment object to use in the script
  */
-function newTestEnvironmentCalled()
+function newTestEnvironment()
 {
-    $testEnv = new TestEnvironment_Definition('unknown');
-    $testEnv->determineName();
+    // work out the name of this test environment
+    $trace = debug_backtrace();
+    $filename = $trace[0]['file'];
+    $name = basename(dirname($filename));
 
+    $testEnv = new TestEnvironment_Definition($name);
     return $testEnv;
 }
 
