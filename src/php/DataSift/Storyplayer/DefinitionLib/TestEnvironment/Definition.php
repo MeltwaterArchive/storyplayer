@@ -73,6 +73,27 @@ class TestEnvironment_Definition
      */
     public function __construct($name)
     {
+        $this->setName($name);
+    }
+
+    /**
+     * what is the name of this test environment?
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * set the name of this test environment
+     *
+     * @param string $name
+     *        the new name for this test environment
+     */
+    public function setName($name)
+    {
         $this->name = $name;
     }
 
