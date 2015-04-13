@@ -149,6 +149,10 @@ class AnsibleProvisioner extends Provisioner
         // where should we create the host_vars?
         $inventoryFolder = dirname($inventoryFile);
 
+        // we set these in the foreach() loop
+        $sshUsername = null;
+        $sshKeyFile  = null;
+
         // now we need to write out the host files
         foreach($hosts as $hostId => $hostProps) {
             // what is the host's IP address?

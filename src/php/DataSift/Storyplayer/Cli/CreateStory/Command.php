@@ -117,8 +117,6 @@ class CreateStory_Command extends CliCommand
         $story = <<<EOS
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-
 EOS;
 
         if (isset($engine->options->basedOn)) {
@@ -135,7 +133,7 @@ EOS;
 // ------------------------------------------------------------------------
 
 \$story = newStoryFor('Top-Level Category')
-         ->inGroup('Group inside Top-level Category')
+         ->inGroup(['Group inside Top-level Category'])
          ->called('Your story name')
 EOS;
 
@@ -164,13 +162,13 @@ EOS;
 // ------------------------------------------------------------------------
 
 /*
-\$story->addTestSetup(function(StoryTeller \$st) {
+\$story->addTestSetup(function() {
     // setup the conditions for this specific test
 });
 */
 
 /*
-\$story->addTestTeardown(function(StoryTeller \$st) {
+\$story->addTestTeardown(function() {
     // undo anything that you did in addTestSetup()
 });
 */
@@ -182,7 +180,7 @@ EOS;
 // ------------------------------------------------------------------------
 
 /*
-\$story->addPreTestPrediction(function(StoryTeller \$st) {
+\$story->addPreTestPrediction(function() {
     // if it is okay for your story to fail, detect that here
 });
 */
@@ -194,9 +192,9 @@ EOS;
 // ------------------------------------------------------------------------
 
 /*
-\$story->addPreTestInspection(function(StoryTeller \$st) {
+\$story->addPreTestInspection(function() {
     // get the checkpoint - we're going to store data in here
-    \$checkpoint = \$st->getCheckpoint();
+    \$checkpoint = getCheckpoint();
 
     // store any data that your story is about to change, so that you
     // can do a before and after comparison
@@ -210,7 +208,7 @@ EOS;
 // ------------------------------------------------------------------------
 
 /*
-\$story->addAction(function(StoryTeller \$st) {
+\$story->addAction(function() {
     // this is where you perform the steps of your user story
 });
 */
@@ -221,9 +219,9 @@ EOS;
 //
 // ------------------------------------------------------------------------
 
-\$story->addPostTestInspection(function(StoryTeller \$st) {
+\$story->addPostTestInspection(function() {
     // the information to guide our checks is in the checkpoint
-    \$checkpoint = \$st->getCheckpoint();
+    \$checkpoint = getCheckpoint();
 
     // gather new data, and make sure that your action actually changed
     // something. never assume that the action worked just because it

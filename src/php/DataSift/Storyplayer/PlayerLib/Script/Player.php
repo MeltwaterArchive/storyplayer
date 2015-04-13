@@ -90,7 +90,7 @@ class Script_Player
     public function __construct($scriptFilename, Injectables $injectables)
     {
         $this->scriptFilename = $scriptFilename;
-        $this->scriptPhases   = $injectables->activeConfig->getData('storyplayer.phases.script');
+        $this->scriptPhases   = $injectables->activeConfig->getArray('storyplayer.phases.script');
     }
 
     public function play(StoryTeller $st, Injectables $injectables)

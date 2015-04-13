@@ -82,8 +82,8 @@ class Script_Command extends BaseCommand implements CliSignalHandler
     // we track this for convenience
     protected $output;
 
-    // our list of stories to execute
-    protected $storyList;
+    // our list of scripts to execute
+    protected $scriptList;
 
     // our injected data / services
     // needed for when user presses CTRL+C
@@ -124,7 +124,7 @@ class Script_Command extends BaseCommand implements CliSignalHandler
      *
      * @param  CliEngine $engine
      * @param  array     $params
-     * @param  Injectables $injectables
+     * @param  Injectables|null $injectables
      * @return integer
      */
     public function processCommand(CliEngine $engine, $params = array(), $injectables = null)
@@ -236,7 +236,7 @@ class Script_Command extends BaseCommand implements CliSignalHandler
 
     /**
      *
-     * @param  CliEngine   $engine
+     * @param  CliEngine   $cliEngine
      * @param  Injectables $injectables
      * @param  array       $cliParams
      * @return void
@@ -262,7 +262,7 @@ class Script_Command extends BaseCommand implements CliSignalHandler
                         break;
 
                     case 'json':
-                        $this->scriptList = $this->scriptList + $this->addScriptsFromFile($cliEgine, $injectables, $cliParam);
+                        $this->scriptList = $this->scriptList + $this->addScriptsFromFile($cliEngine, $injectables, $cliParam);
                         break;
 
                     default:
@@ -328,6 +328,7 @@ class Script_Command extends BaseCommand implements CliSignalHandler
         // cleanup
         $phasesPlayer = new PhaseGroup_Player();
         $phasesPlayer->playPhases(
+            "user abort",
             $this->st,
             $this->injectables,
             $this->injectables->activeConfig->getData('storyplayer.phases.userAbort'),

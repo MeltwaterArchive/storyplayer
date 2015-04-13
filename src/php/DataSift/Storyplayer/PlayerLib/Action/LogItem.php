@@ -83,7 +83,7 @@ class Action_LogItem
      * @param  mixed $message
      *         the message to log. if it isn't a string, we'll convert it
      *         and apply the user's -V preference before logging
-     * @param  array $codeLine
+     * @param  array|null $codeLine
      *         metadata about the line of code that we're logging about
      * @return Action_LogItem
      *         return $this for fluent interfaces

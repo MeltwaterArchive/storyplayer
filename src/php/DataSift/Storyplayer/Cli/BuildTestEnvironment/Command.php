@@ -272,9 +272,7 @@ class BuildTestEnvironment_Command extends BaseCommand implements CliSignalHandl
 
     /**
      *
-     * @param  CliEngine   $cliEngine
      * @param  Injectables $injectables
-     * @param  array       $cliParams
      * @return void
      */
     protected function initPlayerList(Injectables $injectables)

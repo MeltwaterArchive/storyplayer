@@ -211,11 +211,24 @@ class DomElementSearch
         try {
             // build up the xpath to use
             $xpathList = [
+                'descendant::*[text()]//parent::label',
                 'descendant::label[normalize-space(text()) = "' . $labelText . '"]'
             ];
 
             // search using the xpath
-            $labelElements = $this->getElementsByXpath($xpathList);
+            $tmpElements = $this->getElementsByXpath($xpathList);
+
+            // we're going to search in a case-insensitive manner
+            $searchText = trim(rtrim(strtolower($labelText)));
+
+            // filter out any labels that do not have the text we want
+            $labelElements = [];
+            foreach ($tmpElements as $tmpElement) {
+                if (strtolower(trim(rtrim($labelElement->text))) == $searchText) {
+                    $labelElements[] = $tmpElement;
+                }
+            }
+
 
             // we cannot filter by visibility here - the <label> may be
             // visible but the <input> may be invisible :(
