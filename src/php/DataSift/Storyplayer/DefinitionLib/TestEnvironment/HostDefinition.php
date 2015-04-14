@@ -129,7 +129,11 @@ class TestEnvironment_HostDefinition
     {
         // make sure the operating system is compatible with this group
 
+        // remember the adapter
         $this->osAdapter = $osAdapter;
+
+        // fluent interface
+        return $this;
     }
 
     public function getOperatingSystemValidator()
@@ -139,7 +143,11 @@ class TestEnvironment_HostDefinition
 
     public function setOperatingSystemValidator(OsAdapterValidator $osAdapterValidator)
     {
+        // remember the validator for the adapter
         $this->osAdapterValidator = $osAdapterValidator;
+
+        // fluent interface
+        return $this;
     }
 
     // ==================================================================
@@ -155,6 +163,10 @@ class TestEnvironment_HostDefinition
 
     public function setHostManager(HostManager $hostManager)
     {
+        // remember the adapter
         $this->hostManager = $hostManager;
+
+        // fluent interface
+        return $this;
     }
 }
