@@ -43,6 +43,7 @@
 
 namespace DataSift\Storyplayer\ConfigLib;
 
+use DataSift\Storyplayer\DefinitionLib\TestEnvironment_Definition;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
@@ -171,6 +172,12 @@ class ConfigList
         // let's get them processed
         foreach ($filenames as $filename) {
             $config = require ($filename);
+
+            // make sure we have a definition!
+            if (!$config instanceof TestEnvironment_Definition) {
+                throw new E4xx_TestEnvironmentFileMustReturnADefinition($filename);
+            }
+
             $configs[$config->getName()] = $config;
         //     $config = $this->newWrappedConfigObject();
         //     $config->loadConfigFromFile($filename);
