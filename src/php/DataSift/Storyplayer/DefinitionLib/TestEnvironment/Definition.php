@@ -45,6 +45,8 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
+use Storyplayer\GroupAdapters\GroupAdapter;
+
 /**
  * Represents the TestEnvironment that is being created / destroyed
  *
@@ -106,12 +108,15 @@ class TestEnvironment_Definition
     /**
      * add a new group to our collection
      *
+     * @param  GroupAdapter $groupAdapter
+     *         the adapter for this group
+     *
      * @return TestEnvironmentGroup
      *         a new and empty group, ready for you to define
      */
-    public function addGroup()
+    public function addGroup(GroupAdapter $groupAdapter)
     {
-        $this->groups[] = new TestEnvironment_GroupDefinition($name);
+        $this->groups[] = new TestEnvironment_GroupDefinition($groupAdapter);
         return end($this->groups);
     }
 }
