@@ -58,6 +58,6 @@ namespace Storyplayer\HostManagers;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class VagrantVboxAdapter implements HostManager
+class Vagrant_VirtualboxAdapter implements HostManager
 {
 }
