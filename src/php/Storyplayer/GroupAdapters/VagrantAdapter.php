@@ -60,6 +60,6 @@ use Storyplayer\OsAdapters\OsAdapterValidator;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class VagrantVmsAdapter implements GroupAdapter
+class VagrantAdapter implements GroupAdapter
 {
 }
