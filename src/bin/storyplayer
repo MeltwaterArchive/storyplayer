@@ -45,6 +45,8 @@ use DataSift\Storyplayer\SystemsUnderTestLib\HardCodedSystemsUnderTest;
 use DataSift\Storyplayer\ConfigLib\TestEnvironmentsList;
 use DataSift\Storyplayer\TestEnvironmentsLib\HardCodedTestEnvironments;
 
+use DataSift\Storyplayer\ConfigLib\E4xx_TestEnvironmentFileMustReturnADefinition;
+
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 
@@ -239,6 +241,13 @@ function main($argv)
 
 		// do we have any command-line defaults set in the config?
 		$injectables->initDefaultCommandLineSupport($injectables->storyplayerConfig, $injectables);
+	}
+	catch (E4xx_TestEnvironmentFileMustReturnADefinition $e)
+	{
+		// this happens when a PHP-style test environment file either does
+		// not return anything, or does not return the expected object
+		$output->logCliError($e->getMessage());
+		exit(1);
 	}
 	catch (Exception $e)
 	{
