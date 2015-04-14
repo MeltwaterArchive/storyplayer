@@ -61,6 +61,12 @@ use Storyplayer\GroupAdapters\GroupAdapter;
 class TestEnvironment_GroupDefinition
 {
     /**
+     * the test environment that we belong to
+     * @var TestEnvironment_Definition
+     */
+    protected $parentEnv;
+
+    /**
      * the code that understands what's special about this type of group
      * @var GroupAdapter
      */
@@ -72,8 +78,9 @@ class TestEnvironment_GroupDefinition
      */
     protected $hosts = array();
 
-    public function __construct(GroupAdapter $groupAdapter)
+    public function __construct(TestEnvironment_Definition $parent, GroupAdapter $groupAdapter)
     {
+        $this->parentEnv = $parent;
         $this->setGroupAdapter($groupAdapter);
     }
 

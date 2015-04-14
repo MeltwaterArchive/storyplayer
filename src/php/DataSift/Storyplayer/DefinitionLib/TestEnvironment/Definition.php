@@ -116,7 +116,7 @@ class TestEnvironment_Definition
      */
     public function addGroup(GroupAdapter $groupAdapter)
     {
-        $this->groups[] = new TestEnvironment_GroupDefinition($groupAdapter);
+        $this->groups[] = new TestEnvironment_GroupDefinition($this, $groupAdapter);
         return end($this->groups);
     }
 }
