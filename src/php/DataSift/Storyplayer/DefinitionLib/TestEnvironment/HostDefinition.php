@@ -66,7 +66,7 @@ class TestEnvironment_HostDefinition
     /**
      * the group that this host belongs to
      *
-     * @var TestEnvironmentGroup
+     * @var TestEnvironment_GroupDefinition
      */
     protected $parentGroup;
 
@@ -76,7 +76,7 @@ class TestEnvironment_HostDefinition
      */
     protected $hostId;
 
-    public function __construct(TestEnvironmentGroup $parentGroup, $hostId)
+    public function __construct(TestEnvironment_GroupDefinition $parentGroup, $hostId)
     {
         $this->setParentGroup($parentGroup);
         $this->setHostId($hostId);
@@ -93,7 +93,7 @@ class TestEnvironment_HostDefinition
         return $this->parentGroup;
     }
 
-    public function setParentGroup(TestEnvironmentGroup $parentGroup)
+    public function setParentGroup(TestEnvironment_GroupDefinition $parentGroup)
     {
         $this->parentGroup = $parentGroup;
     }

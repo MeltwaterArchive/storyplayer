@@ -97,7 +97,7 @@ class TestEnvironment_GroupDefinition
         if (!is_string($hostId)) {
             throw new E4xx_IllegalHostId("hostId must be a string, " . gettype($hostId) . " given");
         }
-        $this->hosts[$hostId] = new TestEnvironmentHost($hostId);
+        $this->hosts[$hostId] = new TestEnvironment_HostDefinition($this, $hostId);
         return $this->hosts[$hostId];
     }
 
