@@ -169,4 +169,22 @@ class TestEnvironment_HostDefinition
         // fluent interface
         return $this;
     }
+
+    // ==================================================================
+    //
+    // Roles support
+    //
+    // ------------------------------------------------------------------
+
+    protected $roles = [];
+
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+    }
 }
