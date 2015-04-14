@@ -169,13 +169,14 @@ class ConfigList
         $filenames = $this->findConfigFilenames("main.php");
 
         // let's get them processed
-        // foreach ($filenames as $filename) {
-
+        foreach ($filenames as $filename) {
+            $config = require ($filename);
+            $configs[$config->getName()] = $config;
         //     $config = $this->newWrappedConfigObject();
         //     $config->loadConfigFromFile($filename);
         //     $config->validateConfig();
         //     $configs[$config->getName()] = $config;
-        // }
+        }
 
         // all done
         return $configs;
