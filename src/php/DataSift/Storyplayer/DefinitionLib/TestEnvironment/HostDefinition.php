@@ -52,6 +52,8 @@ use Storyplayer\OsAdapters\OsAdapterValidator;
 
 use DataSift\Storyplayer\DefinitionLib\TestEnvironment_RolesValidator;
 
+use DataSift\Stone\ObjectLib\BaseObject;
+
 /**
  * Represents a host defined in the TestEnvironment
  *
@@ -78,10 +80,20 @@ class TestEnvironment_HostDefinition
      */
     protected $hostId;
 
+    /**
+     * the settings that apps may be interested in
+     *
+     * @var BaseObject
+     */
+    protected $storySettings;
+
     public function __construct(TestEnvironment_GroupDefinition $parentGroup, $hostId)
     {
         $this->setParentGroup($parentGroup);
         $this->setHostId($hostId);
+
+        // start with an empty set of story settings
+        $this->storySettings = new BaseObject;
     }
 
     // ==================================================================
@@ -199,6 +211,30 @@ class TestEnvironment_HostDefinition
         return $this;
     }
 
+    // ==================================================================
+    //
+    // Settings support goes here
+    //
+    // ------------------------------------------------------------------
+
+    public function getStorySettings()
+    {
+        return $this->storySettings;
+    }
+
+    public function setStorySettings($rawSettings)
+    {
+        // just in case we've been called more than once
+        $this->storySettings = new BaseObject;
+
+        // convert to our BaseObject, which comes with all sorts of
+        // funky helpers
+        $this->storySettings->mergeFrom($rawSettings);
+
+        // all done
+        // flient interface support
+        return $this;
+    }
 
     // ==================================================================
     //
