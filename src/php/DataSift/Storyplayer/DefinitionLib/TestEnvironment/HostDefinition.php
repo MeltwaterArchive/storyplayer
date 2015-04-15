@@ -68,19 +68,6 @@ use DataSift\Stone\ObjectLib\BaseObject;
 class TestEnvironment_HostDefinition
 {
     /**
-     * the group that this host belongs to
-     *
-     * @var TestEnvironment_GroupDefinition
-     */
-    protected $parentGroup;
-
-    /**
-     * the ID assigned to this host (it's complicated)
-     * @var string
-     */
-    protected $hostId;
-
-    /**
      * the settings that apps may be interested in
      *
      * @var BaseObject
@@ -102,6 +89,14 @@ class TestEnvironment_HostDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * the group that this host belongs to
+     *
+     * @var TestEnvironment_GroupDefinition
+     */
+    protected $parentGroup;
+
+
     public function getParentGroup()
     {
         return $this->parentGroup;
@@ -118,11 +113,36 @@ class TestEnvironment_HostDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * the ID assigned to this host (it's complicated)
+     * @var string
+     */
+    protected $hostId;
+
+    /**
+     * what is the ID of this host?
+     *
+     * host IDs are the names that Storyplayer (and stories you write) will
+     * use to refer to a host. They may or may not be the same as the host's
+     * hostname.
+     *
+     * @return string
+     */
     public function getHostId()
     {
         return $this->hostId;
     }
 
+    /**
+     * tell this host what its host ID is
+     *
+     * NOTES:
+     *
+     * * host IDs are normally validated in the group definition
+     *
+     * @param string $hostId
+     *        the host ID to use for this host
+     */
     public function setHostId($hostId)
     {
         $this->hostId = $hostId;
@@ -134,11 +154,22 @@ class TestEnvironment_HostDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * what operating system is running on this host?
+     *
+     * @return OsAdapter
+     */
     public function getOperatingSystem()
     {
         return $this->osAdapter;
     }
 
+    /**
+     * tell this host what operating system is running on this host
+     *
+     * @param OsAdapter $osAdapter
+     *        the adapter to use for the relevant operating system
+     */
     public function setOperatingSystem(OsAdapter $osAdapter)
     {
         // make sure the operating system is compatible with this group
@@ -170,11 +201,29 @@ class TestEnvironment_HostDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * the adapter to use when interacting with this host
+     *
+     * @var HostManager
+     */
+    protected $hostManager;
+
+    /**
+     * how do we interact with this host?
+     *
+     * @return HostAdapter
+     */
     public function getHostManager()
     {
         return $this->hostManager;
     }
 
+    /**
+     * tell us how to interact with this host
+     *
+     * @param HostManager $hostManager
+     *        the adapter we should use
+     */
     public function setHostManager(HostManager $hostManager)
     {
         // remember the adapter
@@ -190,13 +239,28 @@ class TestEnvironment_HostDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * a list of the roles that this host supports
+     * @var array<string>
+     */
     protected $roles = [];
 
+    /**
+     * what roles does this host support?
+     *
+     * @return array<string>
+     */
     public function getRoles()
     {
         return $this->roles;
     }
 
+    /**
+     * tell this host what roles it supports
+     *
+     * @param array<string> $roles
+     *        a list of the roles that it supports
+     */
     public function setRoles($roles)
     {
         // make sure we have what we expect
@@ -217,11 +281,22 @@ class TestEnvironment_HostDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * return all of the story settings that this host supports
+     *
+     * @return BaseObject
+     */
     public function getStorySettings()
     {
         return $this->storySettings;
     }
 
+    /**
+     * tell this host what story settings it supports
+     *
+     * @param array|object|null $rawSettings
+     *        the settings to set
+     */
     public function setStorySettings($rawSettings)
     {
         // just in case we've been called more than once
