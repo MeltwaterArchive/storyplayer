@@ -102,15 +102,16 @@ class TestEnvironment_GroupDefinition
      *
      * @param string $hostId
      *        the ID of this host
-     * @return TestEnvironmentHost
+     * @return TestEnvironment_HostDefinition
      *         the empty host definition, for you to complete
      */
     public function addHost($hostId)
     {
-        // make sure 'hostId' is a string
-        if (!is_string($hostId)) {
-            throw new E4xx_IllegalHostId("hostId must be a string, " . gettype($hostId) . " given");
-        }
+        // make sure we're happy with the hostId
+        $hostIdValidator = new TestEnvironment_HostIdValidator($this);
+        $hostIdValidator->validate($hostId);
+
+        // create the new host and send it back
         $this->hosts[$hostId] = new TestEnvironment_HostDefinition($this, $hostId);
         return $this->hosts[$hostId];
     }

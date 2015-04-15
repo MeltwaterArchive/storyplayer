@@ -45,10 +45,13 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use Storyplayer\HostManagers\HostManager;
+use Storyplayer\HostManagers\HostManagerValidator;
+use Storyplayer\OsAdapters\OsAdapter;
+use Storyplayer\OsAdapters\OsAdapterValidator;
 
 /**
- * Exception thrown when we're given a hostId that isn't a string
+ * Logic for verifying a host ID
  *
  * @category  Libraries
  * @package   Storyplayer/DefinitionLib
@@ -58,11 +61,53 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_IllegalHostId extends E4xx_BadTestEnvironmentDefinition
+class TestEnvironment_HostIdValidator
 {
-    public function __construct($testEnvironmentName, $groupId, $hostId)
+    /**
+     * the group that we are validating host IDs for
+     * @var TestEnvironment_GroupDefinition
+     */
+    protected $group;
+
+    /**
+     * constructor
+     *
+     * @param TestEnvironment_GroupDefinition $group
+     *        the group that we are validating host IDs for
+     */
+    public function __construct(TestEnvironment_GroupDefinition $group)
     {
-    	$msg = "in test environment {$testEnvironmentName}, group {$groupId}, hostIds must all be strings, at least one " . gettype($hostId) . " found instead";
-        parent::__construct(400, $msg, $msg);
+        $this->group = $group;
+    }
+
+    /**
+     * make sure that we're happy with a hostId
+     *
+     * @param  mixed $hostId
+     *         the hostId to check
+     * @return void
+     */
+    public function validate($hostId)
+    {
+        $this->validateMustBeString($hostId);
+    }
+
+    /**
+     * make sure that the hostId is a string
+     *
+     * @param  mixed $hostId
+     *         the hostId to check
+     * @return void
+     */
+    protected function validateMustBeString($hostId)
+    {
+        // make sure 'hostId' is a string
+        if (!is_string($hostId)) {
+            throw new E4xx_IllegalHostId(
+                $this->group->getTestEnvironmentName(),
+                $this->group->getGroupId(),
+                $hostId
+            );
+        }
     }
 }
