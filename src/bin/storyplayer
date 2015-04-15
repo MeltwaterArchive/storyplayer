@@ -46,6 +46,7 @@ use DataSift\Storyplayer\ConfigLib\TestEnvironmentsList;
 use DataSift\Storyplayer\TestEnvironmentsLib\HardCodedTestEnvironments;
 
 use DataSift\Storyplayer\ConfigLib\E4xx_TestEnvironmentFileMustReturnADefinition;
+use DataSift\Storyplayer\DefinitionLib\E4xx_BadTestEnvironmentDefinition;
 
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
@@ -246,6 +247,13 @@ function main($argv)
 	{
 		// this happens when a PHP-style test environment file either does
 		// not return anything, or does not return the expected object
+		$output->logCliError($e->getMessage());
+		exit(1);
+	}
+	catch (E4xx_BadTestEnvironmentDefinition $e)
+	{
+		// this happens when a PHP-style test environment file passes an
+		// invalid input into one of the DefinitionLib classes
 		$output->logCliError($e->getMessage());
 		exit(1);
 	}

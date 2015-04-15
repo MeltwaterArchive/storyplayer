@@ -50,6 +50,8 @@ use Storyplayer\HostManagers\HostManagerValidator;
 use Storyplayer\OsAdapters\OsAdapter;
 use Storyplayer\OsAdapters\OsAdapterValidator;
 
+use DataSift\Storyplayer\DefinitionLib\TestEnvironment_RolesValidator;
+
 /**
  * Represents a host defined in the TestEnvironment
  *
@@ -185,6 +187,27 @@ class TestEnvironment_HostDefinition
 
     public function setRoles($roles)
     {
+        // make sure we have what we expect
+        $rolesValidator = new TestEnvironment_RolesValidator($this);
+        $rolesValidator->validate($roles);
+
+        // remember the roles
         $this->roles = $roles;
+    }
+
+    // ==================================================================
+    //
+    // Helpers go here
+    //
+    // ------------------------------------------------------------------
+
+    function getGroupId()
+    {
+        return $this->parentGroup->getGroupId();
+    }
+
+    function getTestEnvironmentName()
+    {
+        return $this->parentGroup->getTestEnvironmentName();
     }
 }

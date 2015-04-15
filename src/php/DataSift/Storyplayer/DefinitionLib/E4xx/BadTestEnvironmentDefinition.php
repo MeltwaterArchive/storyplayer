@@ -45,10 +45,10 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
-use Storyplayer\GroupAdapters\GroupAdapter;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Represents the TestEnvironment that is being created / destroyed
+ * Base exception thrown for all bad test environment definitions
  *
  * @category  Libraries
  * @package   Storyplayer/DefinitionLib
@@ -58,65 +58,6 @@ use Storyplayer\GroupAdapters\GroupAdapter;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironment_Definition
+class E4xx_BadTestEnvironmentDefinition extends Exxx_Exception
 {
-    /**
-     * the name of this test environment
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * create a new test environment definition
-     *
-     * @param string $name
-     *        the name to assign to this test environment
-     */
-    public function __construct($name)
-    {
-        $this->setName($name);
-    }
-
-    /**
-     * what is the name of this test environment?
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * set the name of this test environment
-     *
-     * @param string $name
-     *        the new name for this test environment
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * a list of all of the groups of hosts in our test environment
-     * @var array<TestEnvironmentGroup>
-     */
-    protected $groups = array();
-
-    /**
-     * add a new group to our collection
-     *
-     * @param  GroupAdapter $groupAdapter
-     *         the adapter for this group
-     *
-     * @return TestEnvironmentGroup
-     *         a new and empty group, ready for you to define
-     */
-    public function addGroup(GroupAdapter $groupAdapter)
-    {
-        $this->groups[] = new TestEnvironment_GroupDefinition($this, count($this->groups) + 1, $groupAdapter);
-        return end($this->groups);
-    }
 }

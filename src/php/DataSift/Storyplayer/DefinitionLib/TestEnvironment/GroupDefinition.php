@@ -67,6 +67,12 @@ class TestEnvironment_GroupDefinition
     protected $parentEnv;
 
     /**
+     * which group are we?
+     * @var int
+     */
+    protected $groupId;
+
+    /**
      * the code that understands what's special about this type of group
      * @var GroupAdapter
      */
@@ -78,9 +84,10 @@ class TestEnvironment_GroupDefinition
      */
     protected $hosts = array();
 
-    public function __construct(TestEnvironment_Definition $parent, GroupAdapter $groupAdapter)
+    public function __construct(TestEnvironment_Definition $parent, $groupId, GroupAdapter $groupAdapter)
     {
         $this->parentEnv = $parent;
+        $this->groupId   = $groupId;
         $this->setGroupAdapter($groupAdapter);
     }
 
@@ -132,5 +139,21 @@ class TestEnvironment_GroupDefinition
     public function getHostManagerValidator()
     {
         return $this->groupAdapter->getHostAdapterValidator();
+    }
+
+    // ==================================================================
+    //
+    // Helpers go here
+    //
+    // ------------------------------------------------------------------
+
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
+
+    public function getTestEnvironmentName()
+    {
+        return $this->parentEnv->getName();
     }
 }
