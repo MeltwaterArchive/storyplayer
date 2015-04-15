@@ -193,7 +193,12 @@ class TestEnvironment_HostDefinition
 
         // remember the roles
         $this->roles = $roles;
+
+        // all done
+        // fluent interface support
+        return $this;
     }
+
 
     // ==================================================================
     //
