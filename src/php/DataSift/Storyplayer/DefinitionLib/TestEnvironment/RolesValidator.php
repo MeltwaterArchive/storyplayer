@@ -69,11 +69,26 @@ class TestEnvironment_RolesValidator
      */
     protected $host;
 
+    /**
+     * constructor
+     *
+     * @param TestEnvironment_HostDefinition $host
+     *        the host that we are validating roles for
+     */
     public function __construct($host)
     {
         $this->host = $host;
     }
 
+    /**
+     * validate a set of roles
+     *
+     * throws an exception if there's anything wrong with the roles
+     *
+     * @param  mixed $roles
+     *         the roles to validate
+     * @return void
+     */
     public function validate($roles)
     {
         $this->validateMustBeArray($roles);
@@ -86,6 +101,13 @@ class TestEnvironment_RolesValidator
         $this->validateMustBeKeyValuePairs($roles);
     }
 
+    /**
+     * make sure that the roles are an array
+     *
+     * @param  mixed $roles
+     *         the roles to check
+     * @return void
+     */
     protected function validateMustBeArray($roles)
     {
         if (!is_array($roles)) {
@@ -98,6 +120,13 @@ class TestEnvironment_RolesValidator
         }
     }
 
+    /**
+     * make sure that the roles are simple key / value pairs
+     *
+     * @param  array $roles
+     *         the roles to check
+     * @return void
+     */
     protected function validateMustBeKeyValuePairs($roles)
     {
         foreach ($roles as $key => $value) {
