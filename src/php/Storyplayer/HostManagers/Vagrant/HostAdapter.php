@@ -46,8 +46,7 @@
 namespace Storyplayer\HostManagers;
 
 /**
- * adapter for working with a host that runs inside Virtualbox, and is
- * managed by Vagrant
+ * base class for all Vagrant host adapters
  *
  * @category  Libraries
  * @package   Storyplayer/HostManagers
@@ -58,6 +57,6 @@ namespace Storyplayer\HostManagers;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Vagrant_VirtualboxAdapter extends Vagrant_HostAdapter
+abstract class Vagrant_HostAdapter implements HostManager
 {
 }
