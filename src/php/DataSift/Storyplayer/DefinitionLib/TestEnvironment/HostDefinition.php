@@ -226,6 +226,18 @@ class TestEnvironment_HostDefinition
      */
     public function setHostManager(HostManager $hostManager)
     {
+        // we need to validate first
+        $validator = $this->getParentGroup()->getHostManagerValidator();
+        if (!$validator->validate($hostManager)) {
+            throw new E4xx_IncompatibleHostManager(
+                $this->getTestEnvironmentName(),
+                $this->getGroupId(),
+                $this->getHostId(),
+                $hostManager,
+                $this->getGroupAdapter()
+            );
+        }
+
         // remember the adapter
         $this->hostManager = $hostManager;
 
@@ -316,6 +328,11 @@ class TestEnvironment_HostDefinition
     // Helpers go here
     //
     // ------------------------------------------------------------------
+
+    function getGroupAdapter()
+    {
+        return $this->parentGroup->getGroupAdapter();
+    }
 
     function getGroupId()
     {

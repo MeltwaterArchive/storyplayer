@@ -59,4 +59,13 @@ namespace Storyplayer\TestEnvironments;
 
 class Vagrant_GroupAdapter implements GroupAdapter
 {
+	/**
+	 * how do we validate any host managers used by hosts in this group?
+	 *
+	 * @return OsAdapterValidator
+	 */
+	public function getHostManagerValidator()
+	{
+		return new Vagrant_HostManagerValidator($this);
+	}
 }

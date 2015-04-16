@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironments
+ * @package   Storyplayer/DefinitionLib
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,26 +43,27 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\TestEnvironments;
+namespace DataSift\Storyplayer\DefinitionLib;
+
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * interface that all host group adapters must implement
+ * Exception thrown when we're given a host manager that isn't compatible with
+ * the group's adapter
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironments
+ * @package   Storyplayer/DefinitionLib
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-
-interface GroupAdapter
+class E4xx_IncompatibleHostManager extends E4xx_BadTestEnvironmentDefinition
 {
-	/**
-	 * how do we validate any host managers used by hosts in this group?
-	 *
-	 * @return OsAdapterValidator
-	 */
-	public function getHostManagerValidator();
+    public function __construct($testEnvironmentName, $groupId, $hostId, $hostManager, $groupAdapter)
+    {
+    	$msg = "in test environment {$testEnvironmentName}, group {$groupId}, host {$hostId}: host manager '" . gettype($hostManager) . "' isn't compatible with group of type '" . gettype($groupAdapter) . "'";
+        parent::__construct(400, $msg, $msg);
+    }
 }
