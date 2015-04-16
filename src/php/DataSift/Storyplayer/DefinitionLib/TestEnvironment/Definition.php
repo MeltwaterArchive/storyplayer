@@ -45,7 +45,7 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
-use Storyplayer\GroupAdapters\GroupAdapter;
+use Storyplayer\TestEnvironments\GroupAdapter;
 
 /**
  * Represents the TestEnvironment that is being created / destroyed

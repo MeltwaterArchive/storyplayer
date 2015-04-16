@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/GroupAdapters
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,16 +43,14 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\GroupAdapters;
-
-use Storyplayer\HostManagers\HostManagerValidator;
-use Storyplayer\OsAdapters\OsAdapterValidator;
+namespace Storyplayer\TestEnvironments;
 
 /**
- * group adapter for hosts managed by vagrant
+ * adapter for working with a host that runs inside Virtualbox, and is
+ * managed by Vagrant
  *
  * @category  Libraries
- * @package   Storyplayer/GroupAdapters
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -60,6 +58,6 @@ use Storyplayer\OsAdapters\OsAdapterValidator;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class VagrantAdapter implements GroupAdapter
+class Vagrant_VirtualboxHostAdapter extends Vagrant_HostAdapter
 {
 }

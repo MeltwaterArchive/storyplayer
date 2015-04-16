@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/GroupAdapters
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,16 +43,13 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\GroupAdapters;
-
-use Storyplayer\HostManagers\HostManagerValidator;
-use Storyplayer\OsAdapters\OsAdapterValidator;
+namespace Storyplayer\TestEnvironments;
 
 /**
  * interface that all host group adapters must implement
  *
  * @category  Libraries
- * @package   Storyplayer/GroupAdapters
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com

@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/DefinitionLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,71 +43,26 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\DefinitionLib;
+namespace Storyplayer\TestEnvironments\OsAdapters;
 
-use Storyplayer\TestEnvironments\HostManager;
-use Storyplayer\TestEnvironments\HostManagerValidator;
+use DataSift\Storyplayer\OsLib\Remote_Centos6;
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\HostLib\SupportedHost;
+
 use Storyplayer\TestEnvironments\OsAdapter;
-use Storyplayer\TestEnvironments\OsAdapterValidator;
 
 /**
- * Logic for verifying a host ID
+ * support for Storyplayer testing against Debian
  *
  * @category  Libraries
- * @package   Storyplayer/DefinitionLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironment_HostIdValidator
+
+class DebianAdapter implements OsAdapter
 {
-    /**
-     * the group that we are validating host IDs for
-     * @var TestEnvironment_GroupDefinition
-     */
-    protected $group;
-
-    /**
-     * constructor
-     *
-     * @param TestEnvironment_GroupDefinition $group
-     *        the group that we are validating host IDs for
-     */
-    public function __construct(TestEnvironment_GroupDefinition $group)
-    {
-        $this->group = $group;
-    }
-
-    /**
-     * make sure that we're happy with a hostId
-     *
-     * @param  mixed $hostId
-     *         the hostId to check
-     * @return void
-     */
-    public function validate($hostId)
-    {
-        $this->validateMustBeString($hostId);
-    }
-
-    /**
-     * make sure that the hostId is a string
-     *
-     * @param  mixed $hostId
-     *         the hostId to check
-     * @return void
-     */
-    protected function validateMustBeString($hostId)
-    {
-        // make sure 'hostId' is a string
-        if (!is_string($hostId)) {
-            throw new E4xx_IllegalHostId(
-                $this->group->getTestEnvironmentName(),
-                $this->group->getGroupId(),
-                $hostId
-            );
-        }
-    }
 }

@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostManagers
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,13 +43,13 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\HostManagers;
+namespace Storyplayer\TestEnvironments;
 
 /**
- * interface that all host managers must implement
+ * interface that all host manager validators must implement
  *
  * @category  Libraries
- * @package   Storyplayer/HostManagers
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -57,6 +57,15 @@ namespace Storyplayer\HostManagers;
  * @link      http://datasift.github.io/storyplayer
  */
 
-interface HostManager
+interface HostManagerValidator
 {
+	/**
+	 * check to make sure that a host manager plugin is compatible with
+	 * the group adapter
+	 *
+	 * @param  HostManager $hostManager
+	 *         the adapter to validate
+	 * @return void
+	 */
+	public function validate(HostManager $hostManager);
 }

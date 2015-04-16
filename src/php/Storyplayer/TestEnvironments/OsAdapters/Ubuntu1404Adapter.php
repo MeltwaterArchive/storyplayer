@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostManagers
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,13 +43,19 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\HostManagers;
+namespace Storyplayer\TestEnvironments\OsAdapters;
+
+use DataSift\Storyplayer\OsLib\Remote_Centos6;
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\HostLib\SupportedHost;
+
+use Storyplayer\TestEnvironments\OsAdapter;
 
 /**
- * base class for all Vagrant host adapters
+ * support for Storyplayer testing against Ubuntu 14.04
  *
  * @category  Libraries
- * @package   Storyplayer/HostManagers
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -57,6 +63,6 @@ namespace Storyplayer\HostManagers;
  * @link      http://datasift.github.io/storyplayer
  */
 
-abstract class Vagrant_HostAdapter implements HostManager
+class Ubuntu1404Adapter implements OsAdapter
 {
 }

@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/OsLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,17 +43,13 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\OsAdapters;
-
-use DataSift\Storyplayer\OsLib\Remote_Centos6;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Storyplayer\HostLib\SupportedHost;
+namespace Storyplayer\TestEnvironments;
 
 /**
- * support for Storyplayer testing against Centos6
+ * group adapter for hosts managed by vagrant
  *
  * @category  Libraries
- * @package   Storyplayer/OsAdapters
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -61,6 +57,6 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Centos6Adapter implements OsAdapter
+class Vagrant_GroupAdapter implements GroupAdapter
 {
 }

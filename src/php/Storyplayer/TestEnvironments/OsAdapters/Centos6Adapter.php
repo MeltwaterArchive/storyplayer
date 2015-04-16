@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostManagers
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,14 +43,19 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\HostManagers;
+namespace Storyplayer\TestEnvironments\OsAdapters;
+
+use DataSift\Storyplayer\OsLib\Remote_Centos6;
+use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\HostLib\SupportedHost;
+
+use Storyplayer\TestEnvironments\OsAdapter;
 
 /**
- * adapter for working with a host that runs inside Virtualbox, and is
- * managed by Vagrant
+ * support for Storyplayer testing against Centos6
  *
  * @category  Libraries
- * @package   Storyplayer/HostManagers
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -58,6 +63,6 @@ namespace Storyplayer\HostManagers;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Vagrant_VirtualboxAdapter extends Vagrant_HostAdapter
+class Centos6Adapter implements OsAdapter
 {
 }

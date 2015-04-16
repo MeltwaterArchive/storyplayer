@@ -45,10 +45,10 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
-use Storyplayer\HostManagers\HostManager;
-use Storyplayer\HostManagers\HostManagerValidator;
-use Storyplayer\OsAdapters\OsAdapter;
-use Storyplayer\OsAdapters\OsAdapterValidator;
+use Storyplayer\TestEnvironments\HostManager;
+use Storyplayer\TestEnvironments\HostManagerValidator;
+use Storyplayer\TestEnvironments\OsAdapter;
+use Storyplayer\TestEnvironments\OsAdapterValidator;
 
 /**
  * Logic for verifying a list of roles for a host

@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/OsAdapters
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,13 +43,13 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\OsAdapters;
+namespace Storyplayer\TestEnvironments;
 
 /**
- * interface that all operating system adapters must implement
+ * base class for all Vagrant host adapters
  *
  * @category  Libraries
- * @package   Storyplayer/OsAdapters
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -57,6 +57,6 @@ namespace Storyplayer\OsAdapters;
  * @link      http://datasift.github.io/storyplayer
  */
 
-interface OsAdapter
+abstract class Vagrant_HostAdapter implements HostManager
 {
 }
