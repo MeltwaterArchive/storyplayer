@@ -137,9 +137,9 @@ class TestEnvironment_GroupDefinition
         return $this->groupAdapter->getOsAdapterValidator();
     }
 
-    public function getHostManagerValidator()
+    public function getHostAdapterValidator()
     {
-        return $this->groupAdapter->getHostManagerValidator();
+        return $this->groupAdapter->getHostAdapterValidator();
     }
 
     // ==================================================================

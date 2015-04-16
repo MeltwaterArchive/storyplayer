@@ -48,7 +48,7 @@ namespace DataSift\Storyplayer\DefinitionLib;
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Exception thrown when we're given a host manager that isn't compatible with
+ * Exception thrown when we're given a host adapter that isn't compatible with
  * the group's adapter
  *
  * @category  Libraries
@@ -59,11 +59,11 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_IncompatibleHostManager extends E4xx_BadTestEnvironmentDefinition
+class E4xx_IncompatibleHostAdapter extends E4xx_BadTestEnvironmentDefinition
 {
     public function __construct($testEnvironmentName, $groupId, $hostId, $hostManager, $groupAdapter)
     {
-    	$msg = "in test environment {$testEnvironmentName}, group {$groupId}, host {$hostId}: host manager '" . gettype($hostManager) . "' isn't compatible with group of type '" . gettype($groupAdapter) . "'";
+    	$msg = "in test environment {$testEnvironmentName}, group {$groupId}, host {$hostId}: host adapter '" . gettype($hostManager) . "' isn't compatible with group of type '" . gettype($groupAdapter) . "'";
         parent::__construct(400, $msg, $msg);
     }
 }

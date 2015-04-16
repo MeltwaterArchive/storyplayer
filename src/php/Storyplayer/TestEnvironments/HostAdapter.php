@@ -46,7 +46,7 @@
 namespace Storyplayer\TestEnvironments;
 
 /**
- * validator for hosts added to a Vagrant group
+ * interface that all host adapters must implement
  *
  * @category  Libraries
  * @package   Storyplayer/TestEnvironments
@@ -57,22 +57,6 @@ namespace Storyplayer\TestEnvironments;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Vagrant_HostManagerValidator implements HostManagerValidator
+interface HostAdapter
 {
-	/**
-	 * check to make sure that a host manager plugin is compatible with
-	 * the group adapter
-	 *
-	 * @param  HostManager $hostManager
-	 *         the adapter to validate
-	 * @return boolean
-	 */
-	public function validate(HostManager $hostManager)
-	{
-		if (!$hostManager instanceof Vagrant_HostAdapter) {
-			return false;
-		}
-
-		return true;
-	}
 }

@@ -57,6 +57,6 @@ namespace Storyplayer\TestEnvironments;
  * @link      http://datasift.github.io/storyplayer
  */
 
-abstract class Vagrant_HostAdapter implements HostManager
+abstract class Vagrant_HostAdapter implements HostAdapter
 {
 }

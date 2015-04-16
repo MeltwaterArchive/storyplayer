@@ -60,9 +60,9 @@ namespace Storyplayer\TestEnvironments;
 interface GroupAdapter
 {
 	/**
-	 * how do we validate any host managers used by hosts in this group?
+	 * how do we validate any host adapters used by hosts in this group?
 	 *
-	 * @return OsAdapterValidator
+	 * @return HostAdapterValidator
 	 */
-	public function getHostManagerValidator();
+	public function getHostAdapterValidator();
 }

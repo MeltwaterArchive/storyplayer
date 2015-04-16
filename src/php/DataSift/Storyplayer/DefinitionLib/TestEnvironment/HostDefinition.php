@@ -45,8 +45,8 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
-use Storyplayer\TestEnvironments\HostManager;
-use Storyplayer\TestEnvironments\HostManagerValidator;
+use Storyplayer\TestEnvironments\HostAdapter;
+use Storyplayer\TestEnvironments\HostAdapterValidator;
 use Storyplayer\TestEnvironments\OsAdapter;
 use Storyplayer\TestEnvironments\OsAdapterValidator;
 
@@ -197,39 +197,39 @@ class TestEnvironment_HostDefinition
 
     // ==================================================================
     //
-    // Host manager support
+    // Host adapter support
     //
     // ------------------------------------------------------------------
 
     /**
      * the adapter to use when interacting with this host
      *
-     * @var HostManager
+     * @var HostAdapter
      */
-    protected $hostManager;
+    protected $hostAdapter;
 
     /**
      * how do we interact with this host?
      *
      * @return HostAdapter
      */
-    public function getHostManager()
+    public function getHostAdapter()
     {
-        return $this->hostManager;
+        return $this->hostAdapter;
     }
 
     /**
      * tell us how to interact with this host
      *
-     * @param HostManager $hostManager
+     * @param HostAdapter $hostAdapter
      *        the adapter we should use
      */
-    public function setHostManager(HostManager $hostManager)
+    public function setHostAdapter(HostAdapter $hostAdapter)
     {
         // we need to validate first
-        $validator = $this->getParentGroup()->getHostManagerValidator();
-        if (!$validator->validate($hostManager)) {
-            throw new E4xx_IncompatibleHostManager(
+        $validator = $this->getParentGroup()->getHostAdapterValidator();
+        if (!$validator->validate($hostAdapter)) {
+            throw new E4xx_IncompatibleHostAdapter(
                 $this->getTestEnvironmentName(),
                 $this->getGroupId(),
                 $this->getHostId(),
@@ -239,7 +239,7 @@ class TestEnvironment_HostDefinition
         }
 
         // remember the adapter
-        $this->hostManager = $hostManager;
+        $this->hostAdapter = $hostAdapter;
 
         // fluent interface
         return $this;

@@ -46,7 +46,7 @@
 namespace Storyplayer\TestEnvironments;
 
 /**
- * interface that all host managers must implement
+ * interface that all host adapter validators must implement
  *
  * @category  Libraries
  * @package   Storyplayer/TestEnvironments
@@ -57,6 +57,15 @@ namespace Storyplayer\TestEnvironments;
  * @link      http://datasift.github.io/storyplayer
  */
 
-interface HostManager
+interface HostAdapterValidator
 {
+	/**
+	 * check to make sure that a host adapter plugin is compatible with
+	 * the group adapter
+	 *
+	 * @param  HostAdapter $hostAdapter
+	 *         the adapter to validate
+	 * @return void
+	 */
+	public function validate(HostAdapter $hostAdapter);
 }
