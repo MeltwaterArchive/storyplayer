@@ -106,7 +106,7 @@ class TestEnvironment_Definition
     protected $groups = array();
 
     /**
-     * add a new group to our collection
+     * create a new group of hosts
      *
      * @param  GroupAdapter $groupAdapter
      *         the adapter for this group
@@ -114,7 +114,7 @@ class TestEnvironment_Definition
      * @return TestEnvironmentGroup
      *         a new and empty group, ready for you to define
      */
-    public function addGroup(GroupAdapter $groupAdapter)
+    public function newGroup(GroupAdapter $groupAdapter)
     {
         $this->groups[] = new TestEnvironment_GroupDefinition($this, count($this->groups) + 1, $groupAdapter);
         return end($this->groups);

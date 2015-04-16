@@ -105,7 +105,7 @@ class TestEnvironment_GroupDefinition
      * @return TestEnvironment_HostDefinition
      *         the empty host definition, for you to complete
      */
-    public function addHost($hostId)
+    public function newHost($hostId)
     {
         // make sure we're happy with the hostId
         $hostIdValidator = new TestEnvironment_HostIdValidator($this);
