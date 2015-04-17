@@ -46,6 +46,7 @@
 namespace DataSift\Storyplayer\DefinitionLib;
 
 use Storyplayer\TestEnvironments\GroupAdapter;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
  * Represents the TestEnvironment that is being created / destroyed
@@ -118,5 +119,44 @@ class TestEnvironment_Definition
     {
         $this->groups[] = new TestEnvironment_GroupDefinition($this, count($this->groups) + 1, $groupAdapter);
         return end($this->groups);
+    }
+
+    // ==================================================================
+    //
+    // Settings go here
+    //
+    // ------------------------------------------------------------------
+
+    /**
+     * any module settings for this test environment
+     *
+     * these settings apply to any host in any group in this environment
+     *
+     * @var null|object
+     */
+    protected $moduleSettings = null;
+
+    /**
+     * get the current module settings for this test environment
+     *
+     * @return null|object
+     */
+    public function getModuleSettings()
+    {
+        return $this->moduleSettings;
+    }
+
+    /**
+     * tell us the module settings you want to apply to this test environment
+     *
+     * @param object $newSettings
+     *        the settings to apply
+     */
+    public function setModuleSettings($newSettings)
+    {
+        $this->moduleSettings = new BaseObject;
+        $this->moduleSettings->mergeFrom($newSettings);
+
+        return $this;
     }
 }
