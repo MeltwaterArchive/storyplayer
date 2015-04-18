@@ -144,6 +144,40 @@ class TestEnvironment_GroupDefinition
 
     // ==================================================================
     //
+    // Provisioning support goes here
+    //
+    // ------------------------------------------------------------------
+
+    /**
+     * How are we going to provision this test environment?
+     *
+     * @var array<TestEnvironment_ProvisioningDefinition>
+     */
+    protected $provisioningDefinition = [];
+
+    /**
+     * what (if any) provisioning instructions do we have?
+     *
+     * @return array<TestEnvironment_ProvisioningDefinition>
+     */
+    public function getProvisioningDefinition()
+    {
+        return $this->provisioningDefinition;
+    }
+
+    /**
+     * create a new (empty) provisioning definition to fill out
+     *
+     * @return TestEnvironment_ProvisioningDefinition
+     */
+    public function newProvisioningDefinition()
+    {
+        $this->provisioningDefinition[] = new TestEnvironment_ProvisioningDefinition($this);
+        return end($this->provisioningDefinition);
+    }
+
+    // ==================================================================
+    //
     // Helpers go here
     //
     // ------------------------------------------------------------------
