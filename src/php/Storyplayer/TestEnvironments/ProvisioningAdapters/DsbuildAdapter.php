@@ -61,4 +61,54 @@ use Storyplayer\TestEnvironments\ProvisioningAdapter;
 
 class DsbuildAdapter implements ProvisioningAdapter
 {
+	public function __construct()
+	{
+		$this->setExecutePath(getcwd() . DIRECTORY_SEPARATOR . "dsbuild.sh");
+	}
+
+	// ==================================================================
+	//
+	// Support for executing the script
+	//
+	// ------------------------------------------------------------------
+
+	/**
+	 * where is the script that we are going to execute?
+	 *
+	 * @var string
+	 */
+	protected $executePath;
+
+	/**
+	 * which folder are we executing things in?
+	 *
+	 * @return string
+	 */
+	public function getExecuteDir()
+	{
+		return dirname($this->executePath);
+	}
+
+	/**
+	 * where is the script that we are going to execute?
+	 *
+	 * @return string
+	 */
+	public function getExecutePath()
+	{
+		return $this->executePath;
+	}
+
+	/**
+	 * tell me which script to execute
+	 *
+	 * @param string $path
+	 *        path to the dsbuild script
+	 */
+	public function setExecutePath($path)
+	{
+		$this->executePath = $path;
+
+		return $this;
+	}
 }
