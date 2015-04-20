@@ -46,6 +46,7 @@
 namespace DataSift\Storyplayer\DefinitionLib;
 
 use Storyplayer\TestEnvironments\GroupAdapter;
+use Storyplayer\TestEnvironments\ProvisioningAdapter;
 
 /**
  * Represents a group of hosts in the test environment
@@ -149,31 +150,35 @@ class TestEnvironment_GroupDefinition
     // ------------------------------------------------------------------
 
     /**
-     * How are we going to provision this test environment?
+     * a list of provisioning adapters to use for this group
      *
-     * @var array<TestEnvironment_ProvisioningDefinition>
+     * @var array<ProvisioningAdapter>
      */
-    protected $provisioningDefinition = [];
+    protected $provisioningAdapters;
 
     /**
-     * what (if any) provisioning instructions do we have?
+     * how should we provision this environment?
      *
-     * @return array<TestEnvironment_ProvisioningDefinition>
+     * @return array<ProvisioningAdapters>
      */
-    public function getProvisioningDefinition()
+    public function getProvisioningAdapters()
     {
-        return $this->provisioningDefinition;
+        return $this->provisioningAdapters;
     }
 
     /**
-     * create a new (empty) provisioning definition to fill out
+     * add a provisioning adapter to our list
      *
-     * @return TestEnvironment_ProvisioningDefinition
+     * our list can have as many provisioning adapters as you would like
+     * they are executed in the order that you add them
+     *
+     * @param ProvisioningAdapter $adapter
+     *        the provisioning adapter to add
      */
-    public function newProvisioningDefinition()
+    public function addProvisioningAdapter(ProvisioningAdapter $adapter)
     {
-        $this->provisioningDefinition[] = new TestEnvironment_ProvisioningDefinition($this);
-        return end($this->provisioningDefinition);
+        $this->provisioningAdapters[] = $adapter;
+        return $this;
     }
 
     // ==================================================================
