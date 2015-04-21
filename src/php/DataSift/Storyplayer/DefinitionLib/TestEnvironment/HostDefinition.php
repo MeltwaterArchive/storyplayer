@@ -287,6 +287,48 @@ class TestEnvironment_HostDefinition
         return $this;
     }
 
+    /**
+     * does this host support this role?
+     *
+     * @param  string $roleName
+     *         the role to check for
+     * @return boolean
+     *         TRUE if the role is supported
+     *         FALSE otherwise
+     */
+    public function hasRole($roleName)
+    {
+        // special case
+        if ($roleName === '*') {
+            return true;
+        }
+
+        // general case
+        if (in_array($roleName, $this->roles)) {
+            return true;
+        }
+
+        // no luck, daddy-o!
+        return false;
+    }
+
+    /**
+     * add an extra role to our list of supported roles
+     *
+     * @param string $roleName
+     *        the name of the role to add
+     * @return void
+     */
+    public function addRole($roleName)
+    {
+        // avoid duplicating roles
+        if ($this->hasRole($roleName)) {
+            return;
+        }
+
+        $this->roles[] = $roleName;
+    }
+
     // ==================================================================
     //
     // Settings support goes here
