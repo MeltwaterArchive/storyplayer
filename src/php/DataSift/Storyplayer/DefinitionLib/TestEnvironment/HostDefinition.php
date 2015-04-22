@@ -81,6 +81,9 @@ class TestEnvironment_HostDefinition
 
         // start with an empty set of story settings
         $this->storySettings = new BaseObject;
+
+        // start with an empty set of provisioning params
+        $this->initProvisioningParams();
     }
 
     // ==================================================================
@@ -362,6 +365,54 @@ class TestEnvironment_HostDefinition
 
         // all done
         // flient interface support
+        return $this;
+    }
+
+    // ==================================================================
+    //
+    // Provisioning params support goes here
+    //
+    // ------------------------------------------------------------------
+
+    /**
+     * a list of provisioning parameters to send over to any provisioning
+     * engine
+     *
+     * @var BaseObject
+     */
+    protected $provisioningParams;
+
+    /**
+     * initialise the provisioning params list
+     *
+     * @return void
+     */
+    protected function initProvisioningParams()
+    {
+        $this->provisioningParams = new BaseObject();
+    }
+
+    /**
+     * what provisioning params do we have?
+     *
+     * @return BaseObject
+     */
+    public function getProvisioningParams()
+    {
+        return $this->provisioningParams;
+    }
+
+    public function setProvisioningParams($rawSettings)
+    {
+        // just in case we've been called more than once
+        $this->initProvisioningParams();
+
+        // convert to our BaseObject, which comes with all sorts of
+        // funky helpers
+        $this->provisioningParams->mergeFrom($rawSettings);
+
+        // all done
+        // fluent interface support
         return $this;
     }
 
