@@ -183,6 +183,22 @@ class TestEnvironment_GroupDefinition
 
     // ==================================================================
     //
+    // Host support goes here
+    //
+    // ------------------------------------------------------------------
+
+    /**
+     * what hosts exist in this group?
+     *
+     * @return array<TestEnvironment_HostDefinition>
+     */
+    public function getHosts()
+    {
+        return $this->hosts;
+    }
+
+    // ==================================================================
+    //
     // Helpers go here
     //
     // ------------------------------------------------------------------
