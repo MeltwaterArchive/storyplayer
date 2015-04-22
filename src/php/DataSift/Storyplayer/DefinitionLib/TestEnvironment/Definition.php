@@ -159,4 +159,33 @@ class TestEnvironment_Definition
 
         return $this;
     }
+
+    // ==================================================================
+    //
+    // Support for merging in from the system under test
+    //
+    // ------------------------------------------------------------------
+
+    public function mergeSystemUnderTestConfig($sutConfig)
+    {
+        // do we have anything to merge?
+        if (!$sutConfig->hasData('roles')) {
+            // nothing to merge
+            return;
+        }
+
+        // get the list of roles
+        $sutRoles = $sutConfig->getData('roles');
+
+        // we need to merge in the role params
+        foreach ($sutRoles as $sutRole) {
+            foreach ($this->groups as $groupDef) {
+                foreach ($groupDef->getHosts() as $hostDef) {
+                    if ($hostDef->hasRole($sutRole)) {
+                        $hostDef->addParams($sutRole->params);
+                    }
+                }
+            }
+        }
+    }
 }
