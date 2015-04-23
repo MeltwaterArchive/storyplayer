@@ -65,4 +65,13 @@ use Storyplayer\TestEnvironments\OsAdapter;
 
 class Ubuntu1404Adapter implements OsAdapter
 {
+    /**
+     * what is our operating system name?
+     *
+     * @return string
+     */
+    public function getOsName()
+    {
+        return "ubuntu1404";
+    }
 }

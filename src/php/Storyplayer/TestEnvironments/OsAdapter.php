@@ -59,4 +59,17 @@ namespace Storyplayer\TestEnvironments;
 
 interface OsAdapter
 {
+
+	// ==================================================================
+	//
+	// Temporary features which will be removed in SP2.4 go here
+	//
+	// ------------------------------------------------------------------
+
+    /**
+     * what is our operating system name?
+     *
+     * @return string
+     */
+    public function getOsName();
 }

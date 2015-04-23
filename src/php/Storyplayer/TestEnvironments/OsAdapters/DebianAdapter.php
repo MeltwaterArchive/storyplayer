@@ -65,4 +65,13 @@ use Storyplayer\TestEnvironments\OsAdapter;
 
 class DebianAdapter implements OsAdapter
 {
+    /**
+     * what is our operating system name?
+     *
+     * @return string
+     */
+    public function getOsName()
+    {
+        return "debian";
+    }
 }
