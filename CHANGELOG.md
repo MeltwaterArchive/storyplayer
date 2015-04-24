@@ -20,6 +20,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 Fixes:
 - Browser module: can now search for labels
+- Browser module: fromBrowser()->has() works once more
 
 ## 2.2.0 - Tuesday 31st March 2015
 
