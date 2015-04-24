@@ -160,6 +160,20 @@ class TestEnvironment_Definition
         return $this;
     }
 
+    /**
+     * do we have any module settings?
+     *
+     * @return boolean
+     */
+    public function hasModuleSettings()
+    {
+        if ($this->moduleSettings === null) {
+            return false;
+        }
+
+        return true;
+    }
+
     // ==================================================================
     //
     // Support for merging in from the system under test
@@ -187,5 +201,55 @@ class TestEnvironment_Definition
                 }
             }
         }
+    }
+
+    // ==================================================================
+    //
+    // Support for dot.notation.support
+    //
+    // ------------------------------------------------------------------
+
+    /**
+     * what does our definition look like, as a config structure?
+     *
+     * IMPORTANT:
+     *
+     * we make sure that the data we return is a read-only copy of our
+     * definition. At the time of writing, we're not sure if other parts
+     * of SPv2 will break as a result.
+     *
+     * @return BaseObject
+     */
+    public function getConfig()
+    {
+        // the config that we will return to the caller
+        $retval = new BaseObject;
+
+        // first things first ... who are we?
+        $retval->name = $this->getName();
+
+        // let's get the groups built
+        $retval->groups = [];
+        foreach ($this->groups as $groupDef) {
+            $groupConfig = new BaseObject;
+            $groupConfig->type = $groupDef->getGroupType();
+
+            $groupConfig->details = new BaseObject;
+            $groupConfig->details->machines = $groupDef->getHostsAsConfig();
+
+            if ($groupDef->hasProvisioningAdapters()) {
+                $groupConfig->provisioning = $groupDef->getProvisioningAsConfig();
+            }
+            $retval->groups[] = $groupConfig;
+        }
+
+        // do we have any module settings to carry over?
+        if ($this->hasModuleSettings()) {
+            $retval->moduleSettings = new BaseObject;
+            $retval->moduleSettings->mergeFrom($this->getModuleSettings());
+        }
+
+        // all done
+        return $retval;
     }
 }
