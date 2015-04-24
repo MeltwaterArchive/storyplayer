@@ -48,6 +48,8 @@ namespace DataSift\Storyplayer\DefinitionLib;
 use Storyplayer\TestEnvironments\GroupAdapter;
 use Storyplayer\TestEnvironments\ProvisioningAdapter;
 
+use DataSift\Stone\ObjectLib\BaseObject;
+
 /**
  * Represents a group of hosts in the test environment
  *
@@ -143,6 +145,19 @@ class TestEnvironment_GroupDefinition
         return $this->groupAdapter->getHostAdapterValidator();
     }
 
+    /**
+     * what type of group are we?
+     *
+     * this is the name of the class (without namespace) that our group
+     * adapter uses
+     *
+     * @return string
+     */
+    public function getGroupType()
+    {
+        return $this->groupAdapter->getType();
+    }
+
     // ==================================================================
     //
     // Provisioning support goes here
@@ -181,6 +196,20 @@ class TestEnvironment_GroupDefinition
         return $this;
     }
 
+    /**
+     * do we have any provisioning adapters?
+     *
+     * @return boolean
+     */
+    public function hasProvisioningAdapters()
+    {
+        if (count($this->provisioningAdapters) === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     // ==================================================================
     //
     // Host support goes here
@@ -195,6 +224,44 @@ class TestEnvironment_GroupDefinition
     public function getHosts()
     {
         return $this->hosts;
+    }
+
+    // ==================================================================
+    //
+    // SPv2.0-style config support goes here
+    //
+    // ------------------------------------------------------------------
+
+    /**
+     * return our hosts, as SPv2.0-style config tree
+     *
+     * @return BaseObject
+     */
+    public function getHostsAsConfig()
+    {
+        // our return value
+        $retval = new BaseObject;
+
+        // ask our hosts to convert themselves
+        foreach ($this->hosts as $hostDef) {
+            $hostConf = $hostDef->getHostAsConfig();
+            $retval->{$hostConf->name} = $hostConf;
+        }
+
+        // all done
+        return $retval;
+    }
+
+    public function getProvisioningAsConfig()
+    {
+        // special case
+        if (count($this->provisioningAdapters) === 0) {
+            return null;
+        }
+
+        // ask our first adapter to yield up its config
+        $firstAdapter = first($this->provisioningAdapters);
+        return $firstAdapter->getAsConfig();
     }
 
     // ==================================================================
