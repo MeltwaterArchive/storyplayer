@@ -45,6 +45,7 @@
 
 namespace Storyplayer\TestEnvironments\ProvisioningAdapters;
 
+use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\TestEnvironments\ProvisioningAdapter;
 
 /**
@@ -110,5 +111,26 @@ class DsbuildAdapter implements ProvisioningAdapter
 		$this->executePath = $path;
 
 		return $this;
+	}
+
+	// ==================================================================
+	//
+	// SPv2.0-style config support
+	//
+	// ------------------------------------------------------------------
+
+	public function getAsConfig()
+	{
+		// our return value
+		$retval = new BaseObject;
+
+		// this is who we are
+		$retval->engine = "dsbuild";
+
+		// this is what needs running
+		$retval->execute = $this->getExecutePath();
+
+		// all done
+		return $retval;
 	}
 }
