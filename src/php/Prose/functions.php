@@ -160,6 +160,8 @@ use Prose\UsingZmqContext;
 use Prose\UsingZmqSocket;
 use Prose\UsingZookeeper;
 
+use Prose\E5xx_ActionFailed;
+
 /**
  * returns the AssertsArray module
  *

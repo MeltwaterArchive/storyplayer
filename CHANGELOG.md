@@ -16,6 +16,13 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 * Nothing yet
 
+## 2.2.1 - Friday 24th April 2014
+
+Fixes:
+- Browser module: can now search for labels
+- Browser module: fromBrowser()->has() works once more
+- Iterators: fix 'exception not found' error
+
 ## 2.2.0 - Tuesday 31st March 2015
 
 ### Backwards-compatibility Breaks:
