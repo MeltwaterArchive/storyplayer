@@ -418,6 +418,25 @@ class TestEnvironment_HostDefinition
 
     // ==================================================================
     //
+    // SPv2.0-style config support goes here
+    //
+    // ------------------------------------------------------------------
+
+    public function getHostAsConfig()
+    {
+        // our return value
+        $retval = new BaseObject;
+
+        $retval->name   = $this->getHostId();
+        $retval->osName = $this->osAdapter->getOsName();
+        $retval->roles  = $this->getRoles();
+
+        // all done
+        return $retval;
+    }
+
+    // ==================================================================
+    //
     // Helpers go here
     //
     // ------------------------------------------------------------------
