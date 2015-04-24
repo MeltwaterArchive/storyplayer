@@ -430,6 +430,7 @@ class TestEnvironment_HostDefinition
         $retval->name   = $this->getHostId();
         $retval->osName = $this->osAdapter->getOsName();
         $retval->roles  = $this->getRoles();
+        $retval->storySettings = $this->getStorySettings();
 
         // all done
         return $retval;
