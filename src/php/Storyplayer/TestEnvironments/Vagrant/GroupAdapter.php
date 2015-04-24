@@ -68,4 +68,17 @@ class Vagrant_GroupAdapter implements GroupAdapter
 	{
 		return new Vagrant_HostAdapterValidator($this);
 	}
+
+    /**
+     * what type of group are we?
+     *
+     * this is the name of the class (without namespace) that our group
+     * adapter uses
+     *
+     * @return string
+     */
+	public function getType()
+	{
+		return "LocalVagrantVms";
+	}
 }
