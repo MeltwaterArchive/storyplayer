@@ -12,7 +12,18 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
-## 2.2.0 - `develop` branch
+## 2.3.0 - `develop` branch
+
+* Nothing yet
+
+## 2.2.1 - Friday 24th April 2014
+
+Fixes:
+- Browser module: can now search for labels
+- Browser module: fromBrowser()->has() works once more
+- Iterators: fix 'exception not found' error
+
+## 2.2.0 - Tuesday 31st March 2015
 
 ### Backwards-compatibility Breaks:
 
