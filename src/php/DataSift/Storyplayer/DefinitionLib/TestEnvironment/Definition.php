@@ -195,8 +195,8 @@ class TestEnvironment_Definition
         foreach ($sutRoles as $sutRole) {
             foreach ($this->groups as $groupDef) {
                 foreach ($groupDef->getHosts() as $hostDef) {
-                    if ($hostDef->hasRole($sutRole)) {
-                        $hostDef->addParams($sutRole->params);
+                    if ($hostDef->hasRole($sutRole->role)) {
+                        $hostDef->addProvisioningParams($sutRole->params);
                     }
                 }
             }

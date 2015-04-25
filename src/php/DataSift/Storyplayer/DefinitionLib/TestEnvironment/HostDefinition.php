@@ -416,6 +416,13 @@ class TestEnvironment_HostDefinition
         return $this;
     }
 
+    public function addProvisioningParams($extraParams)
+    {
+        $this->provisioningParams->mergeFrom($extraParams);
+
+        return $this;
+    }
+
     // ==================================================================
     //
     // SPv2.0-style config support goes here
@@ -431,6 +438,7 @@ class TestEnvironment_HostDefinition
         $retval->osName = $this->osAdapter->getOsName();
         $retval->roles  = $this->getRoles();
         $retval->storySettings = $this->getStorySettings();
+        $retval->params = $this->getProvisioningParams();
 
         // all done
         return $retval;
