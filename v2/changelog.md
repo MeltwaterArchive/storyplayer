@@ -10,6 +10,16 @@ updated_for_v2: true
 
 For the very latest list of changes in upcoming releases, see the [CHANGELOG](https://github.com/datasift/storyplayer/blob/develop/CHANGELOG.md) on GitHub.
 
+## v2.2.1
+
+Released Friday 24th April 2015.
+
+### Fixes:
+
+- Browser module: can now search for labels
+- Browser module: fromBrowser()->has() works once more
+- Iterators: fix 'exception not found' error
+
 ## v2.2.0
 
 Released Tuesday 31st March 2015.
