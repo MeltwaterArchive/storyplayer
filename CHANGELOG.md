@@ -14,7 +14,8 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 ## 2.3.0 - `develop` branch
 
-* Nothing yet
+New:
+- Test environments can now be defined in PHP.
 
 ## 2.2.1 - Friday 24th April 2014
 
