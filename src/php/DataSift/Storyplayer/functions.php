@@ -43,7 +43,7 @@
 
 use DataSift\Storyplayer\PlayerLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use Datasift\Storyplayer\DefinitionLib\TestEnvironment_Definition;
+use DataSift\Storyplayer\DefinitionLib\TestEnvironment_Definition;
 use Prose\E5xx_ActionFailed;
 use Prose\E5xx_ProseException;
 
