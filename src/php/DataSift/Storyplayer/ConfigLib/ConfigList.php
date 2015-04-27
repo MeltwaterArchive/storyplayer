@@ -43,8 +43,8 @@
 
 namespace DataSift\Storyplayer\ConfigLib;
 
+use DataSift\Storyplayer\DefinitionLib\TestEnvironment_Definition;
 use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Stone\ConfigLib\ConfigHelper;
 
 /**
  * tracks a list of available configs of a given type
@@ -118,16 +118,11 @@ class ConfigList
      */
     public function findConfigs()
     {
-        // look on disk
-        $filenames = $this->findConfigFilenames();
+        // find our SPv2.0-style config files
+        $this->list = array_merge($this->list, $this->findJsonConfigs());
 
-        // let's get them processed
-        foreach ($filenames as $filename) {
-            $config = $this->newWrappedConfigObject();
-            $config->loadConfigFromFile($filename);
-            $config->validateConfig();
-            $this->list[$config->getName()] = $config;
-        }
+        // find our SPv2.3-style config files
+        $this->list = array_merge($this->list, $this->findPhpConfigs());
 
         // we want our list of configs to be sorted, to make presentation
         // to end-users easier
@@ -137,11 +132,69 @@ class ConfigList
     }
 
     /**
+     * find a list of SPv2.0-style JSON configs
+     *
+     * @return array
+     */
+    protected function findJsonConfigs()
+    {
+        // our return value
+        $configs = [];
+
+        // look on disk
+        $filenames = $this->findConfigFilenames('\.json');
+
+        // let's get them processed
+        foreach ($filenames as $filename) {
+            $config = $this->newWrappedConfigObject();
+            $config->loadConfigFromFile($filename);
+            $config->validateConfig();
+            $configs[$config->getName()] = $config;
+        }
+
+        // all done
+        return $configs;
+    }
+
+    /**
+     * find a list of SPv2.3-style PHP configs
+     *
+     * @return array
+     */
+    protected function findPhpConfigs()
+    {
+        // our return value
+        $configs = [];
+
+        // look on disk
+        $filenames = $this->findConfigFilenames("main.php");
+
+        // let's get them processed
+        foreach ($filenames as $filename) {
+            $config = require ($filename);
+
+            // make sure we have a definition!
+            if (!$config instanceof TestEnvironment_Definition) {
+                throw new E4xx_TestEnvironmentFileMustReturnADefinition($filename);
+            }
+
+            $configs[$config->getName()] = $config;
+        //     $config = $this->newWrappedConfigObject();
+        //     $config->loadConfigFromFile($filename);
+        //     $config->validateConfig();
+        //     $configs[$config->getName()] = $config;
+        }
+
+        // all done
+        return $configs;
+    }
+
+    /**
      * build a list of the config files in the $searchFolder
      *
      * @return array<string>
      */
-    protected function findConfigFilenames()
+    protected function findConfigFilenames($searchPattern)
     {
         // where are we looking?
         $searchFolder = $this->getSearchFolder();
@@ -152,8 +205,8 @@ class ConfigList
         }
 
         // build our list
-        $helper = new ConfigHelper();
-        $filenames = $helper->getListOfConfigFilesIn($searchFolder, 'json');
+        $configFinder = new ConfigFinder();
+        $filenames = $configFinder->getListOfConfigFilesIn($searchFolder, $searchPattern);
 
         // all done
         return $filenames;
