@@ -99,15 +99,28 @@ class TestEnvironment_HostDefinition
      */
     protected $parentGroup;
 
-
+    /**
+     * which test environment group do we belong to?
+     *
+     * @return TestEnvironment_GroupDefinition
+     */
     public function getParentGroup()
     {
         return $this->parentGroup;
     }
 
+    /**
+     * tell us which test environment group we belong to
+     *
+     * @param  TestEnvironment_GroupDefinition $parentGroup
+     * @return TestEnvironment_HostDefinition
+     */
     public function setParentGroup(TestEnvironment_GroupDefinition $parentGroup)
     {
         $this->parentGroup = $parentGroup;
+
+        // fluent interface
+        return $this;
     }
 
     // ==================================================================
@@ -158,6 +171,14 @@ class TestEnvironment_HostDefinition
     // ------------------------------------------------------------------
 
     /**
+     * plugin that we use to talk to the operating system running
+     * inside this host
+     *
+     * @var OsAdapter
+     */
+    protected $osAdapter;
+
+    /**
      * what operating system is running on this host?
      *
      * @return OsAdapter
@@ -179,20 +200,6 @@ class TestEnvironment_HostDefinition
 
         // remember the adapter
         $this->osAdapter = $osAdapter;
-
-        // fluent interface
-        return $this;
-    }
-
-    public function getOperatingSystemValidator()
-    {
-        return $this->osAdapterValidator;
-    }
-
-    public function setOperatingSystemValidator(OsAdapterValidator $osAdapterValidator)
-    {
-        // remember the validator for the adapter
-        $this->osAdapterValidator = $osAdapterValidator;
 
         // fluent interface
         return $this;
@@ -402,6 +409,21 @@ class TestEnvironment_HostDefinition
         return $this->provisioningParams;
     }
 
+    /**
+     * set our provisioning parameters
+     *
+     * NOTES:
+     *
+     * * this will overwrite any existing provisioning parameters that
+     *   have already been set
+     * * if you pass in an object, we'll copy the details. we don't keep
+     *   a handle to your original object
+     *
+     * @param mixed $rawSettings
+     *        the parameters to set
+     *
+     * @return TestEnvironment_HostDefinition
+     */
     public function setProvisioningParams($rawSettings)
     {
         // just in case we've been called more than once
@@ -416,10 +438,24 @@ class TestEnvironment_HostDefinition
         return $this;
     }
 
+    /**
+     * add some extra provisioning parameters to any that have already been
+     * defined
+     *
+     * this is mostly used when we merge parameters across from the
+     * SystemUnderTest config
+     *
+     * @param mixed $extraParams
+     *        the extra parameters to merge in
+     *
+     * @return TestEnvironment_HostDefinition
+     */
     public function addProvisioningParams($extraParams)
     {
+        // let's get them merged in
         $this->provisioningParams->mergeFrom($extraParams);
 
+        // fluent interface support
         return $this;
     }
 
@@ -429,6 +465,11 @@ class TestEnvironment_HostDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * generate an SPv2.0-style config block describing this host
+     *
+     * @return BaseObject
+     */
     public function getHostAsConfig()
     {
         // our return value
@@ -450,17 +491,32 @@ class TestEnvironment_HostDefinition
     //
     // ------------------------------------------------------------------
 
-    function getGroupAdapter()
+    /**
+     * get access to the adapter for the group that we belong to
+     *
+     * @return \Storyplayer\TestEnvironments\GroupAdapter
+     */
+    public function getGroupAdapter()
     {
         return $this->parentGroup->getGroupAdapter();
     }
 
-    function getGroupId()
+    /**
+     * what is the ID of the group that we belong to?
+     *
+     * @return int
+     */
+    public function getGroupId()
     {
         return $this->parentGroup->getGroupId();
     }
 
-    function getTestEnvironmentName()
+    /**
+     * what is the name of the test environment that we belong to?
+     *
+     * @return string
+     */
+    public function getTestEnvironmentName()
     {
         return $this->parentGroup->getTestEnvironmentName();
     }
