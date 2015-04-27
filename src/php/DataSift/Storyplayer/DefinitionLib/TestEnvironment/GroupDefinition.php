@@ -125,23 +125,53 @@ class TestEnvironment_GroupDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * get the plugin we use to start and stop this test environment
+     *
+     * @return GroupAdapter
+     */
     public function getGroupAdapter()
     {
         return $this->groupAdapter;
     }
 
+    /**
+     * tell us which plugin to use to start and stop this test environment
+     *
+     * @param GroupAdapter $groupAdapter
+     *        the adapter to use for this group
+     *
+     * @return TestEnvironment_GroupDefinition
+     */
     public function setGroupAdapter(GroupAdapter $groupAdapter)
     {
         $this->groupAdapter = $groupAdapter;
+
+        // fluent interface support
+        return $this;
     }
 
-    public function getOsAdapterValidator()
+    /**
+     * throws an exception if we don't have a valid group adapter to use
+     *
+     * @return void
+     */
+    protected function requireGroupAdapter()
     {
-        return $this->groupAdapter->getOsAdapterValidator();
+        if (!$this->groupAdapter instanceof GroupAdapter) {
+            throw new E4xx_NeedGroupAdapter($this->getTestEnvironmentName(), $this->getGroupId());
+        }
     }
 
+    /**
+     * what should we use to validate a host adapter that is being added
+     * to one of the hosts in this group?
+     *
+     * @return \Storyplayer\TestEnvironments\HostAdapterValidator
+     */
     public function getHostAdapterValidator()
     {
+        $this->requireGroupAdapter();
         return $this->groupAdapter->getHostAdapterValidator();
     }
 
@@ -155,6 +185,7 @@ class TestEnvironment_GroupDefinition
      */
     public function getGroupType()
     {
+        $this->requireGroupAdapter();
         return $this->groupAdapter->getType();
     }
 
@@ -252,6 +283,10 @@ class TestEnvironment_GroupDefinition
         return $retval;
     }
 
+    /**
+     * return our first provisioning adapter, as SPv2.0-style config tree
+     * @return BaseObject
+     */
     public function getProvisioningAsConfig()
     {
         // special case
@@ -270,11 +305,21 @@ class TestEnvironment_GroupDefinition
     //
     // ------------------------------------------------------------------
 
+    /**
+     * what is our group ID?
+     *
+     * @return int
+     */
     public function getGroupId()
     {
         return $this->groupId;
     }
 
+    /**
+     * which test environment do we belong to?
+     *
+     * @return string
+     */
     public function getTestEnvironmentName()
     {
         return $this->parentEnv->getName();
