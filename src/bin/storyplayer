@@ -121,6 +121,16 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 	}
 }
 
+// work out where your local Storyplayer extensions might be
+$localExtensions = [
+	getcwd() . '/storyplayer/php',
+];
+foreach ($localExtensions as $key => $candidateDir) {
+	if (!is_dir($candidateDir)) {
+		unset($localExtensions[$key]);
+	}
+}
+
 // do we have a composer autoloader?
 $composerAutoloader = false;
 $composerFiles = array (
@@ -176,8 +186,20 @@ foreach ($localSrcDirs as $localSrcDir){
 	Autoloader_Path::searchFirst($localSrcDir);
 }
 
+// if there are local storyplayer extensions, we also want to load from there
+foreach ($localExtensions as $localExtensionDir) {
+	Autoloader_Path::searchFirst($localExtensionDir);
+}
+
 // load our list of helper functions
 require __DIR__.'/../php/DataSift/Storyplayer/functions.php';
+
+// are there any local functions to load?
+$localFunctions = __DIR__ . "/storyplayer/php/functions.php";
+if (file_exists($localFunctions)) {
+	// require_once() in case it has been loaded via Composer first
+	require_once($localFunctions);
+}
 
 /**
  * it all happens here, baby
