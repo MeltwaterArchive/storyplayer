@@ -32,6 +32,7 @@ The older, JSON-based approach has not been dropped, but will remain undocumente
 * dsbuild files can now live in the same folder as the test environment config file
 * `storyplayer/php` in your project is now automatically added to the PHP autoloader search path if it exists
   * use it for any local Storyplayer modules you want to publish
+* `storyplayer/php/functions.php` in your project is now autoloaded if it exists
 * [fromHost()->getLocalFolder()](https://datasift.github.io/storyplayer/modules/host/fromHost.html#getlocalfolder) - the folder containing the host's supporting files
 
 ## 2.2.1 - Friday 24th April 2014
