@@ -23,6 +23,8 @@ The older, JSON-based approach has not been dropped, but will remain undocumente
 
 ### New:
 
+* Storyplayer now searches a `storyplayer` folder (without a dot at the front of the name) for your system-under-test and test environment config files
+  * Falls back to searching the `.storyplayer` too.
 * Test environments can now be defined in PHP.
   * Only Vagrant / Virtualbox is supported in this release
   * Support for all other test environment types will be added in SPv2.4.

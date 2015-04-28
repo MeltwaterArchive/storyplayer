@@ -70,9 +70,9 @@ class ConfigList
     /**
      * where are we looking for these configs?
      *
-     * @var string
+     * @var array<string>
      */
-    private $searchFolder = null;
+    private $searchFolders = null;
 
     /**
      * what configs (including hard-coded defaults) do we know about?
@@ -84,31 +84,34 @@ class ConfigList
     /**
      * constructor
      */
-    public function __construct($configType, $searchFolder)
+    public function __construct($configType, $searchFolders)
     {
         $this->setConfigType($configType);
-        $this->setSearchFolder($searchFolder);
+        $this->setSearchFolders($searchFolders);
     }
 
     /**
-     * returns the folder where we look for config files
+     * returns the folders where we look for config files
      *
-     * @return string|null
+     * @return array<string>
      */
-    public function getSearchFolder()
+    public function getSearchFolders()
     {
-        return $this->searchFolder;
+        return $this->searchFolders;
     }
 
     /**
      * tells us where to look for config files
      *
-     * @param string $searchFolder
-     *        the folder to search inside
+     * @param array<string> $searchFolders
+     *        the folders to search inside
      */
-    public function setSearchFolder($searchFolder)
+    public function setSearchFolders($searchFolders)
     {
-        $this->searchFolder = $searchFolder;
+        if (!is_array($searchFolders)) {
+            var_dump($searchFolders);
+        }
+        $this->searchFolders = $searchFolders;
     }
 
     /**
@@ -197,16 +200,21 @@ class ConfigList
     protected function findConfigFilenames($searchPattern)
     {
         // where are we looking?
-        $searchFolder = $this->getSearchFolder();
+        $searchFolders = $this->getSearchFolders();
 
-        // do we have somewhere to look?
-        if (null === $searchFolder || !is_dir($searchFolder)) {
-            return [];
+        // our return value
+        $filenames = [];
+
+        foreach ($searchFolders as $searchFolder) {
+            // do we have somewhere to look?
+            if (null === $searchFolder || !is_dir($searchFolder)) {
+                continue;
+            }
+
+            // build our list
+            $configFinder = new ConfigFinder();
+            $filenames = array_merge($filenames, $configFinder->getListOfConfigFilesIn($searchFolder, $searchPattern));
         }
-
-        // build our list
-        $configFinder = new ConfigFinder();
-        $filenames = $configFinder->getListOfConfigFilesIn($searchFolder, $searchPattern);
 
         // all done
         return $filenames;
