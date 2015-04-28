@@ -16,6 +16,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 New:
 - Test environments can now be defined in PHP.
+- [fromHost()->getLocalFolder()](https://datasift.github.io/storyplayer/modules/host/fromHost.html#getlocalfolder) - the folder containing the host's supporting files
 
 ## 2.2.1 - Friday 24th April 2014
 

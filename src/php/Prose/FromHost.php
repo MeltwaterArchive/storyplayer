@@ -597,4 +597,30 @@ class FromHost extends HostBase
         $log->endAction();
         return $details;
     }
+
+    /**
+     * which local folder do we need to be in when working with this host?
+     *
+     * @return string
+     */
+    public function getLocalFolder()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get local folder for host '{$this->args[0]}'");
+
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
+
+        // does it have a folder defined?
+        if (isset($hostDetails->dir)) {
+            $retval = $hostDetails->dir;
+        }
+        else {
+            $retval = getcwd();
+        }
+
+        // all done
+        $log->endAction($retval);
+        return $retval;
+    }
 }

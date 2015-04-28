@@ -43,7 +43,7 @@ $group1->newHost('default')
         ]);
 
 $prov1 = new DsbuildAdapter();
-$prov1->setExecutePath("dsbuild/vagrant-centos6-ssl.sh");
+$prov1->setExecutePath(__DIR__ . "/dsbuild.sh");
 $group1->addProvisioningAdapter($prov1);
 
 $testEnv->setModuleSettings((object)[
