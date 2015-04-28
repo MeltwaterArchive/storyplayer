@@ -58,8 +58,14 @@ use DataSift\Stone\ConfigLib\ConfigHelper;
  */
 class SystemsUnderTestList extends ConfigList
 {
-    public function __construct($searchFolder = '.storyplayer/systems-under-test')
+    public function __construct()
     {
-        parent::__construct('DataSift\Storyplayer\SystemsUnderTestLib\SystemUnderTestConfig', $searchFolder);
+        parent::__construct(
+        	'DataSift\Storyplayer\SystemsUnderTestLib\SystemUnderTestConfig',
+        	[
+	        	"storyplayer/systems-under-test",
+	        	".storyplayer/systems-under-test",
+	        ]
+        );
     }
 }
