@@ -134,7 +134,8 @@ class DsbuildProvisioner extends Provisioner
         // provision each host in the order that they're listed
         foreach($hosts as $hostId => $hostProps) {
             // which dsbuildfile are we going to run?
-            $dsbuildFilename = $this->getDsbuildFilename($provConfig, $hostId);
+            $hostDir = fromHost($hostId)->getLocalFolder();
+            $dsbuildFilename = $this->getDsbuildFilename($hostDir, $provConfig, $hostId);
             if ($dsbuildFilename === null) {
                 // there is no dsbuildfile at all to run
                 $log->endAction("cannot find dsbuildfile to run :(");
@@ -162,8 +163,8 @@ class DsbuildProvisioner extends Provisioner
             }
 
             // provision
-            $command = 'vagrant ssh -c "sudo bash /vagrant/' . $dsbuildFilename . '" "' . $hostId . '"';
-            $result = $commandRunner->runSilently($command);
+            $command = 'sudo bash /vagrant/' . $dsbuildFilename;
+            $result = usingHost($hostId)->runCommand($command);
 
             // what happened?
             if (!$result->didCommandSucceed()) {
@@ -248,6 +249,8 @@ class DsbuildProvisioner extends Provisioner
     /**
      * find the provisioning script to run for a given hostId
      *
+     * @param  string $baseFolder
+     *         the folder we should look in
      * @param  BaseObject $provConfig
      *         the "provisioning" section from the test environment config
      * @param  string $hostId
@@ -255,7 +258,7 @@ class DsbuildProvisioner extends Provisioner
      * @return string|null
      *         path to the file to execute
      */
-    protected function getDsbuildFilename($provConfig, $hostId)
+    protected function getDsbuildFilename($baseFolder, $provConfig, $hostId)
     {
         if (isset($provConfig->execute)) {
             $basename = dirname($provConfig->execute) . "/" . basename($provConfig->execute, '.sh');
@@ -272,7 +275,7 @@ class DsbuildProvisioner extends Provisioner
         ];
 
         foreach ($candidateFilenames as $candidateFilename) {
-            if (file_exists($candidateFilename)) {
+            if (file_exists($baseFolder . '/' . $candidateFilename)) {
                 return $candidateFilename;
             }
         }
