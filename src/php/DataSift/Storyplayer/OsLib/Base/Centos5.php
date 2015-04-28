@@ -46,6 +46,8 @@ namespace DataSift\Storyplayer\OsLib;
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 
+use Prose\E5xx_ActionFailed;
+
 /**
  * get information about vagrant
  *

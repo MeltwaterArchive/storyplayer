@@ -2,6 +2,7 @@
 
 /**
  * Copyright (c) 2011-present Mediasift Ltd
+ * Copyright (c) 2015-present Ganbaro Digital Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,34 +35,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @package   Storyplayer/Vagrant
+ * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\HostLib;
+namespace Storyplayer\TestEnvironments;
 
-use DataSift\Storyplayer\CommandLib\CommandRunner;
-use DataSift\Storyplayer\CommandLib\CommandResult;
-use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ObjectLib\BaseObject;
-use Prose\E5xx_ActionFailed;
-use DataSift\Storyplayer\HostLib\VagrantVms;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * the things you can do / learn about a group of Vagrant virtual machines
+ * Base exception thrown for all problems with Vagrant
  *
  * @category  Libraries
- * @package   Storyplayer/HostLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @author    Nicola Asuni <nicola.asuni@datasift.com>
+ * @package   Storyplayer/Vagrant
+ * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class LocalVagrantVms extends VagrantVms
+class Vagrant_Exxx_Exception extends Exxx_Exception
 {
 }

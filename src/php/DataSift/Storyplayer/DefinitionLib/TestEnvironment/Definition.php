@@ -240,6 +240,7 @@ class TestEnvironment_Definition
             if ($groupDef->hasProvisioningAdapters()) {
                 $groupConfig->provisioning = $groupDef->getProvisioningAsConfig();
             }
+            $groupConfig->baseFolder = $groupDef->getBaseFolder();
             $retval->groups[] = $groupConfig;
         }
 

@@ -59,6 +59,14 @@ namespace Storyplayer\TestEnvironments;
 
 interface GroupAdapter
 {
+    /**
+     * which folder should SPv2 be in when interacting with this group
+     * of virtual machines?
+     *
+     * @return string
+     */
+    public function getBaseFolder();
+
 	/**
 	 * how do we validate any host adapters used by hosts in this group?
 	 *
