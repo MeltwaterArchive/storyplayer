@@ -2,14 +2,14 @@
 
 use Storyplayer\TestEnvironments\Vagrant_GroupAdapter;
 use Storyplayer\TestEnvironments\Vagrant_VirtualboxHostAdapter;
-use Storyplayer\TestEnvironments\OsAdapters\Centos6Adapter;
+use Storyplayer\TestEnvironments\OsAdapters\Ubuntu1410Adapter;
 use Storyplayer\TestEnvironments\ProvisioningAdapters\DsbuildAdapter;
 
 $testEnv = newTestEnvironment();
 
 $group1 = $testEnv->newGroup(new Vagrant_GroupAdapter);
 $group1->newHost('default')
-       ->setOperatingSystem(new Centos6Adapter)
+       ->setOperatingSystem(new Ubuntu1410Adapter)
        ->setHostAdapter(new Vagrant_VirtualboxHostAdapter)
 //        ->setIpAddress()
 //        ->setHostname()
