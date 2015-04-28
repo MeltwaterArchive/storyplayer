@@ -14,9 +14,21 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 ## 2.3.0 - `develop` branch
 
-New:
-- Test environments can now be defined in PHP.
-- [fromHost()->getLocalFolder()](https://datasift.github.io/storyplayer/modules/host/fromHost.html#getlocalfolder) - the folder containing the host's supporting files
+The major focus for this week has been building the new way of defining a test environment. This was necessary:
+
+1. to make it possible to document how to define a test environment
+1. to build a facade on top of our last piece of major technical debt (test environment adapters)
+
+The older, JSON-based approach has not been dropped, but will remain undocumented. You are urged to migrate your test environment config files before SPv2.5 is released at the start of July.
+
+### New:
+
+* Test environments can now be defined in PHP.
+  * Only Vagrant / Virtualbox is supported in this release
+  * Support for all other test environment types will be added in SPv2.4.
+* Support for multiple Vagrantfiles (one Vagrantfile per test environment)
+* dsbuild files can now live in the same folder as the test environment config file
+* [fromHost()->getLocalFolder()](https://datasift.github.io/storyplayer/modules/host/fromHost.html#getlocalfolder) - the folder containing the host's supporting files
 
 ## 2.2.1 - Friday 24th April 2014
 
