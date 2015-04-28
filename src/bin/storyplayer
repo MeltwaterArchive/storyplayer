@@ -121,6 +121,16 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 	}
 }
 
+// work out where your local Storyplayer extensions might be
+$localExtensions = [
+	getcwd() . '/storyplayer/php',
+];
+foreach ($localExtensions as $key => $candidateDir) {
+	if (!is_dir($candidateDir)) {
+		unset($localExtensions[$key]);
+	}
+}
+
 // do we have a composer autoloader?
 $composerAutoloader = false;
 $composerFiles = array (
@@ -174,6 +184,11 @@ foreach ($vendorDirs as $vendorDir){
 // if we have a source dir, we also want to load from there
 foreach ($localSrcDirs as $localSrcDir){
 	Autoloader_Path::searchFirst($localSrcDir);
+}
+
+// if there are local storyplayer extensions, we also want to load from there
+foreach ($localExtensions as $localExtensionDir) {
+	Autoloader_Path::searchFirst($localExtensionDir);
 }
 
 // load our list of helper functions
