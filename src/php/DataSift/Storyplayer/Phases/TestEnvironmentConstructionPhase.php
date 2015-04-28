@@ -83,22 +83,22 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
 
         // create the environments
         try {
-            foreach ($testEnvironmentConfig->groups as $env) {
+            foreach ($testEnvironmentConfig->groups as $group) {
                 // create the machine(s) in this environment, including:
                 //
                 // * building any virtual machines
                 // * registering in the Hosts table
                 // * registering in the Roles table
-                $hostAdapter = HostLib::getHostAdapter($st, $env->type);
-                $hostAdapter->createHost($env->details);
+                $hostAdapter = HostLib::getHostAdapter($st, $group->type);
+                $hostAdapter->createHost($group);
 
                 // provision software onto the machines we've just
                 // created
-                if (isset($env->provisioning)) {
-                    $provAdapter = ProvisioningLib::getProvisioner($st, $env->provisioning->engine);
-                    $provDef = $provAdapter->buildDefinitionFor($env);
+                if (isset($group->provisioning)) {
+                    $provAdapter = ProvisioningLib::getProvisioner($st, $group->provisioning->engine);
+                    $provDef = $provAdapter->buildDefinitionFor($group);
 
-                    $provAdapter->provisionHosts($provDef, $env->provisioning);
+                    $provAdapter->provisionHosts($provDef, $group->provisioning);
                 }
             }
 

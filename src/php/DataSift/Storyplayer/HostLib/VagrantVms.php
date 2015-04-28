@@ -81,73 +81,81 @@ class VagrantVms implements SupportedHost
     /**
      * Check environmental details
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      */
-    protected function checkEnvDetails($envDetails)
+    protected function checkGroupDefinition($groupDef)
     {
         // make sure we like the provided details
-        if (!isset($envDetails->homeFolder)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->homeFolder");
+        if (!isset($groupDef->details)) {
+            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details");
         }
-        if (!isset($envDetails->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines");
+        if (!isset($groupDef->details->machines)) {
+            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines");
         }
-        if (empty($envDetails->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
+        if (empty($groupDef->details->machines)) {
+            throw new E5xx_ActionFailed(__METHOD__, "groupDef->details->machines cannot be empty");
         }
+
+        // make sure we have a Vagrantfile
+        $expectedVagrantfile = $this->getVagrantDir($groupDef) . "/Vagrantfile";
+        if (!file_exists($expectedVagrantfile)) {
+            throw new E5xx_ActionFailed(__METHOD__, "no Vagrantfile; expected it to be here: {$expectedVagrantfile}");
+        }
+
     }
 
     /**
      * Get the Vagrant directory
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      *
      * @return string
      */
-    protected function getVagrantDir($envDetails)
+    protected function getVagrantDir($groupDef)
     {
-        // make sure the folder exists
-        $vagrantDir = $this->st->fromStoryplayer()->getModuleSetting('vagrant', 'dir');
-        $pathToHomeFolder = $vagrantDir . '/' . $envDetails->homeFolder;
-        if (!is_dir($pathToHomeFolder)) {
-            throw new E5xx_ActionFailed(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
+        if (isset($groupDef->baseFolder)) {
+            return $groupDef->baseFolder;
         }
-        return $pathToHomeFolder;
+
+        return getcwd();
     }
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @param  array $provisioningVars
      * @return void
      */
-    public function createHost($envDetails, $provisioningVars = array())
+    public function createHost($groupDef, $provisioningVars = array())
     {
         // what are we doing?
         $log = usingLog()->startAction('create new VM');
 
-        $this->checkEnvDetails($envDetails);
-        $envDetails->dir = $this->getVagrantDir($envDetails);
+        // make sure we're happy with this group
+        $this->checkGroupDefinition($groupDef);
+
+        // where is the action?
+        $baseFolder = $this->getVagrantDir($groupDef);
 
         // make sure we're happy with details about the machine
-        foreach($envDetails->machines as $hostId => $machine) {
+        foreach($groupDef->details->machines as $hostId => $machine) {
             // TODO: it would be great to autodetect this one day
             if (!isset($machine->osName)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->osName");
+                throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines['$hostId']->osName");
             }
             if (!isset($machine->roles)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->roles");
+                throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines['$hostId']->roles");
             }
         }
 
         // make sure the VM is stopped, if it is running
-        $log->addStep('stop vagrant VM in '.$envDetails->dir.' if already running', function() use($envDetails) {
+        $log->addStep('stop vagrant VM in '.$baseFolder.' if already running', function() use($baseFolder) {
             $command = "vagrant destroy --force";
-            $this->runCommandAgainstHostManager($envDetails, $command);
+            $this->runCommandAgainstHostManager($baseFolder, $command);
         });
 
         // remove any existing hosts table entry
-        foreach ($envDetails->machines as $hostId => $machine) {
+        foreach ($groupDef->details->machines as $hostId => $machine) {
             usingHostsTable()->removeHost($hostId);
 
             // remove any roles
@@ -159,8 +167,8 @@ class VagrantVms implements SupportedHost
 
         // let's start the VM
         $command = "vagrant up";
-        $result = $log->addStep('create vagrant VM in '.$envDetails->dir, function() use($envDetails, $command) {
-            return $this->runCommandAgainstHostManager($envDetails, $command);
+        $result = $log->addStep('create vagrant VM(s) in '.$baseFolder, function() use($baseFolder, $command) {
+            return $this->runCommandAgainstHostManager($baseFolder, $command);
         });
 
         // did it work?
@@ -172,7 +180,7 @@ class VagrantVms implements SupportedHost
         // yes it did!!
 
         // store the details
-        foreach($envDetails->machines as $hostId => $machine)
+        foreach($groupDef->details->machines as $hostId => $machine)
         {
             // we want all the details from the config file
             $vmDetails = clone $machine;
@@ -188,7 +196,7 @@ class VagrantVms implements SupportedHost
             $vmDetails->hostId      = $hostId;
 
             // remember where the machine lives
-            $vmDetails->dir         = $envDetails->dir;
+            $vmDetails->dir         = $baseFolder;
 
             // we need to remember how to SSH into the box
             $vmDetails->sshUsername = 'vagrant';
@@ -280,16 +288,16 @@ class VagrantVms implements SupportedHost
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @return void
      */
-    public function destroyHost($envDetails)
+    public function destroyHost($groupDef)
     {
         // what are we doing?
         $log = usingLog()->startAction("destroy VM(s)");
 
         // stop all the VMs, one by one
-        foreach ($envDetails->machines as $hostId => $machine) {
+        foreach ($groupDef->details->machines as $hostId => $machine) {
             // get the machine details
             $vmDetails = fromHostsTable()->getDetailsForHost($hostId);
             if ($vmDetails) {
@@ -310,17 +318,17 @@ class VagrantVms implements SupportedHost
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  string $baseFolder
      * @param  string $command
      * @return CommandResult
      */
-    public function runCommandAgainstHostManager($envDetails, $command)
+    public function runCommandAgainstHostManager($baseFolder, $command)
     {
         // what are we doing?
         $log = usingLog()->startAction("run vagrant command '{$command}'");
 
         // build the command
-        $fullCommand = "cd '{$envDetails->dir}' && $command 2>&1";
+        $fullCommand = "cd '{$baseFolder}' && $command 2>&1";
 
         // run the command
         $commandRunner = new CommandRunner();
@@ -332,18 +340,17 @@ class VagrantVms implements SupportedHost
     }
 
     /**
-     *
-     * @param  stdClass $vmDetails
+     * @param  string $baseFolder
      * @param  string $command
      * @return CommandResult
      */
-    public function runCommandViaHostManager($vmDetails, $command)
+    public function runCommandViaHostManager($baseFolder, $command)
     {
         // what are we doing?
         $log = usingLog()->startAction("run vagrant command '{$command}'");
 
         // build the command
-        $fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
+        $fullCommand = "cd '{$baseFolder}' && vagrant ssh -c \"$command\"";
 
         // run the command
         $commandRunner = new CommandRunner();
@@ -378,7 +385,7 @@ class VagrantVms implements SupportedHost
         $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
         // get the IP address
-        $ipAddress = $host->determineIpAddress($vmDetails, $this);
+        $ipAddress = $host->determineIpAddress($vmDetails, new VagrantVm($this->st));
 
         // all done
         $log->endAction("IP address is '{$ipAddress}'");
@@ -399,7 +406,7 @@ class VagrantVms implements SupportedHost
         $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
 
         // get the hostname
-        $hostname = $host->determineHostname($vmDetails, $this);
+        $hostname = $host->determineHostname($vmDetails, new VagrantVm($this->st));
 
         // all done
         $log->endAction("hostname is '{$hostname}'");
