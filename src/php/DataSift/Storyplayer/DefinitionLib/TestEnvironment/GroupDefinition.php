@@ -189,6 +189,17 @@ class TestEnvironment_GroupDefinition
         return $this->groupAdapter->getType();
     }
 
+    /**
+     * which folder contains all of our supporting files?
+     *
+     * @return string
+     */
+    public function getBaseFolder()
+    {
+        $this->requireGroupAdapter();
+        return $this->groupAdapter->getBaseFolder();
+    }
+
     // ==================================================================
     //
     // Provisioning support goes here
