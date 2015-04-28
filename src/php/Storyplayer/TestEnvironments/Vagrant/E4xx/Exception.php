@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironments
+ * @package   Storyplayer/Vagrant
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -45,42 +45,20 @@
 
 namespace Storyplayer\TestEnvironments;
 
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+
 /**
- * interface that all host group adapters must implement
+ * Base exception thrown for all problems with Vagrant that are definitely
+ * caused by the end-user giving us bad input of some kind
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironments
+ * @package   Storyplayer/Vagrant
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-
-interface GroupAdapter
+class Vagrant_E4xx_Exception extends Vagrant_E4xx_Exception
 {
-    /**
-     * which folder should SPv2 be in when interacting with this group
-     * of virtual machines?
-     *
-     * @return string
-     */
-    public function getBaseFolder();
-
-	/**
-	 * how do we validate any host adapters used by hosts in this group?
-	 *
-	 * @return HostAdapterValidator
-	 */
-	public function getHostAdapterValidator();
-
-    /**
-     * what type of group are we?
-     *
-     * this is the name of the class (without namespace) that our group
-     * adapter uses
-     *
-     * @return string
-     */
-	public function getType();
 }

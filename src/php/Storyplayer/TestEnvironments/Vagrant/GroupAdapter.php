@@ -59,6 +59,66 @@ namespace Storyplayer\TestEnvironments;
 
 class Vagrant_GroupAdapter implements GroupAdapter
 {
+	public function __construct()
+	{
+		$this->determineBaseFolder();
+	}
+
+	// ==================================================================
+	//
+	// Base folder support goes here
+	//
+	// ------------------------------------------------------------------
+
+	protected $baseFolder;
+
+	/**
+	 * automagically work out where our test environment's files and
+	 * such like are
+	 *
+	 * @return void
+	 */
+	protected function determineBaseFolder()
+	{
+		// where should we be looking?
+		//
+		// first match wins!
+		$candidates = [
+			dirname(debug_backtrace()[1]['file']),
+			getcwd()
+		];
+
+		foreach ($candidates as $folder) {
+			if (file_exists($folder . '/Vagrantfile')) {
+				$this->baseFolder = str_replace(getcwd(), '.', $folder);
+
+				// all done
+				return;
+			}
+		}
+
+		// if we get here, then we do not know where the Vagrantfile
+		// is, and it is time to bail
+		throw new Vagrant_E4xx_NoVagrantFile($candidates);
+	}
+
+    /**
+     * which folder should SPv2 be in when interacting with this group
+     * of virtual machines?
+     *
+     * @return string
+     */
+    public function getBaseFolder()
+    {
+    	return $this->baseFolder;
+    }
+
+	// ==================================================================
+	//
+	// Host support goes here
+	//
+	// ------------------------------------------------------------------
+
 	/**
 	 * how do we validate any host adapters used by hosts in this group?
 	 *
@@ -68,6 +128,15 @@ class Vagrant_GroupAdapter implements GroupAdapter
 	{
 		return new Vagrant_HostAdapterValidator($this);
 	}
+
+	// ==================================================================
+	//
+	// Stuff to support SPv2.0-style internals goes here
+	//
+	// Everything below here is technical debt, and the plan is to
+	// gradually phase it all out over several SPv2 releases
+	//
+	// ------------------------------------------------------------------
 
     /**
      * what type of group are we?
