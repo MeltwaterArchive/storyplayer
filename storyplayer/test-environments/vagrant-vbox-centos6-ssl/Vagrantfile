@@ -9,11 +9,15 @@ Vagrant::Config.run do |config|
 
   # enable bridged networking
   #config.vm.network :bridged, :bridge=>ENV["VIRTUALBOX_BRIDGE_ADAPTER"]
-
 end
 
 # provider-specfic configuration
 Vagrant.configure("2") do |config|
+  # enable caching if available
+  if Vagrant.has_plugin?("vagrant-cachier")
+      config.cache.scope = :box
+  end
+
   # enable private networking
   config.vm.network "private_network", type: "dhcp"
 
