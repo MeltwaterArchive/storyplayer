@@ -23,6 +23,7 @@ The older, JSON-based approach has not been dropped, but will remain undocumente
 
 ### New:
 
+* Centos 7.0 is now supported for test environment hosts.
 * Ubuntu is now supported for test environment hosts :) Supported releases are:
   * Ubuntu 14.04 LTS
   * Ubuntu 14.10
