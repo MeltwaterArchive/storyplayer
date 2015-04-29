@@ -23,6 +23,11 @@ The older, JSON-based approach has not been dropped, but will remain undocumente
 
 ### New:
 
+* Centos 7.0 is now supported for test environment hosts.
+* Ubuntu is now supported for test environment hosts :) Supported releases are:
+  * Ubuntu 14.04 LTS
+  * Ubuntu 14.10
+  * Ubuntu 15.04
 * Storyplayer now searches a `storyplayer` folder (without a dot at the front of the name) for your system-under-test and test environment config files
   * Falls back to searching the `.storyplayer` too.
 * Test environments can now be defined in PHP.
