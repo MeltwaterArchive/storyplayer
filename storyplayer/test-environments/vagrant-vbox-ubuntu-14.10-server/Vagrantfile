@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
-  config.vm.box = "utopic-server-20141130"
+  config.vm.box = "utopic-server-20150428"
   config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/utopic/current/utopic-server-cloudimg-amd64-vagrant-disk1.box"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
