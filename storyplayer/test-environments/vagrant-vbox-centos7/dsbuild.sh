@@ -5,7 +5,8 @@ yum install -y /usr/bin/applydeltarpm
 yum groupinstall -y 'Development Tools'
 
 # add Webtatic repo for PHP 5.5 packages
-rpm -Uvh https://mirror.webtatic.com/yum/el7/latest.rpm
+rpm -Uvh https://mirror.webtatic.com/yum/el7/epel-release.rpm
+rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 
 # install Nginx
 yum install -y nginx
