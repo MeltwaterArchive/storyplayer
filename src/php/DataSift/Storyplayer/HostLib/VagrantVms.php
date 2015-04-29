@@ -493,12 +493,12 @@ class VagrantVms implements SupportedHost
 
         // the key will be in one of two places, in this order:
         //
-        // cwd()/.vagrant/machines/:name/virtualbox/private_key
+        // <test environment folder>/.vagrant/machines/:name/virtualbox/private_key
         // $HOME/.vagrant.d/insecure_private_key
         //
         // we use the first that we can find
         $keyFilenames = [
-            getcwd() . "/.vagrant/machines/{$vmDetails->hostId}/virtualbox/private_key",
+            $vmDetails->dir . "/.vagrant/machines/{$vmDetails->hostId}/virtualbox/private_key",
             getenv("HOME") . "/.vagrant.d/insecure_private_key"
         ];
 
