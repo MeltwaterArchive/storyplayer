@@ -2,7 +2,7 @@
 apt-get update
 
 # make sure we have compilers and such like
-apt-get install -y build-essential pkg-config git
+apt-get install -y build-essential pkg-config git autoconf automake libtool libtool-bin m4
 
 # install Nginx
 apt-get install -y nginx
