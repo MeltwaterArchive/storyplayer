@@ -17,7 +17,7 @@ chmod 700 /etc/nginx/ssl
 cp /vagrant/files/ssl/nginx.crt /etc/nginx/ssl
 cp /vagrant/files/ssl/nginx.key /etc/nginx/ssl
 cp /vagrant/files/ssl/default.conf /etc/nginx/conf.d/
-/etc/init.d/nginx restart
+systemctl restart nginx
 
 # install libzmq4 stable
 git clone https://github.com/zeromq/zeromq4-x.git
