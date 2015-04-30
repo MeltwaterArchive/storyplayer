@@ -59,6 +59,6 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class Vagrant_E4xx_Exception extends Vagrant_E4xx_Exception
+class Vagrant_E4xx_Exception extends Vagrant_Exxx_Exception
 {
 }
