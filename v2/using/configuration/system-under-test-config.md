@@ -20,21 +20,21 @@ vendor/bin/storyplayer -s storyplayer-2.x
 
 ## Location
 
-Your _system-under-test config file_ goes inside the `.storyplayer/systems-under-test` folder. (__Note__ that the folder is 'systems' plural, not 'system'!)
+Your _system-under-test config file_ goes inside the `storyplayer/systems-under-test` folder. (__Note__ that the folder is 'systems' plural, not 'system'!)
 
 There is one _system-under-test config file_ for each version of the software / service / platform that you are testing.
 
 <pre>
 project-root-folder/
-|- .storyplayer/
+|- storyplayer/
    |- systems-under-test/
       | &lt;system-under-test-name&gt;-&lt;version&gt;.json
 </pre>
 
 For example, Storyplayer ships with these files for testing itself:
 
-* `.storyplayer/systems-under-test/storyplayer-2.2.0.json` - config file for testing the v2.2.0 release
-* `.storyplayer/systems-under-test/storyplayer-2.x.json` - config file for testing the `develop` branch
+* `storyplayer/systems-under-test/storyplayer-2.2.0.json` - config file for testing the v2.2.0 release
+* `storyplayer/systems-under-test/storyplayer-2.x.json` - config file for testing the `develop` branch
 
 ## Contents
 
