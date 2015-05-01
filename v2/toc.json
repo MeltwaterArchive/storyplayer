@@ -47,6 +47,7 @@
 		"using/configuration/module-settings",
 		"using/configuration/system-under-test-config",
 		"using/configuration/test-environment-config",
+		"using/configuration/provision-parameters",
 		"using/configuration/user-config",
 		"using/configuration/dot.notation.support",
 		"using/configuration/overriding-from-the-command-line",

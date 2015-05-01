@@ -88,4 +88,4 @@ The `roles` section provides you with a way to inject provisioning parameters (o
 * `role` is the name of the test-environment role that you want to inject one or more params into
 * `params` is an object containing a list of the params you want to inject
 
-Any `params` that you specify here are added to your test environment config before Storyplayer runs your chosen provisioning engine.
+Any `params` that you specify here are added to your test environment config before Storyplayer runs your chosen provisioning engine. See [Provisioning Parameters](provisioning-parameters.html) for more details.
