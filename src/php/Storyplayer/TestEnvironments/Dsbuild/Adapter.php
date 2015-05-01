@@ -43,16 +43,12 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\TestEnvironments\OsAdapters;
+namespace Storyplayer\TestEnvironments;
 
-use DataSift\Storyplayer\OsLib\Remote_Centos6;
 use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Storyplayer\HostLib\SupportedHost;
-
-use Storyplayer\TestEnvironments\OsAdapter;
 
 /**
- * support for Storyplayer testing against Ubuntu 15.04
+ * support for building a test environment using dsbuild
  *
  * @category  Libraries
  * @package   Storyplayer/TestEnvironments
@@ -63,15 +59,77 @@ use Storyplayer\TestEnvironments\OsAdapter;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Ubuntu1504Adapter implements OsAdapter
+class Dsbuild_Adapter implements ProvisioningAdapter
 {
-    /**
-     * what is our operating system name?
-     *
-     * @return string
-     */
-    public function getOsName()
-    {
-        return "ubuntu1504";
-    }
+	public function __construct()
+	{
+		$this->setExecutePath(getcwd() . DIRECTORY_SEPARATOR . "dsbuild.sh");
+	}
+
+	// ==================================================================
+	//
+	// Support for executing the script
+	//
+	// ------------------------------------------------------------------
+
+	/**
+	 * where is the script that we are going to execute?
+	 *
+	 * @var string
+	 */
+	protected $executePath;
+
+	/**
+	 * which folder are we executing things in?
+	 *
+	 * @return string
+	 */
+	public function getExecuteDir()
+	{
+		return dirname($this->executePath);
+	}
+
+	/**
+	 * where is the script that we are going to execute?
+	 *
+	 * @return string
+	 */
+	public function getExecutePath()
+	{
+		return $this->executePath;
+	}
+
+	/**
+	 * tell me which script to execute
+	 *
+	 * @param string $path
+	 *        path to the dsbuild script
+	 */
+	public function setExecutePath($path)
+	{
+		$this->executePath = $path;
+
+		return $this;
+	}
+
+	// ==================================================================
+	//
+	// SPv2.0-style config support
+	//
+	// ------------------------------------------------------------------
+
+	public function getAsConfig()
+	{
+		// our return value
+		$retval = new BaseObject;
+
+		// this is who we are
+		$retval->engine = "dsbuild";
+
+		// this is what needs running
+		$retval->execute = $this->getExecutePath();
+
+		// all done
+		return $retval;
+	}
 }

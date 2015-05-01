@@ -2,14 +2,14 @@
 
 use Storyplayer\TestEnvironments\Vagrant_GroupAdapter;
 use Storyplayer\TestEnvironments\Vagrant_VirtualboxHostAdapter;
-use Storyplayer\TestEnvironments\OsAdapters\Ubuntu1410Adapter;
-use Storyplayer\TestEnvironments\ProvisioningAdapters\DsbuildAdapter;
+use Storyplayer\TestEnvironments\Ubuntu_1410_HostAdapter;
+use Storyplayer\TestEnvironments\Dsbuild_Adapter;
 
 $testEnv = newTestEnvironment();
 
 $group1 = $testEnv->newGroup(new Vagrant_GroupAdapter);
 $group1->newHost('default')
-       ->setOperatingSystem(new Ubuntu1410Adapter)
+       ->setOperatingSystem(new Ubuntu_1410_HostAdapter)
        ->setHostAdapter(new Vagrant_VirtualboxHostAdapter)
 //        ->setIpAddress()
 //        ->setHostname()
@@ -42,7 +42,7 @@ $group1->newHost('default')
             ]
         ]);
 
-$prov1 = new DsbuildAdapter();
+$prov1 = new Dsbuild_Adapter();
 $prov1->setExecutePath("dsbuild.sh");
 $group1->addProvisioningAdapter($prov1);
 

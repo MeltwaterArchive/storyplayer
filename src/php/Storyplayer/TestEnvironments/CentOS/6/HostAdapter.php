@@ -43,16 +43,14 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\TestEnvironments\OsAdapters;
+namespace Storyplayer\TestEnvironments;
 
 use DataSift\Storyplayer\OsLib\Remote_Centos6;
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 
-use Storyplayer\TestEnvironments\OsAdapter;
-
 /**
- * support for Storyplayer testing against Debian
+ * support for Storyplayer testing against Centos6
  *
  * @category  Libraries
  * @package   Storyplayer/TestEnvironments
@@ -63,7 +61,7 @@ use Storyplayer\TestEnvironments\OsAdapter;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class DebianAdapter implements OsAdapter
+class Centos_6_HostAdapter implements OsAdapter
 {
     /**
      * what is our operating system name?
@@ -72,6 +70,6 @@ class DebianAdapter implements OsAdapter
      */
     public function getOsName()
     {
-        return "debian";
+        return "centos6";
     }
 }

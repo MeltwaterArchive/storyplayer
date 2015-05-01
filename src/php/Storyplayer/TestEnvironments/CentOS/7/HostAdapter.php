@@ -43,13 +43,11 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\TestEnvironments\OsAdapters;
+namespace Storyplayer\TestEnvironments;
 
 use DataSift\Storyplayer\OsLib\Remote_Centos6;
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\HostLib\SupportedHost;
-
-use Storyplayer\TestEnvironments\OsAdapter;
 
 /**
  * support for Storyplayer testing against Centos7
@@ -63,7 +61,7 @@ use Storyplayer\TestEnvironments\OsAdapter;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Centos7Adapter implements OsAdapter
+class Centos_7_HostAdapter implements OsAdapter
 {
     /**
      * what is our operating system name?

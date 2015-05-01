@@ -2,17 +2,15 @@
 
 use Storyplayer\TestEnvironments\Vagrant_GroupAdapter;
 use Storyplayer\TestEnvironments\Vagrant_VirtualboxHostAdapter;
-use Storyplayer\TestEnvironments\OsAdapters\Centos6Adapter;
-use Storyplayer\TestEnvironments\ProvisioningAdapters\DsbuildAdapter;
+use Storyplayer\TestEnvironments\CentOS_6_HostAdapter;
+use Storyplayer\TestEnvironments\Dsbuild_Adapter;
 
 $testEnv = newTestEnvironment();
 
 $group1 = $testEnv->newGroup(new Vagrant_GroupAdapter);
 $group1->newHost('default')
-       ->setOperatingSystem(new Centos6Adapter)
+       ->setOperatingSystem(new CentOS_6_HostAdapter)
        ->setHostAdapter(new Vagrant_VirtualboxHostAdapter)
-//        ->setIpAddress()
-//        ->setHostname()
        ->setRoles([
             "host_target",
             "upload_target",
@@ -42,7 +40,7 @@ $group1->newHost('default')
             ]
         ]);
 
-$prov1 = new DsbuildAdapter();
+$prov1 = new Dsbuild_Adapter();
 $prov1->setExecutePath("dsbuild.sh");
 $group1->addProvisioningAdapter($prov1);
 

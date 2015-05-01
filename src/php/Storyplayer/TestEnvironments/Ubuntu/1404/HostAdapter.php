@@ -43,13 +43,7 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\TestEnvironments\OsAdapters;
-
-use DataSift\Storyplayer\OsLib\Remote_Centos6;
-use DataSift\Stone\ObjectLib\BaseObject;
-use DataSift\Storyplayer\HostLib\SupportedHost;
-
-use Storyplayer\TestEnvironments\OsAdapter;
+namespace Storyplayer\TestEnvironments;
 
 /**
  * support for Storyplayer testing against Ubuntu 14.04
@@ -63,7 +57,7 @@ use Storyplayer\TestEnvironments\OsAdapter;
  * @link      http://datasift.github.io/storyplayer
  */
 
-class Ubuntu1404Adapter implements OsAdapter
+class Ubuntu_1404_HostAdapter implements OsAdapter
 {
     /**
      * what is our operating system name?
