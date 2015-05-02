@@ -20,16 +20,17 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addTestSetup(function() {
     // cleanup after ourselves
-    foreach (hostWithRole('upload_target') as $hostname) {
-        usingHost($hostname)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
+    foreach (hostWithRole('upload_target') as $hostId) {
+        usingHost($hostId)->uploadFile(__DIR__ . '/testfile.txt', "testfile.txt");
+        usingHost($hostId)->runCommand("chmod 644 testfile.txt");
     }
 });
 
 $story->addTestTeardown(function() {
     // cleanup after ourselves
-    foreach (hostWithRole('upload_target') as $hostname) {
+    foreach (hostWithRole('upload_target') as $hostId) {
         // remove the file from the test environment
-        usingHost($hostname)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
+        usingHost($hostId)->runCommand("if [[ -e testfile.txt ]] ; then rm -f testfile.txt ; fi");
     }
 });
 
@@ -40,13 +41,13 @@ $story->addTestTeardown(function() {
 // ------------------------------------------------------------------------
 
 $story->addAction(function() {
-    foreach (hostWithRole('upload_target') as $hostname) {
+    foreach (hostWithRole('upload_target') as $hostId) {
         // get the default user details for this test environment
-        $hostUser  = fromHost($hostname)->getStorySetting("user.username");
-        $hostGroup = fromHost($hostname)->getStorySetting("user.group");
+        $hostUser  = fromHost($hostId)->getStorySetting("user.username");
+        $hostGroup = fromHost($hostId)->getStorySetting("user.group");
 
         // get the details for this file
-        $details = fromHost($hostname)->getFileDetails('testfile.txt');
+        $details = fromHost($hostId)->getFileDetails('testfile.txt');
 
         // make sure we have the details that we expect
         assertsObject($details)->isNotNull();
@@ -64,12 +65,12 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-    foreach (hostWithRole('upload_target') as $hostname) {
+    foreach (hostWithRole('upload_target') as $hostId) {
         // get the default user details for this test environment
-        $hostUser  = fromHost($hostname)->getStorySetting("user.username");
-        $hostGroup = fromHost($hostname)->getStorySetting("user.group");
+        $hostUser  = fromHost($hostId)->getStorySetting("user.username");
+        $hostGroup = fromHost($hostId)->getStorySetting("user.group");
 
         // check the details for this file
-        expectsHost($hostname)->hasFileWithPermissions('testfile.txt', $hostUser, $hostGroup, 0644);
+        expectsHost($hostId)->hasFileWithPermissions('testfile.txt', $hostUser, $hostGroup, 0644);
     }
 });
