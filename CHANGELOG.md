@@ -21,7 +21,7 @@ The major focus for this release will be:
 1. refactoring HostLib and OsLib away into our test environment adapters
 1. more tests for Storyplayer itself
 
-## 2.3.0 - Tuesday 5th May 2015
+## 2.3.0 - Wednesday 6th May 2015
 
 The major focus for this release has been building the new way of defining a test environment. This was necessary:
 
