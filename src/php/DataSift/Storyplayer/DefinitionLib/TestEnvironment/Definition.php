@@ -109,15 +109,23 @@ class TestEnvironment_Definition
     /**
      * create a new group of hosts
      *
+     * @param  int|string $groupId
+     *         the ID of this group
      * @param  GroupAdapter $groupAdapter
      *         the adapter for this group
      *
      * @return TestEnvironmentGroup
      *         a new and empty group, ready for you to define
      */
-    public function newGroup(GroupAdapter $groupAdapter)
+    public function newGroup($groupId, GroupAdapter $groupAdapter)
     {
-        $this->groups[] = new TestEnvironment_GroupDefinition($this, count($this->groups) + 1, $groupAdapter);
+        // make sure that we don't already have a group with this ID
+        if (isset($this->groups[$groupId])) {
+            throw new E4xx_DuplicateGroupId($groupId);
+        }
+
+        // if we get here, we're good
+        $this->groups[$groupId] = new TestEnvironment_GroupDefinition($this, $groupId, $groupAdapter);
         return end($this->groups);
     }
 
