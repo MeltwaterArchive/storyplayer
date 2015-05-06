@@ -10,6 +10,37 @@ updated_for_v2: true
 
 For the very latest list of changes in upcoming releases, see the [CHANGELOG](https://github.com/datasift/storyplayer/blob/develop/CHANGELOG.md) on GitHub.
 
+## v2.3.0
+
+Released Wednesday 6th May 2015.
+
+### Summary
+
+The major focus for this release has been building the new way of defining a test environment. This was necessary:
+
+1. to make it possible to document how to define a test environment
+1. to build a facade on top of our last piece of major technical debt (test environment adapters)
+
+The older, JSON-based approach has not been dropped, but will remain undocumented. You are urged to migrate your test environment config files before SPv2.5 is released at the start of July.
+
+### New:
+
+* Centos 7.0 is now supported for test environment hosts.
+* Ubuntu is now supported for test environment hosts :) Supported releases are:
+  * Ubuntu 14.04 LTS
+  * Ubuntu 14.10
+  * Ubuntu 15.04
+* Storyplayer now searches a `storyplayer` folder (without a dot at the front of the name) for your system-under-test and test environment config files
+  * Falls back to searching the `.storyplayer` too.
+* Test environments can now be defined in PHP.
+  * Only Vagrant / Virtualbox is supported in this release
+  * Support for all other test environment types will be added in SPv2.4.
+* Support for multiple Vagrantfiles (one Vagrantfile per test environment)
+* dsbuild files can now live in the same folder as the test environment config file
+* `storyplayer/php` in your project is now automatically added to the PHP autoloader search path if it exists
+  * use it for any local Storyplayer modules you want to publish
+* `storyplayer/php/functions.php` in your project is now autoloaded if it exists
+* [fromHost()->getLocalFolder()](https://datasift.github.io/storyplayer/modules/host/fromHost.html#getlocalfolder) - the folder containing the host's supporting files
 ## v2.2.1
 
 Released Friday 24th April 2015.
