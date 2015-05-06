@@ -7,10 +7,9 @@ use Storyplayer\TestEnvironments\Dsbuild_Adapter;
 
 $testEnv = newTestEnvironment();
 
-$group1 = $testEnv->newGroup(new Vagrant_GroupAdapter);
-$group1->newHost('default')
+$group1 = $testEnv->newGroup('vagrant', new Vagrant_GroupAdapter);
+$group1->newHost('default', new Vagrant_VirtualboxHostAdapter)
        ->setOperatingSystem(new CentOS_6_HostAdapter)
-       ->setHostAdapter(new Vagrant_VirtualboxHostAdapter)
        ->setRoles([
             "host_target",
             "upload_target",

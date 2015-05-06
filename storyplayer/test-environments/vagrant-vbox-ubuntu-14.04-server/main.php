@@ -2,17 +2,14 @@
 
 use Storyplayer\TestEnvironments\Vagrant_GroupAdapter;
 use Storyplayer\TestEnvironments\Vagrant_VirtualboxHostAdapter;
-use Storyplayer\TestEnvironments\Ubuntu_1410_HostAdapter;
+use Storyplayer\TestEnvironments\Ubuntu_1404_HostAdapter;
 use Storyplayer\TestEnvironments\Dsbuild_Adapter;
 
 $testEnv = newTestEnvironment();
 
-$group1 = $testEnv->newGroup(new Vagrant_GroupAdapter);
-$group1->newHost('default')
-       ->setOperatingSystem(new Ubuntu_1410_HostAdapter)
-       ->setHostAdapter(new Vagrant_VirtualboxHostAdapter)
-//        ->setIpAddress()
-//        ->setHostname()
+$group1 = $testEnv->newGroup('vagrant', new Vagrant_GroupAdapter);
+$group1->newHost('default', new Vagrant_VirtualboxHostAdapter)
+       ->setOperatingSystem(new Ubuntu_1404_HostAdapter)
        ->setRoles([
             "host_target",
             "upload_target",

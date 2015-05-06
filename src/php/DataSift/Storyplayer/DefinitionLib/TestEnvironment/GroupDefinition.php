@@ -46,6 +46,7 @@
 namespace DataSift\Storyplayer\DefinitionLib;
 
 use Storyplayer\TestEnvironments\GroupAdapter;
+use Storyplayer\TestEnvironments\HostAdapter;
 use Storyplayer\TestEnvironments\ProvisioningAdapter;
 
 use DataSift\Stone\ObjectLib\BaseObject;
@@ -71,7 +72,7 @@ class TestEnvironment_GroupDefinition
 
     /**
      * which group are we?
-     * @var int
+     * @var int|string
      */
     protected $groupId;
 
@@ -105,17 +106,20 @@ class TestEnvironment_GroupDefinition
      *
      * @param string $hostId
      *        the ID of this host
+     * @param HostAdapter $hostAdapter
+     *        the plugin for this kind of host
      * @return TestEnvironment_HostDefinition
      *         the empty host definition, for you to complete
      */
-    public function newHost($hostId)
+    public function newHost($hostId, HostAdapter $hostAdapter)
     {
         // make sure we're happy with the hostId
         $hostIdValidator = new TestEnvironment_HostIdValidator($this);
         $hostIdValidator->validate($hostId);
 
         // create the new host and send it back
-        $this->hosts[$hostId] = new TestEnvironment_HostDefinition($this, $hostId);
+        $this->hosts[$hostId] = $hostAdapter->newHostDefinition($this, $hostId);
+        $this->hosts[$hostId]->setHostAdapter($hostAdapter);
         return $this->hosts[$hostId];
     }
 
@@ -319,7 +323,7 @@ class TestEnvironment_GroupDefinition
     /**
      * what is our group ID?
      *
-     * @return int
+     * @return int|string
      */
     public function getGroupId()
     {

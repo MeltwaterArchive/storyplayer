@@ -12,9 +12,18 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
-## 2.3.0 - `develop` branch
+## 2.4.0 - `develop` branch
 
-The major focus for this week has been building the new way of defining a test environment. This was necessary:
+The major focus for this release will be:
+
+1. completing new-style test environment support for EC2 and Docker
+1. completing new-style test environment support for Ansible
+1. refactoring HostLib and OsLib away into our test environment adapters
+1. more tests for Storyplayer itself
+
+## 2.3.0 - Wednesday 6th May 2015
+
+The major focus for this release has been building the new way of defining a test environment. This was necessary:
 
 1. to make it possible to document how to define a test environment
 1. to build a facade on top of our last piece of major technical debt (test environment adapters)

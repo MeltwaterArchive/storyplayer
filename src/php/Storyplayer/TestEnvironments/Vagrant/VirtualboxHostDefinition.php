@@ -45,10 +45,11 @@
 
 namespace Storyplayer\TestEnvironments;
 
-use DataSift\Storyplayer\DefinitionLib\TestEnvironment_GroupDefinition;
+use DataSift\Storyplayer\DefinitionLib\TestEnvironment_HostDefinition;
 
 /**
- * interface that all host adapters must implement
+ * specialist class for representing a test environment host that is managed
+ * by Vagrant and which runs inside Virtualbox
  *
  * @category  Libraries
  * @package   Storyplayer/TestEnvironments
@@ -59,17 +60,6 @@ use DataSift\Storyplayer\DefinitionLib\TestEnvironment_GroupDefinition;
  * @link      http://datasift.github.io/storyplayer
  */
 
-interface HostAdapter
+class Vagrant_VirtualboxHostDefinition extends TestEnvironment_HostDefinition
 {
-	/**
-	 * create an empty host definition for this kind of host
-	 *
-	 * @param  TestEnvironment_GroupDefinition $groupDef
-	 *         the group that we belong to
-	 * @param  string $hostId
-	 *         the alias for this host
-	 * @return object
-	 *         a host definition to populate
-	 */
-	public function newHostDefinition(TestEnvironment_GroupDefinition $groupDef, $hostId);
 }

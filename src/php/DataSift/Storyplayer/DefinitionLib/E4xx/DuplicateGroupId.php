@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironments
+ * @package   Storyplayer/DefinitionLib
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,33 +43,26 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\TestEnvironments;
+namespace DataSift\Storyplayer\DefinitionLib;
 
-use DataSift\Storyplayer\DefinitionLib\TestEnvironment_GroupDefinition;
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * interface that all host adapters must implement
+ * Exception thrown when a test environment contains duplicate group IDs
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironments
+ * @package   Storyplayer/DefinitionLib
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-
-interface HostAdapter
+class E4xx_DuplicateGroupId extends E4xx_BadTestEnvironmentDefinition
 {
-	/**
-	 * create an empty host definition for this kind of host
-	 *
-	 * @param  TestEnvironment_GroupDefinition $groupDef
-	 *         the group that we belong to
-	 * @param  string $hostId
-	 *         the alias for this host
-	 * @return object
-	 *         a host definition to populate
-	 */
-	public function newHostDefinition(TestEnvironment_GroupDefinition $groupDef, $hostId);
+    public function __construct($testEnvironmentName, $groupId)
+    {
+    	$msg = "in test environment {$testEnvironmentName}: attempt to create two or more groups with the same group ID {$groupId}";
+        parent::__construct(400, $msg, $msg);
+    }
 }
