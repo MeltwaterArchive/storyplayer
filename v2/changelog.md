@@ -41,6 +41,7 @@ The older, JSON-based approach has not been dropped, but will remain undocumente
   * use it for any local Storyplayer modules you want to publish
 * `storyplayer/php/functions.php` in your project is now autoloaded if it exists
 * [fromHost()->getLocalFolder()](https://datasift.github.io/storyplayer/modules/host/fromHost.html#getlocalfolder) - the folder containing the host's supporting files
+
 ## v2.2.1
 
 Released Friday 24th April 2015.
