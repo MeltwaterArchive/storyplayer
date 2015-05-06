@@ -80,31 +80,34 @@ class Blackboxes implements SupportedHost
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @param  array $provisioningVars
      * @return void
      */
-    public function createHost($envDetails, $provisioningVars = array())
+    public function createHost($groupDef, $provisioningVars = array())
     {
         // what are we doing?
         $log = usingLog()->startAction('register blackbox(es)');
 
         // make sure we like the provided details
-        if (!isset($envDetails->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines");
+        if (!isset($groupDef->details)) {
+            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details");
         }
-        if (empty($envDetails->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "envDetails->machines cannot be empty");
+        if (!isset($groupDef->details->machines)) {
+            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines");
         }
-        foreach($envDetails->machines as $hostId => $machine) {
+        if (empty($groupDef->details->machines)) {
+            throw new E5xx_ActionFailed(__METHOD__, "groupDef->details->machines cannot be empty");
+        }
+        foreach($groupDef->details->machines as $hostId => $machine) {
             // TODO: it would be great to autodetect this one day
             if (!isset($machine->roles)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing envDetails->machines['$hostId']->roles");
+                throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines['$hostId']->roles");
             }
         }
 
         // remove any existing hosts table entry
-        foreach ($envDetails->machines as $hostId => $machine) {
+        foreach ($groupDef->details->machines as $hostId => $machine) {
             usingHostsTable()->removeHost($hostId);
 
             // remove any roles
@@ -117,7 +120,7 @@ class Blackboxes implements SupportedHost
         // if it is not, that is NOT our responsibility
 
         // store the details
-        foreach($envDetails->machines as $hostId => $machine)
+        foreach($groupDef->details->machines as $hostId => $machine)
         {
             // we want all the details from the config file
             $vmDetails = clone $machine;
@@ -145,61 +148,61 @@ class Blackboxes implements SupportedHost
         }
 
         // all done
-        $log->endAction(count($envDetails->machines) . ' machine(s) registered');
+        $log->endAction(count($groupDef->details->machines) . ' machine(s) registered');
     }
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @return void
      */
-    public function startHost($envDetails)
+    public function startHost($groupDef)
     {
         throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
     }
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @return void
      */
-    public function stopHost($envDetails)
+    public function stopHost($groupDef)
     {
         throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
     }
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @return void
      */
-    public function restartHost($envDetails)
+    public function restartHost($groupDef)
     {
         throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
     }
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @return void
      */
-    public function powerOffHost($envDetails)
+    public function powerOffHost($groupDef)
     {
         throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
     }
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @return void
      */
-    public function destroyHost($envDetails)
+    public function destroyHost($groupDef)
     {
         // what are we doing?
         $log = usingLog()->startAction("de-register blackbox(es)");
 
         // de-register all the hosts
-        foreach ($envDetails->machines as $hostId => $machine)
+        foreach ($groupDef->details->machines as $hostId => $machine)
         {
             foreach ($machine->roles as $role) {
                 usingRolesTable()->removeHostFromAllRoles($hostId);
@@ -213,22 +216,22 @@ class Blackboxes implements SupportedHost
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @param  string $command
      * @return CommandResult
      */
-    public function runCommandAgainstHostManager($envDetails, $command)
+    public function runCommandAgainstHostManager($groupDef, $command)
     {
         throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
     }
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @param  string $command
      * @return CommandResult
      */
-    public function runCommandViaHostManager($envDetails, $command)
+    public function runCommandViaHostManager($groupDef, $command)
     {
         throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
     }
@@ -245,10 +248,10 @@ class Blackboxes implements SupportedHost
 
     /**
      *
-     * @param  stdClass $envDetails
+     * @param  stdClass $groupDef
      * @return string
      */
-    public function determineIpAddress($envDetails)
+    public function determineIpAddress($groupDef)
     {
         throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
     }

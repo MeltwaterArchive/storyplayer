@@ -58,8 +58,14 @@ use DataSift\Stone\ConfigLib\ConfigHelper;
  */
 class DevicesList extends ConfigList
 {
-    public function __construct($searchFolder = '.storyplayer/devices')
+    public function __construct()
     {
-        parent::__construct('DataSift\Storyplayer\DeviceLib\DeviceConfig', $searchFolder);
+        parent::__construct(
+        	'DataSift\Storyplayer\DeviceLib\DeviceConfig',
+        	[
+	        	"storyplayer/devices",
+	        	".storyplayer/devices",
+	        ]
+        );
     }
 }

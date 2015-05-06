@@ -45,6 +45,9 @@ use DataSift\Storyplayer\SystemsUnderTestLib\HardCodedSystemsUnderTest;
 use DataSift\Storyplayer\ConfigLib\TestEnvironmentsList;
 use DataSift\Storyplayer\TestEnvironmentsLib\HardCodedTestEnvironments;
 
+use DataSift\Storyplayer\ConfigLib\E4xx_TestEnvironmentFileMustReturnADefinition;
+use DataSift\Storyplayer\DefinitionLib\E4xx_BadTestEnvironmentDefinition;
+
 use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
 use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
 
@@ -118,6 +121,16 @@ foreach ($localSrcDirs as $key => $candidateDir) {
 	}
 }
 
+// work out where your local Storyplayer extensions might be
+$localExtensions = [
+	getcwd() . '/storyplayer/php',
+];
+foreach ($localExtensions as $key => $candidateDir) {
+	if (!is_dir($candidateDir)) {
+		unset($localExtensions[$key]);
+	}
+}
+
 // do we have a composer autoloader?
 $composerAutoloader = false;
 $composerFiles = array (
@@ -173,8 +186,20 @@ foreach ($localSrcDirs as $localSrcDir){
 	Autoloader_Path::searchFirst($localSrcDir);
 }
 
+// if there are local storyplayer extensions, we also want to load from there
+foreach ($localExtensions as $localExtensionDir) {
+	Autoloader_Path::searchFirst($localExtensionDir);
+}
+
 // load our list of helper functions
 require __DIR__.'/../php/DataSift/Storyplayer/functions.php';
+
+// are there any local functions to load?
+$localFunctions = "storyplayer/php/functions.php";
+if (file_exists($localFunctions)) {
+	// require_once() in case it has been loaded via Composer first
+	require_once($localFunctions);
+}
 
 /**
  * it all happens here, baby
@@ -239,6 +264,20 @@ function main($argv)
 
 		// do we have any command-line defaults set in the config?
 		$injectables->initDefaultCommandLineSupport($injectables->storyplayerConfig, $injectables);
+	}
+	catch (E4xx_TestEnvironmentFileMustReturnADefinition $e)
+	{
+		// this happens when a PHP-style test environment file either does
+		// not return anything, or does not return the expected object
+		$output->logCliError($e->getMessage());
+		exit(1);
+	}
+	catch (E4xx_BadTestEnvironmentDefinition $e)
+	{
+		// this happens when a PHP-style test environment file passes an
+		// invalid input into one of the DefinitionLib classes
+		$output->logCliError($e->getMessage());
+		exit(1);
 	}
 	catch (Exception $e)
 	{
