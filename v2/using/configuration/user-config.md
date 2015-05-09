@@ -1,47 +1,31 @@
 ---
 layout: v2/using-configuration
-title: Per-User Configuration
+title: User Dotfile
 prev: '<a href="../../using/configuration/test-environment-config.html">Prev: Test Environment Configuration</a>'
 next: '<a href="../../using/configuration/dot.notation.support.html">Next: dot.notation.support</a>'
+updated_for_v2: true
 ---
 
-# Per-User Configuration
+# User Dotfile
 
-Storyplayer supports an optional configuration file that lives in _$HOME/.storyplayer/storyplayer.json_, where you can put any Storyplayer settings that you want to apply across multiple test repositories.
+Like many UNIX command-line applications, Storyplayer supports a global config file that you can use to override settings in your local config files.
 
-## Why Do We Need Per-User Configuration?
+This file is commonly used to host authentication keys for services such as Amazon AWS or SauceLabs.
 
-As your application grows in size and complexity, you'll start to use Storyplayer to control other test tools, and you'll start to create virtual machines on demand to test your application inside.  The location of these additional tools - where they are on your computer - will be unique to your computer.  It makes sense to store these settings inside your own dotfiles rather than inside your test repository's config files.
+## Location
 
-For example, here at DataSift, many of our tests rely on:
+Your user dotfile is the file `$HOME/.storyplayer/storyplayer.json`. This file is optional.
 
-* _our vagrant-environments project_, which contains our virtual machine images and provisioning files, and
-* _Hornet_, our EvilLoadTestTool(tm)
+## Content
 
-It's more convenient for us if we use both _Hornet_ and the _vagrant-environments_ from their own Git repositories.
-
-* Both of these tools are generic, so we don't need a unique copy inside each of our test repositories.
-* Both of these tools are large (multi-gigabyte), so we don't want to clone a copy for every test repository that we create.
-* Both tools get modified and extended to support new tests. By running them from their own Git repositories, we reduce the effort required by developers to commit and share these changes.
-
-My per-user config file ends up looking like this:
+Your user dotfile is a JSON file. If it exists, it must define an object. The following sections are permitted:
 
 {% highlight json %}
 {
-    "environments": {
-        "defaults": {
-            "hornet": {
-                "path": "/home/stuart/Devel/datasift/ms-hornet/src/main/cli"
-            },
-            "vagrant": {
-                "dir": "/home/stuart/Devel/datasift/vagrant-environments"
-            }
-        }
-    }
+    "moduleSettings": { ... }
 }
 {% endhighlight %}
 
-Other uses for your storyplayer dotfile include:
+where:
 
-* setting your own preferences for how verbose the output of the `storyplayer` command is
-* temporarily disabling [test phases](test-phases.html) to help you speed up writing new tests
+* `moduleSettings` are [configuration settings for Storyplayer modules to use](module-settings.html)
