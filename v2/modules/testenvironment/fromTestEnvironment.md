@@ -57,6 +57,12 @@ $config = fromTestEnvironment()->getConfig();
 
 ## getModuleSetting()
 
+<div class="callout warning" markdown="1">
+#### A Better Alternative
+
+If you're writing a Storyplayer module, use [fromConfig()->getModuleSetting()](../config/fromConfig.html#getmodulesetting) instead.
+</div>
+
 Use `fromTestEnvironment()->getModuleSetting()` to retrieve a single module setting from the test environment config file.
 
 {% highlight php startinline %}
@@ -68,6 +74,12 @@ Notes:
 * This method is meant to be used by Storyplayer modules. You should never need to call this from your stories.
 
 ## getModuleSettings()
+
+<div class="callout warning" markdown="1">
+#### A Better Alternative
+
+If you're writing a Storyplayer module, use [fromConfig()->getModuleSetting()](../config/fromConfig.html#getmodulesetting) instead.
+</div>
 
 Use `fromTestEnvironment()->getModuleSettings()` to retrieve all the settings for a module from the test environment config file.
 
