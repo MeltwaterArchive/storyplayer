@@ -26,8 +26,4 @@ Your stories require three configuration files:
 
 Some settings, such as your Amazon AWS keys or your Sauce Labs credentials, are associated with the person who runs Storyplayer. It often makes no sense to put these settings into the three key config files.
 
-Storyplayer provides an optional [per-user config file](user-config.html) exactly for this purpose.
-
-## Storyplayer Remembers Things Too
-
-Finally, Storyplayer sometimes needs to remember things between test runs, such as the test environment that has already been provisioned.  Storyplayer stores all of these things in the [runtime config file](runtime-config.json).
+Storyplayer provides an optional [per-user config file](user-dot-config.html) exactly for this purpose.
