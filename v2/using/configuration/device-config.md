@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: Device Configuration
 prev: '<a href="../../using/configuration/overriding-from-the-command-line.html">Prev: Overriding From The Command-Line</a>'
-next: '<a href="../../using/configuration/prose-namespaces.html">Next: Prose Namespaces</a>'
+next: '<a href="../../using/configuration/runtime-config.html">Next: The Runtime Configuration</a>'
 updated_for_v2: true
 ---
 
