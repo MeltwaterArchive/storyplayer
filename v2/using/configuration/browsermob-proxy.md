@@ -2,7 +2,7 @@
 layout: v2/using-configuration
 title: browsermob-proxy Configuration
 updated_for_v2: true
-prev: '<a href="../../using/configuration/runtime-config.html">Prev: The Runtime Configuration</a>'
+prev: '<a href="../../using/configuration/device-config.html">Prev: Device Configuration</a>'
 next: '<a href="../../using/deprecated/index.html">Next: Deprecated Features</a>'
 ---
 

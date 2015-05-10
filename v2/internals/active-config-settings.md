@@ -3,7 +3,7 @@ layout: v2/internals
 title: Config Settings Available At Runtime
 updated_for_v2: true
 prev: '<a href="../internals/index.html">Prev: Storyplayer Internals</a>'
-next: '<a href="../changelog.html">Next: ChangeLog</a>'
+next: '<a href="../internals/runtime-config.html">Next: The Runtime Configuration</a>'
 ---
 # Config Settings Available At Runtime
 

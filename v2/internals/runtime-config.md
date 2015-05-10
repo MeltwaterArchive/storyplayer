@@ -1,8 +1,8 @@
 ---
 layout: v2/using-configuration
 title: The Runtime Configuration
-prev: '<a href="../../using/configuration/device-config.html">Prev: Device Configuration</a>'
-next: '<a href="../../using/configuration/browsermob-proxy.html">Next: browsermob-proxy Configuration</a>'
+prev: '<a href="../internals/active-config-settings.html">Prev: Config Settings Available At Runtime</a>'
+next: '<a href="../changelog.html">Next: ChangeLog</a>'
 ---
 
 # The Runtime Configuration

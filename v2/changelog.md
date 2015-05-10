@@ -1,7 +1,7 @@
 ---
 layout: v2/top-level
 title: ChangeLog
-prev: '<a href="internals/active-config-settings.html">Prev: Config Settings Available At Runtime</a>'
+prev: '<a href="internals/runtime-config.html">Prev: The Runtime Configuration</a>'
 next: '<a href="copyright.html">Next: Legal Stuff</a>'
 updated_for_v2: true
 ---
