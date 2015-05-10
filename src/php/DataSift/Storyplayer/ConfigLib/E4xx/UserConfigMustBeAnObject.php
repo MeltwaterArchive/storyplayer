@@ -34,50 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Injectables
+ * @package   Storyplayer/ConfigLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Injectables;
-
-use Exception;
-use DataSift\Storyplayer\Injectables;
-use DataSift\Storyplayer\ConfigLib\ActiveConfig;
-
-use DataSift\Stone\ConfigLib\E5xx_ConfigFileNotFound;
-use DataSift\Stone\ConfigLib\E5xx_InvalidConfigFile;
-use DataSift\Stone\ObjectLib\BaseObject;
+namespace DataSift\Storyplayer\ConfigLib;
 
 /**
- * support for working with Storyplayer's config file
+ * Exception thrown when the user $HOME/.storyplayer/storyplayer.json file
+ * doesn't define an object at the top-level
  *
  * @category  Libraries
- * @package   Storyplayer/Injectables
+ * @package   Storyplayer/ConfigLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait ActiveConfigSupport
+class E4xx_UserConfigMustBeAnObject extends E4xx_StoryplayerConfigInvalid
 {
-    public $activeConfig;
-
-    public function initActiveConfigSupport(Injectables $injectables)
+    public function __construct($pathToFile)
     {
-        $this->activeConfig = new ActiveConfig;
-        $this->activeConfig->init($injectables);
-
-        $this->activeConfig->mergeUserConfig($injectables, $injectables->userConfig);
-        $this->activeConfig->mergeStoryplayerConfig($injectables, $injectables->storyplayerConfig);
-        $this->activeConfig->mergeSystemUnderTestConfig($injectables, $injectables->activeSystemUnderTestConfig);
-        $this->activeConfig->mergeTestEnvironmentConfig($injectables, $injectables->activeTestEnvironmentConfig);
-
-        // all done
-        return $this->activeConfig;
+        $msg = "User dotfile config file '{$pathToFile}' must be a JSON object";
+        parent::__construct(400, $msg, $msg);
     }
-
-
 }
