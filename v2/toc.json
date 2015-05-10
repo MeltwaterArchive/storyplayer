@@ -219,6 +219,8 @@
 		"modules/deprecated-modules",
 		"modules/environment/index",
 		"modules/environment/fromEnvironment",
+		"internals/index",
+		"internals/active-config-settings",
 		"changelog",
 		"copyright"
 	],
