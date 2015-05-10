@@ -3,6 +3,7 @@ layout: v2/using-deprecated
 title: Deprecated Features
 prev: '<a href="../../using/configuration/browsermob-proxy.html">Prev: browsermob-proxy Configuration</a>'
 next: '<a href="../../using/deprecated/appSettings.html">Next: appSettings</a>'
+updated_for_v2: true
 ---
 # Deprecated Features
 
