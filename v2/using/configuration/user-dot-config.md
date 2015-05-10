@@ -1,12 +1,12 @@
 ---
 layout: v2/using-configuration
-title: User Dotfile
+title: User dot-Storyplayer Config
 prev: '<a href="../../using/configuration/test-environment-config.html">Prev: Test Environment Configuration</a>'
 next: '<a href="../../using/configuration/dot.notation.support.html">Next: dot.notation.support</a>'
 updated_for_v2: true
 ---
 
-# User Dotfile
+# User dot-Storyplayer Config
 
 Like many UNIX command-line applications, Storyplayer supports a global config file that you can use to override settings in your local config files.
 

@@ -14,7 +14,7 @@ The `moduleSettings` sections of your config files are where Storyplayer's modul
 
 You can add `moduleSettings` to any of your config files:
 
-* your [personal dot-storyplayer config file](dot-storyplayer-config.html)
+* your [personal dot-storyplayer config file](user-dot-config.html)
 * your [system-under-test config file](system-under-test-config.html)
 * your [test environment config file](test-environment-config.html)
 * your [storyplayer.json](storyplayer-json.html) file
