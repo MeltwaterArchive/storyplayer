@@ -23,6 +23,7 @@ Active config files are available under these prefixes:
 
 Prefix           | Loaded From File
 -----------------|-----------------
+device.          | [the device config file](../configuration/device-config.html)
 storyplayer.     | [the storyplayer.json config file](../configuration/storyplayer-json.html)
 systemundertest. | [the system under test config file](../configuration/systemd-under-test-config.html)
 target.          | [the test environment config file](../configuration/test-environment-config.html)
@@ -40,6 +41,7 @@ commands.&lt;name&gt;.args.     | Ordered list of arguments that the command acc
 commands.&lt;name&gt;.phases.   | Ordered list of steps to run for the command
 commands.&lt;name&gt;.switches. | Unordered list of CLI switches that the command supports
 consoles.&lt;name&gt;           | Config for each loaded console
+devices.&lt;name&gt;            | Config for each loaded device
 reports.&lt;name&gt;            | Config for each loaded report
 themes.&lt;name&gt;             | Colour scheme theme
 
