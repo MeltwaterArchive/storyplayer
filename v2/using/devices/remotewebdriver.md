@@ -3,11 +3,16 @@ layout: v2/using-devices
 title: Testing Unusual Browsers Using The Remote WebDriver
 prev: '<a href="../../using/devices/saucelabs.html">Prev: Testing Multiple Browsers Using SauceLabs</a>'
 next: '<a href="../../using/devices/how-to-test.html">Next: How To Test With Browsers And Devices</a>'
+updated_for_v2: true
 ---
 
 # Testing Unusual Browsers Using The Remote WebDriver
 
-_Please note that this support is currently experimental. Expect bugs._
+<div class="callout danger" markdown="1">
+#### Experimental And Unsupported
+
+Experimental support was added in Storyplayer v1. As far as I know, no-one ever needed it. I haven't tested it for SPv2. I'm unlikely to test it in the near future.
+</div>
 
 Not every interesting web browser can run on your dev computer.  Sometimes, you'll want Storyplayer to control a web browser that's running somewhere else.  It might be a copy of Internet Explorer running on Windows XP in a virtual machine.  It might be a copy of mobile Safari running in Apple's iPhone simulator, even a UIWeb instance embedded in an iOS app.  It might be anywhere.
 

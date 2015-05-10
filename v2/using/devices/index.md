@@ -3,6 +3,7 @@ layout: v2/using-devices
 title: Testing With Different Devices
 prev: '<a href="../../using/deprecated/appSettings.html">Prev: appSettings</a>'
 next: '<a href="../../using/devices/how-it-works.html">Next: How We Control Web Browsers</a>'
+updated_for_v2: true
 ---
 
 # Testing With Different Devices

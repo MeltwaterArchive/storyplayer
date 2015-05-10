@@ -3,6 +3,7 @@ layout: v2/using-devices
 title: How We Control Web Browsers
 prev: '<a href="../../using/devices/index.html">Prev: Testing With Different Devices</a>'
 next: '<a href="../../using/devices/localbrowsers.html">Next: Testing With Locally Running Web Browsers</a>'
+updated_for_v2: true
 ---
 
 # How We Control Web Browsers

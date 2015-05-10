@@ -3,6 +3,7 @@ layout: v2/using-devices
 title: How To Test With Browsers And Devices
 prev: '<a href="../../using/devices/remotewebdriver.html">Prev: Testing Unusual Browsers Using The Remote WebDriver</a>'
 next: '<a href="../../using/stories/index.html">Next: Introducing Stories</a>'
+updated_for_v2: true
 ---
 
 # How To Test With Browsers And Devices
@@ -31,7 +32,7 @@ There's a few things we sometimes have to adjust when we start running a new tes
 * Anything that's been hard-coded into the test, but which is different in different environments, needs turning into a config file entry.  It's normally URLs that are the problem here.
 * Timeouts on page loads often need adjusting.  Some of our environments are virtual, whilst others run on dedicated hardware, and as a result, they perform differently.  (This is something we're going to look at in a future release; I'm sure we can make this much easier than it currently is).
 * Different environments run different versions of the code, and have different functionality. You've got to be careful here; the more `if` statements in your tests, the more fragile your tests become.  You're better off maintaining different tests for different versions of your app.
-* Some tests are too dangerous to run in production, especially when attempting to test superadmin functionality.  You can use Storyplayer's support for [safeguarding environments](../environments/safeguarding.html) to help with this.
+* Some tests are too dangerous to run in production, especially when attempting to test superadmin functionality.  You can use Storyplayer's support for [safeguarding environments](../test-environments/safeguarding.html) to help with this.
 
 ## Pick One Browser And Device, Then Adapt
 
@@ -47,8 +48,6 @@ You can take your website or web-based application, and draw a simple graph show
 * For a web-based app, a user will normally have to register or login before he can access many of your web pages.  Some pages will be part of 'wizard'-like processes.  Some pages will only be available to some of your users (e.g. premium users).
 
 These are your user journeys, and they represent how you designed your website or web-based app to be used.  Pick a user journey, and write a series of tests for it.  Then pick another journey, and write those tests.
-
-You can create [tales](../stories/tales.html) to string sequences of tests together in order.  Each tale will be a single user journey.
 
 As you build up your library of tests, you'll start to find that some of your journeys can re-use tests you've already written (especially those that involved registration or logging in).
 

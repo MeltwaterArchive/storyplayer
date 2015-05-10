@@ -3,6 +3,7 @@ layout: v2/using-devices
 title: Testing With Locally Running Web Browsers
 prev: '<a href="../../using/devices/how-it-works.html">Prev: How We Control Web Browsers</a>'
 next: '<a href="../../using/devices/saucelabs.html">Next: Testing Multiple Browsers Using SauceLabs</a>'
+updated_for_v2: true
 ---
 
 # Testing With Locally Running Web Browsers
@@ -70,4 +71,4 @@ Storyplayer will automatically close the web browser at the end of each phase of
 
 At the time of writing, Selenium WebDriver (the technology Storyplayer uses to control web browsers) does not provide working support for authenticating via HTTP Basic Auth.  To get around this, when you run tests against a browser on your own desktop, we proxy the web browser through browsermob-proxy, which can inject the HTTP Basic Auth credentials for us.
 
-If your website requires HTTP Basic Auth, then your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling _[$st->usingBrowser()->setHttpBasicAuthForHost()](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost)_.
+If your website requires HTTP Basic Auth, then your test will need to tell Storyplayer which HTTP Basic Auth credentials to use, by calling _[usingBrowser()->setHttpBasicAuthForHost()](../../modules/browser/usingBrowser.html#sethttpbasicauthforhost)_.

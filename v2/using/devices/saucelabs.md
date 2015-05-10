@@ -3,6 +3,7 @@ layout: v2/using-devices
 title: Testing Multiple Browsers Using SauceLabs
 prev: '<a href="../../using/devices/localbrowsers.html">Prev: Testing With Locally Running Web Browsers</a>'
 next: '<a href="../../using/devices/remotewebdriver.html">Next: Testing Unusual Browsers Using The Remote WebDriver</a>'
+updated_for_v2: true
 ---
 
 # Testing Multiple Browsers Using SauceLabs
@@ -31,14 +32,12 @@ You need to add your Sauce Labs details to your Storyplayer config file.
 
 {% highlight json %}
 {
-	"environments": {
-		"defaults": {
-			"saucelabs": {
-				"username": "<saucelabs-username>",
-				"accesskey": "<saucelabs-accesskey>"
-			}
-		}
-	}
+    "moduleSettings": {
+        "saucelabs": {
+            "username": "<saucelabs-username>",
+            "accesskey": "<saucelabs-accesskey>"
+        }
+    }
 }
 {% endhighlight %}
 
