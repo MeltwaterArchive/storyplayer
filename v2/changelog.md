@@ -1,7 +1,7 @@
 ---
 layout: v2/top-level
 title: ChangeLog
-prev: '<a href="modules/environment/fromEnvironment.html">Prev: fromEnvironment()</a>'
+prev: '<a href="internals/active-config-settings.html">Prev: Config Settings Available At Runtime</a>'
 next: '<a href="copyright.html">Next: Legal Stuff</a>'
 updated_for_v2: true
 ---

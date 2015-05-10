@@ -2,7 +2,7 @@
 layout: v2/modules-environment
 title: fromEnvironment()
 prev: '<a href="../../modules/environment/index.html">Prev: The Environment Module</a>'
-next: '<a href="../../changelog.html">Next: ChangeLog</a>'
+next: '<a href="../../internals/index.html">Next: Storyplayer Internals</a>'
 ---
 
 # fromEnvironment()
