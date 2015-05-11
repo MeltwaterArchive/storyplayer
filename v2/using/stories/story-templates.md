@@ -1,7 +1,7 @@
 ---
 layout: v2/using-stories
 title: Story Templates
-prev: '<a href="../../using/stories/post-test-inspection.html">Prev: Post-Test Inspection Phase</a>'
+prev: '<a href="../../using/stories/grouping-stories.html">Prev: Grouping Stories</a>'
 next: '<a href="../../using/stories/story-params.html">Next: Story Parameters</a>'
 ---
 
