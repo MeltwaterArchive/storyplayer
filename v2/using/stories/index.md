@@ -2,7 +2,7 @@
 layout: v2/using-stories
 title: Introducing Stories
 prev: '<a href="../../using/devices/how-to-test.html">Prev: How To Test With Browsers And Devices</a>'
-next: '<a href="../../using/stories/story-test.html">Next: The Story Test</a>'
+next: '<a href="../../using/stories/tests.html">Next: The Story Test</a>'
 updated_for_v2: true
 ---
 
