@@ -1,11 +1,11 @@
 ---
 layout: v2/using-stories
-title: The Eight Phases Of A Story Test
-prev: '<a href="../../using/stories/tests.html">Prev: The Story Test</a>'
+title: The Eight Phases Of A test
+prev: '<a href="../../using/stories/tests.html">Prev: The test</a>'
 next: '<a href="../../using/stories/the-checkpoint.html">Next: The Checkpoint</a>'
 ---
 
-# The Eight Phases Of A Story Test
+# The Eight Phases Of A test
 
 ## The Life-Cycle Of A Single Test
 

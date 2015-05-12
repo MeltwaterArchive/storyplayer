@@ -1,7 +1,7 @@
 ---
 layout: v2/using-stories
 title: The Checkpoint
-prev: '<a href="../../using/stories/phases.html">Prev: The Eight Phases Of A Story Test</a>'
+prev: '<a href="../../using/stories/phases.html">Prev: The Eight Phases Of A test</a>'
 next: '<a href="../../using/stories/the-environment.html">Next: The Environment</a>'
 ---
 
@@ -16,7 +16,7 @@ We've always had to strike a balance between people who code all day for a livin
 
 ## Story Phases Are Stateless
 
-Each story phase is a function.  There is no `$this` to save variables to.  And you should __never__ use `$GLOBALS` to get around the lack of `$this`.  (Likewise, each module that you call in your story tests is also stateless).
+Each story phase is a function.  There is no `$this` to save variables to.  And you should __never__ use `$GLOBALS` to get around the lack of `$this`.  (Likewise, each module that you call in your tests is also stateless).
 
 This is a deliberate choice, to minimise time-consuming bugs in your test code caused either by someone writing code that's too clever, or someone writing code that isn't clever enough.  We believe that you want to spend time debugging your app, not debugging your tests.  Making Storyplayer as stateless as possible is a key part of making that possible.
 
@@ -35,7 +35,7 @@ You can put anything that you want into it - Storyplayer doesn't care.  Storypla
 
 ## The Checkpoint Is Not Persistent
 
-When your story test finishes, Storyplayer destroys the checkpoint object.  _The checkpoint is not persistent between test runs._ You're always guaranteed to start with an empty checkpoint at the start of your test.  This helps ensure that your tests are more likely to be deterministic - that the tests behave the same way every time they execute.
+When your test finishes, Storyplayer destroys the checkpoint object.  _The checkpoint is not persistent between test runs._ You're always guaranteed to start with an empty checkpoint at the start of your test.  This helps ensure that your tests are more likely to be deterministic - that the tests behave the same way every time they execute.
 
 ## When To Use The Checkpoint
 

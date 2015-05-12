@@ -2,7 +2,7 @@
 layout: v2/using-stories
 title: Introducing Stories
 prev: '<a href="../../using/devices/how-to-test.html">Prev: How To Test With Browsers And Devices</a>'
-next: '<a href="../../using/stories/tests.html">Next: The Story Test</a>'
+next: '<a href="../../using/stories/tests.html">Next: The test</a>'
 updated_for_v2: true
 ---
 
@@ -24,7 +24,7 @@ Storyplayer supports testing both flavours inside the one tool.
 
 ## Turning Stories Into Tests
 
-Each story describes something that a user can do.  In Storyplayer, we turn stories into [tests](tests.html) - the steps that the user would _do_ for that story.  This forms the heart of each story test that you write.  For example:
+Each story describes something that a user can do.  In Storyplayer, we turn stories into [tests](tests.html) - the steps that the user would _do_ for that story.  This forms the heart of each test that you write.  For example:
 
 * subscription users can see all of their invoices
 
