@@ -63,6 +63,7 @@
 		"using/devices/how-to-test",
 		"using/stories/index",
 		"using/stories/tests",
+		"using/stories/designing-a-test",
 		"using/stories/phases",
 		"using/stories/the-checkpoint",
 		"using/stories/the-environment",
