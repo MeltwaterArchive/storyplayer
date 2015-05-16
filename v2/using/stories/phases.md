@@ -18,7 +18,7 @@ Each phase is a separate anonymous PHP function that you write. You'll find exam
 
 With Storyplayer, you can automate the complete life-cycle of every single test:
 
-1. [Can-run check](can-run-check.html): Examine the system under test, test environment and test data to see if this test should run or should be skipped.
+1. [Test can run check](test-can-run-check.html): Examine the system under test, test environment and test data to see if this test should run or should be skipped.
 1. [Test setup](test-setup-teardown.html): Inject test-specific data, start any service mocks that are required, and start any monitoring that is required.
 1. [Pre-test prediction](pre-test-prediction.html): Look at the test conditions. Is the test likely to succeed?
 1. [Pre-test inspection](pre-test-inspection.html): Record the state of the software before we run our test.
