@@ -9,26 +9,31 @@ next: '<a href="../../using/stories/running-stories.html">Next: Running Stories<
 
 In your testing, you can't use the absence of errors to mean that everything worked.  That's important, sure, but you also need to check and make sure that whatever [`Action()`](action.html) you did actually changed something.
 
-How do you know if something changed?  Use the [`PreTestInspection()`](pre-test-inspection.html) to remember the state before your story's `Action()` executes, and then use the `PostTestInspection()` afterwards to check what you've remembered against the actual state of your app.
+How do you know if something changed?  Use the [`PreTestInspection()`](pre-test-inspection.html) to remember the state before your test's `Action()` executes, and then use the `PostTestInspection()` afterwards to check what you've remembered against the actual state of your app.
 
-This phase is *optional*.
+*This phase is optional. Most tests will have a `PostTestInspection()` phase.*
 
 ## Running Order
 
 The `PostTestInspection()` happens after the story's `Action()` phase has completed:
 
-1. Test Environment Setup
+1. Test Can Run Check
 1. Test Setup
 1. Pre-test Prediction
 1. Pre-test Inspection
 1. Action
 1. __Post-test Inspection__
 1. Test Teardown
-1. Test Environment Teardown
 
-## How To Inspect After Your Story Has Made Changes
+<div class="callout info" markdown="1">
+#### What If The Action Fails?
 
-To make a post-test inspection, add a `PostTestInspection()` function to your story:
+If The `Action()` phase fails, Storyplayer does not run the `PostTestInspection()` phase. Why? __Your test has already failed.__ There's no need for the `PostTestInspection()` to confirm this.
+</div>
+
+## How To Inspect After Your Test Has Made Changes
+
+To make a post-test inspection, add a `PostTestInspection()` function to your test:
 
 {% highlight php startinline %}
 $story->addPostTestInspection(function() {
@@ -44,4 +49,4 @@ Repeat the steps you took in your `PreTestInspection()` to get the new state of 
 
 ## Templating Your Post-Test Inspections
 
-As with `PreTestInspection()`, each `PostTestInspection()` tends to be unique to each story, but if you do find yourself with common `PreTestInspection()` functions, you can use Storyplayer's [story templating](story-templates.html) to share the same _PostTestInspection()_ function across multiple stories.
+As with `PreTestInspection()`, each `PostTestInspection()` tends to be unique to each test, but if you do find yourself with common `PreTestInspection()` functions, you can use Storyplayer's [story templating](story-templates.html) to share the same _PostTestInspection()_ function across multiple tests.
