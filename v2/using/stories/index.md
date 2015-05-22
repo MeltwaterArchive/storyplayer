@@ -98,7 +98,7 @@ Stories are meant to be independent from each other, and therefore your tests sh
       |- host
 </pre>
 
-[You can easily run a single test or any group of tests. Or you can run the lot.](running-stories.html)
+[You can easily run a single test or any group of tests. Or you can run the lot.](running-tests.html)
 
 ## Tests Can Be Templated
 
