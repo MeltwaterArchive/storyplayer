@@ -87,7 +87,7 @@ Stories are meant to be independent from each other, and therefore your tests sh
 
 ## Tests Can Be Grouped
 
-[Stories tend to be grouped](grouping-stories.html), and this will be reflected in your library of tests as you build it up.  For example, Storyplayer's own tests include these groups:
+[Tests tend to be grouped](grouping-tests.html), and this will be reflected in your library of tests as you build it up.  For example, Storyplayer's own tests include these groups:
 
 <pre>
 |- stories
