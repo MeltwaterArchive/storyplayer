@@ -1,7 +1,7 @@
 ---
 layout: v2/using-configuration
 title: User dot-Storyplayer Config
-prev: '<a href="../../using/configuration/test-environment-config.html">Prev: Test Environment Configuration</a>'
+prev: '<a href="../../using/configuration/provisioning-parameters.html">Prev: Provisioning Parameters</a>'
 next: '<a href="../../using/configuration/dot.notation.support.html">Next: dot.notation.support</a>'
 updated_for_v2: true
 ---
