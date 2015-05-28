@@ -2,6 +2,8 @@
 layout: v2/using-stories
 title: Designing A Test
 updated_for_v2: true
+prev: '<a href="../../using/stories/tests.html">Prev: Tests</a>'
+next: '<a href="../../using/stories/phases.html">Next: Test Phases</a>'
 ---
 
 # Designing A Test

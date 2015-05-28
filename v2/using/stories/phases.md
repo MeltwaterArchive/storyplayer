@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: Test Phases
-prev: '<a href="../../using/stories/tests.html">Prev: The test</a>'
-next: '<a href="../../using/stories/the-checkpoint.html">Next: The Checkpoint</a>'
+prev: '<a href="../../using/stories/designing-a-test.html">Prev: Designing A Test</a>'
+next: '<a href="../../using/stories/test-can-run-check.html">Next: Can-Run Check Phase</a>'
 updated_for_v2: true
 ---
 

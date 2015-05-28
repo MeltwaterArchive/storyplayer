@@ -1,7 +1,7 @@
 ---
 layout: v2/using-stories
 title: Test Users
-prev: '<a href="../../using/stories/story-params.html">Prev: Story Parameters</a>'
+prev: '<a href="../../using/stories/story-templates.html">Prev: Story Templates</a>'
 next: '<a href="../../using/storyplayer-commands/index.html">Next: Storyplayer Commands</a>'
 updated_for_v2: true
 ---

@@ -1,7 +1,7 @@
 ---
 layout: v2/using-stories
 title: Test Setup / Teardown Phases
-prev: '<a href="../../using/stories/the-environment.html">Prev: The Environment</a>'
+prev: '<a href="../../using/stories/test-can-run-check.html">Prev: Can-Run Check Phase</a>'
 next: '<a href="../../using/stories/pre-test-prediction.html">Next: The Pre-Test Prediction Phase</a>'
 updated_for_v2: true
 ---

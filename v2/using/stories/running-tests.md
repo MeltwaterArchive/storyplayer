@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: Running Tests
-prev: '<a href="../../using/stories/post-test-inspection.html">Prev: Post-Test Inspection Phase</a>'
-next: '<a href="../../using/stories/grouping-stories.html">Next: Grouping Stories</a>'
+prev: '<a href="../../using/stories/grouping-tests.html">Prev: Grouping Tests</a>'
+next: '<a href="../../using/stories/story-templates.html">Next: Story Templates</a>'
 updated_for_v2: true
 ---
 

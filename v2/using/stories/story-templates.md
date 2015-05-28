@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: Story Templates
-prev: '<a href="../../using/stories/grouping-stories.html">Prev: Grouping Stories</a>'
-next: '<a href="../../using/stories/story-params.html">Next: Story Parameters</a>'
+prev: '<a href="../../using/stories/running-tests.html">Prev: Running Tests</a>'
+next: '<a href="../../using/stories/test-users.html">Next: Test Users</a>'
 updated_for_v2: true
 ---
 

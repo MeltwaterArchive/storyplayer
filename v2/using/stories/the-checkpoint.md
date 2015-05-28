@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: The Checkpoint
-prev: '<a href="../../using/stories/phases.html">Prev: The Eight Phases Of A test</a>'
-next: '<a href="../../using/stories/the-environment.html">Next: The Environment</a>'
+prev: '<a href="../../using/stories/post-test-inspection.html">Prev: Post-Test Inspection Phase</a>'
+next: '<a href="../../using/stories/grouping-tests.html">Next: Grouping Tests</a>'
 updated_for_v2: true
 ---
 

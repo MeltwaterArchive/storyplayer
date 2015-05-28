@@ -2,7 +2,7 @@
 layout: v2/using-stories
 title: Tests
 prev: '<a href="../../using/stories/index.html">Prev: Introducing Stories</a>'
-next: '<a href="../../using/stories/phases.html">Next: The Eight Phases Of A test</a>'
+next: '<a href="../../using/stories/designing-a-test.html">Next: Designing A Test</a>'
 updated_for_v2: true
 ---
 

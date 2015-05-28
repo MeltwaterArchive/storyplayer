@@ -1,6 +1,8 @@
 ---
 layout: v2/using-stories
 title: Can-Run Check Phase
+prev: '<a href="../../using/stories/phases.html">Prev: Test Phases</a>'
+next: '<a href="../../using/stories/test-setup-teardown.html">Next: Test Setup / Teardown Phases</a>'
 ---
 
 # The Can-Run Check Phase

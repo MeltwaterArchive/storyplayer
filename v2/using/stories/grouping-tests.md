@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: Grouping Tests
-prev: '<a href="../../using/stories/running-stories.html">Prev: Running Stories</a>'
-next: '<a href="../../using/stories/story-templates.html">Next: Story Templates</a>'
+prev: '<a href="../../using/stories/the-checkpoint.html">Prev: The Checkpoint</a>'
+next: '<a href="../../using/stories/running-tests.html">Next: Running Tests</a>'
 updated_for_v2: true
 ---
 
