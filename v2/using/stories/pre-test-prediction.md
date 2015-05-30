@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: The Pre-Test Prediction Phase
-prev: '<a href="../../using/stories/test-setup-teardown.html">Prev: Test Setup / Teardown Phases</a>'
-next: '<a href="../../using/stories/pre-test-inspection.html">Next: Pre-Test Inspection Phase</a>'
+prev: '<a href="../../using/stories/pre-test-inspection.html">Prev: Pre-Test Inspection Phase</a>'
+next: '<a href="../../using/stories/action.html">Next: Action Phase</a>'
 updated_for_v2: true
 ---
 
@@ -24,12 +24,12 @@ If you want to know more about _Continuous Assurance_, do get in touch with Stua
 
 ## Running Order
 
-The `PreTestPrediction()` happens once the test conditions have been setup:
+The `PreTestPrediction()` happens once the test conditions have been setup, and data has been gathered in the [PreTestInspection()](pre-test-inspection.html):
 
 1. Test Can Run Check
 1. Test Setup
-1. __Pre-test Prediction__
 1. Pre-test Inspection
+1. __Pre-test Prediction__
 1. Action
 1. Post-test Inspection
 1. Test Teardown

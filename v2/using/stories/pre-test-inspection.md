@@ -1,8 +1,8 @@
 ---
 layout: v2/using-stories
 title: "Pre-Test Inspection Phase"
-prev: '<a href="../../using/stories/pre-test-prediction.html">Prev: The Pre-Test Prediction Phase</a>'
-next: '<a href="../../using/stories/action.html">Next: Action Phase</a>'
+prev: '<a href="../../using/stories/test-setup-teardown.html">Prev: Test Setup / Teardown Phases</a>'
+next: '<a href="../../using/stories/pre-test-prediction.html">Next: The Pre-Test Prediction Phase</a>'
 updated_for_v2: true
 ---
 
@@ -16,12 +16,12 @@ How do you know if something changed?  Use the `PreTestInspection()` to remember
 
 ## Running Order
 
-The `PreTestInspection()` happens once the test conditions have been setup, and after the optional [`PreTestPrediction()`](pre-test-prediction.html) has been made:
+The `PreTestInspection()` happens once the test conditions have been setup, and before the optional [`PreTestPrediction()`](pre-test-prediction.html) has been made:
 
 1. Test Can Run Check
 1. Test Setup
-1. Pre-test Prediction
 1. __Pre-test Inspection__
+1. Pre-test Prediction
 1. Action
 1. Post-test Inspection
 1. Test Teardown

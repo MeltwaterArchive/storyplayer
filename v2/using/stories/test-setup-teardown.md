@@ -2,7 +2,7 @@
 layout: v2/using-stories
 title: Test Setup / Teardown Phases
 prev: '<a href="../../using/stories/test-can-run-check.html">Prev: Can-Run Check Phase</a>'
-next: '<a href="../../using/stories/pre-test-prediction.html">Next: The Pre-Test Prediction Phase</a>'
+next: '<a href="../../using/stories/pre-test-inspection.html">Next: Pre-Test Inspection Phase</a>'
 updated_for_v2: true
 ---
 
@@ -18,8 +18,8 @@ Test conditions are created after the `TestCanRunCheck()` has passed, and they a
 
 1. Test Can Run Check
 1. __Test Setup__
-1. Pre-test Prediction
 1. Pre-test Inspection
+1. Pre-test Prediction
 1. Action
 1. Post-test Inspection
 1. __Test Teardown__
