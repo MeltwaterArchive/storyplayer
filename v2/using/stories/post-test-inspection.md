@@ -3,6 +3,7 @@ layout: v2/using-stories
 title: Post-Test Inspection Phase
 prev: '<a href="../../using/stories/action.html">Prev: Action Phase</a>'
 next: '<a href="../../using/stories/the-checkpoint.html">Next: The Checkpoint</a>'
+updated_for_v2: true
 ---
 
 # The Post-Test Inspection Phase
@@ -49,4 +50,4 @@ Repeat the steps you took in your `PreTestInspection()` to get the new state of 
 
 ## Templating Your Post-Test Inspections
 
-As with `PreTestInspection()`, each `PostTestInspection()` tends to be unique to each test, but if you do find yourself with common `PreTestInspection()` functions, you can use Storyplayer's [story templating](story-templates.html) to share the same _PostTestInspection()_ function across multiple tests.
+As with `PreTestInspection()`, each `PostTestInspection()` tends to be unique to each test. But if you do find yourself with common `PreTestInspection()` functions, you can use Storyplayer's [story templating](story-templates.html) to share the same _PostTestInspection()_ function across multiple tests.
