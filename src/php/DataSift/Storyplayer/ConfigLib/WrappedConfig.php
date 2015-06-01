@@ -163,6 +163,51 @@ class WrappedConfig
     }
 
     /**
+     * save the config to disk, as a JSON file
+     *
+     * @return void
+     */
+    public function saveConfig()
+    {
+        // do we have a filename?
+        $filename = $this->getFilename();
+        if ($filename === null) {
+            throw new E4xx_ConfigNeedsAFilename($this->getName());
+        }
+
+        // make sure that the parent folder exists
+        $this->makeConfigDir(dirname($filename));
+
+        // let's get this saved
+        $data = json_encode($this->getConfig());
+        if (!file_put_contents($filename, $data)) {
+            throw new E4xx_ConfigCannotBeSaved($name, $filename);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function makeConfigDir($configDir)
+    {
+        if (file_exists($configDir)) {
+            // nothing to do
+            return;
+        }
+
+        // can we make the folder?
+        //
+        // if this fails, we do not know why
+        $success = mkdir($configDir, 0700, true);
+        if (!$success)
+        {
+            // cannot create it - bail out now
+            throw new E4xx_ConfigPathCannotBeCreated($configDir);
+        }
+    }
+
+
+    /**
      * returns the name assigned to this config
      * @return string|null
      */
