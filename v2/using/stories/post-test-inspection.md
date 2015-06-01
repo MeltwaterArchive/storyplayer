@@ -20,8 +20,8 @@ The `PostTestInspection()` happens after the story's `Action()` phase has comple
 
 1. Test Can Run Check
 1. Test Setup
-1. Pre-test Inspection
 1. Pre-test Prediction
+1. Pre-test Inspection
 1. Action
 1. __Post-test Inspection__
 1. Test Teardown

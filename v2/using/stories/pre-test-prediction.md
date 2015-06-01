@@ -24,12 +24,12 @@ If you want to know more about _Continuous Assurance_, do get in touch with Stua
 
 ## Running Order
 
-The `PreTestPrediction()` happens once the test conditions have been setup, and data has been gathered in the [PreTestInspection()](pre-test-inspection.html):
+The `PreTestPrediction()` happens once the test conditions have been setup, and before data is gathered in the [PreTestInspection()](pre-test-inspection.html):
 
 1. Test Can Run Check
 1. Test Setup
-1. Pre-test Inspection
 1. __Pre-test Prediction__
+1. Pre-test Inspection
 1. Action
 1. Post-test Inspection
 1. Test Teardown

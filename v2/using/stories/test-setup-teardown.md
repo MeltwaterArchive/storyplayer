@@ -18,8 +18,8 @@ Test conditions are created after the `TestCanRunCheck()` has passed, and they a
 
 1. Test Can Run Check
 1. __Test Setup__
-1. Pre-test Inspection
 1. Pre-test Prediction
+1. Pre-test Inspection
 1. Action
 1. Post-test Inspection
 1. __Test Teardown__

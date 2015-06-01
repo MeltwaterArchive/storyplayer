@@ -14,12 +14,12 @@ At the heart of each test are the steps that actually perform the test.  For sto
 
 ## Running Order
 
-The `Action()` happens after everything has been setup, and after any pre-test inspections and predictions.
+The `Action()` happens after everything has been setup, and after any pre-test predictions and inspections.
 
 1. Test Can Run Check
 1. Test Setup
-1. Pre-test Inspection
 1. Pre-test Prediction
+1. Pre-test Inspection
 1. __Action__
 1. Post-test Inspection
 1. Test Teardown

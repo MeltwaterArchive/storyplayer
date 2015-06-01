@@ -16,12 +16,12 @@ How do you know if something changed?  Use the `PreTestInspection()` to remember
 
 ## Running Order
 
-The `PreTestInspection()` happens once the test conditions have been setup, and before the optional [`PreTestPrediction()`](pre-test-prediction.html) has been made:
+The `PreTestInspection()` happens once the test conditions have been setup, and after the optional [`PreTestPrediction()`](pre-test-prediction.html) has been made:
 
 1. Test Can Run Check
 1. Test Setup
-1. __Pre-test Inspection__
 1. Pre-test Prediction
+1. __Pre-test Inspection__
 1. Action
 1. Post-test Inspection
 1. Test Teardown

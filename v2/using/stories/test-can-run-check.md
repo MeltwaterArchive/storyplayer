@@ -20,8 +20,8 @@ The `TestCanRunCheck()` happens before the test's `TestSetup()` phase runs:
 
 1. __Test Can Run Check__
 1. Test Setup
-1. Pre-test Inspection
 1. Pre-test Prediction
+1. Pre-test Inspection
 1. Action
 1. Post-test Inspection
 1. Test Teardown
