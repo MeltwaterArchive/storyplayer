@@ -361,6 +361,35 @@ class WrappedConfig
     }
 
     /**
+     * support for arrow->notation support on wrapped configs
+     *
+     * NOTE: objects returned by arrow->notation are READ-WRITE
+     *
+     * @param  string $path
+     *         the variable to be retrieved
+     * @return mixed
+     *         the fake attribute
+     */
+    public function __get($path)
+    {
+        return $this->config->getPath($path);
+    }
+
+    /**
+     * support for arrow->notation on wrapped configs
+     *
+     * @param string $path
+     *        the name of the attribute to save
+     * @param mixed $data
+     *        the data to save
+     * @return void
+     */
+    public function __set($path, $data)
+    {
+        return $this->setData($path, $data);
+    }
+
+    /**
      * remove data using a dot.notation.path
      *
      * @param  string $path
