@@ -112,8 +112,8 @@ class DefaultConfig extends BaseObject
         ];
         $phases->story = [
             'TestSetup' => true,
-            'PreTestInspection' => true,
             'PreTestPrediction' => true,
+            'PreTestInspection' => true,
             'Action' => true,
             'PostTestInspection' => true,
         ];
