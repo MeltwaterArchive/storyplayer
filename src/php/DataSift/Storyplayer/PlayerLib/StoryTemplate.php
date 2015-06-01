@@ -40,12 +40,15 @@
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
+
 namespace DataSift\Storyplayer\PlayerLib;
 
-use ReflectionObject;
-
 /**
- * Base class for reusable test environment setup/teardown instructions
+ * Legacy class for backwards-compatibility with DataSift's tests
+ *
+ * Make sure your new StoryTemplates all inherit from:
+ *
+ * - Storyplayer\Stories\StoryTemplate
  *
  * @category  Libraries
  * @package   Storyplayer/PlayerLib
@@ -54,159 +57,6 @@ use ReflectionObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryTemplate
+class StoryTemplate extends \Storyplayer\Stories\StoryTemplate
 {
-    protected $story;
-
-    protected $params = array();
-
-    public function getStory()
-    {
-        return $this->story;
-    }
-
-    public function setStory(Story $story)
-    {
-        $this->story = $story;
-    }
-
-    public function getParams()
-    {
-        return $this->params;
-    }
-
-    public function setParams($params = array())
-    {
-        $this->params = $params;
-    }
-
-    /**
-     * Helper methods to keep the Templates API in line with the phases
-     */
-
-    public function hasTestCanRunCheck()
-    {
-        return method_exists($this, 'testCanRunCheck');
-    }
-
-    public function hasTestSetup()
-    {
-        return method_exists($this, 'testSetup');
-    }
-
-    public function hasPerPhaseSetup()
-    {
-        return method_exists($this, 'perPhaseSetup');
-    }
-
-    public function hasPerPhaseTeardown()
-    {
-        return method_exists($this, 'perPhaseTeardown');
-    }
-
-    public function hasDeviceSetup()
-    {
-        return method_exists($this, 'deviceSetup');
-    }
-
-    public function hasDeviceTeardown()
-    {
-        return method_exists($this, 'deviceTeardown');
-    }
-
-    public function hasHints()
-    {
-        return method_exists($this, 'hints');
-    }
-
-    public function hasPreTestPrediction()
-    {
-        return method_exists($this, 'preTestPrediction');
-    }
-
-    public function hasPreTestInspection()
-    {
-        return method_exists($this, 'preTestInspection');
-    }
-
-    public function hasAction()
-    {
-        return method_exists($this, 'action');
-    }
-
-    public function hasPostTestInspection()
-    {
-        return method_exists($this, 'postTestInspection');
-    }
-
-    public function hasTestTeardown()
-    {
-        return method_exists($this, 'testTeardown');
-    }
-
-    public function getTestCanRunCheck()
-    {
-        return array($this, 'testCanRunCheck');
-    }
-
-    public function getTestSetup()
-    {
-        return array($this, 'testSetup');
-    }
-
-    public function getPerPhaseSetup()
-    {
-        return array($this, 'perPhaseSetup');
-    }
-
-    public function getPerPhaseTeardown()
-    {
-        return array($this, 'perPhaseTeardown');
-    }
-
-    public function getDeviceSetup()
-    {
-        return array($this, 'deviceSetup');
-    }
-
-    public function getDeviceTeardown()
-    {
-        return array($this, 'deviceTeardown');
-    }
-
-    public function getHints()
-    {
-        return array($this, 'hints');
-    }
-
-    public function getPreTestPrediction()
-    {
-        return array($this, 'preTestPrediction');
-    }
-
-    public function getPreTestInspection()
-    {
-        return array($this, 'preTestInspection');
-    }
-
-    public function getAction()
-    {
-        return array($this, 'action');
-    }
-
-    public function getPostTestInspection()
-    {
-        return array($this, 'postTestInspection');
-    }
-
-    public function getTestTeardown()
-    {
-        return array($this, 'testTeardown');
-    }
-
-    public function getSourceFilename()
-    {
-        $refObj = new ReflectionObject($this);
-        return $refObj->getFileName();
-    }
 }
