@@ -14,10 +14,10 @@ You can move this duplicate code into a story template.
 
 ## Creating A Story Template
 
-A _story template_ is a PHP class that inherits the `DataSift\Storyplayer\PlayerLib\StoryTemplate` class:
+A _story template_ is a PHP class that extends the `Storyplayer\Stories\StoryTemplate` class:
 
 {% highlight php startinline %}
-use DataSift\Storyplayer\PlayerLib\StoryTemplate;
+use Storyplayer\Stories\StoryTemplate;
 
 class MyTemplate extends StoryTemplate
 {
@@ -39,7 +39,7 @@ For example, at [DataSift](http://datasift.com) our story templates live in the 
 Each phase is a PHP method with no parameters.
 
 {% highlight php startinline %}
-use DataSift\Storyplayer\PlayerLib\StoryTemplate;
+use Storyplayer\Stories\StoryTemplate;
 
 class MyTemplate extends StoryTemplate
 {
