@@ -89,7 +89,7 @@ class TestEnvironmentDestructionPhase extends InfrastructurePhase
                 // * de-registering in the Hosts table
                 // * de-registering in the Roles table
                 $hostAdapter = HostLib::getHostAdapter($st, $env->type);
-                $hostAdapter->destroyHost($env->details);
+                $hostAdapter->destroyHost($env);
             }
 
             $st->usingTargetsTable()->removeCurrentTestEnvironment();

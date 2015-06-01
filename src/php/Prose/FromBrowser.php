@@ -145,7 +145,7 @@ class FromBrowser extends Prose
             return false;
         };
 
-        return new MultiElementAction(
+        return new SingleElementAction(
             $action,
             "has",
             $this->getTopElement()

@@ -57,6 +57,12 @@ class TestEnvironmentsList extends ConfigList
 {
     public function __construct($searchFolder = '.storyplayer/test-environments')
     {
-        parent::__construct('DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentConfig', $searchFolder);
+        parent::__construct(
+        	'DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentConfig',
+        	[
+        		"storyplayer/test-environments",
+        		".storyplayer/test-environments"
+        	]
+        );
     }
 }

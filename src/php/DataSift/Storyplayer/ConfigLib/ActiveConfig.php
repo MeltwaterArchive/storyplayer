@@ -125,7 +125,13 @@ class ActiveConfig extends WrappedConfig
         $this->mergeData('systemundertest', $sutConfig->getConfig());
 	}
 
-	public function mergeTestEnvironmentConfig($injectables, TestEnvironmentConfig $envConfig = null)
+    /**
+     *
+     * @param  Injectables $injectables
+     * @param  \DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentsConfig|\DataSift\Storyplayer\DefinitionLib\TestEnvironment_Definition $envConfig
+     * @return void
+     */
+	public function mergeTestEnvironmentConfig($injectables, $envConfig = null)
 	{
         // do we have a test environment?
         if (!isset($injectables->activeTestEnvironmentName) || $envConfig === null) {

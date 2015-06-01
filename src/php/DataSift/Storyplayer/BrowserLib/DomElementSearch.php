@@ -224,8 +224,13 @@ class DomElementSearch
             // filter out any labels that do not have the text we want
             $labelElements = [];
             foreach ($tmpElements as $tmpElement) {
-                if (strtolower(trim(rtrim($labelElement->text))) == $searchText) {
+                $elementText = strtolower(trim(rtrim($tmpElement->text())));
+                $elementText = str_replace(["\n", "\r\n"], " ", $elementText);
+                if ($elementText == $searchText) {
                     $labelElements[] = $tmpElement;
+                }
+                else {
+                    usingLog()->writeToLog("rejecting element containing text '{$elementText}'");
                 }
             }
 

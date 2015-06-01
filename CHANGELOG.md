@@ -12,7 +12,51 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
-## 2.2.0 - `develop` branch
+## 2.4.0 - `develop` branch
+
+The major focus for this release will be:
+
+1. completing new-style test environment support for EC2 and Docker
+1. completing new-style test environment support for Ansible
+1. refactoring HostLib and OsLib away into our test environment adapters
+1. more tests for Storyplayer itself
+
+## 2.3.0 - Wednesday 6th May 2015
+
+The major focus for this release has been building the new way of defining a test environment. This was necessary:
+
+1. to make it possible to document how to define a test environment
+1. to build a facade on top of our last piece of major technical debt (test environment adapters)
+
+The older, JSON-based approach has not been dropped, but will remain undocumented. You are urged to migrate your test environment config files before SPv2.5 is released at the start of July.
+
+### New:
+
+* Centos 7.0 is now supported for test environment hosts.
+* Ubuntu is now supported for test environment hosts :) Supported releases are:
+  * Ubuntu 14.04 LTS
+  * Ubuntu 14.10
+  * Ubuntu 15.04
+* Storyplayer now searches a `storyplayer` folder (without a dot at the front of the name) for your system-under-test and test environment config files
+  * Falls back to searching the `.storyplayer` too.
+* Test environments can now be defined in PHP.
+  * Only Vagrant / Virtualbox is supported in this release
+  * Support for all other test environment types will be added in SPv2.4.
+* Support for multiple Vagrantfiles (one Vagrantfile per test environment)
+* dsbuild files can now live in the same folder as the test environment config file
+* `storyplayer/php` in your project is now automatically added to the PHP autoloader search path if it exists
+  * use it for any local Storyplayer modules you want to publish
+* `storyplayer/php/functions.php` in your project is now autoloaded if it exists
+* [fromHost()->getLocalFolder()](https://datasift.github.io/storyplayer/modules/host/fromHost.html#getlocalfolder) - the folder containing the host's supporting files
+
+## 2.2.1 - Friday 24th April 2014
+
+Fixes:
+- Browser module: can now search for labels
+- Browser module: fromBrowser()->has() works once more
+- Iterators: fix 'exception not found' error
+
+## 2.2.0 - Tuesday 31st March 2015
 
 ### Backwards-compatibility Breaks:
 
