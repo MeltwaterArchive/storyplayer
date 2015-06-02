@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\Cli;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\Output;
+use DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentRuntimeConfig;
 
 /**
  * Helper class for working with Storyplayer's persistent state
@@ -78,30 +79,10 @@ class RuntimeConfigManager extends ConfigManagerBase
     }
 
     /**
+     * NEW for SPv2.4 - we are replacing the runtime config file with a
+     * separate file for each test environment
      *
-     * @return void
-     */
-    public function makeConfigDir(Output $output)
-    {
-        // what is the path to the config directory?
-        $configDir = $this->getConfigDir();
-
-        // does it exist?
-        if (!file_exists($configDir))
-        {
-            $success = mkdir($configDir, 0700, true);
-            if (!$success)
-            {
-                // cannot create it - bail out now
-                $output->logCliError("unable to create config directory '{$configDir}'");
-                exit(1);
-            }
-        }
-    }
-
-    /**
-     *
-     * @return \DataSift\Stone\ObjectLib\BaseObject
+     * @return null
      */
     public function loadRuntimeConfig(Output $output)
     {
@@ -111,7 +92,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 
         // does the file exist?
         if (!is_file($filename)) {
-            return new BaseObject;
+            return;
         }
 
         // at this point, we should be able to load the config
@@ -123,7 +104,7 @@ class RuntimeConfigManager extends ConfigManagerBase
 
         // the config file may be empty
         if (strlen(rtrim($raw)) === 0) {
-            return new BaseObject;
+            return;
         }
 
         $config = @json_decode($raw);
@@ -137,25 +118,78 @@ class RuntimeConfigManager extends ConfigManagerBase
         $enhancedConfig = new BaseObject;
         $enhancedConfig->mergeFrom($config);
 
+        // NEW for SPv2.4 ... the runtimeConfig is going away
+        $this->splitUpConfig($enhancedConfig);
+        $this->removeRuntimeConfig();
+
         // all done
-        return $enhancedConfig;
+        return null;
     }
 
     /**
+     * NEW for SPv2.4 - we're replacing the runtime-v2.json with a config
+     * file per test environment
      *
-     * @param stdClass $config
+     * This method takes a runtime.json already loaded from disk, and creates
+     * a separate config file for each test environment. The original
+     * runtime-v2.json file is then deleted from disk.
+     *
+     * @param  BaseObject $config
      * @return void
      */
-    public function saveRuntimeConfig($config, Output $output)
+    protected function splitUpConfig($oldConfig)
     {
-        $this->makeConfigDir($output);
-        $raw = json_encode($config);
-
-        $filename = $this->getConfigDir() . "/" . self::RUNTIME_FILENAME;
-        if (FALSE === file_put_contents($filename, $raw)) {
-            $output->logCliError("unable to write config file '{$filename}'");
-            exit(1);
+        // do we have any config to split up?
+        if (!isset($oldConfig->storyplayer, $oldConfig->storyplayer->tables, $oldConfig->storyplayer->tables->hosts)) {
+            return;
         }
+
+        // yes we do
+        foreach($oldConfig->storyplayer->tables->hosts as $testEnvName => $hosts) {
+            // our new per-test-env config file
+            $newConfig = new TestEnvironmentRuntimeConfig();
+            $newConfig->setName($testEnvName);
+            $newConfig->setFilename(".storyplayer/runtime-test-environments/{$testEnvName}/runtime.json");
+
+            // replicate the existing tables approach
+            //
+            // we should have roles here too, but it looks like there's a bug
+            // in SPv2.3 which prevents roles data being correctly recorded
+            $newConfig->setData("tables.hosts", $hosts);
+
+            // all done
+            $newConfig->saveConfig();
+        }
+    }
+
+    /**
+     * NEW for SPv2.4 - the old-style runtime.json (single file for each
+     * Storyplayer project) is going away
+     *
+     * @return void
+     */
+    protected function removeRuntimeConfig()
+    {
+        // where is the config file?
+        $configDir = $this->getConfigDir();
+        $filename = $configDir . "/" . self::RUNTIME_FILENAME;
+
+        // do we have a config file to delete?
+        if (!file_exists($filename)) {
+            return;
+        }
+
+        // remove it
+        unlink($filename);
+    }
+
+    /**
+     * @param TestEnvironmentRuntimeConfig $config
+     * @return void
+     */
+    public function saveRuntimeConfig(TestEnvironmentRuntimeConfig $config, Output $output)
+    {
+        $config->saveConfig();
     }
 
     /**
@@ -166,19 +200,9 @@ class RuntimeConfigManager extends ConfigManagerBase
      *
      * @return BaseObject
      */
-    public function getAllTables($runtimeConfig)
+    public function getAllTables(TestEnvironmentRuntimeConfig $runtimeConfig)
     {
-        // make sure the storyplayer section exists
-        if (!isset($runtimeConfig->storyplayer)) {
-            $runtimeConfig->storyplayer = new BaseObject;
-        }
-
-        // and that the tables section exists
-        if (!isset($runtimeConfig->storyplayer->tables)) {
-            $runtimeConfig->storyplayer->tables = new BaseObject;
-        }
-
-        return $runtimeConfig->storyplayer->tables;
+        return $runtimeConfig->getAllTables();
     }
 
     /**
@@ -187,7 +211,7 @@ class RuntimeConfigManager extends ConfigManagerBase
      * if the table does not exist, this will create an empty table
      * before returning it to the caller
      *
-     * @param  BaseObject $runtimeConfig
+     * @param  TestEnvironmentRuntimeConfig $runtimeConfig
      *         our persistent config
      * @param  string $tableName
      *         the name of the table we want
@@ -195,17 +219,6 @@ class RuntimeConfigManager extends ConfigManagerBase
      */
     public function getTable($runtimeConfig, $tableName)
     {
-        // normalise!
-        $tableName = lcfirst($tableName);
-
-        // find it
-        $tables = $this->getAllTables($runtimeConfig);
-        if (!isset($tables->$tableName)) {
-            // make sure the caller gets a table
-            $tables->$tableName = new BaseObject;
-        }
-
-        // all done
-        return $tables->$tableName;
+        return $runtimeConfig->getTable($tableName);
     }
 }
