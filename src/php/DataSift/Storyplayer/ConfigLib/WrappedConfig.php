@@ -372,7 +372,7 @@ class WrappedConfig
      */
     public function __get($path)
     {
-        return $this->config->getPath($path);
+        return $this->config->$path;
     }
 
     /**
