@@ -146,6 +146,18 @@ class ActiveConfig extends WrappedConfig
 		$this->mergeData('target', $envConfig->getConfig());
 	}
 
+    /**
+     * merge in the config from the user's dotfile (if there is one)
+     *
+     * @param  Injectables $injectables
+     * @param  \DataSift\Storyplayer\ConfigLib\UserConfig $userConf
+     * @return void
+     */
+    public function mergeUserConfig($injectables, $userConf)
+    {
+        $this->mergeData('user', $userConf);
+    }
+
     protected function getHostIpAddress()
     {
         // step 1 - how many adapters do we have on this box?

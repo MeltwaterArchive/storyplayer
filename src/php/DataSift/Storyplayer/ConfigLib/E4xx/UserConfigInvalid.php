@@ -34,29 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/ConfigLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\ConfigLib;
+
+use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
 /**
- * Legacy class for backwards-compatibility with DataSift's tests
- *
- * Make sure your new StoryTemplates all inherit from:
- *
- * - Storyplayer\Stories\StoryTemplate
+ * Base exception thrown when the user's dotfile is somehow invalid
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/ConfigLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryTemplate extends \Storyplayer\Stories\StoryTemplate
+class E4xx_UserConfigInvalid extends Exxx_Exception
 {
 }

@@ -60,7 +60,7 @@ use Phix_Project\ValidationLib4\ValidationResult;
 class MustBeValidStoryTemplate implements Validator
 {
     const MSG_NOTVALIDCLASS = "'%value%' is not a valid PHP class";
-    const MSG_NOTVALIDTEMPLATE = "'%value%' is a PHP class, but it does not extend DataSift\Storyplayer\PlayerLib\StoryTemplate";
+    const MSG_NOTVALIDTEMPLATE = "'%value%' is a PHP class, but it does not extend Storyplayer\Stories\StoryTemplate";
 
     public function validate($value, ValidationResult $result = null)
     {
@@ -78,7 +78,7 @@ class MustBeValidStoryTemplate implements Validator
 
         // the class must be a StoryTemplate
         $refClass = new ReflectionClass($value);
-        if (!$refClass->isSubclassOf('DataSift\Storyplayer\PlayerLib\StoryTemplate'))
+        if (!$refClass->isSubclassOf('Storyplayer\Stories\StoryTemplate'))
         {
         	$result->addError(static::MSG_NOTVALIDTEMPLATE);
         	return $result;

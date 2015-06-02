@@ -34,29 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/ConfigLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\ConfigLib;
 
 /**
- * Legacy class for backwards-compatibility with DataSift's tests
- *
- * Make sure your new StoryTemplates all inherit from:
- *
- * - Storyplayer\Stories\StoryTemplate
+ * Exception thrown when the user $HOME/.storyplayer/storyplayer.json file
+ * doesn't define an object at the top-level
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/ConfigLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryTemplate extends \Storyplayer\Stories\StoryTemplate
+class E4xx_UserConfigMustBeAnObject extends E4xx_StoryplayerConfigInvalid
 {
+    public function __construct($pathToFile)
+    {
+        $msg = "User dotfile config file '{$pathToFile}' must be a JSON object";
+        parent::__construct(400, $msg, $msg);
+    }
 }

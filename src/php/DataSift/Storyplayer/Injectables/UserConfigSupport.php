@@ -34,29 +34,67 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\Injectables;
+
+use Exception;
+use DataSift\Storyplayer\Injectables;
+use DataSift\Storyplayer\ConfigLib\UserConfig;
+use DataSift\Storyplayer\ConfigLib\E4xx_ConfigFileNotFound;
+use DataSift\Storyplayer\ConfigLib\E4xx_ConfigFileContainsInvalidJson;
+use DataSift\Storyplayer\ConfigLib\E4xx_UserConfigInvalid;
+use DataSift\Storyplayer\ConfigLib\E4xx_UserConfigMustBeAnObject;
 
 /**
- * Legacy class for backwards-compatibility with DataSift's tests
- *
- * Make sure your new StoryTemplates all inherit from:
- *
- * - Storyplayer\Stories\StoryTemplate
+ * support for working with the user's dotfile
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryTemplate extends \Storyplayer\Stories\StoryTemplate
+trait UserConfigSupport
 {
+    public $userConfig;
+
+    public function initUserConfigSupport(Injectables $injectables, $configFilename)
+    {
+        // shorthand
+        $output = $injectables->output;
+
+        // we start with an empty object
+        $config = new UserConfig();
+
+        try {
+            // try to load our main config file
+            $config->loadConfigFromFile($configFilename);
+        }
+        catch (E4xx_ConfigFileNotFound $e) {
+            // there is no user dotfile
+            //
+            // we don't care
+        }
+        catch (E4xx_ConfigFileContainsInvalidJson $e) {
+            // that is fatal
+            $output->logCliError("user dotfile '$configFilename' is not valid JSON");
+            exit(1);
+        }
+        catch (E4xx_UserConfigInvalid $e) {
+            $output->logCliError($e->getMessage());
+        }
+        catch (Exception $e) {
+            $output->logCliErrorWithException("unexpected error: " . $e->getMessage(), $e);
+        }
+
+        // all done
+        $this->userConfig = $config->getConfig();
+    }
 }

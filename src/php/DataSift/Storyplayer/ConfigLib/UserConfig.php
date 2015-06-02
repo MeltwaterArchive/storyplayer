@@ -34,29 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/ConfigLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\PlayerLib;
+namespace DataSift\Storyplayer\ConfigLib;
 
 /**
- * Legacy class for backwards-compatibility with DataSift's tests
- *
- * Make sure your new StoryTemplates all inherit from:
- *
- * - Storyplayer\Stories\StoryTemplate
+ * the class for the $HOME/.storyplayer/storyplayer.json config
  *
  * @category  Libraries
- * @package   Storyplayer/PlayerLib
+ * @package   Storyplayer/ConfigLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class StoryTemplate extends \Storyplayer\Stories\StoryTemplate
+class UserConfig extends WrappedConfig
 {
+    public function validateConfig()
+    {
+        $this->validateIsObject();
+    }
+
+    public function validateIsObject()
+    {
+        $config = $this->getConfig();
+        if (!is_object($config)) {
+            throw new E4xx_UserConfigMustBeAnObject($this->getFilename());
+        }
+    }
 }

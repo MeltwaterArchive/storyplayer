@@ -70,6 +70,7 @@ trait ActiveConfigSupport
         $this->activeConfig = new ActiveConfig;
         $this->activeConfig->init($injectables);
 
+        $this->activeConfig->mergeUserConfig($injectables, $injectables->userConfig);
         $this->activeConfig->mergeStoryplayerConfig($injectables, $injectables->storyplayerConfig);
         $this->activeConfig->mergeSystemUnderTestConfig($injectables, $injectables->activeSystemUnderTestConfig);
         $this->activeConfig->mergeTestEnvironmentConfig($injectables, $injectables->activeTestEnvironmentConfig);

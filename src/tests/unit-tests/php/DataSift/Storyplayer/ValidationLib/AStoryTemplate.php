@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer\ValidationLib;
 
-use DataSift\Storyplayer\PlayerLib\StoryTemplate;
+use Storyplayer\Stories\StoryTemplate;
 
 class AStoryTemplate extends StoryTemplate
 {
