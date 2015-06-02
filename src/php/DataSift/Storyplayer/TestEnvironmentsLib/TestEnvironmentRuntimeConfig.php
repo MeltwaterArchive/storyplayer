@@ -118,7 +118,7 @@ class TestEnvironmentRuntimeConfig extends WrappedConfig
         $tableName = lcfirst($tableName);
 
         // find it
-        $tables = $this->getAllTables($runtimeConfig);
+        $tables = $this->getAllTables();
         if (!isset($tables->$tableName)) {
             // make sure the caller gets a table
             $tables->$tableName = new BaseObject;
