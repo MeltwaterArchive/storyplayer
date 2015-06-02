@@ -38,7 +38,7 @@
 	},
 	"require-dev": {
 		"stuart/phingtasks": "1.0.0",
-		"mockery/mockery": "0.9.*",
+		"mockery/mockery": "dev-master",
 		"phpunit/phpunit": "~4.4"
 	},
 	"autoload": {

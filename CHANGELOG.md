@@ -21,10 +21,6 @@ The major focus for this release will be:
 1. refactoring HostLib and OsLib away into our test environment adapters
 1. more tests for Storyplayer itself
 
-### New:
-
-* Story templates should now extend `Storyplayer\Stories\StoryTemplate`. The original `DataSift\Storyplayer\PlayerLib\StoryTemplate` base class is still there, for backwards-compatibility.
-
 ## 2.3.0 - Wednesday 6th May 2015
 
 The major focus for this release has been building the new way of defining a test environment. This was necessary:

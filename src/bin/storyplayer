@@ -237,9 +237,6 @@ function main($argv)
 		$staticConfigManager = $injectables->initStaticConfigManagerSupport();
 		$injectables->initStoryplayerConfigSupport($injectables, $injectables->storyplayerConfigFilename);
 
-		// load the user's dotfile, if there is one
-		$injectables->initUserConfigSupport($injectables, getenv("HOME") . "/.storyplayer/storyplayer.json");
-
 		// create our runtime config folder, and load any pre-existing
 		// runtime config
 		$runtimeConfigManager = $injectables->initRuntimeConfigSupport($injectables);
