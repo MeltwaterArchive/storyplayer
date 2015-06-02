@@ -69,25 +69,7 @@ class Feature_LocalhostSupport implements Feature
 
     public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables)
     {
-        // create a definition for localhost
-        $host = new BaseObject();
-        $host->hostId      = "localhost";
-        $host->osName      = $this->detectOs();
-        $host->type        = "PhysicalHost";
-        $host->ipAddress   = "127.0.0.1";
-        $host->hostname    = "localhost";
-        $host->provisioned = true;
-
-        // we need to make sure it's registered in the hosts table
-        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
-        $runtimeConfig        = $injectables->getRuntimeConfig();
-        $hostsTable = $runtimeConfigManager->getTable($runtimeConfig, 'hosts');
-        $testEnv = $injectables->activeTestEnvironmentName;
-
-        if (!isset($hostsTable->$testEnv)) {
-            $hostsTable->$testEnv = new BaseObject();
-        }
-        $hostsTable->$testEnv->localhost = $host;
+        // no-op
     }
 
     protected function detectOs()
@@ -109,6 +91,23 @@ class Feature_LocalhostSupport implements Feature
 
     public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
     {
-        // no-op
+        // create a definition for localhost
+        $host = new BaseObject();
+        $host->hostId      = "localhost";
+        $host->osName      = $this->detectOs();
+        $host->type        = "PhysicalHost";
+        $host->ipAddress   = "127.0.0.1";
+        $host->hostname    = "localhost";
+        $host->provisioned = true;
+
+        // we need to make sure it's registered in the hosts table
+        $runtimeConfig = $injectables->getRuntimeConfig();
+        $hostsTable    = $runtimeConfig->getTable('hosts');
+        $testEnv       = $injectables->activeTestEnvironmentName;
+
+        if (!isset($hostsTable->$testEnv)) {
+            $hostsTable->$testEnv = new BaseObject();
+        }
+        $hostsTable->$testEnv->localhost = $host;
     }
 }
