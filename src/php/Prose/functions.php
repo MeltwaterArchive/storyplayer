@@ -1850,7 +1850,7 @@ function usingZmqSocket($zmqSocket)
 function firstHostWithRole($roleName)
 {
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
-    if (!count(get_object_vars($listOfHosts))) {
+    if (!count($listOfHosts)) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
@@ -1858,9 +1858,8 @@ function firstHostWithRole($roleName)
     $log = usingLog()->startAction("for the first host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $hostsAsArray = get_object_vars($listOfHosts);
-    $hostDetails  = array_pop($hostsAsArray);
-    yield($hostDetails->hostId);
+    $hostId = array_pop($listOfHosts);
+    yield($hostId);
 
     // all done
     $log->endAction();
@@ -1878,7 +1877,7 @@ function firstHostWithRole($roleName)
 function lastHostWithRole($roleName)
 {
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
-    if (!count(get_object_vars($listOfHosts))) {
+    if (!count($listOfHosts)) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
@@ -1886,9 +1885,8 @@ function lastHostWithRole($roleName)
     $log = usingLog()->startAction("for the last host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $hostsAsArray = get_object_vars($listOfHosts);
-    $hostDetails = end($hostsAsArray);
-    yield($hostDetails->hostId);
+    $hostId = end($listofHosts);
+    yield($hostId);
 
     // all done
     $log->endAction();
@@ -1901,7 +1899,7 @@ function lastHostWithRole($roleName)
  *         The role that we want
  *
  * @return Iterator
- *         a hostid that matches the role
+ *         a hostId that matches the role
  */
 function hostWithRole($roleName)
 {
@@ -1911,15 +1909,15 @@ function hostWithRole($roleName)
     }
 
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
-    if (!count(get_object_vars($listOfHosts))) {
+    if (!count($listOfHosts)) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
     $log = usingLog()->startAction("for each host with role '{$roleName}' ... ");
 
-    foreach ($listOfHosts as $hostDetails) {
-        yield($hostDetails->hostId);
+    foreach ($listOfHosts as $hostId) {
+        yield($hostId);
     }
 
     // all done

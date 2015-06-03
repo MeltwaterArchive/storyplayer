@@ -60,6 +60,8 @@ class HostsByRoleBase extends Prose
 {
     protected $roleName;
 
+    use HostsByRoleTrait;
+
     public function __construct(StoryTeller $st, $args = array())
     {
         // call the parent constructor
@@ -71,18 +73,5 @@ class HostsByRoleBase extends Prose
         }
 
         $this->roleName = $args[0];
-    }
-
-    protected function retrieveHostsDetails()
-    {
-        // shorthand
-        $roleName = $this->roleName;
-
-        // do we have this role?
-        $role = fromRolesTable()->getDetailsForRole($roleName);
-        if (!count(get_object_vars($role))) {
-            throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
-        }
-        return $role;
     }
 }
