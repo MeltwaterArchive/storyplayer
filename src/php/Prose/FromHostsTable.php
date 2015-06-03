@@ -110,27 +110,4 @@ class FromHostsTable extends Prose
         $log->endAction();
         return $hostDetails;
     }
-
-    public function hasTestEnvironment()
-    {
-        // what are we doing?
-        $log = usingLog()->startAction("do we already have the test environment defined in the hosts table?");
-
-        // which test environment are we working with?
-        $testEnvName = $this->st->getTestEnvironmentName();
-
-        // get the hosts table
-        $hostsTable = fromRuntimeTable($this->entryKey)->getTable();
-        //var_dump($hostsTable);
-
-        // does the test environment exist?
-        if (isset($hostsTable->$testEnvName) && $hostsTable->$testEnvName->hasProperties()) {
-            $log->endAction("yes");
-            return true;
-        }
-
-        // no, it does not
-        $log->endAction("no");
-        return false;
-    }
 }
