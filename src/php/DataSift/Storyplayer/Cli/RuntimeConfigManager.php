@@ -189,7 +189,17 @@ class RuntimeConfigManager extends ConfigManagerBase
      */
     public function saveRuntimeConfig(TestEnvironmentRuntimeConfig $config, Output $output)
     {
-        $config->saveConfig();
+        // tidy the config first
+        $runtimeConfig->tidyEmptyTables();
+
+        // we save if there's something to save, otherwise
+        // we remove the config
+        if ($config->hasConfig()) {
+            $config->saveConfig();
+        }
+        else {
+            $config->removeConfig();
+        }
     }
 
     /**
@@ -220,5 +230,19 @@ class RuntimeConfigManager extends ConfigManagerBase
     public function getTable($runtimeConfig, $tableName)
     {
         return $runtimeConfig->getTable($tableName);
+    }
+
+    /**
+     * remove all empty tables from the runtime config
+     *
+     * if there are no tables left, the 'tables' entry will be removed too
+     *
+     * @param  TestEnvironmentRuntimeConfig $runtimeConfig
+     *         our persistent config
+     * @return void
+     */
+    public function removeEmptyTables($runtimeConfig)
+    {
+        $runtimeConfig->removeEmptyTables();
     }
 }

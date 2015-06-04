@@ -142,4 +142,31 @@ class TestEnvironmentRuntimeConfig extends WrappedConfig
         // all done
         return $tables->$tableName;
     }
+
+    /**
+     * remove any empty tables from the runtime config
+     *
+     * @return void
+     */
+    public function tidyEmptyTables()
+    {
+        $tables = $this->getAllTables();
+
+        foreach ($tables as $tableName => $table) {
+            if ($table instanceof BaseObject) {
+                if (!$table->hasProperties()) {
+                    unset($tables->$tableName);
+                }
+            }
+            else if (is_array($table)) {
+                if (empty($table)) {
+                    unset($tables->$tableName);
+                }
+            }
+        }
+
+        if (!$tables->hasProperties()) {
+            $this->unsetData('tables');
+        }
+    }
 }
