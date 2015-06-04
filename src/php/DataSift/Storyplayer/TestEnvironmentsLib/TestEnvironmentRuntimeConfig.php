@@ -169,4 +169,26 @@ class TestEnvironmentRuntimeConfig extends WrappedConfig
             $this->unsetData('tables');
         }
     }
+
+    /**
+     * delete our config file off disk
+     *
+     * also attempt to delete the folder that the config lived in
+     *
+     * @return void
+     */
+    public function removeConfig()
+    {
+        // remember this, in case parent::removeConfig() nukes the filename
+        $filename = $this->getFilename();
+
+        // if this fails, an exception will be thrown
+        parent::removeConfig();
+
+        // remove the parent folder if we can
+        $parentDir = dirname($filename);
+        if (is_dir($parentDir)) {
+            @rmdir($parentDir);
+        }
+    }
 }
