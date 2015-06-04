@@ -212,4 +212,21 @@ class UsingRolesTable extends Prose
 
         return $retval;
     }
+
+    /**
+     * empty out the table
+     *
+     * @return void
+     */
+    public function emptyTable()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("empty the roles table completely");
+
+        // remove it
+        usingRuntimeTable($this->entryKey)->removeTable();
+
+        // all done
+        $log->endAction();
+    }
 }
