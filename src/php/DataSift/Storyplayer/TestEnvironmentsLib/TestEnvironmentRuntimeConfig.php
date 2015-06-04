@@ -74,6 +74,21 @@ class TestEnvironmentRuntimeConfig extends WrappedConfig
         $config = $this->getConfig();
     }
 
+    /**
+     * set the name of this config by looking at the filename
+     *
+     * the 'name' is used as an array key elsewhere. if we get this wrong,
+     * then Storyplayer isn't going to be able to find our config later on
+     *
+     * @param  string $filename
+     *         the path/to/file/name.ext where we found this config
+     * @return void
+     */
+    protected function setNameFromFilename($filename)
+    {
+        $this->setName(basename(dirname($filename)));
+    }
+
     // ==================================================================
     //
     // This is the old RuntimeConfigManager API from SPv1 (more or less).
