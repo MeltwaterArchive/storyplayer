@@ -241,6 +241,43 @@ class WrappedConfig
         }
     }
 
+    /**
+     * forget all of the config we (may) currently have
+     *
+     * @return void
+     */
+    public function emptyConfig()
+    {
+        $this->config = new BaseObject();
+    }
+
+    /**
+     * @return void
+     */
+    public function removeConfig()
+    {
+        // do we have a filename?
+        $filename = $this->getFilename();
+        if ($filename === null) {
+            throw new E4xx_ConfigNeedsAFilename($this->getName());
+        }
+
+        // does the file exist?
+        if (!file_exists($filename)) {
+            // nothing to do
+            return;
+        }
+
+        // remove the file
+        $deleted = @unlink($filename);
+        if ($deleted) {
+            // all done
+            return;
+        }
+
+        // if we get here, we could not remove the file
+        throw new E4xx_ConfigCannotBeRemoved($this->getName());
+    }
 
     /**
      * returns the name assigned to this config
