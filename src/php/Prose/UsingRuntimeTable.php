@@ -348,4 +348,56 @@ class UsingRuntimeTable extends BaseRuntimeTable
         // all done
         $log->endAction();
     }
+
+    /**
+     * removeTable
+     *
+     * deletes the entire table
+     *
+     * @return void
+     */
+    public function removeTable()
+    {
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = usingLog()->startAction("remove the {$tableName} table from the runtime config");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure it exists
+        if (!isset($tables->$tableName)) {
+            $log->endAction();
+            return;
+        }
+
+        // remove the table
+        unset($tables->$tableName);
+
+        // save the changes
+        $this->st->saveRuntimeConfig();
+
+        // all done
+        $log->endAction();
+
+    }
+
+    /**
+     * empty out the table
+     *
+     * @return void
+     */
+    public function emptyTable()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("empty the roles table completely");
+
+        // remove it
+        usingRuntimeTable($this->entryKey)->removeTable();
+
+        // all done
+        $log->endAction();
+    }
 }

@@ -104,4 +104,21 @@ class UsingHostsTable extends Prose
         // all done
         $log->endAction();
     }
+
+    /**
+     * empty out the table
+     *
+     * @return void
+     */
+    public function emptyTable()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("empty the hosts table completely");
+
+        // remove it
+        usingRuntimeTable($this->entryKey)->removeTable();
+
+        // all done
+        $log->endAction();
+    }
 }
