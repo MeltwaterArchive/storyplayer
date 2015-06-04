@@ -55,6 +55,8 @@ namespace Prose;
  */
 class FromTargetsTable extends Prose
 {
+    const SIGNATURE_KEY = "signature";
+
     /**
      * entryKey
      * The key that this table interacts with in the RuntimeConfig
@@ -63,42 +65,16 @@ class FromTargetsTable extends Prose
      */
     protected $entryKey = "targets";
 
-
-    /**
-     * getTargetsTable
-     *
-     *
-     * @return object The targets table
-     */
-    public function getCurrentTestEnvironment()
+    public function hasCurrentTestEnvironmentSignature()
     {
         // what are we doing?
-        $log = usingLog()->startAction("get the current test environment from the targets table");
+        $log = usingLog()->startAction("do we have the test environment's config signature in the targets table?");
 
-        // which test environment are we working with?
-        $testEnvName = $this->st->getTestEnvironmentName();
+        $tables = fromRuntimeTable($this->entryKey)->getAllTables();
 
-        // get the table
-        $table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
-
-        // all done
-        $log->endAction();
-        return $table;
-    }
-
-    public function hasCurrentTestEnvironment()
-    {
-        // what are we doing?
-        $log = usingLog()->startAction("do we already have the test environment defined in the targets table?");
-
-        // which test environment are we working with?
-        $testEnvName = $this->st->getTestEnvironmentName();
-
-        // get the full targets table
-        $targetsTable = fromRuntimeTable($this->entryKey)->getTable();
-
-        // does the test environment exist?
-        if (isset($targetsTable->$testEnvName)) {
+        // do we have it?
+        $signature = fromRuntimeTable($this->entryKey)->getDetails(self::SIGNATURE_KEY);
+        if ($signature !== null) {
             $log->endAction("yes");
             return true;
         }
@@ -111,24 +87,18 @@ class FromTargetsTable extends Prose
     public function getCurrentTestEnvironmentSignature()
     {
         // what are we doing?
-        $log = usingLog()->startAction("do we already have the test environment defined in the targets table?");
+        $log = usingLog()->startAction("get the test environment's config signature from the targets table");
 
-        // which test environment are we working with?
-        $testEnvName = $this->st->getTestEnvironmentName();
+        // do we have a signature?
+        $signature = fromRuntimeTable($this->entryKey)->getDetails(self::SIGNATURE_KEY);
 
-        // get the full targets table
-        $targetsTable = fromRuntimeTable($this->entryKey)->getTable();
-        //var_dump($hostsTable);
-
-        // does the test environment exist?
-        if (!isset($targetsTable->$testEnvName)) {
+        if ($signature === null) {
             $log->endAction('no signature found');
             return '';
         }
 
-        // no, it does not
-        $return = $targetsTable->$testEnvName;
-        $log->endAction($return);
-        return $return;
+        // yes we do
+        $log->endAction($signature);
+        return $signature;
     }
 }
