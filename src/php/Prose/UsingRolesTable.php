@@ -178,7 +178,7 @@ class UsingRolesTable extends Prose
 
             // save the role
             if (empty($role)) {
-                usingRuntimeTable($this->entryKey)->remoteItem($roleName);
+                usingRuntimeTable($this->entryKey)->removeItem($roleName);
             }
             else {
                 usingRuntimeTable($this->entryKey)->updateItem($roleName, $role);
