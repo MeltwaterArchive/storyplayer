@@ -145,6 +145,16 @@ class UsingRolesTable extends Prose
         $log->endAction();
     }
 
+    /**
+     * remove a host from all of our known roles
+     *
+     * after calling this, $hostId will not be found by any of our 'xxWithRole'
+     * iterators
+     *
+     * @param  string $hostId
+     *         the ID of the host to forget
+     * @return void
+     */
     public function removeHostFromAllRoles($hostId)
     {
         // what are we doing?
@@ -179,6 +189,17 @@ class UsingRolesTable extends Prose
         $log->endAction();
     }
 
+    /**
+     * remove a hostId from a role
+     *
+     * @param  string $hostId
+     *         the hostId to be removed
+     * @param  array<string> $role
+     *         the role that we need to edit
+     *
+     * @return array<string>
+     *         the (possibly) updated role
+     */
     protected function filterHostIdFromRole($hostId, $role)
     {
         $retval = array_filter($role, function($input) use ($hostId) {
