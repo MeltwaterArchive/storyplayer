@@ -167,7 +167,12 @@ class UsingRolesTable extends Prose
             $role = $this->filterHostIdFromRole($hostId, $role);
 
             // save the role
-            usingRuntimeTable($this->entryKey)->addItem($roleName, $role);
+            if (empty($role)) {
+                usingRuntimeTable($this->entryKey)->remoteItem($roleName);
+            }
+            else {
+                usingRuntimeTable($this->entryKey)->updateItem($roleName, $role);
+            }
         }
 
         // all done
