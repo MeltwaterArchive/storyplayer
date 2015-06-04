@@ -119,6 +119,24 @@ class WrappedConfig
     }
 
     /**
+     * do we have any config?
+     *
+     * @return boolean
+     */
+    public function hasConfig()
+    {
+        if ($this->config instanceof BaseObject) {
+            return $this->config->hasProperties();
+        }
+
+        if (is_array($this->config)) {
+            return empty($this->config);
+        }
+
+        return false;
+    }
+
+    /**
      * load a config file from disk, and store the config in $this
      *
      * @param  string $pathToFile
