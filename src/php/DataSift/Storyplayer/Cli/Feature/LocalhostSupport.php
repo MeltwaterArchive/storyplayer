@@ -91,23 +91,27 @@ class Feature_LocalhostSupport implements Feature
 
     public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
     {
+        // we need to go stealth mode for a bit
+        $injectables->output->setSilentMode();
+
         // create a definition for localhost
-        $host = new BaseObject();
-        $host->hostId      = "localhost";
-        $host->osName      = $this->detectOs();
-        $host->type        = "PhysicalHost";
-        $host->ipAddress   = "127.0.0.1";
-        $host->hostname    = "localhost";
-        $host->provisioned = true;
+        $hostDetails = new BaseObject();
+        $hostDetails->hostId      = "localhost";
+        $hostDetails->osName      = $this->detectOs();
+        $hostDetails->type        = "PhysicalHost";
+        $hostDetails->ipAddress   = "127.0.0.1";
+        $hostDetails->hostname    = "localhost";
+        $hostDetails->provisioned = true;
 
         // we need to make sure it's registered in the hosts table
-        $runtimeConfig = $injectables->getRuntimeConfig();
-        $hostsTable    = $runtimeConfig->getTable('hosts');
-        $testEnv       = $injectables->activeTestEnvironmentName;
-
-        if (!isset($hostsTable->$testEnv)) {
-            $hostsTable->$testEnv = new BaseObject();
+        //
+        // it only needs registering if an entry does not already exist
+        $entry = fromHostsTable()->getDetailsForHost('localhost');
+        if ($entry === null) {
+            usingHostsTable()->addHost('localhost', $hostDetails);
         }
-        $hostsTable->$testEnv->localhost = $host;
+
+        // all done
+        $injectables->output->resetSilentMode();
     }
 }
