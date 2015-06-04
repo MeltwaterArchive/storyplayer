@@ -57,7 +57,7 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_ConfigPathCannotBeCreated extends Exxx_Exception
+class E4xx_ConfigCannotBeSaved extends Exxx_Exception
 {
     public function __construct($configName, $configFilename)
     {
