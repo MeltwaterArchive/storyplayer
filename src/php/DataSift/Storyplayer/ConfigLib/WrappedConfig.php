@@ -140,7 +140,7 @@ class WrappedConfig
         if (strlen(rtrim($raw)) === 0) {
             // nothing to see, move along :)
             $this->setConfig(new BaseObject);
-            $this->setName(basename($pathToFile, '.json'));
+            $this->setNameFromFilename($pathToFile);
             return;
         }
 
@@ -156,10 +156,27 @@ class WrappedConfig
 
         // store the config
         $this->setConfig($config);
-        $this->setName(basename($pathToFile, '.json'));
+        $this->setNameFromFilename($pathToFile);
         $this->setFilename($pathToFile);
 
         // all done
+    }
+
+    /**
+     * set the name of this config by looking at the filename
+     *
+     * the 'name' is used as an array key elsewhere. if we get this wrong,
+     * then Storyplayer isn't going to be able to find our config later on
+     *
+     * override this in more specialist config types
+     *
+     * @param  string $filename
+     *         the path/to/file/name.ext where we found this config
+     * @return void
+     */
+    protected function setNameFromFilename($filename)
+    {
+        $this->setName(basename($filename, '.json'));
     }
 
     /**
