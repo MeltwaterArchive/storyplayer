@@ -108,7 +108,6 @@ use Prose\FromProcessesTable;
 use Prose\FromRedisConn;
 use Prose\FromRolesTable;
 use Prose\FromRuntimeTable;
-use Prose\FromRuntimeTableForTargetEnvironment;
 use Prose\FromSauceLabs;
 use Prose\FromShell;
 use Prose\FromStoryplayer;
@@ -145,7 +144,6 @@ use Prose\UsingRedisConn;
 use Prose\UsingReporting;
 use Prose\UsingRolesTable;
 use Prose\UsingRuntimeTable;
-use Prose\UsingRuntimeTableForTargetEnvironment;
 use Prose\UsingSauceLabs;
 use Prose\UsingSavageD;
 use Prose\UsingShell;
@@ -1010,22 +1008,6 @@ function fromRuntimeTable($tableName)
 }
 
 /**
- * returns the FromRuntimeTableForTargetEnvironment module
- *
- * This module provides access to Storyplayer's internal table that tracks
- * the state of the current test environment.
- *
- * This module is intended for internal use only. You shouldn't need to call
- * this module from your own stories.
- *
- * @return \Prose\FromRuntimeTableForTargetEnvironment
- */
-function fromRuntimeTableForTargetEnvironment($tableName)
-{
-    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
-}
-
-/**
  * returns the FromSauceLabs module
  *
  * At the moment, this module is a placeholder. We hope to add full support
@@ -1630,19 +1612,6 @@ function usingRolesTable()
 function usingRuntimeTable($tableName)
 {
     return new UsingRuntimeTable(StoryTeller::instance(), [$tableName]);
-}
-
-/**
- * returns the UsingRuntimeTableForTargetEnvironment module
- *
- * this module is for internal use inside Storyplayer
- * you shouldn't need to use it from your own stories
- *
- * @return \Prose\UsingRuntimeTableForTargetEnvironment
- */
-function usingRuntimeTableForTargetEnvironment($tableName)
-{
-    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
 }
 
 /**
