@@ -65,7 +65,10 @@ class SystemsUnderTestList extends ConfigList
         	[
 	        	"storyplayer/systems-under-test",
 	        	".storyplayer/systems-under-test",
-	        ]
+	        ],
+            [
+                new ConfigFinder(".*\\.json")
+            ]
         );
     }
 }

@@ -63,13 +63,16 @@ use DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentRuntimeConfig;
  */
 class RunningTestEnvironmentsList extends ConfigList
 {
-    public function __construct($searchFolder = '.storyplayer/running-test-environments')
+    public function __construct($searchFolder = 'storyplayer/test-environments')
     {
         parent::__construct(
         	'DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentRuntimeConfig',
         	[
-        		".storyplayer/running-test-environments"
-        	]
+        		"storyplayer/test-environments"
+        	],
+            [
+                new ConfigFinder("/runtime.json")
+            ]
         );
     }
 
@@ -79,7 +82,7 @@ class RunningTestEnvironmentsList extends ConfigList
             // we need to create a new entry
             $newConfig = new TestEnvironmentRuntimeConfig();
             $newConfig->setName($testEnvName);
-            $newConfig->setFilename(".storyplayer/running-test-environments/{$testEnvName}/runtime.json");
+            $newConfig->setFilename("storyplayer/test-environments/{$testEnvName}/runtime.json");
             $this->addEntry($testEnvName, $newConfig);
         }
 
