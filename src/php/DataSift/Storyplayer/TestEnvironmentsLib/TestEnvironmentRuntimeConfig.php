@@ -184,11 +184,5 @@ class TestEnvironmentRuntimeConfig extends WrappedConfig
 
         // if this fails, an exception will be thrown
         parent::removeConfig();
-
-        // remove the parent folder if we can
-        $parentDir = dirname($filename);
-        if (is_dir($parentDir)) {
-            @rmdir($parentDir);
-        }
     }
 }
