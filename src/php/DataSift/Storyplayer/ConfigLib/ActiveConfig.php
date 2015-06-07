@@ -90,7 +90,6 @@ class ActiveConfig extends WrappedConfig
 		$activeConfig         = $this->getConfig();
         $runtimeConfig        = $injectables->getRuntimeConfig();
         $runtimeConfigManager = $injectables->getRuntimeConfigManager();
-        $testEnvName          = $injectables->activeTestEnvironmentName;
 
 		$hostsTable = $runtimeConfigManager->getTable($runtimeConfig, 'hosts');
         $activeConfig->hosts = $hostsTable;

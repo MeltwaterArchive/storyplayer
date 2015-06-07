@@ -117,7 +117,7 @@ class ConfigList
     public function setSearchFolders($searchFolders)
     {
         if (!is_array($searchFolders)) {
-            var_dump($searchFolders);
+            throw new E5xx_ArrayParameterExpected(__METHOD__, '$searchFolders', $searchFolders);
         }
         $this->searchFolders = $searchFolders;
     }
@@ -135,11 +135,14 @@ class ConfigList
     /**
      * tell us how to find the config files
      *
-     * @param array<ConfigFinders> $configFinders
+     * @param array<ConfigFinder> $configFinders
      *        a list of config finders to use
      */
     public function setConfigFinders($configFinders)
     {
+        if (!is_array($configFinders)) {
+            throw new E5xx_ArrayParameterExpected(__METHOD__, '$configFinders', $configFinders);
+        }
         $this->configFinders = $configFinders;
     }
 
@@ -166,8 +169,7 @@ class ConfigList
                     break;
                 default:
                     // should never happen, but just in case
-                    var_dump($filename, $ext);
-                    exit(9);
+                    throw new E5xx_UnsupportedConfigFileExtension($filename);
             }
 
             // at this point, we have a WrappedConfig to add to our list
@@ -184,7 +186,7 @@ class ConfigList
     /**
      * load a SPv2.0-style JSON configs
      *
-     * @return array
+     * @return object
      */
     protected function loadJsonConfig($filename)
     {
@@ -202,7 +204,7 @@ class ConfigList
      * @todo we need (at some point) to move the check for a return value
      *       out to somewhere else
      *
-     * @return array
+     * @return object
      */
     protected function loadPhpConfig($filename)
     {

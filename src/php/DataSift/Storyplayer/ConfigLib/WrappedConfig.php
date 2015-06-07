@@ -276,7 +276,7 @@ class WrappedConfig
         }
 
         // if we get here, we could not remove the file
-        throw new E4xx_ConfigCannotBeRemoved($this->getName());
+        throw new E4xx_ConfigCannotBeRemoved($this->getName(), $filename);
     }
 
     /**
