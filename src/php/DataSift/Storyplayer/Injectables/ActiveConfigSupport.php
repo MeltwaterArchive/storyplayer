@@ -64,9 +64,17 @@ use DataSift\Stone\ObjectLib\BaseObject;
 trait ActiveConfigSupport
 {
     public $activeConfig;
+    public $runtimeConfig;
 
     public function initActiveConfigSupport(Injectables $injectables)
     {
+        // NEW for SPv2.4
+        //
+        // the 'runtimeConfig' is now from the current test environment
+        $testEnvName         = $injectables->activeTestEnvironmentName;
+        $this->runtimeConfig = $injectables->runningTestEnvironmentsList->getRuntimeConfigForTestEnvironment($testEnvName);
+
+        // we can now initialise the ActiveConfig
         $this->activeConfig = new ActiveConfig;
         $this->activeConfig->init($injectables);
 
@@ -79,5 +87,15 @@ trait ActiveConfigSupport
         return $this->activeConfig;
     }
 
+    /**
+     * @return \DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentRuntimeConfig
+     */
+    public function getRuntimeConfig()
+    {
+        if ($this->runtimeConfig === null) {
+            throw new E4xx_NotInitialised('runtimeConfig');
+        }
 
+        return $this->runtimeConfig;
+    }
 }

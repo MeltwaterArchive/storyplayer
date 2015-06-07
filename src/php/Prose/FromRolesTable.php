@@ -76,8 +76,8 @@ class FromRolesTable extends Prose
         // what are we doing?
         $log = usingLog()->startAction("get the roles table for the current test environment");
 
-        // what is our roles table for this test environment?
-        $rolesTable = fromRuntimeTableForTargetEnvironment($this->entryKey)->getTable();
+        // what is our roles table?
+        $rolesTable = fromRuntimeTable($this->entryKey)->getTable();
 
         // all done
         $log->endAction();
@@ -102,11 +102,7 @@ class FromRolesTable extends Prose
 
         if (!isset($rolesTable->$roleName)) {
             // create an empty entry for this role
-            $rolesTable->$roleName = new BaseObject;
-
-            // we've just created a new entry in the runtime config, so
-            // we need to force a save to disk
-            $this->st->saveRuntimeConfig();
+            $rolesTable->$roleName = [];
         }
 
         // all done

@@ -83,8 +83,24 @@ class UsingRolesTable extends Prose
         // what are we doing?
         $log = usingLog()->startAction("add host '{$hostId}' to role '{$roleName}'");
 
+        // do we have this role already?
+        $role = fromRuntimeTable($this->entryKey)->getDetails($roleName);
+        if ($role === null) {
+            $role = [];
+        }
+
+        // does this host already have this role?
+        if (in_array($hostId, $role)) {
+            // all done
+            $log->endAction();
+            return;
+        }
+
+        // if we get here, the host needs adding to the role
+        $role[] = $hostId;
+
         // add it
-        usingRuntimeTableForTargetEnvironment($this->entryKey)->addItemToGroup($roleName, $hostId, $hostDetails);
+        usingRuntimeTable($this->entryKey)->addItem($roleName, $role);
 
         // all done
         $log->endAction();
@@ -105,20 +121,110 @@ class UsingRolesTable extends Prose
         // what are we doing?
         $log = usingLog()->startAction("remove host '{$hostId}' from '{$roleName}'");
 
+        // let's see what we have
+        $role = fromRuntimeTable($this->entryKey)->getDetails($roleName);
+        if (!is_array($role) || empty($role)) {
+            // no such role
+            $log->endAction();
+            return;
+        }
+
+        if (!in_array($hostId, $role)) {
+            // host does not have this role
+            $log->endAction();
+            return;
+        }
+
+        // remove the host from this role
+        $role = $this->filterHostIdFromRole($hostId, $role);
+
         // remove it
-        usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromGroup($roleName, $hostId);
+        usingRuntimeTable($this->entryKey)->addItem($roleName, $role);
 
         // all done
         $log->endAction();
     }
 
+    /**
+     * remove a host from all of our known roles
+     *
+     * after calling this, $hostId will not be found by any of our 'xxWithRole'
+     * iterators
+     *
+     * @param  string $hostId
+     *         the ID of the host to forget
+     * @return void
+     */
     public function removeHostFromAllRoles($hostId)
     {
         // what are we doing?
         $log = usingLog()->startAction("remove host '{$hostId}' from all roles");
 
+        // get the full table of roles
+        $roles = fromRuntimeTable($this->entryKey)->getTable();
+        foreach ($roles as $roleName => $role) {
+            // skip any empty roles
+            if (!is_array($role) || empty($role)) {
+                continue;
+            }
+
+            // skip any roles where the hostId is not present
+            if (!in_array($hostId, $role)) {
+                continue;
+            }
+
+            // if we get here, then the host needs removing from this role
+            $role = $this->filterHostIdFromRole($hostId, $role);
+
+            // save the role
+            if (empty($role)) {
+                usingRuntimeTable($this->entryKey)->removeItem($roleName);
+            }
+            else {
+                usingRuntimeTable($this->entryKey)->updateItem($roleName, $role);
+            }
+        }
+
+        // all done
+        $log->endAction();
+    }
+
+    /**
+     * remove a hostId from a role
+     *
+     * @param  string $hostId
+     *         the hostId to be removed
+     * @param  array<string> $role
+     *         the role that we need to edit
+     *
+     * @return array<string>
+     *         the (possibly) updated role
+     */
+    protected function filterHostIdFromRole($hostId, $role)
+    {
+        $retval = array_filter($role, function($input) use ($hostId) {
+            if ($input === $hostId) {
+                return false;
+            }
+
+            return true;
+        });
+
+        return $retval;
+    }
+
+    /**
+     * empty out the table
+     *
+     * @return void
+     */
+    public function emptyTable()
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("empty the roles table completely");
+
         // remove it
-        usingRuntimeTableForTargetEnvironment($this->entryKey)->removeItemFromAllGroups($hostId);
+        usingRuntimeTable($this->entryKey)->removeTable();
 
         // all done
         $log->endAction();

@@ -92,7 +92,17 @@ class TestEnvironmentDestructionPhase extends InfrastructurePhase
                 $hostAdapter->destroyHost($env);
             }
 
-            $st->usingTargetsTable()->removeCurrentTestEnvironment();
+            // all the hosts from the config are gone
+            //
+            // now, let's get rid of any hosts (e.g. localhost) that
+            // Storyplayer has injected into the table elsewhere
+            usingHostsTable()->emptyTable();
+            usingRolesTable()->emptyTable();
+
+            // remove the test environment signature
+            usingTargetsTable()->removeCurrentTestEnvironment();
+
+            // all done
             $phaseResult->setContinuePlaying();
         }
         catch (E5xx_ActionFailed $e) {

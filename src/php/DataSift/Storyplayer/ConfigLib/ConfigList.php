@@ -75,6 +75,13 @@ class ConfigList
     private $searchFolders = null;
 
     /**
+     * our list of tools to go and find our config files
+     *
+     * @var array<ConfigFinder>
+     */
+    private $configFinders = [];
+
+    /**
      * what configs (including hard-coded defaults) do we know about?
      *
      * @var array<SystemUnderTestConfig>
@@ -84,10 +91,11 @@ class ConfigList
     /**
      * constructor
      */
-    public function __construct($configType, $searchFolders)
+    public function __construct($configType, $searchFolders, $configFinders)
     {
         $this->setConfigType($configType);
         $this->setSearchFolders($searchFolders);
+        $this->setConfigFinders($configFinders);
     }
 
     /**
@@ -109,9 +117,33 @@ class ConfigList
     public function setSearchFolders($searchFolders)
     {
         if (!is_array($searchFolders)) {
-            var_dump($searchFolders);
+            throw new E5xx_ArrayParameterExpected(__METHOD__, '$searchFolders', $searchFolders);
         }
         $this->searchFolders = $searchFolders;
+    }
+
+    /**
+     * get the list of objects that know how to find our config files
+     *
+     * @return array<ConfigFinder>
+     */
+    public function getConfigFinders()
+    {
+        return $this->configFinders;
+    }
+
+    /**
+     * tell us how to find the config files
+     *
+     * @param array<ConfigFinder> $configFinders
+     *        a list of config finders to use
+     */
+    public function setConfigFinders($configFinders)
+    {
+        if (!is_array($configFinders)) {
+            throw new E5xx_ArrayParameterExpected(__METHOD__, '$configFinders', $configFinders);
+        }
+        $this->configFinders = $configFinders;
     }
 
     /**
@@ -121,11 +153,28 @@ class ConfigList
      */
     public function findConfigs()
     {
-        // find our SPv2.0-style config files
-        $this->list = array_merge($this->list, $this->findJsonConfigs());
+        // which config files do we need to load?
+        $filenames = $this->findConfigFilenames();
 
-        // find our SPv2.3-style config files
-        $this->list = array_merge($this->list, $this->findPhpConfigs());
+        // let's get them loaded
+        foreach ($filenames as $filename) {
+            // the file extension determines how we handle it
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            switch ($ext) {
+                case "json":
+                    $config = $this->loadJsonConfig($filename);
+                    break;
+                case "php":
+                    $config = $this->loadPhpConfig($filename);
+                    break;
+                default:
+                    // should never happen, but just in case
+                    throw new E5xx_UnsupportedConfigFileExtension($filename);
+            }
+
+            // at this point, we have a WrappedConfig to add to our list
+            $this->list[$config->getName()] = $config;
+        }
 
         // we want our list of configs to be sorted, to make presentation
         // to end-users easier
@@ -135,72 +184,53 @@ class ConfigList
     }
 
     /**
-     * find a list of SPv2.0-style JSON configs
+     * load a SPv2.0-style JSON configs
      *
-     * @return array
+     * @return object
      */
-    protected function findJsonConfigs()
+    protected function loadJsonConfig($filename)
     {
-        // our return value
-        $configs = [];
-
-        // look on disk
-        $filenames = $this->findConfigFilenames('\.json');
-
-        // let's get them processed
-        foreach ($filenames as $filename) {
-            $config = $this->newWrappedConfigObject();
-            $config->loadConfigFromFile($filename);
-            $config->validateConfig();
-            $configs[$config->getName()] = $config;
-        }
+        $config = $this->newWrappedConfigObject();
+        $config->loadConfigFromFile($filename);
+        $config->validateConfig();
 
         // all done
-        return $configs;
+        return $config;
     }
 
     /**
-     * find a list of SPv2.3-style PHP configs
+     * load a SPv2.3-style PHP config
      *
-     * @return array
+     * @todo we need (at some point) to move the check for a return value
+     *       out to somewhere else
+     *
+     * @return object
      */
-    protected function findPhpConfigs()
+    protected function loadPhpConfig($filename)
     {
-        // our return value
-        $configs = [];
+        $config = require ($filename);
 
-        // look on disk
-        $filenames = $this->findConfigFilenames("main.php");
-
-        // let's get them processed
-        foreach ($filenames as $filename) {
-            $config = require ($filename);
-
-            // make sure we have a definition!
-            if (!$config instanceof TestEnvironment_Definition) {
-                throw new E4xx_TestEnvironmentFileMustReturnADefinition($filename);
-            }
-
-            $configs[$config->getName()] = $config;
-        //     $config = $this->newWrappedConfigObject();
-        //     $config->loadConfigFromFile($filename);
-        //     $config->validateConfig();
-        //     $configs[$config->getName()] = $config;
+        // make sure we have a definition!
+        if (!$config instanceof TestEnvironment_Definition) {
+            throw new E4xx_TestEnvironmentFileMustReturnADefinition($filename);
         }
 
         // all done
-        return $configs;
+        return $config;
     }
 
     /**
-     * build a list of the config files in the $searchFolder
+     * build a list of the config files found by the ConfigFinders
      *
      * @return array<string>
      */
-    protected function findConfigFilenames($searchPattern)
+    protected function findConfigFilenames()
     {
         // where are we looking?
         $searchFolders = $this->getSearchFolders();
+
+        // how are we looking?
+        $configFinders = $this->getConfigFinders();
 
         // our return value
         $filenames = [];
@@ -212,8 +242,9 @@ class ConfigList
             }
 
             // build our list
-            $configFinder = new ConfigFinder();
-            $filenames = array_merge($filenames, $configFinder->getListOfConfigFilesIn($searchFolder, $searchPattern));
+            foreach ($configFinders as $configFinder) {
+                $filenames = array_merge($filenames, $configFinder->getListOfConfigFilesIn($searchFolder));
+            }
         }
 
         // all done

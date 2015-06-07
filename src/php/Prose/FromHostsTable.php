@@ -75,11 +75,8 @@ class FromHostsTable extends Prose
         // what are we doing?
         $log = usingLog()->startAction("get the hosts table for the current test environment");
 
-        // which test environment are we working with?
-        $testEnvName = $this->st->getTestEnvironmentName();
-
         // get the table
-        $table = fromRuntimeTable($this->entryKey)->getGroupFromTable($testEnvName);
+        $table = fromRuntimeTable($this->entryKey)->getTable();
 
         // all done
         $log->endAction();
@@ -100,37 +97,11 @@ class FromHostsTable extends Prose
         // what are we doing?
         $log = usingLog()->startAction("get details for host '{$hostId}' from the current test environment");
 
-        // which test environment are we working with?
-        $testEnvName = $this->st->getTestEnvironmentName();
-
         // get the details
-        $hostDetails = fromRuntimeTable($this->entryKey)->getDetailsFromGroup($testEnvName, $hostId);
+        $hostDetails = fromRuntimeTable($this->entryKey)->getDetails($hostId);
 
         // all done
         $log->endAction();
         return $hostDetails;
-    }
-
-    public function hasTestEnvironment()
-    {
-        // what are we doing?
-        $log = usingLog()->startAction("do we already have the test environment defined in the hosts table?");
-
-        // which test environment are we working with?
-        $testEnvName = $this->st->getTestEnvironmentName();
-
-        // get the hosts table
-        $hostsTable = fromRuntimeTable($this->entryKey)->getTable();
-        //var_dump($hostsTable);
-
-        // does the test environment exist?
-        if (isset($hostsTable->$testEnvName) && $hostsTable->$testEnvName->hasProperties()) {
-            $log->endAction("yes");
-            return true;
-        }
-
-        // no, it does not
-        $log->endAction("no");
-        return false;
     }
 }

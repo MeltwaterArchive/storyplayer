@@ -62,6 +62,7 @@ use DataSift\Storyplayer\Injectables\OutputSupport;
 use DataSift\Storyplayer\Injectables\PhaseLoaderSupport;
 use DataSift\Storyplayer\Injectables\ProseLoaderSupport;
 use DataSift\Storyplayer\Injectables\ReportLoaderSupport;
+use DataSift\Storyplayer\Injectables\RunningTestEnvironmentsListSupport;
 use DataSift\Storyplayer\Injectables\RuntimeConfigSupport;
 use DataSift\Storyplayer\Injectables\StaticConfigManagerSupport;
 use DataSift\Storyplayer\Injectables\StoryplayerConfigFilenameSupport;
@@ -97,6 +98,7 @@ class Injectables extends BaseInjectables
     use PhaseLoaderSupport;
     use ProseLoaderSupport;
     use ReportLoaderSupport;
+    use RunningTestEnvironmentsListSupport;
     use RuntimeConfigSupport;
     use StaticConfigManagerSupport;
     use StoryplayerConfigFilenameSupport;

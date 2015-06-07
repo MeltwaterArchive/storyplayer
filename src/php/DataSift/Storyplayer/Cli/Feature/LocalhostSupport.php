@@ -69,25 +69,7 @@ class Feature_LocalhostSupport implements Feature
 
     public function initBeforeModulesAvailable(CliEngine $engine, CliCommand $command, Injectables $injectables)
     {
-        // create a definition for localhost
-        $host = new BaseObject();
-        $host->hostId      = "localhost";
-        $host->osName      = $this->detectOs();
-        $host->type        = "PhysicalHost";
-        $host->ipAddress   = "127.0.0.1";
-        $host->hostname    = "localhost";
-        $host->provisioned = true;
-
-        // we need to make sure it's registered in the hosts table
-        $runtimeConfigManager = $injectables->getRuntimeConfigManager();
-        $runtimeConfig        = $injectables->getRuntimeConfig();
-        $hostsTable = $runtimeConfigManager->getTable($runtimeConfig, 'hosts');
-        $testEnv = $injectables->activeTestEnvironmentName;
-
-        if (!isset($hostsTable->$testEnv)) {
-            $hostsTable->$testEnv = new BaseObject();
-        }
-        $hostsTable->$testEnv->localhost = $host;
+        // no-op
     }
 
     protected function detectOs()
@@ -109,6 +91,27 @@ class Feature_LocalhostSupport implements Feature
 
     public function initAfterModulesAvailable(StoryTeller $st, CliEngine $engine, Injectables $injectables)
     {
-        // no-op
+        // we need to go stealth mode for a bit
+        $injectables->output->setSilentMode();
+
+        // create a definition for localhost
+        $hostDetails = new BaseObject();
+        $hostDetails->hostId      = "localhost";
+        $hostDetails->osName      = $this->detectOs();
+        $hostDetails->type        = "PhysicalHost";
+        $hostDetails->ipAddress   = "127.0.0.1";
+        $hostDetails->hostname    = "localhost";
+        $hostDetails->provisioned = true;
+
+        // we need to make sure it's registered in the hosts table
+        //
+        // it only needs registering if an entry does not already exist
+        $entry = fromHostsTable()->getDetailsForHost('localhost');
+        if ($entry === null) {
+            usingHostsTable()->addHost('localhost', $hostDetails);
+        }
+
+        // all done
+        $injectables->output->resetSilentMode();
     }
 }

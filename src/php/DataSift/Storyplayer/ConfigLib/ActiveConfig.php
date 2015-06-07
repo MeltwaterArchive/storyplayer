@@ -90,19 +90,12 @@ class ActiveConfig extends WrappedConfig
 		$activeConfig         = $this->getConfig();
         $runtimeConfig        = $injectables->getRuntimeConfig();
         $runtimeConfigManager = $injectables->getRuntimeConfigManager();
-        $testEnvName          = $injectables->activeTestEnvironmentName;
 
 		$hostsTable = $runtimeConfigManager->getTable($runtimeConfig, 'hosts');
-        if (!isset($hostsTable->$testEnvName)) {
-            $hostsTable->$testEnvName = new BaseObject;
-        }
-        $activeConfig->hosts = $hostsTable->$testEnvName;
+        $activeConfig->hosts = $hostsTable;
 
 		$rolesTable = $runtimeConfigManager->getTable($runtimeConfig, 'roles');
-        if (!isset($rolesTable->$testEnvName)) {
-            $rolesTable->$testEnvName = new BaseObject;
-        }
-        $activeConfig->roles = $rolesTable->$testEnvName;
+        $activeConfig->roles = $rolesTable;
 	}
 
 	public function mergeStoryplayerConfig($injectables, $spConf)

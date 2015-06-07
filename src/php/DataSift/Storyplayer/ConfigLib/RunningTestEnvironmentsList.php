@@ -2,6 +2,7 @@
 
 /**
  * Copyright (c) 2011-present Mediasift Ltd
+ * Copyright (c) 2015-present Ganbaro Digital Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,91 +35,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @package   Storyplayer/ConfigLib
+ * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace DataSift\Storyplayer\ConfigLib;
+
+use DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentRuntimeConfig;
 
 /**
- * manipulate the internal hosts table
+ * tracks a list of test environments that are currently 'running'
+ * i.e. the test environments we have runtime.json files for
+ *
+ * this replaces the 'hosts' and 'roles' section of the runtime.json file
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
+ * @package   Storyplayer/ConfigLib
+ * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingHostsTable extends Prose
+class RunningTestEnvironmentsList extends ConfigList
 {
-    /**
-     * entryKey
-     * The key that this table interacts with in the RuntimeConfig
-     *
-     * @var string
-     */
-    protected $entryKey = "hosts";
-
-    /**
-     * addHost
-     *
-     * @param string $hostId
-     *        ID of the host to add to the table
-     * @param object $hostDetails
-     *        Details about this host
-     *
-     * @return void
-     */
-    public function addHost($hostId, $hostDetails)
+    public function __construct($searchFolder = 'storyplayer/test-environments')
     {
-        // what are we doing?
-        $log = usingLog()->startAction("add host '{$hostId}' to current test environment hosts table");
-
-        // add it
-        usingRuntimeTable($this->entryKey)->addItem($hostId, $hostDetails);
-
-        // all done
-        $log->endAction();
+        parent::__construct(
+        	'DataSift\Storyplayer\TestEnvironmentsLib\TestEnvironmentRuntimeConfig',
+        	[
+        		"storyplayer/test-environments"
+        	],
+            [
+                new ConfigFinder("/runtime.json")
+            ]
+        );
     }
 
-    /**
-     * removeHost
-     *
-     * @param string $hostId
-     *        ID of the host to remove
-     *
-     * @return void
-     */
-    public function removeHost($hostId)
+    public function getRuntimeConfigForTestEnvironment($testEnvName)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("remove host '{$hostId}' from current test environment hosts table");
+        if (!$this->hasEntry($testEnvName)) {
+            // we need to create a new entry
+            $newConfig = new TestEnvironmentRuntimeConfig();
+            $newConfig->setName($testEnvName);
+            $newConfig->setFilename("storyplayer/test-environments/{$testEnvName}/runtime.json");
+            $this->addEntry($testEnvName, $newConfig);
+        }
 
-        // remove it
-        usingRuntimeTable($this->entryKey)->removeItem($hostId);
-
-        // all done
-        $log->endAction();
-    }
-
-    /**
-     * empty out the table
-     *
-     * @return void
-     */
-    public function emptyTable()
-    {
-        // what are we doing?
-        $log = usingLog()->startAction("empty the hosts table completely");
-
-        // remove it
-        usingRuntimeTable($this->entryKey)->removeTable();
-
-        // all done
-        $log->endAction();
+        return $this->getEntry($testEnvName);
     }
 }

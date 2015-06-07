@@ -65,7 +65,10 @@ class DevicesList extends ConfigList
         	[
 	        	"storyplayer/devices",
 	        	".storyplayer/devices",
-	        ]
+	        ],
+            [
+                new ConfigFinder(".*\\.json")
+            ]
         );
     }
 }

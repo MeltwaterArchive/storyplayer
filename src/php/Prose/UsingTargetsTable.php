@@ -72,11 +72,10 @@ class UsingTargetsTable extends Prose
         $log = usingLog()->startAction("add current test environment to targets table");
 
         // get the details to add
-        $testEnvName = $this->st->getTestEnvironmentName();
         $testEnvSig  = $this->st->getTestEnvironmentSignature();
 
         // add it
-        usingRuntimeTable($this->entryKey)->addItem($testEnvName, $testEnvSig);
+        usingRuntimeTable($this->entryKey)->addItem(FromTargetsTable::SIGNATURE_KEY, $testEnvSig);
 
         // all done
         $log->endAction();
@@ -90,11 +89,8 @@ class UsingTargetsTable extends Prose
         // what are we doing?
         $log = usingLog()->startAction("remove current test environment from targets table");
 
-        // get the details to remove
-        $testEnvName = $this->st->getTestEnvironmentName();
-
         // remove it
-        usingRuntimeTable($this->entryKey)->removeItem($testEnvName);
+        usingRuntimeTable($this->entryKey)->removeItem(FromTargetsTable::SIGNATURE_KEY);
 
         // all done
         $log->endAction();

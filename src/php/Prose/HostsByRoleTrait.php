@@ -62,10 +62,18 @@ trait HostsByRoleTrait
     {
         // do we have this role?
         $role = fromRolesTable()->getDetailsForRole($roleName);
-        if (!count(get_object_vars($role))) {
+        if (!count($role)) {
             throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
         }
-        return $role;
+
+        // now we need to gather all of the hosts that make up this role
+        $hostsDetails = [];
+        foreach ($role as $hostId) {
+            $hostsDetails[$hostId] = fromHostsTable()->getDetailsForHost($hostId);
+        }
+
+        // all done
+        return $hostsDetails;
     }
 
     protected function retrieveFirstHost($roleName)
@@ -73,16 +81,7 @@ trait HostsByRoleTrait
         $hostsDetails = $this->retrieveHostsDetails($roleName);
 
         // isolate the first host to use
-        if (is_object($hostsDetails)) {
-            $list = get_object_vars($hostsDetails);
-            $hostDetails = array_pop($list);
-        }
-        else if (is_array($hostsDetails)) {
-            $hostDetails = array_pop($hostsDetails);
-        }
-        else {
-            throw new E5xx_ActionFailed(__METHOD__, "unexpected list of host details");
-        }
+        $hostDetails = array_pop($hostsDetails);
 
         return $hostDetails;
     }

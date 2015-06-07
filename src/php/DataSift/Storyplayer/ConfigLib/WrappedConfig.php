@@ -119,6 +119,24 @@ class WrappedConfig
     }
 
     /**
+     * do we have any config?
+     *
+     * @return boolean
+     */
+    public function hasConfig()
+    {
+        if ($this->config instanceof BaseObject) {
+            return $this->config->hasProperties();
+        }
+
+        if (is_array($this->config)) {
+            return empty($this->config);
+        }
+
+        return false;
+    }
+
+    /**
      * load a config file from disk, and store the config in $this
      *
      * @param  string $pathToFile
@@ -140,7 +158,7 @@ class WrappedConfig
         if (strlen(rtrim($raw)) === 0) {
             // nothing to see, move along :)
             $this->setConfig(new BaseObject);
-            $this->setName(basename($pathToFile, '.json'));
+            $this->setNameFromFilename($pathToFile);
             return;
         }
 
@@ -156,10 +174,109 @@ class WrappedConfig
 
         // store the config
         $this->setConfig($config);
-        $this->setName(basename($pathToFile, '.json'));
+        $this->setNameFromFilename($pathToFile);
         $this->setFilename($pathToFile);
 
         // all done
+    }
+
+    /**
+     * set the name of this config by looking at the filename
+     *
+     * the 'name' is used as an array key elsewhere. if we get this wrong,
+     * then Storyplayer isn't going to be able to find our config later on
+     *
+     * override this in more specialist config types
+     *
+     * @param  string $filename
+     *         the path/to/file/name.ext where we found this config
+     * @return void
+     */
+    protected function setNameFromFilename($filename)
+    {
+        $this->setName(basename($filename, '.json'));
+    }
+
+    /**
+     * save the config to disk, as a JSON file
+     *
+     * @return void
+     */
+    public function saveConfig()
+    {
+        // do we have a filename?
+        $filename = $this->getFilename();
+        if ($filename === null) {
+            throw new E4xx_ConfigNeedsAFilename($this->getName());
+        }
+
+        // make sure that the parent folder exists
+        $this->makeConfigDir(dirname($filename));
+
+        // let's get this saved
+        $data = json_encode($this->getConfig());
+        if (!file_put_contents($filename, $data)) {
+            throw new E4xx_ConfigCannotBeSaved($name, $filename);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function makeConfigDir($configDir)
+    {
+        if (file_exists($configDir)) {
+            // nothing to do
+            return;
+        }
+
+        // can we make the folder?
+        //
+        // if this fails, we do not know why
+        $success = mkdir($configDir, 0700, true);
+        if (!$success)
+        {
+            // cannot create it - bail out now
+            throw new E4xx_ConfigPathCannotBeCreated($configDir);
+        }
+    }
+
+    /**
+     * forget all of the config we (may) currently have
+     *
+     * @return void
+     */
+    public function emptyConfig()
+    {
+        $this->config = new BaseObject();
+    }
+
+    /**
+     * @return void
+     */
+    public function removeConfig()
+    {
+        // do we have a filename?
+        $filename = $this->getFilename();
+        if ($filename === null) {
+            throw new E4xx_ConfigNeedsAFilename($this->getName());
+        }
+
+        // does the file exist?
+        if (!file_exists($filename)) {
+            // nothing to do
+            return;
+        }
+
+        // remove the file
+        $deleted = @unlink($filename);
+        if ($deleted) {
+            // all done
+            return;
+        }
+
+        // if we get here, we could not remove the file
+        throw new E4xx_ConfigCannotBeRemoved($this->getName(), $filename);
     }
 
     /**
@@ -313,6 +430,35 @@ class WrappedConfig
 
         // general case
         $this->config->setData($path, $data);
+    }
+
+    /**
+     * support for arrow->notation support on wrapped configs
+     *
+     * NOTE: objects returned by arrow->notation are READ-WRITE
+     *
+     * @param  string $path
+     *         the variable to be retrieved
+     * @return mixed
+     *         the fake attribute
+     */
+    public function __get($path)
+    {
+        return $this->config->$path;
+    }
+
+    /**
+     * support for arrow->notation on wrapped configs
+     *
+     * @param string $path
+     *        the name of the attribute to save
+     * @param mixed $data
+     *        the data to save
+     * @return void
+     */
+    public function __set($path, $data)
+    {
+        return $this->setData($path, $data);
     }
 
     /**

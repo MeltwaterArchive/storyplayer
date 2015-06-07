@@ -58,8 +58,8 @@ use DataSift\Storyplayer\Cli\RuntimeConfigManager;
  */
 trait RuntimeConfigSupport
 {
-    protected $runtimeConfigManager = null;
-    protected $runtimeConfig = null;
+    /** @var RuntimeConfigManager */
+    protected $runtimeConfigManager;
 
     /**
      * @return RuntimeConfigManager
@@ -69,37 +69,31 @@ trait RuntimeConfigSupport
         // create the runtime config's manager
         $this->runtimeConfigManager = new RuntimeConfigManager();
 
-        // create the folder where we will store the persistent config
-        $this->runtimeConfigManager->makeConfigDir($injectables->output);
-
         // load any config from the last time Storyplayer ran
-        $this->runtimeConfig = $this->runtimeConfigManager->loadRuntimeConfig($injectables->output);
+        //
+        // NEW for SPv2.4 - this converts the older runtime-v2.json into
+        // the new per-test-environment config file
+        $this->runtimeConfigManager->loadRuntimeConfig($injectables->output);
 
         // all done
         return $this->runtimeConfigManager;
     }
 
     /**
-     * @return \DataSift\Storyplayer\Cli\RuntimeConfigManager
+     * get the runtimeConfigManager
+     *
+     * @return RuntimeConfigManager
      */
     public function getRuntimeConfigManager()
     {
-        if ($this->runtimeConfigManager === null) {
+        if (!isset($this->runtimeConfigManager)) {
             throw new E4xx_NotInitialised('runtimeConfigManager');
         }
 
         return $this->runtimeConfigManager;
     }
 
-    /**
-     * @return object
-     */
-    public function getRuntimeConfig()
-    {
-        if ($this->runtimeConfig === null) {
-            throw new E4xx_NotInitialised('runtimeConfig');
-        }
-
-        return $this->runtimeConfig;
-    }
+    // looking for getRuntimeConfig()?
+    //
+    // this is now implemented by the ActiveConfigSupport
 }

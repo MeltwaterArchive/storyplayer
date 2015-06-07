@@ -108,7 +108,6 @@ use Prose\FromProcessesTable;
 use Prose\FromRedisConn;
 use Prose\FromRolesTable;
 use Prose\FromRuntimeTable;
-use Prose\FromRuntimeTableForTargetEnvironment;
 use Prose\FromSauceLabs;
 use Prose\FromShell;
 use Prose\FromStoryplayer;
@@ -145,7 +144,6 @@ use Prose\UsingRedisConn;
 use Prose\UsingReporting;
 use Prose\UsingRolesTable;
 use Prose\UsingRuntimeTable;
-use Prose\UsingRuntimeTableForTargetEnvironment;
 use Prose\UsingSauceLabs;
 use Prose\UsingSavageD;
 use Prose\UsingShell;
@@ -1010,22 +1008,6 @@ function fromRuntimeTable($tableName)
 }
 
 /**
- * returns the FromRuntimeTableForTargetEnvironment module
- *
- * This module provides access to Storyplayer's internal table that tracks
- * the state of the current test environment.
- *
- * This module is intended for internal use only. You shouldn't need to call
- * this module from your own stories.
- *
- * @return \Prose\FromRuntimeTableForTargetEnvironment
- */
-function fromRuntimeTableForTargetEnvironment($tableName)
-{
-    return new FromRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
-}
-
-/**
  * returns the FromSauceLabs module
  *
  * At the moment, this module is a placeholder. We hope to add full support
@@ -1633,19 +1615,6 @@ function usingRuntimeTable($tableName)
 }
 
 /**
- * returns the UsingRuntimeTableForTargetEnvironment module
- *
- * this module is for internal use inside Storyplayer
- * you shouldn't need to use it from your own stories
- *
- * @return \Prose\UsingRuntimeTableForTargetEnvironment
- */
-function usingRuntimeTableForTargetEnvironment($tableName)
-{
-    return new UsingRuntimeTableForTargetEnvironment(StoryTeller::instance(), [$tableName]);
-}
-
-/**
  * returns the UsingSauceLabs module
  *
  * At the moment, this module is a placeholder. We hope to add full support
@@ -1850,7 +1819,7 @@ function usingZmqSocket($zmqSocket)
 function firstHostWithRole($roleName)
 {
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
-    if (!count(get_object_vars($listOfHosts))) {
+    if (!count($listOfHosts)) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
@@ -1858,9 +1827,8 @@ function firstHostWithRole($roleName)
     $log = usingLog()->startAction("for the first host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $hostsAsArray = get_object_vars($listOfHosts);
-    $hostDetails  = array_pop($hostsAsArray);
-    yield($hostDetails->hostId);
+    $hostId = array_pop($listOfHosts);
+    yield($hostId);
 
     // all done
     $log->endAction();
@@ -1878,7 +1846,7 @@ function firstHostWithRole($roleName)
 function lastHostWithRole($roleName)
 {
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
-    if (!count(get_object_vars($listOfHosts))) {
+    if (!count($listOfHosts)) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
@@ -1886,9 +1854,8 @@ function lastHostWithRole($roleName)
     $log = usingLog()->startAction("for the last host with role '{$roleName}' ... ");
 
     // we yield a single host ID ...
-    $hostsAsArray = get_object_vars($listOfHosts);
-    $hostDetails = end($hostsAsArray);
-    yield($hostDetails->hostId);
+    $hostId = end($listofHosts);
+    yield($hostId);
 
     // all done
     $log->endAction();
@@ -1901,7 +1868,7 @@ function lastHostWithRole($roleName)
  *         The role that we want
  *
  * @return Iterator
- *         a hostid that matches the role
+ *         a hostId that matches the role
  */
 function hostWithRole($roleName)
 {
@@ -1911,15 +1878,15 @@ function hostWithRole($roleName)
     }
 
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
-    if (!count(get_object_vars($listOfHosts))) {
+    if (!count($listOfHosts)) {
         throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
     $log = usingLog()->startAction("for each host with role '{$roleName}' ... ");
 
-    foreach ($listOfHosts as $hostDetails) {
-        yield($hostDetails->hostId);
+    foreach ($listOfHosts as $hostId) {
+        yield($hostId);
     }
 
     // all done

@@ -151,6 +151,47 @@ class UsingRuntimeTable extends BaseRuntimeTable
 
     }
 
+    /**
+     * updateItem
+     *
+     * Replace an item in the runtimeConfig file
+     *
+     * @param string $key
+     *        The key that we want to update
+     * @param mixed $value
+     *        The new value for $key
+     *
+     * @return void
+     */
+    public function updateItem($key, $value)
+    {
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = usingLog()->startAction("update entry '{$key}' in {$tableName} table");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure it exists
+        if (!isset($tables->$tableName)) {
+            $msg = "table is empty / does not exist. '{$key}' not updated";
+            $log->endAction($msg);
+            return;
+        }
+
+        // make sure we have an entry to update
+        $tables->$tableName->$key = $value;
+        $log->endAction();
+
+        // save the changes
+        $this->st->saveRuntimeConfig();
+
+        // all done
+        $log->endAction();
+
+    }
 
     /**
      * Add an item to a module's runtime config table
@@ -301,6 +342,40 @@ class UsingRuntimeTable extends BaseRuntimeTable
                 }
             }
         }
+        // save the changes
+        $this->st->saveRuntimeConfig();
+
+        // all done
+        $log->endAction();
+    }
+
+    /**
+     * removeTable
+     *
+     * deletes the entire table
+     *
+     * @return void
+     */
+    public function removeTable()
+    {
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = usingLog()->startAction("remove the {$tableName} table from the runtime config");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure it exists
+        if (!isset($tables->$tableName)) {
+            $log->endAction();
+            return;
+        }
+
+        // remove the table
+        unset($tables->$tableName);
+
         // save the changes
         $this->st->saveRuntimeConfig();
 

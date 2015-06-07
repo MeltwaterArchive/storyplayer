@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Cli;
+namespace DataSift\Storyplayer\Injectables;
 
 use DataSift\Stone\ExceptionsLib\Exxx_Exception;
 
@@ -50,7 +50,7 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * been initialised
  *
  * @category  Libraries
- * @package   Storyplayer/Cli
+ * @package   Storyplayer/Injectables
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License

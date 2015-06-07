@@ -63,11 +63,35 @@ use DataSift\Stone\ObjectLib\BaseObject;
 class ConfigFinder
 {
     /**
+     * the regex that describes the config file(s) we are looking for
+     *
+     * @var string
+     */
+    protected $pattern;
+
+    /**
+     * our constructor
+     *
+     * create instances of this class, to pass into the ConfigList for
+     * finding files
+     *
+     * @param string $pattern
+     *        the regex that describes the config file(s) that we are
+     *        looking for
+     */
+    public function __construct($pattern)
+    {
+        $this->pattern = $pattern;
+    }
+
+    /**
      * find a list of config files in a folder
      *
+     * @param  string $directory
+     *         the folder to search
      * @return array
      */
-    public function getListOfConfigFilesIn($directory, $pattern)
+    public function getListOfConfigFilesIn($directory)
     {
         // does the directory exist?
         if (!is_dir($directory)) {
@@ -77,7 +101,7 @@ class ConfigFinder
         // use the SPL to do the heavy lifting
         $dirIter = new RecursiveDirectoryIterator($directory);
         $recIter = new RecursiveIteratorIterator($dirIter);
-        $regIter = new RegexIterator($recIter, '|^.+' . $pattern . '$|i', RegexIterator::GET_MATCH);
+        $regIter = new RegexIterator($recIter, '|^.+' . $this->pattern . '$|i', RegexIterator::GET_MATCH);
 
         // what happened?
         $filenames = [];

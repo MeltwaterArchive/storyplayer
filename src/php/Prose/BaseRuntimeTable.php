@@ -96,6 +96,3 @@ class BaseRuntimeTable extends Prose
         return $runtimeConfigManager->getAllTables($runtimeConfig);
     }
 }
-
-
-

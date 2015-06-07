@@ -42,6 +42,7 @@ use DataSift\Storyplayer\ConfigLib\DevicesList;
 use DataSift\Storyplayer\DeviceLib\HardCodedDevices;
 use DataSift\Storyplayer\ConfigLib\SystemsUnderTestList;
 use DataSift\Storyplayer\SystemsUnderTestLib\HardCodedSystemsUnderTest;
+use DataSift\Storyplayer\ConfigLib\RunninTestEnvironmentsList;
 use DataSift\Storyplayer\ConfigLib\TestEnvironmentsList;
 use DataSift\Storyplayer\TestEnvironmentsLib\HardCodedTestEnvironments;
 
@@ -240,10 +241,9 @@ function main($argv)
 		// load the user's dotfile, if there is one
 		$injectables->initUserConfigSupport($injectables, getenv("HOME") . "/.storyplayer/storyplayer.json");
 
-		// create our runtime config folder, and load any pre-existing
-		// runtime config
-		$runtimeConfigManager = $injectables->initRuntimeConfigSupport($injectables);
-		$runtimeConfig        = $injectables->getRuntimeConfig();
+		// create our runtime config folder, and migrate any SPv2.[0-3] config
+		// over to the new SPv2.4+ format
+		$injectables->initRuntimeConfigSupport($injectables);
 
 		// a list of the additional files that the user can select from
 		$sutList = new SystemsUnderTestList();
@@ -264,6 +264,9 @@ function main($argv)
 		$injectables->initDefaultTestEnvironmentName($injectables);
 		$injectables->initKnownSystemsUnderTestSupport($sutList);
 		$injectables->initDefaultSystemUnderTestName($injectables);
+
+		// now, load our list of active test environments
+		$injectables->initRunningTestEnvironmentsListSupport($injectables);
 
 		// do we have any command-line defaults set in the config?
 		$injectables->initDefaultCommandLineSupport($injectables->storyplayerConfig, $injectables);
