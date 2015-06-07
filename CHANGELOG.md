@@ -21,9 +21,20 @@ The major focus for this release will be:
 1. refactoring HostLib and OsLib away into our test environment adapters
 1. more tests for Storyplayer itself
 
+### Upgrade Instructions
+
+In this release, I've made some important improvements to Storyplayer's `runtime.json` config file. Before upgrading, please:
+
+* close down any test environments that Storyplayer has created for you
+* delete your .storyplayer/runtime.json file
+
 ### New:
 
 * Story templates should now extend `Storyplayer\Stories\StoryTemplate`. The original `DataSift\Storyplayer\PlayerLib\StoryTemplate` base class is still there, for backwards-compatibility.
+
+### Refactor:
+
+* .storyplayer/runtime.json has been replaced. Each test environment now gets its own `runtime.json` file.
 
 ## 2.3.0 - Wednesday 6th May 2015
 
