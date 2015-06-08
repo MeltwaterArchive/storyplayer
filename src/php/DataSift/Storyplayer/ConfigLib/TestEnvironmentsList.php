@@ -64,8 +64,8 @@ class TestEnvironmentsList extends ConfigList
         		".storyplayer/test-environments"
         	],
             [
-                new ConfigFinder("(^runtime)*\\.json"),
-                new ConfigFinder("main.php")
+                new ConfigFinder(".*(?<!runtime)\\.json$"),
+                new ConfigFinder("main.php$")
             ]
         );
     }
