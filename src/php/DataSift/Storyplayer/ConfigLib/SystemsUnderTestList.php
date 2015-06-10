@@ -60,7 +60,7 @@ class SystemsUnderTestList extends ConfigList
 {
     public function __construct()
     {
-        parent::__construct(
+        return parent::__construct(
         	'DataSift\Storyplayer\SystemsUnderTestLib\SystemUnderTestConfig',
         	[
 	        	"storyplayer/systems-under-test",

@@ -95,8 +95,8 @@ class ListSystems_Switch extends CliSwitch
     public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
     {
         // list the systems-under-test (if any) in a machine-friendly way
-        foreach ($this->sutList as $sutName) {
-            echo "{$sutName}\n";
+        foreach ($this->sutList->getEntries() as $sutName) {
+            echo $sutName->getName().PHP_EOL;
         }
 
         // all done

@@ -323,7 +323,7 @@ function main($argv)
 	$engine->addEngineSwitch(new VersionSwitch);
 	$engine->addEngineSwitch(new KillProcesses_Switch);
 	$engine->addEngineSwitch(new ListProcesses_Switch);
-	$engine->addEngineSwitch(new ListSystems_Switch($injectables->knownSystemsUnderTestFilenames));
+	$engine->addEngineSwitch(new ListSystems_Switch($injectables->knownSystemsUnderTestList));
 	$engine->addEngineSwitch(new ListTargets_Switch($injectables->knownTestEnvironmentsList));
 	$engine->addEngineSwitch(new LongHelpSwitch);
 	$engine->addEngineSwitch(new ShortHelpSwitch);
