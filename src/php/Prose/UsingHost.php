@@ -193,6 +193,11 @@ class UsingHost extends HostBase
         // get the process details
         $processDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
 
+        if (!$processDetails) {
+            $log->endAction("session is not running, unable to stop session");
+            throw new E5xx_ActionFailed(__METHOD__, "session is not running, unable to stop session '{$sessionName}'");
+        }
+
         // stop the process
         usingHost($this->args[0])->stopProcess($processDetails->pid);
 
