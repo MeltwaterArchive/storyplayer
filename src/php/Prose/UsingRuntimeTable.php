@@ -138,9 +138,8 @@ class UsingRuntimeTable extends BaseRuntimeTable
 
         // remove the table if it's empty
         if (!count(get_object_vars($tables->$tableName))) {
-            $log->addStep("table '{$tableName}' is empty, removing from runtime config", function() use ($tables, $tableName){
-                unset($tables->$tableName);
-            });
+            usingLog()->writeToLog("table '{$tableName}' is empty, removing from runtime config");
+            unset($tables->$tableName);
         }
 
         // save the changes
