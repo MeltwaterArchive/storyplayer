@@ -12,15 +12,29 @@ updated_for_v2: true
 
 The best way to test that everything is installed is to run Storyplayer's own test suite:
 
-    cd $HOME
-    mkdir Projects
-    cd Projects
-    git clone https://github.com/datasift/storyplayer.git
-    cd storyplayer
-    composer.phar install
-    src/bin/storyplayer install
-    vendor/bin/browsermob-proxy.sh start
-    vendor/bin/selenium-server.sh start
-    src/bin/storyplayer
+{% highlight bash %}
+# download the Storyplayer source code
+cd $HOME
+mkdir Projects
+cd Projects
+git clone https://github.com/datasift/storyplayer.git
+cd storyplayer
+
+# install Storyplayer's PHP dependencies
+# assumes you have installed composer as /usr/local/bin/composer
+composer install
+
+# download Storyplayer's Java dependencies
+src/bin/storyplayer install
+
+# Selenium is used to control web browsers
+vendor/bin/selenium-server.sh start
+
+# check that Vagrant and Virtualbox are working together
+( cd storyplayer/test-environments/vagrant-vbox-centos6-ssl && vagrant up )
+
+# this will run Storyplayer's own test suite
+src/bin/storyplayer
+{% endhighlight %}
 
 Afterwards, you can delete the `$HOME/Projects/storyplayer` folder.
