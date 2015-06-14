@@ -34,31 +34,45 @@ sudo apt-get -y install build-essential libtool automake git pkg-config
 
 ## PHP
 
+### Install PHP
+
 Use Ubuntu's standard PHP packages.
 
 {% highlight bash %}
 sudo apt-get -y install php5-cli php5-curl php5-json php5-mysql php5-dev php-pear
 {% endhighlight %}
 
-Download and install [Composer](https://getcomposer.org/download/)
+### Install Composer
 
-* Composer is the modern package manager for PHP libraries. You'll use Composer to install Storyplayer into your projects.
+Download and install [Composer](https://getcomposer.org/download/). Composer is the modern package manager for PHP libraries. You'll use Composer to install Storyplayer into your projects.
+
+{% highlight bash %}
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+sudo chmod 755 /usr/local/bin/composer
+{% endhighlight %}
 
 ## Virtual Machine Tools
+
+### Install Virtualbox
 
 Oracle provide a Debian package repo that we can use for installing Virtualbox (and for keeping it up to date!)
 
 {% highlight bash %}
 # add the virtualbox repo
+#
+# replace 'utopic' (Ubuntu 14.10) with 'vivid' (Ubuntu 15.04) or 'trusty' (Ubuntu 14.04)
 wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc | sudo apt-key add -
-sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian utopic non-free contrib" >> /etc/apt/sources.list.d/virtualbox.org.list'
+sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian utopic contrib" >> /etc/apt/sources.list.d/virtualbox.org.list'
 
 # pull down the list of packages in the virtualbox repo
 sudo apt-get update
 
 # install virtualbox
-sudo apt-get -y install virtualbox
+sudo apt-get -y install virtualbox-4.3
 {% endhighlight %}
+
+### Install Vagrant
 
 Vagrant has to be downloaded and installed by hand.
 
@@ -70,10 +84,14 @@ Vagrant has to be downloaded and installed by hand.
 
 {% highlight bash %}
 # vagrant is downloaded from their website, there is no ppa or repo
-sudo dpkg -i vagrant_1.7.2_x86_64.deb
+#
+# by default, your browser's downloads go into your Downloads/ folder
+sudo dpkg -i ~/Downloads/vagrant_1.7.2_x86_64.deb
 {% endhighlight %}
 
 ## Provisioning
+
+### Install Ansible
 
 If you're using Ansible for provisioning, you can get Ansible from a third-party repo.
 
@@ -90,17 +108,17 @@ sudo apt-get -y install ansible
 
 ## Web Browsers
 
-Download and install [a Java VM for OSX](http://www.java.com).
+### Install Java JVM
 
-* Storyplayer uses [Selenium v2 aka WebDriver](http://www.seleniumhq.org) to control real web browsers. Selenium is written in Java.
+Download and install [a Java VM for OSX](http://www.java.com). Storyplayer uses [Selenium v2 aka WebDriver](http://www.seleniumhq.org) to control real web browsers. Selenium is written in Java.
 
 {% highlight bash %}
 sudo apt-get install -y openjdk-7-jdk
 {% endhighlight %}
 
-Download and install [Google Chrome](https://www.google.com/chrome/) and [Mozilla Firefox](https://www.mozilla.org).
+### Install Chrome
 
-* Storyplayer can use either of these browsers for testing websites.
+Download and install [Google Chrome](https://www.google.com/chrome/). Ubuntu comes with [Mozilla Firefox](https://www.mozilla.org) already installed. Storyplayer can use either of these browsers for testing websites.
 
 ## ZeroMQ
 
