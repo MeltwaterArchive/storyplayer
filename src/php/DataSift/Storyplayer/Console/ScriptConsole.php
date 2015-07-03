@@ -165,8 +165,7 @@ EOS;
      */
     public function logPhaseError($phaseName, $msg)
     {
-        // send this to the default logger
-        Log::write(Log::LOG_CRITICAL, $msg);
+        $this->writeActivity($msg);
     }
 
     /**
@@ -178,8 +177,7 @@ EOS;
      */
     public function logPhaseSkipped($phaseName, $msg)
     {
-        // send this to the default logger
-        Log::write(Log::LOG_NOTICE, $msg);
+        $this->writeActivity($msg);
     }
 
     public function logPhaseCodeLine($codeLine)
