@@ -10,6 +10,15 @@ updated_for_v2: true
 
 For the very latest list of changes in upcoming releases, see the [CHANGELOG](https://github.com/datasift/storyplayer/blob/develop/CHANGELOG.md) on GitHub.
 
+## v2.3.1
+
+Release Wednesday 15th July 2015.
+
+### Fixes
+
+* No longer depends upon dev-master of nikic/php-parser
+* Fixed broken dependency on mockery/mockery
+
 ## v2.3.0
 
 Released Wednesday 6th May 2015.
