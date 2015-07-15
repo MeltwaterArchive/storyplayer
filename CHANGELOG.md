@@ -12,14 +12,12 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
-## 2.4.0 - `develop` branch
+## 2.3.1 - Wednesday 15th July 2015
 
-The major focus for this release will be:
+### Fixes
 
-1. completing new-style test environment support for EC2 and Docker
-1. completing new-style test environment support for Ansible
-1. refactoring HostLib and OsLib away into our test environment adapters
-1. more tests for Storyplayer itself
+* No longer depends upon dev-master of nikic/php-parser
+* Fixed broken dependency on mockery/mockery
 
 ### Upgrade Instructions
 
