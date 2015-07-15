@@ -17,7 +17,7 @@ Storyplayer should be installed using Composer. Simply add the following `requir
 {% highlight json %}
 {
     "require-dev": {
-        "datasift/storyplayer": "~2.0.0"
+        "datasift/storyplayer": "^2.3"
     }
 }
 {% endhighlight %}
