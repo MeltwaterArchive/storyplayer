@@ -17,6 +17,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 ### Fixes
 
 * No longer depends upon dev-master of nikic/php-parser
+* Fixed broken dependency on mockery/mockery
 
 ## 2.3.0 - Wednesday 6th May 2015
 
