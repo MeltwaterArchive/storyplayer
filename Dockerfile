@@ -98,6 +98,9 @@ RUN cd /tmp && wget --no-check-certificate https://dl.bintray.com/mitchellh/vagr
 RUN vagrant plugin install vagrant-omnibus
 RUN vagrant plugin install vagrant-openstack-plugin
 RUN vagrant plugin install vagrant-aws
+RUN vagrant plugin install vagrant-berkshelf
+RUN vagrant plugin install vagrant-cachier
+RUN vagrant plugin install vagrant-vbguest
 
 # install composer
 RUN cd /var/www && curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/bin/composer
