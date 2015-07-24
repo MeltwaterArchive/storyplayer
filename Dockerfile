@@ -94,7 +94,7 @@ RUN echo "extension=zmq.so" > /etc/php5/apache2/conf.d/20-zmq.ini
 
 # install Vagrant
 ENV VAGRANT_HOME /root/.vagrant.d
-RUN cd /tmp && wget --no-check-certificate https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb && dpkg -i vagrant_1.7.2_x86_64.deb && apt-get -y install -f
+RUN cd /tmp && wget --no-check-certificate https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.4_x86_64.deb && dpkg -i vagrant_1.7.4_x86_64.deb && apt-get -y install -f
 RUN vagrant plugin install vagrant-omnibus
 RUN vagrant plugin install vagrant-openstack-plugin
 RUN vagrant plugin install vagrant-aws
