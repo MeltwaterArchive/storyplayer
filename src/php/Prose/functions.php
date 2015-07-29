@@ -649,7 +649,7 @@ function foreachHostWithRole($roleName)
  */
 function fromArray()
 {
-    return new FromArray();
+    return new FromArray(StoryTeller::instance());
 }
 
 /**
@@ -1081,7 +1081,7 @@ function fromStoryplayer()
  */
 function fromString()
 {
-    return new FromString();
+    return new FromString(StoryTeller::instance());
 }
 
 /**
