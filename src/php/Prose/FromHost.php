@@ -341,7 +341,7 @@ class FromHost extends HostBase
         $log = usingLog()->startAction("get details about screen session '{$sessionName}' on host '{$this->args[0]}' from Storyplayer");
 
         // are there any details?
-        $cmd = "screen -ls | grep -E '[[:digit:]]+.{$sessionName}[[:space:]]' | awk -F. '{print \\\$1}'";
+        $cmd = "screen -ls | grep -E '[[:digit:]]+.{$sessionName}[[:space:]]' | awk -F. '{print $1}'";
         $result = usingHost($this->args[0])->runCommand($cmd);
 
         // there might be
@@ -371,7 +371,7 @@ class FromHost extends HostBase
         $log = usingLog()->startAction("get details about all screen sessions on host '{$this->args[0]}'");
 
         // are there any details?
-        $cmd = "screen -ls | grep -E '[[:digit:]]+\.[^[:space:]]+[[:space:]]' | awk '{print \\\$1}'";
+        $cmd = "screen -ls | grep -E '[[:digit:]]+\.[^[:space:]]+[[:space:]]' | awk '{print $1}'";
         $result = usingHost($this->args[0])->runCommand($cmd);
 
         $retval = [];
