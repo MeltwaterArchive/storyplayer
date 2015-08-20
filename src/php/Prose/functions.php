@@ -86,6 +86,7 @@ use Prose\ExpectsUuid;
 use Prose\ExpectsZmq;
 use Prose\ExpectsZmqSocket;
 use Prose\ForeachHostWithRole;
+use Prose\FromArray;
 use Prose\FromAws;
 use Prose\FromBrowser;
 use Prose\FromCheckpoint;
@@ -111,6 +112,7 @@ use Prose\FromRuntimeTable;
 use Prose\FromSauceLabs;
 use Prose\FromShell;
 use Prose\FromStoryplayer;
+use Prose\FromString;
 use Prose\FromSupervisor;
 use Prose\FromSystemUnderTest;
 use Prose\FromTargetsTable;
@@ -639,6 +641,18 @@ function foreachHostWithRole($roleName)
 }
 
 /**
+ * returns the FromArray module
+ *
+ * This module contains functions that can be used to manipulate arrays
+ *
+ * @return \Prose\FromArray
+ */
+function fromArray()
+{
+    return new FromArray(StoryTeller::instance());
+}
+
+/**
  * returns the FromAws module
  *
  * This module is used internally by Storyplayer to connect the Amazon EC2
@@ -1055,6 +1069,19 @@ function fromShell()
 function fromStoryplayer()
 {
     return new FromStoryplayer(StoryTeller::instance());
+}
+
+
+/**
+ * returns the FromString module
+ *
+ * This module provides useful functions for interacting with strings
+ *
+ * @return FromString
+ */
+function fromString()
+{
+    return new FromString(StoryTeller::instance());
 }
 
 /**
