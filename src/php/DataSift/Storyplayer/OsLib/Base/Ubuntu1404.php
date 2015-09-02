@@ -46,6 +46,7 @@ namespace DataSift\Storyplayer\OsLib;
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\HostLib\SupportedHost;
 use GanbaroDigital\TextTools\Filters\FilterColumns;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 use Prose\E5xx_ActionFailed;
@@ -151,7 +152,7 @@ abstract class Base_Ubuntu1404 extends Base_Unix
         $log = usingLog()->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
 
         // get the details
-        $command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";
+        $command   = 'dpkg-query -W --showformat=\'\\${Package} \\${Version}\t\\${Status}\n\' ' . $packageName;
         $result    = $this->runCommand($hostDetails, $command);
 
         // any luck?
@@ -161,21 +162,19 @@ abstract class Base_Ubuntu1404 extends Base_Unix
         }
 
         // study the output
-        $parts = explode(' ', $result->output);
-        if (count($parts) < 3) {
-            $log->endAction("could not get details ... package not installed?");
-            return new BaseObject();
-        }
-        if (strtolower($parts[0]) == 'error:') {
-            $log->endAction("could not get details ... package not installed?");
+        $lines = explode("\n", $result->output);
+        $lines = FilterForMatchingRegex::against($lines, "|^{$packageName} |");
+        $lines = FilterForMatchingString::against($lines, "install ok installed");
+        if (empty($lines)) {
+            $log->endAction("package not installed?");
             return new BaseObject();
         }
 
         // we have some information to return
         $return = new BaseObject();
-        $return->name = $parts[0];
-        $return->version = $parts[1];
-        $return->repo = $parts[2];
+        $return->name = FilterColumns::fromString($lines[0], "0", " ");
+        $return->version = FilterColumns::fromString($lines[0], "1", "\t");
+        $return->repo = "unknown";
 
         // all done
         $log->endAction();
