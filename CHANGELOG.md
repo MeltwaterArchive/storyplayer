@@ -12,12 +12,7 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
-## 2.3.1 - Wednesday 15th July 2015
-
-### Fixes
-
-* No longer depends upon dev-master of nikic/php-parser
-* Fixed broken dependency on mockery/mockery
+## Develop Branch - In Progress
 
 ### Upgrade Instructions
 
@@ -33,6 +28,13 @@ In this release, I've made some important improvements to Storyplayer's `runtime
 ### Refactor:
 
 * .storyplayer/runtime.json has been replaced. Each test environment now gets its own `runtime.json` file.
+
+## 2.3.1 - Wednesday 15th July 2015
+
+### Fixes
+
+* No longer depends upon dev-master of nikic/php-parser
+* Fixed broken dependency on mockery/mockery
 
 ## 2.3.0 - Wednesday 6th May 2015
 
