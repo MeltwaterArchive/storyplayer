@@ -150,7 +150,7 @@ abstract class Base_Centos5 extends Base_Unix
         $log = usingLog()->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
 
         // get the details
-        $command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";
+        $command   = "sudo yum list installed {$packageName}";
         $result    = $this->runCommand($hostDetails, $command);
 
         // any luck?
@@ -160,6 +160,13 @@ abstract class Base_Centos5 extends Base_Unix
         }
 
         // study the output
+        $parts = explode("\n", $result->output);
+        $parts = FilterForMatchingString::against($parts, $packageName);
+        $parts = FilterColumns::from($parts, "0-2", ' ');
+        if (!isset($parts[0])) {
+            $log->endAction("could not get details ... package not installed?");
+            return new BaseObject();
+        }
         $parts = explode(' ', $result->output);
         if (count($parts) < 3) {
             $log->endAction("could not get details ... package not installed?");
