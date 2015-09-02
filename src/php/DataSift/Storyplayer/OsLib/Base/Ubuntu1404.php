@@ -45,6 +45,8 @@ namespace DataSift\Storyplayer\OsLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\HostLib\SupportedHost;
+use GanbaroDigital\TextTools\Filters\FilterColumns;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 use Prose\E5xx_ActionFailed;
 
@@ -79,16 +81,33 @@ abstract class Base_Ubuntu1404 extends Base_Unix
 
         // how do we do this?
         foreach ($hostDetails->ifaces as $iface) {
-            $command = "/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'";
+            // $command = "/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'";
+            $command = "/sbin/ifconfig {$iface}";
             $result = $host->runCommandViaHostManager($hostDetails, $command);
 
-            // NOTE: the above command will return the exit code 0 even if the interface is not found
-            if ($result->didCommandSucceed() && (strpos($result->output, 'error') === false)) {
-                $lines = explode("\n", $result->output);
-                $ipAddress = trim($lines[0]);
-                $log->endAction("IP address is '{$ipAddress}'");
-                return $ipAddress;
+            if ($result->didCommandFail() || (strpos($result->output, 'error fetching') !== false)) {
+                // no interface found
+                //
+                // move on to the next interface to check
+                continue;
             }
+
+            // reduce the output down to an IP address
+            $lines = explode("\n", $result->output);
+            $lines = FilterForMatchingString::against($lines, 'inet addr');
+            $lines = FilterColumns::from($lines, '1', ':');
+            $lines = FilterColumns::from($lines, '0', ' ');
+
+            // do we have an IP address?
+            if (!isset($lines[0]) || empty(trim(rtrim($lines[0])))) {
+                // no, we do not
+                continue;
+            }
+
+            // if we get here, then we've found an IP address!
+            $ipAddress = trim($lines[0]);
+            $log->endAction("IP address is '{$ipAddress}'");
+            return $ipAddress;
         }
 
         // if we get here, we do not know what the IP address is
