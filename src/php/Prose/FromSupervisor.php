@@ -48,6 +48,9 @@ use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 
+use GanbaroDigital\TextTools\Filters\FilterColumns;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
+
 /**
  * get information about a program running under supervisor
  *
@@ -69,7 +72,8 @@ class FromSupervisor extends HostBase
         $hostDetails = $this->getHostDetails();
 
         //run the supervisorctl command
-        $result = usingHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status |egrep '^$programName' | awk '{print \\$2}'");
+        $result = usingHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status");
+        // |egrep '^$programName' | awk '{print \\$2}'");
 
         // did the command succeed?
         if ($result->didCommandFail()) {
@@ -78,15 +82,25 @@ class FromSupervisor extends HostBase
             throw new E5xx_ActionFailed(__METHOD__);
         }
 
+        // reduce the output down
+        $lines = explode("\n", $result->output);
+        $lines = FilterForMatchingRegex::against($lines, "/^$programName /");
+        $lines = FilterColumns::from($lines, "1", ' ');
+
+        if (empty($lines)) {
+            $log->endAction("supervisor does not know about '{$programName}'");
+            return false;
+        }
+
         // what happened?
-        if (rtrim($result->output) == 'RUNNING') {
+        if ($lines[0] == 'RUNNING') {
             $log->endAction('current status is RUNNING');
             return true;
         }
 
         // if we get here, then the program is not RUNNING, and we
         // treat that as a failure
-        $log->endAction('current status is ' . rtrim($result->output));
+        $log->endAction('current status is ' . $lines[0]);
         return false;
     }
 }
