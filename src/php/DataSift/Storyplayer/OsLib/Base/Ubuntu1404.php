@@ -82,7 +82,6 @@ abstract class Base_Ubuntu1404 extends Base_Unix
 
         // how do we do this?
         foreach ($hostDetails->ifaces as $iface) {
-            // $command = "/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'";
             $command = "/sbin/ifconfig {$iface}";
             $result = $host->runCommandViaHostManager($hostDetails, $command);
 
