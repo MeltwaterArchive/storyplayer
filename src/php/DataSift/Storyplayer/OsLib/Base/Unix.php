@@ -145,8 +145,7 @@ abstract class Base_Unix extends OsBase
         $log = usingLog()->startAction("is process '{$processName}' running on host '{$hostDetails->hostId}'?");
 
         // SSH in and have a look
-        // $command   = "ps -ef | awk '{ print \\\$8 }' | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "'";
-        $command   = "ps -ef";
+        $command   = "ps -ef | grep '{$processName}'";
         $result    = $this->runCommand($hostDetails, $command);
 
         // what did we find?
@@ -158,7 +157,7 @@ abstract class Base_Unix extends OsBase
         // whittle down the output
         $lines = explode("\n", $result->output);
         $lines = FilterColumns::from($lines, "7", ' ');
-        $lines = FilterForMatchingRegex::against($lines, "/[" . $processName{0} . "]" . substr($processName, 1) . "/");
+        $lines = FilterForMatchingRegex::against($lines, "/^{$processName}$/");
 
         if (empty($lines)) {
             $log->endAction("not running");
@@ -181,8 +180,7 @@ abstract class Base_Unix extends OsBase
         $log = usingLog()->startAction("get PID for process '{$processName}' running on host '{$hostDetails->hostId}'");
 
         // run the command to get the process id
-        // $command   = "ps -ef | grep -E '^[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \\\$2}'";
-        $command   = "ps -ef";
+        $command   = "ps -ef | grep '{$processName}'";
         $result    = $this->runCommand($hostDetails, $command);
 
         // check that we got something
@@ -193,7 +191,7 @@ abstract class Base_Unix extends OsBase
 
         // reduce the output down to a single pid
         $pids = explode("\n", $result->output);
-        $pids = FilterForMatchingRegex::against($pids, "/[" . $processName{0} . "]" . substr($processName, 1) . "/");
+        $pids = FilterForMatchingRegex::against($pids, "/{$processName}/");
         $pids = FilterColumns::from($pids, "1", ' ');
 
         // check that we found exactly one process
@@ -222,8 +220,7 @@ abstract class Base_Unix extends OsBase
         $log = usingLog()->startAction("is process PID '{$pid}' running on UNIX '{$hostDetails->hostId}'?");
 
         // SSH in and have a look
-        // $command   = "ps -ef | awk '{ print \\\$2 }' | grep '[" . $pid{0} . "]" . substr($pid, 1) . "'";
-        $command = "ps -ef";
+        $command = "ps -ef | grep '{$pid}'";
         $result    = $this->runCommand($hostDetails, $command);
 
         // what did we find?
@@ -235,7 +232,7 @@ abstract class Base_Unix extends OsBase
         // reduce down the output we have
         $pids = explode("\n", $result->output);
         $pids = FilterColumns::from($pids, "1", ' ');
-        $pids = FilterForMatchingRegex::against($pids, "/^{$pid}/");
+        $pids = FilterForMatchingRegex::against($pids, "/^{$pid}$/");
 
         // success?
         if (empty($pids)) {
