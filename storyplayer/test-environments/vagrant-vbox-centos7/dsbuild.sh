@@ -21,7 +21,7 @@ systemctl restart nginx
 
 # install libzmq4 stable
 git clone https://github.com/zeromq/zeromq4-x.git
-( cd zeromq4-x && ./autogen.sh && ./configure && make install )
+( cd zeromq4-x && ./autogen.sh && ./configure && make -j 4 install )
 
 # install PHP 5.5 from Webtatic repo
 yum install -y php55w php55w-devel php55w-pear

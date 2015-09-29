@@ -34,7 +34,8 @@
 		"nikic/php-parser": "^1.3",
 		"twig/twig": "1.*",
 		"predis/predis": "~1.0",
-		"stuart/myversion": "^1.0.1"
+		"stuart/myversion": "^1.0.1",
+		"ganbarodigital/php-text-tools": "^1.1.1"
 	},
 	"require-dev": {
 		"stuart/phingtasks": "1.0.0",
