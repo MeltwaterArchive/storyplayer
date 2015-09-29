@@ -43,6 +43,8 @@
 
 namespace DataSift\Storyplayer\HostLib;
 
+use GanbaroDigital\TextTools\Filters\FilterColumns;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\OsLib;
@@ -376,10 +378,15 @@ class VagrantVm implements SupportedHost
         $log = usingLog()->startAction("determine status of Vagrant VM '{$vmDetails->hostId}'");
 
         // if the box is running, it should have a status of 'running'
-        $command = "vagrant status | grep {$vmDetails->hostId} | head -n 1 | awk '{print \$2'}";
+        $command = "vagrant status";
         $result  = $this->runCommandAgainstHostManager($vmDetails, $command);
 
+        // reduce the output down to the exact host we are looking for
         $lines = explode("\n", $result->output);
+        $lines = FilterForMatchingString::against($lines, $vmDetails->hostId);
+        $lines = FilterColumns::from($lines, "1", ' ');
+
+        // what is the status?
         $state = trim($lines[0]);
         if ($state != 'running') {
             $log->endAction("VM is not running; state is '{$state}'");

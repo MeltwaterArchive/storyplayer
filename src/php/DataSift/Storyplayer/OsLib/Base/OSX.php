@@ -45,6 +45,9 @@ namespace DataSift\Storyplayer\OsLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\HostLib\SupportedHost;
+use GanbaroDigital\TextTools\Filters\FilterColumns;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 /**
  * support for Storyplayer running on OSX
@@ -116,11 +119,20 @@ abstract class Base_OSX extends OsBase
         $log = usingLog()->startAction("is process '{$processName}' running on OSX '{$hostDetails->hostId}'?");
 
         // SSH in and have a look
-        $command   = "ps -ef | awk '{ print \$8 }' | grep '[" . $processName{0} . "]" . substr($processName, 1) . "'";
+        $command   = "ps -ef | grep '{$processName}'";
         $result    = $this->runCommand($hostDetails, $command);
 
         // what did we find?
         if ($result->didCommandFail() || empty($result->output)) {
+            $log->endAction("not running");
+            return false;
+        }
+
+        // process the result
+        $lines = explode("\n", $result->output);
+        $lines = FilterColumns::from($lines, "7", ' ');
+        $lines = FilterForMatchingRegex::against($lines, "/^{$processName}$/");
+        if (empty($lines)) {
             $log->endAction("not running");
             return false;
         }
@@ -142,7 +154,7 @@ abstract class Base_OSX extends OsBase
         $log = usingLog()->startAction("get pid for process '{$processName}' running on OSX machine '{$hostDetails->hostId}'");
 
         // run the command to get the process id
-        $command   = "ps -ef | grep '[" . $processName{0} . "]" . substr($processName, 1) . "' | awk '{print \$2}'";
+        $command   = "ps -ef | grep '{$processName}'";
         $result    = $this->runCommand($hostDetails, $command);
 
         // check that we got something
@@ -153,6 +165,8 @@ abstract class Base_OSX extends OsBase
 
         // check that we found exactly one process
         $pids = explode("\n", $result->output);
+        $pids = FilterForMatchingRegex::against($lines, "/{$processName}/");
+        $pids = FilterColumns::from($lines, 1, ' ');
         if (count($pids) != 1) {
             $log->endAction("found more than one process but expecting only one ... is this correct?");
             return 0;
@@ -178,13 +192,23 @@ abstract class Base_OSX extends OsBase
         $log = usingLog()->startAction("is process PID '{$pid}' running on OSX '{$hostDetails->hostId}'?");
 
         // SSH in and have a look
-        $command   = "ps -ef | awk '{ print \$2 }' | grep '[" . $pid{0} . "]" . substr($pid, 1) . "'";
+        $command   = "ps -ef | grep '{$pid}'";
         $result    = $this->runCommand($hostDetails, $command);
 
         // what did we find?
         if ($result->didCommandFail() || empty($result->output)) {
             $log->endAction("not running");
             return false;
+        }
+
+        // examine the output
+        $lines = explode("\n", $result->output);
+        $lines = FilterColumns::from($lines, "1", ' ');
+        $lines = FilterForMatchingRegex::against($lines, "/^{$pid}$/");
+
+        // did we find the process?
+        if (empty($lines)) {
+            $log->endAction("not running");
         }
 
         // success

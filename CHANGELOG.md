@@ -12,6 +12,23 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
+## 2.3.2 - In Progress
+
+### Fixes
+
+* Replace all `grep` and `awk` CLI commands with processing done in PHP instead
+
+  This fix solves the problem of the mangling of escaped characters in many of the shell commands that Storyplayer runs.
+
+### Test Suite Fixes
+
+* Update virtualbox images used for Storyplayer's own test-suite.
+
+  * The CentOS images that we previously used are no longer available :(
+  * Ubuntu have removed their v14.10 virtualbox image :(
+
+* Use `make -j 4` for building ZMQ inside virtualbox images, to speed up test runs.
+
 ## 2.3.1 - Wednesday 15th July 2015
 
 ### Fixes

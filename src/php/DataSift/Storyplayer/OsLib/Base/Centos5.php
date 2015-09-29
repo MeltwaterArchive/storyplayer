@@ -45,6 +45,8 @@ namespace DataSift\Storyplayer\OsLib;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\HostLib\SupportedHost;
+use GanbaroDigital\TextTools\Filters\FilterColumns;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 use Prose\E5xx_ActionFailed;
 
@@ -79,16 +81,32 @@ abstract class Base_Centos5 extends Base_Unix
 
         // how do we do this?
         foreach ($hostDetails->ifaces as $iface) {
-            $command = "/sbin/ifconfig {$iface} | grep 'inet addr' | awk -F : '{print \\\$2}' | awk '{print \\\$1}'";
+            $command = "/sbin/ifconfig {$iface}";
             $result = $host->runCommandViaHostManager($hostDetails, $command);
 
-            // NOTE: the above command will return the exit code 0 even if the interface is not found
-            if ($result->didCommandSucceed() && (strpos($result->output, 'error') === false)) {
-                $lines = explode("\n", $result->output);
-                $ipAddress = trim($lines[0]);
-                $log->endAction("IP address is '{$ipAddress}'");
-                return $ipAddress;
+            if ($result->didCommandFail() || (strpos($result->output, 'error fetching') !== false)) {
+                // no interface found
+                //
+                // move on to the next interface to check
+                continue;
             }
+
+            // reduce the output down to an IP address
+            $lines = explode("\n", $result->output);
+            $lines = FilterForMatchingString::against($lines, 'inet addr');
+            $lines = FilterColumns::from($lines, '1', ':');
+            $lines = FilterColumns::from($lines, '0', ' ');
+
+            // do we have an IP address?
+            if (!isset($lines[0]) || empty(trim(rtrim($lines[0])))) {
+                // no, we do not
+                continue;
+            }
+
+            // if we get here, then we've found an IP address!
+            $ipAddress = trim($lines[0]);
+            $log->endAction("IP address is '{$ipAddress}'");
+            return $ipAddress;
         }
 
         // if we get here, we do not know what the IP address is
@@ -132,7 +150,7 @@ abstract class Base_Centos5 extends Base_Unix
         $log = usingLog()->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
 
         // get the details
-        $command   = "sudo yum list installed {$packageName} | grep '{$packageName}' | awk '{print \\\$1,\\\$2,\\\$3}'";
+        $command   = "sudo yum list installed {$packageName}";
         $result    = $this->runCommand($hostDetails, $command);
 
         // any luck?
@@ -142,6 +160,13 @@ abstract class Base_Centos5 extends Base_Unix
         }
 
         // study the output
+        $parts = explode("\n", $result->output);
+        $parts = FilterForMatchingString::against($parts, $packageName);
+        $parts = FilterColumns::from($parts, "0-2", ' ');
+        if (!isset($parts[0])) {
+            $log->endAction("could not get details ... package not installed?");
+            return new BaseObject();
+        }
         $parts = explode(' ', $result->output);
         if (count($parts) < 3) {
             $log->endAction("could not get details ... package not installed?");

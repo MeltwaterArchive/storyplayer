@@ -49,6 +49,10 @@ use DataSift\Storyplayer\OsLib;
 use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\ObjectLib\BaseObject;
 
+use GanbaroDigital\TextTools\Filters\FilterColumns;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
+
 /**
  * get information about a given host
  *
@@ -341,21 +345,35 @@ class FromHost extends HostBase
         $log = usingLog()->startAction("get details about screen session '{$sessionName}' on host '{$this->args[0]}' from Storyplayer");
 
         // are there any details?
-        $cmd = "screen -ls | grep -E '[[:digit:]]+.{$sessionName}[[:space:]]' | awk -F. '{print \\\$1}'";
-        $result = usingHost($this->args[0])->runCommand($cmd);
+        $cmd = "screen -ls";
+        $result = usingHost($this->args[0])->runCommandAndIgnoreErrors($cmd);
+
+        // NOTE:
+        //
+        // screen is not a well-behaved UNIX program, and its exit code
+        // can be non-zero when everything is good
+        if (empty($result->output)) {
+            $msg = "unable to get list of screen sessions";
+            return null;
+        }
+
+        // do we have the session we are looking for?
+        $lines = explode("\n", $result->output);
+        $lines = FilterForMatchingRegex::against($lines, "/[0-9]+\\.{$sessionName}\t/");
+        $lines = FilterColumns::from($lines, "0", '.');
+
+        if (empty($lines)) {
+            $msg = "screen session '{$sessionName}' is not running";
+            $log->endAction($msg);
+            return null;
+        }
 
         // there might be
         $processDetails = new BaseObject;
         $processDetails->hostId = $this->args[0];
         $processDetails->name = $sessionName;
         $processDetails->type = 'screen';
-        $processDetails->pid = trim(rtrim($result->output));
-
-        if (empty($processDetails->pid)) {
-            $msg = "unable to find PID of screen session '{$sessionName}'";
-            $log->endAction($msg);
-            return null;
-        }
+        $processDetails->pid = trim(rtrim($lines[0]));
 
         // all done
         $log->endAction("session is running as PID '{$processDetails->pid}'");
@@ -371,23 +389,38 @@ class FromHost extends HostBase
         $log = usingLog()->startAction("get details about all screen sessions on host '{$this->args[0]}'");
 
         // are there any details?
-        $cmd = "screen -ls | grep -E '[[:digit:]]+\.[^[:space:]]+[[:space:]]' | awk '{print \\\$1}'";
-        $result = usingHost($this->args[0])->runCommand($cmd);
+        $cmd = "screen -ls";
+        $result = usingHost($this->args[0])->runCommandAndIgnoreErrors($cmd);
+
+        // NOTE:
+        //
+        // screen is not a well-behaved UNIX program, and its exit code
+        // can be non-zero when everything is good
+        if (empty($result->output)) {
+            $msg = "unable to get list of screen sessions";
+            $log->endAction($msg);
+            return [];
+        }
+
+        // reduce the output down to a list of sessions
+        $lines = explode("\n", $result->output);
+        $lines = FilterForMatchingRegex::against($lines, "/[0-9]+.+\t/");
+
+        if (empty($lines)) {
+            $msg = "no screen processes running";
+            $log->endAction($msg);
+            return [];
+        }
 
         $retval = [];
-        foreach (explode("\n", $result->output) as $line) {
-            // skip empty lines
-            $line = trim(rtrim($line));
-            if (empty($line)) {
-                continue;
-            }
+        foreach ($lines as $line) {
             $parts = explode('.', $line);
 
             $processDetails = new BaseObject;
             $processDetails->hostId = $this->args[0];
             $processDetails->type = 'screen';
-            $processDetails->pid  = $parts[0];
-            $processDetails->name = $parts[1];
+            $processDetails->pid  = trim($parts[0]);
+            $processDetails->name = rtrim($parts[1]);
 
             $retval[] = $processDetails;
         }
