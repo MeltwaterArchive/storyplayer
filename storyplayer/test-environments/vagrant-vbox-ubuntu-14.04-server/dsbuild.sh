@@ -17,7 +17,7 @@ cp /vagrant/files/ssl/default.conf /etc/nginx/conf.d/
 
 # install libzmq4 stable
 git clone https://github.com/zeromq/zeromq4-x.git
-( cd zeromq4-x && ./autogen.sh && ./configure && make install )
+( cd zeromq4-x && ./autogen.sh && ./configure && make -j 4 install )
 
 # install PHP 5.5
 apt-get install -y php5-cli php5-dev php-pear
