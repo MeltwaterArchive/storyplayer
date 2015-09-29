@@ -10,9 +10,28 @@ updated_for_v2: true
 
 For the very latest list of changes in upcoming releases, see the [CHANGELOG](https://github.com/datasift/storyplayer/blob/develop/CHANGELOG.md) on GitHub.
 
+## v2.3.2
+
+Released Tuesday 29th September 2015.
+
+### Fixes
+
+* Replace all `grep` and `awk` CLI commands with processing done in PHP instead
+
+  This fix solves the problem of the mangling of escaped characters in many of the shell commands that Storyplayer runs.
+
+### Test Suite Fixes
+
+* Update virtualbox images used for Storyplayer's own test-suite.
+
+  * The CentOS images that we previously used are no longer available :(
+  * Ubuntu have removed their v14.10 virtualbox image :(
+
+* Use `make -j 4` for building ZMQ inside virtualbox images, to speed up test runs.
+
 ## v2.3.1
 
-Release Wednesday 15th July 2015.
+Released Wednesday 15th July 2015.
 
 ### Fixes
 
