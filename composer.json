@@ -27,7 +27,6 @@
 		"phix/validationlib": ">=4.2.0",
 		"datasift/stone": "^1.9.16",
 		"datasift/webdriver": ">=1.5.0",
-		"aws/aws-sdk-php": "2.*",
 		"datasift/netifaces": "*",
 		"phix/injectables": "*",
 		"symfony/yaml": "2.*",

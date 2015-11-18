@@ -29,7 +29,17 @@ In this release, I've made some important improvements to Storyplayer's `runtime
 
 * .storyplayer/runtime.json has been replaced. Each test environment now gets its own `runtime.json` file.
 
-## 2.3.2 - Tuesday 29th September 2015
+## 2.3.3 - Wednesday 18th November 2015
+
+### Fixes
+
+* Drop requirement for Amazon AWS SDK
+  - Amazon have removed v2.x of their SDK from Packagist
+  - Missing dependency was preventing Storyplayer installing
+
+We'll update Storyplayer to support v3.x of the SDK in due course.
+
+## 2.3.2 - Tuesday 29th Sept 2015
 
 ### Fixes
 
