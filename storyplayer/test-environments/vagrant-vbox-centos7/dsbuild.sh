@@ -9,7 +9,7 @@ rpm -Uvh https://mirror.webtatic.com/yum/el7/epel-release.rpm
 rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 
 # install Nginx
-yum install -y nginx
+yum install -y --skip-broken nginx
 
 # configure SSL support
 mkdir /etc/nginx/ssl
@@ -43,3 +43,6 @@ yum install -y screen
 
 # now we're ready to start supervisor
 supervisord -c /etc/supervisord.conf
+
+# finally, we need to get rid of the default firewall
+systemctl stop firewalld
