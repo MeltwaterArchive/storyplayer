@@ -20,6 +20,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
   * Moved `vagrant-vbox-centos6-ssl` to our own image
   * Renamed `vagrant-vbox-centos6-ssl` to be `vagrant-vbox-centos-6.7`
   * Moved vagrant-vbox-centos7 to our own image
+  * Renamed `vagrant-vbox-centos7` to be `vagrant-vbox-centos-7.1`
 
 ## 2.3.3 - Wednesday 18th November 2015
 
