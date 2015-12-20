@@ -214,10 +214,6 @@ class StoryTeller
     // story / template params
     private $defines = [];
 
-    // our repository of parsed code, for printing code statements
-    private $codeParser = null;
-    private $lastSeenCodeLine = null;
-
     // our data formatter
     private $dataFormatter = null;
 
@@ -228,9 +224,6 @@ class StoryTeller
     {
         // remember our output object
         $this->setOutput($injectables->output);
-
-        // our code parser
-        $this->setCodeParser($injectables->codeParser);
 
         // our data formatter
         $this->setDataFormatter($injectables->dataFormatter);
@@ -474,16 +467,6 @@ class StoryTeller
     public function setOutput(Output $output)
     {
         $this->output = $output;
-    }
-
-    public function getCodeParser()
-    {
-        return $this->codeParser;
-    }
-
-    public function setCodeParser($codeParser)
-    {
-        $this->codeParser = $codeParser;
     }
 
     public function setDataFormatter($dataFormatter)
@@ -797,14 +780,6 @@ class StoryTeller
             throw new E5xx_NoMatchingActions($methodName);
         }
 
-        // who called us?
-        $stackTrace = debug_backtrace();
-        $codeLine = $this->codeParser->buildExecutingCodeLine($stackTrace);
-        $this->lastSeenCodeLine = null;
-        if ($codeLine && !empty($codeLine)) {
-            $this->lastSeenCodeLine = $codeLine;
-        }
-
         // all done
         return $obj;
     }
@@ -820,7 +795,7 @@ class StoryTeller
      */
     public function startAction($text)
     {
-        return $this->actionLogger->startAction($text, $this->lastSeenCodeLine);
+        return $this->actionLogger->startAction($text);
     }
 
     /**

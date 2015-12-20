@@ -49,7 +49,6 @@ use DataSift\Storyplayer\Injectables\ActiveConfigSupport;
 use DataSift\Storyplayer\Injectables\ActiveDeviceSupport;
 use DataSift\Storyplayer\Injectables\ActiveSystemUnderTestConfigSupport;
 use DataSift\Storyplayer\Injectables\ActiveTestEnvironmentConfigSupport;
-use DataSift\Storyplayer\Injectables\CodeParserSupport;
 use DataSift\Storyplayer\Injectables\DataFormatterSupport;
 use DataSift\Storyplayer\Injectables\DefaultCommandLineSupport;
 use DataSift\Storyplayer\Injectables\DefaultConfigSupport;
@@ -85,7 +84,6 @@ class Injectables extends BaseInjectables
     use ActiveDeviceSupport;
     use ActiveSystemUnderTestConfigSupport;
     use ActiveTestEnvironmentConfigSupport;
-    use CodeParserSupport;
     use DataFormatterSupport;
     use DefaultCommandLineSupport;
     use DefaultConfigSupport;

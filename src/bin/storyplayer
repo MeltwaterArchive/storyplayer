@@ -221,9 +221,6 @@ function main($argv)
 	// activate support for printing to the user
 	$output = $injectables->initOutputSupport();
 
-	// activate support for parsing code
-	$injectables->initCodeParserSupport();
-
 	// activate support for printing data
 	$injectables->initDataFormatterSupport();
 
