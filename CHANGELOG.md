@@ -17,6 +17,8 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 ### Fixes
 
 * Stop relying on unpredictable third-party CentOS Vagrant images
+  * Moved `vagrant-vbox-centos6-ssl` to our own image
+  * Renamed `vagrant-vbox-centos6-ssl` to be `vagrant-vbox-centos-6.7`
   * Moved vagrant-vbox-centos7 to our own image
 
 ## 2.3.3 - Wednesday 18th November 2015

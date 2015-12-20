@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
-  config.vm.box = "learningchef/centos65"
+  config.vm.box = "vagrant-vbox-centos-6.7.box"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   config.vm.boot_mode = :gui
