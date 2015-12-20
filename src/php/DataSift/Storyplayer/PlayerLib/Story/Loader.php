@@ -92,12 +92,6 @@ class Story_Loader
             throw new E5xx_InvalidStoryFile("Story file '{$filename}' did create a \$story variable, but it is of type '" . get_class($story) . "' instead of type 'DataSift\Storyplayer\PlayerLib\Story'");
         }
 
-        // now that the story is built, we want to parse the source code
-        //
-        // we're going to use the source code if we need to explain why
-        // a story failed or errored
-        $story->buildParseTrees(realpath($filename));
-
         // all done
         return $story;
     }

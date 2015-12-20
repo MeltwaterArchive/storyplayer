@@ -23,6 +23,8 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
   * Renamed `vagrant-vbox-centos7` to be `vagrant-vbox-centos-7.1`
 * Parse CentOS 7 IP addresses using the `ip` command
   * `ifconfig` is no longer installed by default on CentOS 7.x
+* Drop support for parsing the PHP code we're executing
+  * Too many `composer` errors when trying to install nikic's parser :(
 
 ## 2.3.3 - Wednesday 18th November 2015
 

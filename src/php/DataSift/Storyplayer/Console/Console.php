@@ -306,48 +306,6 @@ abstract class Console extends OutputPlugin
         if ($e)
         {
             $stackTrace = $e->getTrace();
-            foreach ($stackTrace as $stackEntry)
-            {
-                if (!isset($stackEntry['file'])) {
-                    continue;
-                }
-
-                // do we have any code for this?
-                $code = $story->getStoryCodeFor($stackEntry['file'], $stackEntry['line']);
-                if (!$code) {
-                    continue;
-                }
-
-                // because we chain multiple method calls on a single line,
-                // a PHP stack entry can contain duplicate entries
-                //
-                // we don't want to show duplicate entries, so we use the
-                // filename@line as a key in the array
-                $key = $stackEntry['file'] . '@' . $stackEntry['line'];
-                if (count($codePoints) > 0 && end($codePoints)['key'] == $key) {
-                    $codePoint = end($codePoints);
-                    if ($stackEntry['function'] == '__call') {
-                        $codePoint['args'] += $stackEntry['args'][1];
-                    }
-                    else {
-                        $codePoint['args'] += $stackEntry['args'];
-                    }
-                    $codePoints[count($codePoints) - 1] = $codePoint;
-                }
-                else {
-                    $codePoint = $stackEntry;
-                    $codePoint['code'] = CodeFormatter::formatCode($code);
-                    $codePoint['key']  = $key;
-
-                    // deal with magic
-                    if ($codePoint['function'] == '__call') {
-                        $codePoint['args'] = $codePoint['args'][1];
-                    }
-
-                    $codePoints[] = $codePoint;
-                }
-            }
-
             $trace = $e->getTraceAsString();
         }
 
@@ -360,54 +318,6 @@ abstract class Console extends OutputPlugin
         $this->write($phaseName, $this->writer->failedPhaseStyle);
         $this->write(" phase." . PHP_EOL);
 
-        if (count($codePoints) > 0)
-        {
-            $this->write(PHP_EOL . "-----" . PHP_EOL, $this->writer->commentStyle);
-            $this->write("The story was executing this Prose code when it failed:". PHP_EOL);
-
-            $codePoints = array_reverse($codePoints);
-            foreach ($codePoints as $codePoint) {
-                $this->write(PHP_EOL . str_repeat(' ', 4));
-                $this->writeCodePointFile($codePoint);
-                $this->write(':' . PHP_EOL . PHP_EOL);
-                $this->write('        ');
-                $this->writeCodePointCode($codePoint);
-                $this->write(PHP_EOL);
-
-                // unfortunately, I've had to comment this out
-                //
-                // it's just far too easy to end up with a variable that
-                // can't be var_dump()ed without running out of RAM :(
-                //
-                // if (isset($codePoint['args']) && count($codePoint['args'])) {
-                //  $this->write(PHP_EOL . '        Arguments:' . PHP_EOL, $this->writer->argumentsHeadingStyle);
-                //  foreach ($codePoint['args'] as $key => $arg) {
-                //      if (is_object($arg) && get_class($arg) == 'DataSift\Storyplayer\PlayerLib\Storyteller') {
-                //          $printableArg = '$st';
-                //      }
-                //      else {
-                //          ob_start();
-                //          var_dump($arg);
-                //          $printableArg = ob_get_contents();
-                //          ob_end_clean();
-                //      }
-
-                //      // how many lines do we have?
-                //      $lines = explode(PHP_EOL, $printableArg);
-                //      $maxLength = 100;
-                //      if (count($lines) > $maxLength) {
-                //          $printableArg = '';
-                //          for ($i = 0; $i < $maxLength; $i++) {
-                //              $printableArg .= $lines[$i] . PHP_EOL;
-                //          }
-                //          $printableArg .= '...' . PHP_EOL;
-                //      }
-
-                //      $this->write(PHP_EOL . CodeFormatter::indentBySpaces($printableArg, 12));
-                //  }
-                // }
-            }
-        }
         if (!empty($activityLog)) {
             $this->write(PHP_EOL . "-----" . PHP_EOL, $this->writer->commentStyle);
             $this->write("This is the detailed output from the ");
@@ -430,17 +340,5 @@ abstract class Console extends OutputPlugin
         $this->write("----------------------------------------" . PHP_EOL, $this->writer->commentStyle);
         $this->write("END OF ERROR REPORT" . PHP_EOL);
         $this->write("=============================================================" . PHP_EOL . PHP_EOL, $this->writer->commentStyle);
-    }
-
-    protected function writeCodePointFile($codeLine)
-    {
-        $this->write($codeLine['file'], $this->writer->activityStyle);
-        $this->write('@', $this->writer->punctuationStyle);
-        $this->write($codeLine['line'], $this->writer->activityStyle);
-    }
-
-    protected function writeCodePointCode($codeLine, $style = null)
-    {
-        $this->write(rtrim($codeLine['code'] . PHP_EOL), $style);
     }
 }
