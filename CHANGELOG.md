@@ -23,7 +23,7 @@ In this release, I've made some important improvements to Storyplayer's `runtime
 
 ### New:
 
-* Story templates should now extend `Storyplayer\Stories\StoryTemplate`. The original `DataSift\Storyplayer\PlayerLib\StoryTemplate` base class is still there, for backwards-compatibility.
+* Story templates should now extend `Storyplayer\SPv2\Stories\StoryTemplate`. The original `DataSift\Storyplayer\PlayerLib\StoryTemplate` base class is still there, for backwards-compatibility.
 * New stories should now be created from `Storyplayer\SPv2\Stories\BuildStory`.
 
 ### Refactor:
