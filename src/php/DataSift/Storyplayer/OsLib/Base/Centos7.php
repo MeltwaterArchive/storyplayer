@@ -81,7 +81,7 @@ abstract class Base_Centos7 extends Base_Centos5
 
         // how do we do this?
         foreach ($hostDetails->ifaces as $iface) {
-            $command = "/sbin/ifconfig {$iface}";
+            $command = "/sbin/ip addr show {$iface}";
             $result = $host->runCommandViaHostManager($hostDetails, $command);
 
             // NOTE: the above command will return the exit code 0 even if the interface is not found
@@ -98,13 +98,14 @@ abstract class Base_Centos7 extends Base_Centos5
             $lines = FilterColumns::from($lines, '1', ' ');
 
             // do we have an IP address?
-            if (!isset($lines[0]) || empty(trim(rtrim($lines[0])))) {
+            if (!isset($lines[0]) || empty(trim($lines[0]))) {
                 // no, we do not
                 continue;
             }
 
-            // if we get here, then we have an IP address
-            $ipAddress = trim($lines[0]);
+            // if we get here, then we have an IP address/netmask combo
+            $parts = explode("/", $lines[0]);
+            $ipAddress = trim($parts[0]);
             $log->endAction("IP address is '{$ipAddress}'");
             return $ipAddress;
         }

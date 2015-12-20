@@ -12,6 +12,20 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
+## hotfix/2.3.4
+
+### Fixes
+
+* Stop relying on unpredictable third-party CentOS Vagrant images
+  * Moved `vagrant-vbox-centos6-ssl` to our own image
+  * Renamed `vagrant-vbox-centos6-ssl` to be `vagrant-vbox-centos-6.7`
+  * Moved vagrant-vbox-centos7 to our own image
+  * Renamed `vagrant-vbox-centos7` to be `vagrant-vbox-centos-7.1`
+* Parse CentOS 7 IP addresses using the `ip` command
+  * `ifconfig` is no longer installed by default on CentOS 7.x
+* Drop support for parsing the PHP code we're executing
+  * Too many `composer` errors when trying to install nikic's parser :(
+
 ## 2.3.3 - Wednesday 18th November 2015
 
 ### Fixes

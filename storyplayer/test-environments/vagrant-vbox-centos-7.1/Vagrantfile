@@ -2,22 +2,18 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
-  config.vm.box = "learningchef/centos65"
+  config.vm.box = "vagrant-vbox-centos-7.1.box"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   config.vm.boot_mode = :gui
 
   # enable bridged networking
   #config.vm.network :bridged, :bridge=>ENV["VIRTUALBOX_BRIDGE_ADAPTER"]
+
 end
 
 # provider-specfic configuration
 Vagrant.configure("2") do |config|
-  # enable caching if available
-  if Vagrant.has_plugin?("vagrant-cachier")
-      config.cache.scope = :box
-  end
-
   # enable private networking
   config.vm.network "private_network", type: "dhcp"
 
