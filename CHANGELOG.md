@@ -12,7 +12,7 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
-## Develop Branch - In Progress
+## develop Branch - In Progress
 
 ### Upgrade Instructions
 
@@ -21,14 +21,18 @@ In this release, I've made some important improvements to Storyplayer's `runtime
 * close down any test environments that Storyplayer has created for you
 * delete your .storyplayer/runtime.json file
 
-### New:
+### New
 
 * Story templates should now extend `Storyplayer\SPv2\Stories\StoryTemplate`. The original `DataSift\Storyplayer\PlayerLib\StoryTemplate` base class is still there, for backwards-compatibility.
 * New stories should now be created from `Storyplayer\SPv2\Stories\BuildStory`.
 
-### Refactor:
+### Refactor
 
 * .storyplayer/runtime.json has been replaced. Each test environment now gets its own `runtime.json` file.
+
+### Self-Test
+
+* New `legacy-features` section, for testing SPv2 functionality that is no longer the recommended approach.
 
 ## 2.3.4 - Sunday 20th December 2015
 
