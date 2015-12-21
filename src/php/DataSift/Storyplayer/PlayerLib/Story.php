@@ -484,6 +484,36 @@ class Story
     }
 
     /**
+     * get the name of this story, as is suitable for displaying in
+     * the console
+     *
+     * @return string
+     */
+    public function getNameForConsole()
+    {
+        // this is for stories that made the effort to tell us
+        // about themselves
+        if (isset($this->category)) {
+            return $this->getCategory() . ' > ' . $this->getGroupAsString() . ' > ' . $this->getName();
+        }
+
+        // this is for stories that have not gone to the trouble
+        $cwd = getcwd() . DIRECTORY_SEPARATOR;
+        $filename = $this->getStoryFilename();
+
+        $filename = str_replace($cwd, '', $filename);
+        $parts = explode(DIRECTORY_SEPARATOR, $filename);
+        while (!empty($parts)) {
+            $part = array_shift($parts);
+            if (strtolower($part) === 'stories') {
+                return implode(DIRECTORY_SEPARATOR, $parts);
+            }
+        }
+
+        return $filename;
+    }
+
+    /**
      * Set the parameters for this story
      *
      * Parameters are a way of passing settings between Stories and
@@ -1258,7 +1288,7 @@ class Story
      */
     public function __toString()
     {
-        return $this->getCategory() . ' :: ' . $this->getGroupAsString() . ' :: ' . $this->getName();
+        return $this->getNameForConsole();
     }
 
     // ==================================================================

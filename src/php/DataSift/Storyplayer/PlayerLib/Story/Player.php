@@ -121,7 +121,7 @@ class Story_Player
 
         // tell the outside world what we're doing
         $activity = "Running story";
-        $name     = $story->getCategory() . ' > ' . $story->getGroupAsString() . ' > ' . $story->getName();
+        $name     = $story->getNameForConsole();
         $output->startPhaseGroup($activity, $name);
 
         // run the phases before the story truly starts
