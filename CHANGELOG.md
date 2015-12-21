@@ -21,11 +21,20 @@ In this release, I've made some important improvements to Storyplayer's `runtime
 * close down any test environments that Storyplayer has created for you
 * delete your .storyplayer/runtime.json file
 
+After upgrading, all of your original stories will continue to work without modification.
+
+### Deprecated
+
+The following are deprecated, and will be removed in SPv3:
+
+* [modules as global functions](https://datasift.github.io/storyplayer/v2/using/deprecated/modules-as-global-functions.html)
+
 ### New
 
 * Story templates should now extend `Storyplayer\SPv2\Stories\StoryTemplate`. The original `DataSift\Storyplayer\PlayerLib\StoryTemplate` base class is still there, for backwards-compatibility.
 * New stories should now be created from `Storyplayer\SPv2\Stories\BuildStory`.
   * These stories will show their filename in output, rather than the old category / group / called triad.
+* SPv2 modules are now available to imported via standard PHP `use` statements.
 
 ### Refactor
 

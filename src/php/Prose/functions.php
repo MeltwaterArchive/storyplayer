@@ -58,12 +58,7 @@ use Predis\Client as PredisClient;
 //
 // ------------------------------------------------------------------
 
-use Prose\AssertsArray;
-use Prose\AssertsBoolean;
-use Prose\AssertsDouble;
-use Prose\AssertsInteger;
-use Prose\AssertsObject;
-use Prose\AssertsString;
+use Storyplayer\SPv2\Modules\Asserts;
 use Prose\CleanupHosts;
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
@@ -167,11 +162,11 @@ use Prose\E5xx_ActionFailed;
  *
  * @param  array $actual
  *         the array to be tested
- * @return \Prose\AssertsArray
+ * @return Storyplayer\SPv2\Modules\Asserts\AssertsArray
  */
 function assertsArray($actual)
 {
-    return new AssertsArray(StoryTeller::instance(), [$actual]);
+    return Asserts::assertsArray($actual);
 }
 
 /**
@@ -179,11 +174,11 @@ function assertsArray($actual)
  *
  * @param  boolean $actual
  *         the data to be tested
- * @return \Prose\AssertsBoolean
+ * @return Storyplayer\SPv2\Modules\Asserts\AssertsBoolean
  */
 function assertsBoolean($actual)
 {
-    return new AssertsBoolean(StoryTeller::instance(), [$actual]);
+    return Asserts::assertsBoolean($actual);
 }
 
 /**
@@ -191,11 +186,11 @@ function assertsBoolean($actual)
  *
  * @param  double $actual
  *         the data to be tested
- * @return \Prose\AssertsDouble
+ * @return Storyplayer\SPv2\Modules\Asserts\AssertsDouble
  */
 function assertsDouble($actual)
 {
-    return new AssertsDouble(StoryTeller::instance(), [$actual]);
+    return Asserts::assertsDouble($actual);
 }
 
 /**
@@ -203,11 +198,11 @@ function assertsDouble($actual)
  *
  * @param  int $actual
  *         the data to be tested
- * @return \Prose\AssertsInteger
+ * @return Storyplayer\SPv2\Modules\Asserts\AssertsInteger
  */
 function assertsInteger($actual)
 {
-    return new AssertsInteger(StoryTeller::instance(), [$actual]);
+    return Asserts::assertsInteger($actual);
 }
 
 /**
@@ -215,11 +210,11 @@ function assertsInteger($actual)
  *
  * @param  object $actual
  *         the data to be tested
- * @return \Prose\AssertsObject
+ * @return Storyplayer\SPv2\Modules\Asserts\AssertsObject
  */
 function assertsObject($actual)
 {
-    return new AssertsObject(StoryTeller::instance(), [$actual]);
+    return Asserts::assertsObject($actual);
 }
 
 /**
@@ -227,11 +222,11 @@ function assertsObject($actual)
  *
  * @param  string $actual
  *         the data to be tested
- * @return \Prose\AssertsString
+ * @return Storyplayer\SPv2\Modules\Asserts\AssertsString
  */
 function assertsString($actual)
 {
-    return new AssertsString(StoryTeller::instance(), [$actual]);
+    return Asserts::assertsString($actual);
 }
 
 /**
