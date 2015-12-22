@@ -41,7 +41,7 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithWindows.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../../testpages/WorkingWithWindows.html');
 
     // get the h1
     $checkpoint->mainHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_windows');

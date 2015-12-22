@@ -54,7 +54,7 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../../testpages/index.html');
 
     // resize the window
     usingBrowser()->resizeCurrentWindow(

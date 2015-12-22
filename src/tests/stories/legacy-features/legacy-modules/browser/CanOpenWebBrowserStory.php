@@ -41,7 +41,7 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../../testpages/index.html');
 
     // get the title of the test page
     $checkpoint->title = fromBrowser()->getTitle();

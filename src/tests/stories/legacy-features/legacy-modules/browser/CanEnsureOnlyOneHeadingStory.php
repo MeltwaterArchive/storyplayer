@@ -38,7 +38,7 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../../testpages/index.html');
 
     // make sure only one heading with this ID exists
     expectsBrowser()->has()->oneHeadingWithId('self_test_website');

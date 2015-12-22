@@ -41,7 +41,7 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../../testpages/index.html');
 
     // get a h2 by its ID
     $checkpoint->content = fromBrowser()->getText()->fromHeadingWithId('self_test_website');
