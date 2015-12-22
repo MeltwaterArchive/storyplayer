@@ -41,7 +41,7 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithIFrames.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithIframes.html');
 
     // get a h1
     $checkpoint->mainHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
