@@ -3,6 +3,7 @@
 use Storyplayer\SPv2\Modules\Asserts;
 use Storyplayer\SPv2\Modules\Browser;
 use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Stories\BuildStory;
 
 // ========================================================================
 //
@@ -10,11 +11,7 @@ use Storyplayer\SPv2\Modules\Checkpoint;
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor("Storyplayer")
-         ->inGroup(["Modules", "Browser"])
-         ->called('Can see inside iFrames');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
