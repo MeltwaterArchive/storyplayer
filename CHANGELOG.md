@@ -38,6 +38,10 @@ The following are deprecated, and will be removed in SPv3:
 * New modules:
   * Exceptions - standardise the exceptions that other modules should throw
 
+### Fixes
+
+* The browser no longer gets stuck in 'persist' mode when a single story wants the browser to persist for its execution.
+
 ### Refactor
 
 * .storyplayer/runtime.json has been replaced. Each test environment now gets its own `runtime.json` file.

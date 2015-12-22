@@ -955,6 +955,7 @@ class StoryTeller
         // stop the web browser
         if (!$adapter) {
             // nothing to do
+            // silently return
             return;
         }
 

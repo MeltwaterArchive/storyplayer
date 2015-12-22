@@ -237,11 +237,6 @@ class PhaseGroup_Player
         // close off any open log actions
         $st->closeAllOpenActions();
 
-        // stop any running test devices
-        if (!$st->getPersistDevice()) {
-            $st->stopDevice();
-        }
-
         // close off any log actions left open by closing down
         // the test device
         $st->closeAllOpenActions();
