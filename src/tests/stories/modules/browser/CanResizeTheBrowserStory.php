@@ -3,6 +3,7 @@
 use Storyplayer\SPv2\Modules\Asserts;
 use Storyplayer\SPv2\Modules\Browser;
 use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Stories\BuildStory;
 
 // ========================================================================
@@ -49,6 +50,9 @@ $story->addPreTestInspection(function() {
 // ------------------------------------------------------------------------
 
 $story->addAction(function() {
+    // what are we doing?
+    $log = Log::usingLog()->startAction("attempt to resize the browser");
+
 	// get the checkpoint, to store data in
 	$checkpoint = Checkpoint::getCheckpoint();
 
@@ -69,6 +73,8 @@ $story->addAction(function() {
     	$checkpoint->expectedDimensions['width'],
     	$checkpoint->expectedDimensions['height']
     );
+
+    $log->endAction("phase complete");
 });
 
 // ========================================================================
