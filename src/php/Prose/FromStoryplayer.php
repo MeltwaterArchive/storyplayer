@@ -44,6 +44,7 @@
 namespace Prose;
 
 use DataSift\Stone\DataLib\DataPrinter;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Get information from the loaded storyplayer.json (+ anything that has been
