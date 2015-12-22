@@ -1,16 +1,15 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor("Storyplayer")
-         ->inGroup(["Modules", "Browser"])
-         ->called('Can ensure only one heading');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -38,10 +37,10 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
+    Browser::usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
 
     // make sure only one heading with this ID exists
-    expectsBrowser()->has()->oneHeadingWithId('self_test_website');
+    Browser::expectsBrowser()->has()->oneHeadingWithId('self_test_website');
 });
 
 // ========================================================================

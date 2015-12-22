@@ -1,16 +1,17 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor("Storyplayer")
-         ->inGroup(["Modules", "Browser"])
-         ->called("Can get title of a web page");
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -37,10 +38,10 @@ $story->requiresStoryplayerVersion(2);
 // ------------------------------------------------------------------------
 
 $story->addAction(function() {
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
-	usingBrowser()->gotoPage("http://news.bbc.co.uk");
-	$checkpoint->title = fromBrowser()->getTitle();
+	Browser::usingBrowser()->gotoPage("http://news.bbc.co.uk");
+	$checkpoint->title = Browser::fromBrowser()->getTitle();
 });
 
 // ========================================================================
@@ -50,12 +51,12 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	// what title are we expecting?
 	$expectedTitle = fromStoryplayer()->getStorySetting("modules.http.remotePage.title");
 
 	// do we have the title we expected?
-	assertsObject($checkpoint)->hasAttribute('title');
-	assertsString($checkpoint->title)->equals($expectedTitle);
+	Asserts::assertsObject($checkpoint)->hasAttribute('title');
+	Asserts::assertsString($checkpoint->title)->equals($expectedTitle);
 });

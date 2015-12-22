@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/BrowserLib
+ * @package   Storyplayer/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\BrowserLib;
+namespace Storyplayer\SPv2\Modules\Browser;
 
 use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
@@ -52,7 +52,7 @@ use Prose\E5xx_ExpectFailed;
  * and terms for elements (such as 'buttonLabelled')
  *
  * @category  Libraries
- * @package   Storyplayer/BrowserLib
+ * @package   Storyplayer/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License

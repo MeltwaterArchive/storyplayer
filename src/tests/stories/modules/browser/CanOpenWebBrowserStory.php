@@ -1,16 +1,17 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor("Storyplayer")
-         ->inGroup(["Modules", "Browser"])
-         ->called('Can open web browser');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -38,13 +39,13 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
+    Browser::usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
 
     // get the title of the test page
-    $checkpoint->title = fromBrowser()->getTitle();
+    $checkpoint->title = Browser::fromBrowser()->getTitle();
 });
 
 // ========================================================================
@@ -55,9 +56,9 @@ $story->addAction(function() {
 
 $story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	// do we have the title we expected?
-	assertsObject($checkpoint)->hasAttribute('title');
-	assertsString($checkpoint->title)->equals("Storyplayer: Welcome To The Tests!");
+	Asserts::assertsObject($checkpoint)->hasAttribute('title');
+	Asserts::assertsString($checkpoint->title)->equals("Storyplayer: Welcome To The Tests!");
 });

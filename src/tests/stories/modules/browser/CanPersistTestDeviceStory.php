@@ -1,19 +1,19 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor("Storyplayer")
-         ->inGroup(["Modules", "Browser"])
-         ->called('Can persist the test device');
+$story = BuildStory::newStory();
 
 // keep the test device open
 $story->setPersistDevice();
-
-$story->requiresStoryplayerVersion(2);
 
 // ========================================================================
 //
@@ -41,7 +41,7 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
+    Browser::usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
 });
 
 // ========================================================================
@@ -53,11 +53,8 @@ $story->addAction(function() {
 $story->addPostTestInspection(function() {
 	// if this feature is working, the browser should already be open
 	// and we can just grab the title
-	$title = fromBrowser()->getTitle();
+	$title = Browser::fromBrowser()->getTitle();
 
 	// do we have the title we expected?
-	assertsString($title)->equals("Storyplayer: Welcome To The Tests!");
-
-	// all done - shut down the browser
-	stopDevice();
+	Asserts::assertsString($title)->equals("Storyplayer: Welcome To The Tests!");
 });

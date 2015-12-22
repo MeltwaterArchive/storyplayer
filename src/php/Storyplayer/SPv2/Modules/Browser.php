@@ -34,69 +34,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/BrowserLib
+ * @package   Storyplayer
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\BrowserLib;
+namespace Storyplayer\SPv2\Modules;
 
-use Exception;
+use Storyplayer\SPv2\Modules\Browser\ExpectsBrowser;
+use Storyplayer\SPv2\Modules\Browser\FromBrowser;
+use Storyplayer\SPv2\Modules\Browser\UsingBrowser;
+use Storyplayer\SPv2\Modules\Browser;
+
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-/**
- * Helper class for finding multiple DOM elements to act upon
- *
- * @method mixed elementWithId(string $id)
- *
- * @category  Libraries
- * @package   Storyplayer/BrowserLib
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class MultiElementAction extends BaseElementAction
+class Browser
 {
-    protected $pageContext;
-    protected $action;
-    protected $actionDesc;
-
     /**
-     * @param \Closure $action
-     * @param string $actionDesc
+     * returns the ExpectsBrowser submodule
+     *
+     * @return Storyplayer\SPv2\Modules\Browser\ExpectsBrowser;
      */
-    public function __construct($action, $actionDesc, $baseElement = null)
+    public static function expectsBrowser()
     {
-        parent::__construct($baseElement);
-
-        $this->action      = $action;
-        $this->actionDesc  = $actionDesc;
+        return new ExpectsBrowser(StoryTeller::instance());
     }
 
     /**
-     * @param  string $methodName
-     * @param  array $methodArgs
-     * @return mixed
+     * returns the FromBrowser submodule
+     *
+     * @return Storyplayer\SPv2\Modules\Browser\FromBrowser;
      */
-    public function __call($methodName, $methodArgs)
+    public static function fromBrowser()
     {
-        // turn the method name into an array of words
-        $words = $this->convertMethodNameToWords($methodName);
+        return new FromBrowser(StoryTeller::instance());
+    }
 
-        // how many elements are we searching for?
-        $countType  = $this->determineCountType($words);
-
-        // get the elements we need
-        $elements = $this->retrieveElements($methodName, $methodArgs);
-
-        // now that we have our elements, let's apply the action to them
-        $action = $this->action;
-        $return = $action($countType, $elements, $methodArgs[0], $methodName);
-
-        // all done
-        return $return;
+    /**
+     * returns the UsingBrowser submodule
+     *
+     * @return Storyplayer\SPv2\Modules\Browser\UsingBrowser;
+     */
+    public static function usingBrowser()
+    {
+        return new UsingBrowser(StoryTeller::instance());
     }
 }

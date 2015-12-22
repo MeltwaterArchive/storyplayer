@@ -1,16 +1,17 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor("Storyplayer")
-         ->inGroup(["Modules", "Browser"])
-         ->called('Can retrieve a heading by ID');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -38,13 +39,13 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
+    Browser::usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/index.html');
 
     // get a h2 by its ID
-    $checkpoint->content = fromBrowser()->getText()->fromHeadingWithId('self_test_website');
+    $checkpoint->content = Browser::fromBrowser()->getText()->fromHeadingWithId('self_test_website');
 });
 
 // ========================================================================
@@ -55,9 +56,9 @@ $story->addAction(function() {
 
 $story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	// do we have the content we expected?
-	assertsObject($checkpoint)->hasAttribute('content');
-	assertsString($checkpoint->content)->equals("Self-Test Website");
+	Asserts::assertsObject($checkpoint)->hasAttribute('content');
+	Asserts::assertsString($checkpoint->content)->equals("Self-Test Website");
 });

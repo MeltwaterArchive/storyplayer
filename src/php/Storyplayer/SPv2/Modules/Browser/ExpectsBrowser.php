@@ -34,24 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Browser;
 
-use DataSift\Storyplayer\BrowserLib\MultiElementAction;
-use DataSift\Storyplayer\BrowserLib\SingleElementExpect;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Browser;
 
 /**
  * Test the current contents of the browser
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -168,7 +167,7 @@ class ExpectsBrowser extends Prose
         $log = usingLog()->startAction("page title must be {$title}");
 
         // get the browser title
-        $browserTitle = fromBrowser()->getTitle();
+        $browserTitle = Browser::fromBrowser()->getTitle();
 
         if ($title != $browserTitle) {
             throw new E5xx_ExpectFailed('BrowserExpects::title', $title, $browserTitle);

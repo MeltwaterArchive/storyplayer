@@ -34,18 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/BrowserLib
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Browserlib;
+namespace Storyplayer\SPv2\Modules\Browser;
 
 use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Storyplayer\PlayerLib\Action_LogItem;
 use Prose\E5xx_ActionFailed;
 
 /**
@@ -58,7 +57,7 @@ use Prose\E5xx_ActionFailed;
  * - the caller then reduces the list to the single element that is required
  *
  * @category  Libraries
- * @package   Storyplayer/BrowserLib
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License

@@ -59,6 +59,8 @@ use Predis\Client as PredisClient;
 // ------------------------------------------------------------------
 
 use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Device;
 use Prose\CleanupHosts;
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
@@ -311,12 +313,12 @@ function cleanupTargets($key)
  *
  * If the check fails, this module throws an exception.
  *
- * @return \Prose\ExpectsBrowser
+ * @return \Storyplayer\SPv2\Modules\Browser\ExpectsBrowser
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsBrowser()
 {
-    return new ExpectsBrowser(StoryTeller::instance());
+    return Browser::expectsBrowser();
 }
 
 /**
@@ -678,11 +680,11 @@ function fromAws()
  * and natural to retrieve information from the HTML page that's currently
  * open in the web browser.
  *
- * @return \Prose\FromBrowser
+ * @return \Storyplayer\SPv2\Modules\Browser\FromBrowser
  */
 function fromBrowser()
 {
-    return new FromBrowser(StoryTeller::instance());
+    return Browser::fromBrowser();
 }
 
 /**
@@ -1233,7 +1235,7 @@ function getCheckpoint()
  */
 function stopDevice()
 {
-    return StoryTeller::instance()->stopDevice();
+    return Device::stopDevice();
 }
 
 /**
@@ -1248,11 +1250,11 @@ function stopDevice()
  * We've added a lot of helpful methods you can use to make it both quick
  * and natural to control the web browser.
  *
- * @return \Prose\UsingBrowser
+ * @return \Storyplayer\SPv2\Modules\Browser\UsingBrowser
  */
 function usingBrowser()
 {
-    return new UsingBrowser(StoryTeller::instance());
+    return Browser::usingBrowser();
 }
 
 /**

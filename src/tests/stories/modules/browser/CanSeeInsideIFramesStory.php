@@ -1,5 +1,9 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Checkpoint;
+
 // ========================================================================
 //
 // STORY DETAILS
@@ -38,19 +42,19 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithIFrames.html');
+    Browser::usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithIframes.html');
 
     // get a h1
-    $checkpoint->mainHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
+    $checkpoint->mainHeader = Browser::fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
 
     // switch to the iFrame
-    usingBrowser()->switchToIframe('iframe1');
+    Browser::usingBrowser()->switchToIframe('iframe1');
 
     // get the h1 now
-    $checkpoint->iFrameHeader = fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
+    $checkpoint->iFrameHeader = Browser::fromBrowser()->getText()->fromHeadingWithId('storyplayer_working_with_iframes');
 });
 
 // ========================================================================
@@ -61,12 +65,12 @@ $story->addAction(function() {
 
 $story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	// do we have the content we expected?
-	assertsObject($checkpoint)->hasAttribute('mainHeader');
-	assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With IFrames");
+	Asserts::assertsObject($checkpoint)->hasAttribute('mainHeader');
+	Asserts::assertsString($checkpoint->mainHeader)->equals("Storyplayer: Working With IFrames");
 
-	assertsObject($checkpoint)->hasAttribute('iFrameHeader');
-	assertsString($checkpoint->iFrameHeader)->equals("IFrame Content");
+	Asserts::assertsObject($checkpoint)->hasAttribute('iFrameHeader');
+	Asserts::assertsString($checkpoint->iFrameHeader)->equals("IFrame Content");
 });
