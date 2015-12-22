@@ -43,7 +43,7 @@ $story->addAction(function() {
 	$checkpoint = getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithForms.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../../testpages/WorkingWithForms.html');
 
     // get a field from a form
     $checkpoint->field1 = fromForm("test_form")->getValue()->fieldLabelled('Page Name');

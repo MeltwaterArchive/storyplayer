@@ -38,7 +38,7 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithForms.html');
+    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../../testpages/WorkingWithForms.html');
 
     // check the control that we're interested in
     expectsForm('test_form')->inputWithLabel('Page Subtitle')->isBlank();
