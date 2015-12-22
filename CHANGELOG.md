@@ -35,6 +35,8 @@ The following are deprecated, and will be removed in SPv3:
 * New stories should now be created from `Storyplayer\SPv2\Stories\BuildStory`.
   * These stories will show their filename in output, rather than the old category / group / called triad.
 * SPv2 modules are now available to imported via standard PHP `use` statements.
+* New modules:
+  * Exceptions - standardise the exceptions that other modules should throw
 
 ### Refactor
 
