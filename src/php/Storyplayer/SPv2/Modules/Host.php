@@ -44,6 +44,7 @@
 namespace Storyplayer\SPv2\Modules;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Iterator;
 use Storyplayer\SPv2\Modules\Host\CleanupHosts;
 use Storyplayer\SPv2\Modules\Host\ExpectsFirstHostWithRole;
 use Storyplayer\SPv2\Modules\Host\ExpectsHost;

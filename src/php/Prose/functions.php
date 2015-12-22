@@ -356,8 +356,7 @@ function expectsFailure()
  *
  * @param  string $roleName
  *         the assigned role you're looking for
- * @return \Prose\ExpectsHost
- * @throws \Prose\E5xx_ExpectFailed
+ * @return \Storyplayer\SPv2\Modules\Host\ExpectsFirstHostWithRole
  */
 function expectsFirstHostWithRole($roleName)
 {
@@ -417,8 +416,7 @@ function expectsGraphite()
  *
  * @param  string $hostId
  *         the ID of the host to use
- * @return \Prose\ExpectsHost
- * @throws \Prose\E5xx_ExpectFailed
+ * @return \Storyplayer\SPv2\Modules\Host\ExpectsHost
  */
 function expectsHost($hostId)
 {
@@ -434,8 +432,7 @@ function expectsHost($hostId)
  * This module is intended for internal use by Storyplayer. You should not
  * need to call this module from your own stories.
  *
- * @return \Prose\ExpectsHostsTable
- * @throws \Prose\E5xx_ExpectFailed
+ * @return \Storyplayer\SPv2\Modules\Host\ExpectsHostsTable
  */
 function expectsHostsTable()
 {
@@ -617,7 +614,7 @@ function expectsZmqSocket($zmqSocket)
  *
  * @param  string $roleName
  *         the role that you want to work with
- * @return \Prose\ForeachHostWithRole
+ * @return \Storyplayer\SPv2\Modules\Host\ForeachHostWithRole
  */
 function foreachHostWithRole($roleName)
 {
@@ -815,7 +812,7 @@ function fromFile()
  *
  * @param  string $roleName
  *         the assigned role you're looking for
- * @return \Prose\FromHost
+ * @return \Storyplayer\SPv2\Modules\Host\FromFirstHostWithRole
  */
 function fromFirstHostWithRole($roleName)
 {
@@ -874,7 +871,7 @@ function fromGraphite()
  *
  * @param  string $hostId
  *         the ID of the host to use
- * @return \Prose\FromHost
+ * @return \Storyplayer\SPv2\Modules\Host\FromHost
  */
 function fromHost($hostId)
 {
@@ -890,7 +887,7 @@ function fromHost($hostId)
  * This module is intended for internal use by Storyplayer. You should not
  * need to call this module from your own stories.
  *
- * @return \Prose\FromHostsTable
+ * @return \Storyplayer\SPv2\Modules\Host\FromHostsTable
  */
 function fromHostsTable()
 {
@@ -1329,7 +1326,7 @@ function usingFile()
  *
  * @param  string $roleName
  *         the assigned role you're looking for
- * @return \Prose\UsingHost
+ * @return \Storyplayer\SPv2\Modules\Host\UsingHost
  */
 function usingFirstHostWithRole($roleName)
 {
@@ -1369,7 +1366,7 @@ function usingForm($formId)
  *
  * @param  string $hostId
  *         the ID of the host to use
- * @return \Prose\UsingHost
+ * @return \Storyplayer\SPv2\Modules\Host\UsingHost
  */
 function usingHost($hostId)
 {
@@ -1385,7 +1382,7 @@ function usingHost($hostId)
  * This module is intended for internal use by Storyplayer. You should not
  * need to call this module from your own stories.
  *
- * @return \Prose\UsingHostsTable
+ * @return \Storyplayer\SPv2\Modules\Host\UsingHostsTable
  */
 function usingHostsTable()
 {
@@ -1421,7 +1418,7 @@ function usingHttp()
  * use this in your own stories whenever you to need to add an extra log
  * message, for example to make it really clear what is happening.
  *
- * @return \Prose\UsingLog
+ * @return \Storyplayer\SPv2\Modules\Host\UsingLog
  */
 function usingLog()
 {

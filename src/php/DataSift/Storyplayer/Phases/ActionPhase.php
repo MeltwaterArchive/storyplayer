@@ -46,7 +46,7 @@ namespace DataSift\Storyplayer\Phases;
 use Exception;
 use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
 use Storyplayer\SPv2\Modules\Exceptions\ExpectFailedException;
-use Stpryplayer\SPv2\Modules\Exceptions\NotImplementedException;
+use Storyplayer\SPv2\Modules\Exceptions\NotImplementedException;
 
 /**
  * the Action phase
