@@ -44,10 +44,10 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use Storyplayer\Modules\SPv2\Exceptions\ActionFailedException;
-use Storyplayer\Modules\SPv2\Exceptions\ExpectFailedException;
-use Storyplayer\Modules\SPv2\Exceptions\NotImplementedException;
-use Storyplayer\Modules\SPv2\Exceptions\StoryShouldFailException;
+use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\ExpectFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\NotImplementedException;
+use Storyplayer\SPv2\Modules\Exceptions\StoryShouldFailException;
 
 /**
  * the PreTestPrediction phase
