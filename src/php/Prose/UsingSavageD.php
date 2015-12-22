@@ -396,7 +396,7 @@ class UsingSavageD extends HostBase
 
         // do we have the module settings we need?
         if (!isset($hostDetails->moduleSettings, $hostDetails->moduleSettings->savaged, $hostDetails->moduleSettings->savaged->httpPort)) {
-            throw new E5xx_ActionFailed(__METHOD__, "moduleSettings.savaged.httpPort not set for host '{$this->args[0]}'");
+            throw Exceptions::newActionFailedException(__METHOD__, "moduleSettings.savaged.httpPort not set for host '{$this->args[0]}'");
         }
 
         $url = "http://" . $hostDetails->ipAddress . ":" . $hostDetails->moduleSettings->savaged->httpPort;

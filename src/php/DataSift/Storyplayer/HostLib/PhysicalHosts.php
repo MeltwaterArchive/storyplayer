@@ -47,7 +47,7 @@ use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * the things you can do / learn about a group of physical machines that
@@ -91,21 +91,21 @@ class PhysicalHosts implements SupportedHost
 
         // make sure we like the provided details
         if (!isset($groupDef->details)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details");
+            throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details");
         }
         if (!isset($groupDef->details->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines");
+            throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details->machines");
         }
         if (empty($groupDef->details->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "groupDef->details->machines cannot be empty");
+            throw Exceptions::newActionFailedException(__METHOD__, "groupDef->details->machines cannot be empty");
         }
         foreach($groupDef->details->machines as $hostId => $machine) {
             // TODO: it would be great to autodetect this one day
             if (!isset($machine->roles)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines['$hostId']->roles");
+                throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details->machines['$hostId']->roles");
             }
             if (!isset($machine->ipAddress)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines['$hostId']->ipAddress");
+                throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details->machines['$hostId']->ipAddress");
             }
         }
 
@@ -161,7 +161,7 @@ class PhysicalHosts implements SupportedHost
      */
     public function startHost($envDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -171,7 +171,7 @@ class PhysicalHosts implements SupportedHost
      */
     public function stopHost($envDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -181,7 +181,7 @@ class PhysicalHosts implements SupportedHost
      */
     public function restartHost($envDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -191,7 +191,7 @@ class PhysicalHosts implements SupportedHost
      */
     public function powerOffHost($envDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -225,7 +225,7 @@ class PhysicalHosts implements SupportedHost
      */
     public function runCommandAgainstHostManager($envDetails, $command)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -236,7 +236,7 @@ class PhysicalHosts implements SupportedHost
      */
     public function runCommandViaHostManager($envDetails, $command)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -246,7 +246,7 @@ class PhysicalHosts implements SupportedHost
      */
     public function isRunning($vmDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -256,6 +256,6 @@ class PhysicalHosts implements SupportedHost
      */
     public function determineIpAddress($vmDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 }

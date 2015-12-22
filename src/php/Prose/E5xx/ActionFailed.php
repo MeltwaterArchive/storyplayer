@@ -43,6 +43,8 @@
 
 namespace Prose;
 
+use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
+
 /**
  * Exception thrown when an operation in an 'Action' class fails
  *
@@ -53,13 +55,6 @@ namespace Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ActionFailed extends E5xx_ProseException
+class E5xx_ActionFailed extends ActionFailedException
 {
-    public function __construct($actionName, $reason = '', $params = array()) {
-        $msg = "Action '$actionName' failed";
-        if (strlen($reason) > 0) {
-            $msg .= "; reason is '{$reason}'";
-        }
-        parent::__construct(500, $msg, $msg);
-    }
 }

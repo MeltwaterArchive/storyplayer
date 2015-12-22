@@ -46,9 +46,9 @@ namespace DataSift\Storyplayer\Phases;
 use Exception;
 use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\ProvisioningLib;
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_ExpectFailed;
-use Prose\E5xx_NotImplemented;
+use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\ExpectFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\NotImplementedException;
 
 /**
  * the TestEnvironmentConstruction phase
@@ -106,14 +106,14 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
             $phaseResult->setContinuePlaying();
 
         }
-        catch (E5xx_ActionFailed $e) {
+        catch (ActionFailedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::FAILED,
                 $e->getMessage(),
                 $e
             );
         }
-        catch (E5xx_ExpectFailed $e) {
+        catch (ExpectFailedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::FAILED,
                 $e->getMessage(),
@@ -121,7 +121,7 @@ class TestEnvironmentConstructionPhase extends InfrastructurePhase
             );
         }
         // if anythin is marked as incomplete, deal with that too
-        catch (E5xx_NotImplemented $e) {
+        catch (NotImplementedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::INCOMPLETE,
                 $e->getMessage(),

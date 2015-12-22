@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * host adapter factory
@@ -75,7 +75,7 @@ class OsLib
 
         // does it exist?
         if (!class_exists($className)) {
-            throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' for host OS '{$osName}'");
+            throw Exceptions::newActionFailedException(__METHOD__, "cannot find class '{$className}' for host OS '{$osName}'");
         }
 
         // create the adapter

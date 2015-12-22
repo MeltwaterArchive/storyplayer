@@ -69,7 +69,7 @@ class FromStoryplayer extends Prose
         // get the details
         $config = $this->st->getActiveConfig();
         if (!$config->hasData($fullPath)) {
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
         $value = $config->getData($fullPath);
 
@@ -93,7 +93,7 @@ class FromStoryplayer extends Prose
         // get the details
         $config = $this->st->getActiveConfig();
         if (!$config->hasData($fullPath)) {
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
         $value = $config->getData($fullPath);
 
@@ -117,7 +117,7 @@ class FromStoryplayer extends Prose
         // get the details
         $config = $this->st->getActiveConfig();
         if (!$config->hasData($fullPath)) {
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
         $value = $config->getData($fullPath);
 
@@ -141,7 +141,7 @@ class FromStoryplayer extends Prose
         // get the details
         $config = $this->st->getActiveConfig();
         if (!$config->hasData($fullPath)) {
-            throw new E5xx_ActionFailed(__METHOD__, "module setting '$path' not found");
+            throw Exceptions::newActionFailedException(__METHOD__, "module setting '$path' not found");
         }
 
         // success!
@@ -167,7 +167,7 @@ class FromStoryplayer extends Prose
         // get the details
         $config = $this->st->getActiveConfig();
         if (!$config->hasData($fullPath)) {
-            throw new E5xx_ActionFailed(__METHOD__, "no module '$module' found in the config");
+            throw Exceptions::newActionFailedException(__METHOD__, "no module '$module' found in the config");
         }
 
         // success!

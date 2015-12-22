@@ -43,7 +43,7 @@
 
 namespace DataSift\Storyplayer;
 
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * provisioning adapter factory
@@ -67,7 +67,7 @@ class ProvisioningLib
 
         // does it exist?
         if (!class_exists($className)) {
-            throw new E5xx_ActionFailed(__METHOD__, "cannot find class '{$className}' to use for provisioning via '{$type}'");
+            throw Exceptions::newActionFailedException(__METHOD__, "cannot find class '{$className}' to use for provisioning via '{$type}'");
         }
 
         // create the adapter

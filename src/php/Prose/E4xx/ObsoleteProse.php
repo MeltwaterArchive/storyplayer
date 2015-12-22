@@ -43,7 +43,8 @@
 
 namespace Prose;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use Storyplayer\SPv2\Modules\Exceptions\ObsoleteModuleException;
+
 
 /**
  * Exception thrown when a deprecated Prose module is used
@@ -55,10 +56,6 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_ObsoleteProse extends Exxx_Exception
+class E4xx_ObsoleteProse extends ObsoleteModuleException
 {
-    public function __construct($oldProse, $newProse) {
-        $msg = "Support for '$oldProse' has been removed; please use $newProse instead";
-        parent::__construct(400, $msg, $msg);
-    }
 }

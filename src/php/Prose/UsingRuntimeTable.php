@@ -84,7 +84,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         if (isset($tables->$tableName->$key)){
             $msg = "Table already contains an entry for '{$key}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // add the entry
@@ -222,7 +222,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         if (isset($tables->$tableName->$group->$key)){
             $msg = "table already contains an entry for '{$group}->{$key}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // add the entry

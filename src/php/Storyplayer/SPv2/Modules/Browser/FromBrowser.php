@@ -84,7 +84,7 @@ class FromBrowser extends Prose
             // no such table
             $log->endAction("no matching table");
 
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // at this point, it looks like we'll have something to return

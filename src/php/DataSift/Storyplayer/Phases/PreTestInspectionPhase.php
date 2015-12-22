@@ -44,9 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_ExpectFailed;
-use Prose\E5xx_NotImplemented;
+use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\ExpectFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\NotImplementedException;
 
 /**
  * the PreTestInspectionSetup phase
@@ -98,7 +98,7 @@ class PreTestInspectionPhase extends StoryPhase
             // if we get here, the pre-test inspection was successful
             $phaseResult->setContinuePlaying();
         }
-        catch (E5xx_ActionFailed $e) {
+        catch (ActionFailedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::FAILED,
                 $e->getMessage(),
@@ -106,7 +106,7 @@ class PreTestInspectionPhase extends StoryPhase
             );
             $storyResult->setStoryHasError($phaseResult);
         }
-        catch (E5xx_ExpectFailed $e) {
+        catch (ExpectFailedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::FAILED,
                 $e->getMessage(),
@@ -114,7 +114,7 @@ class PreTestInspectionPhase extends StoryPhase
             );
             $storyResult->setStoryHasError($phaseResult);
         }
-        catch (E5xx_NotImplemented $e) {
+        catch (NotImplementedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::INCOMPLETE,
                 $e->getMessage(),

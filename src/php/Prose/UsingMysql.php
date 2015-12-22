@@ -63,13 +63,13 @@ class UsingMysql extends Prose
         parent::__construct($st, $args);
 
         if (!isset($args[0])) {
-            throw new E5xx_ActionFailed(__METHOD__, "param 1 must be the host of the MySQL server");
+            throw Exceptions::newActionFailedException(__METHOD__, "param 1 must be the host of the MySQL server");
         }
         if (!isset($args[1])) {
-            throw new E5xx_ActionFailed(__METHOD__, "param 2 must be the MySQL user to use");
+            throw Exceptions::newActionFailedException(__METHOD__, "param 2 must be the MySQL user to use");
         }
         if (!isset($args[2])) {
-            throw new E5xx_ActionFailed(__METHOD__, "param 2 must be the password for the MySQL user");
+            throw Exceptions::newActionFailedException(__METHOD__, "param 2 must be the password for the MySQL user");
         }
     }
 
@@ -82,14 +82,14 @@ class UsingMysql extends Prose
         $conn = new mysqli($this->args[0], $this->args[1], $this->args[2]);
         if ($conn->connect_errno) {
             $log->endAction('unable to connect to database :( - ' . $conn->connect_error);
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // switch database
         if (isset($this->args[2])) {
             if (!$conn->select_db($this->args[3])) {
                 $log->endAction("unable to switch to database '{$this->args[2]}' - " . $conn->error);
-                throw new E5xx_ActionFailed(__METHOD__);
+                throw Exceptions::newActionFailedException(__METHOD__);
             }
         }
 
@@ -99,7 +99,7 @@ class UsingMysql extends Prose
         // what happened?
         if (!$result) {
             $log->endAction("failed to run query");
-            throw new E5xx_ActionFailed(__METHOD__, "query failed - " . $conn->error);
+            throw Exceptions::newActionFailedException(__METHOD__, "query failed - " . $conn->error);
         }
 
         // success

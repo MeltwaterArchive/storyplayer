@@ -48,7 +48,7 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * work with CentOS 7.x guest operating system
@@ -113,6 +113,6 @@ abstract class Base_Centos7 extends Base_Centos5
         // if we get here, we do not know what the IP address is
         $msg = "could not determine IP address";
         $log->endAction($msg);
-        throw new E5xx_ActionFailed(__METHOD__, $msg);
+        throw Exceptions::newActionFailedException(__METHOD__, $msg);
     }
 }

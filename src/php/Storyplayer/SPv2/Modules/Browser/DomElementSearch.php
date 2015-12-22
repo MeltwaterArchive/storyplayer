@@ -45,7 +45,7 @@ namespace Storyplayer\SPv2\Modules\Browser;
 
 use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Retrieve element(s) from the DOM
@@ -304,7 +304,7 @@ class DomElementSearch
 
                 $log->endAction("could not find element with id '{$inputElementId}'; does markup use 'name' when it should 'id'?");
                 // report the failure
-                throw new E5xx_ActionFailed(__METHOD__);
+                throw Exceptions::newActionFailedException(__METHOD__);
             }
         }
 
@@ -329,7 +329,7 @@ class DomElementSearch
         }
         catch (Exception $e) {
             $log->endAction("cound not find input element associated with label '{$labelText}'");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
     }
 
@@ -541,7 +541,7 @@ class DomElementSearch
             $log->endAction("no matching elements");
 
             // report the failure
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // if we get here, we found a match

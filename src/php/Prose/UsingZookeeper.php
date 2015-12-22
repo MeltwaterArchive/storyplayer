@@ -96,7 +96,7 @@ class UsingZookeeper extends Prose
             // timed out?
             $now = microtime(true);
             if ($now > $start + $this->connect_timeout) {
-                throw new E5xx_ActionFailed(__METHOD__);
+                throw Exceptions::newActionFailedException(__METHOD__);
             }
         }
 
@@ -135,7 +135,7 @@ class UsingZookeeper extends Prose
                 if (!$this->zk->create($path, 1, $this->default_acl))
                 {
                     // failed to create the entry
-                    throw new E5xx_ActionFailed(__METHOD__);
+                    throw Exceptions::newActionFailedException(__METHOD__);
                 }
             }
         }
@@ -152,10 +152,10 @@ class UsingZookeeper extends Prose
         // now we can safely set the key itself
         if (!$this->zk->exists($key)) {
             if (!$this->zk->create($key, $value, $this->default_acl))
-                throw new E5xx_ActionFailed(__METHOD__);
+                throw Exceptions::newActionFailedException(__METHOD__);
         }
         else if (!$this->zk->set($key, $value)) {
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // all done
@@ -186,7 +186,7 @@ class UsingZookeeper extends Prose
 
         // now we can safely delete the key itself
         if (!$this->zk->delete($key)) {
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // all done

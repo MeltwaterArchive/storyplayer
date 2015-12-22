@@ -72,7 +72,7 @@ class UsingEc2Instance extends Ec2InstanceBase
 
         // did we get an image ID back?
         if (!isset($response['ImageId'])) {
-            throw new E5xx_ActionFailed(__METHOD__, "no ImageId returned from EC2 :(");
+            throw Exceptions::newActionFailedException(__METHOD__, "no ImageId returned from EC2 :(");
         }
 
         // all done

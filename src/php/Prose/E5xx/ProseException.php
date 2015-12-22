@@ -43,7 +43,7 @@
 
 namespace Prose;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use RuntimeException;
 
 /**
  * Base class for exceptions thrown whilst executing Prose
@@ -55,6 +55,6 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ProseException extends Exxx_Exception
+class E5xx_ProseException extends RuntimeException
 {
 }

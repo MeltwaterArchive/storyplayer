@@ -79,7 +79,7 @@ class FromSupervisor extends HostBase
         if ($result->didCommandFail()) {
             $msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // reduce the output down

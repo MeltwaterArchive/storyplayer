@@ -126,6 +126,6 @@ class UsingVagrant extends VmActionsBase
 
         // if we get here, then we do not know where the private key is
         $log->endAction("unable to find Vagrant private key for VM");
-        throw new E5xx_ActionFailed(__METHOD__);
+        throw Exceptions::newActionFailedException(__METHOD__);
     }
 }

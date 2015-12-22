@@ -69,10 +69,10 @@ class FromPDOStatement extends Prose
 
         // make sure we have a PDO connection to use
         if (!isset($this->args[0])) {
-            throw new E5xx_ActionFailed(__METHOD__, "param #1 must be a valid PDOStatement object");
+            throw Exceptions::newActionFailedException(__METHOD__, "param #1 must be a valid PDOStatement object");
         }
         if (!$this->args[0] instanceof PDOStatement) {
-            throw new E5xx_ActionFailed(__METHOD__, "param #1 must be an instance of PDOStatement");
+            throw Exceptions::newActionFailedException(__METHOD__, "param #1 must be an instance of PDOStatement");
         }
     }
 
@@ -92,7 +92,7 @@ class FromPDOStatement extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 
@@ -112,7 +112,7 @@ class FromPDOStatement extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 
@@ -132,7 +132,7 @@ class FromPDOStatement extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 
@@ -152,7 +152,7 @@ class FromPDOStatement extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 

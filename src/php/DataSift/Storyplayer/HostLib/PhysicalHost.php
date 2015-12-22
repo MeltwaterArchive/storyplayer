@@ -45,7 +45,7 @@ namespace DataSift\Storyplayer\HostLib;
 
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * the things you can do / learn about a physical host
@@ -83,7 +83,7 @@ class PhysicalHost implements SupportedHost
      */
     public function createHost($vmDetails, $provisioningVars = array())
     {
-        throw new E5xx_ActionFailed(__METHOD__, "cannot create a physical host");
+        throw Exceptions::newActionFailedException(__METHOD__, "cannot create a physical host");
     }
 
     /**
@@ -93,7 +93,7 @@ class PhysicalHost implements SupportedHost
      */
     public function startHost($vmDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "cannot start a physical host");
+        throw Exceptions::newActionFailedException(__METHOD__, "cannot start a physical host");
     }
 
     /**
@@ -103,7 +103,7 @@ class PhysicalHost implements SupportedHost
      */
     public function stopHost($vmDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "cannot stop a physical host");
+        throw Exceptions::newActionFailedException(__METHOD__, "cannot stop a physical host");
     }
 
     /**
@@ -113,7 +113,7 @@ class PhysicalHost implements SupportedHost
      */
     public function restartHost($vmDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "cannot restart a physical host");
+        throw Exceptions::newActionFailedException(__METHOD__, "cannot restart a physical host");
     }
 
     /**
@@ -123,7 +123,7 @@ class PhysicalHost implements SupportedHost
      */
     public function powerOffHost($vmDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "cannot power off a physical host");
+        throw Exceptions::newActionFailedException(__METHOD__, "cannot power off a physical host");
     }
 
     /**
@@ -133,7 +133,7 @@ class PhysicalHost implements SupportedHost
      */
     public function destroyHost($vmDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "cannot destroy a physical host");
+        throw Exceptions::newActionFailedException(__METHOD__, "cannot destroy a physical host");
     }
 
     /**
@@ -143,7 +143,7 @@ class PhysicalHost implements SupportedHost
      */
     public function runCommandAgainstHostManager($vmDetails, $command)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands against");
+        throw Exceptions::newActionFailedException(__METHOD__, "no host manager to run commands against");
     }
 
     /**
@@ -153,7 +153,7 @@ class PhysicalHost implements SupportedHost
      */
     public function runCommandViaHostManager($vmDetails, $command)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "no host manager to run commands via");
+        throw Exceptions::newActionFailedException(__METHOD__, "no host manager to run commands via");
     }
 
     /**

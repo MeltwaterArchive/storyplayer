@@ -530,7 +530,7 @@ class StoryTeller
     public function saveRuntimeConfig()
     {
         if (!isset($this->runtimeConfigManager)) {
-            throw new E5xx_ActionFailed(__METHOD__, "no runtimeConfigManager available");
+            throw Exceptions::newActionFailedException(__METHOD__, "no runtimeConfigManager available");
         }
 
         $this->runtimeConfigManager->saveRuntimeConfig($this->runtimeConfig, $this->output);

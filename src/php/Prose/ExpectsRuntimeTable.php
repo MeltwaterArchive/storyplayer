@@ -74,7 +74,7 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
             $msg = "table is empty / does not exist";
             $log->endAction($msg);
 
-            throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table existed", "{$parent} table does not exist");
+            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table existed", "{$parent} table does not exist");
         }
 
         // make sure we don't have a duplicate entry
@@ -82,7 +82,7 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
             $msg = "table does not contain an entry for '{$key}'";
             $log->endAction($msg);
 
-            throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
         }
 
         // all done
@@ -119,7 +119,7 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
             $msg = "table already contains an entry for '{$key}'";
             $log->endAction($msg);
 
-            throw new E5xx_ExpectFailed(__METHOD__, "{$tableName} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");
         }
 
         // all done

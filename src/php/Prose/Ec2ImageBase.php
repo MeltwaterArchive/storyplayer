@@ -75,7 +75,7 @@ class Ec2ImageBase extends Prose
     protected function requiresValidImage($method)
     {
         if (!$this->image) {
-            throw new E5xx_ActionFailed($method, "No such EC2 image '{$this->amiId}' at AWS");
+            throw Exceptions::newActionFailedException($method, "No such EC2 image '{$this->amiId}' at AWS");
         }
     }
 }

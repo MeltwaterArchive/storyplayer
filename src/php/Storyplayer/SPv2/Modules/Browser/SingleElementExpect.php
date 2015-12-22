@@ -87,7 +87,7 @@ class SingleElementExpect
                 return true;
             }
 
-            throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is blank', $elementName . ' is not blank');
+            throw Exceptions::newExpectFailedException(__METHOD__, $elementName . ' is blank', $elementName . ' is not blank');
         };
 
         $wrapper = new SingleElementAction(
@@ -113,7 +113,7 @@ class SingleElementExpect
                 return true;
             }
 
-            throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is not blank', $elementName . ' is blank');
+            throw Exceptions::newExpectFailedException(__METHOD__, $elementName . ' is not blank', $elementName . ' is blank');
         };
 
         $wrapper = new SingleElementAction(
@@ -139,7 +139,7 @@ class SingleElementExpect
                 return true;
             }
 
-            throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is checked', $elementName . ' is not checked');
+            throw Exceptions::newExpectFailedException(__METHOD__, $elementName . ' is checked', $elementName . ' is not checked');
         };
 
         $wrapper = new SingleElementAction(
@@ -165,7 +165,7 @@ class SingleElementExpect
                 return true;
             }
 
-            throw new E5xx_ExpectFailed(__METHOD__, $elementName . ' is not checked', $elementName . ' is checked');
+            throw Exceptions::newExpectFailedException(__METHOD__, $elementName . ' is not checked', $elementName . ' is checked');
         };
 
         $wrapper = new SingleElementAction(

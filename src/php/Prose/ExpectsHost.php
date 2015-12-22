@@ -68,7 +68,7 @@ class ExpectsHost extends HostBase
         $running = fromHost($hostDetails->hostId)->getHostIsRunning();
         if (!$running) {
             $log->endAction();
-            throw new E5xx_ExpectFailed(__METHOD__, 'host is running', 'host is not running');
+            throw Exceptions::newExpectFailedException(__METHOD__, 'host is running', 'host is not running');
         }
 
         // all done
@@ -87,7 +87,7 @@ class ExpectsHost extends HostBase
         $running = fromHost($hostDetails->hostId)->getHostIsRunning();
         if ($running) {
             $log->endAction();
-            throw new E5xx_ExpectFailed(__METHOD__, 'host is not running', 'host is running');
+            throw Exceptions::newExpectFailedException(__METHOD__, 'host is not running', 'host is running');
         }
 
         // all done
@@ -106,7 +106,7 @@ class ExpectsHost extends HostBase
         $details = fromHost($hostDetails->hostId)->getInstalledPackageDetails($packageName);
         if (!isset($details->version)) {
             $log->endAction();
-            throw new E5xx_ExpectFailed(__METHOD__, "package installed", "package is not installed");
+            throw Exceptions::newExpectFailedException(__METHOD__, "package installed", "package is not installed");
         }
 
         // all done
@@ -126,7 +126,7 @@ class ExpectsHost extends HostBase
 
         if (isset($details->version)) {
             $log->endAction();
-            throw new E5xx_ExpectFailed(__METHOD__, "package not installed", "package is installed");
+            throw Exceptions::newExpectFailedException(__METHOD__, "package not installed", "package is installed");
         }
 
         // all done
@@ -145,7 +145,7 @@ class ExpectsHost extends HostBase
         $isRunning = fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
 
         if (!$isRunning) {
-            throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' running", "process '{$processName}' is not running");
+            throw Exceptions::newExpectFailedException(__METHOD__, "process '{$processName}' running", "process '{$processName}' is not running");
         }
 
         // all done
@@ -164,7 +164,7 @@ class ExpectsHost extends HostBase
         $isRunning = fromHost($hostDetails->hostId)->getProcessIsRunning($processName);
 
         if ($isRunning) {
-            throw new E5xx_ExpectFailed(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");
+            throw Exceptions::newExpectFailedException(__METHOD__, "process '{$processName}' not running", "process '{$processName}' is running");
         }
 
         // all done
@@ -183,7 +183,7 @@ class ExpectsHost extends HostBase
         }
 
         $log->endAction("session is not running");
-        throw new E5xx_ExpectFailed(__METHOD__, "session '{$sessionName}' running", "session '{$sessionName}' not running");
+        throw Exceptions::newExpectFailedException(__METHOD__, "session '{$sessionName}' running", "session '{$sessionName}' not running");
     }
 
     public function screenIsNotRunning($sessionName)
@@ -198,7 +198,7 @@ class ExpectsHost extends HostBase
         }
 
         $log->endAction("session is running");
-        throw new E5xx_ExpectFailed(__METHOD__, "session not running", "session running as PID {$processDetails->pid}");
+        throw Exceptions::newExpectFailedException(__METHOD__, "session not running", "session running as PID {$processDetails->pid}");
     }
 
     /**
@@ -245,20 +245,20 @@ class ExpectsHost extends HostBase
 
         // validate the details
         if ($details === null) {
-            throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' exists", "'{$filename}' does not exist");
+            throw Exceptions::newExpectFailedException(__METHOD__, "'{$filename}' exists", "'{$filename}' does not exist");
         }
 
         if ($details->type != 'file') {
-            throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' is a file", "'{$filename}' is type '{$details->type}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "'{$filename}' is a file", "'{$filename}' is type '{$details->type}'");
         }
 
         if ($details->mode != $mode) {
             $theirOctMode = decoct($details->mode);
-            throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' has permissions '{$octMode}'", "'{$filename}' has permissions '{$theirOctMode}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "'{$filename}' has permissions '{$octMode}'", "'{$filename}' has permissions '{$theirOctMode}'");
         }
 
         if ($details->user != $owner || $details->group != $group) {
-            throw new E5xx_ExpectFailed(__METHOD__, "'{$filename}' has ownership '{$owner}:{$group}'", "'{$filename}' has ownership '{$details->user}:{$details->group}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "'{$filename}' has ownership '{$owner}:{$group}'", "'{$filename}' has ownership '{$details->user}:{$details->group}'");
         }
 
         // if we get here, then all is good
@@ -281,20 +281,20 @@ class ExpectsHost extends HostBase
 
         // validate the details
         if ($details === null) {
-            throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' exists", "'{$folder}' does not exist");
+            throw Exceptions::newExpectFailedException(__METHOD__, "'{$folder}' exists", "'{$folder}' does not exist");
         }
 
         if ($details->type != 'dir') {
-            throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' is a file", "'{$folder}' is type '{$details->type}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "'{$folder}' is a file", "'{$folder}' is type '{$details->type}'");
         }
 
         if ($details->mode != $mode) {
             $theirOctMode = decoct($details->mode);
-            throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' has permissions '{$octMode}'", "'{$folder}' has permissions '{$theirOctMode}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "'{$folder}' has permissions '{$octMode}'", "'{$folder}' has permissions '{$theirOctMode}'");
         }
 
         if ($details->user != $owner || $details->group != $group) {
-            throw new E5xx_ExpectFailed(__METHOD__, "'{$folder}' has ownership '{$owner}:{$group}'", "'{$folder}' has ownership '{$details->user}:{$details->group}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "'{$folder}' has ownership '{$owner}:{$group}'", "'{$folder}' has ownership '{$details->user}:{$details->group}'");
         }
 
         // if we get here, then all is good

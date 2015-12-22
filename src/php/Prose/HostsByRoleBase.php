@@ -69,7 +69,7 @@ class HostsByRoleBase extends Prose
 
         // arg[0] is the name of the box
         if (!isset($args[0])) {
-            throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
+            throw Exceptions::newActionFailedException(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
         }
 
         $this->roleName = $args[0];

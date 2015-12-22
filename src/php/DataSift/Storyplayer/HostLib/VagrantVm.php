@@ -50,7 +50,7 @@ use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * the things you can do / learn about Vagrant virtual machine
@@ -94,22 +94,22 @@ class VagrantVm implements SupportedHost
         // make sure we like the provided details
         foreach(array('name', 'osName', 'homeFolder') as $param) {
             if (!isset($vmDetails->$param)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing vmDetails['{$param}']");
+                throw Exceptions::newActionFailedException(__METHOD__, "missing vmDetails['{$param}']");
             }
         }
 
         // make sure the folder exists
         $config = $this->st->getConfig();
         if (!isset($config->storyplayer->modules->vagrant)) {
-            throw new E5xx_ActionFailed(__METHOD__, "'vagrant' section missing in your storyplayer.json config file");
+            throw Exceptions::newActionFailedException(__METHOD__, "'vagrant' section missing in your storyplayer.json config file");
         }
         if (!isset($config->storyplayer->modules->vagrant->dir)) {
-            throw new E5xx_ActionFailed(__METHOD__, "'dir' setting missing from 'vagrant' section of your storyplayer.json config file");
+            throw Exceptions::newActionFailedException(__METHOD__, "'dir' setting missing from 'vagrant' section of your storyplayer.json config file");
         }
 
         $pathToHomeFolder = $config->storyplayer->modules->vagrant->dir . '/' . $vmDetails->homeFolder;
         if (!is_dir($pathToHomeFolder)) {
-            throw new E5xx_ActionFailed(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
+            throw Exceptions::newActionFailedException(__METHOD__, "VM dir '{$pathToHomeFolder}' does not exist");
         }
 
         // remember where the Vagrantfile is
@@ -136,7 +136,7 @@ class VagrantVm implements SupportedHost
         // did it work?
         if ($result->returnCode !== 0) {
             $log->endAction("VM failed to start or provision :(");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // yes it did!!
@@ -190,7 +190,7 @@ class VagrantVm implements SupportedHost
         // did it work?
         if ($result->returnCode != 0) {
             $log->endAction("VM failed to start or re-provision :(");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // yes it did!!
@@ -231,7 +231,7 @@ class VagrantVm implements SupportedHost
         // did it work?
         if ($result->returnCode != 0) {
             $log->endAction("VM failed to shutdown :(");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // all done - success!
@@ -281,7 +281,7 @@ class VagrantVm implements SupportedHost
         // did it work?
         if ($result->returnCode != 0) {
             $log->endAction("VM failed to power off :(");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // all done - success!
@@ -307,7 +307,7 @@ class VagrantVm implements SupportedHost
             // did it work?
             if ($result->returnCode != 0) {
                 $log->endAction("VM failed to shutdown :(");
-                throw new E5xx_ActionFailed(__METHOD__);
+                throw Exceptions::newActionFailedException(__METHOD__);
             }
         }
 
@@ -467,6 +467,6 @@ class VagrantVm implements SupportedHost
 
         // if we get here, then we do not know where the private key is
         $log->endAction("unable to find Vagrant private key for VM");
-        throw new E5xx_ActionFailed(__METHOD__);
+        throw Exceptions::newActionFailedException(__METHOD__);
     }
 }

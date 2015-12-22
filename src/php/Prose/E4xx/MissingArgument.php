@@ -43,7 +43,7 @@
 
 namespace Prose;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use RuntimeException;
 
 /**
  * Exception thrown when a required argument is not provided
@@ -55,13 +55,13 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_MissingArgument extends Exxx_Exception
+class E4xx_MissingArgument extends RuntimeException
 {
     public function __construct($method, $reason = '', $params = array()) {
         $msg = "Missing argument in '$method'";
         if (strlen($reason) > 0) {
             $msg .= "; reason is '{$reason}'";
         }
-        parent::__construct(400, $msg, $msg);
+        parent::__construct($msg);
     }
 }

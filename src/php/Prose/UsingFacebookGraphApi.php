@@ -121,7 +121,7 @@ class UsingFacebookGraphApi extends Prose
 
             $respString = json_encode($resp);
             $log->endAction("no data key found. payload is '{$respString}'");
-            throw new E5xx_ActionFailed(__METHOD__, "Key 'data' was not found in response");
+            throw Exceptions::newActionFailedException(__METHOD__, "Key 'data' was not found in response");
         }
 
         $log->endAction();

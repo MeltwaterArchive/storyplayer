@@ -44,9 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_ExpectFailed;
-use Prose\E5xx_NotImplemented;
+use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\ExpectFailedException;
+use Stpryplayer\SPv2\Modules\Exceptions\NotImplementedException;
 
 /**
  * the Action phase
@@ -105,7 +105,7 @@ class ActionPhase extends StoryPhase
         }
 
         // if the set of actions fails, it will throw this exception
-        catch (E5xx_ActionFailed $e) {
+        catch (ActionFailedException $e) {
             if ($storyResult->getStoryShouldFail()) {
                 $phaseResult->setContinuePlaying(
                     $phaseResult::FAILED,
@@ -122,7 +122,7 @@ class ActionPhase extends StoryPhase
                 $storyResult->setStoryHasFailed($phaseResult);
             }
         }
-        catch (E5xx_ExpectFailed $e) {
+        catch (ExpectFailedException $e) {
             if ($storyResult->getStoryShouldFail()) {
                 $phaseResult->setContinuePlaying(
                     $phaseResult::FAILED,
@@ -141,7 +141,7 @@ class ActionPhase extends StoryPhase
         }
 
         // we treat this as a hard failure
-        catch (E5xx_NotImplemented $e) {
+        catch (NotImplementedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::INCOMPLETE,
                 $e->getMessage(),

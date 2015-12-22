@@ -34,13 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-namespace Prose;
+
+namespace Storyplayer\SPv2\Modules\Browser;
+
+use RuntimeException;
 
 /**
  * Exception thrown when we can't work out what kind of DOM element you
@@ -53,10 +56,10 @@ namespace Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_UnknownDomElementType extends E5xx_ProseException
+class UnknownDomElementTypeException extends RuntimeException
 {
     public function __construct($elementType) {
         $msg = "Unknown DOM element type '{$elementType}'";
-        parent::__construct(500, $msg, $msg);
+        parent::__construct($msg);
     }
 }

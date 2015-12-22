@@ -81,7 +81,7 @@ class UsingZmq extends Prose
         // make the connection
         $socket = new ZMQSocket(new ZMQContext(), $socketType);
         if (!$socket) {
-            throw new E5xx_ActionFailed(__METHOD__, "unable to create ZMQ socket");
+            throw Exceptions::newActionFailedException(__METHOD__, "unable to create ZMQ socket");
         }
         $socket->bind($address);
 
@@ -98,7 +98,7 @@ class UsingZmq extends Prose
         // create the socket
         $socket = new ZMQSocket(new ZMQContext(), $socketType);
         if (!$socket) {
-            throw new E5xx_ActionFailed(__METHOD__, "unable to create ZMQ socket");
+            throw Exceptions::newActionFailedException(__METHOD__, "unable to create ZMQ socket");
         }
 
         // set high-water marks now

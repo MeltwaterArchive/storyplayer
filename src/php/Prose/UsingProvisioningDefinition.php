@@ -68,7 +68,7 @@ class UsingProvisioningDefinition extends Prose
 
         // $args[0] should be our provisioning block
         if (!isset($args[0]) || ! $args[0] instanceof ProvisioningDefinition) {
-            throw new E5xx_ActionFailed(__METHOD__, "Param #0 must be a ProvisioningDefinition object");
+            throw Exceptions::newActionFailedException(__METHOD__, "Param #0 must be a ProvisioningDefinition object");
         }
     }
 

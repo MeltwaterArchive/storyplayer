@@ -44,9 +44,9 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_ExpectFailed;
-use Prose\E5xx_NotImplemented;
+use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\ExpectFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\NotImplementedException;
 
 /**
  * the TestSetup phase
@@ -97,7 +97,7 @@ class TestSetupPhase extends StoryPhase
             // if we get here, then all is well
             $phaseResult->setContinuePlaying();
         }
-        catch (E5xx_ActionFailed $e) {
+        catch (ActionFailedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::FAILED,
                 $e->getMessage(),
@@ -105,7 +105,7 @@ class TestSetupPhase extends StoryPhase
             );
             $storyResult->setStoryHasFailed($phaseResult);
         }
-        catch (E5xx_ExpectFailed $e) {
+        catch (ExpectFailedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::FAILED,
                 $e->getMessage(),
@@ -114,7 +114,7 @@ class TestSetupPhase extends StoryPhase
             $storyResult->setStoryHasFailed($phaseResult);
         }
         // if any of the tests are incomplete, deal with that too
-        catch (E5xx_NotImplemented $e) {
+        catch (NotImplementedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::INCOMPLETE,
                 $e->getMessage(),

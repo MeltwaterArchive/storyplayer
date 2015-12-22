@@ -69,10 +69,10 @@ class UsingPDODB extends Prose
 
         // make sure we have a PDO connection to use
         if (!isset($this->args[0])) {
-            throw new E5xx_ActionFailed(__METHOD__, "param #1 must be a valid PDO connection");
+            throw Exceptions::newActionFailedException(__METHOD__, "param #1 must be a valid PDO connection");
         }
         if (!$this->args[0] instanceof PDO) {
-            throw new E5xx_ActionFailed(__METHOD__, "param #1 must be an instance of PDO");
+            throw Exceptions::newActionFailedException(__METHOD__, "param #1 must be an instance of PDO");
         }
     }
 
@@ -97,7 +97,7 @@ class UsingPDODB extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 
@@ -120,7 +120,7 @@ class UsingPDODB extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 
@@ -138,7 +138,7 @@ class UsingPDODB extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 
@@ -156,7 +156,7 @@ class UsingPDODB extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 
@@ -174,7 +174,7 @@ class UsingPDODB extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 

@@ -76,7 +76,7 @@ class UsingHost extends HostBase
         if ($result->didCommandFail()) {
             $msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // all done
@@ -106,7 +106,7 @@ class UsingHost extends HostBase
         if ($result->didCommandFail()) {
             $msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // all done
@@ -178,7 +178,7 @@ class UsingHost extends HostBase
         // did the process start, or has it already terminated?
         if (empty($sessionDetails->pid)) {
             $log->endAction("session failed to start, or command exited quickly");
-            throw new E5xx_ActionFailed(__METHOD__, "failed to start session '{$sessionName}'");
+            throw Exceptions::newActionFailedException(__METHOD__, "failed to start session '{$sessionName}'");
         }
 
         // all done
@@ -273,7 +273,7 @@ class UsingHost extends HostBase
         // success?
         if (fromHost($this->args[0])->getProcessIsRunning($pid)) {
             $log->endAction("process is still running :(");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // all done
@@ -288,7 +288,7 @@ class UsingHost extends HostBase
         // does the source file exist?
         if (!is_file($sourceFilename)) {
             $log->endAction("file '{$sourceFilename}' not found :(");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // make sure we have valid host details
@@ -304,7 +304,7 @@ class UsingHost extends HostBase
         if ($result->didCommandFail()) {
             $msg = "upload failed with return code '{$result->returnCode}' and output '{$result->output}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // all done

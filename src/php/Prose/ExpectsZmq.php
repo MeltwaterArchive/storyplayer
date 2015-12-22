@@ -43,6 +43,7 @@
 
 namespace Prose;
 
+use Storyplayer\SPv2\Modules\Exceptions;
 use ZMQ;
 
 /**
@@ -67,7 +68,7 @@ class ExpectsZmq extends Prose
 
         // would it have blocked?
         if (!$sent) {
-            throw new E5xx_ExpectFailed(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
+            throw Exceptions::newExpectFailedException(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
         }
 
         // all done
@@ -77,7 +78,7 @@ class ExpectsZmq extends Prose
     public function requirementsAreMet()
     {
         if (!class_exists('ZMQ')) {
-            throw new E5xx_ExpectFailed(__METHOD__, "PHP ZMQ extension installed", "PHP ZMQ extension is not installed");
+            throw Exceptions::newExpectFailedException(__METHOD__, "PHP ZMQ extension installed", "PHP ZMQ extension is not installed");
         }
     }
 }

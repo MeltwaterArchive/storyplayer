@@ -104,7 +104,7 @@ class FromHttp extends Prose
 
         // is this a valid response?
         if (!$response instanceof HttpClientResponse) {
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // all done

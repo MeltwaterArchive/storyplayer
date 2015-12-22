@@ -75,6 +75,6 @@ class ExpectsFailure extends Prose
 
         // if we get here, then the action did not fail - and THAT
         // is a failure
-        throw new E5xx_ExpectFailed(__METHOD__, "{$what} failed", "{$what} did not fail");
+        throw Exceptions::newExpectFailedException(__METHOD__, "{$what} failed", "{$what} did not fail");
     }
 }

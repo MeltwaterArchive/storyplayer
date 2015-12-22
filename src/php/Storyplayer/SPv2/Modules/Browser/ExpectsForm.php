@@ -43,8 +43,8 @@
 
 namespace Storyplayer\SPv2\Modules\Browser;
 
-use Storyplayer\Exceptions\E5xx_ActionFailed;
 use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * test forms in the web browser
@@ -70,7 +70,7 @@ class ExpectsForm extends ExpectsBrowser
 
         // is it really a form?
         if (strtolower($formElement->name()) !== 'form') {
-            throw new E5xx_ActionFailed('form');
+            throw Exceptions::newActionFailedException('form');
         }
 
         // yes, it really is a form

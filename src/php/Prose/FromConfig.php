@@ -127,7 +127,7 @@ class FromConfig extends Prose
         }
 
         // if we get here, the module setting does not exist
-        throw new E5xx_ActionFailed(__METHOD__, "unable to find moduleSetting '{$settingPath}'");
+        throw Exceptions::newActionFailedException(__METHOD__, "unable to find moduleSetting '{$settingPath}'");
     }
 
     public function hasModuleSetting($settingPath)

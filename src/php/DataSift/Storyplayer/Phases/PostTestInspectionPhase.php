@@ -45,9 +45,9 @@ namespace DataSift\Storyplayer\Phases;
 
 use Exception;
 use DataSift\Storyplayer\PlayerLib\Phase_Result;
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_ExpectFailed;
-use Prose\E5xx_NotImplemented;
+use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\ExpectFailedException;
+use Storyplayer\SPv2\Modules\Exceptions\NotImplementedException;
 
 /**
  * the PostTestInspection phase
@@ -109,7 +109,7 @@ class PostTestInspectionPhase extends StoryPhase
                 $phaseResult->setContinuePlaying();
             }
         }
-        catch (E5xx_ActionFailed $e) {
+        catch (ActionFailedException $e) {
             if ($storyResult->getStoryShouldFail()) {
                 $phaseResult->setContinuePlaying(
                     $phaseResult::SUCCEEDED,
@@ -126,7 +126,7 @@ class PostTestInspectionPhase extends StoryPhase
                 $storyResult->setStoryHasFailed($phaseResult);
             }
         }
-        catch (E5xx_ExpectFailed $e) {
+        catch (ExpectFailedException $e) {
             if ($storyResult->getStoryShouldFail()) {
                 $phaseResult->setContinuePlaying(
                     $phaseResult::SUCCEEDED,
@@ -145,7 +145,7 @@ class PostTestInspectionPhase extends StoryPhase
         }
 
         // this is treated as a hard fail
-        catch (E5xx_NotImplemented $e) {
+        catch (NotImplementedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::INCOMPLETE,
                 $e->getMessage(),

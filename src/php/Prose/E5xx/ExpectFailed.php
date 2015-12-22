@@ -43,6 +43,8 @@
 
 namespace Prose;
 
+use Storyplayer\SPv2\Modules\Exceptions\ExpectFailedException;
+
 /**
  * Exception thrown when an operation in an 'Except' class fails
  *
@@ -53,10 +55,6 @@ namespace Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_ExpectFailed extends E5xx_ProseException
+class E5xx_ExpectFailed extends ExpectFailedException
 {
-    public function __construct($actionName, $expected, $found) {
-        $msg = "Action '$actionName' failed; expected '$expected', found '$found'";
-        parent::__construct(500, $msg, $msg);
-    }
 }

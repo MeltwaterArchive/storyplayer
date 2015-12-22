@@ -65,7 +65,7 @@ class UsingRedisConn extends BaseRedisConn
 
         // do we have such a redis call?
         if (!method_exists($this->args[0], $methodName)) {
-            throw new E5xx_ActionFailed(__METHOD__, "no such redis command '{$methodName}'");
+            throw Exceptions::newActionFailedException(__METHOD__, "no such redis command '{$methodName}'");
         }
 
         // make the call
@@ -79,7 +79,7 @@ class UsingRedisConn extends BaseRedisConn
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 }

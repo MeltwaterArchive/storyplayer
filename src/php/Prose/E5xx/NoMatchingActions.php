@@ -43,6 +43,8 @@
 
 namespace Prose;
 
+use RuntimeException;
+
 /**
  * Exception thrown when the StoryTeller class cannot find any suitable
  * Prose to load and execute
@@ -54,10 +56,10 @@ namespace Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E5xx_NoMatchingActions extends E5xx_ProseException
+class E5xx_NoMatchingActions extends RuntimeException
 {
     public function __construct($methodName) {
         $msg = "Cannot find a suitable class for actions of type '$methodName'";
-        parent::__construct(500, $msg, $msg);
+        parent::__construct($msg);
     }
 }

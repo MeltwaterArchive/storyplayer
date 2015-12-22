@@ -61,6 +61,7 @@ use Predis\Client as PredisClient;
 use Storyplayer\SPv2\Modules\Asserts;
 use Storyplayer\SPv2\Modules\Browser;
 use Storyplayer\SPv2\Modules\Device;
+use Storyplayer\SPv2\Modules\Exceptions;
 use Prose\CleanupHosts;
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
@@ -1838,7 +1839,7 @@ function firstHostWithRole($roleName)
 {
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count($listOfHosts)) {
-        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+        throw Exceptions::newActionFailedException(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
@@ -1865,7 +1866,7 @@ function lastHostWithRole($roleName)
 {
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count($listOfHosts)) {
-        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+        throw Exceptions::newActionFailedException(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?
@@ -1892,12 +1893,12 @@ function hostWithRole($roleName)
 {
     // special case
     if ($roleName instanceof StoryTeller) {
-        throw new E5xx_ActionFailed(__METHOD__, "first param to hostWithRole() is no longer \$st");
+        throw Exceptions::newActionFailedException(__METHOD__, "first param to hostWithRole() is no longer \$st");
     }
 
     $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
     if (!count($listOfHosts)) {
-        throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
+        throw Exceptions::newActionFailedException(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
     }
 
     // what are we doing?

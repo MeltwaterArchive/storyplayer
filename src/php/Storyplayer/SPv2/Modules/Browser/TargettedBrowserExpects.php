@@ -87,7 +87,7 @@ class TargettedBrowserExpects
 
         // test it
         if (strlen($element->attribute("value")) > 0) {
-            throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' is blank', $this->searchTerm . ' is not blank');
+            throw Exceptions::newExpectFailedException(__METHOD__, $this->searchTerm . ' is blank', $this->searchTerm . ' is not blank');
         }
 
         // all done
@@ -109,7 +109,7 @@ class TargettedBrowserExpects
             return true;
         }
 
-        throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' is not blank', $this->searchTerm . ' is blank');
+        throw Exceptions::newExpectFailedException(__METHOD__, $this->searchTerm . ' is not blank', $this->searchTerm . ' is blank');
     }
 
     public function isChecked()
@@ -126,7 +126,7 @@ class TargettedBrowserExpects
             return true;
         }
 
-        throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' checked', $this->searchTerm . ' not checked');
+        throw Exceptions::newExpectFailedException(__METHOD__, $this->searchTerm . ' checked', $this->searchTerm . ' not checked');
     }
 
     public function isNotChecked()
@@ -139,7 +139,7 @@ class TargettedBrowserExpects
 
         // test it
         if ($element->attribute("checked")) {
-            throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' not checked', $this->searchTerm . ' checked');
+            throw Exceptions::newExpectFailedException(__METHOD__, $this->searchTerm . ' not checked', $this->searchTerm . ' checked');
         }
 
         // all done
@@ -159,7 +159,7 @@ class TargettedBrowserExpects
             return $element;
         }
         catch (Exception $e) {
-            throw new E5xx_ExpectFailed(__METHOD__, $this->searchTerm . ' exists', 'does not exist');
+            throw Exceptions::newExpectFailedException(__METHOD__, $this->searchTerm . ' exists', 'does not exist');
         }
     }
 }

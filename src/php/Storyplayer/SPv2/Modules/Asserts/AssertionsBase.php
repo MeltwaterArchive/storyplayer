@@ -48,7 +48,8 @@ use DataSift\Storyplayer\PlayerLib\Story_Checkpoint;
 use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\TextLib\TextHelper;
 
-use Prose\E5xx_ExpectFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
+
 use Prose\Prose;
 
 /**
@@ -84,7 +85,7 @@ class AssertionsBase extends Prose
         // is the user trying to call a method that exists in our comparitor?
         if (!method_exists($this->comparitor, $methodName)) {
             $log->endAction("unsupported comparison '{$methodName}'");
-            throw new E5xx_NotImplemented(get_class($this) . '::' . $methodName);
+            throw Exceptions::newNotImplementedException(get_class($this) . '::' . $methodName);
         }
 
         // if we get here, then there's a comparitor we can call
@@ -100,7 +101,7 @@ class AssertionsBase extends Prose
         usingLog()->writeToLog("expected outcome: " . $result->getExpected());
         usingLog()->writeToLog("actual   outcome: " . $result->getActual());
         $log->endAction("assertion failed!");
-        throw new E5xx_ExpectFailed(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
+        throw Exceptions::newExpectFailedException(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
     }
 
     protected function getStartLogMessage($methodName, $params)

@@ -49,7 +49,6 @@ use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
-use Prose\E5xx_ActionFailed;
 
 /**
  * the things you can do / learn about EC2 virtual machine
@@ -93,7 +92,7 @@ class Ec2Vm implements SupportedHost
         // make sure we like the provided details
         foreach(array('name', 'environment', 'osName', 'amiId', 'securityGroup') as $param) {
             if (!isset($vmDetails->$param)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing vmDetails['{$param}']");
+                throw Exceptions::newActionFailedException(__METHOD__, "missing vmDetails['{$param}']");
             }
         }
 
@@ -144,7 +143,7 @@ class Ec2Vm implements SupportedHost
         {
             // something went wrong
             $log->endAction("VM failed to provision :(");
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
 
         // we'll need this for future API calls
@@ -167,7 +166,7 @@ class Ec2Vm implements SupportedHost
         {
             // something went wrong
             $log->endAction("VM failed to start :(");
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
 
         // yes it did!!
@@ -240,7 +239,7 @@ class Ec2Vm implements SupportedHost
         {
             // something went wrong
             $log->endAction("VM failed to start :(");
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
 
         // yes it did!!
@@ -303,7 +302,7 @@ class Ec2Vm implements SupportedHost
         {
             // something went wrong
             $log->endAction("VM failed to stop :(");
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
 
         // all done - success!
@@ -378,7 +377,7 @@ class Ec2Vm implements SupportedHost
         {
             // something went wrong
             $log->endAction("VM failed to terminate :(");
-            throw new E5xx_ActionFailed(__METHOD__, $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
 
         // if we get here, we need to forget about this VM
@@ -396,7 +395,7 @@ class Ec2Vm implements SupportedHost
      */
     public function runCommandAgainstHostManager($vmDetails, $command)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
+        throw Exceptions::newActionFailedException(__METHOD__, "not supported on EC2");
     }
 
     /**
@@ -407,7 +406,7 @@ class Ec2Vm implements SupportedHost
      */
     public function runCommandViaHostManager($vmDetails, $command)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "not supported on EC2");
+        throw Exceptions::newActionFailedException(__METHOD__, "not supported on EC2");
     }
 
     /**
@@ -452,7 +451,7 @@ class Ec2Vm implements SupportedHost
 
         // do we have a DNS name?
         if (!$dnsName) {
-            throw new E5xx_ActionFailed(__METHOD__, "Ec2Vm has no public DNS name - is the VM broken?");
+            throw Exceptions::newActionFailedException(__METHOD__, "Ec2Vm has no public DNS name - is the VM broken?");
         }
 
         // convert it to an IP address
@@ -460,7 +459,7 @@ class Ec2Vm implements SupportedHost
 
         // did we get one?
         if ($ipAddress == $dnsName) {
-            throw new E5xx_ActionFailed(__METHOD__, "unable to convert hostname '{$dnsName}' into an IP address");
+            throw Exceptions::newActionFailedException(__METHOD__, "unable to convert hostname '{$dnsName}' into an IP address");
         }
 
         // all done

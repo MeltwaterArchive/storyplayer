@@ -70,7 +70,7 @@ abstract class Base_OSX extends OsBase
      */
     public function determineIpAddress($hostDetails, SupportedHost $host)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "not supported");
+        throw Exceptions::newActionFailedException(__METHOD__, "not supported");
     }
 
     public function determineHostname($hostDetails, SupportedHost $host)
@@ -93,7 +93,7 @@ abstract class Base_OSX extends OsBase
         // if we get here, we do not know what the hostname is
         $msg = "could not determine hostname";
         $log->endAction($msg);
-        throw new E5xx_ActionFailed(__METHOD__, $msg);
+        throw Exceptions::newActionFailedException(__METHOD__, $msg);
     }
 
     /**
@@ -104,7 +104,7 @@ abstract class Base_OSX extends OsBase
      */
     public function getInstalledPackageDetails($hostDetails, $packageName)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "not supported");
+        throw Exceptions::newActionFailedException(__METHOD__, "not supported");
     }
 
     /**

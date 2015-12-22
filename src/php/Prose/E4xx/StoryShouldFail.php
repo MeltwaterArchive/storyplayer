@@ -43,7 +43,7 @@
 
 namespace Prose;
 
-use DataSift\Stone\ExceptionsLib\Exxx_Exception;
+use Storyplayer\SPv2\Modules\Exceptions\StoryShouldFailException;
 
 /**
  * Exception thrown in PreTestPrediction when you expect the story to fail
@@ -55,10 +55,6 @@ use DataSift\Stone\ExceptionsLib\Exxx_Exception;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class E4xx_StoryShouldFail extends Exxx_Exception
+class E4xx_StoryShouldFail extends StoryShouldFailException
 {
-    public function __construct() {
-        $msg = "Story should fail";
-        parent::__construct(400, $msg, $msg);
-    }
 }

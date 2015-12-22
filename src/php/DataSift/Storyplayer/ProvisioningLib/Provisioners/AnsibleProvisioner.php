@@ -47,7 +47,7 @@ use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * support for provisioning via Ansible
@@ -192,7 +192,7 @@ class AnsibleProvisioner extends Provisioner
 
         // what happened?
         if (!$result->didCommandSucceed()) {
-            throw new E5xx_ActionFailed(__METHOD__, "provisioning failed");
+            throw Exceptions::newActionFailedException(__METHOD__, "provisioning failed");
         }
 
         // all done

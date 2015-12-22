@@ -43,8 +43,7 @@
 
 namespace Storyplayer\SPv2\Modules\Browser;
 
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_UnknownDomElementType;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Trait for assisting with finding a visible element from a larger list
@@ -70,7 +69,7 @@ trait VisibleElementFinder
         // visible
         if ($nth >= count($elements)) {
             $log->endAction("not enough elements :(");
-            throw new E5xx_ActionFailed(__METHOD__, "no matching element found");
+            throw Exceptions::newActionFailedException(__METHOD__, "no matching element found");
         }
 
         // let's track which visible element we're looking at
@@ -111,6 +110,6 @@ trait VisibleElementFinder
 
         $msg = "no matching element found";
         $log->endAction($msg);
-        throw new E5xx_ActionFailed(__METHOD__, $msg);
+        throw Exceptions::newActionFailedException(__METHOD__, $msg);
     }
 }

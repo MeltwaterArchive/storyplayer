@@ -86,7 +86,7 @@ abstract class Base_Unix extends OsBase
         // if we get here, we do not know what the IP address is
         $msg = "could not determine IP address";
         $log->endAction($msg);
-        throw new E5xx_ActionFailed(__METHOD__, $msg);
+        throw Exceptions::newActionFailedException(__METHOD__, $msg);
     }
 
     /**
@@ -119,7 +119,7 @@ abstract class Base_Unix extends OsBase
         // if we get here, we do not know what the hostname is
         $msg = "could not determine hostname";
         $log->endAction($msg);
-        throw new E5xx_ActionFailed(__METHOD__, $msg);
+        throw Exceptions::newActionFailedException(__METHOD__, $msg);
     }
 
     /**
@@ -130,7 +130,7 @@ abstract class Base_Unix extends OsBase
      */
     public function getInstalledPackageDetails($hostDetails, $packageName)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "not supported");
+        throw Exceptions::newActionFailedException(__METHOD__, "not supported");
     }
 
     /**

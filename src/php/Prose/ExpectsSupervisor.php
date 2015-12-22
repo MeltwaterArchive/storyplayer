@@ -72,7 +72,7 @@ class ExpectsSupervisor extends HostBase
         $running = fromSupervisor($hostDetails->hostId)->getProgramIsRunning($programName);
         if (!$running) {
             $log->endAction();
-            throw new E5xx_ExpectFailed(__METHOD__, 'program is running', 'program is not running');
+            throw Exceptions::newExpectFailedException(__METHOD__, 'program is running', 'program is not running');
         }
 
         // all done
@@ -91,7 +91,7 @@ class ExpectsSupervisor extends HostBase
         $running = fromSupervisor($hostDetails->hostId)->getProgramIsRunning($programName);
         if ($running) {
             $log->endAction();
-            throw new E5xx_ExpectFailed(__METHOD__, 'program is not running', 'program is running');
+            throw Exceptions::newExpectFailedException(__METHOD__, 'program is not running', 'program is running');
         }
 
         // all done

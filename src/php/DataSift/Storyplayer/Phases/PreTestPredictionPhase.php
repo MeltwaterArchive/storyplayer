@@ -44,10 +44,10 @@
 namespace DataSift\Storyplayer\Phases;
 
 use Exception;
-use Prose\E4xx_StoryShouldFail;
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_ExpectFailed;
-use Prose\E5xx_NotImplemented;
+use Storyplayer\Modules\SPv2\Exceptions\ActionFailedException;
+use Storyplayer\Modules\SPv2\Exceptions\ExpectFailedException;
+use Storyplayer\Modules\SPv2\Exceptions\NotImplementedException;
+use Storyplayer\Modules\SPv2\Exceptions\StoryShouldFailException;
 
 /**
  * the PreTestPrediction phase
@@ -101,8 +101,8 @@ class PreTestPredictionPhase extends StoryPhase
             $phaseResult->setContinuePlaying();
         }
         // in any of the expects() calls in the preflight checks fails,
-        // an E5xx_ActionFailed will be thrown
-        catch (E5xx_ActionFailed $e) {
+        // an ActionFailedException will be thrown
+        catch (ActionFailedException $e) {
             $phaseResult->setContinuePlaying(
                 $phaseResult::FAILED,
                 $e->getMessage(),
@@ -110,7 +110,7 @@ class PreTestPredictionPhase extends StoryPhase
             );
             $storyResult->setStoryShouldFail();
         }
-        catch (E5xx_ExpectFailed $e) {
+        catch (ExpectFailedException $e) {
             $phaseResult->setContinuePlaying(
                 $phaseResult::FAILED,
                 $e->getMessage(),
@@ -119,7 +119,7 @@ class PreTestPredictionPhase extends StoryPhase
             $storyResult->setStoryShouldFail();
         }
         // users can throw this to tell us that the story should fail
-        catch (E4xx_StoryShouldFail $e) {
+        catch (StoryShouldFailException $e) {
             $phaseResult->setContinuePlaying(
                 $phaseResult::FAILED,
                 $e->getMessage(),
@@ -128,7 +128,7 @@ class PreTestPredictionPhase extends StoryPhase
             $storyResult->setStoryShouldFail();
         }
         // if any of the tests are incomplete, deal with that too
-        catch (E5xx_NotImplemented $e) {
+        catch (NotImplementedException $e) {
             $phaseResult->setPlayingFailed(
                 $phaseResult::INCOMPLETE,
                 $e->getMessage(),

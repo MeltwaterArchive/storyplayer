@@ -47,7 +47,6 @@ use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
-use Prose\E5xx_ActionFailed;
 
 /**
  * the things you can do / learn about a group of machines (possibly
@@ -91,18 +90,18 @@ class Blackboxes implements SupportedHost
 
         // make sure we like the provided details
         if (!isset($groupDef->details)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details");
+            throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details");
         }
         if (!isset($groupDef->details->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines");
+            throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details->machines");
         }
         if (empty($groupDef->details->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "groupDef->details->machines cannot be empty");
+            throw Exceptions::newActionFailedException(__METHOD__, "groupDef->details->machines cannot be empty");
         }
         foreach($groupDef->details->machines as $hostId => $machine) {
             // TODO: it would be great to autodetect this one day
             if (!isset($machine->roles)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines['$hostId']->roles");
+                throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details->machines['$hostId']->roles");
             }
         }
 
@@ -158,7 +157,7 @@ class Blackboxes implements SupportedHost
      */
     public function startHost($groupDef)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -168,7 +167,7 @@ class Blackboxes implements SupportedHost
      */
     public function stopHost($groupDef)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -178,7 +177,7 @@ class Blackboxes implements SupportedHost
      */
     public function restartHost($groupDef)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -188,7 +187,7 @@ class Blackboxes implements SupportedHost
      */
     public function powerOffHost($groupDef)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -222,7 +221,7 @@ class Blackboxes implements SupportedHost
      */
     public function runCommandAgainstHostManager($groupDef, $command)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -233,7 +232,7 @@ class Blackboxes implements SupportedHost
      */
     public function runCommandViaHostManager($groupDef, $command)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -243,7 +242,7 @@ class Blackboxes implements SupportedHost
      */
     public function isRunning($vmDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -253,6 +252,6 @@ class Blackboxes implements SupportedHost
      */
     public function determineIpAddress($groupDef)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 }

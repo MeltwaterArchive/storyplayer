@@ -74,7 +74,7 @@ class UsingForm extends UsingBrowser
 
         // is it really a form?
         if (strtolower($formElement->name()) !== 'form') {
-            throw new E5xx_ActionFailed(__METHOD__, "expected form element, got element '" . $formElement->name() . "'");
+            throw Exceptions::newActionFailedException(__METHOD__, "expected form element, got element '" . $formElement->name() . "'");
         }
 
         // yes, it really is a form
@@ -125,11 +125,11 @@ class UsingForm extends UsingBrowser
 
                 case null:
                     $log->endAction("cannot find field labelled '{$labelText}'");
-                    throw new E5xx_ActionFailed(__METHOD__);
+                    throw Exceptions::newActionFailedException(__METHOD__);
 
                 default:
                     $log->endAction("* field labelled '{$labelText}' has unsupported tag '{$tag}' *");
-                    throw new E5xx_ActionFailed(__METHOD__);
+                    throw Exceptions::newActionFailedException(__METHOD__);
             }
         }
 
@@ -176,7 +176,7 @@ class UsingForm extends UsingBrowser
 
                 default:
                     $log->endAction("* field '{$labelText}' has unexpected tag '{$tag}' *");
-                    throw new E5xx_ActionFailed(__METHOD__);
+                    throw Exceptions::newActionFailedException(__METHOD__);
             }
         }
 

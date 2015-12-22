@@ -66,14 +66,14 @@ class ExpectsUuid extends Prose
         if (!function_exists('uuid_create')) {
             // we really want this
             $log->endAction("PECL uuid extension missing");
-            throw new E5xx_ExpectFailed(__METHOD__, "PECL uuid extension installed", "extension is not installed");
+            throw Exceptions::newExpectFailedException(__METHOD__, "PECL uuid extension installed", "extension is not installed");
         }
 
         // is Stone's TokenLib available?
         if (!class_exists('DataSift\Stone\TokenLib\TokenGenerator')) {
             // we really want this
             $log->endAction("DataSift\Stone\TokenLib missing");
-            throw new E5xx_ExpectFailed(__METHOD__, "DataSift's Stone library includes TokenLib", "TokenLib not found");
+            throw Exceptions::newExpectFailedException(__METHOD__, "DataSift's Stone library includes TokenLib", "TokenLib not found");
         }
 
         // if we get here, we are good

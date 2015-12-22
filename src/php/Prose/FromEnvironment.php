@@ -68,7 +68,7 @@ class FromEnvironment extends Prose
 
         // do we have the setting we want?
         if (!isset($appSettings->$settingName)) {
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // if we get here, then we have what we want
@@ -104,7 +104,7 @@ class FromEnvironment extends Prose
         // TODO: search test environments too?
 
         // if we get here, then we could not find the settings
-        throw new E5xx_ActionFailed(__METHOD__);
+        throw Exceptions::newActionFailedException(__METHOD__);
     }
 
     public function __get($appName)

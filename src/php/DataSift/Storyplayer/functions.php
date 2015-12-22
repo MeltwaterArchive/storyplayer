@@ -44,8 +44,7 @@
 use DataSift\Storyplayer\PlayerLib\Story;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\DefinitionLib\TestEnvironment_Definition;
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_ProseException;
+use Storyplayer\SPv2\Modules\Exceptions\ActionFailedException;
 
 /**
  * return the first element in an array
@@ -119,7 +118,7 @@ function tryTo($callback) {
     try {
         $callback();
     }
-    catch (E5xx_ProseException $e) {
+    catch (ActionFailedException $e) {
         // do nothing
     }
 }

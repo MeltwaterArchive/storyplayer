@@ -74,7 +74,7 @@ class UsingSupervisor extends HostBase
 
         // did the command succeed?
         if ($result->didCommandFail()) {
-            throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
+            throw Exceptions::newActionFailedException(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
         }
 
         // all done
@@ -95,7 +95,7 @@ class UsingSupervisor extends HostBase
 
         // did the command succeed?
         if ($result->didCommandFail()) {
-            throw new E5xx_ActionFailed(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
+            throw Exceptions::newActionFailedException(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
         }
 
         // all done

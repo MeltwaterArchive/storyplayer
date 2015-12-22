@@ -48,7 +48,6 @@ use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
-use Prose\E5xx_ActionFailed;
 use DataSift\Storyplayer\HostLib\VagrantVms;
 
 /**

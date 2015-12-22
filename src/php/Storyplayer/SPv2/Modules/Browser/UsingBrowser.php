@@ -222,7 +222,7 @@ class UsingBrowser extends Prose
         // relative, or absolute URL?
         if (substr($url, 0, 1) == '/') {
             // only absolute URLs are supported
-            throw new E5xx_ActionFailed(__METHOD__, 'only absolute URLs are supported');
+            throw Exceptions::newActionFailedException(__METHOD__, 'only absolute URLs are supported');
         }
 
         // parse the URL
@@ -347,7 +347,7 @@ class UsingBrowser extends Prose
         // if we get here, then we could not find the window we wanted
         // the browser might be pointing at ANY of the open windows,
         // and it might be pointing at no window at all
-        throw new E5xx_ActionFailed(__METHOD__, "No such window '{$name}'");
+        throw Exceptions::newActionFailedException(__METHOD__, "No such window '{$name}'");
     }
 
     public function closeCurrentWindow()
@@ -421,7 +421,7 @@ class UsingBrowser extends Prose
         }
         catch (Exception $e)
         {
-            throw new E5xx_ActionFailed(__METHOD__, "unable to set HTTP basic auth; error is: " . $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__, "unable to set HTTP basic auth; error is: " . $e->getMessage());
         }
 
         // all done

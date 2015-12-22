@@ -67,7 +67,7 @@ class ExpectsZmqSocket extends ZmqSocketBase
 
         // would it have blocked?
         if (!$sent) {
-            throw new E5xx_ExpectFailed(__METHOD__, "send() would not block", "send() would have blocked");
+            throw Exceptions::newExpectFailedException(__METHOD__, "send() would not block", "send() would have blocked");
         }
 
         // all done
@@ -84,7 +84,7 @@ class ExpectsZmqSocket extends ZmqSocketBase
 
         // would it have blocked?
         if (!$sent) {
-            throw new E5xx_ExpectFailed(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
+            throw Exceptions::newExpectFailedException(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
         }
 
         // all done

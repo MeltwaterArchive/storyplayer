@@ -63,7 +63,7 @@ trait HostsByRoleTrait
         // do we have this role?
         $role = fromRolesTable()->getDetailsForRole($roleName);
         if (!count($role)) {
-            throw new E5xx_ActionFailed(__METHOD__, "unknown role '{$roleName}'");
+            throw Exceptions::newActionFailedException(__METHOD__, "unknown role '{$roleName}'");
         }
 
         // now we need to gather all of the hosts that make up this role

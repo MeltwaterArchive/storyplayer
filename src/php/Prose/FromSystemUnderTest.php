@@ -70,7 +70,7 @@ class FromSystemUnderTest extends Prose
         if (!$config->hasData($fullPath)) {
             $msg = "module setting '$path' not found";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
         $value = $config->getData($fullPath);
 
@@ -96,7 +96,7 @@ class FromSystemUnderTest extends Prose
         if (!$config->hasData($fullPath)) {
             $msg = "no app '$app' found in the config";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
         $value = $config->getData($fullPath);
 
@@ -122,7 +122,7 @@ class FromSystemUnderTest extends Prose
         if (!$config->hasData($fullPath)) {
             $msg = "module setting '$path' not found";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
         $value = $config->getData($fullPath);
 
@@ -148,7 +148,7 @@ class FromSystemUnderTest extends Prose
         if (!$config->hasData($fullPath)) {
             $msg = "module setting '$path' not found";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // success!
@@ -176,7 +176,7 @@ class FromSystemUnderTest extends Prose
         if (!$config->hasData($fullPath)) {
             $msg = "no module '$module' found in the config";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // success!
@@ -204,7 +204,7 @@ class FromSystemUnderTest extends Prose
         if (!$config->hasData($fullPath)) {
             $msg = "no system-under-test name found; internal Storyplayer bug!";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // success!
@@ -234,7 +234,7 @@ class FromSystemUnderTest extends Prose
         $config = $this->st->getActiveConfig();
         if (!$config->hasData($fullPath)) {
             $log->endAction("no settings found");
-            throw new E5xx_ActionFailed(__METHOD__, "no settings found");
+            throw Exceptions::newActionFailedException(__METHOD__, "no settings found");
         }
 
         // success!

@@ -67,7 +67,7 @@ class HostBase extends Prose
 
         // arg[0] is the name of the box
         if (!isset($args[0])) {
-            throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name you've given to the machine");
+            throw Exceptions::newActionFailedException(__METHOD__, "Param #0 needs to be the name you've given to the machine");
         }
     }
 

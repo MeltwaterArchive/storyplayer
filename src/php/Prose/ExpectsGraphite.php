@@ -81,7 +81,7 @@ class ExpectsGraphite extends Prose
         // we have data ... let's make sure we're happy with it
         foreach ($data[0]->datapoints as $datapoint) {
             if ($datapoint[0] > 0) {
-                throw new E5xx_ExpectFailed(__METHOD__, 0, $datapoint[0]);
+                throw Exceptions::newExpectFailedException(__METHOD__, 0, $datapoint[0]);
             }
         }
 
@@ -110,7 +110,7 @@ class ExpectsGraphite extends Prose
             //       the wrong metric :(
             if ($expectedTotal !== 0) {
                 // we were expecting there to be some data
-                throw new E5xx_ExpectFailed(__METHOD__, "data available for metric '{$metric}'", "no data available for metric '{$metric}'");
+                throw Exceptions::newExpectFailedException(__METHOD__, "data available for metric '{$metric}'", "no data available for metric '{$metric}'");
             }
 
             // if we get here, it's reasonable to assume that everything is
@@ -155,7 +155,7 @@ class ExpectsGraphite extends Prose
             //       the wrong metric :(
             if ($expectedMax !== 0) {
                 // we were expecting there to be some data
-                throw new E5xx_ExpectFailed(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
+                throw Exceptions::newExpectFailedException(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
             }
 
             // if we get here, it's reasonable to assume that everything is
@@ -196,7 +196,7 @@ class ExpectsGraphite extends Prose
             //       the wrong metric :(
             if ($expectedAverage !== 0) {
                 // we were expecting there to be some data
-                throw new E5xx_ExpectFailed(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
+                throw Exceptions::newExpectFailedException(__METHOD__, "data for metric '{$metric}'", "no data available for metric '{$metric}'");
             }
 
             // if we get here, it's reasonable to assume that everything is

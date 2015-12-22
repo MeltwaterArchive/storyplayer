@@ -74,7 +74,7 @@ class FromUsers extends Prose
         if (!isset($users->$userId)) {
             $msg = "user ID '{$userId}' not found";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed($msg);
+            throw Exceptions::newActionFailedException($msg);
         }
 
         // all done

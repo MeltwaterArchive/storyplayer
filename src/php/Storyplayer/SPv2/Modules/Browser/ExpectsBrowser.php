@@ -45,6 +45,7 @@ namespace Storyplayer\SPv2\Modules\Browser;
 
 use Prose\Prose;
 use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Test the current contents of the browser
@@ -83,7 +84,7 @@ class ExpectsBrowser extends Prose
                         $log->endAction("0 element(s) found");
                         return;
                     }
-                    throw new E5xx_ExpectFailed(__METHOD__, "0 element(s) to exist", "$actualCount element(s) exist");
+                    throw Exceptions::newExpectFailedException(__METHOD__, "0 element(s) to exist", "$actualCount element(s) exist");
 
                 case 'several':
                     if ($actualCount < 3 || $actualCount > 9) {
@@ -91,7 +92,7 @@ class ExpectsBrowser extends Prose
                         return true;
                     }
 
-                    throw new E5xx_ExpectFailed(__METHOD__, "must not be several element(s)", "several element(s) exist");
+                    throw Exceptions::newExpectFailedException(__METHOD__, "must not be several element(s)", "several element(s) exist");
 
                 // this satisfies something like:
                 //
@@ -102,7 +103,7 @@ class ExpectsBrowser extends Prose
                         return true;
                     }
 
-                    throw new E5xx_ExpectFailed(__METHOD__, "$requiredCount element(s) must not exist", "$actualCount element(s) exist");
+                    throw Exceptions::newExpectFailedException(__METHOD__, "$requiredCount element(s) must not exist", "$actualCount element(s) exist");
             }
         };
 
@@ -131,7 +132,7 @@ class ExpectsBrowser extends Prose
                         return true;
                     }
 
-                    throw new E5xx_ExpectFailed(__METHOD__, "at least one element to exist", "$actualCount element(s) exist");
+                    throw Exceptions::newExpectFailedException(__METHOD__, "at least one element to exist", "$actualCount element(s) exist");
 
                 case 'several':
                     if ($actualCount > 2 && $actualCount < 10) {
@@ -139,7 +140,7 @@ class ExpectsBrowser extends Prose
                         return true;
                     }
 
-                    throw new E5xx_ExpectFailed(__METHOD__, "several element to exist", "$actualCount element(s) exist");
+                    throw Exceptions::newExpectFailedException(__METHOD__, "several element to exist", "$actualCount element(s) exist");
 
                 // this satisfies something like:
                 //
@@ -150,7 +151,7 @@ class ExpectsBrowser extends Prose
                         return true;
                     }
 
-                    throw new E5xx_ExpectFailed(__METHOD__, "$requiredCount element(s) to exist", "$actualCount element(s) exist");
+                    throw Exceptions::newExpectFailedException(__METHOD__, "$requiredCount element(s) to exist", "$actualCount element(s) exist");
             }
         };
 
@@ -170,7 +171,7 @@ class ExpectsBrowser extends Prose
         $browserTitle = Browser::fromBrowser()->getTitle();
 
         if ($title != $browserTitle) {
-            throw new E5xx_ExpectFailed('BrowserExpects::title', $title, $browserTitle);
+            throw Exceptions::newExpectFailedException('BrowserExpects::title', $title, $browserTitle);
         }
 
         // all done
@@ -187,7 +188,7 @@ class ExpectsBrowser extends Prose
         $browserTitle = fromBrowser()->getTitle();
 
         if (!in_array($browserTitle, $titles)) {
-            throw new E5xx_ExpectFailed(__METHOD__, $titlesString, $browserTitle);
+            throw Exceptions::newExpectFailedException(__METHOD__, $titlesString, $browserTitle);
         }
 
         // all done
@@ -204,7 +205,7 @@ class ExpectsBrowser extends Prose
 
         // are they right?
         if ($dimensions['width'] != $width || $dimensions['height'] != $height) {
-            throw new E5xx_ExpectFailed(__METHOD__, "$width x $height", "{$dimensions['width']} x {$dimensions['height']}");
+            throw Exceptions::newExpectFailedException(__METHOD__, "$width x $height", "{$dimensions['width']} x {$dimensions['height']}");
         }
 
         // all done

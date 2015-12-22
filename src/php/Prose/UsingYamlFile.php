@@ -66,7 +66,7 @@ class UsingYamlFile extends Prose
 
         // $args[0] will be our filename
         if (!isset($args[0])) {
-            throw new E5xx_ActionFailed(__METHOD__, "Param #0 needs to be the name of the file to work with");
+            throw Exceptions::newActionFailedException(__METHOD__, "Param #0 needs to be the name of the file to work with");
         }
     }
 
@@ -86,7 +86,7 @@ class UsingYamlFile extends Prose
         // create the YAML data
         $yamlData = $writer->dump($params, 2);
         if (!is_string($yamlData) || strlen($yamlData) < 6) {
-            throw new E5xx_ActionFailed(__METHOD__, "unable to convert data to YAML");
+            throw Exceptions::newActionFailedException(__METHOD__, "unable to convert data to YAML");
         }
 
         // prepend the YAML marker
@@ -97,7 +97,7 @@ class UsingYamlFile extends Prose
         // the loose FALSE test here is exactly what we want, because we want to catch
         // both the situation when the write fails, and when there's zero bytes written
         if (!file_put_contents($filename, $yamlData)) {
-            throw new E5xx_ActionFailed(__METHOD__, "unable to write file '{$filename}'");
+            throw Exceptions::newActionFailedException(__METHOD__, "unable to write file '{$filename}'");
         }
 
         // all done

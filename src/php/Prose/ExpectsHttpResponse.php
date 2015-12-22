@@ -76,15 +76,15 @@ class ExpectsHttpResponse extends Prose
     {
         // do we HAVE a valid response?
         if (!isset($params[0])) {
-            throw new E5xx_ExpectFailed(__METHOD__, "HttpClientResponse object", "missing object");
+            throw Exceptions::newExpectFailedException(__METHOD__, "HttpClientResponse object", "missing object");
         }
         $response = $params[0];
 
         if (!is_object($response)) {
-            throw new E5xx_ExpectFailed(__METHOD__, "HttpClientResponse object", gettype($response));
+            throw Exceptions::newExpectFailedException(__METHOD__, "HttpClientResponse object", gettype($response));
         }
         if (!$response instanceof HttpClientResponse) {
-            throw new E5xx_ExpectFailed(__METHOD__, "HttpClientResponse object", get_class($response));
+            throw Exceptions::newExpectFailedException(__METHOD__, "HttpClientResponse object", get_class($response));
         }
 
         // call our parent constructor
@@ -102,16 +102,16 @@ class ExpectsHttpResponse extends Prose
         // do we even HAVE a response?
         if (!is_object($response)) {
             $log->endAction("no response to examine :(");
-            throw new E5xx_ExpectFailed(__METHOD__, "HttpClientResponse object", gettype($response));
+            throw Exceptions::newExpectFailedException(__METHOD__, "HttpClientResponse object", gettype($response));
         }
         if (!$response instanceof HttpClientResponse) {
             $log->endAction("no response to examine :(");
-            throw new E5xx_ExpectFailed(__METHOD__, "HttpClientResponse object", get_class($response));
+            throw Exceptions::newExpectFailedException(__METHOD__, "HttpClientResponse object", get_class($response));
         }
 
         if ($response->statusCode != $status) {
             $log->endAction("status code is '{$response->statusCode}'");
-            throw new E5xx_ExpectFailed(__METHOD__, $status, $response->statusCode);
+            throw Exceptions::newExpectFailedException(__METHOD__, $status, $response->statusCode);
         }
 
         // if we get here, all is well

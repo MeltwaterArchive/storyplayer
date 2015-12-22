@@ -64,8 +64,6 @@ use Storyplayer\SPv2\Modules\Asserts\AssertsInteger;
 use Storyplayer\SPv2\Modules\Asserts\AssertsObject;
 use Storyplayer\SPv2\Modules\Asserts\AssertsString;
 
-use Prose\E5xx_ActionFailed;
-
 class Asserts
 {
     /**

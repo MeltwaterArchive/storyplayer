@@ -85,12 +85,12 @@ class Ec2InstanceBase extends Prose
     protected function requiresValidHost($method)
     {
         if (!$this->vmDetails) {
-            throw new E5xx_ActionFailed($method, "No such host '{$this->args[0]}' in the hosts table");
+            throw Exceptions::newActionFailedException($method, "No such host '{$this->args[0]}' in the hosts table");
         }
 
         // did we get anything?
         if (!$this->instance) {
-            throw new E5xx_ActionFailed($method, "No such EC2 instance '{$this->instanceName}' at AWS");
+            throw Exceptions::newActionFailedException($method, "No such EC2 instance '{$this->instanceName}' at AWS");
         }
     }
 }

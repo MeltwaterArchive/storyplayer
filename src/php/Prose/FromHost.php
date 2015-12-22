@@ -80,7 +80,7 @@ class FromHost extends HostBase
         if (isset($hostDetails->invalidHost) && $hostDetails->invalidHost) {
             $msg = "there are no details about host '{$hostDetails->hostId}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // return the details
@@ -137,7 +137,7 @@ class FromHost extends HostBase
 
         // do we have a hostname?
         if (!isset($hostDetails->hostname)) {
-            throw new E5xx_ActionFailed(__METHOD__, "no hostname found for host ID '{$this->args[0]}'");
+            throw Exceptions::newActionFailedException(__METHOD__, "no hostname found for host ID '{$this->args[0]}'");
         }
 
         // all done
@@ -447,7 +447,7 @@ class FromHost extends HostBase
         // do we have any app settings?
         if (!isset($hostDetails->appSettings, $hostDetails->appSettings->$appName)) {
             $log->endAction("setting does not exist :(");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // yes we do
@@ -488,13 +488,13 @@ class FromHost extends HostBase
         if (!isset($hostDetails->appSettings)) {
             $msg = "host has no appSettings at all";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // do we have the setting that we want?
         if (!$hostDetails->appSettings->hasData($path)) {
             $msg = "host does not have appSetting '{$path}'";
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // success
@@ -521,15 +521,15 @@ class FromHost extends HostBase
         // do we have any app settings?
         if (!isset($hostDetails->appSettings)) {
             $log->endAction("host has no appSettings at all");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
         if (!isset($hostDetails->appSettings->$appName)) {
             $log->endAction("host has no appSettings for {$appName}");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
         if (!isset($hostDetails->appSettings->$appName->$settingName)) {
             $log->endAction("host has no appSetting '{$settingName}' for {$appName}");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // yes we do
@@ -560,13 +560,13 @@ class FromHost extends HostBase
         if (!isset($hostDetails->storySettings)) {
             $msg = "host has no storySettings at all";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // do we have the setting that we want?
         if (!$hostDetails->storySettings->hasData($path)) {
             $msg = "host does not have storySetting '{$path}'";
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // success
@@ -600,7 +600,7 @@ class FromHost extends HostBase
         if ($result->didCommandFail()) {
             $msg = "download failed with return code '{$result->returnCode}' and output '{$result->output}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // all done

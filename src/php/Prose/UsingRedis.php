@@ -69,7 +69,7 @@ class UsingRedis extends Prose
         }
         catch (Exception $e) {
             $log->endAction("connection failed: " . $e->getMessage());
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // if we get here, all is good

@@ -48,7 +48,7 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * get information about vagrant
@@ -112,7 +112,7 @@ abstract class Base_Centos5 extends Base_Unix
         // if we get here, we do not know what the IP address is
         $msg = "could not determine IP address";
         $log->endAction($msg);
-        throw new E5xx_ActionFailed(__METHOD__, $msg);
+        throw Exceptions::newActionFailedException(__METHOD__, $msg);
     }
 
     public function determineHostname($hostDetails, SupportedHost $host)
@@ -135,7 +135,7 @@ abstract class Base_Centos5 extends Base_Unix
         // if we get here, we do not know what the hostname is
         $msg = "could not determine hostname";
         $log->endAction($msg);
-        throw new E5xx_ActionFailed(__METHOD__, $msg);
+        throw Exceptions::newActionFailedException(__METHOD__, $msg);
     }
 
     /**

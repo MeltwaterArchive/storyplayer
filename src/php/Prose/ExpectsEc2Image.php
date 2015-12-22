@@ -67,7 +67,7 @@ class ExpectsEc2Image extends Ec2ImageBase
 
         if ($imageState != 'available') {
             $log->endAction("image state is '{$imageState}'");
-            throw new E5xx_ExpectFailed(__METHOD__, "state is 'available'", "state is '{$imageState}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "state is 'available'", "state is '{$imageState}'");
         }
 
         // if we get here, all is well
@@ -86,7 +86,7 @@ class ExpectsEc2Image extends Ec2ImageBase
 
         if ($imageState != 'failed') {
             $log->endAction("image state is '{$imageState}'");
-            throw new E5xx_ExpectFailed(__METHOD__, "state is 'failed'", "state is '{$imageState}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "state is 'failed'", "state is '{$imageState}'");
         }
 
         // if we get here, all is well
@@ -105,7 +105,7 @@ class ExpectsEc2Image extends Ec2ImageBase
 
         if ($imageState != 'pending') {
             $log->endAction("image state is '{$imageState}'");
-            throw new E5xx_ExpectFailed(__METHOD__, "state is 'pending'", "state is '{$imageState}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "state is 'pending'", "state is '{$imageState}'");
         }
 
         // if we get here, all is well

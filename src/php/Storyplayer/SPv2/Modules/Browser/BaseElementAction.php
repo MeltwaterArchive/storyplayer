@@ -43,8 +43,7 @@
 
 namespace Storyplayer\SPv2\Modules\Browser;
 
-use Prose\E5xx_ActionFailed;
-use Prose\E5xx_UnknownDomElementType;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Base class for all the *ElementAction helper classes
@@ -280,7 +279,7 @@ class BaseElementAction
     {
         // is this a valid target type?
         if (!isset($this->targetTypes[$targetType])) {
-            throw new E5xx_UnknownDomElementType($targetType);
+            throw new UnknownDomElementTypeException($targetType);
         }
 
         // is this a plural target?
@@ -324,7 +323,7 @@ class BaseElementAction
 
         $searchType = $this->determineSearchType($words);
         if ($searchType === null) {             // we do not understand how to find the target field
-            throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
+            throw Exceptions::newActionFailedException(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
         }
 
         // what tag(s) do we want to narrow our search to?

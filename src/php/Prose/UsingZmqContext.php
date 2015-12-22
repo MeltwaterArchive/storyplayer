@@ -106,7 +106,7 @@ class UsingZmqContext extends Prose
         if (!isset($this->socketMap[$socketType])) {
             $msg = "unknown ZMQ socket type '{$socketType}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // make the connection
@@ -114,7 +114,7 @@ class UsingZmqContext extends Prose
         if (!$socket) {
             $msg = "unable to create ZMQ socket";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
         $socket->bind("tcp://*:{$port}");
 
@@ -136,7 +136,7 @@ class UsingZmqContext extends Prose
         if (!isset($this->socketMap[$socketType])) {
             $msg = "unknown ZMQ socket type '{$socketType}'";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // where are we connecting to?
@@ -147,7 +147,7 @@ class UsingZmqContext extends Prose
         if (!$socket) {
             $msg = "unable to create ZMQ socket";
             $log->endAction($msg);
-            throw new E5xx_ActionFailed(__METHOD__, $msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // set high-water marks now

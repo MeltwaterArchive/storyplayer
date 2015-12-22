@@ -48,7 +48,8 @@ use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
-use Prose\E5xx_ActionFailed;
+use Exception;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * the things you can do / learn about a group of Vagrant virtual machines
@@ -87,19 +88,19 @@ class VagrantVms implements SupportedHost
     {
         // make sure we like the provided details
         if (!isset($groupDef->details)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details");
+            throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details");
         }
         if (!isset($groupDef->details->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines");
+            throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details->machines");
         }
         if (empty($groupDef->details->machines)) {
-            throw new E5xx_ActionFailed(__METHOD__, "groupDef->details->machines cannot be empty");
+            throw Exceptions::newActionFailedException(__METHOD__, "groupDef->details->machines cannot be empty");
         }
 
         // make sure we have a Vagrantfile
         $expectedVagrantfile = $this->getVagrantDir($groupDef) . "/Vagrantfile";
         if (!file_exists($expectedVagrantfile)) {
-            throw new E5xx_ActionFailed(__METHOD__, "no Vagrantfile; expected it to be here: {$expectedVagrantfile}");
+            throw Exceptions::newActionFailedException(__METHOD__, "no Vagrantfile; expected it to be here: {$expectedVagrantfile}");
         }
 
     }
@@ -141,10 +142,10 @@ class VagrantVms implements SupportedHost
         foreach($groupDef->details->machines as $hostId => $machine) {
             // TODO: it would be great to autodetect this one day
             if (!isset($machine->osName)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines['$hostId']->osName");
+                throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details->machines['$hostId']->osName");
             }
             if (!isset($machine->roles)) {
-                throw new E5xx_ActionFailed(__METHOD__, "missing groupDef->details->machines['$hostId']->roles");
+                throw Exceptions::newActionFailedException(__METHOD__, "missing groupDef->details->machines['$hostId']->roles");
             }
         }
 
@@ -174,7 +175,7 @@ class VagrantVms implements SupportedHost
         // did it work?
         if ($result->returnCode != 0) {
             $log->endAction("VM failed to start or provision :(");
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // yes it did!!
@@ -247,7 +248,7 @@ class VagrantVms implements SupportedHost
     {
         // if you really want to do this from your story, use
         // $st->usingVagrantVm()->startHost()
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -259,7 +260,7 @@ class VagrantVms implements SupportedHost
     {
         // if you really want to do this from your story, use
         // $st->usingVagrantVm()->stopHost()
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -271,7 +272,7 @@ class VagrantVms implements SupportedHost
     {
         // if you really want to do this from your story, use
         // $st->usingVagrantVm()->restartHost()
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -283,7 +284,7 @@ class VagrantVms implements SupportedHost
     {
         // if you really want to do this from your story, use
         // $st->usingVagrantVm()->powerOffHost()
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -368,7 +369,7 @@ class VagrantVms implements SupportedHost
      */
     public function isRunning($envDetails)
     {
-        throw new E5xx_ActionFailed(__METHOD__, "unsupported operation");
+        throw Exceptions::newActionFailedException(__METHOD__, "unsupported operation");
     }
 
     /**
@@ -439,7 +440,7 @@ class VagrantVms implements SupportedHost
                 $log->endAction('Returning configured '.$vagrantSettings->bridgedIface.' interface');
                 return $vagrantSettings->bridgedIface;
             }
-        } catch (E5xx_ActionFailed $e) {
+        } catch (Exception $e) {
             // ignore errors as this setting may not exist
         }
 
@@ -460,7 +461,7 @@ class VagrantVms implements SupportedHost
         $result = $commandRunner->runSilently($command);
         if ($result->returnCode != 0) {
             $log->endAction('unable to get list of bridgable network interfaces from VBoxManage :(');
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
 
         // now we just need to make sense of it all
@@ -483,7 +484,7 @@ class VagrantVms implements SupportedHost
 
         // if we get here, then we haven't found a network interface to use
         $log->endAction("no bridgeable network interface found :(");
-        throw new E5xx_ActionFailed(__METHOD__);
+        throw Exceptions::newActionFailedException(__METHOD__);
     }
 
     public function determinePrivateKey($vmDetails)
@@ -513,6 +514,6 @@ class VagrantVms implements SupportedHost
 
         // if we get here, then we do not know where the private key is
         $log->endAction("unable to find Vagrant private key for VM");
-        throw new E5xx_ActionFailed(__METHOD__);
+        throw Exceptions::newActionFailedException(__METHOD__);
     }
 }

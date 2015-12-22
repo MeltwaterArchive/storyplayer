@@ -76,7 +76,7 @@ class Prose
         // save any arguments that have been passed into the constructor
         // our child classes may be interested in them
         if (!is_array($args)) {
-            throw new E5xx_ActionFailed(__METHOD__);
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
         $this->args = $args;
 

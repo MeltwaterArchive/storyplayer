@@ -68,7 +68,7 @@ class UsingProvisioningEngine extends Prose
 
         // $args[0] should contain the name of a valid provisioning helper
         if (!isset($args[0])) {
-            throw new E5xx_ActionFailed(__METHOD__, "Param #0 must be the name of the provisioning engine you want to use");
+            throw Exceptions::newActionFailedException(__METHOD__, "Param #0 must be the name of the provisioning engine you want to use");
         }
 
         // remember the provisioner for later

@@ -98,7 +98,7 @@ class FromCurl extends Prose
         curl_close($ch);
 
         if ($error){
-            throw new E5xx_ActionFailed(__METHOD__.': '.$error);
+            throw Exceptions::newActionFailedException(__METHOD__.': '.$error);
         }
 
         // Try and decode it

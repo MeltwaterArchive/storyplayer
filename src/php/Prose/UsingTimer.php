@@ -93,7 +93,7 @@ class UsingTimer extends Prose
             // has the action actually failed?
             if (isset($result) && !$result) {
                 $log->endAction();
-                throw new E5xx_ActionFailed(__METHOD__);
+                throw Exceptions::newActionFailedException(__METHOD__);
             }
 
             // we don't want to use all the CPU resources
@@ -104,7 +104,7 @@ class UsingTimer extends Prose
         }
 
         // if we get here, then the timeout happened
-        throw new E5xx_ActionFailed('timer()->waitFor()');
+        throw Exceptions::newActionFailedException('timer()->waitFor()');
     }
 
     public function waitWhile($callback, $timeout = 'PT5S')
@@ -143,7 +143,7 @@ class UsingTimer extends Prose
             // has the action actually failed?
             if (isset($result) && !$result) {
                 $log->endAction();
-                throw new E5xx_ActionFailed(__METHOD__);
+                throw Exceptions::newActionFailedException(__METHOD__);
             }
 
             // we don't want to use all the CPU resources
@@ -155,7 +155,7 @@ class UsingTimer extends Prose
 
         // if we get here, then the timeout happened
         $log->endAction();
-        throw new E5xx_ActionFailed('timer()->waitWhile()');
+        throw Exceptions::newActionFailedException('timer()->waitWhile()');
     }
 
     public function wait($timeout = 'PT01M', $reason = "waiting for everything to catch up")

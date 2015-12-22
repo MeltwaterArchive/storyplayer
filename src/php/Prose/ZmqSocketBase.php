@@ -70,7 +70,7 @@ class ZmqSocketBase extends Prose
 
         // make sure that we have a ZMQ socket
         if (!isset($params[0]) || !$params[0] instanceof ZMQSocket) {
-            throw new E5xx_ActionFailed(__METHOD__, "first param must be a ZMQ socket");
+            throw Exceptions::newActionFailedException(__METHOD__, "first param must be a ZMQ socket");
         }
     }
 }

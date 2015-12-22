@@ -49,7 +49,7 @@ use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
-use Prose\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * support for provisioning via dsbuild
@@ -139,7 +139,7 @@ class DsbuildProvisioner extends Provisioner
             if ($dsbuildFilename === null) {
                 // there is no dsbuildfile at all to run
                 $log->endAction("cannot find dsbuildfile to run :(");
-                throw new E5xx_ActionFailed(__METHOD__, "no dsbuildfile to run");
+                throw Exceptions::newActionFailedException(__METHOD__, "no dsbuildfile to run");
             }
 
             // at this point, we are ready to provision
@@ -168,7 +168,7 @@ class DsbuildProvisioner extends Provisioner
 
             // what happened?
             if (!$result->didCommandSucceed()) {
-                throw new E5xx_ActionFailed(__METHOD__, "provisioning failed");
+                throw Exceptions::newActionFailedException(__METHOD__, "provisioning failed");
             }
         }
 
