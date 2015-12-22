@@ -1,6 +1,9 @@
 <?php
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Stories\BuildStory;
 
 // ========================================================================
 //
@@ -8,11 +11,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Form'])
-         ->called('Can retrieve form field by its label');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -40,10 +39,10 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
 	// get the checkpoint, to store data in
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithForms.html');
+    Browser::usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithForms.html');
 
     // get a field from a form
     $checkpoint->field1 = fromForm("test_form")->getValue()->fieldLabelled('Page Name');
@@ -57,9 +56,9 @@ $story->addAction(function() {
 
 $story->addPostTestInspection(function() {
 	// get the checkpoint
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	// do we have the title we expected?
-	assertsObject($checkpoint)->hasAttribute('field1');
-	assertsString($checkpoint->field1)->equals("Storyplayer: Working With Forms");
+	Asserts::assertsObject($checkpoint)->hasAttribute('field1');
+	Asserts::assertsString($checkpoint->field1)->equals("Storyplayer: Working With Forms");
 });

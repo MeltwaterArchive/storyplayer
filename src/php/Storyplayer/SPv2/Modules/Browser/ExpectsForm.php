@@ -34,26 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Browser;
+
+use Storyplayer\Exceptions\E5xx_ActionFailed;
+use Storyplayer\SPv2\Modules\Browser;
 
 /**
- * get information about forms in the web browser
+ * test forms in the web browser
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromForm extends FromBrowser
+class ExpectsForm extends ExpectsBrowser
 {
     protected $formId;
 
@@ -63,7 +66,7 @@ class FromForm extends FromBrowser
         $formId = $this->args[0];
 
         // find the form
-        $formElement = fromBrowser()->get()->elementById($formId);
+        $formElement = Browser::fromBrowser()->get()->elementById($formId);
 
         // is it really a form?
         if (strtolower($formElement->name()) !== 'form') {

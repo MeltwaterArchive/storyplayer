@@ -44,9 +44,11 @@
 namespace Storyplayer\SPv2\Modules;
 
 use Storyplayer\SPv2\Modules\Browser\ExpectsBrowser;
+use Storyplayer\SPv2\Modules\Browser\ExpectsForm;
 use Storyplayer\SPv2\Modules\Browser\FromBrowser;
+use Storyplayer\SPv2\Modules\Browser\FromForm;
 use Storyplayer\SPv2\Modules\Browser\UsingBrowser;
-use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Browser\UsingForm;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
@@ -63,6 +65,18 @@ class Browser
     }
 
     /**
+     * returns the ExpectsForm submodule
+     *
+     * @param int $formId
+     *        the value of the form's 'id' attribute
+     * @return Storyplayer\SPv2\Modules\Browser\ExpectsForm;
+     */
+    public static function expectsForm($formId)
+    {
+        return new ExpectsForm(StoryTeller::instance(), [$formId]);
+    }
+
+    /**
      * returns the FromBrowser submodule
      *
      * @return Storyplayer\SPv2\Modules\Browser\FromBrowser;
@@ -73,6 +87,18 @@ class Browser
     }
 
     /**
+     * returns the FromForm submodule
+     *
+     * @param int $formId
+     *        the value of the form's 'id' attribute
+     * @return Storyplayer\SPv2\Modules\Browser\FromForm;
+     */
+    public static function fromForm($formId)
+    {
+        return new FromForm(StoryTeller::instance(), [$formId]);
+    }
+
+    /**
      * returns the UsingBrowser submodule
      *
      * @return Storyplayer\SPv2\Modules\Browser\UsingBrowser;
@@ -80,5 +106,17 @@ class Browser
     public static function usingBrowser()
     {
         return new UsingBrowser(StoryTeller::instance());
+    }
+
+    /**
+     * returns the UsingForm submodule
+     *
+     * @param int $formId
+     *        the value of the form's 'id' attribute
+     * @return Storyplayer\SPv2\Modules\Browser\UsingForm;
+     */
+    public static function usingForm($formId)
+    {
+        return new UsingForm(StoryTeller::instance(), $formId);
     }
 }

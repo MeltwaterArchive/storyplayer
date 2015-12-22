@@ -65,11 +65,9 @@ use Prose\CleanupHosts;
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
 use Prose\CleanupTargets;
-use Prose\ExpectsBrowser;
 use Prose\ExpectsEc2Image;
 use Prose\ExpectsFailure;
 use Prose\ExpectsFirstHostWithRole;
-use Prose\ExpectsForm;
 use Prose\ExpectsGraphite;
 use Prose\ExpectsHost;
 use Prose\ExpectsHostsTable;
@@ -85,7 +83,6 @@ use Prose\ExpectsZmqSocket;
 use Prose\ForeachHostWithRole;
 use Prose\FromArray;
 use Prose\FromAws;
-use Prose\FromBrowser;
 use Prose\FromCheckpoint;
 use Prose\FromConfig;
 use Prose\FromCurl;
@@ -95,7 +92,6 @@ use Prose\FromEnvironment;
 use Prose\FromFacebook;
 use Prose\FromFile;
 use Prose\FromFirstHostWithRole;
-use Prose\FromForm;
 use Prose\FromGraphite;
 use Prose\FromHost;
 use Prose\FromHostsTable;
@@ -117,14 +113,12 @@ use Prose\FromTestEnvironment;
 use Prose\FromUsers;
 use Prose\FromUuid;
 use Prose\FromZmqSocket;
-use Prose\UsingBrowser;
 use Prose\UsingCheckpoint;
 use Prose\UsingEc2;
 use Prose\UsingEc2Instance;
 use Prose\UsingFacebookGraphApi;
 use Prose\UsingFile;
 use Prose\UsingFirstHostWithRole;
-use Prose\UsingForm;
 use Prose\UsingHornet;
 use Prose\UsingHost;
 use Prose\UsingHostsTable;
@@ -389,12 +383,12 @@ function expectsFirstHostWithRole($roleName)
  *
  * @param  string $formId
  *         the 'id' attribute of the HTML form to use
- * @return \Prose\ExpectsForm
+ * @return \Storyplayer\SPv2\Modules\Browser\ExpectsForm
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsForm($formId)
 {
-    return new ExpectsForm(StoryTeller::instance(), [$formId]);
+    return Browser::expectsForm($formId);
 }
 
 /**
@@ -847,11 +841,11 @@ function fromFirstHostWithRole($roleName)
  *
  * @param  string $formId
  *         the 'id' attribute of the HTML form to use
- * @return \Prose\FromForm
+ * @return \Storyplayer\SPv2\Modules\Browser\FromForm
  */
 function fromForm($formId)
 {
-    return new FromForm(StoryTeller::instance(), [$formId]);
+    return Browser::fromForm($formId);
 }
 
 /**
@@ -1361,11 +1355,11 @@ function usingFirstHostWithRole($roleName)
  *
  * @param  string $formId
  *         the 'id' attribute of the HTML form to use
- * @return \Prose\UsingForm
+ * @return \Storyplayer\SPv2\Modules\Browser\UsingForm
  */
 function usingForm($formId)
 {
-    return new UsingForm(StoryTeller::instance(), [$formId]);
+    return Browser::usingForm($formId);
 }
 
 /**

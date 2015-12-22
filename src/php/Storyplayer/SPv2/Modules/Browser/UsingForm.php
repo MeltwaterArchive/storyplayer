@@ -34,22 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Browser;
 
 use Exception;
+use Storyplayer\SPv2\Modules\Browser;
 
 /**
  * do things to forms in the web browser
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Browser
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -69,7 +70,7 @@ class UsingForm extends UsingBrowser
         $formId = $this->args[0];
 
         // find the form
-        $formElement = fromBrowser()->get()->elementById($formId);
+        $formElement = Browser::fromBrowser()->get()->elementById($formId);
 
         // is it really a form?
         if (strtolower($formElement->name()) !== 'form') {
@@ -93,7 +94,7 @@ class UsingForm extends UsingBrowser
         $log = usingLog()->startAction("clear " . count($fields) . " field(s) in the form '{$this->formId}'");
 
         foreach ($fields as $labelText => $fieldValue) {
-            usingForm($this->formId)->clear()->theFieldLabelled($labelText);
+            Browser::usingForm($this->formId)->clear()->theFieldLabelled($labelText);
         }
 
         $log->endAction();
@@ -109,7 +110,7 @@ class UsingForm extends UsingBrowser
 
         foreach ($fields as $labelText => $fieldValue) {
             // find the element
-            $element = fromForm($formId)->get()->elementByLabelIdOrName($labelText);
+            $element = Browser::fromForm($formId)->get()->elementByLabelIdOrName($labelText);
             $tag     = $element->name();
 
             switch ($tag) {
@@ -148,7 +149,7 @@ class UsingForm extends UsingBrowser
             // find the element
             $element = $log->addStep("finding field with label, id or name '{$labelText}'", function($log) use($formId, $labelText) {
                 try {
-                    return fromForm($formId)->get()->elementByLabelIdOrName($labelText);
+                    return Browser::fromForm($formId)->get()->elementByLabelIdOrName($labelText);
                 }
                 catch (Exception $e) {
                     $log->endAction("field '{$labelText}' not present; ignoring!");

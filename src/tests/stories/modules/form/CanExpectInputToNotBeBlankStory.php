@@ -1,16 +1,15 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Forms'])
-         ->called('Can expect a form input not to be blank');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -38,10 +37,10 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
     // load our test page
-    usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithForms.html');
+    Browser::usingBrowser()->gotoPage("file://" . __DIR__ . '/../../testpages/WorkingWithForms.html');
 
     // check the control that we're interested in
-    expectsForm('test_form')->inputWithLabel('Page Name')->isNotBlank();
+    Browser::expectsForm('test_form')->inputWithLabel('Page Name')->isNotBlank();
 });
 
 // ========================================================================
