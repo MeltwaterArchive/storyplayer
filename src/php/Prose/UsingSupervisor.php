@@ -49,6 +49,8 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
+use Storyplayer\SPv2\Modules\Host\HostBase;
+
 /**
  * start and stop programs under supervisor
  *

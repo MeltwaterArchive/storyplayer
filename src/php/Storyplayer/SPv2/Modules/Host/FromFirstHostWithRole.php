@@ -34,27 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Host;
 
 /**
  *
  * helps us when more than one test host has the same role
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsFirstHostWithRole extends ExpectsHost
+class FromFirstHostWithRole extends FromHost
 {
     // pull in some handy helpers
     use HostsByRoleTrait;
@@ -74,8 +74,9 @@ class ExpectsFirstHostWithRole extends ExpectsHost
         // get the hosts details
         $hostDetails = $this->retrieveFirstHost($this->args[0]);
 
-        // we only need to remember the hostId
+        // we only need to remember the name
         $this->args[0] = $hostDetails->hostId;
+
 
         // all done
         $log->endAction("selected host '{$this->args[0]}'");

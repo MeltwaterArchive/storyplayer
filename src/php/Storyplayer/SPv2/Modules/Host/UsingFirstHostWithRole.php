@@ -34,60 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Host;
 
 /**
  *
- * test the state of the internal hosts table
+ * helps us when more than one test host has the same role
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsHostsTable extends Prose
+class UsingFirstHostWithRole extends UsingHost
 {
+    // pull in some handy helpers
+    use HostsByRoleTrait;
 
-    /**
-     * entryKey
-     * The key that this table interacts with in the RuntimeConfig
-     *
-     * @var string
-     */
-    protected $entryKey = "hosts";
-
-    /**
-     * hasEntryForHost
-     *
-     * @param string $hostId
-     *        The host we're looking for
-     *
-     * @return void
-     */
-    public function hasEntryForHost($hostId)
+    public function __construct($st, $args)
     {
-        expectsRuntimeTable($this->entryKey)->hasEntry($hostId);
-    }
+        // call our parent constructor first
+        parent::__construct($st, $args);
 
-    /**
-     * hasNoEntryForHost
-     *
-     * @param string $hostId
-     *        The host we're looking for
-     *
-     * @return void
-     */
-    public function hasNoEntryForHost($hostId)
-    {
-        expectsRuntimeTable($this->entryKey)->hasNoEntry($hostId);
+        // $args[0] contains the rolename
+        // we need to replace this with the hostId for FromHost() to
+        // function correctly
+
+        // what are we doing?
+        $log = usingLog()->startAction("select first host with role '{$this->args[0]}' ...");
+
+        // get the hosts details
+        $hostDetails = $this->retrieveFirstHost($this->args[0]);
+
+        // we only need to remember the name
+        $this->args[0] = $hostDetails->hostId;
+
+        // all done
+        $log->endAction("selected host '{$this->args[0]}'");
     }
 }

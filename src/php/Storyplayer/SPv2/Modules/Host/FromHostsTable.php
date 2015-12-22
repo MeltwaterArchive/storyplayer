@@ -34,44 +34,76 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Host;
 
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ObjectLib\BaseObject;
+use Prose\Prose;
 
 /**
- * base class for all 'Host' Prose modules
+ * retrieve data from the internal hosts table
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostsByRoleBase extends Prose
+class FromHostsTable extends Prose
 {
-    protected $roleName;
+    /**
+     * entryKey
+     * The key that this table interacts with in the RuntimeConfig
+     *
+     * @var string
+     */
+    protected $entryKey = "hosts";
 
-    use HostsByRoleTrait;
 
-    public function __construct(StoryTeller $st, $args = array())
+    /**
+     * getHostsTable
+     *
+     *
+     * @return object The hosts table
+     */
+    public function getHostsTable()
     {
-        // call the parent constructor
-        parent::__construct($st, $args);
+        // what are we doing?
+        $log = usingLog()->startAction("get the hosts table for the current test environment");
 
-        // arg[0] is the name of the box
-        if (!isset($args[0])) {
-            throw Exceptions::newActionFailedException(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
-        }
+        // get the table
+        $table = fromRuntimeTable($this->entryKey)->getTable();
 
-        $this->roleName = $args[0];
+        // all done
+        $log->endAction();
+        return $table;
+    }
+
+    /**
+     * getDetailsForHost
+     *
+     * @param string $hostId
+     *        The host we're looking for
+     *
+     * @return object
+     *         Details about $hostId
+     */
+    public function getDetailsForHost($hostId)
+    {
+        // what are we doing?
+        $log = usingLog()->startAction("get details for host '{$hostId}' from the current test environment");
+
+        // get the details
+        $hostDetails = fromRuntimeTable($this->entryKey)->getDetails($hostId);
+
+        // all done
+        $log->endAction();
+        return $hostDetails;
     }
 }

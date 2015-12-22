@@ -62,16 +62,15 @@ use Storyplayer\SPv2\Modules\Asserts;
 use Storyplayer\SPv2\Modules\Browser;
 use Storyplayer\SPv2\Modules\Device;
 use Storyplayer\SPv2\Modules\Exceptions;
-use Prose\CleanupHosts;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\Log;
+
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
 use Prose\CleanupTargets;
 use Prose\ExpectsEc2Image;
 use Prose\ExpectsFailure;
-use Prose\ExpectsFirstHostWithRole;
 use Prose\ExpectsGraphite;
-use Prose\ExpectsHost;
-use Prose\ExpectsHostsTable;
 use Prose\ExpectsHttpResponse;
 use Prose\ExpectsProcessesTable;
 use Prose\ExpectsRolesTable;
@@ -81,7 +80,6 @@ use Prose\ExpectsSupervisor;
 use Prose\ExpectsUuid;
 use Prose\ExpectsZmq;
 use Prose\ExpectsZmqSocket;
-use Prose\ForeachHostWithRole;
 use Prose\FromArray;
 use Prose\FromAws;
 use Prose\FromCheckpoint;
@@ -92,10 +90,7 @@ use Prose\FromEc2Instance;
 use Prose\FromEnvironment;
 use Prose\FromFacebook;
 use Prose\FromFile;
-use Prose\FromFirstHostWithRole;
 use Prose\FromGraphite;
-use Prose\FromHost;
-use Prose\FromHostsTable;
 use Prose\FromHttp;
 use Prose\FromIframe;
 use Prose\FromPDOStatement;
@@ -121,11 +116,8 @@ use Prose\UsingFacebookGraphApi;
 use Prose\UsingFile;
 use Prose\UsingFirstHostWithRole;
 use Prose\UsingHornet;
-use Prose\UsingHost;
-use Prose\UsingHostsTable;
 use Prose\UsingHttp;
 use Prose\UsingIframe;
-use Prose\UsingLog;
 use Prose\UsingMysql;
 use Prose\UsingPDO;
 use Prose\UsingPDODB;
@@ -236,11 +228,11 @@ function assertsString($actual)
  *
  * @param  string $key
  *         the name of the hosts table in the runtime table
- * @return \Prose\CleanupHosts
+ * @return \Storyplayer\SPv2\Modules\Host\CleanupHosts
  */
 function cleanupHosts($key)
 {
-    return new CleanupHosts(StoryTeller::instance(), [$key]);
+    return Host::cleanupHosts($key);
 }
 
 /**
@@ -369,7 +361,7 @@ function expectsFailure()
  */
 function expectsFirstHostWithRole($roleName)
 {
-    return new ExpectsFirstHostWithRole(StoryTeller::instance(), [$roleName]);
+    return Host::expectsFirstHostWithRole($roleName);
 }
 
 /**
@@ -430,7 +422,7 @@ function expectsGraphite()
  */
 function expectsHost($hostId)
 {
-    return new ExpectsHost(StoryTeller::instance(), [$hostId]);
+    return Host::expectsHost($hostId);
 }
 
 /**
@@ -447,7 +439,7 @@ function expectsHost($hostId)
  */
 function expectsHostsTable()
 {
-    return new ExpectsHostsTable(StoryTeller::instance());
+    return Host::expectsHostsTable();
 }
 
 /**
@@ -629,7 +621,7 @@ function expectsZmqSocket($zmqSocket)
  */
 function foreachHostWithRole($roleName)
 {
-    return new ForeachHostWithRole(StoryTeller::instance(), [$roleName]);
+    return Host::foreachHostWithRole($roleName);
 }
 
 /**
@@ -827,7 +819,7 @@ function fromFile()
  */
 function fromFirstHostWithRole($roleName)
 {
-    return new FromFirstHostWithRole(StoryTeller::instance(), [$roleName]);
+    return Host::fromFirstHostWithRole($roleName);
 }
 
 /**
@@ -886,7 +878,7 @@ function fromGraphite()
  */
 function fromHost($hostId)
 {
-    return new FromHost(StoryTeller::instance(), [$hostId]);
+    return Host::fromHost($hostId);
 }
 
 /**
@@ -902,7 +894,7 @@ function fromHost($hostId)
  */
 function fromHostsTable()
 {
-    return new FromHostsTable(StoryTeller::instance());
+    return Host::fromHostsTable();
 }
 
 /**
@@ -1341,7 +1333,7 @@ function usingFile()
  */
 function usingFirstHostWithRole($roleName)
 {
-    return new UsingFirstHostWithRole(StoryTeller::instance(), [$roleName]);
+    return Host::usingFirstHostWithRole($roleName);
 }
 
 /**
@@ -1381,7 +1373,7 @@ function usingForm($formId)
  */
 function usingHost($hostId)
 {
-    return new UsingHost(StoryTeller::instance(), [$hostId]);
+    return Host::usingHost($hostId);
 }
 
 /**
@@ -1397,7 +1389,7 @@ function usingHost($hostId)
  */
 function usingHostsTable()
 {
-    return new UsingHostsTable(StoryTeller::instance());
+    return Host::usingHostsTable();
 }
 
 /**
@@ -1433,7 +1425,7 @@ function usingHttp()
  */
 function usingLog()
 {
-    return new UsingLog(StoryTeller::instance());
+    return Log::usingLog();
 }
 
 /**
@@ -1891,23 +1883,5 @@ function lastHostWithRole($roleName)
  */
 function hostWithRole($roleName)
 {
-    // special case
-    if ($roleName instanceof StoryTeller) {
-        throw Exceptions::newActionFailedException(__METHOD__, "first param to hostWithRole() is no longer \$st");
-    }
-
-    $listOfHosts = fromRolesTable()->getDetailsForRole($roleName);
-    if (!count($listOfHosts)) {
-        throw Exceptions::newActionFailedException(__METHOD__, "unknown role '{$roleName}' or no hosts for that role");
-    }
-
-    // what are we doing?
-    $log = usingLog()->startAction("for each host with role '{$roleName}' ... ");
-
-    foreach ($listOfHosts as $hostId) {
-        yield($hostId);
-    }
-
-    // all done
-    $log->endAction();
+    return Host::getHostsWithRole($roleName);
 }

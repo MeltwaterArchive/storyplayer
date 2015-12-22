@@ -34,41 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Host;
+
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- *
- * generator for applying modules to all hosts that have a given role
+ * base class for all 'Host' Prose modules
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ForeachHostWithRole extends HostsByRoleBase
+class HostsByRoleBase extends Prose
 {
-    public function __call($moduleName, $params)
+    protected $roleName;
+
+    use HostsByRoleTrait;
+
+    public function __construct(StoryTeller $st, $args = array())
     {
-        // what are we doing?
-        $log = usingLog()->startAction("for each host with role '{$this->roleName}' ...");
+        // call the parent constructor
+        parent::__construct($st, $args);
 
-        // get the hosts details
-        $hostsDetails = $this->retrieveHostsDetails($this->roleName);
+        // arg[0] is the name of the box
+        if (!isset($args[0])) {
+            throw Exceptions::newActionFailedException(__METHOD__, "Param #0 needs to be the role you've given to the machine(s)");
+        }
 
-        // build the iterator that we're going to use
-        $return = new DelayedHostsModuleIterator($this->st, $hostsDetails, $moduleName);
-
-        // all done
-        $log->endAction();
-        return $return;
+        $this->roleName = $args[0];
     }
 }

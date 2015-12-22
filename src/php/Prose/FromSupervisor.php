@@ -51,6 +51,8 @@ use DataSift\Stone\ObjectLib\BaseObject;
 use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 
+use Storyplayer\SPv2\Modules\Host\HostBase;
+
 /**
  * get information about a program running under supervisor
  *

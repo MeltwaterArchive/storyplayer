@@ -47,6 +47,8 @@ use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
+use Storyplayer\SPv2\Modules\Host\HostBase;
+
 /**
  *
  * test the state of a program running under supervisor

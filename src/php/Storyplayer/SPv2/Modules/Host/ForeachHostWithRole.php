@@ -34,55 +34,41 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
-
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ObjectLib\BaseObject;
+namespace Storyplayer\SPv2\Modules\Host;
 
 /**
- * base class for all 'Host' Prose modules
+ *
+ * generator for applying modules to all hosts that have a given role
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-trait HostsByRoleTrait
+class ForeachHostWithRole extends HostsByRoleBase
 {
-    protected function retrieveHostsDetails($roleName)
+    public function __call($moduleName, $params)
     {
-        // do we have this role?
-        $role = fromRolesTable()->getDetailsForRole($roleName);
-        if (!count($role)) {
-            throw Exceptions::newActionFailedException(__METHOD__, "unknown role '{$roleName}'");
-        }
+        // what are we doing?
+        $log = usingLog()->startAction("for each host with role '{$this->roleName}' ...");
 
-        // now we need to gather all of the hosts that make up this role
-        $hostsDetails = [];
-        foreach ($role as $hostId) {
-            $hostsDetails[$hostId] = fromHostsTable()->getDetailsForHost($hostId);
-        }
+        // get the hosts details
+        $hostsDetails = $this->retrieveHostsDetails($this->roleName);
+
+        // build the iterator that we're going to use
+        $return = new DelayedHostsModuleIterator($this->st, $hostsDetails, $moduleName);
 
         // all done
-        return $hostsDetails;
-    }
-
-    protected function retrieveFirstHost($roleName)
-    {
-        $hostsDetails = $this->retrieveHostsDetails($roleName);
-
-        // isolate the first host to use
-        $hostDetails = array_pop($hostsDetails);
-
-        return $hostDetails;
+        $log->endAction();
+        return $return;
     }
 }

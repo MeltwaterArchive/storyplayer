@@ -34,51 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Host;
+
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\ObjectLib\BaseObject;
 
 /**
- *
- * helps us when more than one test host has the same role
+ * base class for all 'Host' Prose modules
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromFirstHostWithRole extends FromHost
+trait HostsByRoleTrait
 {
-    // pull in some handy helpers
-    use HostsByRoleTrait;
-
-    public function __construct($st, $args)
+    protected function retrieveHostsDetails($roleName)
     {
-        // call our parent constructor first
-        parent::__construct($st, $args);
+        // do we have this role?
+        $role = fromRolesTable()->getDetailsForRole($roleName);
+        if (!count($role)) {
+            throw Exceptions::newActionFailedException(__METHOD__, "unknown role '{$roleName}'");
+        }
 
-        // $args[0] contains the rolename
-        // we need to replace this with the hostId for FromHost() to
-        // function correctly
-
-        // what are we doing?
-        $log = usingLog()->startAction("select first host with role '{$this->args[0]}' ...");
-
-        // get the hosts details
-        $hostDetails = $this->retrieveFirstHost($this->args[0]);
-
-        // we only need to remember the name
-        $this->args[0] = $hostDetails->hostId;
-
+        // now we need to gather all of the hosts that make up this role
+        $hostsDetails = [];
+        foreach ($role as $hostId) {
+            $hostsDetails[$hostId] = fromHostsTable()->getDetailsForHost($hostId);
+        }
 
         // all done
-        $log->endAction("selected host '{$this->args[0]}'");
+        return $hostsDetails;
+    }
+
+    protected function retrieveFirstHost($roleName)
+    {
+        $hostsDetails = $this->retrieveHostsDetails($roleName);
+
+        // isolate the first host to use
+        $hostDetails = array_pop($hostsDetails);
+
+        return $hostDetails;
     }
 }

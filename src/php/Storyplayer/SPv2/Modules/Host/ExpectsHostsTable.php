@@ -34,27 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Host;
+
+use Prose\Prose;
 
 /**
- * manipulate the internal hosts table
+ *
+ * test the state of the internal hosts table
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingHostsTable extends Prose
+class ExpectsHostsTable extends Prose
 {
+
     /**
      * entryKey
      * The key that this table interacts with in the RuntimeConfig
@@ -64,61 +68,28 @@ class UsingHostsTable extends Prose
     protected $entryKey = "hosts";
 
     /**
-     * addHost
+     * hasEntryForHost
      *
      * @param string $hostId
-     *        ID of the host to add to the table
-     * @param object $hostDetails
-     *        Details about this host
+     *        The host we're looking for
      *
      * @return void
      */
-    public function addHost($hostId, $hostDetails)
+    public function hasEntryForHost($hostId)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("add host '{$hostId}' to current test environment hosts table");
-
-        // add it
-        usingRuntimeTable($this->entryKey)->addItem($hostId, $hostDetails);
-
-        // all done
-        $log->endAction();
+        expectsRuntimeTable($this->entryKey)->hasEntry($hostId);
     }
 
     /**
-     * removeHost
+     * hasNoEntryForHost
      *
      * @param string $hostId
-     *        ID of the host to remove
+     *        The host we're looking for
      *
      * @return void
      */
-    public function removeHost($hostId)
+    public function hasNoEntryForHost($hostId)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("remove host '{$hostId}' from current test environment hosts table");
-
-        // remove it
-        usingRuntimeTable($this->entryKey)->removeItem($hostId);
-
-        // all done
-        $log->endAction();
-    }
-
-    /**
-     * empty out the table
-     *
-     * @return void
-     */
-    public function emptyTable()
-    {
-        // what are we doing?
-        $log = usingLog()->startAction("empty the hosts table completely");
-
-        // remove it
-        usingRuntimeTable($this->entryKey)->removeTable();
-
-        // all done
-        $log->endAction();
+        expectsRuntimeTable($this->entryKey)->hasNoEntry($hostId);
     }
 }

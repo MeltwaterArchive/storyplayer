@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2011-present Mediasift Ltd
+ * Copyright (c) 2013-present Mediasift Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,54 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @package   Storyplayer/Modules/Host
+ * @author    Michael Heap <michael.heap@datasift.com>
+ * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Host;
+
+use Prose\BaseCleanup;
 
 /**
- * iterator for applying modules to all hosts that have a given role
+ * CleanupHosts
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
+ * @uses CleanupHosts
+ * @author Stuart Herbert <stuart@datasift.com>
  */
-class DelayedHostsModuleIterator
+class CleanupHosts extends BaseCleanup
 {
-    protected $st;
-    protected $hostsDetails;
-    protected $moduleName;
-
-    public function __construct($st, $hostsDetails, $moduleName)
+    public function startup()
     {
-        $this->st = $st;
-        $this->hostsDetails = $hostsDetails;
-        $this->moduleName   = $moduleName;
+        // do nothing
     }
 
-    public function __call($methodName, $params)
+    public function shutdown()
     {
-        // shorthand
-        $st         = $this->st;
-        $moduleName = $this->moduleName;
-
-        // our (potentially empty) return result
-        $return = [];
-
-        // make sure each host is up and running
-        foreach ($this->hostsDetails as $hostDetails) {
-            $module = $st->$moduleName($hostDetails->hostId);
-            $return[$hostDetails->hostId] = call_user_func_array([$module, $methodName], $params);
+        // get the hosts table, if we have one
+        $hostsTable = $this->getTable();
+        if (!$hostsTable) {
+        	return;
         }
 
-        // all done
-        return $return;
+        // remove any empty test environments
+        foreach ($hostsTable as $testEnv => $hosts) {
+        	if (count(get_object_vars($hosts)) == 0) {
+        		unset($hostsTable->$testEnv);
+        	}
+        }
+
+        // cleanup the tables
+        $this->removeTablesIfEmpty();
+
+        // save the runtimeConfig
+        $this->st->saveRuntimeConfig();
     }
 }

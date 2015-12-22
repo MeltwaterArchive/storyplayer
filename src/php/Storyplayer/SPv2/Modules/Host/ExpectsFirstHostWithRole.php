@@ -34,70 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
-
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ObjectLib\BaseObject;
+namespace Storyplayer\SPv2\Modules\Host;
 
 /**
- * base class for all 'Host' Prose modules
+ *
+ * helps us when more than one test host has the same role
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Host
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostBase extends Prose
+class ExpectsFirstHostWithRole extends ExpectsHost
 {
-    protected $hostDetails;
+    // pull in some handy helpers
+    use HostsByRoleTrait;
 
-    public function __construct(StoryTeller $st, $args = array())
+    public function __construct($st, $args)
     {
-        // call the parent constructor
+        // call our parent constructor first
         parent::__construct($st, $args);
 
-        // arg[0] is the name of the box
-        if (!isset($args[0])) {
-            throw Exceptions::newActionFailedException(__METHOD__, "Param #0 needs to be the name you've given to the machine");
-        }
-    }
+        // $args[0] contains the rolename
+        // we need to replace this with the hostId for FromHost() to
+        // function correctly
 
-    protected function getHostDetails()
-    {
-        // shorthand
-        $hostId = $this->args[0];
+        // what are we doing?
+        $log = usingLog()->startAction("select first host with role '{$this->args[0]}' ...");
 
-        // do we know anything about this host?
-        $hostsTable = fromHostsTable()->getHostsTable();
-        if (!isset($hostsTable->$hostId)) {
-            $hostDetails = new BaseObject();
-            $hostDetails->hostId = $hostId;
-            $hostDetails->osName = "unknown";
-            $hostDetails->nameInHostsTable = $hostId;
-            $hostDetails->invalidHost = true;
-        }
-        else {
-            $hostDetails = $hostsTable->$hostId;
-        }
+        // get the hosts details
+        $hostDetails = $this->retrieveFirstHost($this->args[0]);
 
-        return $hostDetails;
-    }
+        // we only need to remember the hostId
+        $this->args[0] = $hostDetails->hostId;
 
-    protected function getIsLocalhost()
-    {
-        if (strtolower($this->args[0]) == 'localhost') {
-            return true;
-        }
-
-        return false;
+        // all done
+        $log->endAction("selected host '{$this->args[0]}'");
     }
 }
