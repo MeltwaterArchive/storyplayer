@@ -1,16 +1,16 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Host'])
-         ->called('Can start a screen session');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -20,26 +20,26 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addTestSetup(function() {
 	// use the checkpoint to share the name of our screen session
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 	$checkpoint->session = "storyplayer_test_session";
 
 	// make sure the session isn't running on the host
-	foreach(hostWithRole('host_target') as $hostId) {
-		$details = fromHost($hostId)->getScreenSessionDetails($checkpoint->session);
+	foreach(Host::getHostsWithRole('host_target') as $hostId) {
+		$details = Host::fromHost($hostId)->getScreenSessionDetails($checkpoint->session);
 		if ($details) {
-			usingHost($hostId)->stopProcess($details->pid);
+			Host::usingHost($hostId)->stopProcess($details->pid);
 		}
 	}
 });
 
 $story->addTestTeardown(function() {
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	// if we've left the session running, go and kill it off
-	foreach(hostWithRole('host_target') as $hostId) {
-		$details = fromHost($hostId)->getScreenSessionDetails($checkpoint->session);
+	foreach(Host::getHostsWithRole('host_target') as $hostId) {
+		$details = Host::fromHost($hostId)->getScreenSessionDetails($checkpoint->session);
 		if ($details) {
-			usingHost($hostId)->stopProcess($details->pid);
+			Host::usingHost($hostId)->stopProcess($details->pid);
 		}
 	}
 });
@@ -51,10 +51,10 @@ $story->addTestTeardown(function() {
 // ------------------------------------------------------------------------
 
 $story->addAction(function() {
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
-	foreach(hostWithRole('host_target') as $hostId) {
-		usingHost($hostId)->startInScreen($checkpoint->session, "top");
+	foreach(Host::getHostsWithRole('host_target') as $hostId) {
+		Host::usingHost($hostId)->startInScreen($checkpoint->session, "top");
 	}
 });
 
@@ -65,9 +65,9 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	foreach(hostWithRole('host_target') as $hostId) {
-		expectsHost($hostId)->screenIsRunning($checkpoint->session);
+		Host::expectsHost($hostId)->screenIsRunning($checkpoint->session);
 	}
 });

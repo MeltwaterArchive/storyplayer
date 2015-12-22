@@ -1,16 +1,18 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Host'])
-         ->called('Can detect when a screen session fails to start');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -19,21 +21,40 @@ $story->requiresStoryplayerVersion(2);
 // ------------------------------------------------------------------------
 
 $story->addTestSetup(function() {
+    // what are we doing?
+    $log = Log::usingLog()->startAction("set the name of the screen session for this test");
+
 	// use the checkpoint to share the name of our screen session
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 	$checkpoint->session = "storyplayer_test_session";
 
+    // all done
+    $log->endAction();
+});
+
+$story->addTestSetup(function() {
+    // what are we doing?
+    $log = Log::usingLog()->startAction("make sure our test session is not running in our test environment");
+
+    $checkpoint = Checkpoint::getCheckpoint();
+
 	// make sure the session isn't running on the host
-	foreach(hostWithRole('host_target') as $hostId) {
-		$details = fromHost($hostId)->getScreenSessionDetails($checkpoint->session);
+	foreach(Host::getHostsWithRole('host_target') as $hostId) {
+		$details = Host::fromHost($hostId)->getScreenSessionDetails($checkpoint->session);
 		if ($details) {
-			usingHost($hostId)->stopProcess($details->pid);
+			Host::usingHost($hostId)->stopProcess($details->pid);
 		}
 	}
+
+    // all done
+    $log->endAction();
 });
 
 $story->addTestTeardown(function() {
-	$checkpoint = getCheckpoint();
+    // what are we doing?
+    $log = Log::usingLog()->startAction("stop our test session if it has been left running");
+
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	// if we've left the session running, go and kill it off
 	foreach(hostWithRole('host_target') as $hostId) {
@@ -42,11 +63,13 @@ $story->addTestTeardown(function() {
 			usingHost($hostId)->stopProcess($details->pid);
 		}
 	}
+
+    // all done
+    $log->endAction();
 });
 
-$story->addPreTestPrediction(function() {
-	// this story should fail
-	throw new \Prose\E4xx_StoryShouldFail();
+$story->addPreTestPrediction(function(){
+    throw Exceptions::newStoryShouldFailException();
 });
 
 // ========================================================================
@@ -56,12 +79,18 @@ $story->addPreTestPrediction(function() {
 // ------------------------------------------------------------------------
 
 $story->addAction(function() {
-	$checkpoint = getCheckpoint();
+    // what are we doing?
+    $log = Log::usingLog()->startAction("run a short screen session in the test environment");
 
-	foreach(hostWithRole('host_target') as $hostId) {
+	$checkpoint = Checkpoint::getCheckpoint();
+
+	foreach(Host::getHostsWithRole('host_target') as $hostId) {
 		// this will cause the screen session to terminate straight away
-		usingHost($hostId)->startInScreen($checkpoint->session, "ls");
+		Host::usingHost($hostId)->startInScreen($checkpoint->session, "ls");
 	}
+
+    // all done
+    $log->endAction();
 });
 
 // ========================================================================
@@ -71,9 +100,15 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	$checkpoint = getCheckpoint();
+    // what are we doing?
+    $log = Log::usingLog()->startAction("check the test environment to see if the screen session is still running");
+
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	foreach(hostWithRole('host_target') as $hostId) {
-		expectsHost($hostId)->screenIsRunning($checkpoint->session);
+		Host::expectsHost($hostId)->screenIsRunning($checkpoint->session);
 	}
+
+    // all done
+    $log->endAction();
 });

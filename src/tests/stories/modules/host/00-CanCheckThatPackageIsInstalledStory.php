@@ -1,16 +1,15 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Host'])
-         ->called('Can check that an operating system package is installed');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -34,12 +33,12 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-    foreach(hostWithRole('host_target') as $hostId) {
+    foreach(Host::getHostsWithRole('host_target') as $hostId) {
         // do we have 'screen' installed?
-        expectsHost($hostId)->packageIsInstalled('screen');
+        Host::expectsHost($hostId)->packageIsInstalled('screen');
 
         // add in a negative test too, in case the other test is returning
         // false positives
-        expectsHost($hostId)->packageIsNotInstalled('storyplayer');
+        Host::expectsHost($hostId)->packageIsNotInstalled('storyplayer');
     }
 });
