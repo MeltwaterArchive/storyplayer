@@ -11,6 +11,7 @@ $group1 = $testEnv->newGroup('vagrant', new Vagrant_GroupAdapter);
 $group1->newHost('default', new Vagrant_VirtualboxHostAdapter)
        ->setOperatingSystem(new CentOS_6_HostAdapter)
        ->setRoles([
+            "http_target",
             "host_target",
             "upload_target",
             "ssl_target",

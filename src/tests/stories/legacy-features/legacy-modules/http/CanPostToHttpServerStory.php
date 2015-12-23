@@ -8,7 +8,7 @@
 
 $story = newStoryFor('Storyplayer')
          ->inGroup(['Modules', 'HTTP'])
-         ->called('Can connect to self-signed SSL server');
+         ->called('Can POST to HTTP server');
 
 $story->requiresStoryplayerVersion(2);
 
@@ -20,12 +20,14 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addAction(function() {
     $checkpoint = getCheckpoint();
-    $checkpoint->responses = [];
 
-    foreach (hostWithRole('ssl_target') as $hostname) {
-        $url = "https://" . fromHost($hostname)->getHostname();
-        $checkpoint->responses[] = fromHttp()->get($url);
-    }
+    // where are we going?
+    $hostname = fromFirstHostWithRole('http_target')->getHostname();
+    $url = "http://{$hostname}/";
+
+    usingHttp()->post(
+        $url
+    );
 });
 
 // ========================================================================
@@ -35,11 +37,4 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function($st) {
-    $checkpoint = getCheckpoint();
-    assertsObject($checkpoint)->hasAttribute("responses");
-    assertsArray($checkpoint->responses)->isExpectedType();
-
-    foreach ($checkpoint->responses as $response) {
-        expectsHttpResponse($response)->hasStatusCode(200);
-    }
 });

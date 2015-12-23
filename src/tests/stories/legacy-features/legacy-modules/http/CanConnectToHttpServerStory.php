@@ -8,7 +8,7 @@
 
 $story = newStoryFor('Storyplayer')
          ->inGroup(['Modules', 'HTTP'])
-         ->called('Can connect to self-signed SSL server');
+         ->called('Can connect to HTTP server');
 
 $story->requiresStoryplayerVersion(2);
 
@@ -22,8 +22,8 @@ $story->addAction(function() {
     $checkpoint = getCheckpoint();
     $checkpoint->responses = [];
 
-    foreach (hostWithRole('ssl_target') as $hostname) {
-        $url = "https://" . fromHost($hostname)->getHostname();
+    foreach (hostWithRole('http_target') as $hostname) {
+        $url = "http://" . fromHost($hostname)->getHostname();
         $checkpoint->responses[] = fromHttp()->get($url);
     }
 });
