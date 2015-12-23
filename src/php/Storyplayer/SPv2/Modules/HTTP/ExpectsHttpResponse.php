@@ -34,18 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/HTTP
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\HTTP;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\HttpLib\HttpClientResponse;
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * test the contents of a HttpClientResponse (retrieved by using
@@ -54,7 +58,7 @@ use DataSift\Stone\HttpLib\HttpClientResponse;
  * great for testing APIs
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/HTTP
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -97,7 +101,7 @@ class ExpectsHttpResponse extends Prose
         $response = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction("make sure HTTP response has status code '{$status}'");
+        $log = Log::usingLog()->startAction("make sure HTTP response has status code '{$status}'");
 
         // do we even HAVE a response?
         if (!is_object($response)) {
@@ -124,10 +128,10 @@ class ExpectsHttpResponse extends Prose
         $response = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction(["make sure HTTP response has body", $expectedBody]);
+        $log = Log::usingLog()->startAction(["make sure HTTP response has body", $expectedBody]);
 
         // do the comparison
-        assertsString($response->getBody())->equals($expectedBody);
+        Asserts::assertsString($response->getBody())->equals($expectedBody);
 
         // if we get here, all is well
         $log->endAction();

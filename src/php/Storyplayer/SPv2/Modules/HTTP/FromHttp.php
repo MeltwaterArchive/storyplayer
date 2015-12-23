@@ -34,53 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/HTTP
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\HTTP;
 
 use DataSift\Stone\HttpLib\HttpClient;
 use DataSift\Stone\HttpLib\HttpClientRequest;
 use DataSift\Stone\HttpLib\HttpClientResponse;
 
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
+
 /**
- * do things to a web site by making requests directly to it (i.e. not
- * using the web browser at all)
+ * get information from a HTTP server, without using a web browser to
+ * get it.
  *
- * Great for testing APIs
+ * great for testing APIs
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/HTTP
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingHttp extends Prose
+class FromHttp extends Prose
 {
-    public function delete($url, $params = array(), $headers = array(), $timeout = null)
-    {
-        return $this->makeHttpRequest($url, "DELETE", $params, null, $headers, $timeout);
-    }
-
-    public function post($url, $params = array(), $body = null, $headers = array(), $timeout = null)
-    {
-        return $this->makeHttpRequest($url, "POST", $params, $body, $headers, $timeout);
-    }
-
-    public function put($url, $params = array(), $body = null, $headers = array(), $timeout = null)
-    {
-        return $this->makeHttpRequest($url, "PUT", $params, $body, $headers, $timeout);
-    }
-
-    /**
-     * @param string $verb
-     */
-    protected function makeHttpRequest($url, $verb, $params, $body, $headers = array(), $timeout = null)
+    public function get($url, $params = array(), $headers = array(), $timeout = null)
     {
         // create the full URL
         if (count($params) > 0) {
@@ -88,43 +74,28 @@ class UsingHttp extends Prose
         }
 
         // what are we doing?
-        $logMsg = [ "HTTP " . strtoupper($verb) . " '${url}'" ];
-        if ($body != null) {
-            $logMsg[] = $body;
-        }
-        if (count($headers) > 0) {
-            $logMsg[] = $headers;
-        }
-        $log = usingLog()->startAction($logMsg);
+        $log = Log::usingLog()->startAction("HTTP GET '${url}'");
 
         // build the HTTP request
         $request = new HttpClientRequest($url);
         $request->withUserAgent("Storyplayer")
-                ->withHttpVerb($verb);
-
-        if (is_array($headers)) {
-            foreach ($headers as $key => $value) {
-                $request->withExtraHeader($key, $value);
-            }
-        }
-
-        if (is_array($body)) {
-            foreach ($body as $key => $value) {
-                $request->addData($key, $value);
-            }
-        }else{
-            $request->setPayload($body);
+                ->asGetRequest();
+        foreach ($headers as $key => $value) {
+            $request->withExtraHeader($key, $value);
         }
 
         // special case - do we validate SSL certificates in this
         // test environment?
-        $validateSsl = fromConfig()->getModuleSetting("http.validateSsl");
-        if (null === $validateSsl) {
-            // default to TRUE if no setting present
-            $validateSsl = true;
-        }
-        if (!$validateSsl) {
-            $request->disableSslCertificateValidation();
+        $httpAddress = $request->getAddress();
+        if ($httpAddress->scheme == "https") {
+            $validateSsl = fromConfig()->getModuleSetting("http.validateSsl");
+            if (null === $validateSsl) {
+                // default to TRUE if no setting present
+                $validateSsl = true;
+            }
+            if (!$validateSsl) {
+                $request->disableSslCertificateValidation();
+            }
         }
 
         if ($timeout !== null) {

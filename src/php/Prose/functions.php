@@ -63,6 +63,7 @@ use Storyplayer\SPv2\Modules\Browser;
 use Storyplayer\SPv2\Modules\Device;
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\HTTP;
 use Storyplayer\SPv2\Modules\Log;
 
 use Prose\CleanupProcesses;
@@ -71,7 +72,6 @@ use Prose\CleanupTargets;
 use Prose\ExpectsEc2Image;
 use Prose\ExpectsFailure;
 use Prose\ExpectsGraphite;
-use Prose\ExpectsHttpResponse;
 use Prose\ExpectsProcessesTable;
 use Prose\ExpectsRolesTable;
 use Prose\ExpectsRuntimeTable;
@@ -91,7 +91,6 @@ use Prose\FromEnvironment;
 use Prose\FromFacebook;
 use Prose\FromFile;
 use Prose\FromGraphite;
-use Prose\FromHttp;
 use Prose\FromIframe;
 use Prose\FromPDOStatement;
 use Prose\FromProcessesTable;
@@ -116,7 +115,6 @@ use Prose\UsingFacebookGraphApi;
 use Prose\UsingFile;
 use Prose\UsingFirstHostWithRole;
 use Prose\UsingHornet;
-use Prose\UsingHttp;
 use Prose\UsingIframe;
 use Prose\UsingMysql;
 use Prose\UsingPDO;
@@ -450,12 +448,12 @@ function expectsHostsTable()
  *
  * @param  HttpClientResponse $httpResponse
  *         the return value from usingHttp()->post() et al
- * @return \Prose\ExpectsHttpResponse
+ * @return \Storyplayer\SPv2\Modules\HTTP\ExpectsHttpResponse
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsHttpResponse(HttpClientResponse $httpResponse)
 {
-    return new ExpectsHttpResponse(StoryTeller::instance(), [$httpResponse]);
+    return HTTP::expectsHttpResponse($httpResponse);
 }
 
 /**
@@ -907,11 +905,11 @@ function fromHostsTable()
  *
  * To make PUT, POST and DELETE requests, use the UsingHttp module.
  *
- * @return \Prose\FromHttp
+ * @return \Storyplayer\SPv2\Modules\HTTP\FromHttp
  */
 function fromHttp()
 {
-    return new FromHttp(StoryTeller::instance());
+    return HTTP::fromHttp();
 }
 
 /**
@@ -1404,11 +1402,11 @@ function usingHostsTable()
  *
  * To make GET requests, use the FromHttp module.
  *
- * @return \Prose\UsingHttp
+ * @return \Storyplayer\SPv2\Modules\HTTP\UsingHttp
  */
 function usingHttp()
 {
-    return new UsingHttp(StoryTeller::instance());
+    return HTTP::usingHttp(StoryTeller::instance());
 }
 
 /**
