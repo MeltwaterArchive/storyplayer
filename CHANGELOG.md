@@ -39,6 +39,7 @@ The following are deprecated, and will be removed in SPv3:
   * Exceptions - standardise the exceptions that other modules should throw
   * Filesystem - operate on the local or remote filesystem
   * Screen - run processes inside screen(1) locally or remotely
+* `storyplayer create-story` updated to generate a template based on the long-term approach to modules
 
 ### Fixes
 
