@@ -65,6 +65,7 @@ use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\HTTP;
 use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\Supervisor;
 
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
@@ -76,7 +77,6 @@ use Prose\ExpectsProcessesTable;
 use Prose\ExpectsRolesTable;
 use Prose\ExpectsRuntimeTable;
 use Prose\ExpectsShell;
-use Prose\ExpectsSupervisor;
 use Prose\ExpectsUuid;
 use Prose\ExpectsZmq;
 use Prose\ExpectsZmqSocket;
@@ -101,7 +101,6 @@ use Prose\FromSauceLabs;
 use Prose\FromShell;
 use Prose\FromStoryplayer;
 use Prose\FromString;
-use Prose\FromSupervisor;
 use Prose\FromSystemUnderTest;
 use Prose\FromTargetsTable;
 use Prose\FromTestEnvironment;
@@ -131,7 +130,6 @@ use Prose\UsingRuntimeTable;
 use Prose\UsingSauceLabs;
 use Prose\UsingSavageD;
 use Prose\UsingShell;
-use Prose\UsingSupervisor;
 use Prose\UsingTargetsTable;
 use Prose\UsingTimer;
 use Prose\UsingUsers;
@@ -536,12 +534,11 @@ function expectsShell()
  *
  * @param  string $hostId
  *         the ID of the host you want to use Supervisor on
- * @return \Prose\ExpectsSupervisor
- * @throws \Prose\E5xx_ExpectFailed
+ * @return \Storyplayer\SPv2\Modules\Supervisor\ExpectsSupervisor
  */
 function expectsSupervisor($hostId)
 {
-    return new ExpectsSupervisor(StoryTeller::instance(), [$hostId]);
+    return Supervisor::expectsSupervisor($hostId);
 }
 
 /**
@@ -1072,11 +1069,11 @@ function fromString()
  *
  * @param  string $hostId
  *         the ID of the host you want to use Supervisor on
- * @return \Prose\FromSupervisor
+ * @return \Storyplayer\SPv2\Modules\Supervisor\FromSupervisor
  */
 function fromSupervisor($hostId)
 {
-    return new FromSupervisor(StoryTeller::instance(),[$hostId]);
+    return Supervisor::fromSupervisor($hostId);
 }
 
 /**
@@ -1676,11 +1673,11 @@ function usingShell()
  *
  * @param  string $hostId
  *         the ID of the host you want to use Supervisor on
- * @return \Prose\UsingSupervisor
+ * @return \Storyplayer\SPv2\Modules\Supervisor\UsingSupervisor
  */
 function usingSupervisor($hostId)
 {
-    return new UsingSupervisor(StoryTeller::instance(), [$hostId]);
+    return Supervisor::usingSupervisor($hostId);
 }
 
 /**

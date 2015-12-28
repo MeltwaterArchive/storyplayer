@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Supervisor
  * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Supervisor;
 
 use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
@@ -51,13 +51,16 @@ use DataSift\Stone\ObjectLib\BaseObject;
 use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\Host\HostBase;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * get information about a program running under supervisor
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Supervisor
  * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -68,13 +71,13 @@ class FromSupervisor extends HostBase
     public function getProgramIsRunning($programName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("is program '{$programName}' running under supervisor on host '{$this->args[0]}'?");
+        $log = Log::usingLog()->startAction("is program '{$programName}' running under supervisor on host '{$this->args[0]}'?");
 
         // get the host details
         $hostDetails = $this->getHostDetails();
 
         //run the supervisorctl command
-        $result = usingHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status");
+        $result = Host::usingHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status");
         // |egrep '^$programName' | awk '{print \\$2}'");
 
         // did the command succeed?

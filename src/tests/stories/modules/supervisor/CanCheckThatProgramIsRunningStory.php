@@ -1,16 +1,15 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Supervisor;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Supervisor'])
-         ->called('Can check that a supervised program is running');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -36,6 +35,6 @@ $story->addAction(function() {
 $story->addPostTestInspection(function() {
     // we should have a file for each host in the configuration
     foreach (hostWithRole('upload_target') as $hostname) {
-        expectsSupervisor($hostname)->programIsRunning('zmq-echo-server');
+        Supervisor::expectsSupervisor($hostname)->programIsRunning('zmq-echo-server');
     }
 });

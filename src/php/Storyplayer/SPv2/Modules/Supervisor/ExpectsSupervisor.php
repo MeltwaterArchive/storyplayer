@@ -34,27 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Supervisor
  * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Supervisor;
 
 use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
+use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host\HostBase;
+use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\Supervisor;
 
 /**
  *
  * test the state of a program running under supervisor
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Supervisor
  * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -65,13 +68,13 @@ class ExpectsSupervisor extends HostBase
     public function programIsRunning($programName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure program '{$programName}' is running on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("make sure program '{$programName}' is running on host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
 
         // is it running?
-        $running = fromSupervisor($hostDetails->hostId)->getProgramIsRunning($programName);
+        $running = Supervisor::fromSupervisor($hostDetails->hostId)->getProgramIsRunning($programName);
         if (!$running) {
             $log->endAction();
             throw Exceptions::newExpectFailedException(__METHOD__, 'program is running', 'program is not running');
@@ -84,13 +87,13 @@ class ExpectsSupervisor extends HostBase
     public function programIsNotRunning($programName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure program '{$programName}' is not running on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("make sure program '{$programName}' is not running on host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
 
         // is it running?
-        $running = fromSupervisor($hostDetails->hostId)->getProgramIsRunning($programName);
+        $running = Supervisor::fromSupervisor($hostDetails->hostId)->getProgramIsRunning($programName);
         if ($running) {
             $log->endAction();
             throw Exceptions::newExpectFailedException(__METHOD__, 'program is not running', 'program is running');
