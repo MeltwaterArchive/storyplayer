@@ -34,15 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/ZeroMQ
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\ZeroMQ;
 
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Log;
 use ZMQ;
 use ZMQContext;
 use ZMQSocket;
@@ -52,7 +54,7 @@ use DataSift\Stone\DataLib\DataPrinter;
  * receive data from a ZMQ socket
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/ZeroMQ
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -69,7 +71,7 @@ class FromZmqSocket extends ZmqSocketBase
 
         // what are we doing?
         if ($timeout == -1) {
-            $log = usingLog()->startAction("recv() from ZMQ socket; no timeout");
+            $log = Log::usingLog()->startAction("recv() from ZMQ socket; no timeout");
             $this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
         }
         else {
@@ -88,7 +90,7 @@ class FromZmqSocket extends ZmqSocketBase
     public function recvNonBlocking()
     {
         // what are we doing?
-        $log = usingLog()->startAction("recv() from ZMQ socket");
+        $log = Log::usingLog()->startAction("recv() from ZMQ socket");
 
         // do it
         $return = $this->args[0]->recv(ZMQ::MODE_NOBLOCK);
@@ -112,11 +114,11 @@ class FromZmqSocket extends ZmqSocketBase
 
         // what are we doing?
         if ($timeout == -1) {
-            $log = usingLog()->startAction("recvmulti() from ZMQ socket; no timeout");
+            $log = Log::usingLog()->startAction("recvmulti() from ZMQ socket; no timeout");
             $this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
         }
         else {
-            $log = usingLog()->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
+            $log = Log::usingLog()->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
             $this->args[0]->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
         }
 
@@ -135,7 +137,7 @@ class FromZmqSocket extends ZmqSocketBase
     public function recvMultiNonBlocking()
     {
         // what are we doing?
-        $log = usingLog()->startAction("recvmulti() from ZMQ socket");
+        $log = Log::usingLog()->startAction("recvmulti() from ZMQ socket");
 
         // do it
         $return = $this->args[0]->recvmulti(ZMQ::MODE_NOBLOCK);
@@ -153,7 +155,7 @@ class FromZmqSocket extends ZmqSocketBase
     public function getEndpoints()
     {
         // what are we doing?
-        $log = usingLog()->startAction("get the list of endpoints for a ZMQ socket");
+        $log = Log::usingLog()->startAction("get the list of endpoints for a ZMQ socket");
 
         // do it
         $endpoints = $this->args[0]->getEndpoints();

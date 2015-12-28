@@ -34,79 +34,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/ZeroMQ
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\ZeroMQ;
 
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 use ZMQ;
+use ZMQContext;
+use ZMQSocket;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Stone\DataLib\DataPrinter;
 
 /**
- * test ZeroMQ connections
+ * base class for all things ZMQ socket related
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/ZeroMQ
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsZmqSocket extends ZmqSocketBase
+class ZmqSocketBase extends Prose
 {
-    public function canSendNonBlocking($message)
+    static public $defaultTimeout = 5;
+
+    public function __construct(Storyteller $st, $params = [])
     {
-        // what are we doing?
-        $log = usingLog()->startAction("make sure ZMQ::send() does not block");
+        // call our parent first
+        parent::__construct($st, $params);
 
-        // send the data
-        $sent = $this->args[0]->send($message, ZMQ::MODE_NOBLOCK);
-
-        // would it have blocked?
-        if (!$sent) {
-            throw Exceptions::newExpectFailedException(__METHOD__, "send() would not block", "send() would have blocked");
+        // make sure that we have a ZMQ socket
+        if (!isset($params[0]) || !$params[0] instanceof ZMQSocket) {
+            throw Exceptions::newActionFailedException(__METHOD__, "first param must be a ZMQ socket");
         }
-
-        // all done
-        $log->endAction();
-    }
-
-    public function canSendmultiNonBlocking($message)
-    {
-        // what are we doing?
-        $log = usingLog()->startAction("make sure ZMQ::sendmulti() does not block");
-
-        // send the data
-        $sent = $this->args[0]->sendmulti($message, ZMQ::MODE_NOBLOCK);
-
-        // would it have blocked?
-        if (!$sent) {
-            throw Exceptions::newExpectFailedException(__METHOD__, "sendmulti() would not block", "sendmulti() would have blocked");
-        }
-
-        // all done
-        $log->endAction();
-    }
-
-    public function isConnectedToHost($hostId, $portNumber)
-    {
-        // what are we doing?
-        $log = usingLog()->startAction("make sure ZMQ socket is connected to host '{$hostId}':{$portNumber}");
-
-        // build the address that we should be connected to
-        $ipAddress = fromHost($hostId)->getIpAddress();
-        $zmqAddress = "tcp://{$ipAddress}:{$portNumber}";
-
-        // where are we connected to?
-        $connections = fromZmqSocket($this->args[0])->getEndpoints();
-
-        // make sure we're connected
-        assertsArray($connections['connect'])->containsValue($zmqAddress);
-
-        // all done
-        $log->endAction();
     }
 }

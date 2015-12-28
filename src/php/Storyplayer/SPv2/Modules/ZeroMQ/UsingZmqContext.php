@@ -34,15 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/ZeroMQ
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\ZeroMQ;
 
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\Log;
 use ZMQ;
 use ZMQContext;
 use ZMQSocket;
@@ -53,7 +57,7 @@ use DataSift\Stone\DataLib\DataPrinter;
  * create a ZMQ socket for sending or receiving data
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/ZeroMQ
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -90,7 +94,7 @@ class UsingZmqContext extends Prose
     public function getZmqContext()
     {
         // what are we doing?
-        $log = usingLog()->startAction("get a ZMQContext object");
+        $log = Log::usingLog()->startAction("get a ZMQContext object");
 
         // all done
         $log->endAction();
@@ -100,7 +104,7 @@ class UsingZmqContext extends Prose
     public function bindToPort($port, $socketType, $sendHwm = 100, $recvHwm = 100)
     {
         // what are we doing?
-        $log = usingLog()->startAction("bind() to ZMQ tcp '{$socketType}' socket at host 'localhost':{$port}");
+        $log = Log::usingLog()->startAction("bind() to ZMQ tcp '{$socketType}' socket at host 'localhost':{$port}");
 
         // do we have a supported socket?
         if (!isset($this->socketMap[$socketType])) {
@@ -130,7 +134,7 @@ class UsingZmqContext extends Prose
     public function connectToHost($hostId, $port, $socketType, $sendHwm = 100, $recvHwm = 100)
     {
         // what are we doing?
-        $log = usingLog()->startAction("connect() to ZMQ '{$socketType}' socket on host '{$hostId}':{$port}");
+        $log = Log::usingLog()->startAction("connect() to ZMQ '{$socketType}' socket on host '{$hostId}':{$port}");
 
         // do we have a supported socket?
         if (!isset($this->socketMap[$socketType])) {
@@ -140,7 +144,7 @@ class UsingZmqContext extends Prose
         }
 
         // where are we connecting to?
-        $ipAddress = fromHost($hostId)->getIpAddress();
+        $ipAddress = Host::fromHost($hostId)->getIpAddress();
 
         // create the socket
         $socket = new ZMQSocket($this->args[0], $this->socketMap[$socketType]);

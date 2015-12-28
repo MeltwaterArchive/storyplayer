@@ -1,16 +1,17 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\ZeroMQ;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'ZeroMQ'])
-         ->called('Can check where a ZMQ socket is connected');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -20,7 +21,7 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addTestCanRunCheck(function() {
 	// do we have the ZMQ extension installed?
-	expectsZmq()->requirementsAreMet();
+	ZeroMQ::expectsZmq()->requirementsAreMet();
 });
 
 // ========================================================================
@@ -49,16 +50,16 @@ $story->addTestCanRunCheck(function() {
 
 $story->addAction(function() {
 	// we're going to store the received message in here
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	foreach(firstHostWithRole("zmq_target") as $hostId) {
 		// we need to connect
-		$context = usingZmqContext()->getZmqContext();
-		$inPort  = fromHost($hostId)->getStorySetting("zmq.multi.inPort");
-		$inSocket  = usingZmqContext($context)->connectToHost($hostId, $inPort, 'PUSH');
+		$context = ZeroMQ::usingZmqContext()->getZmqContext();
+		$inPort  = Host::fromHost($hostId)->getStorySetting("zmq.multi.inPort");
+		$inSocket  = ZeroMQ::usingZmqContext($context)->connectToHost($hostId, $inPort, 'PUSH');
 
 		// now let's make sure we are connected
-		expectsZmqSocket($inSocket)->isConnectedToHost($hostId, $inPort);
+		ZeroMQ::expectsZmqSocket($inSocket)->isConnectedToHost($hostId, $inPort);
 	}
 });
 

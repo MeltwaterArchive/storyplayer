@@ -34,15 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/ZeroMQ
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\ZeroMQ;
 
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\ZeroMQ;
 use ZMQ;
 use ZMQSocket;
 use DataSift\Stone\DataLib\DataPrinter;
@@ -62,7 +67,7 @@ class UsingZmqSocket extends ZmqSocketBase
     public function bindToPort($port, $sendHwm = 100, $recvHwm = 100)
     {
         // what are we doing?
-        $log = usingLog()->startAction("bind() as ZMQ tcp socket at host 'localhost':{$port}");
+        $log = Log::usingLog()->startAction("bind() as ZMQ tcp socket at host 'localhost':{$port}");
 
         // reuse the existing socket
         $socket = $this->args[0];
@@ -79,7 +84,7 @@ class UsingZmqSocket extends ZmqSocketBase
     public function unbindFromPort($port)
     {
         // what are we doing?
-        $log = usingLog()->startAction("unbind() ZMQ tcp socket at host 'localhost':{$port}");
+        $log = Log::usingLog()->startAction("unbind() ZMQ tcp socket at host 'localhost':{$port}");
 
         // attempt the unbind
         $this->args[0]->unbind("tcp://*:{$port}");
@@ -91,10 +96,10 @@ class UsingZmqSocket extends ZmqSocketBase
     public function unbindFromAllPorts()
     {
         // what are we doing?
-        $log = usingLog()->startAction("unbind() ZMQ socket from all ports");
+        $log = Log::usingLog()->startAction("unbind() ZMQ socket from all ports");
 
         // where are we unbinding from?
-        $endpoints = fromZmqSocket($this->args[0])->getEndpoints();
+        $endpoints = ZeroMQ::fromZmqSocket($this->args[0])->getEndpoints();
 
         foreach($endpoints['bind'] as $address) {
             usingLog()->writeToLog("unbinding from {$address}");
@@ -108,10 +113,10 @@ class UsingZmqSocket extends ZmqSocketBase
     public function connectToHost($hostId, $port, $sendHwm = 100, $recvHwm = 100)
     {
         // what are we doing?
-        $log = usingLog()->startAction("connect() to ZMQ tcp socket on host '{$hostId}':{$port}");
+        $log = Log::usingLog()->startAction("connect() to ZMQ tcp socket on host '{$hostId}':{$port}");
 
         // where are we connecting to?
-        $ipAddress = fromHost($hostId)->getIpAddress();
+        $ipAddress = Host::fromHost($hostId)->getIpAddress();
 
         // we're reusing the existing socket
         $socket = $this->args[0];
@@ -133,10 +138,10 @@ class UsingZmqSocket extends ZmqSocketBase
     public function disconnectFromHost($hostId, $port)
     {
         // what are we doing?
-        $log = usingLog()->startAction("disconnect() from ZMQ tcp socket on host '{$hostId}':{$port}");
+        $log = Log::usingLog()->startAction("disconnect() from ZMQ tcp socket on host '{$hostId}':{$port}");
 
         // where are we connecting to?
-        $ipAddress = fromHost($hostId)->getIpAddress();
+        $ipAddress = Host::fromHost($hostId)->getIpAddress();
 
         // we're reusing the existing socket
         $socket = $this->args[0];
@@ -151,13 +156,13 @@ class UsingZmqSocket extends ZmqSocketBase
     public function disconnectFromAllHosts()
     {
         // what are we doing?
-        $log = usingLog()->startAction("disconnect() ZMQ socket from all endpoints");
+        $log = Log::usingLog()->startAction("disconnect() ZMQ socket from all endpoints");
 
         // where are we disconnecting from?
-        $endpoints = fromZmqSocket($this->args[0])->getEndpoints();
+        $endpoints = ZeroMQ::fromZmqSocket($this->args[0])->getEndpoints();
 
         foreach($endpoints['connect'] as $address) {
-            usingLog()->writeToLog("disconnecting from {$address}");
+            Log::usingLog()->writeToLog("disconnecting from {$address}");
             $this->args[0]->disconnect($address);
         }
 
@@ -168,7 +173,7 @@ class UsingZmqSocket extends ZmqSocketBase
     public function close()
     {
         // what are we doing?
-        $log = usingLog()->startAction("close all open endpoints on ZMQ socket");
+        $log = Log::usingLog()->startAction("close all open endpoints on ZMQ socket");
 
         $this->unbindFromAllPorts();
         $this->disconnectFromAllHosts();
@@ -186,11 +191,11 @@ class UsingZmqSocket extends ZmqSocketBase
 
         // what are we doing?
         if ($timeout == -1) {
-            $log = usingLog()->startAction("send() to ZMQ socket; no timeout");
+            $log = Log::usingLog()->startAction("send() to ZMQ socket; no timeout");
             $this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
         }
         else {
-            $log = usingLog()->startAction("send() to ZMQ socket; timeout is {$timeout} seconds");
+            $log = Log::usingLog()->startAction("send() to ZMQ socket; timeout is {$timeout} seconds");
             $this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
         }
 
@@ -204,7 +209,7 @@ class UsingZmqSocket extends ZmqSocketBase
     public function sendNonBlocking($message)
     {
         // what are we doing?
-        $log = usingLog()->startAction("sendNonBlocking() to ZMQ socket");
+        $log = Log::usingLog()->startAction("sendNonBlocking() to ZMQ socket");
         $this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
 
         // do it
@@ -229,11 +234,11 @@ class UsingZmqSocket extends ZmqSocketBase
 
         // what are we doing?
         if ($timeout == -1) {
-            $log = usingLog()->startAction("sendmulti() to ZMQ socket; no timeout");
+            $log = Log::usingLog()->startAction("sendmulti() to ZMQ socket; no timeout");
             $this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
         }
         else {
-            $log = usingLog()->startAction("sendmulti() to ZMQ socket; timeout is {$timeout} seconds");
+            $log = Log::usingLog()->startAction("sendmulti() to ZMQ socket; timeout is {$timeout} seconds");
             $this->args[0]->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
         }
 
@@ -247,7 +252,7 @@ class UsingZmqSocket extends ZmqSocketBase
     public function sendMultiNonBlocking($message)
     {
         // what are we doing?
-        $log = usingLog()->startAction("sendMultiNonBlocking() to ZMQ socket");
+        $log = Log::usingLog()->startAction("sendMultiNonBlocking() to ZMQ socket");
 
         // do it
         $sent = $this->args[0]->sendmulti($message, ZMQ::MODE_NOBLOCK);

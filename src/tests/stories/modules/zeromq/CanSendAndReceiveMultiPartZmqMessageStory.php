@@ -1,16 +1,18 @@
 <?php
 
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\Checkpoint;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\ZeroMQ;
+use Storyplayer\SPv2\Stories\BuildStory;
+
 // ========================================================================
 //
 // STORY DETAILS
 //
 // ------------------------------------------------------------------------
 
-$story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'ZeroMQ'])
-         ->called('Can send and receive a multi-part message');
-
-$story->requiresStoryplayerVersion(2);
+$story = BuildStory::newStory();
 
 // ========================================================================
 //
@@ -20,7 +22,7 @@ $story->requiresStoryplayerVersion(2);
 
 $story->addTestCanRunCheck(function() {
 	// do we have the ZMQ extension installed?
-	expectsZmq()->requirementsAreMet();
+	ZeroMQ::expectsZmq()->requirementsAreMet();
 });
 
 // ========================================================================
@@ -31,7 +33,7 @@ $story->addTestCanRunCheck(function() {
 
 $story->addTestSetup(function() {
 	// let's decide on the message we're sending and expecting back
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 	$checkpoint->expectedMessage = [ "hello, Storyplayer", "you're looking fine today"];
 	$checkpoint->actualMessage = null;
 });
@@ -56,18 +58,18 @@ $story->addTestSetup(function() {
 
 $story->addAction(function() {
 	// we're going to store the received message in here
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	foreach(firstHostWithRole("zmq_target") as $hostId) {
-		$context = usingZmqContext()->getZmqContext();
-		$inPort  = fromHost($hostId)->getStorySetting("zmq.multi.inPort");
-		$outPort = fromHost($hostId)->getStorySetting("zmq.multi.outPort");
+		$context = ZeroMQ::usingZmqContext()->getZmqContext();
+		$inPort  = Host::fromHost($hostId)->getStorySetting("zmq.multi.inPort");
+		$outPort = Host::fromHost($hostId)->getStorySetting("zmq.multi.outPort");
 
-		$inSocket  = usingZmqContext($context)->connectToHost($hostId, $inPort, 'PUSH');
-		$outSocket = usingZmqContext($context)->connectToHost($hostId, $outPort, 'PULL');
+		$inSocket  = ZeroMQ::usingZmqContext($context)->connectToHost($hostId, $inPort, 'PUSH');
+		$outSocket = ZeroMQ::usingZmqContext($context)->connectToHost($hostId, $outPort, 'PULL');
 
-		usingZmqSocket($inSocket)->sendMulti($checkpoint->expectedMessage);
-		$checkpoint->actualMessage = fromZmqSocket($outSocket)->recvMulti();
+		ZeroMQ::usingZmqSocket($inSocket)->sendMulti($checkpoint->expectedMessage);
+		$checkpoint->actualMessage = ZeroMQ::fromZmqSocket($outSocket)->recvMulti();
 	}
 });
 
@@ -78,9 +80,9 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
-	assertsObject($checkpoint)->hasAttribute("expectedMessage");
-	assertsObject($checkpoint)->hasAttribute("actualMessage");
-	assertsArray($checkpoint->actualMessage)->equals($checkpoint->expectedMessage);
+	Asserts::assertsObject($checkpoint)->hasAttribute("expectedMessage");
+	Asserts::assertsObject($checkpoint)->hasAttribute("actualMessage");
+	Asserts::assertsArray($checkpoint->actualMessage)->equals($checkpoint->expectedMessage);
 });

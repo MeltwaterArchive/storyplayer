@@ -34,15 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/ZeroMQ
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\ZeroMQ;
 
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 use ZMQ;
 use ZMQContext;
 use ZMQSocket;
@@ -76,7 +79,7 @@ class UsingZmq extends Prose
     public function bind($address, $socketType)
     {
         // what are we doing?
-        $log = usingLog()->startAction("bind() to '{$this->socketMap[$socketType]}' at address '{$address}'");
+        $log = Log::usingLog()->startAction("bind() to '{$this->socketMap[$socketType]}' at address '{$address}'");
 
         // make the connection
         $socket = new ZMQSocket(new ZMQContext(), $socketType);
@@ -93,7 +96,7 @@ class UsingZmq extends Prose
     public function connect($address, $socketType, $sendHwm = 100, $recvHwm = 100)
     {
         // what are we doing?
-        $log = usingLog()->startAction("connect() to '{$this->socketMap[$socketType]}' at address '{$address}'");
+        $log = Log::usingLog()->startAction("connect() to '{$this->socketMap[$socketType]}' at address '{$address}'");
 
         // create the socket
         $socket = new ZMQSocket(new ZMQContext(), $socketType);
@@ -116,11 +119,11 @@ class UsingZmq extends Prose
     {
         // what are we doing?
         if ($timeout == -1) {
-            $log = usingLog()->startAction("send() to ZMQ socket; no timeout");
+            $log = Log::usingLog()->startAction("send() to ZMQ socket; no timeout");
             $socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
         }
         else {
-            $log = usingLog()->startAction("send() to ZMQ socket; timeout is {$timeout} seconds");
+            $log = Log::usingLog()->startAction("send() to ZMQ socket; timeout is {$timeout} seconds");
             $socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
         }
 
@@ -135,11 +138,11 @@ class UsingZmq extends Prose
     {
         // what are we doing?
         if ($timeout == -1) {
-            $log = usingLog()->startAction("recv() from ZMQ socket; no timeout");
+            $log = Log::usingLog()->startAction("recv() from ZMQ socket; no timeout");
             $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
         }
         else {
-            $log = usingLog()->startAction("recv() from ZMQ socket; timeout is {$timeout} seconds");
+            $log = Log::usingLog()->startAction("recv() from ZMQ socket; timeout is {$timeout} seconds");
             $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
         }
 
@@ -154,7 +157,7 @@ class UsingZmq extends Prose
     public function recvNonBlocking($socket)
     {
         // what are we doing?
-        $log = usingLog()->startAction("recv() from ZMQ socket");
+        $log = Log::usingLog()->startAction("recv() from ZMQ socket");
 
         // do it
         $return = $socket->recv(ZMQ::MODE_NOBLOCK);
@@ -173,11 +176,11 @@ class UsingZmq extends Prose
     {
         // what are we doing?
         if ($timeout == -1) {
-            $log = usingLog()->startAction("sendmulti() to ZMQ socket; no timeout");
+            $log = Log::usingLog()->startAction("sendmulti() to ZMQ socket; no timeout");
             $socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, -1);
         }
         else {
-            $log = usingLog()->startAction("sendmulti() to ZMQ socket; timeout is {$timeout} seconds");
+            $log = Log::usingLog()->startAction("sendmulti() to ZMQ socket; timeout is {$timeout} seconds");
             $socket->setSockOpt(ZMQ::SOCKOPT_SNDTIMEO, $timeout * 1000);
         }
 
@@ -192,11 +195,11 @@ class UsingZmq extends Prose
     {
         // what are we doing?
         if ($timeout == -1) {
-            $log = usingLog()->startAction("recvmulti() from ZMQ socket; no timeout");
+            $log = Log::usingLog()->startAction("recvmulti() from ZMQ socket; no timeout");
             $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, -1);
         }
         else {
-            $log = usingLog()->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
+            $log = Log::usingLog()->startAction("recvmulti() from ZMQ socket; timeout is {$timeout} seconds");
             $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, $timeout * 1000);
         }
 
@@ -215,7 +218,7 @@ class UsingZmq extends Prose
     public function recvMultiNonBlocking($socket)
     {
         // what are we doing?
-        $log = usingLog()->startAction("recvmulti() from ZMQ socket");
+        $log = Log::usingLog()->startAction("recvmulti() from ZMQ socket");
 
         // do it
         $return = $socket->recvmulti(ZMQ::MODE_NOBLOCK);

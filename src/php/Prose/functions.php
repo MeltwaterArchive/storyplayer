@@ -67,6 +67,7 @@ use Storyplayer\SPv2\Modules\HTTP;
 use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Supervisor;
 use Storyplayer\SPv2\Modules\Users;
+use Storyplayer\SPv2\Modules\ZeroMQ;
 
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
@@ -79,8 +80,6 @@ use Prose\ExpectsRolesTable;
 use Prose\ExpectsRuntimeTable;
 use Prose\ExpectsShell;
 use Prose\ExpectsUuid;
-use Prose\ExpectsZmq;
-use Prose\ExpectsZmqSocket;
 use Prose\FromArray;
 use Prose\FromAws;
 use Prose\FromCheckpoint;
@@ -106,7 +105,6 @@ use Prose\FromSystemUnderTest;
 use Prose\FromTargetsTable;
 use Prose\FromTestEnvironment;
 use Prose\FromUuid;
-use Prose\FromZmqSocket;
 use Prose\UsingCheckpoint;
 use Prose\UsingEc2;
 use Prose\UsingEc2Instance;
@@ -134,9 +132,6 @@ use Prose\UsingTargetsTable;
 use Prose\UsingTimer;
 use Prose\UsingVagrant;
 use Prose\UsingYamlFile;
-use Prose\UsingZmq;
-use Prose\UsingZmqContext;
-use Prose\UsingZmqSocket;
 use Prose\UsingZookeeper;
 
 use Prose\E5xx_ActionFailed;
@@ -560,12 +555,12 @@ function expectsUuid()
  * This module provides support for working with ZeroMQ, the no-broker
  * inter-process queuing library.
  *
- * @return \Prose\ExpectsZmq
+ * @return \Storyplayer\SPv2\Modules\ZeroMQ\ExpectsZmq
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsZmq()
 {
-    return new ExpectsZmq(StoryTeller::instance());
+    return ZeroMQ::expectsZmq();
 }
 
 /**
@@ -575,11 +570,11 @@ function expectsZmq()
  *
  * @param  \ZMQSocket
  *         the ZMQSocket to test
- * @return \Prose\ExpectsZmqSocket
+ * @return \Storyplayer\SPv2\Modules\ZeroMQ\ExpectsZmqSocket
  */
 function expectsZmqSocket($zmqSocket)
 {
-    return new ExpectsZmqSocket(StoryTeller::instance(), [$zmqSocket]);
+    return ZeroMQ::expectsZmqSocket($zmqSocket);
 }
 
 /**
@@ -1175,11 +1170,11 @@ function fromUuid()
  *
  * @param  \ZMQSocket $zmqSocket
  *         the ZeroMQ socket you want to receive data from
- * @return \Prose\FromZmqSocket
+ * @return \Storyplayer\SPv2\Modules\ZeroMQ\FromZmqSocket
  */
 function fromZmqSocket($zmqSocket)
 {
-    return new FromZmqSocket(StoryTeller::instance(), [$zmqSocket]);
+    return ZeroMQ::fromZmqSocket($zmqSocket);
 }
 
 /**
@@ -1767,11 +1762,11 @@ function usingYamlFile($filename)
  * This module provides support for working with ZeroMQ, the no-broker
  * inter-process queuing library.
  *
- * @return \Prose\UsingZmq
+ * @return \Storyplayer\SPv2\Modules\ZeroMQ\UsingZmq
  */
 function usingZmq()
 {
-    return new UsingZmq(StoryTeller::instance());
+    return ZeroMQ::usingZmq();
 }
 
 /**
@@ -1782,11 +1777,11 @@ function usingZmq()
  * @param  \ZMQContext|null $zmqContext
  *         the ZMQContext to use when creating the socket
  *         (leave empty and we'll create a context for you)
- * @return \Prose\UsingZmqContext
+ * @return \Storyplayer\SPv2\Modules\ZeroMQ\UsingZmqContext
  */
 function usingZmqContext($zmqContext = null, $ioThreads = 1)
 {
-    return new UsingZmqContext(StoryTeller::instance(), [$zmqContext, $ioThreads]);
+    return ZeroMQ::usingZmqContext($zmqContext, $ioThreads);
 }
 
 /**
@@ -1796,11 +1791,11 @@ function usingZmqContext($zmqContext = null, $ioThreads = 1)
  *
  * @param  \ZMQSocket $zmqSocket
  *         the socket to send on
- * @return \Prose\UsingZmqSocket
+ * @return \Storyplayer\SPv2\Modules\ZeroMQ\UsingZmqSocket
  */
 function usingZmqSocket($zmqSocket)
 {
-    return new UsingZmqSocket(StoryTeller::instance(), [$zmqSocket]);
+    return ZeroMQ::usingZmqSocket($zmqSocket);
 }
 
 // ==================================================================
