@@ -7,7 +7,7 @@
 // ------------------------------------------------------------------------
 
 $story = newStoryFor('Storyplayer')
-         ->inGroup('Hosts')
+         ->inGroup(['Modules', 'Hosts'])
          ->called('Can upload a file');
 
 $story->requiresStoryplayerVersion(2);

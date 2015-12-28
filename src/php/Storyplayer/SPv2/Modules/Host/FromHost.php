@@ -54,6 +54,7 @@ use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Filesystem;
 use Storyplayer\SPv2\Modules\Screen;
 
 /**
@@ -485,57 +486,19 @@ class FromHost extends HostAwareModule
     }
 
     /**
-     * @param  string $sourceFilename
-     * @param  string $destFilename
-     * @return \DataSift\Storyplayer\CommandLib\CommandResult
+     * @deprecated since v2.4.0
      */
     public function downloadFile($sourceFilename, $destFilename)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("download file '{$this->args[0]}':'{$sourceFilename}' to '{$destFilename}'");
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get an object to talk to this host
-        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
-
-        // upload the file
-        $result = $host->downloadFile($hostDetails, $sourceFilename, $destFilename);
-
-        // did the command used to upload succeed?
-        if ($result->didCommandFail()) {
-            $msg = "download failed with return code '{$result->returnCode}' and output '{$result->output}'";
-            $log->endAction($msg);
-            throw Exceptions::newActionFailedException(__METHOD__, $msg);
-        }
-
-        // all done
-        $log->endAction();
-        return $result;
+        return Filesystem::fromHost($this->args[0])->downloadFile($sourceFilename, $destFilename);
     }
 
     /**
-     * @param  string $filename
-     * @return object
+     * @deprecated since v2.4.0
      */
     public function getFileDetails($filename)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("get details for '{$filename}' on host '{$this->args[0]}'");
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get an object to talk to this host
-        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
-
-        // get the details
-        $details = $host->getFileDetails($hostDetails, $filename);
-
-        // all done
-        $log->endAction();
-        return $details;
+        return Filesystem::fromHost($this->args[0])->getFileDetails($filename);
     }
 
     /**

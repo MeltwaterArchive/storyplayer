@@ -7,7 +7,7 @@
 // ------------------------------------------------------------------------
 
 $story = newStoryFor('Storyplayer')
-         ->inGroup('Hosts')
+         ->inGroup(['Modules', 'Host'])
          ->called('Can download a file');
 
 $story->requiresStoryplayerVersion(2);

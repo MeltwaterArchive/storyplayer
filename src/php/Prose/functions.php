@@ -65,6 +65,7 @@ use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\HTTP;
 use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\Shell;
 use Storyplayer\SPv2\Modules\Supervisor;
 use Storyplayer\SPv2\Modules\Users;
 use Storyplayer\SPv2\Modules\ZeroMQ;
@@ -78,7 +79,6 @@ use Prose\ExpectsGraphite;
 use Prose\ExpectsProcessesTable;
 use Prose\ExpectsRolesTable;
 use Prose\ExpectsRuntimeTable;
-use Prose\ExpectsShell;
 use Prose\ExpectsUuid;
 use Prose\FromArray;
 use Prose\FromAws;
@@ -98,7 +98,6 @@ use Prose\FromRedisConn;
 use Prose\FromRolesTable;
 use Prose\FromRuntimeTable;
 use Prose\FromSauceLabs;
-use Prose\FromShell;
 use Prose\FromStoryplayer;
 use Prose\FromString;
 use Prose\FromSystemUnderTest;
@@ -127,7 +126,6 @@ use Prose\UsingRolesTable;
 use Prose\UsingRuntimeTable;
 use Prose\UsingSauceLabs;
 use Prose\UsingSavageD;
-use Prose\UsingShell;
 use Prose\UsingTargetsTable;
 use Prose\UsingTimer;
 use Prose\UsingVagrant;
@@ -503,7 +501,7 @@ function expectsRuntimeTable($tableName)
 }
 
 /**
- * returns the FromShell module
+ * returns the ExpectsShell module
  *
  * This module provides support for running commands via the UNIX shell.
  * These commands will run on the same computer where Storyplayer is running.
@@ -511,12 +509,11 @@ function expectsRuntimeTable($tableName)
  * If you want to run commands on a computer in your test environment, you
  * need the UsingHost module.
  *
- * @return \Prose\ExpectsShell
- * @throws \Prose\E5xx_ExpectFailed
+ * @return \Storyplayer\SPv2\Modules\Host\ExpectsHost
  */
 function expectsShell()
 {
-    return new ExpectsShell(StoryTeller::instance());
+    return Host::expectsHost('localhost');
 }
 
 /**
@@ -1019,11 +1016,11 @@ function fromSauceLabs()
  * If you want to run commands on a computer in your test environment, you
  * need the FromHost module.
  *
- * @return \Prose\FromShell
+ * @return \Storyplayer\SPv2\Modules\Host\FromHost
  */
 function fromShell()
 {
-    return new FromShell(StoryTeller::instance());
+    return Host::fromHost('localhost');
 }
 
 /**
@@ -1359,7 +1356,7 @@ function usingForm($formId)
  */
 function usingHost($hostId)
 {
-    return Host::usingHost($hostId);
+    return Host::onHost($hostId);
 }
 
 /**
@@ -1651,11 +1648,11 @@ function usingSavageD($hostId)
  * If you want to run commands on a computer in your test environment, you
  * need the UsingHost module.
  *
- * @return \Prose\UsingShell
+ * @return \Storyplayer\SPv2\Modules\Shell\UsingShell
  */
 function usingShell()
 {
-    return new UsingShell(StoryTeller::instance());
+    return Shell::onLocalhost();
 }
 
 /**

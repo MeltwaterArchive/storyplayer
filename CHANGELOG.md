@@ -37,6 +37,8 @@ The following are deprecated, and will be removed in SPv3:
 * SPv2 modules are now available to imported via standard PHP `use` statements.
 * New modules:
   * Exceptions - standardise the exceptions that other modules should throw
+  * Filesystem - operate on the local or remote filesystem
+  * Screen - run processes inside screen(1) locally or remotely
 
 ### Fixes
 

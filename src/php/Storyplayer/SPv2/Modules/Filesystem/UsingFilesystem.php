@@ -34,33 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Filesystem
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Filesystem;
+
+use DataSift\Storyplayer\OsLib;
+use DataSift\Stone\ObjectLib\BaseObject;
+
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Host\HostAwareModule;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
- * get information from the UNIX shell
- *
- * as of Storyplayer v2, this is now just an alias for:
- *
- *   fromHost('localhost')
+ * do things with (possibly remote) filesystems
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Filesystem
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromShell extends FromHost
+class UsingFilesystem extends HostAwareModule
 {
-    public function __construct($st)
+    public function uploadFile($sourceFilename, $destFilename)
     {
-        parent::__construct($st, ['localhost']);
+        // what are we doing?
+        $log = Log::usingLog()->startAction("upload file '{$sourceFilename}' to '{$this->args[0]}':'{$destFilename}'");
+
+        // does the source file exist?
+        if (!is_file($sourceFilename)) {
+            $log->endAction("file '{$sourceFilename}' not found :(");
+            throw Exceptions::newActionFailedException(__METHOD__);
+        }
+
+        // make sure we have valid host details
+        $hostDetails = $this->getHostDetails();
+
+        // get an object to talk to this host
+        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
+
+        // upload the file
+        $result = $host->uploadFile($hostDetails, $sourceFilename, $destFilename);
+
+        // did the command used to upload succeed?
+        if ($result->didCommandFail()) {
+            $msg = "upload failed with return code '{$result->returnCode}' and output '{$result->output}'";
+            $log->endAction($msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
+        }
+
+        // all done
+        $log->endAction();
+        return $result;
     }
 }

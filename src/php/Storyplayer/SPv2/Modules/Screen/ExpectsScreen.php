@@ -34,36 +34,61 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Screen
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Screen;
 
-use DataSift\Storyplayer\CommandLib\CommandResult;
-use DataSift\Stone\ObjectLib\BaseObject;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Host\HostAwareModule;
+use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\Screen;
 
 /**
- * do things with the UNIX shell (such as start background processes)
  *
- * as of Storyplayer v2, this is now just an alias for:
- *
- *   usingHost('localhost')
+ * test the state of a screen session on a (possibly remote) computer
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Screen
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingShell extends UsingHost
+class ExpectsScreen extends HostAwareModule
 {
-    public function __construct($st)
+    public function screenIsRunning($sessionName)
     {
-        parent::__construct($st, ['localhost']);
+        // what are we doing?
+        $log = Log::usingLog()->startAction("make sure screen session '{$sessionName}' is running on host '{$this->args[0]}'");
+
+        // is this session still running?
+        if (Screen::fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
+            $log->endAction();
+            return;
+        }
+
+        $log->endAction("session is not running");
+        throw Exceptions::newExpectFailedException(__METHOD__, "session '{$sessionName}' running", "session '{$sessionName}' not running");
+    }
+
+    public function screenIsNotRunning($sessionName)
+    {
+        // what are we doing?
+        $log = Log::usingLog()->startAction("make sure screen session '{$sessionName}' is not running on host '{$this->args[0]}'");
+
+        // get the details
+        $processDetails = Screen::fromHost($this->args[0])->getScreenSessionDetails($sessionName);
+        if ($processDetails === null) {
+            $log->endAction("session is not running");
+            return;
+        }
+
+        $log->endAction("session is running");
+        throw Exceptions::newExpectFailedException(__METHOD__, "session not running", "session running as PID {$processDetails->pid}");
     }
 }

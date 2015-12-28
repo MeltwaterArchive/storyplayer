@@ -77,7 +77,7 @@ class FromSupervisor extends HostAwareModule
         $hostDetails = $this->getHostDetails();
 
         //run the supervisorctl command
-        $result = Host::usingHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status");
+        $result = Host::onHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status");
         // |egrep '^$programName' | awk '{print \\$2}'");
 
         // did the command succeed?

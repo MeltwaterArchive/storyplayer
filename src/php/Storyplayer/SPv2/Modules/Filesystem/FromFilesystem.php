@@ -34,77 +34,92 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Modules/Supervisor
- * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
+ * @package   Storyplayer/Modules/Filesystem
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\SPv2\Modules\Supervisor;
+namespace Storyplayer\SPv2\Modules\Filesystem;
 
 use DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
+use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\ObjectLib\BaseObject;
 
+use GanbaroDigital\TextTools\Filters\FilterColumns;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
+use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
+
 use Storyplayer\SPv2\Modules\Exceptions;
-use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\Host\HostAwareModule;
 use Storyplayer\SPv2\Modules\Log;
 
 /**
- * start and stop programs under supervisor
+ * get information about a given host
  *
  * @category  Libraries
- * @package   Storyplayer/Modules/Supervisor
- * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
+ * @package   Storyplayer/Modules/Filesystem
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingSupervisor extends HostAwareModule
+class FromFilesystem extends HostAwareModule
 {
-    public function startProgram($programName)
+    /**
+     * @param  string $sourceFilename
+     * @param  string $destFilename
+     * @return \DataSift\Storyplayer\CommandLib\CommandResult
+     */
+    public function downloadFile($sourceFilename, $destFilename)
     {
         // what are we doing?
-        $log = Log::usingLog()->startAction("start program '{$programName}' on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("download file '{$this->args[0]}':'{$sourceFilename}' to '{$destFilename}'");
 
-        // get the host details
+        // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
 
-        // start the program
-        $result = Host::onHost($hostDetails->hostId)->runCommand("sudo supervisorctl start '{$programName}'");
+        // get an object to talk to this host
+        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
-        // did the command succeed?
+        // upload the file
+        $result = $host->downloadFile($hostDetails, $sourceFilename, $destFilename);
+
+        // did the command used to upload succeed?
         if ($result->didCommandFail()) {
-            throw Exceptions::newActionFailedException(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
+            $msg = "download failed with return code '{$result->returnCode}' and output '{$result->output}'";
+            $log->endAction($msg);
+            throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // all done
         $log->endAction();
-        return true;
+        return $result;
     }
 
-    public function stopProgram($programName)
+    /**
+     * @param  string $filename
+     * @return object
+     */
+    public function getFileDetails($filename)
     {
         // what are we doing?
-        $log = Log::usingLog()->startAction("stop program '{$programName}' on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get details for '{$filename}' on host '{$this->args[0]}'");
 
-        // get the host details
+        // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
 
-        // stop the program
-        $result = Host::onHost($hostDetails->hostId)->runCommand("sudo supervisorctl stop '{$programName}'");
+        // get an object to talk to this host
+        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
-        // did the command succeed?
-        if ($result->didCommandFail()) {
-            throw Exceptions::newActionFailedException(__METHOD__, "failed to start process '{$programName} (via supervisord)'");
-        }
+        // get the details
+        $details = $host->getFileDetails($hostDetails, $filename);
 
         // all done
         $log->endAction();
-        return true;
+        return $details;
     }
 }

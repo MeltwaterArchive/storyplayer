@@ -47,7 +47,9 @@ use DataSift\Storyplayer\OsLib;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Filesystem;
 use Storyplayer\SPv2\Modules\Screen;
+use Storyplayer\SPv2\Modules\Shell;
 
 /**
  * do things with vagrant
@@ -61,102 +63,36 @@ use Storyplayer\SPv2\Modules\Screen;
  */
 class UsingHost extends HostAwareModule
 {
+    /**
+     * @deprecated since v2.4.0
+     */
     public function runCommand($command)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("run command '{$command}' on host '{$this->args[0]}'");
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get an object to talk to this host
-        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
-
-        // run the command in the guest operating system
-        $result = $host->runCommand($hostDetails, $command);
-
-        // did the command succeed?
-        if ($result->didCommandFail()) {
-            $msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-            $log->endAction($msg);
-            throw Exceptions::newActionFailedException(__METHOD__, $msg);
-        }
-
-        // all done
-        $log->endAction();
-        return $result;
+        return Shell::onHost($this->args[0])->runCommand($command);
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function runCommandAsUser($command, $user)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get an object to talk to this host
-        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
-
-        // make a copy of the hostDetails, so that we can override them
-        $myHostDetails = clone $hostDetails;
-        $myHostDetails->sshUsername = $user;
-
-        // run the command in the guest operating system
-        $result = $host->runCommand($myHostDetails, $command);
-
-        // did the command succeed?
-        if ($result->didCommandFail()) {
-            $msg = "command failed with return code '{$result->returnCode}' and output '{$result->output}'";
-            $log->endAction($msg);
-            throw Exceptions::newActionFailedException(__METHOD__, $msg);
-        }
-
-        // all done
-        $log->endAction();
-        return $result;
+        return Shell::onHost($this->args[0])->runCommandAsUser($command, $user);
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function runCommandAndIgnoreErrors($command)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("run command '{$command}' on host '{$this->args[0]}'");
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get an object to talk to this host
-        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
-
-        // run the command in the guest operating system
-        $result = $host->runCommand($hostDetails, $command);
-
-        // all done
-        $log->endAction();
-        return $result;
+        return Shell::onHost($this->args[0])->runCommandAndIgnoreErrors($command);
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function runCommandAsUserAndIgnoreErrors($command, $user)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("run command '{$command}' as user '{$user}' on host '{$this->args[0]}'");
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get an object to talk to this host
-        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
-
-        // make a copy of the hostDetails, so that we can override them
-        $myHostDetails = clone $hostDetails;
-        $myHostDetails->sshUsername = $user;
-
-        // run the command in the guest operating system
-        $result = $host->runCommand($myHostDetails, $command);
-
-        // all done
-        $log->endAction();
-        return $result;
+        return Shell::onHost($this->args[0])->runCommandAsUserAndIgnoreErrors($command, $user);
     }
 
     /**
@@ -245,35 +181,11 @@ class UsingHost extends HostAwareModule
         $log->endAction("process has finished");
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function uploadFile($sourceFilename, $destFilename)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("upload file '{$sourceFilename}' to '{$this->args[0]}':'{$destFilename}'");
-
-        // does the source file exist?
-        if (!is_file($sourceFilename)) {
-            $log->endAction("file '{$sourceFilename}' not found :(");
-            throw Exceptions::newActionFailedException(__METHOD__);
-        }
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get an object to talk to this host
-        $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
-
-        // upload the file
-        $result = $host->uploadFile($hostDetails, $sourceFilename, $destFilename);
-
-        // did the command used to upload succeed?
-        if ($result->didCommandFail()) {
-            $msg = "upload failed with return code '{$result->returnCode}' and output '{$result->output}'";
-            $log->endAction($msg);
-            throw Exceptions::newActionFailedException(__METHOD__, $msg);
-        }
-
-        // all done
-        $log->endAction();
-        return $result;
+        return Filesystem::onHost($this->args[0])->uploadFile($sourceFilename, $destFilename);
     }
 }

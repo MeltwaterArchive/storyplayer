@@ -44,6 +44,7 @@
 namespace Storyplayer\SPv2\Modules\Host;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Filesystem;
 use Storyplayer\SPv2\Modules\Screen;
 
 /**
@@ -218,75 +219,19 @@ class ExpectsHost extends HostAwareModule
         return $this->screenIsNotRunning($sessionName);
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function hasFileWithPermissions($filename, $owner, $group, $mode)
     {
-        // shorthand
-        $octMode = decoct($mode);
-
-        // what are we doing?
-        $log = usingLog()->startAction("make sure file '{$filename}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get the file details
-        $details = fromHost($hostDetails->hostId)->getFileDetails($filename);
-
-        // validate the details
-        if ($details === null) {
-            throw Exceptions::newExpectFailedException(__METHOD__, "'{$filename}' exists", "'{$filename}' does not exist");
-        }
-
-        if ($details->type != 'file') {
-            throw Exceptions::newExpectFailedException(__METHOD__, "'{$filename}' is a file", "'{$filename}' is type '{$details->type}'");
-        }
-
-        if ($details->mode != $mode) {
-            $theirOctMode = decoct($details->mode);
-            throw Exceptions::newExpectFailedException(__METHOD__, "'{$filename}' has permissions '{$octMode}'", "'{$filename}' has permissions '{$theirOctMode}'");
-        }
-
-        if ($details->user != $owner || $details->group != $group) {
-            throw Exceptions::newExpectFailedException(__METHOD__, "'{$filename}' has ownership '{$owner}:{$group}'", "'{$filename}' has ownership '{$details->user}:{$details->group}'");
-        }
-
-        // if we get here, then all is good
-        $log->endAction();
+        return Filesystem::expectsHost($this->args[0])->hasFileWithPermissions($filename, $owner, $group, $mode);
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function hasFolderWithPermissions($folder, $owner, $group, $mode)
     {
-        // shorthand
-        $octMode = decoct($mode);
-
-        // what are we doing?
-        $log = usingLog()->startAction("make sure folder '{$folder}' exists on host '{$this->args[0]}' with permissions '{$octMode}' owned by '{$owner}:{$group}'");
-
-        // make sure we have valid host details
-        $hostDetails = $this->getHostDetails();
-
-        // get the file details
-        $details = fromHost($hostDetails->hostId)->getFileDetails($folder);
-
-        // validate the details
-        if ($details === null) {
-            throw Exceptions::newExpectFailedException(__METHOD__, "'{$folder}' exists", "'{$folder}' does not exist");
-        }
-
-        if ($details->type != 'dir') {
-            throw Exceptions::newExpectFailedException(__METHOD__, "'{$folder}' is a file", "'{$folder}' is type '{$details->type}'");
-        }
-
-        if ($details->mode != $mode) {
-            $theirOctMode = decoct($details->mode);
-            throw Exceptions::newExpectFailedException(__METHOD__, "'{$folder}' has permissions '{$octMode}'", "'{$folder}' has permissions '{$theirOctMode}'");
-        }
-
-        if ($details->user != $owner || $details->group != $group) {
-            throw Exceptions::newExpectFailedException(__METHOD__, "'{$folder}' has ownership '{$owner}:{$group}'", "'{$folder}' has ownership '{$details->user}:{$details->group}'");
-        }
-
-        // if we get here, then all is good
-        $log->endAction();
+        return Filesystem::expectsHost($this->args[0])->hasFolderWithPermissions($folder, $owner, $group, $mode);
     }
 }

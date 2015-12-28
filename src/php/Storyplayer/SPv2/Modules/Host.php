@@ -118,6 +118,20 @@ class Host
     }
 
     /**
+     * returns the ExpectsHost module
+     *
+     * This module provides support for checking on something on the computer
+     * where Storyplayer is running.  If the check fails, an exception is
+     * thrown for you.
+     *
+     * @return ExpectsHost
+     */
+    public static function expectsLocalhost()
+    {
+        return new ExpectsHost(StoryTeller::instance(), ['localhost']);
+    }
+
+    /**
      * returns the ExpectsHostsTable module
      *
      * This module provides access to Storyplayer's internal list of computers
@@ -215,6 +229,19 @@ class Host
     }
 
     /**
+     * returns the FromHost module
+     *
+     * This module provides support for getting information about the computer
+     * where Storyplayer is running.
+     *
+     * @return FromHost
+     */
+    public static function fromLocalhost()
+    {
+        return new FromHost(StoryTeller::instance(), ['localhost']);
+    }
+
+    /**
      * returns the FromHostsTable module
      *
      * This module provides access to Storyplayer's internal list of computers
@@ -305,9 +332,23 @@ class Host
      *         the ID of the host to use
      * @return UsingHost
      */
-    public static function usingHost($hostId)
+    public static function onHost($hostId)
     {
         return new UsingHost(StoryTeller::instance(), [$hostId]);
+    }
+
+    /**
+     * returns the UsingHost module
+     *
+     * This module provides support for running commands on a computer in your
+     * test environment - basically for doing anything that's likely to change
+     * the state of that computer.
+     *
+     * @return UsingHost
+     */
+    public static function onLocalhost()
+    {
+        return new UsingHost(StoryTeller::instance(), ['localhost']);
     }
 
     /**
