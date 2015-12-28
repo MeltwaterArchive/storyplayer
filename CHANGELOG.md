@@ -41,6 +41,7 @@ The following are deprecated, and will be removed in SPv3:
 ### Fixes
 
 * The browser no longer gets stuck in 'persist' mode when a single story wants the browser to persist for its execution.
+* The Host and Shell modules now work on OSX.
 
 ### Refactor
 

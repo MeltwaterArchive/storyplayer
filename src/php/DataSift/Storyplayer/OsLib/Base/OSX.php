@@ -131,7 +131,7 @@ abstract class Base_OSX extends OsBase
         // process the result
         $lines = explode("\n", $result->output);
         $lines = FilterColumns::from($lines, "7", ' ');
-        $lines = FilterForMatchingRegex::against($lines, "/^{$processName}$/");
+        $lines = FilterForMatchingRegex::against($lines, "|^{$processName}$|");
         if (empty($lines)) {
             $log->endAction("not running");
             return false;
@@ -165,11 +165,11 @@ abstract class Base_OSX extends OsBase
 
         // check that we found exactly one process
         $pids = explode("\n", $result->output);
-        $pids = FilterForMatchingRegex::against($lines, "/{$processName}/");
-        $pids = FilterColumns::from($lines, 1, ' ');
+        $pids = FilterForMatchingRegex::against($pids, "|{$processName}|");
+        $pids = FilterColumns::from($pids, '1', ' ');
         if (count($pids) != 1) {
-            $log->endAction("found more than one process but expecting only one ... is this correct?");
-            return 0;
+            $log->endAction("found more than one process but expecting only one ... is this correct?", $pids);
+            return $pids[0];
         }
 
         // we can now reason that we have the correct pid
@@ -204,11 +204,12 @@ abstract class Base_OSX extends OsBase
         // examine the output
         $lines = explode("\n", $result->output);
         $lines = FilterColumns::from($lines, "1", ' ');
-        $lines = FilterForMatchingRegex::against($lines, "/^{$pid}$/");
+        $lines = FilterForMatchingRegex::against($lines, "|^{$pid}$|");
 
         // did we find the process?
         if (empty($lines)) {
             $log->endAction("not running");
+            return false;
         }
 
         // success
