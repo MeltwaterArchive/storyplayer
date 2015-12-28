@@ -44,6 +44,7 @@
 namespace Storyplayer\SPv2\Modules\Host;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Screen;
 
 /**
  *
@@ -56,7 +57,7 @@ use Storyplayer\SPv2\Modules\Exceptions;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsHost extends HostBase
+class ExpectsHost extends HostAwareModule
 {
     public function hostIsRunning()
     {
@@ -173,34 +174,20 @@ class ExpectsHost extends HostBase
         $log->endAction();
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function screenIsRunning($sessionName)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("make sure screen session '{$sessionName}' is running on host '{$this->args[0]}'");
-
-        // is this session still running?
-        if (fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
-            $log->endAction();
-            return;
-        }
-
-        $log->endAction("session is not running");
-        throw Exceptions::newExpectFailedException(__METHOD__, "session '{$sessionName}' running", "session '{$sessionName}' not running");
+        return Screen::expectsHost($this->args[0])->screenIsRunning($sessionName);
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function screenIsNotRunning($sessionName)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("make sure screen session '{$sessionName}' is not running on host '{$this->args[0]}'");
-
-        // get the details
-        if (!fromHost($this->args[0])->getScreenIsRunning($sessionName)) {
-            $log->endAction("session is not running");
-            return;
-        }
-
-        $log->endAction("session is running");
-        throw Exceptions::newExpectFailedException(__METHOD__, "session not running", "session running as PID {$processDetails->pid}");
+        return Screen::expectsHost($this->args[0])->screenIsNotRunning($sessionName);
     }
 
     /**

@@ -47,6 +47,7 @@ use DataSift\Storyplayer\OsLib;
 use DataSift\Stone\ObjectLib\BaseObject;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Screen;
 
 /**
  * do things with vagrant
@@ -58,7 +59,7 @@ use Storyplayer\SPv2\Modules\Exceptions;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingHost extends HostBase
+class UsingHost extends HostAwareModule
 {
     public function runCommand($command)
     {
@@ -158,66 +159,28 @@ class UsingHost extends HostBase
         return $result;
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function startInScreen($sessionName, $commandLine)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("start screen session '{$sessionName}' ({$commandLine}) on host '{$this->args[0]}'");
-
-        // do we already have this session running on the host?
-        expectsHost($this->args[0])->screenIsNotRunning($sessionName);
-
-        // build up our command to run
-        $commandLine = 'screen -L -d -m -S "' . $sessionName . '" bash -c "' . $commandLine . '"';
-
-        // run our command
-        //
-        // this creates a detached screen session called $sessionName
-        $this->runCommand($commandLine);
-
-        // find the PID of the screen session, for future use
-        $sessionDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
-
-        // did the process start, or has it already terminated?
-        if (empty($sessionDetails->pid)) {
-            $log->endAction("session failed to start, or command exited quickly");
-            throw Exceptions::newActionFailedException(__METHOD__, "failed to start session '{$sessionName}'");
-        }
-
-        // all done
-        $log->endAction("session running as PID {$sessionDetails->pid}");
+        return Screen::onHost($this->args[0])->startScreen($sessionName, $commandLine);
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function stopInScreen($sessionName)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("stop screen session '{$sessionName}' on host '{$this->args[0]}'");
-
-        // get the process details
-        $processDetails = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
-
-        // stop the process
-        usingHost($this->args[0])->stopProcess($processDetails->pid);
-
-        // all done
-        $log->endAction();
+        return Screen::onHost($this->args[0])->stopScreen($sessionName);
     }
 
+    /**
+     * @deprecated since v2.4.0
+     */
     public function stopAllScreens()
     {
-        // what are we doing?
-        $log = usingLog()->startAction("stop all running screen sessions on host '{$this->args[0]}'");
-
-        // get the app details
-        $processes = fromHost($this->args[0])->getAllScreenSessions();
-
-        // stop the process
-        foreach ($processes as $processDetails) {
-            usingHost($this->args[0])->stopProcess($processDetails->pid);
-            usingProcessesTable()->removeProcess($this->args[0], $processDetails);
-        }
-
-        // all done
-        $log->endAction("stopped " . count($processes) . " session(s)");
+        return Screen::onHost($this->args[0])->stopAllScreens();
     }
 
     public function stopProcess($pid, $grace = 5)

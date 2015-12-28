@@ -53,7 +53,7 @@ use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host;
-use Storyplayer\SPv2\Modules\Host\HostBase;
+use Storyplayer\SPv2\Modules\Host\HostAwareModule;
 use Storyplayer\SPv2\Modules\Log;
 
 /**
@@ -66,7 +66,7 @@ use Storyplayer\SPv2\Modules\Log;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromSupervisor extends HostBase
+class FromSupervisor extends HostAwareModule
 {
     public function getProgramIsRunning($programName)
     {

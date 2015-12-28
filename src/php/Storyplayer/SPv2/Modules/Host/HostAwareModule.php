@@ -57,7 +57,7 @@ use Prose\Prose;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class HostBase extends Prose
+class HostAwareModule extends Prose
 {
     protected $hostDetails;
 

@@ -54,6 +54,7 @@ use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Screen;
 
 /**
  * get information about a given host
@@ -65,7 +66,7 @@ use Storyplayer\SPv2\Modules\Exceptions;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromHost extends HostBase
+class FromHost extends HostAwareModule
 {
     /**
      * @return object
@@ -260,7 +261,7 @@ class FromHost extends HostBase
         $host = OsLib::getHostAdapter($this->st, $hostDetails->osName);
 
         // get the information
-        $return = $host->getPid($hostDetails, $processName);
+        $return = (int)$host->getPid($hostDetails, $processName);
 
         // success
         $log->endAction("pid is '{$return}'");
@@ -315,123 +316,27 @@ class FromHost extends HostBase
     }
 
     /**
-     * @param  string $sessionName
-     * @return bool
+     * @deprecated since v2.4.0
      */
     public function getScreenIsRunning($sessionName)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("check if screen session '{$sessionName}' is still running");
-
-        // get the details
-        $sessionData = fromHost($this->args[0])->getScreenSessionDetails($sessionName);
-
-        // all done
-        if ($sessionData) {
-            $log->endAction("still running");
-            return true;
-        }
-        else {
-            $log->endAction("not running");
-            return false;
-        }
+        return Screen::fromHost($this->args[0])->getScreenIsRunning($sessionName);
     }
 
     /**
-     * @param  string $sessionName
-     * @return BaseObject|null
+     * @deprecated since v2.4.0
      */
     public function getScreenSessionDetails($sessionName)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("get details about screen session '{$sessionName}' on host '{$this->args[0]}' from Storyplayer");
-
-        // are there any details?
-        $cmd = "screen -ls";
-        $result = usingHost($this->args[0])->runCommandAndIgnoreErrors($cmd);
-
-        // NOTE:
-        //
-        // screen is not a well-behaved UNIX program, and its exit code
-        // can be non-zero when everything is good
-        if (empty($result->output)) {
-            $msg = "unable to get list of screen sessions";
-            return null;
-        }
-
-        // do we have the session we are looking for?
-        $lines = explode("\n", $result->output);
-        $lines = FilterForMatchingRegex::against($lines, "/[0-9]+\\.{$sessionName}\t/");
-        $lines = FilterColumns::from($lines, "0", '.');
-
-        if (empty($lines)) {
-            $msg = "screen session '{$sessionName}' is not running";
-            $log->endAction($msg);
-            return null;
-        }
-
-        // there might be
-        $processDetails = new BaseObject;
-        $processDetails->hostId = $this->args[0];
-        $processDetails->name = $sessionName;
-        $processDetails->type = 'screen';
-        $processDetails->pid = trim(rtrim($lines[0]));
-
-        // all done
-        $log->endAction("session is running as PID '{$processDetails->pid}'");
-        return $processDetails;
+        return Screen::fromHost($this->args[0])->getScreenSessionDetails($sessionName);
     }
 
     /**
-     * @return array<object>
+     * @deprecated since v2.4.0
      */
     public function getAllScreenSessions()
     {
-        // what are we doing?
-        $log = usingLog()->startAction("get details about all screen sessions on host '{$this->args[0]}'");
-
-        // are there any details?
-        $cmd = "screen -ls";
-        $result = usingHost($this->args[0])->runCommandAndIgnoreErrors($cmd);
-
-        // NOTE:
-        //
-        // screen is not a well-behaved UNIX program, and its exit code
-        // can be non-zero when everything is good
-        if (empty($result->output)) {
-            $msg = "unable to get list of screen sessions";
-            $log->endAction($msg);
-            return [];
-        }
-
-        // reduce the output down to a list of sessions
-        $lines = explode("\n", $result->output);
-        $lines = FilterForMatchingRegex::against($lines, "/[0-9]+.+\t/");
-
-        if (empty($lines)) {
-            $msg = "no screen processes running";
-            $log->endAction($msg);
-            return [];
-        }
-
-        $retval = [];
-        foreach ($lines as $line) {
-            $parts = explode('.', $line);
-
-            $processDetails = new BaseObject;
-            $processDetails->hostId = $this->args[0];
-            $processDetails->type = 'screen';
-            $processDetails->pid  = trim($parts[0]);
-            $processDetails->name = rtrim($parts[1]);
-
-            $retval[] = $processDetails;
-        }
-
-        // all done
-        $log->endAction("found " . count($retval) . " screen process(es)");
-
-        // all done
-        return $retval;
+        return Screen::fromHost($this->args[0])->getAllScreenSessions();
     }
 
     /**

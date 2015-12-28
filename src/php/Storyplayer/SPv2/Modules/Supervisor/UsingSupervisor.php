@@ -51,20 +51,20 @@ use DataSift\Stone\ObjectLib\BaseObject;
 
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host;
-use Storyplayer\SPv2\Modules\Host\HostBase;
+use Storyplayer\SPv2\Modules\Host\HostAwareModule;
 use Storyplayer\SPv2\Modules\Log;
 
 /**
  * start and stop programs under supervisor
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Supervisor
  * @author    Shweta Saikumar <shweta.saikumar@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingSupervisor extends HostBase
+class UsingSupervisor extends HostAwareModule
 {
     public function startProgram($programName)
     {
