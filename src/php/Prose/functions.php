@@ -66,6 +66,7 @@ use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\HTTP;
 use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Supervisor;
+use Storyplayer\SPv2\Modules\Users;
 
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
@@ -104,7 +105,6 @@ use Prose\FromString;
 use Prose\FromSystemUnderTest;
 use Prose\FromTargetsTable;
 use Prose\FromTestEnvironment;
-use Prose\FromUsers;
 use Prose\FromUuid;
 use Prose\FromZmqSocket;
 use Prose\UsingCheckpoint;
@@ -132,7 +132,6 @@ use Prose\UsingSavageD;
 use Prose\UsingShell;
 use Prose\UsingTargetsTable;
 use Prose\UsingTimer;
-use Prose\UsingUsers;
 use Prose\UsingVagrant;
 use Prose\UsingYamlFile;
 use Prose\UsingZmq;
@@ -1153,7 +1152,7 @@ function fromTestEnvironment()
  */
 function fromUsers()
 {
-    return new FromUsers(StoryTeller::instance());
+    return Users::fromUsers();
 }
 
 /**
@@ -1723,11 +1722,11 @@ function usingTimer()
  * file. You can also load your own files directly from your stories if you
  * need to.
  *
- * @return \Prose\UsingUsers
+ * @return \Storyplayer\SPv2\Modules\Users\UsingUsers
  */
 function usingUsers()
 {
-    return new UsingUsers(StoryTeller::instance());
+    return Users::usingUsers();
 }
 
 /**

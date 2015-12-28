@@ -34,65 +34,69 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/Modules/Users
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\Phases;
+namespace Storyplayer\SPv2\Modules\Users;
 
-use Exception;
-use Storyplayer\SPv2\Modules\Users;
+use DataSift\Stone\PasswordLib\BasicGenerator;
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
- * save our test users to disk
+ * work with the library of test users
  *
  * @category  Libraries
- * @package   Storyplayer/Phases
+ * @package   Storyplayer/Modules/Users
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-
-class SaveTestUsersPhase extends InternalPostPhase
+class FromUsers extends Prose
 {
-    public function doPhase($story)
+    /**
+     * return a user from the test users file
+     *
+     * @param  string $userId
+     *         the ID of the user to retrieve
+     * @return \DataSift\Stone\ObjectLib\BaseObject
+     */
+    public function getUser($userId)
     {
-        // shorthand
-        $st = $this->st;
-        $output = $st->getOutput();
+        // what are we doing?
+        $log = Log::usingLog()->startAction("get user ID '{$userId}'");
 
-        // our results object
-        $phaseResult = $this->getNewPhaseResult();
-
-        // do we have any test users?
-        if (!$st->hasTestUsers()) {
-            $phaseResult->setContinuePlaying();
-            return $phaseResult;
-        }
-
-        // are the test users read-only?
-        if ($st->getTestUsersFileIsReadOnly()) {
-            // nothing to do
-            $phaseResult->setContinuePlaying();
-            return $phaseResult;
-        }
-
-        // save the file
-        try {
-            $filename = $st->getTestUsersFilename();
-            Users::usingUsers()->saveUsersToFile($st->getTestUsers(), $filename);
-        }
-        catch (Exception $e) {
-            // warn the user, but do not abort Storyplayer
-            $output->logCliWarning("unable to save test users file; error is: " . $e->getMessage());
+        // do we have this user?
+        $users = $this->st->getTestUsers();
+        if (!isset($users->$userId)) {
+            $msg = "user ID '{$userId}' not found";
+            $log->endAction($msg);
+            throw Exceptions::newActionFailedException($msg);
         }
 
         // all done
-        $phaseResult->setContinuePlaying();
-        return $phaseResult;
+        $log->endAction($users->$userId);
+        return $users->$userId;
+    }
+
+    /**
+     * generates a random password of the requested length
+     *
+     * @param  integer $minLength
+     *         minimum number of characters to include
+     * @param  integer $maxLength
+     *         maximum number of characters to include
+     * @return string
+     *         the generated password
+     */
+    public function generateNewPassword($minLength = 8, $maxLength = 20)
+    {
+        return BasicGenerator::generatePassword($minLength, $maxLength);
     }
 }

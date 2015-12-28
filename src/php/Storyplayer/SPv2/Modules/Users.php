@@ -34,66 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Users
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules;
 
-use DataSift\Stone\PasswordLib\BasicGenerator;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
-/**
- * work with the library of test users
- *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class FromUsers extends Prose
+use Storyplayer\SPv2\Modules\Users\FromUsers;
+use Storyplayer\SPv2\Modules\Users\UsingUsers;
+
+class Users
 {
     /**
-     * return a user from the test users file
+     * returns the FromUsers module
      *
-     * @param  string $userId
-     *         the ID of the user to retrieve
-     * @return \DataSift\Stone\ObjectLib\BaseObject
+     * This module allows you to retrieve specific user(s) from the test users
+     * you loaded with the --users command-line switch. Each user is a plain
+     * PHP object created using json_decode().
+     *
+     * Any changes you make to these users will be saved back to disk when
+     * Storyplayer finishes the current test run. You can prevent this by using
+     * the --readonly-users command-line switch.
+     *
+     * @return \Storyplayer\SPv2\Module\Users\FromUsers
      */
-    public function getUser($userId)
+    function fromUsers()
     {
-        // what are we doing?
-        $log = usingLog()->startAction("get user ID '{$userId}'");
-
-        // do we have this user?
-        $users = $this->st->getTestUsers();
-        if (!isset($users->$userId)) {
-            $msg = "user ID '{$userId}' not found";
-            $log->endAction($msg);
-            throw Exceptions::newActionFailedException($msg);
-        }
-
-        // all done
-        $log->endAction($users->$userId);
-        return $users->$userId;
+        return new FromUsers(StoryTeller::instance());
     }
 
     /**
-     * generates a random password of the requested length
+     * returns the UsingUsers module
      *
-     * @param  integer $minLength
-     *         minimum number of characters to include
-     * @param  integer $maxLength
-     *         maximum number of characters to include
-     * @return string
-     *         the generated password
+     * This module provides support for working with the test users loaded via
+     * the --users switch.
+     *
+     * Storyplayer uses this module internally to load and save the test users
+     * file. You can also load your own files directly from your stories if you
+     * need to.
+     *
+     * @return \Storyplayer\SPv2\Modules\Users\UsingUsers
      */
-    public function generateNewPassword($minLength = 8, $maxLength = 20)
+    function usingUsers()
     {
-        return BasicGenerator::generatePassword($minLength, $maxLength);
+        return new UsingUsers(StoryTeller::instance());
     }
+
 }

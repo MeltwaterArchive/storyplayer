@@ -34,22 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Users
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Users;
 
 use DataSift\Stone\ObjectLib\BaseObject;
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * work with the library of test users
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Users
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -75,7 +78,7 @@ class UsingUsers extends Prose
     public function loadUsersFromFile($filename)
     {
         // what are we doing?
-        $log = usingLog()->startAction("load test users from '{$filename}'");
+        $log = Log::usingLog()->startAction("load test users from '{$filename}'");
 
         // load the file
         $raw = @file_get_contents($filename);
@@ -122,7 +125,7 @@ class UsingUsers extends Prose
     public function saveUsersToFile($users, $filename)
     {
         // what are we doing?
-        $log = usingLog()->startAction("save test users to file '{$filename}'");
+        $log = Log::usingLog()->startAction("save test users to file '{$filename}'");
 
         // save the contents
         file_put_contents($filename, json_encode($users, JSON_PRETTY_PRINT));
@@ -147,7 +150,7 @@ class UsingUsers extends Prose
     public function setUsersFileIsReadOnly()
     {
         // what are we doing?
-        $log = usingLog()->startAction("mark test users file as read-only");
+        $log = Log::usingLog()->startAction("mark test users file as read-only");
 
         // track the state change
         $this->st->setTestUsersFileIsReadOnly(true);
