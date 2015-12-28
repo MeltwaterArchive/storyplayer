@@ -131,7 +131,11 @@ class Phase_Result
      */
     public function getMessage()
     {
-        return $this->message;
+        if (!isset($this->exception)) {
+            return $this->message;
+        }
+
+        return $this->message . PHP_EOL . $this->exception->getTraceAsString();
     }
 
     /**
