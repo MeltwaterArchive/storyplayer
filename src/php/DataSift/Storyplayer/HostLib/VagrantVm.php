@@ -158,7 +158,7 @@ class VagrantVm implements SupportedHost
         // now, let's get this VM into our SSH known_hosts file, to avoid
         // prompting people when we try and provision this VM
         $log->addStep("get the VM into the SSH known_hosts file", function() use($vmDetails) {
-            Shell::usingHost($vmDetails->hostId)->runCommand("ls");
+            Shell::onHost($vmDetails->hostId)->runCommand("ls");
         });
 
         // all done
