@@ -9,7 +9,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
 // ------------------------------------------------------------------------
 
 $story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Hosts'])
+         ->inGroup(['Modules', 'Host'])
          ->called('Can get appSetting using dot.notation.support');
 
 $story->requiresStoryplayerVersion(2);

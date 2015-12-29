@@ -50,6 +50,8 @@ use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\Shell;
 
 /**
  * support for provisioning via dsbuild
@@ -112,7 +114,7 @@ class DsbuildProvisioner extends Provisioner
         // build up the list of settings to write out
         foreach($hosts as $hostId => $hostProps) {
             // what is the host's IP address?
-            $ipAddress = fromHost($hostId)->getIpAddress();
+            $ipAddress = Host::fromHost($hostId)->getIpAddress();
 
             $propName = $hostId . '_ipv4Address';
             $dsbuildParams->$propName = $ipAddress;
@@ -134,7 +136,7 @@ class DsbuildProvisioner extends Provisioner
         // provision each host in the order that they're listed
         foreach($hosts as $hostId => $hostProps) {
             // which dsbuildfile are we going to run?
-            $hostDir = fromHost($hostId)->getLocalFolder();
+            $hostDir = Host::fromHost($hostId)->getLocalFolder();
             $dsbuildFilename = $this->getDsbuildFilename($hostDir, $provConfig, $hostId);
             if ($dsbuildFilename === null) {
                 // there is no dsbuildfile at all to run
@@ -164,7 +166,7 @@ class DsbuildProvisioner extends Provisioner
 
             // provision
             $command = 'sudo bash /vagrant/' . $dsbuildFilename;
-            $result = usingHost($hostId)->runCommand($command);
+            $result = Shell::onHost($hostId)->runCommand($command);
 
             // what happened?
             if (!$result->didCommandSucceed()) {

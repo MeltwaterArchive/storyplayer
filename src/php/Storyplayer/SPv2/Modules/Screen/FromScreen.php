@@ -114,6 +114,7 @@ class FromScreen extends HostAwareModule
         // can be non-zero when everything is good
         if (empty($result->output)) {
             $msg = "unable to get list of screen sessions";
+            $log->endAction($msg);
             return null;
         }
 

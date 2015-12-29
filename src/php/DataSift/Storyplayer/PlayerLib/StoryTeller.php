@@ -55,6 +55,7 @@ use Prose\E5xx_NoMatchingActions;
 use Prose\PageContext;
 
 use DataSift\Stone\ObjectLib\BaseObject;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * our main facilitation class

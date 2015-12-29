@@ -168,7 +168,7 @@ abstract class Base_OSX extends OsBase
         $pids = FilterForMatchingRegex::against($pids, "|{$processName}|");
         $pids = FilterColumns::from($pids, '1', ' ');
         if (count($pids) != 1) {
-            $log->endAction("found more than one process but expecting only one ... is this correct?", $pids);
+            $log->endAction("found more than one process but expecting only one ... is this correct?");
             return $pids[0];
         }
 

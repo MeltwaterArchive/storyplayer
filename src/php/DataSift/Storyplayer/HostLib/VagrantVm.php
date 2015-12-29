@@ -51,6 +51,7 @@ use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Shell;
 
 /**
  * the things you can do / learn about Vagrant virtual machine
@@ -156,7 +157,7 @@ class VagrantVm implements SupportedHost
         // now, let's get this VM into our SSH known_hosts file, to avoid
         // prompting people when we try and provision this VM
         $log->addStep("get the VM into the SSH known_hosts file", function() use($vmDetails) {
-            usingHost($vmDetails->hostId)->runCommand("ls");
+            Shell::usingHost($vmDetails->hostId)->runCommand("ls");
         });
 
         // all done

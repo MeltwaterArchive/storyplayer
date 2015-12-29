@@ -47,6 +47,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 
 use Storyplayer\SPv2\Modules\Supervisor\ExpectsSupervisor;
 use Storyplayer\SPv2\Modules\Supervisor\FromSupervisor;
+use Storyplayer\SPv2\Modules\Supervisor\UsingSupervisor;
 
 class Supervisor
 {
@@ -61,7 +62,7 @@ class Supervisor
      *         the ID of the host you want to use Supervisor on
      * @return ExpectsSupervisor
      */
-    function expectsSupervisor($hostId)
+    public static function expectsHost($hostId)
     {
         return new ExpectsSupervisor(StoryTeller::instance(), [$hostId]);
     }
@@ -77,7 +78,7 @@ class Supervisor
      *         the ID of the host you want to use Supervisor on
      * @return FromSupervisor
      */
-    function fromSupervisor($hostId)
+    public static function fromHost($hostId)
     {
         return new FromSupervisor(StoryTeller::instance(),[$hostId]);
     }
@@ -93,7 +94,7 @@ class Supervisor
      *         the ID of the host you want to use Supervisor on
      * @return UsingSupervisor
      */
-    function usingSupervisor($hostId)
+    public static function onHost($hostId)
     {
         return new UsingSupervisor(StoryTeller::instance(), [$hostId]);
     }

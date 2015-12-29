@@ -48,6 +48,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
 
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Filesystem;
+use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\Screen;
 use Storyplayer\SPv2\Modules\Shell;
 
@@ -125,7 +126,7 @@ class UsingHost extends HostAwareModule
         $log = usingLog()->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
 
         // is the process running at all?
-        if (!fromHost($this->args[0])->getPidIsRunning($pid)) {
+        if (!Host::fromHost($this->args[0])->getPidIsRunning($pid)) {
             $log->endAction("process is not running");
             return;
         }
@@ -137,14 +138,14 @@ class UsingHost extends HostAwareModule
                 posix_kill($pid, SIGTERM);
             }
             else {
-                usingHost($this->args[0])->runCommand("kill {$pid}");
+                Shell::onHost($this->args[0])->runCommand("kill {$pid}");
             }
         });
 
         // has this worked?
         $isStopped = $log->addStep("wait for process to terminate", function() use($pid, $grace, $log) {
             for($i = 0; $i < $grace; $i++) {
-                if (!fromHost($this->args[0])->getPidIsRunning($pid)) {
+                if (!Host::fromHost($this->args[0])->getPidIsRunning($pid)) {
                     return true;
                 }
 
@@ -166,13 +167,13 @@ class UsingHost extends HostAwareModule
                 posix_kill($pid, SIGKILL);
             }
             else {
-                usingHost($this->args[0])->runCommand("kill -9 {$pid}");
+                Shell::onHost($this->args[0])->runCommand("kill -9 {$pid}");
             }
             sleep(1);
         });
 
         // success?
-        if (fromHost($this->args[0])->getProcessIsRunning($pid)) {
+        if (Host::fromHost($this->args[0])->getProcessIsRunning($pid)) {
             $log->endAction("process is still running :(");
             throw Exceptions::newActionFailedException(__METHOD__);
         }

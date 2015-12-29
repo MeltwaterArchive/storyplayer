@@ -50,6 +50,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Exception;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Shell;
 
 /**
  * the things you can do / learn about a group of Vagrant virtual machines
@@ -157,10 +158,11 @@ class VagrantVms implements SupportedHost
 
         // remove any existing hosts table entry
         foreach ($groupDef->details->machines as $hostId => $machine) {
-            usingHostsTable()->removeHost($hostId);
-
             // remove any roles
             usingRolesTable()->removeHostFromAllRoles($hostId);
+
+            // now drop the host
+            usingHostsTable()->removeHost($hostId);
         }
 
         // work out which network interface to use
@@ -231,7 +233,7 @@ class VagrantVms implements SupportedHost
             // now, let's get this VM into our SSH known_hosts file, to avoid
             // prompting people when we try and provision this VM
             $log->addStep("get the VM into the SSH known_hosts file", function() use($vmDetails) {
-                usingHost($vmDetails->hostId)->runCommand("ls");
+                Shell::onHost($vmDetails->hostId)->runCommand("ls");
             });
         }
 

@@ -7,7 +7,7 @@
 // ------------------------------------------------------------------------
 
 $story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Forms'])
+         ->inGroup(['Modules', 'Form'])
          ->called('Can expect a form input to be blank');
 
 $story->requiresStoryplayerVersion(2);

@@ -53,6 +53,7 @@ use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\Host\HostAwareModule;
 use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\Shell;
 
 /**
  * start and stop programs under supervisor
@@ -75,7 +76,7 @@ class UsingSupervisor extends HostAwareModule
         $hostDetails = $this->getHostDetails();
 
         // start the program
-        $result = Host::onHost($hostDetails->hostId)->runCommand("sudo supervisorctl start '{$programName}'");
+        $result = Shell::onHost($hostDetails->hostId)->runCommand("sudo supervisorctl start '{$programName}'");
 
         // did the command succeed?
         if ($result->didCommandFail()) {
@@ -96,7 +97,7 @@ class UsingSupervisor extends HostAwareModule
         $hostDetails = $this->getHostDetails();
 
         // stop the program
-        $result = Host::onHost($hostDetails->hostId)->runCommand("sudo supervisorctl stop '{$programName}'");
+        $result = Shell::onHost($hostDetails->hostId)->runCommand("sudo supervisorctl stop '{$programName}'");
 
         // did the command succeed?
         if ($result->didCommandFail()) {

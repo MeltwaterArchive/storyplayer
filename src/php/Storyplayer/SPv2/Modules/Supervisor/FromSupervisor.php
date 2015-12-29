@@ -55,6 +55,7 @@ use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\Host\HostAwareModule;
 use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\Shell;
 
 /**
  * get information about a program running under supervisor
@@ -77,7 +78,7 @@ class FromSupervisor extends HostAwareModule
         $hostDetails = $this->getHostDetails();
 
         //run the supervisorctl command
-        $result = Host::onHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status");
+        $result = Shell::onHost($hostDetails->hostId)->runCommandAndIgnoreErrors("sudo supervisorctl status");
         // |egrep '^$programName' | awk '{print \\$2}'");
 
         // did the command succeed?

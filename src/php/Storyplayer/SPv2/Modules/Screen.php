@@ -144,8 +144,6 @@ class Screen
      * This module provides support for running commands on the same computer
      * that Storyplayer is running on, inside a screen session.
      *
-     * @param  string $hostId
-     *         the ID of the host to use
      * @return UsingScreen
      */
     public static function onLocalhost()

@@ -147,7 +147,6 @@ class UsingRuntimeTable extends BaseRuntimeTable
 
         // all done
         $log->endAction();
-
     }
 
     /**

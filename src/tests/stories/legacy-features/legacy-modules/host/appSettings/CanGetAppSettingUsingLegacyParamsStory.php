@@ -9,7 +9,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
 // ------------------------------------------------------------------------
 
 $story = newStoryFor('Storyplayer')
-         ->inGroup(['Modules', 'Hosts'])
+         ->inGroup(['Modules', 'Host'])
          ->called('Host: Can get appSetting using legacy params');
 
 $story->requiresStoryplayerVersion(2);

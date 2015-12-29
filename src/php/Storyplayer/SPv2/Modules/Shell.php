@@ -71,7 +71,7 @@ class Shell
      *
      * @return \Storyplayer\SPv2\Modules\Shell\ExpectsShell
      */
-    public static function expectsLocalhost($hostId)
+    public static function expectsLocalhost()
     {
         return new ExpectsShell(StoryTeller::instance(), ['localhost']);
     }

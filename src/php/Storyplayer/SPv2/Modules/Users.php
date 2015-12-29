@@ -63,7 +63,7 @@ class Users
      *
      * @return \Storyplayer\SPv2\Module\Users\FromUsers
      */
-    function fromUsers()
+    public static function fromUsers()
     {
         return new FromUsers(StoryTeller::instance());
     }
@@ -80,7 +80,7 @@ class Users
      *
      * @return \Storyplayer\SPv2\Modules\Users\UsingUsers
      */
-    function usingUsers()
+    public static function usingUsers()
     {
         return new UsingUsers(StoryTeller::instance());
     }

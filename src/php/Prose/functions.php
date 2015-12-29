@@ -529,7 +529,7 @@ function expectsShell()
  */
 function expectsSupervisor($hostId)
 {
-    return Supervisor::expectsSupervisor($hostId);
+    return Supervisor::expectsHost($hostId);
 }
 
 /**
@@ -1064,7 +1064,7 @@ function fromString()
  */
 function fromSupervisor($hostId)
 {
-    return Supervisor::fromSupervisor($hostId);
+    return Supervisor::fromHost($hostId);
 }
 
 /**
@@ -1140,7 +1140,7 @@ function fromTestEnvironment()
  * Storyplayer finishes the current test run. You can prevent this by using
  * the --readonly-users command-line switch.
  *
- * @return \Prose\FromUsers
+ * @return \Storyplayer\SPv2\Modules\Users\FromUsers
  */
 function fromUsers()
 {
@@ -1648,11 +1648,11 @@ function usingSavageD($hostId)
  * If you want to run commands on a computer in your test environment, you
  * need the UsingHost module.
  *
- * @return \Storyplayer\SPv2\Modules\Shell\UsingShell
+ * @return \Storyplayer\SPv2\Modules\Host\UsingHost
  */
 function usingShell()
 {
-    return Shell::onLocalhost();
+    return usingHost('localhost');
 }
 
 /**
@@ -1668,7 +1668,7 @@ function usingShell()
  */
 function usingSupervisor($hostId)
 {
-    return Supervisor::usingSupervisor($hostId);
+    return Supervisor::onHost($hostId);
 }
 
 /**

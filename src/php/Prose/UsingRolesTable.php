@@ -162,19 +162,19 @@ class UsingRolesTable extends Prose
 
         // get the full table of roles
         $roles = fromRuntimeTable($this->entryKey)->getTable();
-        foreach ($roles as $roleName => $role) {
+        foreach ($roles as $roleName => $hosts) {
             // skip any empty roles
-            if (!is_array($role) || empty($role)) {
+            if (!is_array($hosts) || empty($hosts)) {
                 continue;
             }
 
             // skip any roles where the hostId is not present
-            if (!in_array($hostId, $role)) {
+            if (!in_array($hostId, $hosts)) {
                 continue;
             }
 
             // if we get here, then the host needs removing from this role
-            $role = $this->filterHostIdFromRole($hostId, $role);
+            $role = $this->filterHostIdFromRole($hostId, $hosts);
 
             // save the role
             if (empty($role)) {

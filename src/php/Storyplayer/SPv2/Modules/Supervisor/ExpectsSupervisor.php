@@ -74,7 +74,7 @@ class ExpectsSupervisor extends HostAwareModule
         $hostDetails = $this->getHostDetails();
 
         // is it running?
-        $running = Supervisor::fromSupervisor($hostDetails->hostId)->getProgramIsRunning($programName);
+        $running = Supervisor::fromHost($hostDetails->hostId)->getProgramIsRunning($programName);
         if (!$running) {
             $log->endAction();
             throw Exceptions::newExpectFailedException(__METHOD__, 'program is running', 'program is not running');
@@ -93,7 +93,7 @@ class ExpectsSupervisor extends HostAwareModule
         $hostDetails = $this->getHostDetails();
 
         // is it running?
-        $running = Supervisor::fromSupervisor($hostDetails->hostId)->getProgramIsRunning($programName);
+        $running = Supervisor::fromHost($hostDetails->hostId)->getProgramIsRunning($programName);
         if ($running) {
             $log->endAction();
             throw Exceptions::newExpectFailedException(__METHOD__, 'program is not running', 'program is running');
