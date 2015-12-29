@@ -61,7 +61,7 @@ class UsingLog extends Prose
     public function writeToLog($msg)
     {
         // what are we doing?
-        $log = usingLog()->startAction($msg);
+        $log = $this->startAction($msg);
 
         // all done
         $log->endAction();
