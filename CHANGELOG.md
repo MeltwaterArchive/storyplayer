@@ -40,6 +40,7 @@ The following are deprecated, and will be removed in SPv3:
   * Filesystem - operate on the local or remote filesystem
   * Screen - run processes inside screen(1) locally or remotely
 * `storyplayer create-story` updated to generate a template based on the long-term approach to modules
+* `runtime.json` files are now formatted for ease of reading
 
 ### Fixes
 

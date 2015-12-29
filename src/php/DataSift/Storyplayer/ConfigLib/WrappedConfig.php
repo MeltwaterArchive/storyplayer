@@ -214,7 +214,7 @@ class WrappedConfig
         $this->makeConfigDir(dirname($filename));
 
         // let's get this saved
-        $data = json_encode($this->getConfig());
+        $data = json_encode($this->getConfig(), JSON_PRETTY_PRINT);
         if (!file_put_contents($filename, $data)) {
             throw new E4xx_ConfigCannotBeSaved($name, $filename);
         }
