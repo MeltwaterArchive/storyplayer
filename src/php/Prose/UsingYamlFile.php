@@ -46,6 +46,7 @@ namespace Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\DataLib\DataPrinter;
 use Symfony\Component\Yaml\Dumper;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Support for working with YAML files

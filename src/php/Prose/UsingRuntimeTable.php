@@ -44,6 +44,7 @@
 namespace Prose;
 
 use DataSift\Stone\ObjectLib\BaseObject;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * UsingRuntimeTable

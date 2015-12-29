@@ -45,6 +45,7 @@ namespace Prose;
 
 use Zookeeper;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * do things with zookeeper

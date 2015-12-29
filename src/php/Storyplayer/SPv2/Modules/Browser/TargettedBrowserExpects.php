@@ -45,6 +45,7 @@ namespace Storyplayer\SPv2\Modules\Browser;
 
 use Exception;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Helper class for testing elements using convenient, human-like names

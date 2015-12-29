@@ -43,6 +43,8 @@
 
 namespace Prose;
 
+use Storyplayer\SPv2\Modules\Exceptions;
+
 /**
  * get information from a HTTP server, without using a web browser to
  * get it.

@@ -45,6 +45,7 @@ namespace Prose;
 
 use Exception;
 use DataSift\Stone\TimeLib\DateInterval;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * perform delayed actions

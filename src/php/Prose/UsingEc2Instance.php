@@ -42,6 +42,7 @@
  */
 
 namespace Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * wrappers around the official Amazon EC2 SDK

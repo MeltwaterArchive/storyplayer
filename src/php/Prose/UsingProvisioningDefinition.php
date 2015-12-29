@@ -48,6 +48,7 @@ use DataSift\Storyplayer\ProvisioningLib\DelayedProvisioningDefinitionAction;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\ObjectLib\BaseObject;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Support for populating a provisioning definition

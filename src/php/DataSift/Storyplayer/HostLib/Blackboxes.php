@@ -47,6 +47,7 @@ use DataSift\Storyplayer\CommandLib\CommandResult;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * the things you can do / learn about a group of machines (possibly

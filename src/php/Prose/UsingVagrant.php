@@ -46,6 +46,7 @@ namespace Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\HostLib;
 use DataSift\Stone\ObjectLib\BaseObject;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * do things with vagrant

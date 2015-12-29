@@ -45,6 +45,7 @@ namespace Prose;
 
 use ReflectionObject;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * base class for all Prose classes

@@ -45,6 +45,7 @@ namespace Storyplayer\SPv2\Modules\Browser;
 
 use Exception;
 use Storyplayer\SPv2\Modules\Browser;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * do things to forms in the web browser

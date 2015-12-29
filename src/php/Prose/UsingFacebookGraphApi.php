@@ -42,6 +42,7 @@
  */
 
 namespace Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
 * get information from Facebook via the Graph API

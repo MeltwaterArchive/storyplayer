@@ -44,6 +44,7 @@
 namespace Prose;
 
 use DataSift\Stone\DataLib\DataPrinter;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Was available in v1.x. Has been rejigged to help with backwards

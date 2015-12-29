@@ -46,6 +46,7 @@ namespace Storyplayer\SPv2\Modules\Host;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Prose\Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * base class for all 'Host' Prose modules

@@ -43,6 +43,7 @@
 
 namespace Prose;
 use mysqli;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * do things to a database

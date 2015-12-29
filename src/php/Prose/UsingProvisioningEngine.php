@@ -46,6 +46,7 @@ namespace Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProvisioningLib;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Provision hosts using plugged-in providers

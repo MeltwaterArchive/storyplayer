@@ -43,6 +43,8 @@
 
 namespace Prose;
 
+use Storyplayer\SPv2\Modules\Exceptions;
+
 /**
  * test the data stored in Graphite
  *

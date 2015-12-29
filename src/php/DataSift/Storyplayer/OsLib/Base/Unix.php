@@ -48,6 +48,7 @@ use DataSift\Storyplayer\HostLib\SupportedHost;
 use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * get information about vagrant

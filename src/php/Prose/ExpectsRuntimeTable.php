@@ -43,6 +43,8 @@
 
 namespace Prose;
 
+use Storyplayer\SPv2\Modules\Exceptions;
+
 /**
  * ExpectsRuntimeTable
  *

@@ -47,6 +47,7 @@ use Exception;
 use Prose\Prose;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\Action_LogItem;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * Get information from the browser

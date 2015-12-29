@@ -42,6 +42,7 @@
  */
 
 namespace Prose;
+use Storyplayer\SPv2\Modules\Exceptions;
 
 /**
  * do things with SavageD. SavageD is DataSift's real-time server and
