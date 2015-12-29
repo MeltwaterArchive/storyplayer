@@ -10,6 +10,8 @@ $story = newStoryFor('Storyplayer')
          ->inGroup('Modules')
          ->called('AssertsArray: Can check that data is an array');
 
+$story->requiresStoryplayerVersion(2);
+
 // ========================================================================
 //
 // STORY SETUP / TEAR-DOWN
