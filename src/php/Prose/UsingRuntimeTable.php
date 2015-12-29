@@ -143,7 +143,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         }
 
         // save the changes
-        $this->st->saveRuntimeConfig();
+        //$this->st->saveRuntimeConfig();
 
         // all done
         $log->endAction();

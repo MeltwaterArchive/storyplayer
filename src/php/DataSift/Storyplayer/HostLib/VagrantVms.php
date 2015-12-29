@@ -164,6 +164,7 @@ class VagrantVms implements SupportedHost
             // now drop the host
             usingHostsTable()->removeHost($hostId);
         }
+        $this->st->saveRuntimeConfig();
 
         // work out which network interface to use
         $this->setVagrantBridgedInterface();
