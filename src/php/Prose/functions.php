@@ -69,6 +69,8 @@ use Storyplayer\SPv2\Modules\Shell;
 use Storyplayer\SPv2\Modules\Supervisor;
 use Storyplayer\SPv2\Modules\Users;
 use Storyplayer\SPv2\Modules\ZeroMQ;
+use StoryplayerInternals\SPv2\Modules\Deprecated;
+use StoryplayerInternals\SPv2\Helpers\ManualUrls;
 
 use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
@@ -143,6 +145,7 @@ use Prose\E5xx_ActionFailed;
  */
 function assertsArray($actual)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Asserts::assertsArray($actual);
 }
 
@@ -155,6 +158,7 @@ function assertsArray($actual)
  */
 function assertsBoolean($actual)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Asserts::assertsBoolean($actual);
 }
 
@@ -167,6 +171,7 @@ function assertsBoolean($actual)
  */
 function assertsDouble($actual)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Asserts::assertsDouble($actual);
 }
 
@@ -179,6 +184,7 @@ function assertsDouble($actual)
  */
 function assertsInteger($actual)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Asserts::assertsInteger($actual);
 }
 
@@ -191,6 +197,7 @@ function assertsInteger($actual)
  */
 function assertsObject($actual)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Asserts::assertsObject($actual);
 }
 
@@ -203,6 +210,7 @@ function assertsObject($actual)
  */
 function assertsString($actual)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Asserts::assertsString($actual);
 }
 
@@ -220,6 +228,7 @@ function assertsString($actual)
  */
 function cleanupHosts($key)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::cleanupHosts($key);
 }
 
@@ -237,6 +246,7 @@ function cleanupHosts($key)
  */
 function cleanupProcesses($key)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new CleanupProcesses(StoryTeller::instance(), [$key]);
 }
 
@@ -254,6 +264,7 @@ function cleanupProcesses($key)
  */
 function cleanupRoles($key)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new CleanupRoles(StoryTeller::instance(), [$key]);
 }
 
@@ -271,6 +282,7 @@ function cleanupRoles($key)
  */
 function cleanupTargets($key)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new CleanupTargets(StoryTeller::instance(), [$key]);
 }
 
@@ -293,6 +305,7 @@ function cleanupTargets($key)
  */
 function expectsBrowser()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Browser::expectsBrowser();
 }
 
@@ -310,6 +323,7 @@ function expectsBrowser()
  */
 function expectsEc2Image($amiId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new ExpectsEc2Image(StoryTeller::instance(), [$amiId]);
 }
 
@@ -325,6 +339,7 @@ function expectsEc2Image($amiId)
  */
 function expectsFailure()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new ExpectsFailure(StoryTeller::instance());
 }
 
@@ -348,6 +363,7 @@ function expectsFailure()
  */
 function expectsFirstHostWithRole($roleName)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::expectsFirstHostWithRole($roleName);
 }
 
@@ -368,6 +384,7 @@ function expectsFirstHostWithRole($roleName)
  */
 function expectsForm($formId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Browser::expectsForm($formId);
 }
 
@@ -388,6 +405,7 @@ function expectsForm($formId)
  */
 function expectsGraphite()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new ExpectsGraphite(StoryTeller::instance());
 }
 
@@ -408,6 +426,7 @@ function expectsGraphite()
  */
 function expectsHost($hostId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::expectsHost($hostId);
 }
 
@@ -424,6 +443,7 @@ function expectsHost($hostId)
  */
 function expectsHostsTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::expectsHostsTable();
 }
 
@@ -443,6 +463,7 @@ function expectsHostsTable()
  */
 function expectsHttpResponse(HttpClientResponse $httpResponse)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return HTTP::expectsHttpResponse($httpResponse);
 }
 
@@ -461,6 +482,7 @@ function expectsHttpResponse(HttpClientResponse $httpResponse)
  */
 function expectsProcessesTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new ExpectsProcessesTable(StoryTeller::instance());
 }
 
@@ -478,6 +500,7 @@ function expectsProcessesTable()
  */
 function expectsRolesTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new ExpectsRolesTable(StoryTeller::instance());
 }
 
@@ -497,6 +520,7 @@ function expectsRolesTable()
  */
 function expectsRuntimeTable($tableName)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new ExpectsRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
@@ -513,6 +537,7 @@ function expectsRuntimeTable($tableName)
  */
 function expectsShell()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::expectsHost('localhost');
 }
 
@@ -529,6 +554,7 @@ function expectsShell()
  */
 function expectsSupervisor($hostId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Supervisor::expectsHost($hostId);
 }
 
@@ -543,6 +569,7 @@ function expectsSupervisor($hostId)
  */
 function expectsUuid()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new ExpectsUuid(StoryTeller::instance());
 }
 
@@ -557,6 +584,7 @@ function expectsUuid()
  */
 function expectsZmq()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return ZeroMQ::expectsZmq();
 }
 
@@ -571,6 +599,7 @@ function expectsZmq()
  */
 function expectsZmqSocket($zmqSocket)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return ZeroMQ::expectsZmqSocket($zmqSocket);
 }
 
@@ -604,6 +633,7 @@ function expectsZmqSocket($zmqSocket)
  */
 function foreachHostWithRole($roleName)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::foreachHostWithRole($roleName);
 }
 
@@ -616,6 +646,7 @@ function foreachHostWithRole($roleName)
  */
 function fromArray()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromArray(StoryTeller::instance());
 }
 
@@ -634,6 +665,7 @@ function fromArray()
  */
 function fromAws()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromAws(StoryTeller::instance());
 }
 
@@ -654,6 +686,7 @@ function fromAws()
  */
 function fromBrowser()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Browser::fromBrowser();
 }
 
@@ -670,6 +703,7 @@ function fromBrowser()
  */
 function fromCheckpoint()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromCheckpoint(StoryTeller::instance());
 }
 
@@ -685,6 +719,7 @@ function fromCheckpoint()
  */
 function fromConfig()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromConfig(StoryTeller::instance());
 }
 
@@ -699,6 +734,7 @@ function fromConfig()
  */
 function fromCurl()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromCurl(StoryTeller::instance());
 }
 
@@ -713,6 +749,7 @@ function fromCurl()
  */
 function fromEc2()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromEc2(StoryTeller::instance());
 }
 
@@ -729,6 +766,7 @@ function fromEc2()
  */
 function fromEc2Instance($amiId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromEc2Instance(StoryTeller::instance(), [$amiId]);
 }
 
@@ -747,6 +785,7 @@ function fromEc2Instance($amiId)
  */
 function fromEnvironment()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromEnvironment(StoryTeller::instance());
 }
 
@@ -761,6 +800,7 @@ function fromEnvironment()
  */
 function fromFacebook()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromFacebook(StoryTeller::instance());
 }
 
@@ -775,6 +815,7 @@ function fromFacebook()
  */
 function fromFile()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromFile(StoryTeller::instance());
 }
 
@@ -802,6 +843,7 @@ function fromFile()
  */
 function fromFirstHostWithRole($roleName)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::fromFirstHostWithRole($roleName);
 }
 
@@ -821,6 +863,7 @@ function fromFirstHostWithRole($roleName)
  */
 function fromForm($formId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Browser::fromForm($formId);
 }
 
@@ -840,6 +883,7 @@ function fromForm($formId)
  */
 function fromGraphite()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromGraphite(StoryTeller::instance());
 }
 
@@ -861,6 +905,7 @@ function fromGraphite()
  */
 function fromHost($hostId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::fromHost($hostId);
 }
 
@@ -877,6 +922,7 @@ function fromHost($hostId)
  */
 function fromHostsTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::fromHostsTable();
 }
 
@@ -897,6 +943,7 @@ function fromHostsTable()
  */
 function fromHttp()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return HTTP::fromHttp();
 }
 
@@ -916,6 +963,7 @@ function fromHttp()
  */
 function fromPDOStatement(PDOStatement $stmt)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromPDOStatement(StoryTeller::instance(), [$stmt]);
 }
 
@@ -933,6 +981,7 @@ function fromPDOStatement(PDOStatement $stmt)
  */
 function fromProcessesTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromProcessesTable(StoryTeller::instance());
 }
 
@@ -951,6 +1000,7 @@ function fromProcessesTable()
  */
 function fromRedisConn(PredisClient $client)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromRedisConn(StoryTeller::instance(), [$client]);
 }
 
@@ -967,6 +1017,7 @@ function fromRedisConn(PredisClient $client)
  */
 function fromRolesTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromRolesTable(StoryTeller::instance());
 }
 
@@ -985,6 +1036,7 @@ function fromRolesTable()
  */
 function fromRuntimeTable($tableName)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
@@ -1001,6 +1053,7 @@ function fromRuntimeTable($tableName)
  */
 function fromSauceLabs()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromSauceLabs(StoryTeller::instance());
 }
 
@@ -1020,6 +1073,7 @@ function fromSauceLabs()
  */
 function fromShell()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::fromHost('localhost');
 }
 
@@ -1035,6 +1089,7 @@ function fromShell()
  */
 function fromStoryplayer()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromStoryplayer(StoryTeller::instance());
 }
 
@@ -1048,6 +1103,7 @@ function fromStoryplayer()
  */
 function fromString()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromString(StoryTeller::instance());
 }
 
@@ -1064,6 +1120,7 @@ function fromString()
  */
 function fromSupervisor($hostId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Supervisor::fromHost($hostId);
 }
 
@@ -1086,6 +1143,7 @@ function fromSupervisor($hostId)
  */
 function fromSystemUnderTest()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromSystemUnderTest(StoryTeller::instance());
 }
 
@@ -1101,6 +1159,7 @@ function fromSystemUnderTest()
  */
 function fromTargetsTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromTargetsTable(StoryTeller::instance());
 }
 
@@ -1126,6 +1185,7 @@ function fromTargetsTable()
  */
 function fromTestEnvironment()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromTestEnvironment(StoryTeller::instance());
 }
 
@@ -1144,6 +1204,7 @@ function fromTestEnvironment()
  */
 function fromUsers()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Users::fromUsers();
 }
 
@@ -1157,6 +1218,7 @@ function fromUsers()
  */
 function fromUuid()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new FromUuid(StoryTeller::instance());
 }
 
@@ -1171,6 +1233,7 @@ function fromUuid()
  */
 function fromZmqSocket($zmqSocket)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return ZeroMQ::fromZmqSocket($zmqSocket);
 }
 
@@ -1189,6 +1252,7 @@ function fromZmqSocket($zmqSocket)
  */
 function getCheckpoint()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return StoryTeller::instance()->getCheckpoint();
 }
 
@@ -1205,6 +1269,7 @@ function getCheckpoint()
  */
 function stopDevice()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Device::stopDevice();
 }
 
@@ -1224,6 +1289,7 @@ function stopDevice()
  */
 function usingBrowser()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Browser::usingBrowser();
 }
 
@@ -1240,6 +1306,7 @@ function usingBrowser()
  */
 function usingCheckpoint()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingCheckpoint(StoryTeller::instance());
 }
 
@@ -1255,6 +1322,7 @@ function usingCheckpoint()
  */
 function usingEc2()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingEc2(StoryTeller::instance());
 }
 
@@ -1275,6 +1343,7 @@ function usingEc2()
  */
 function usingEc2Instance($amiId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingEc2Instance(StoryTeller::instance(), [$amiId]);
 }
 
@@ -1289,6 +1358,7 @@ function usingEc2Instance($amiId)
  */
 function usingFile()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingFile(StoryTeller::instance());
 }
 
@@ -1316,6 +1386,7 @@ function usingFile()
  */
 function usingFirstHostWithRole($roleName)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::usingFirstHostWithRole($roleName);
 }
 
@@ -1335,6 +1406,7 @@ function usingFirstHostWithRole($roleName)
  */
 function usingForm($formId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Browser::usingForm($formId);
 }
 
@@ -1356,6 +1428,7 @@ function usingForm($formId)
  */
 function usingHost($hostId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::onHost($hostId);
 }
 
@@ -1372,6 +1445,7 @@ function usingHost($hostId)
  */
 function usingHostsTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::usingHostsTable();
 }
 
@@ -1394,6 +1468,7 @@ function usingHostsTable()
  */
 function usingHttp()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return HTTP::usingHttp(StoryTeller::instance());
 }
 
@@ -1408,6 +1483,7 @@ function usingHttp()
  */
 function usingLog()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Log::usingLog();
 }
 
@@ -1423,6 +1499,7 @@ function usingLog()
  */
 function usingPDO()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingPDO(StoryTeller::instance());
 }
 
@@ -1439,6 +1516,7 @@ function usingPDO()
  */
 function usingPDODB(PDO $db)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingPDODB(StoryTeller::instance(), [$db]);
 }
 
@@ -1456,6 +1534,7 @@ function usingPDODB(PDO $db)
  */
 function usingProcessesTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingProcessesTable(StoryTeller::instance());
 }
 
@@ -1480,6 +1559,7 @@ function usingProcessesTable()
  */
 function usingProvisioning()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingProvisioning(StoryTeller::instance());
 }
 
@@ -1501,6 +1581,7 @@ function usingProvisioning()
  */
 function usingProvisioningDefinition(ProvisioningDefinition $def)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingProvisioningDefinition(StoryTeller::instance(), [$def]);
 }
 
@@ -1523,6 +1604,7 @@ function usingProvisioningDefinition(ProvisioningDefinition $def)
  */
 function usingProvisioningEngine($engine)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingProvisioningEngine(StoryTeller::instance(), [$engine]);
 }
 
@@ -1540,6 +1622,7 @@ function usingProvisioningEngine($engine)
  */
 function usingRedis()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingRedis(StoryTeller::instance());
 }
 
@@ -1558,6 +1641,7 @@ function usingRedis()
  */
 function usingRedisConn(PredisClient $client)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingRedisConn(StoryTeller::instance(), [$client]);
 }
 
@@ -1573,6 +1657,7 @@ function usingRedisConn(PredisClient $client)
  */
 function usingReporting()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingReporting(StoryTeller::instance());
 }
 
@@ -1589,6 +1674,7 @@ function usingReporting()
  */
 function usingRolesTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingRolesTable(StoryTeller::instance());
 }
 
@@ -1605,6 +1691,7 @@ function usingRolesTable()
  */
 function usingRuntimeTable($tableName)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingRuntimeTable(StoryTeller::instance(), [$tableName]);
 }
 
@@ -1621,6 +1708,7 @@ function usingRuntimeTable($tableName)
  */
 function usingSauceLabs()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingSauceLabs(StoryTeller::instance());
 }
 
@@ -1636,6 +1724,7 @@ function usingSauceLabs()
  */
 function usingSavageD($hostId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingSavageD(StoryTeller::instance(), [$hostId]);
 }
 
@@ -1652,6 +1741,7 @@ function usingSavageD($hostId)
  */
 function usingShell()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return usingHost('localhost');
 }
 
@@ -1668,6 +1758,7 @@ function usingShell()
  */
 function usingSupervisor($hostId)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Supervisor::onHost($hostId);
 }
 
@@ -1683,6 +1774,7 @@ function usingSupervisor($hostId)
  */
 function usingTargetsTable()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingTargetsTable(StoryTeller::instance());
 }
 
@@ -1701,6 +1793,7 @@ function usingTargetsTable()
  */
 function usingTimer()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingTimer(StoryTeller::instance());
 }
 
@@ -1718,6 +1811,7 @@ function usingTimer()
  */
 function usingUsers()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Users::usingUsers();
 }
 
@@ -1736,6 +1830,7 @@ function usingUsers()
  */
 function usingVagrant()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingVagrant(StoryTeller::instance());
 }
 
@@ -1750,6 +1845,7 @@ function usingVagrant()
  */
 function usingYamlFile($filename)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return new UsingYamlFile(StoryTeller::instance(), [$filename]);
 }
 
@@ -1763,6 +1859,7 @@ function usingYamlFile($filename)
  */
 function usingZmq()
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return ZeroMQ::usingZmq();
 }
 
@@ -1778,6 +1875,7 @@ function usingZmq()
  */
 function usingZmqContext($zmqContext = null, $ioThreads = 1)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return ZeroMQ::usingZmqContext($zmqContext, $ioThreads);
 }
 
@@ -1792,6 +1890,7 @@ function usingZmqContext($zmqContext = null, $ioThreads = 1)
  */
 function usingZmqSocket($zmqSocket)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return ZeroMQ::usingZmqSocket($zmqSocket);
 }
 
@@ -1866,5 +1965,6 @@ function lastHostWithRole($roleName)
  */
 function hostWithRole($roleName)
 {
+    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return Host::getHostsWithRole($roleName);
 }
