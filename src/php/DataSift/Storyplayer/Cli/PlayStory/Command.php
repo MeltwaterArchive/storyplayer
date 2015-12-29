@@ -141,6 +141,8 @@ class PlayStory_Command extends BaseCommand implements CliSignalHandler
         $this->addFeature(new Feature_PersistDeviceSupport);
         $this->addFeature(new Feature_PersistProcessesSupport);
         $this->addFeature(new Feature_TestUsersSupport);
+        $this->addFeature(new Feature_WarnDeprecatedSupport);
+        $this->addFeature(new Feature_LogInternalEventsSupport);
 
         // now setup all of the switches that we support
         $this->addFeatureSwitches();

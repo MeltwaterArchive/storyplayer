@@ -51,6 +51,8 @@ The following are deprecated, and will be removed in SPv3:
 * New `StoryplayerInternals` namespace for us to refactor code into
 * New `Deprecated` internal module
 * New `Events` internal module
+* New `--log-internal-events` CLI switch
+* New `--warn-deprecated` CLI switch
 
 ### Fixes
 
