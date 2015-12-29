@@ -157,10 +157,11 @@ abstract class Base_Unix extends OsBase
         // whittle down the output
         $lines = explode("\n", $result->output);
         $lines = FilterColumns::from($lines, "7", ' ');
-        $lines = FilterForMatchingRegex::against($lines, "/^{$processName}$/");
+        $lines = FilterForMatchingRegex::against($lines, "|^{$processName}$|");
 
         if (empty($lines)) {
             $log->endAction("not running");
+            return false;
         }
 
         // success
@@ -191,13 +192,13 @@ abstract class Base_Unix extends OsBase
 
         // reduce the output down to a single pid
         $pids = explode("\n", $result->output);
-        $pids = FilterForMatchingRegex::against($pids, "/{$processName}/");
+        $pids = FilterForMatchingRegex::against($pids, "|{$processName}|");
         $pids = FilterColumns::from($pids, "1", ' ');
 
         // check that we found exactly one process
         if (count($pids) != 1) {
             $log->endAction("found more than one process but expecting only one ... is this correct?");
-            return 0;
+            return $pids[0];
         }
 
         // we can now reason that we have the correct pid

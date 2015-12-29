@@ -46,6 +46,7 @@ The following are deprecated, and will be removed in SPv3:
 
 * The browser no longer gets stuck in 'persist' mode when a single story wants the browser to persist for its execution.
 * The Host and Shell modules now work on OSX.
+* The Host and Shell modules now work on CentOS 5, 6 & 7.
 * We now have stack traces in the log file whenever a phase fails.
   * We used to only have them for completely uncaught exceptions.
 
