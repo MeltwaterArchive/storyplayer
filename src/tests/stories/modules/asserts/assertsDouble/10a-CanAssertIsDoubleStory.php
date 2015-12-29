@@ -90,7 +90,7 @@ $story->addAction(function() {
 
 	try {
 		$stringData = "";
-		Asserts:assertsDouble($stringData)->isDouble();
+		Asserts::assertsDouble($stringData)->isDouble();
 	}
 	catch (Exception $e) {
 		$checkpoint->stringTestPassed = true;

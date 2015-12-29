@@ -53,7 +53,7 @@ $story->addAction(function() use($story) {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	Asserts::assertsObject($checkpoint)->hasAttribute("test1Passed");
 	Asserts::assertsBoolean($checkpoint->test1Passed)->equals(true);

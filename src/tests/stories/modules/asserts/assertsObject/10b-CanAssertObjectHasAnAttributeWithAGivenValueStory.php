@@ -734,7 +734,7 @@ $story->addAction(function() {
 // ------------------------------------------------------------------------
 
 $story->addPostTestInspection(function() {
-	$checkpoint = getCheckpoint();
+	$checkpoint = Checkpoint::getCheckpoint();
 
 	for ($x = 1; $x <= 111; $x++) {
 		$attributeName = "test{$x}Passed";
