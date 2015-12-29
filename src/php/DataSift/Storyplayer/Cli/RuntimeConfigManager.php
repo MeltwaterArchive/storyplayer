@@ -190,7 +190,7 @@ class RuntimeConfigManager extends ConfigManagerBase
     public function saveRuntimeConfig(TestEnvironmentRuntimeConfig $config, Output $output)
     {
         // tidy the config first
-        $config->tidyEmptyTables();
+        $config->removeEmptyTables();
 
         // we save if there's something to save, otherwise
         // we remove the config

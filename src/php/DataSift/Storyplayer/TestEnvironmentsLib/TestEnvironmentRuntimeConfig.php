@@ -148,7 +148,7 @@ class TestEnvironmentRuntimeConfig extends WrappedConfig
      *
      * @return void
      */
-    public function tidyEmptyTables()
+    public function removeEmptyTables()
     {
         $tables = $this->getAllTables();
 
