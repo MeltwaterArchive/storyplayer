@@ -56,6 +56,8 @@ use Prose\PageContext;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\SPv2\Modules\Exceptions;
+use StoryplayerInternals\SPv2\Modules\Events;
+use StoryplayerInternals\SPv2\Modules\Events\EventStream;
 
 /**
  * our main facilitation class
@@ -221,6 +223,9 @@ class StoryTeller
     // process support
     private $persistProcesses = false;
 
+    // event support
+    private $eventStream;
+
     public function __construct(Injectables $injectables)
     {
         // remember our output object
@@ -253,6 +258,9 @@ class StoryTeller
         // our runtime config
         $this->setRuntimeConfig($injectables->getRuntimeConfig());
         $this->setRuntimeConfigManager($injectables->getRuntimeConfigManager());
+
+        // our event support
+        $this->setEventStream(new EventStream);
 
         self::$self = $this;
     }
@@ -1011,6 +1019,24 @@ class StoryTeller
     public function setPersistProcesses()
     {
         $this->persistProcesses = true;
+    }
+
+    // ==================================================================
+    //
+    // Event support
+    //
+    // Events are used to decouple our code a little.
+    //
+    // ------------------------------------------------------------------
+
+    public function getEventStream()
+    {
+        return $this->eventStream;
+    }
+
+    public function setEventStream(EventStream $eventStream)
+    {
+        $this->eventStream = $eventStream;
     }
 
     // ==================================================================

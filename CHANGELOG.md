@@ -14,6 +14,13 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 ## develop Branch - In Progress
 
+The focus of this release has been:
+
+* Introduce a long-term approach for using Storyplayer modules that's more natural for PHP developers
+* More tests for Storyplayer modules (both the 'legacy' approach used before now, and the long-term approach)
+* Introduce an internal event-driven approach (we will gradually refactor SPv2 around this)
+* Improve support for multiple test environments
+
 ### Upgrade Instructions
 
 In this release, I've made some important improvements to Storyplayer's `runtime.json` config file. Before upgrading, please:
@@ -41,6 +48,9 @@ The following are deprecated, and will be removed in SPv3:
   * Screen - run processes inside screen(1) locally or remotely
 * `storyplayer create-story` updated to generate a template based on the long-term approach to modules
 * `runtime.json` files are now formatted for ease of reading
+* New `StoryplayerInternals` namespace for us to refactor code into
+* New `Deprecated` internal module
+* New `Events` internal module
 
 ### Fixes
 
