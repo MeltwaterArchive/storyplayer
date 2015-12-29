@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\CommandLib;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use Phix_Project\ContractLib2\Contract;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * helpers for interacting with the local operating system
@@ -117,7 +118,7 @@ class LocalClient implements CommandClient
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = usingLog()->startAction("run command '{$command}' against localhost ");
+        $log = Log::usingLog()->startAction("run command '{$command}' against localhost ");
 
         // build the full command
         // <command> <command-args>
@@ -147,7 +148,7 @@ class LocalClient implements CommandClient
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = usingLog()->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
+        $log = Log::usingLog()->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
 
         // build the full command
         //
@@ -177,7 +178,7 @@ class LocalClient implements CommandClient
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = usingLog()->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
+        $log = Log::usingLog()->startAction("copy file '{$sourceFilename}' to localhost as '{$destFilename}'");
 
         // build the full command
         //

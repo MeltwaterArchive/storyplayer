@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\PlayerLib;
 
 use ArrayIterator;
 use IteratorAggregate;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * our data container, that is available to each phase of a test
@@ -134,7 +135,7 @@ class Story_Checkpoint implements IteratorAggregate
 	public function &__get($key)
 	{
 		// what are we doing?
-		$log = usingLog()->startAction("retrieve '{$key}' from the checkpoint");
+		$log = Log::usingLog()->startAction("retrieve '{$key}' from the checkpoint");
 
 		// do we have the data to return?
 		if (!isset($this->data[$key])) {
@@ -179,7 +180,7 @@ class Story_Checkpoint implements IteratorAggregate
 	public function __set($key, $value)
 	{
 		// what are we doing?
-		$log = usingLog()->startAction("store '{$key}' in the checkpoint");
+		$log = Log::usingLog()->startAction("store '{$key}' in the checkpoint");
 
 		// are we allowed to change the data at this time?
 		if ($this->readOnly)

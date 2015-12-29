@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\CommandLib;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use Phix_Project\ContractLib2\Contract;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * helper for running a command and managing its output
@@ -65,7 +66,7 @@ class CommandRunner
         Contract::RequiresValue($cmd, is_string($cmd));
 
         // what are we doing?
-        $log = usingLog()->startAction("run command: $cmd");
+        $log = Log::usingLog()->startAction("run command: $cmd");
 
         // the output that we will return to the caller
         $output = '';

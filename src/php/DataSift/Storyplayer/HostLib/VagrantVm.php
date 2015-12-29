@@ -51,6 +51,7 @@ use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Shell;
 
 /**
@@ -90,7 +91,7 @@ class VagrantVm implements SupportedHost
     public function createHost($vmDetails, $provisioningVars = array())
     {
         // what are we doing?
-        $log = usingLog()->startAction('provision new VM');
+        $log = Log::usingLog()->startAction('provision new VM');
 
         // make sure we like the provided details
         foreach(array('name', 'osName', 'homeFolder') as $param) {
@@ -172,7 +173,7 @@ class VagrantVm implements SupportedHost
     public function startHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("start VM");
+        $log = Log::usingLog()->startAction("start VM");
 
         // is the VM actually running?
         if ($this->isRunning($vmDetails)) {
@@ -215,7 +216,7 @@ class VagrantVm implements SupportedHost
     public function stopHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop VM");
+        $log = Log::usingLog()->startAction("stop VM");
 
         // is the VM actually running?
         if (!$this->isRunning($vmDetails)) {
@@ -247,7 +248,7 @@ class VagrantVm implements SupportedHost
     public function restartHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("restart VM");
+        $log = Log::usingLog()->startAction("restart VM");
 
         // stop and start
         $this->stopHost($vmDetails);
@@ -265,7 +266,7 @@ class VagrantVm implements SupportedHost
     public function powerOffHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("power off VM");
+        $log = Log::usingLog()->startAction("power off VM");
 
         // is the VM actually running?
         if (!$this->isRunning($vmDetails)) {
@@ -297,7 +298,7 @@ class VagrantVm implements SupportedHost
     public function destroyHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("destroy VM");
+        $log = Log::usingLog()->startAction("destroy VM");
 
         // is the VM actually running?
         if ($this->isRunning($vmDetails)) {
@@ -331,7 +332,7 @@ class VagrantVm implements SupportedHost
     public function runCommandAgainstHostManager($vmDetails, $command)
     {
         // what are we doing?
-        $log = usingLog()->startAction("run vagrant command '{$command}'");
+        $log = Log::usingLog()->startAction("run vagrant command '{$command}'");
 
         // build the command
         $fullCommand = "cd '{$vmDetails->dir}' && $command 2>&1";
@@ -354,7 +355,7 @@ class VagrantVm implements SupportedHost
     public function runCommandViaHostManager($vmDetails, $command)
     {
         // what are we doing?
-        $log = usingLog()->startAction("run vagrant command '{$command}'");
+        $log = Log::usingLog()->startAction("run vagrant command '{$command}'");
 
         // build the command
         $fullCommand = "cd '{$vmDetails->dir}' && vagrant ssh -c \"$command\"";
@@ -376,7 +377,7 @@ class VagrantVm implements SupportedHost
     public function isRunning($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine status of Vagrant VM '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine status of Vagrant VM '{$vmDetails->hostId}'");
 
         // if the box is running, it should have a status of 'running'
         $command = "vagrant status";
@@ -407,7 +408,7 @@ class VagrantVm implements SupportedHost
     public function determineIpAddress($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
 
         // create an adapter to talk to the host operating system
         $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
@@ -428,7 +429,7 @@ class VagrantVm implements SupportedHost
     public function determineHostname($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
 
         // create an adapter to talk to the host operating system
         $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
@@ -444,7 +445,7 @@ class VagrantVm implements SupportedHost
     public function determinePrivateKey($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
         // the key will be in one of two places, in this order:
         //
@@ -459,7 +460,7 @@ class VagrantVm implements SupportedHost
 
         foreach ($keyFilenames as $keyFilename)
         {
-            usingLog()->writeToLog("checking if {$keyFilename} exists");
+            Log::usingLog()->writeToLog("checking if {$keyFilename} exists");
             if (file_exists($keyFilename)) {
                 $log->endAction($keyFilename);
                 return $keyFilename;

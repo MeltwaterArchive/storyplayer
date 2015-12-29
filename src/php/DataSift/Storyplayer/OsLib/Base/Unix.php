@@ -49,6 +49,7 @@ use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * get information about vagrant
@@ -72,7 +73,7 @@ abstract class Base_Unix extends OsBase
     public function determineIpAddress($hostDetails, SupportedHost $host)
     {
         // what are we doing?
-        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
+        $log = Log::usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
 
         // how do we do this?
         if (isset($hostDetails->hostname)) {
@@ -99,7 +100,7 @@ abstract class Base_Unix extends OsBase
     public function determineHostname($hostDetails, SupportedHost $host)
     {
         // what are we doing?
-        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
+        $log = Log::usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
 
         // how do we do this?
         if (isset($hostDetails->hostname)) {
@@ -143,7 +144,7 @@ abstract class Base_Unix extends OsBase
     public function getProcessIsRunning($hostDetails, $processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("is process '{$processName}' running on host '{$hostDetails->hostId}'?");
+        $log = Log::usingLog()->startAction("is process '{$processName}' running on host '{$hostDetails->hostId}'?");
 
         // SSH in and have a look
         $command   = "ps -ef | grep '{$processName}'";
@@ -179,7 +180,7 @@ abstract class Base_Unix extends OsBase
     public function getPid($hostDetails, $processName)
     {
         // log some info to the user
-        $log = usingLog()->startAction("get PID for process '{$processName}' running on host '{$hostDetails->hostId}'");
+        $log = Log::usingLog()->startAction("get PID for process '{$processName}' running on host '{$hostDetails->hostId}'");
 
         // run the command to get the process id
         $command   = "ps -ef | grep '{$processName}'";
@@ -219,7 +220,7 @@ abstract class Base_Unix extends OsBase
     public function getPidIsRunning($hostDetails, $pid)
     {
         // what are we doing?
-        $log = usingLog()->startAction("is process PID '{$pid}' running on UNIX '{$hostDetails->hostId}'?");
+        $log = Log::usingLog()->startAction("is process PID '{$pid}' running on UNIX '{$hostDetails->hostId}'?");
 
         // SSH in and have a look
         $command = "ps -ef | grep '{$pid}'";

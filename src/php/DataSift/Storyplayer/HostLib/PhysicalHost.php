@@ -46,6 +46,7 @@ namespace DataSift\Storyplayer\HostLib;
 use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * the things you can do / learn about a physical host
@@ -174,7 +175,7 @@ class PhysicalHost implements SupportedHost
     public function determineIpAddress($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine IP address of physical host '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine IP address of physical host '{$vmDetails->hostId}'");
 
         // create an adapter to talk to the host operating system
         $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
@@ -196,7 +197,7 @@ class PhysicalHost implements SupportedHost
     public function determineHostname($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine hostname of physical host '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine hostname of physical host '{$vmDetails->hostId}'");
 
         // create an adapter to talk to the host operating system
         $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);

@@ -43,6 +43,8 @@
 
 namespace Prose;
 
+use Storyplayer\SPv2\Modules\Log;
+
 /**
  * placeholders used as default behaviour for test phases
  *
@@ -58,7 +60,7 @@ class UsingReporting extends Prose
     public function reportNotRequired()
     {
         // what are we doing?
-        $log = usingLog()->startAction("this phase is not required by this story");
+        $log = Log::usingLog()->startAction("this phase is not required by this story");
 
         // all done
         $log->endAction();
@@ -67,7 +69,7 @@ class UsingReporting extends Prose
     public function reportShouldAlwaysSucceed()
     {
         // what are we doing?
-        $log = usingLog()->startAction("this story is expected to always succeed");
+        $log = Log::usingLog()->startAction("this story is expected to always succeed");
 
         // all done
         $log->endAction();

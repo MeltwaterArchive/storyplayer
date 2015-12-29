@@ -50,6 +50,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Exception;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Shell;
 
 /**
@@ -131,7 +132,7 @@ class VagrantVms implements SupportedHost
     public function createHost($groupDef, $provisioningVars = array())
     {
         // what are we doing?
-        $log = usingLog()->startAction('create new VM');
+        $log = Log::usingLog()->startAction('create new VM');
 
         // make sure we're happy with this group
         $this->checkGroupDefinition($groupDef);
@@ -298,7 +299,7 @@ class VagrantVms implements SupportedHost
     public function destroyHost($groupDef)
     {
         // what are we doing?
-        $log = usingLog()->startAction("destroy VM(s)");
+        $log = Log::usingLog()->startAction("destroy VM(s)");
 
         // stop all the VMs, one by one
         foreach ($groupDef->details->machines as $hostId => $machine) {
@@ -329,7 +330,7 @@ class VagrantVms implements SupportedHost
     public function runCommandAgainstHostManager($baseFolder, $command)
     {
         // what are we doing?
-        $log = usingLog()->startAction("run vagrant command '{$command}'");
+        $log = Log::usingLog()->startAction("run vagrant command '{$command}'");
 
         // build the command
         $fullCommand = "cd '{$baseFolder}' && $command 2>&1";
@@ -351,7 +352,7 @@ class VagrantVms implements SupportedHost
     public function runCommandViaHostManager($baseFolder, $command)
     {
         // what are we doing?
-        $log = usingLog()->startAction("run vagrant command '{$command}'");
+        $log = Log::usingLog()->startAction("run vagrant command '{$command}'");
 
         // build the command
         $fullCommand = "cd '{$baseFolder}' && vagrant ssh -c \"$command\"";
@@ -383,7 +384,7 @@ class VagrantVms implements SupportedHost
     public function determineIpAddress($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine IP address of Vagrant VM '{$vmDetails->hostId}'");
 
         // create an adapter to talk to the host operating system
         $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
@@ -404,7 +405,7 @@ class VagrantVms implements SupportedHost
     public function determineHostname($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine hostname of Vagrant VM '{$vmDetails->hostId}'");
 
         // create an adapter to talk to the host operating system
         $host = OsLib::getHostAdapter($this->st, $vmDetails->osName);
@@ -433,7 +434,7 @@ class VagrantVms implements SupportedHost
     public function determineBridgedInterface()
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine bridged network interface for Vagrant VM");
+        $log = Log::usingLog()->startAction("determine bridged network interface for Vagrant VM");
 
         try {
             // 1. try to load Vagrant settings from storyplayer.json
@@ -493,7 +494,7 @@ class VagrantVms implements SupportedHost
     public function determinePrivateKey($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
 
         // the key will be in one of two places, in this order:
         //
@@ -508,7 +509,7 @@ class VagrantVms implements SupportedHost
 
         foreach ($keyFilenames as $keyFilename)
         {
-            usingLog()->writeToLog("checking if {$keyFilename} exists");
+            Log::usingLog()->writeToLog("checking if {$keyFilename} exists");
             if (file_exists($keyFilename)) {
                 $log->endAction($keyFilename);
                 return $keyFilename;

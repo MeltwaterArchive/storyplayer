@@ -48,6 +48,7 @@ use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * the things you can do / learn about a group of physical machines that
@@ -87,7 +88,7 @@ class PhysicalHosts implements SupportedHost
     public function createHost($groupDef, $provisioningVars = array())
     {
         // what are we doing?
-        $log = usingLog()->startAction('register physical host(s)');
+        $log = Log::usingLog()->startAction('register physical host(s)');
 
         // make sure we like the provided details
         if (!isset($groupDef->details)) {
@@ -202,7 +203,7 @@ class PhysicalHosts implements SupportedHost
     public function destroyHost($groupDef)
     {
         // what are we doing?
-        $log = usingLog()->startAction("de-register blackbox(es)");
+        $log = Log::usingLog()->startAction("de-register blackbox(es)");
 
         // de-register all the hosts
         foreach ($groupDef->details->machines as $hostId => $machine)

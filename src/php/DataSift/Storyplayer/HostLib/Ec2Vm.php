@@ -50,6 +50,7 @@ use DataSift\Storyplayer\OsLib;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * the things you can do / learn about EC2 virtual machine
@@ -88,7 +89,7 @@ class Ec2Vm implements SupportedHost
     public function createHost($vmDetails, $provisioningVars = array())
     {
         // what are we doing?
-        $log = usingLog()->startAction('provision new VM');
+        $log =Log::usingLog()->startAction('provision new VM');
 
         // make sure we like the provided details
         foreach(array('name', 'environment', 'osName', 'amiId', 'securityGroup') as $param) {
@@ -198,7 +199,7 @@ class Ec2Vm implements SupportedHost
     public function startHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("start VM");
+        $log =Log::usingLog()->startAction("start VM");
 
         // is the VM actually running?
         if ($this->isRunning($vmDetails)) {
@@ -263,7 +264,7 @@ class Ec2Vm implements SupportedHost
     public function stopHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop VM");
+        $log =Log::usingLog()->startAction("stop VM");
 
         // is the VM actually running?
         if (!$this->isRunning($vmDetails)) {
@@ -318,7 +319,7 @@ class Ec2Vm implements SupportedHost
     public function restartHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("restart VM");
+        $log =Log::usingLog()->startAction("restart VM");
 
         // stop and start
         $this->stopHost($vmDetails);
@@ -349,7 +350,7 @@ class Ec2Vm implements SupportedHost
     public function destroyHost($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("destroy VM");
+        $log =Log::usingLog()->startAction("destroy VM");
 
         // get our Ec2 client from the SDK
         $client = fromAws()->getEc2Client();
@@ -418,7 +419,7 @@ class Ec2Vm implements SupportedHost
     public function isRunning($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine status of EC2 VM '{$vmDetails->hostId}'");
+        $log =Log::usingLog()->startAction("determine status of EC2 VM '{$vmDetails->hostId}'");
 
         // get the instance data
         $instance = fromEc2()->getInstance($vmDetails->hostId);
@@ -445,7 +446,7 @@ class Ec2Vm implements SupportedHost
     public function determineIpAddress($vmDetails)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine IP address of EC2 VM '{$vmDetails->hostId}'");
+        $log =Log::usingLog()->startAction("determine IP address of EC2 VM '{$vmDetails->hostId}'");
 
         // we need to get a fresh copy of the instance details
         $dnsName = fromEc2Instance($vmDetails->hostId)->getPublicDnsName();

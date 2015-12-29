@@ -45,6 +45,7 @@ namespace DataSift\Storyplayer\CommandLib;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use Phix_Project\ContractLib2\Contract;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * helpers for using SSH to interact with the supported operating system
@@ -358,7 +359,7 @@ class SshClient implements CommandClient
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = usingLog()->startAction("run command '{$command}' against host ");
+        $log = Log::usingLog()->startAction("run command '{$command}' against host ");
 
         // do we actually have everything we need to run the command?
         if (!$this->hasSshUsername()) {
@@ -412,7 +413,7 @@ class SshClient implements CommandClient
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = usingLog()->startAction("download file '{$sourceFilename}' from host as '{$destFilename}'");
+        $log = Log::usingLog()->startAction("download file '{$sourceFilename}' from host as '{$destFilename}'");
 
         // do we actually have everything we need to run the command?
         if (!$this->hasSshUsername()) {
@@ -463,7 +464,7 @@ class SshClient implements CommandClient
         // $printableParams = $this->convertParamsForUse($params);
 
         // what are we doing?
-        $log = usingLog()->startAction("upload file '{$sourceFilename}' to host as '{$destFilename}'");
+        $log = Log::usingLog()->startAction("upload file '{$sourceFilename}' to host as '{$destFilename}'");
 
         // do we actually have everything we need to run the command?
         if (!$this->hasSshUsername()) {

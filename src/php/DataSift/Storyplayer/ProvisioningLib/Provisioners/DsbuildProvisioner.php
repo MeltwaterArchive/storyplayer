@@ -51,6 +51,7 @@ use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Shell;
 
 /**
@@ -77,7 +78,7 @@ class DsbuildProvisioner extends Provisioner
         $provDef = new ProvisioningDefinition;
 
         // what are we doing?
-        $log = usingLog()->startAction("build dsbuild provisioning definition");
+        $log = Log::usingLog()->startAction("build dsbuild provisioning definition");
 
         // add in each machine in the environment
         foreach ($env->details->machines as $hostId => $machine) {
@@ -106,7 +107,7 @@ class DsbuildProvisioner extends Provisioner
     public function provisionHosts(ProvisioningDefinition $hosts, $provConfig)
     {
         // what are we doing?
-        $log = usingLog()->startAction("use dsbuild to provision host(s)");
+        $log = Log::usingLog()->startAction("use dsbuild to provision host(s)");
 
         // the params file that we are going to output
         $dsbuildParams = new BaseObject;
@@ -184,7 +185,7 @@ class DsbuildProvisioner extends Provisioner
     protected function writeDsbuildParamsYamlFile($vars)
     {
         // what are we doing?
-        $log = usingLog()->startAction("write dsbuildparams.yml");
+        $log = Log::usingLog()->startAction("write dsbuildparams.yml");
 
         // what is the path to the file?
         $filename = "dsbuildparams.yml";
@@ -202,7 +203,7 @@ class DsbuildProvisioner extends Provisioner
     protected function writeDsbuildParamsShellFile($vars)
     {
         // what are we doing?
-        $log = usingLog()->startAction("write dsbuildparams.sh");
+        $log = Log::usingLog()->startAction("write dsbuildparams.sh");
 
         // what is the path to the file?
         $filename = "dsbuildparams.sh";

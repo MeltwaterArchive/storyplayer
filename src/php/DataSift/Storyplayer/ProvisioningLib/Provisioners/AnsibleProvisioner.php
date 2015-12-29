@@ -48,6 +48,7 @@ use DataSift\Storyplayer\CommandLib\CommandRunner;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\ProvisioningLib\ProvisioningDefinition;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * support for provisioning via Ansible
@@ -73,7 +74,7 @@ class AnsibleProvisioner extends Provisioner
         $provDef = new ProvisioningDefinition;
 
         // what are we doing?
-        $log = usingLog()->startAction("build Ansible provisioning definition");
+        $log = Log::usingLog()->startAction("build Ansible provisioning definition");
 
         // add in each machine in the environment
         foreach ($env->details->machines as $hostId => $machine) {
@@ -102,7 +103,7 @@ class AnsibleProvisioner extends Provisioner
     public function provisionHosts(ProvisioningDefinition $hosts, $provConf)
     {
         // what are we doing?
-        $log = usingLog()->startAction("use Ansible to provision host(s)");
+        $log = Log::usingLog()->startAction("use Ansible to provision host(s)");
 
         // get our ansible configuration
         $ansibleSettings = fromConfig()->getModuleSetting('ansible');
@@ -205,7 +206,7 @@ class AnsibleProvisioner extends Provisioner
     protected function removeHostVarsFile($inventoryFolder, $ipAddress)
     {
         // what are we doing?
-        $log = usingLog()->startAction("remove host_vars file for '{$ipAddress}'");
+        $log = Log::usingLog()->startAction("remove host_vars file for '{$ipAddress}'");
 
         // what is the path to the file?
         $filename = $this->getHostVarsFilename($inventoryFolder, $ipAddress);
@@ -228,7 +229,7 @@ class AnsibleProvisioner extends Provisioner
     protected function writeHostVarsFile($inventoryFolder, $ipAddress, $vars)
     {
         // what are we doing?
-        $log = usingLog()->startAction("write host_vars file for '{$ipAddress}'");
+        $log = Log::usingLog()->startAction("write host_vars file for '{$ipAddress}'");
 
         // what is the path to the file?
         $filename = $this->getHostVarsFilename($inventoryFolder, $ipAddress);
@@ -254,7 +255,7 @@ class AnsibleProvisioner extends Provisioner
     protected function writeInventoryFile($inventory)
     {
         // what are we doing?
-        $log = usingLog()->startAction("write temporary inventory file");
+        $log = Log::usingLog()->startAction("write temporary inventory file");
 
         // what are we going to call the inventory file?
         $filename = fromFile()->getTmpFilename();
@@ -273,7 +274,7 @@ class AnsibleProvisioner extends Provisioner
     protected function getHostVarsFilename($inventoryFolder, $hostId)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine host_vars filename for host '{$hostId}'");
+        $log = Log::usingLog()->startAction("determine host_vars filename for host '{$hostId}'");
 
         // get our ansible settings
         $ansibleSettings = fromConfig()->getModuleSetting('ansible');

@@ -49,6 +49,7 @@ use DataSift\Stone\DataLib\DataPrinter;
 use DataSift\Stone\TextLib\TextHelper;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 use Prose\Prose;
 
@@ -78,9 +79,9 @@ class AssertionsBase extends Prose
         //
         // let's try and make it a bit more useful to the reader
         $msg = $this->getStartLogMessage($methodName, $params);
-        $log = usingLog()->startAction($msg);
+        $log = Log::usingLog()->startAction($msg);
         $actual4Log = $this->getActualDataForLog();
-        usingLog()->writeToLog("checking data: " . $actual4Log);
+        Log::usingLog()->writeToLog("checking data: " . $actual4Log);
 
         // is the user trying to call a method that exists in our comparitor?
         if (!method_exists($this->comparitor, $methodName)) {
@@ -98,8 +99,8 @@ class AssertionsBase extends Prose
         }
 
         // if we get here, then the comparison failed
-        usingLog()->writeToLog("expected outcome: " . $result->getExpected());
-        usingLog()->writeToLog("actual   outcome: " . $result->getActual());
+        Log::usingLog()->writeToLog("expected outcome: " . $result->getExpected());
+        Log::usingLog()->writeToLog("actual   outcome: " . $result->getActual());
         $log->endAction("assertion failed!");
         throw Exceptions::newExpectFailedException(__CLASS__ . "::${methodName}", $result->getExpected(), $result->getActual());
     }

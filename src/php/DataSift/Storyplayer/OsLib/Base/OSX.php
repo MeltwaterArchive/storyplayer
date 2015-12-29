@@ -49,6 +49,7 @@ use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingRegex;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * support for Storyplayer running on OSX
@@ -77,7 +78,7 @@ abstract class Base_OSX extends OsBase
     public function determineHostname($hostDetails, SupportedHost $host)
     {
         // what are we doing?
-        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
+        $log = Log::usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
 
         // how do we do this?
         $command = "hostname";
@@ -117,7 +118,7 @@ abstract class Base_OSX extends OsBase
     public function getProcessIsRunning($hostDetails, $processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("is process '{$processName}' running on OSX '{$hostDetails->hostId}'?");
+        $log = Log::usingLog()->startAction("is process '{$processName}' running on OSX '{$hostDetails->hostId}'?");
 
         // SSH in and have a look
         $command   = "ps -ef | grep '{$processName}'";
@@ -152,7 +153,7 @@ abstract class Base_OSX extends OsBase
     public function getPid($hostDetails, $processName)
     {
         // log some info to the user
-        $log = usingLog()->startAction("get pid for process '{$processName}' running on OSX machine '{$hostDetails->hostId}'");
+        $log = Log::usingLog()->startAction("get pid for process '{$processName}' running on OSX machine '{$hostDetails->hostId}'");
 
         // run the command to get the process id
         $command   = "ps -ef | grep '{$processName}'";
@@ -190,7 +191,7 @@ abstract class Base_OSX extends OsBase
     public function getPidIsRunning($hostDetails, $pid)
     {
         // what are we doing?
-        $log = usingLog()->startAction("is process PID '{$pid}' running on OSX '{$hostDetails->hostId}'?");
+        $log = Log::usingLog()->startAction("is process PID '{$pid}' running on OSX '{$hostDetails->hostId}'?");
 
         // SSH in and have a look
         $command   = "ps -ef | grep '{$pid}'";

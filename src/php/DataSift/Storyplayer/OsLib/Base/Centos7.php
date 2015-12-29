@@ -49,6 +49,7 @@ use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * work with CentOS 7.x guest operating system
@@ -72,7 +73,7 @@ abstract class Base_Centos7 extends Base_Centos5
     public function determineIpAddress($hostDetails, SupportedHost $host)
     {
         // what are we doing?
-        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
+        $log = Log::usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
 
         if (empty($hostDetails->ifaces)) {
             // set default network interfaces

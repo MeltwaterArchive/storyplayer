@@ -49,6 +49,7 @@ use GanbaroDigital\TextTools\Filters\FilterColumns;
 use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * get information about vagrant
@@ -72,7 +73,7 @@ abstract class Base_Centos5 extends Base_Unix
     public function determineIpAddress($hostDetails, SupportedHost $host)
     {
         // what are we doing?
-        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
+        $log = Log::usingLog()->startAction("query " . basename(__CLASS__) . " for IP address");
 
         if (empty($hostDetails->ifaces)) {
             // set default network interfaces
@@ -118,7 +119,7 @@ abstract class Base_Centos5 extends Base_Unix
     public function determineHostname($hostDetails, SupportedHost $host)
     {
         // what are we doing?
-        $log = usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
+        $log = Log::usingLog()->startAction("query " . basename(__CLASS__) . " for hostname");
 
         // how do we do this?
         $command = "hostname --fqdn";
@@ -147,7 +148,7 @@ abstract class Base_Centos5 extends Base_Unix
     public function getInstalledPackageDetails($hostDetails, $packageName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
+        $log = Log::usingLog()->startAction("get details for package '{$packageName}' installed in host '{$hostDetails->hostId}'");
 
         // get the details
         $command   = "sudo yum list installed {$packageName}";
