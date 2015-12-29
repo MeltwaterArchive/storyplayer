@@ -84,9 +84,11 @@ class UsingRolesTable extends Prose
         $log = usingLog()->startAction("add host '{$hostId}' to role '{$roleName}'");
 
         // do we have this role already?
+        $hasRole = true;
         $role = fromRuntimeTable($this->entryKey)->getDetails($roleName);
         if ($role === null) {
             $role = [];
+            $hasRole = false;
         }
 
         // does this host already have this role?
@@ -100,7 +102,12 @@ class UsingRolesTable extends Prose
         $role[] = $hostId;
 
         // add it
-        usingRuntimeTable($this->entryKey)->addItem($roleName, $role);
+        if ($hasRole) {
+            usingRuntimeTable($this->entryKey)->updateItem($roleName, $role);
+        }
+        else {
+            usingRuntimeTable($this->entryKey)->addItem($roleName, $role);
+        }
 
         // all done
         $log->endAction();
