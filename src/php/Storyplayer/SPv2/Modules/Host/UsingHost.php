@@ -52,6 +52,8 @@ use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Screen;
 use Storyplayer\SPv2\Modules\Shell;
+use StoryplayerInternals\SPv2\Modules\Deprecated;
+use StoryplayerInternals\SPv2\Helpers\ManualUrls;
 
 /**
  * do things with vagrant
@@ -70,6 +72,7 @@ class UsingHost extends HostAwareModule
      */
     public function runCommand($command)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Shell::onHost($this->args[0])->runCommand($command);
     }
 
@@ -78,6 +81,7 @@ class UsingHost extends HostAwareModule
      */
     public function runCommandAsUser($command, $user)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Shell::onHost($this->args[0])->runCommandAsUser($command, $user);
     }
 
@@ -86,6 +90,7 @@ class UsingHost extends HostAwareModule
      */
     public function runCommandAndIgnoreErrors($command)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Shell::onHost($this->args[0])->runCommandAndIgnoreErrors($command);
     }
 
@@ -94,6 +99,7 @@ class UsingHost extends HostAwareModule
      */
     public function runCommandAsUserAndIgnoreErrors($command, $user)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Shell::onHost($this->args[0])->runCommandAsUserAndIgnoreErrors($command, $user);
     }
 
@@ -102,6 +108,7 @@ class UsingHost extends HostAwareModule
      */
     public function startInScreen($sessionName, $commandLine)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Screen::onHost($this->args[0])->startScreen($sessionName, $commandLine);
     }
 
@@ -110,6 +117,7 @@ class UsingHost extends HostAwareModule
      */
     public function stopInScreen($sessionName)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Screen::onHost($this->args[0])->stopScreen($sessionName);
     }
 
@@ -189,6 +197,7 @@ class UsingHost extends HostAwareModule
      */
     public function uploadFile($sourceFilename, $destFilename)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Filesystem::onHost($this->args[0])->uploadFile($sourceFilename, $destFilename);
     }
 }

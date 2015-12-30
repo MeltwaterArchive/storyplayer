@@ -47,6 +47,8 @@ use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Filesystem;
 use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Screen;
+use StoryplayerInternals\SPv2\Modules\Deprecated;
+use StoryplayerInternals\SPv2\Helpers\ManualUrls;
 
 /**
  *
@@ -181,6 +183,7 @@ class ExpectsHost extends HostAwareModule
      */
     public function screenIsRunning($sessionName)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Screen::expectsHost($this->args[0])->screenIsRunning($sessionName);
     }
 
@@ -189,6 +192,7 @@ class ExpectsHost extends HostAwareModule
      */
     public function screenIsNotRunning($sessionName)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Screen::expectsHost($this->args[0])->screenIsNotRunning($sessionName);
     }
 
@@ -225,6 +229,7 @@ class ExpectsHost extends HostAwareModule
      */
     public function hasFileWithPermissions($filename, $owner, $group, $mode)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Filesystem::expectsHost($this->args[0])->hasFileWithPermissions($filename, $owner, $group, $mode);
     }
 
@@ -233,6 +238,7 @@ class ExpectsHost extends HostAwareModule
      */
     public function hasFolderWithPermissions($folder, $owner, $group, $mode)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Filesystem::expectsHost($this->args[0])->hasFolderWithPermissions($folder, $owner, $group, $mode);
     }
 }

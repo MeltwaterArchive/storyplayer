@@ -57,6 +57,8 @@ use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Filesystem;
 use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Screen;
+use StoryplayerInternals\SPv2\Modules\Deprecated;
+use StoryplayerInternals\SPv2\Helpers\ManualUrls;
 
 /**
  * get information about a given host
@@ -322,6 +324,7 @@ class FromHost extends HostAwareModule
      */
     public function getScreenIsRunning($sessionName)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Screen::fromHost($this->args[0])->getScreenIsRunning($sessionName);
     }
 
@@ -330,6 +333,7 @@ class FromHost extends HostAwareModule
      */
     public function getScreenSessionDetails($sessionName)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Screen::fromHost($this->args[0])->getScreenSessionDetails($sessionName);
     }
 
@@ -338,6 +342,7 @@ class FromHost extends HostAwareModule
      */
     public function getAllScreenSessions()
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Screen::fromHost($this->args[0])->getAllScreenSessions();
     }
 
@@ -491,6 +496,7 @@ class FromHost extends HostAwareModule
      */
     public function downloadFile($sourceFilename, $destFilename)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Filesystem::fromHost($this->args[0])->downloadFile($sourceFilename, $destFilename);
     }
 
@@ -499,6 +505,7 @@ class FromHost extends HostAwareModule
      */
     public function getFileDetails($filename)
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Filesystem::fromHost($this->args[0])->getFileDetails($filename);
     }
 
