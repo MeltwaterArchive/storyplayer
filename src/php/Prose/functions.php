@@ -62,6 +62,7 @@ use Storyplayer\SPv2\Modules\Asserts;
 use Storyplayer\SPv2\Modules\Browser;
 use Storyplayer\SPv2\Modules\Device;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Failure;
 use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\HTTP;
 use Storyplayer\SPv2\Modules\Log;
@@ -77,7 +78,6 @@ use Prose\CleanupProcesses;
 use Prose\CleanupRoles;
 use Prose\CleanupTargets;
 use Prose\ExpectsEc2Image;
-use Prose\ExpectsFailure;
 use Prose\ExpectsGraphite;
 use Prose\ExpectsProcessesTable;
 use Prose\ExpectsRolesTable;
@@ -332,13 +332,12 @@ function expectsEc2Image($amiId)
  * they do fail, they do not cause your story to fail. If the operations
  * actually end up succeeding, then this module will throw an exception.
  *
- * @return \Prose\ExpectsFailure
- * @throws \Prose\E5xx_ExpectFailed
+ * @return \Storyplayer\SPv2\Modules\Failure\ExpectsFailure
  */
 function expectsFailure()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new ExpectsFailure(StoryTeller::instance());
+    return Failure::expectsFailure();
 }
 
 /**

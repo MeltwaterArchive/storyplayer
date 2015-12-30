@@ -33,40 +33,38 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Failure;
 
+use RuntimeException;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * prove a negative
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsFailure extends Prose
+class ExpectsFailure
 {
     public function when($what, $callback)
     {
         // what are we doing?
-        $log = usingLog()->startAction("expect {$what} to fail");
+        $log = Log::usingLog()->startAction("expect {$what} to fail");
 
         // let's do it
         try {
             $callback();
         }
-        catch (E5xx_ProseException $e) {
+        catch (RuntimeException $e) {
             // do nothing
             $log->endAction("{$what} failed (this is the expected behaviour)");
             return;
