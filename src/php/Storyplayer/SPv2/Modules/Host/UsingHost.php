@@ -49,6 +49,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Filesystem;
 use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Screen;
 use Storyplayer\SPv2\Modules\Shell;
 
@@ -117,13 +118,14 @@ class UsingHost extends HostAwareModule
      */
     public function stopAllScreens()
     {
+        Deprecated::fireDeprecated(__METHOD__, "v2.4.0", ManualUrls::HOST_MODULE_BREAKUP);
         return Screen::onHost($this->args[0])->stopAllScreens();
     }
 
     public function stopProcess($pid, $grace = 5)
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("stop process '{$pid}' on host '{$this->args[0]}'");
 
         // is the process running at all?
         if (!Host::fromHost($this->args[0])->getPidIsRunning($pid)) {

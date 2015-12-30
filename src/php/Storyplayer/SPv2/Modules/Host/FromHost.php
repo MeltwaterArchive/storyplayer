@@ -55,6 +55,7 @@ use GanbaroDigital\TextTools\Filters\FilterForMatchingString;
 
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Filesystem;
+use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Screen;
 
 /**
@@ -75,7 +76,7 @@ class FromHost extends HostAwareModule
     public function getDetails()
     {
         // what are we doing?
-        $log = usingLog()->startAction("retrieve details for host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("retrieve details for host '{$this->args[0]}'");
 
         // get the host details
         $hostDetails = $this->getHostDetails();
@@ -100,7 +101,7 @@ class FromHost extends HostAwareModule
     public function getHostIsRunning()
     {
         // what are we doing?
-        $log = usingLog()->startAction("is host '{$this->args[0]}' running?");
+        $log = Log::usingLog()->startAction("is host '{$this->args[0]}' running?");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -134,7 +135,7 @@ class FromHost extends HostAwareModule
     public function getHostname()
     {
         // what are we doing?
-        $log = usingLog()->startAction("get the hostname of host ID '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get the hostname of host ID '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -157,7 +158,7 @@ class FromHost extends HostAwareModule
     public function getIpAddress()
     {
         // what are we doing?
-        $log = usingLog()->startAction("get IP address of host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get IP address of host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -174,7 +175,7 @@ class FromHost extends HostAwareModule
     public function getInstalledPackageDetails($packageName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("get details for package '{$packageName}' installed on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get details for package '{$packageName}' installed on host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -197,7 +198,7 @@ class FromHost extends HostAwareModule
     public function getPidIsRunning($pid)
     {
         // what are we doing?
-        $log = usingLog()->startAction("is process PID '{$pid}' running on host '{$this->args[0]}'?");
+        $log = Log::usingLog()->startAction("is process PID '{$pid}' running on host '{$this->args[0]}'?");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -225,7 +226,7 @@ class FromHost extends HostAwareModule
     public function getProcessIsRunning($processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("is process '{$processName}' running on host '{$this->args[0]}'?");
+        $log = Log::usingLog()->startAction("is process '{$processName}' running on host '{$this->args[0]}'?");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -253,7 +254,7 @@ class FromHost extends HostAwareModule
     public function getPid($processName)
     {
         // log some info to the user
-        $log = usingLog()->startAction("get id of process '{$processName}' running on VM '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get id of process '{$processName}' running on VM '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -275,7 +276,7 @@ class FromHost extends HostAwareModule
     public function getSshUsername()
     {
         // what are we doing?
-        $log = usingLog()->startAction("get username to use with SSH to host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get username to use with SSH to host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -294,7 +295,7 @@ class FromHost extends HostAwareModule
     public function getSshKeyFile()
     {
         // what are we doing?
-        $log = usingLog()->startAction("get key file to use with SSH to host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get key file to use with SSH to host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -347,7 +348,7 @@ class FromHost extends HostAwareModule
     public function getAppSettings($appName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("get settings for '{$appName}' from host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get settings for '{$appName}' from host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -387,7 +388,7 @@ class FromHost extends HostAwareModule
         // if we get here, then we are using the new dot.notation.support
 
         // what are we doing?
-        $log = usingLog()->startAction("get appSetting '{$path}' from host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get appSetting '{$path}' from host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -421,7 +422,7 @@ class FromHost extends HostAwareModule
     protected function getLegacyAppSetting($appName, $settingName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("get $settingName for '{$appName}' from host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get $settingName for '{$appName}' from host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -459,7 +460,7 @@ class FromHost extends HostAwareModule
     public function getStorySetting($path)
     {
         // what are we doing?
-        $log = usingLog()->startAction("get storySetting '{$path}' from host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get storySetting '{$path}' from host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -509,7 +510,7 @@ class FromHost extends HostAwareModule
     public function getLocalFolder()
     {
         // what are we doing?
-        $log = usingLog()->startAction("get local folder for host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("get local folder for host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();

@@ -45,6 +45,7 @@ namespace Storyplayer\SPv2\Modules\Host;
 
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Filesystem;
+use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Screen;
 
 /**
@@ -63,7 +64,7 @@ class ExpectsHost extends HostAwareModule
     public function hostIsRunning()
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure host '{$this->args[0]}' is running");
+        $log = Log::usingLog()->startAction("make sure host '{$this->args[0]}' is running");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -82,7 +83,7 @@ class ExpectsHost extends HostAwareModule
     public function hostIsNotRunning()
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure host '{$this->args[0]}' is not running");
+        $log = Log::usingLog()->startAction("make sure host '{$this->args[0]}' is not running");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -101,7 +102,7 @@ class ExpectsHost extends HostAwareModule
     public function packageIsInstalled($packageName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure package '{$packageName}' is installed on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("make sure package '{$packageName}' is installed on host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -120,7 +121,7 @@ class ExpectsHost extends HostAwareModule
     public function packageIsNotInstalled($packageName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure package '{$packageName}' is not installed on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("make sure package '{$packageName}' is not installed on host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -140,7 +141,7 @@ class ExpectsHost extends HostAwareModule
     public function processIsRunning($processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("make sure process '{$processName}' is running on host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
@@ -159,7 +160,7 @@ class ExpectsHost extends HostAwareModule
     public function processIsNotRunning($processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("make sure process '{$processName}' is not running on host '{$this->args[0]}'");
 
         // make sure we have valid host details
         $hostDetails = $this->getHostDetails();
