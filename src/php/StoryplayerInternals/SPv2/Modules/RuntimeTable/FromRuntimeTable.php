@@ -33,17 +33,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
  * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace StoryplayerInternals\SPv2\Modules\RuntimeTable;
 
-use Storyplayer\SPv2\Modules\Exceptions;
+use DataSift\Stone\ObjectLib\BaseObject;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * ExpectsRuntimeTable
@@ -51,60 +50,76 @@ use Storyplayer\SPv2\Modules\Exceptions;
  * @uses Prose
  * @author Michael Heap <michael.heap@datasift.com>
  */
-class ExpectsRuntimeTable extends BaseRuntimeTable
+class FromRuntimeTable extends BaseRuntimeTable
 {
     /**
-     * hasEntry
+     * getTable
      *
-     * @param string $key key The key to look for inside the tableName table
      *
-     * @return void
+     * @return object The table from the config
      */
-    public function hasEntry($key)
+    public function getTable()
     {
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction("make sure host '{$key}' has an entry in the '{$tableName}' table");
+        $log = Log::usingLog()->startAction("get '{$tableName}' table from runtime config");
 
         // get the table config
         $tables = $this->getAllTables();
 
-        // make sure we have a hosts table
-        if (!isset($tables->$tableName)) {
-            $msg = "table is empty / does not exist";
-            $log->endAction($msg);
-
-            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table existed", "{$parent} table does not exist");
-        }
-
-        // make sure we don't have a duplicate entry
-        if (!isset($tables->$tableName->$key)) {
-            $msg = "table does not contain an entry for '{$key}'";
-            $log->endAction($msg);
-
-            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
+        // make sure we have a table
+        if (!isset($tables->$tableName)){
+            $tables->$tableName = new BaseObject();
         }
 
         // all done
         $log->endAction();
+        return $tables->$tableName;
+    }
+
+    public function getGroupFromTable($group)
+    {
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = Log::usingLog()->startAction("get '{$tableName}->{$group}' table group from runtime config");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure we have a table
+        if (!isset($tables->$tableName)){
+            $tables->$tableName = new BaseObject();
+        }
+        // make sure we have a group
+        if (!isset($tables->$tableName->$group)) {
+            $tables->$tableName->$group = new BaseObject;
+        }
+
+        // all done
+        $log->endAction();
+        return $tables->$tableName->$group;
     }
 
     /**
-     * hasNoEntry
+     * getDetails
+     *
+     * Get details for a specific key
      *
      * @param string $key key The key to look for inside the tableName table
      *
-     * @return void
+     * @return object The details stored under $key
      */
-    public function hasNoEntry($key)
+    public function getDetails($key)
     {
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction("make sure there is no existing entry for '{$key}' in '{$tableName}'");
+        $log = Log::usingLog()->startAction("get details for '{$key}' from {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -113,18 +128,66 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
         if (!isset($tables->$tableName)) {
             $msg = "table is empty / does not exist";
             $log->endAction($msg);
-            return;
+
+            return null;
         }
 
-        // make sure we don't have a duplicate entry
-        if (isset($tables->$tableName->$key)) {
-            $msg = "table already contains an entry for '{$key}'";
+        // do we have the entry we're looking for?
+        if (!isset($tables->$tableName->$key)) {
+            $msg = "table does not contain an entry for '{$key}'";
             $log->endAction($msg);
-
-            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");
+            return null;
         }
 
         // all done
         $log->endAction();
+        return $tables->$tableName->$key;
+    }
+
+    /**
+     * Get details for a specific key from a group
+     *
+     * @param string $key
+     *        The key to look for inside the tableName table
+     *
+     * @return stdClass The details stored under $key
+     */
+    public function getDetailsFromGroup($group, $key)
+    {
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = Log::usingLog()->startAction("get details for '{$group}->{$key}' from {$tableName} table");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure we have a table
+        if (!isset($tables->$tableName)) {
+            $msg = "table is empty / does not exist";
+            $log->endAction($msg);
+
+            return null;
+        }
+
+        // make sure we have the group
+        if (!isset($tables->$tableName->$group)) {
+            $msg = "table has no group '{$group}'";
+            $log->endAction($msg);
+
+            return null;
+        }
+
+        // do we have the entry we're looking for?
+        if (!isset($tables->$tableName->$group->$key)) {
+            $msg = "table does not contain an entry for '{$group}->{$key}'";
+            $log->endAction($msg);
+            return null;
+        }
+
+        // all done
+        $log->endAction();
+        return $tables->$tableName->$group->$key;
     }
 }

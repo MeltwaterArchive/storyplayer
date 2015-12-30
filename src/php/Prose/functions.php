@@ -70,6 +70,7 @@ use Storyplayer\SPv2\Modules\Supervisor;
 use Storyplayer\SPv2\Modules\Users;
 use Storyplayer\SPv2\Modules\ZeroMQ;
 use StoryplayerInternals\SPv2\Modules\Deprecated;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable;
 use StoryplayerInternals\SPv2\Helpers\ManualUrls;
 
 use Prose\CleanupProcesses;
@@ -80,7 +81,6 @@ use Prose\ExpectsFailure;
 use Prose\ExpectsGraphite;
 use Prose\ExpectsProcessesTable;
 use Prose\ExpectsRolesTable;
-use Prose\ExpectsRuntimeTable;
 use Prose\ExpectsUuid;
 use Prose\FromArray;
 use Prose\FromAws;
@@ -98,7 +98,6 @@ use Prose\FromPDOStatement;
 use Prose\FromProcessesTable;
 use Prose\FromRedisConn;
 use Prose\FromRolesTable;
-use Prose\FromRuntimeTable;
 use Prose\FromSauceLabs;
 use Prose\FromStoryplayer;
 use Prose\FromString;
@@ -125,7 +124,6 @@ use Prose\UsingRedis;
 use Prose\UsingRedisConn;
 use Prose\UsingReporting;
 use Prose\UsingRolesTable;
-use Prose\UsingRuntimeTable;
 use Prose\UsingSauceLabs;
 use Prose\UsingSavageD;
 use Prose\UsingTargetsTable;
@@ -515,13 +513,12 @@ function expectsRolesTable()
  *
  * @param  string $tableName
  *         which table do we want to test?
- * @return \Prose\ExpectsRuntimeTable
- * @throws \Prose\E5xx_ExpectFailed
+ * @return \StoryplayerInternals\SPv2\Modules\RuntimeTable\ExpectsRuntimeTable
  */
 function expectsRuntimeTable($tableName)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new ExpectsRuntimeTable(StoryTeller::instance(), [$tableName]);
+    return RuntimeTable::expectsRuntimeTable($tableName);
 }
 
 /**
@@ -1032,12 +1029,12 @@ function fromRolesTable()
  *
  * @param  string $tableName
  *         which runtime table do you want?
- * @return \Prose\FromRuntimeTable
+ * @return \StoryplayerInternals\SPv2\Modules\RuntimeTable\FromRuntimeTable
  */
 function fromRuntimeTable($tableName)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromRuntimeTable(StoryTeller::instance(), [$tableName]);
+    return RuntimeTable::fromRuntimeTable($tableName);
 }
 
 /**
@@ -1687,12 +1684,12 @@ function usingRolesTable()
  * This module is for internal use inside Storyplayer. You shouldn't need to
  * use it from your own stories.
  *
- * @return \Prose\UsingRuntimeTable
+ * @return \StoryplayerInternals\SPv2\Modules\RuntimeTable\UsingRuntimeTable
  */
 function usingRuntimeTable($tableName)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingRuntimeTable(StoryTeller::instance(), [$tableName]);
+    return RuntimeTable::usingRuntimeTable($tableName);
 }
 
 /**

@@ -33,18 +33,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
  * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace StoryplayerInternals\SPv2\Modules\RuntimeTable;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * UsingRuntimeTable
@@ -69,7 +68,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         // get our table name from the constructor
         $tableName = $this->args[0];
 
-        $log = usingLog()->startAction("add entry '{$key}' to {$tableName} table");
+        $log = Log::usingLog()->startAction("add entry '{$key}' to {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -115,7 +114,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction("remove entry '{$key}' from {$tableName} table");
+        $log = Log::usingLog()->startAction("remove entry '{$key}' from {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -139,7 +138,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
 
         // remove the table if it's empty
         if (!count(get_object_vars($tables->$tableName))) {
-            usingLog()->writeToLog("table '{$tableName}' is empty, removing from runtime config");
+            Log::usingLog()->writeToLog("table '{$tableName}' is empty, removing from runtime config");
             unset($tables->$tableName);
         }
 
@@ -168,7 +167,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction("update entry '{$key}' in {$tableName} table");
+        $log = Log::usingLog()->startAction("update entry '{$key}' in {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -205,7 +204,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         // get our table name from the constructor
         $tableName = $this->args[0];
 
-        $log = usingLog()->startAction("add entry '{$group}->{$key}' to {$tableName} table");
+        $log = Log::usingLog()->startAction("add entry '{$group}->{$key}' to {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -258,7 +257,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction("remove entry '{$group}->{$key}' from {$tableName} table");
+        $log = Log::usingLog()->startAction("remove entry '{$group}->{$key}' from {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -311,7 +310,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction("remove entry '{$key}' from all groups in {$tableName} table");
+        $log = Log::usingLog()->startAction("remove entry '{$key}' from all groups in {$tableName} table");
 
         // get the table config
         $tables = $this->getAllTables();
@@ -361,7 +360,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = usingLog()->startAction("remove the {$tableName} table from the runtime config");
+        $log = Log::usingLog()->startAction("remove the {$tableName} table from the runtime config");
 
         // get the table config
         $tables = $this->getAllTables();

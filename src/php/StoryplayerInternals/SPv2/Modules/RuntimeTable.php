@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2013-present Mediasift Ltd
+ * Copyright (c) 2011-present Mediasift Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,65 +34,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Michael Heap <michael.heap@datasift.com>
- * @copyright 2013-present Mediasift Ltd www.datasift.com
+ * @package   StoryplayerInternals/Modules/RuntimeTable
+ * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
+ * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace StoryplayerInternals\SPv2\Modules;
 
-use DataSift\Stone\ObjectLib\BaseObject;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable\ExpectsRuntimeTable;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable\FromRuntimeTable;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable\UsingRuntimeTable;
 
 /**
- * BaseRuntimeTable
- *
- * @uses Prose
- * @author Michael Heap <michael.heap@datasift.com>
+ * Module for working with Storyplayer's internal state, known as the
+ * runtime tables.
  */
-class BaseRuntimeTable extends Prose
+class RuntimeTable
 {
-
     /**
-     * __construct
+     * returns the ExpectsRuntimeTable bank of operations
      *
-     * @param StoryTeller $st The StoryTeller object
-     * @param array $args Any arguments to be used in this Prose module
-     *
-     * @return parent::__construct
+     * @param string $tableName
+     *        which runtime table do we want to operate on?
+     * @return ExpectsRuntimeTable
      */
-    public function __construct(StoryTeller $st, $args = array())
+    public static function expectsRuntimeTable($tableName)
     {
-        if (!isset($args[0])){
-            throw new E4xx_MissingArgument(__METHOD__, "You must provide a table name to ".get_class($this)."::__construct");
-        }
-
-        // normalise
-        //
-        // in Storyplayer v1.x, we used ucfirst(), but on reflection,
-        // I strongly prefer lcfirst() now that we've introduced support
-        // for retrieving data via the template engine
-        $args[0] = lcfirst($args[0]);
-
-        return parent::__construct($st, $args);
+        return new ExpectsRuntimeTable(StoryTeller::instance(), [$tableName]);
     }
 
     /**
-     * getAllTables
+     * returns the FromRuntimeTable bank of operations
      *
-     * Return our tables config that we can use for
-     * in place editing
-     *
-     * @return BaseObject
+     * @param string $tableName
+     *        which runtime table do we want to operate on?
+     * @return FromRuntimeTable
      */
-    public function getAllTables()
+    public static function fromRuntimeTable($tableName)
     {
-        // get the runtime config
-        $runtimeConfig = $this->st->getRuntimeConfig();
-        $runtimeConfigManager = $this->st->getRuntimeConfigManager();
+        return new FromRuntimeTable(StoryTeller::instance(), [$tableName]);
+    }
 
-        return $runtimeConfigManager->getAllTables($runtimeConfig);
+    /**
+     * returns the UsingRuntimeTable bank of operations
+     *
+     * @param string $tableName
+     *        which runtime table do we want to operate on?
+     * @return UsingRuntimeTable
+     */
+    public static function usingRuntimeTable($tableName)
+    {
+        return new UsingRuntimeTable(StoryTeller::instance(), [$tableName]);
     }
 }
