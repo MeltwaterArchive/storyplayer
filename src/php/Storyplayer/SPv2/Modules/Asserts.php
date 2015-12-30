@@ -61,6 +61,7 @@ use Storyplayer\SPv2\Modules\Asserts\AssertsArray;
 use Storyplayer\SPv2\Modules\Asserts\AssertsBoolean;
 use Storyplayer\SPv2\Modules\Asserts\AssertsDouble;
 use Storyplayer\SPv2\Modules\Asserts\AssertsInteger;
+use Storyplayer\SPv2\Modules\Asserts\AssertsNull;
 use Storyplayer\SPv2\Modules\Asserts\AssertsObject;
 use Storyplayer\SPv2\Modules\Asserts\AssertsString;
 
@@ -112,6 +113,18 @@ class Asserts
     public static function assertsInteger($actual)
     {
         return new AssertsInteger(StoryTeller::instance(), [$actual]);
+    }
+
+    /**
+     * returns the AssertsNull module
+     *
+     * @param  null $actual
+     *         the data to be tested
+     * @return AssertsNull
+     */
+    public static function assertsNull($actual)
+    {
+        return new AssertsNull(StoryTeller::instance(), [$actual]);
     }
 
     /**

@@ -54,6 +54,7 @@ The following are deprecated, and will be removed in SPv3:
   * Screen - run processes inside screen(1) locally or remotely
 * `storyplayer create-story` updated to generate a template based on the long-term approach to modules
 * `runtime.json` files are now formatted for ease of reading
+* New `Asserts::assertsNull()` actions available
 * New `StoryplayerInternals` namespace for us to refactor code into
 * New `Deprecated` internal module
 * New `Events` internal module
