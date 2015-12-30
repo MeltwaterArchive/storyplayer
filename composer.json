@@ -44,7 +44,8 @@
 	"autoload": {
 		"psr-0": { "" : "src/php/" },
 		"files": [
-			"src/php/Prose/functions.php"
+			"src/php/Prose/functions.php",
+			"src/php/DataSift/Storyplayer/functions.php"
 		]
 	},
 	"bin": ["src/bin/storyplayer"]

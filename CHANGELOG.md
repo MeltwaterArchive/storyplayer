@@ -70,6 +70,7 @@ The following are deprecated, and will be removed in SPv3:
   * We used to only have them for completely uncaught exceptions.
 * `usingRolesTable()->addHostToRole()` no longer triggers an exception when a role already exists in the runtime table.
 * `TestEnvironmentRuntimeConfig::removeEmptyTables()` now correctly called.
+* We now use Composer for autoloading all of Storyplayer's own global functions.
 
 ### Refactor
 
