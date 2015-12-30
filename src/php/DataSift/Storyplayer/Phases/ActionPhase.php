@@ -82,14 +82,16 @@ class ActionPhase extends StoryPhase
             return $phaseResult;
         }
 
-        // run ONE of the actions, picked at random
         try {
             // do any setup
             $this->doPerPhaseSetup();
 
-            // make the call
-            $action = $story->getOneAction();
-            $action($st);
+            $callbacks = $story->getAction();
+            foreach ($callbacks as $action) {
+                if (is_callable($action)) {
+                    call_user_func($action,$st);
+                }
+            }
 
             // if we get here, all is well
             if ($storyResult->getStoryShouldFail()) {
@@ -103,7 +105,7 @@ class ActionPhase extends StoryPhase
                 $phaseResult->setContinuePlaying();
             }
         }
-
+        
         // if the set of actions fails, it will throw this exception
         catch (ActionFailedException $e) {
             if ($storyResult->getStoryShouldFail()) {

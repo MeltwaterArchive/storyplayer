@@ -1180,6 +1180,16 @@ class Story
     }
 
     /**
+     * return all of our actions
+     *
+     * @return array
+     */
+    public function getAction()
+    {
+        return $this->actionsCallbacks;
+    }
+
+    /**
      * does this story have any actions?
      *
      * @return boolean true if this story has any actions

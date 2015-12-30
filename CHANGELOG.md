@@ -30,6 +30,12 @@ In this release, I've made some important improvements to Storyplayer's `runtime
 
 After upgrading, all of your original stories will continue to work without modification.
 
+### Backwards-Compatibility Breaks
+
+The following behaviour has been changed in SPv2.4:
+
+* [stories with multiple ACTION phases](http://datasift.github.io/storyplayer/v2/using/backwards-breaks/stories-with-multiple-action-phases.html)
+
 ### Deprecated
 
 The following are deprecated, and will be removed in SPv3:
