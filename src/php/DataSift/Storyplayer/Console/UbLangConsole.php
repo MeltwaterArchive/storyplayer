@@ -201,7 +201,7 @@ class UbLangConsole extends Console
             return;
         }
 
-        if ($phaseResult->getPhaseFailed()) {
+        if ($phaseResult->getPhaseFailed() || $phaseResult->getPhaseHasErrored()) {
             $this->writePhaseGroupFailed($phaseResult->getPhaseResultString());
         }
         else if ($phaseResult->getPhaseIsIncomplete() || $phaseResult->getPhaseIsBlacklisted()) {

@@ -208,6 +208,15 @@ class Phase_Result
         return false;
     }
 
+    public function getPhaseHasErrored()
+    {
+        if ($this->result == self::ERROR) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @return bool
      */
