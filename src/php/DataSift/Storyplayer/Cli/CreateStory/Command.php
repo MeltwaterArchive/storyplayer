@@ -148,6 +148,7 @@ EOS;
 
         $story .= <<<EOS
 
+
 /**
  * the scenario uses Ubquitous Language to describe what you are testing
  *
