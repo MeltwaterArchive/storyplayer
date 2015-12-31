@@ -148,9 +148,25 @@ EOS;
 
         $story .= <<<EOS
 
+/**
+ * the scenario uses Ubquitous Language to describe what you are testing
+ *
+ * unlike other test tools, Storyplayer does not parse your scenario in any way
+ * it is only used for display purposes, to make your test self-documenting
+ *
+ * INSTRUCTIONS:
+ *
+ * pick one of the formats below that best fits your test,
+ * edit to suit,
+ * and delete the other scenario format(s)
+ */
+
+// this format suits a functional test
 \$story->setScenario([
     // what are the pre-conditions?
-    "given ...",
+    "given:",
+    "- first pre-condition",
+    "- second pre-condition",
     // how will the actions be performed?
     // e.g. using a browser, or an API,
     "using ...",
@@ -158,10 +174,35 @@ EOS;
     "as ...",
     // what functionality is being tested?
     "I can ...",
+    "even if:",
+    "- pre-condition",
     // has anything changed as a result of the actions?
     // if so, list each expected change here
     "afterwards:",
-    "XXX will exist in the database"
+    "- XXX will exist in the database"
+]);
+
+// this format suits a test that focuses on checking for a specific consequence
+// of an action (e.g. testing robustness or correctness)
+\$story->setScenario([
+    // what are the pre-conditions?
+    "given:",
+    "- first pre-condition",
+    "- second pre-condition",
+    // how will the actions be performed?
+    // e.g. using a browser, or an API,
+    "using ...",
+    // who or what is performing the actions?
+    "as ...",
+    // what output do I expect?
+    "if I ...",
+    "- I get XXX", // e.g. HTTP 404
+    "even if:",
+    "- first pre-condition",
+    // has anything changed as a result of the actions?
+    // if so, list each expected change here
+    "afterwards:",
+    "- XXX will exist in the database"
 ]);
 
 // ========================================================================
