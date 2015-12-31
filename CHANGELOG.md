@@ -16,6 +16,7 @@ Urgent bugfixes will go into their own `hotfix` branch, and be immediate release
 
 The focus of this release has been:
 
+* Introduce a more self-documenting approach to stories
 * Introduce a long-term approach for using Storyplayer modules that's more natural for PHP developers
 * More tests for Storyplayer modules (both the 'legacy' approach used before now, and the long-term approach)
 * Introduce an internal event-driven approach (we will gradually refactor SPv2 around this)
@@ -60,6 +61,10 @@ The following are deprecated, and will be removed in SPv3:
 * New `Events` internal module
 * New `--log-internal-events` CLI switch
 * New `--warn-deprecated` CLI switch
+* Add support for a Ubiquitous Language-driven approach
+  * New `--ublang` CLI switch to activate the new UbLang console
+  * New `$story->setScenario()` metadata helper
+  * Reduce some of the chatter in the logs
 
 ### Fixes
 

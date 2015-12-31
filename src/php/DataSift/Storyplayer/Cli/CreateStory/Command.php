@@ -73,7 +73,7 @@ class CreateStory_Command extends CliCommand
             .PHP_EOL
         );
         $this->setArgsList(array(
-            "[<story.php|list.json>]" => "the story.php file to create"
+            "namedStory.php" => "the story.php file to create"
         ));
         $this->setSwitches(array(
             new CreateStory_BasedOnSwitch,
@@ -148,6 +148,21 @@ EOS;
 
         $story .= <<<EOS
 
+\$story->setScenario([
+    // what are the pre-conditions?
+    "given ...",
+    // how will the actions be performed?
+    // e.g. using a browser, or an API,
+    "using ...",
+    // who or what is performing the actions?
+    "as ...",
+    // what functionality is being tested?
+    "I can ...",
+    // has anything changed as a result of the actions?
+    // if so, list each expected change here
+    "afterwards:",
+    "XXX will exist in the database"
+]);
 
 // ========================================================================
 //

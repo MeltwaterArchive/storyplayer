@@ -292,9 +292,12 @@ class Output extends OutputPlugin
      *         what are we doing? (e.g. 'creating', 'running')
      * @param  string $name
      *         the name of the phase group
+     * @param  array|null $details
+     *         optional explanation of what this PhaseGroup is trying
+     *         to achieve
      * @return void
      */
-    public function startPhaseGroup($activity, $name)
+    public function startPhaseGroup($activity, $name, $details = null)
     {
         // ensure our inputs!
         Contract::RequiresValue($activity, is_string($activity));
@@ -303,7 +306,7 @@ class Output extends OutputPlugin
         // call our plugins
         foreach ($this->plugins as $plugin)
         {
-            $plugin->startPhaseGroup($activity, $name);
+            $plugin->startPhaseGroup($activity, $name, $details);
         }
     }
 

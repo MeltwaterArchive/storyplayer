@@ -262,7 +262,7 @@ abstract class OutputPlugin
     /**
      * @return void
      */
-    abstract public function startPhaseGroup($activity, $name);
+    abstract public function startPhaseGroup($activity, $name, $details = null);
 
     /**
      * @return void

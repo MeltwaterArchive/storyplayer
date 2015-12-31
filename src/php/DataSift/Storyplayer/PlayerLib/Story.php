@@ -264,6 +264,12 @@ class Story
      */
     protected $storyResult = null;
 
+    /**
+     * what is this story trying to achieve?
+     * @var null|array
+     */
+    protected $storyScenario = null;
+
     // ====================================================================
     //
     // Metadata about the story itself
@@ -511,6 +517,30 @@ class Story
         }
 
         return $filename;
+    }
+
+    /**
+     * what scenario is this story implementing?
+     *
+     * @return array|null
+     */
+    public function getScenario()
+    {
+        if ($this->storyScenario === null) {
+            return [ "this story has not supplied a scenario; call \$story->setScenario() in your test."];
+        }
+
+        return $this->storyScenario;
+    }
+
+    /**
+     * tell us what scenario this story is implementing
+     *
+     * @param array $scenario
+     */
+    public function setScenario($scenario)
+    {
+        $this->storyScenario = $scenario;
     }
 
     /**
@@ -1243,11 +1273,11 @@ class Story
     public function setDefaultCallbacks()
     {
         // 1: test setup
-        if (!$this->hasTestSetup()) {
-            $this->addTestSetup(function(StoryTeller $st) {
-                $st->usingReporting()->reportNotRequired();
-            });
-        }
+        // if (!$this->hasTestSetup()) {
+        //     $this->addTestSetup(function(StoryTeller $st) {
+        //         $st->usingReporting()->reportNotRequired();
+        //     });
+        // }
 
         // 2: pre-test prediction
         if (!$this->hasPreTestPrediction()) {
@@ -1257,11 +1287,11 @@ class Story
         }
 
         // 3: pre-test inspection
-        if (!$this->hasPreTestInspection()) {
-            $this->addPreTestInspection(function(StoryTeller $st) {
-                $st->usingReporting()->reportNotRequired();
-            });
-        }
+        // if (!$this->hasPreTestInspection()) {
+        //     $this->addPreTestInspection(function(StoryTeller $st) {
+        //         $st->usingReporting()->reportNotRequired();
+        //     });
+        // }
 
         // 4: test action
         //
@@ -1277,11 +1307,11 @@ class Story
         // this
 
         // 6: test tear down
-        if (!$this->hasTestTeardown()) {
-            $this->addTestTeardown(function(StoryTeller $st) {
-                $st->usingReporting()->reportNotRequired();
-            });
-        }
+        // if (!$this->hasTestTeardown()) {
+        //     $this->addTestTeardown(function(StoryTeller $st) {
+        //         $st->usingReporting()->reportNotRequired();
+        //     });
+        // }
 
         // all done
     }

@@ -51,7 +51,7 @@ use DataSift\Storyplayer\PlayerLib\Story_Result;
 use DataSift\Storyplayer\PlayerLib\Story;
 
 /**
- * the console plugin we use unless the user specifies something else
+ * the console plugin we use to show the user how each story is going
  *
  * @category  Libraries
  * @package   Storyplayer/Console
@@ -60,9 +60,10 @@ use DataSift\Storyplayer\PlayerLib\Story;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class DefaultConsole extends Console
+class UbLangConsole extends Console
 {
     protected $currentPhase;
+    protected $currentPhaseStep;
     protected $phaseNumber = 0;
     protected $phaseMessages = array();
 
@@ -112,13 +113,20 @@ class DefaultConsole extends Console
     {
         $this->write($activity . ' ', $this->writer->activityStyle);
         $this->write($name, $this->writer->nameStyle);
-        $this->write(': ', $this->writer->punctuationStyle);
+        $this->write(' ...' . PHP_EOL, $this->writer->punctuationStyle);
+
+        if (is_array($details)) {
+            $this->write('  Scenario: ' . PHP_EOL);
+            foreach ($details as $line) {
+                $this->write('    ' . $line . PHP_EOL);
+            }
+        }
     }
 
     public function endPhaseGroup($result)
     {
         // tell the user what happened
-        $this->write(' ');
+        $this->write('  Result: ');
         if ($result->getPhaseGroupSkipped()) {
             $this->writePhaseGroupSkipped($result->getResultString());
         }
@@ -158,14 +166,18 @@ class DefaultConsole extends Console
         $phaseType  = $phase->getPhaseType();
         $phaseSeqNo = $phase->getPhaseSequenceNo();
 
+        $this->currentPhaseType = $phaseType;
+
         // we're only interested in telling the user about the
         // phases of a story
         if ($phaseType !== Phase::STORY_PHASE) {
             return;
         }
 
-        // tell the user
-        $this->write($phaseSeqNo, $this->writer->miniPhaseNameStyle);
+        // remember the phase for later use
+        $this->currentPhase = $phaseSeqNo;
+        $this->currentPhaseName = $phase->getPhaseName();
+        $this->currentPhaseStep = 0;
     }
 
     /**
@@ -184,8 +196,18 @@ class DefaultConsole extends Console
             return;
         }
 
-        // tell the user
-        $this->write(' ');
+        // if there was no output for the phase, skip the report
+        if ($this->currentPhaseStep === 0) {
+            return;
+        }
+
+        if ($phaseResult->getPhaseFailed()) {
+            $this->writePhaseGroupFailed($phaseResult->getPhaseResultString());
+        }
+        else if ($phaseResult->getPhaseIsIncomplete() || $phaseResult->getPhaseIsBlacklisted()) {
+            $this->writePhaseGroupSkipped( $phaseResult->getPhaseResultString());
+        }
+        $this->write(PHP_EOL);
     }
 
     /**
@@ -196,10 +218,35 @@ class DefaultConsole extends Console
      */
     public function logPhaseActivity($msg, $codeLine = null)
     {
-        // show the user that *something* happened
-        if (!$this->isSilent()) {
-            $this->write(".", $this->writer->miniActivityStyle);
+        // has output been suppressed?
+        if ($this->isSilent()) {
+            return;
         }
+
+        // we only want Story phases
+        if ($this->currentPhaseType !== Phase::STORY_PHASE) {
+            return;
+        }
+
+        // skip any empty messages (just in case)
+        if (strlen($msg) === 0) {
+            return;
+        }
+
+        // we only want the top-level messages
+        if ($msg{0} == ' ') {
+            return;
+        }
+
+        // special case - not the first message for a phase
+        if ($this->currentPhaseStep !== 0) {
+            $this->write(PHP_EOL);
+        }
+
+        $this->write('  ' . $this->currentPhase . chr(ord('a') + $this->currentPhaseStep) . ' ', $this->writer->miniPhaseNameStyle);
+        $this->write($msg . ' ');
+
+        $this->currentPhaseStep++;
     }
 
     /**
@@ -211,10 +258,7 @@ class DefaultConsole extends Console
      */
     public function logPhaseSubprocessOutput($msg)
     {
-        // show the user that *something* happened
-        if (!$this->isSilent()) {
-            $this->write(".", $this->writer->miniActivityStyle);
-        }
+        // no-op?
     }
 
     /**
@@ -226,8 +270,7 @@ class DefaultConsole extends Console
      */
     public function logPhaseError($phaseName, $msg)
     {
-        // we have to show this now, and save it for final output later
-        $this->write("e", $this->writer->failStyle);
+        // no-op?
     }
 
     /**
@@ -239,8 +282,7 @@ class DefaultConsole extends Console
      */
     public function logPhaseSkipped($phaseName, $msg)
     {
-        // we have to show this now, and save it for final output later
-        $this->write("s", $this->writer->skippedStyle);
+        // no-op?
     }
 
     public function logPhaseCodeLine($codeLine)

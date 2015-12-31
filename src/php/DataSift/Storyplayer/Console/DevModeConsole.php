@@ -103,14 +103,25 @@ class DevModeConsole extends Console
     /**
      * called when we start a new set of phases
      *
+     * @param  string $activity
+     *         what are we doing? (e.g. 'creating', 'running')
      * @param  string $name
+     *         the name of the phase group
+     * @param  array|null $details
+     *         optional explanation of what this PhaseGroup is trying
+     *         to achieve
      * @return void
      */
-    public function startPhaseGroup($activity, $name)
+    public function startPhaseGroup($activity, $name, $details = null)
     {
         $this->write("=============================================================" . PHP_EOL, $this->writer->commentStyle);
         $this->write($activity . ' ', $this->writer->activityStyle);
         $this->write($name . PHP_EOL, $this->writer->nameStyle);
+
+        if (is_array($details)) {
+            $this->write(PHP_EOL . "Details:" . PHP_EOL . '  ');
+            $this->write(implode(PHP_EOL . '  ', $details) . PHP_EOL);
+        }
         //$this->write('-------------------------------------------------------------' . PHP_EOL, $this->writer->commentStyle);
         //$this->write(PHP_EOL);
     }
