@@ -64,6 +64,7 @@ class UbLangConsole extends Console
 {
     protected $currentPhase;
     protected $currentPhaseStep;
+    protected $phaseGroupHasOutput = false;
     protected $phaseNumber = 0;
     protected $phaseMessages = array();
 
@@ -116,11 +117,14 @@ class UbLangConsole extends Console
         $this->write(' ...' . PHP_EOL, $this->writer->punctuationStyle);
 
         if (is_array($details)) {
-            $this->write('  Scenario: ' . PHP_EOL);
+            $this->write('  Scenario: ' . PHP_EOL, $this->writer->stepStyle);
             foreach ($details as $line) {
                 $this->write('    ' . $line . PHP_EOL);
             }
         }
+
+        // reset our tracker of any output
+        $this->phaseGroupHasOutput = false;
     }
 
     public function endPhaseGroup($result)
@@ -238,15 +242,25 @@ class UbLangConsole extends Console
             return;
         }
 
+        // special case - first message for a phase group
+        if (!$this->phaseGroupHasOutput && !$this->getIsVerbose()) {
+            $this->write('  Steps:' . PHP_EOL, $this->writer->stepStyle);
+        }
+
+        // special case - first message for a phase
+        if ($this->currentPhaseStep === 0 && $this->getIsVerbose()) {
+            $this->write('  ' . $this->currentPhaseName . ':' . PHP_EOL, $this->writer->stepStyle);
+        }
         // special case - not the first message for a phase
         if ($this->currentPhaseStep !== 0) {
             $this->write(PHP_EOL);
         }
 
-        $this->write('  ' . $this->currentPhase . chr(ord('a') + $this->currentPhaseStep) . ' ', $this->writer->miniPhaseNameStyle);
+        $this->write('    ' . $this->currentPhase . chr(ord('a') + $this->currentPhaseStep) . '. ', $this->writer->stepStyle);
         $this->write($msg . ' ');
 
         $this->currentPhaseStep++;
+        $this->phaseGroupHasOutput = true;
     }
 
     /**

@@ -126,8 +126,8 @@ class PlayStory_Command extends BaseCommand implements CliSignalHandler
         ));
 
         // add in the features that this command relies on
-        $this->addFeature(new Feature_VerboseSupport);
         $this->addFeature(new Feature_ConsoleSupport);
+        $this->addFeature(new Feature_VerboseSupport);
         $this->addFeature(new Feature_ColorSupport);
         $this->addFeature(new Feature_DeviceSupport);
         $this->addFeature(new Feature_TestEnvironmentConfigSupport);

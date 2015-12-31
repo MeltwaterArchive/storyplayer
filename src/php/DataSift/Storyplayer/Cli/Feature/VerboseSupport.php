@@ -73,9 +73,11 @@ class Feature_VerboseSupport implements Feature
         // have we been asked to increase verbosity?
         if (!isset($engine->options->verbose) || !$engine->options->verbose) {
             $injectables->dataFormatter->setIsVerbose(false);
+            $injectables->output->setIsVerbose(false);
         }
         else {
             $injectables->dataFormatter->setIsVerbose(true);
+            $injectables->output->setIsVerbose(true);
         }
     }
 

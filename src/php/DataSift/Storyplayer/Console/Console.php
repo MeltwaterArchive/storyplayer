@@ -74,6 +74,12 @@ abstract class Console extends OutputPlugin
      */
     private $silentActivity = false;
 
+    /**
+     * are we in verbose mode?
+     * @var boolean
+     */
+    private $isVerbose = false;
+
     public function resetSilentMode()
     {
         $this->silentActivity = false;
@@ -87,6 +93,16 @@ abstract class Console extends OutputPlugin
     public function isSilent()
     {
         return $this->silentActivity;
+    }
+
+    public function getIsVerbose()
+    {
+        return $this->isVerbose;
+    }
+
+    public function setIsVerbose($isVerbose)
+    {
+        $this->isVerbose = $isVerbose;
     }
 
     /**

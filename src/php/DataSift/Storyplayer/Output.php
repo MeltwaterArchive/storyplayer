@@ -203,6 +203,23 @@ class Output extends OutputPlugin
     }
 
     /**
+     * switches 'verbose' mode on or off
+     *
+     * in 'non-verbose' mode, each output plugin is free to supress some of
+     * the output, for the sake of asthetics
+     *
+     * @param boolean $isVerbose
+     *        do we want verbose mode or not?
+     */
+    public function setIsVerbose($isVerbose)
+    {
+        foreach ($this->plugins as $plugin)
+        {
+            $plugin->setIsVerbose($isVerbose);
+        }
+    }
+
+    /**
      * disables any colour output
      *
      * @return void

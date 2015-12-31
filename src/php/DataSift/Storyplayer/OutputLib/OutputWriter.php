@@ -217,6 +217,7 @@ class OutputWriter
         $this->miniActivityStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
         $this->miniPhaseNameStyle = [ConsoleColor::BOLD, ConsoleColor::GRAY_FG];
         $this->timeStyle = [ConsoleColor::YELLOW_FG];
+        $this->stepStyle = [ConsoleColor::MAGENTA_FG];
 
         $this->successSummaryStyle = [ConsoleColor::GREEN_BG, ConsoleColor::BLACK_FG];
         $this->failSummaryStyle = [ConsoleColor::RED_BG, ConsoleColor::WHITE_FG];
