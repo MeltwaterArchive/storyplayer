@@ -135,6 +135,12 @@ class Phase_Result
             return $this->message;
         }
 
+        // we only want stack traces if an error has occurred
+        if ($this->result !== self::ERROR) {
+            return $this->message;
+        }
+
+        // if we get here, then we want the stack trace too
         return $this->message . PHP_EOL . $this->exception->getTraceAsString();
     }
 
