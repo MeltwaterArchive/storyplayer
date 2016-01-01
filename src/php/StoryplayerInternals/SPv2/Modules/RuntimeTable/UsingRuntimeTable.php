@@ -142,8 +142,10 @@ class UsingRuntimeTable extends BaseRuntimeTable
             unset($tables->$tableName);
         }
 
-        // save the changes
-        //$this->st->saveRuntimeConfig();
+        // save the updated runtime config
+        $log->addStep("saving runtime config to disk", function() {
+            $this->st->saveRuntimeConfig();
+        });
 
         // all done
         $log->endAction();
