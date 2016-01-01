@@ -75,7 +75,7 @@ class ExpectsProcessesTable extends Prose
      */
     public function hasEntryForProcess($pid)
     {
-        expectsRuntimeTable($this->tableName)->hasEntry($pid);
+        expectsRuntimeTable($this->tableName)->hasItem($pid);
     }
 
     /**
@@ -87,6 +87,6 @@ class ExpectsProcessesTable extends Prose
      */
     public function hasNoEntryForProcess($pid)
     {
-        expectsRuntimeTable($this->tableName)->hasNoEntry($pid);
+        expectsRuntimeTable($this->tableName)->doesNotHaveItem($pid);
     }
 }

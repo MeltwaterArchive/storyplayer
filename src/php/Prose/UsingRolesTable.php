@@ -85,7 +85,7 @@ class UsingRolesTable extends Prose
 
         // do we have this role already?
         $hasRole = true;
-        $role = fromRuntimeTable($this->entryKey)->getDetails($roleName);
+        $role = fromRuntimeTable($this->entryKey)->getItem($roleName);
         if ($role === null) {
             $role = [];
             $hasRole = false;
@@ -129,7 +129,7 @@ class UsingRolesTable extends Prose
         $log = usingLog()->startAction("remove host '{$hostId}' from '{$roleName}'");
 
         // let's see what we have
-        $role = fromRuntimeTable($this->entryKey)->getDetails($roleName);
+        $role = fromRuntimeTable($this->entryKey)->getItem($roleName);
         if (!is_array($role) || empty($role)) {
             // no such role
             $log->endAction();

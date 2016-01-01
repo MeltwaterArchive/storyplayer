@@ -100,7 +100,7 @@ class FromHostsTable extends Prose
         $log = usingLog()->startAction("get details for host '{$hostId}' from the current test environment");
 
         // get the details
-        $hostDetails = fromRuntimeTable($this->entryKey)->getDetails($hostId);
+        $hostDetails = fromRuntimeTable($this->entryKey)->getItem($hostId);
 
         // all done
         $log->endAction();

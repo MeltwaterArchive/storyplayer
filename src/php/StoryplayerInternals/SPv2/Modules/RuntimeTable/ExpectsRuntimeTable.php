@@ -54,37 +54,38 @@ use Storyplayer\SPv2\Modules\Log;
 class ExpectsRuntimeTable extends BaseRuntimeTable
 {
     /**
-     * hasEntry
+     * hasItem
      *
-     * @param string $key key The key to look for inside the tableName table
+     * @param string $key
+     *        The key to look for inside the tableName table
      *
      * @return void
      */
-    public function hasEntry($key)
+    public function hasItem($key)
     {
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = Log::usingLog()->startAction("make sure host '{$key}' has an entry in the '{$tableName}' table");
+        $log = Log::usingLog()->startAction("make sure item '{$key}' exists in the '{$tableName}' table");
 
         // get the table config
         $tables = $this->getAllTables();
 
-        // make sure we have a hosts table
+        // make sure we have our runtime table
         if (!isset($tables->$tableName)) {
             $msg = "table is empty / does not exist";
             $log->endAction($msg);
 
-            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table existed", "{$parent} table does not exist");
+            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table existed", "{$tableName} table does not exist");
         }
 
-        // make sure we don't have a duplicate entry
+        // make sure we have our details
         if (!isset($tables->$tableName->$key)) {
-            $msg = "table does not contain an entry for '{$key}'";
+            $msg = "table does not contain item '{$key}'";
             $log->endAction($msg);
 
-            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has an entry for '{$key}'", "{$parent} table has no entry for '{$key}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has item '{$key}'", "{$tableName} table has no item '{$key}'");
         }
 
         // all done
@@ -92,36 +93,89 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
     }
 
     /**
-     * hasNoEntry
+     * doesNotHaveItem
      *
-     * @param string $key key The key to look for inside the tableName table
+     * @param string $key
+     *        The key to look for inside the tableName table
      *
      * @return void
      */
-    public function hasNoEntry($key)
+    public function doesNotHaveItem($key)
     {
         // get our table name from the constructor
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = Log::usingLog()->startAction("make sure there is no existing entry for '{$key}' in '{$tableName}'");
+        $log = Log::usingLog()->startAction("make sure there is no existing item '{$key}' in '{$tableName}'");
 
         // get the table config
         $tables = $this->getAllTables();
 
-        // make sure we have a hosts table
+        // make sure we have our table
         if (!isset($tables->$tableName)) {
             $msg = "table is empty / does not exist";
             $log->endAction($msg);
             return;
         }
 
-        // make sure we don't have a duplicate entry
+        // make sure we don't have the details
         if (isset($tables->$tableName->$key)) {
-            $msg = "table already contains an entry for '{$key}'";
+            $msg = "table already contains no item '{$key}'";
             $log->endAction($msg);
 
-            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has no entry for '{$key}'", "{$parent} table has an entry for '{$key}'");
+            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has no item '{$key}'", "{$tableName} table has item '{$key}'");
+        }
+
+        // all done
+        $log->endAction();
+    }
+
+    /**
+     * exists
+     *
+     * @return void
+     */
+    public function exists()
+    {
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = Log::usingLog()->startAction("make sure runtime table '{$tableName}' exists");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure we have the named table
+        if (!isset($tables->$tableName)) {
+            $log->endAction("table does not exist");
+            throw Exceptions::newExpectFailedException(__METHOD__, "runtime table '{$tableName}' exists", "runtime table '{$tableName}' does not exist");
+        }
+
+        // all done
+        $log->endAction();
+    }
+
+    /**
+     * doesNotExist
+     *
+     * @return void
+     */
+    public function doesNotExist()
+    {
+        // get our table name from the constructor
+        $tableName = $this->args[0];
+
+        // what are we doing?
+        $log = Log::usingLog()->startAction("make sure runtime table '{$tableName}' does not exist");
+
+        // get the table config
+        $tables = $this->getAllTables();
+
+        // make sure we do not have the named table
+        if (isset($tables->$tableName)) {
+            $log->endAction("table exists");
+            throw Exceptions::newExpectFailedException(__METHOD__, "runtime table '{$tableName}' does not exist", "runtime table '{$tableName}' exists");
         }
 
         // all done

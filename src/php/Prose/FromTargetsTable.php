@@ -73,7 +73,7 @@ class FromTargetsTable extends Prose
         $tables = fromRuntimeTable($this->entryKey)->getAllTables();
 
         // do we have it?
-        $signature = fromRuntimeTable($this->entryKey)->getDetails(self::SIGNATURE_KEY);
+        $signature = fromRuntimeTable($this->entryKey)->getItem(self::SIGNATURE_KEY);
         if ($signature !== null) {
             $log->endAction("yes");
             return true;
@@ -90,7 +90,7 @@ class FromTargetsTable extends Prose
         $log = usingLog()->startAction("get the test environment's config signature from the targets table");
 
         // do we have a signature?
-        $signature = fromRuntimeTable($this->entryKey)->getDetails(self::SIGNATURE_KEY);
+        $signature = fromRuntimeTable($this->entryKey)->getItem(self::SIGNATURE_KEY);
 
         if ($signature === null) {
             $log->endAction('no signature found');

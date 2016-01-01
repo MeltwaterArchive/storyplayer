@@ -77,7 +77,7 @@ class ExpectsHostsTable extends Prose
      */
     public function hasEntryForHost($hostId)
     {
-        expectsRuntimeTable($this->entryKey)->hasEntry($hostId);
+        expectsRuntimeTable($this->entryKey)->hasItem($hostId);
     }
 
     /**
@@ -90,6 +90,6 @@ class ExpectsHostsTable extends Prose
      */
     public function hasNoEntryForHost($hostId)
     {
-        expectsRuntimeTable($this->entryKey)->hasNoEntry($hostId);
+        expectsRuntimeTable($this->entryKey)->doesNotHaveItem($hostId);
     }
 }

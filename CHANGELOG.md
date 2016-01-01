@@ -33,9 +33,10 @@ After upgrading, all of your original stories will continue to work without modi
 
 ### Backwards-Compatibility Breaks
 
-The following behaviour has been changed in SPv2.4:
+The following has been changed in SPv2.4:
 
-* [stories with multiple ACTION phases](http://datasift.github.io/storyplayer/v2/using/backwards-breaks/stories-with-multiple-action-phases.html)
+* [stories with multiple ACTION phases](http://datasift.github.io/storyplayer/v2/using/backwards-breaks/v2.4/stories-with-multiple-action-phases.html)
+* [standardised the RuntimeTable API](http://datasift.github.io/storyplayer/v2/using/backwards-breaks/v2.4/RuntimeTable-API.html)
 
 ### Deprecated
 
@@ -59,6 +60,8 @@ The following are deprecated, and will be removed in SPv3:
 * New `StoryplayerInternals` namespace for us to refactor code into
 * New `Deprecated` internal module
 * New `Events` internal module
+* New `RuntimeTable::expectsRuntimeTable()->exists()`
+* New `RuntimeTable::expectsRuntimeTable()->doesNotExist()`
 * New `--log-internal-events` CLI switch
 * New `--warn-deprecated` CLI switch
 * Add support for a Ubiquitous Language-driven approach

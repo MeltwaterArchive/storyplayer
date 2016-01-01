@@ -105,15 +105,17 @@ class FromRuntimeTable extends BaseRuntimeTable
     }
 
     /**
-     * getDetails
+     * getItem
      *
-     * Get details for a specific key
+     * Get the value of a specific key
      *
-     * @param string $key key The key to look for inside the tableName table
+     * @param string $key
+     *        The key to look for inside the tableName table
      *
-     * @return object The details stored under $key
+     * @return mixed
+     *         The value of the key
      */
-    public function getDetails($key)
+    public function getItem($key)
     {
         // get our table name from the constructor
         $tableName = $this->args[0];
@@ -145,14 +147,15 @@ class FromRuntimeTable extends BaseRuntimeTable
     }
 
     /**
-     * Get details for a specific key from a group
+     * Get the value of a specific key from a group
      *
      * @param string $key
      *        The key to look for inside the tableName table
      *
-     * @return stdClass The details stored under $key
+     * @return mixed
+     *         The value of the $key
      */
-    public function getDetailsFromGroup($group, $key)
+    public function getItemFromGroup($group, $key)
     {
         // get our table name from the constructor
         $tableName = $this->args[0];
