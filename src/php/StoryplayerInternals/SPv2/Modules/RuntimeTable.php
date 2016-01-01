@@ -47,6 +47,7 @@ namespace StoryplayerInternals\SPv2\Modules;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable\ExpectsRuntimeTable;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable\FromRuntimeTable;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable\FromRuntimeTables;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable\UsingRuntimeTable;
 
 /**
@@ -77,6 +78,16 @@ class RuntimeTable
     public static function fromRuntimeTable($tableName)
     {
         return new FromRuntimeTable(StoryTeller::instance(), [$tableName]);
+    }
+
+    /**
+     * returns the FromRuntimeTables bank of operations
+     *
+     * @return FromRuntimeTables
+     */
+    public static function fromRuntimeTables()
+    {
+        return new FromRuntimeTables(StoryTeller::instance());
     }
 
     /**

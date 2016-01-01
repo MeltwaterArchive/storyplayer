@@ -62,6 +62,7 @@ The following are deprecated, and will be removed in SPv3:
 * New `Events` internal module
 * New `RuntimeTable::expectsRuntimeTable()->exists()`
 * New `RuntimeTable::expectsRuntimeTable()->doesNotExist()`
+* New `RuntimeTable::fromRuntimeTables()->getAllTables()`
 * New `--log-internal-events` CLI switch
 * New `--warn-deprecated` CLI switch
 * Add support for a Ubiquitous Language-driven approach
