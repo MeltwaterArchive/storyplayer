@@ -277,7 +277,7 @@ class Action_LogItem
     /**
      * @return void
      */
-    protected function writeToLog($text, $codeLine = null)
+    public function writeToLog($text, $codeLine = null)
     {
         $this->output->logPhaseActivity(str_repeat("  ", $this->nestLevel - 1) . $text, $codeLine);
     }
