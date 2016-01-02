@@ -44,6 +44,7 @@ namespace StoryplayerInternals\SPv2\Modules\RuntimeTable;
 use Prose\Prose;
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Log;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable;
 
 /**
  * ExpectsRuntimeTable
@@ -69,19 +70,9 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
         // what are we doing?
         $log = Log::usingLog()->startAction("make sure item '{$key}' exists in the '{$tableName}' table");
 
-        // get the table config
-        $tables = $this->getAllTables();
-
-        // make sure we have our runtime table
-        if (!isset($tables->$tableName)) {
-            $msg = "table is empty / does not exist";
-            $log->endAction($msg);
-
-            throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table existed", "{$tableName} table does not exist");
-        }
-
-        // make sure we have our details
-        if (!isset($tables->$tableName->$key)) {
+        // does the item exist?
+        $exists = RuntimeTable::fromRuntimeTable($tableName)->hasItem($key);
+        if (!$exists) {
             $msg = "table does not contain item '{$key}'";
             $log->endAction($msg);
 
@@ -108,19 +99,10 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
         // what are we doing?
         $log = Log::usingLog()->startAction("make sure there is no existing item '{$key}' in '{$tableName}'");
 
-        // get the table config
-        $tables = $this->getAllTables();
-
-        // make sure we have our table
-        if (!isset($tables->$tableName)) {
-            $msg = "table is empty / does not exist";
-            $log->endAction($msg);
-            return;
-        }
-
-        // make sure we don't have the details
-        if (isset($tables->$tableName->$key)) {
-            $msg = "table already contains no item '{$key}'";
+        // does the item exist?
+        $exists = RuntimeTable::fromRuntimeTable($tableName)->hasItem($key);
+        if ($exists) {
+            $msg = "table contains item '{$key}'";
             $log->endAction($msg);
 
             throw Exceptions::newExpectFailedException(__METHOD__, "{$tableName} table has no item '{$key}'", "{$tableName} table has item '{$key}'");
@@ -143,11 +125,11 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
         // what are we doing?
         $log = Log::usingLog()->startAction("make sure runtime table '{$tableName}' exists");
 
-        // get the table config
-        $tables = $this->getAllTables();
+        // does the table exist?
+        $exists = RuntimeTable::fromRuntimeTables()->getTableExists($tableName);
 
         // make sure we have the named table
-        if (!isset($tables->$tableName)) {
+        if (!$exists) {
             $log->endAction("table does not exist");
             throw Exceptions::newExpectFailedException(__METHOD__, "runtime table '{$tableName}' exists", "runtime table '{$tableName}' does not exist");
         }
@@ -169,11 +151,11 @@ class ExpectsRuntimeTable extends BaseRuntimeTable
         // what are we doing?
         $log = Log::usingLog()->startAction("make sure runtime table '{$tableName}' does not exist");
 
-        // get the table config
-        $tables = $this->getAllTables();
+        // does the table exist?
+        $exists = RuntimeTable::fromRuntimeTables()->getTableExists($tableName);
 
         // make sure we do not have the named table
-        if (isset($tables->$tableName)) {
+        if ($exists) {
             $log->endAction("table exists");
             throw Exceptions::newExpectFailedException(__METHOD__, "runtime table '{$tableName}' does not exist", "runtime table '{$tableName}' exists");
         }

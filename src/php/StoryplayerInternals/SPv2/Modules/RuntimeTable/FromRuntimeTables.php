@@ -43,6 +43,7 @@
 
 namespace StoryplayerInternals\SPv2\Modules\RuntimeTable;
 
+use DataSift\Stone\ObjectLib\BaseObject;
 use Prose\Prose;
 use Storyplayer\SPv2\Modules\Log;
 
@@ -67,12 +68,103 @@ class FromRuntimeTables extends Prose
         // what are we doing?
         $log = Log::usingLog()->startAction("get all the current runtime tables");
 
+        // get the tables
+        $tables = $this->getAllTablesSilently();
+
+        // all done
+        $log->endAction();
+        return $tables;
+    }
+
+    /**
+     * does the runtime table $tableName exist?
+     *
+     * @param  string $tableName
+     *         the name of the table we want to check
+     * @return boolean
+     *         TRUE if the table exists
+     *         FALSE otherwise
+     */
+    public function getTableExists($tableName)
+    {
+        // what are we doing?
+        $log = Log::usingLog()->startAction("does the runtime table '{$tableName}' exist?");
+
+        // get the active tables
+        $tables = $this->getAllTablesSilently();
+
+        // does our table exist?
+        if (isset($tables->{$tableName})) {
+            $log->endAction("it exists");
+            return true;
+        }
+
+        $log->endAction("it does not exist");
+        return false;
+    }
+
+    /**
+     * return the current runtime tables, without writing to the log
+     *
+     * this exists mostly for other sections of the RuntimeTable module to use
+     * without spamming the hell out of the logs
+     *
+     * @return BaseObject
+     */
+    public function getAllTablesSilently()
+    {
         // get the runtime config
         $runtimeConfig = $this->st->getRuntimeConfig();
         $runtimeConfigManager = $this->st->getRuntimeConfigManager();
 
+        // get the active tables
+        $tables = $runtimeConfigManager->getAllTables($runtimeConfig);
+
         // all done
+        return $tables;
+    }
+
+    /**
+     * get a table from the runtime tables list
+     *
+     * @param  string $tableName
+     *         the name of the table that you want
+     * @return object|null
+     *         returns an object if the table exists
+     *         returns NULL otherwise
+     */
+    public function getTable($tableName)
+    {
+        // what are we doing?
+        $log = Log::usingLog()->startAction("get runtime table '{$tableName}'");
+
+        // do we have one?
+        $table = $this->getTableSilently($tableName);
+
+        // all done
+        //
+        // NOTE: we do not log the contents of the table here, to avoid spamming
+        // the logs
+        //
+        // when we have more fine-grained logging, we can revisit this
         $log->endAction();
-        return $runtimeConfigManager->getAllTables($runtimeConfig);
+        return $table;
+    }
+
+    /**
+     * return a named table, without writing to the log
+     *
+     * @param  string $tableName
+     *         the name of the table that we want
+     * @return BaseObject|null
+     */
+    public function getTableSilently($tableName)
+    {
+        $tables = $this->getAllTablesSilently();
+        if (isset($tables->$tableName)) {
+            return $tables->$tableName;
+        }
+
+        return null;
     }
 }

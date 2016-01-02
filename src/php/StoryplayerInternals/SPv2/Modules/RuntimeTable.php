@@ -49,6 +49,7 @@ use StoryplayerInternals\SPv2\Modules\RuntimeTable\ExpectsRuntimeTable;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable\FromRuntimeTable;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable\FromRuntimeTables;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable\UsingRuntimeTable;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable\UsingRuntimeTables;
 
 /**
  * Module for working with Storyplayer's internal state, known as the
@@ -100,5 +101,15 @@ class RuntimeTable
     public static function usingRuntimeTable($tableName)
     {
         return new UsingRuntimeTable(StoryTeller::instance(), [$tableName]);
+    }
+
+    /**
+     * returns the UsingRuntimeTables bank of operations
+     *
+     * @return UsingRuntimeTables
+     */
+    public static function usingRuntimeTables()
+    {
+        return new UsingRuntimeTables(StoryTeller::instance());
     }
 }

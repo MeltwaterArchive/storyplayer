@@ -77,21 +77,4 @@ class BaseRuntimeTable extends Prose
 
         return parent::__construct($st, $args);
     }
-
-    /**
-     * getAllTables
-     *
-     * Return our tables config that we can use for
-     * in place editing
-     *
-     * @return BaseObject
-     */
-    public function getAllTables()
-    {
-        // get the runtime config
-        $runtimeConfig = $this->st->getRuntimeConfig();
-        $runtimeConfigManager = $this->st->getRuntimeConfigManager();
-
-        return $runtimeConfigManager->getAllTables($runtimeConfig);
-    }
 }

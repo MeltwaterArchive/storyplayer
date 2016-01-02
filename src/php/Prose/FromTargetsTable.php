@@ -70,8 +70,6 @@ class FromTargetsTable extends Prose
         // what are we doing?
         $log = usingLog()->startAction("do we have the test environment's config signature in the targets table?");
 
-        $tables = fromRuntimeTable($this->entryKey)->getAllTables();
-
         // do we have it?
         $signature = fromRuntimeTable($this->entryKey)->getItem(self::SIGNATURE_KEY);
         if ($signature !== null) {

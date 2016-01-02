@@ -60,9 +60,23 @@ The following are deprecated, and will be removed in SPv3:
 * New `StoryplayerInternals` namespace for us to refactor code into
 * New `Deprecated` internal module
 * New `Events` internal module
-* New `RuntimeTable::expectsRuntimeTable()->exists()`
-* New `RuntimeTable::expectsRuntimeTable()->doesNotExist()`
-* New `RuntimeTable::fromRuntimeTables()->getAllTables()`
+* Lots of work tidying up the RuntimeTable internal module
+  * New `RuntimeTable::expectsRuntimeTable()->exists()`
+  * New `RuntimeTable::expectsRuntimeTable()->doesNotExist()`
+  * New `RuntimeTable::fromRuntimeTables()->getAllTables()`
+  * New `RuntimeTable::fromRuntimeTable()->getTableIfExists()`
+  * New `RuntimeTable::fromRuntimeTable()->getGroupFromTable()`
+  * New `RuntimeTable::fromRuntimeTable()->getIsEmpty()`
+  * New `RuntimeTable::fromRuntimeTable()->hasItem()`
+  * New `RuntimeTable::fromRuntimeTable()->hasGroup()`
+  * New `RuntimeTable::fromRuntimeTables()->getAllTables()`
+  * New `RuntimeTable::fromRuntimeTables()->getTableExists()`
+  * New `RuntimeTable::fromRuntimeTables()->getAllTables()`
+  * New `RuntimeTable::fromRuntimeTables()->getTable()`
+  * New `RuntimeTable::usingRuntimeTable()->removeTable()`
+  * New `RuntimeTable::usingRuntimeTables()->createTable()`
+  * New `RuntimeTable::usingRuntimeTables()->removeTable()`
+  * New `RuntimeTable::usingRuntimeTables()->removeTableIfEmpty()`
 * New `--log-internal-events` CLI switch
 * New `--warn-deprecated` CLI switch
 * Add support for a Ubiquitous Language-driven approach

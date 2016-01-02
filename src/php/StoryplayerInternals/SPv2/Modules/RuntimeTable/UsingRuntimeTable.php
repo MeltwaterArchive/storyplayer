@@ -2,6 +2,7 @@
 
 /**
  * Copyright (c) 2013-present Mediasift Ltd
+ * Copyright (c) 2016-present Ganbaro Digital Ltd
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,7 +35,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author    Michael Heap <michael.heap@datasift.com>
+ * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2013-present Mediasift Ltd www.datasift.com
+ * @copyright 2016-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
@@ -44,13 +47,8 @@ namespace StoryplayerInternals\SPv2\Modules\RuntimeTable;
 use DataSift\Stone\ObjectLib\BaseObject;
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Log;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable;
 
-/**
- * UsingRuntimeTable
- *
- * @uses Prose
- * @author Michael Heap <michael.heap@datasift.com>
- */
 class UsingRuntimeTable extends BaseRuntimeTable
 {
     /**
@@ -58,8 +56,10 @@ class UsingRuntimeTable extends BaseRuntimeTable
      *
      * Add an item to a module's runtime config table
      *
-     * @param string $key The key to save data under
-     * @param mixed $value The value to save
+     * @param string $key
+     *        The key to save data under
+     * @param mixed $value
+     *        The value to save
      *
      * @return void
      */
@@ -68,32 +68,23 @@ class UsingRuntimeTable extends BaseRuntimeTable
         // get our table name from the constructor
         $tableName = $this->args[0];
 
-        $log = Log::usingLog()->startAction("add entry '{$key}' to {$tableName} table");
+        $log = Log::usingLog()->startAction("add item '{$key}' to {$tableName} table");
 
-        // get the table config
-        $tables = $this->getAllTables();
-
-        // make sure it exists
-        if (!isset($tables->$tableName)){
-            $log->addStep("{$tableName} does not exist in the runtime config. creating empty table", function() use ($tables, $tableName){
-                $tables->$tableName = new BaseObject();
-            });
-        }
+        // get the table
+        $table = RuntimeTable::fromRuntimeTable($tableName)->getTable();
 
         // make sure we don't have a duplicate entry
-        if (isset($tables->$tableName->$key)){
-            $msg = "Table already contains an entry for '{$key}'";
+        if (isset($table->$key)){
+            $msg = "table already contains item '{$key}'";
             $log->endAction($msg);
             throw Exceptions::newActionFailedException(__METHOD__, $msg);
         }
 
         // add the entry
-        $tables->$tableName->$key = $value;
+        $table->$key = $value;
 
         // save the updated runtime config
-        $log->addStep("saving runtime config to disk", function() {
-            $this->st->saveRuntimeConfig();
-        });
+        $this->saveRuntimeConfig($log);
 
         // all done
         $log->endAction();
@@ -104,7 +95,8 @@ class UsingRuntimeTable extends BaseRuntimeTable
      *
      * Removes an item from the runtimeConfig file
      *
-     * @param string $key The key that we want to remove
+     * @param string $key
+     *        The key that we want to remove
      *
      * @return void
      */
@@ -114,38 +106,33 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = Log::usingLog()->startAction("remove entry '{$key}' from {$tableName} table");
+        $log = Log::usingLog()->startAction("remove item '{$key}' from {$tableName} table");
 
-        // get the table config
-        $tables = $this->getAllTables();
+        // get the table
+        $table = RuntimeTable::fromRuntimeTable($tableName)->getTableIfExists();
 
-        // make sure it exists
-        if (!isset($tables->$tableName)) {
-            $msg = "table is empty / does not exist. '{$key}' not removed";
+        // does the table exist?
+        if (!$table) {
+            $msg = "table does not exist. '{$key}' not removed";
             $log->endAction($msg);
             return;
         }
 
         // make sure we have an entry to remove
-        if (!isset($tables->$tableName->$key)) {
-            $msg = "table does not contain an entry for '{$key}'";
+        if (!isset($table->$key)) {
+            $msg = "table does not contain item '{$key}'";
             $log->endAction($msg);
             return;
         }
 
         // remove the entry
-        unset($tables->$tableName->$key);
+        unset($table->$key);
 
         // remove the table if it's empty
-        if (!count(get_object_vars($tables->$tableName))) {
-            Log::usingLog()->writeToLog("table '{$tableName}' is empty, removing from runtime config");
-            unset($tables->$tableName);
-        }
+        RuntimeTable::usingRuntimeTables()->removeTableIfEmpty($tableName);
 
-        // save the updated runtime config
-        $log->addStep("saving runtime config to disk", function() {
-            $this->st->saveRuntimeConfig();
-        });
+        // save our changes
+        $this->saveRuntimeConfig($log);
 
         // all done
         $log->endAction();
@@ -154,7 +141,8 @@ class UsingRuntimeTable extends BaseRuntimeTable
     /**
      * updateItem
      *
-     * Replace an item in the runtimeConfig file
+     * Replace an item in the runtimeConfig file. If the item does not exist,
+     * we will create it.
      *
      * @param string $key
      *        The key that we want to update
@@ -172,21 +160,13 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $log = Log::usingLog()->startAction("update entry '{$key}' in {$tableName} table");
 
         // get the table config
-        $tables = $this->getAllTables();
+        $table = RuntimeTable::fromRuntimeTable($tableName)->getTable();
 
-        // make sure it exists
-        if (!isset($tables->$tableName)) {
-            $msg = "table is empty / does not exist. '{$key}' not updated";
-            $log->endAction($msg);
-            return;
-        }
-
-        // make sure we have an entry to update
-        $tables->$tableName->$key = $value;
-        $log->endAction();
+        // update the entry
+        $table->$key = $value;
 
         // save the changes
-        $this->st->saveRuntimeConfig();
+        $this->saveRuntimeConfig($log);
 
         // all done
         $log->endAction();
@@ -196,8 +176,10 @@ class UsingRuntimeTable extends BaseRuntimeTable
     /**
      * Add an item to a module's runtime config table
      *
-     * @param string $key The key to save data under
-     * @param string $value The value to save
+     * @param string $key
+     *        The key to save data under
+     * @param string $value
+     *        The value to save
      *
      * @return void
      */
@@ -209,12 +191,9 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $log = Log::usingLog()->startAction("add entry '{$group}->{$key}' to {$tableName} table");
 
         // get the table config
-        $tables = $this->getAllTables();
+        $table = RuntimeTable::fromRuntimeTable($tableName)->getTable();
 
-        // make sure it exists
-        if (!isset($tables->$tableName)){
-            $tables->$tableName = new BaseObject();
-        }
+        // make sure the group exists
         if (!isset($tables->$tableName->$group)) {
             $tables->$tableName->$group = new BaseObject;
         }
@@ -227,7 +206,7 @@ class UsingRuntimeTable extends BaseRuntimeTable
         }
 
         // add the entry
-        $tables->$tableName->$group->$key = $value;
+        $table->$group->$key = $value;
 
         // make sure that the table's group is always available for
         // template expansion
@@ -238,18 +217,17 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $activeConfig->setData($tableName, $tables->$tableName);
 
         // save the updated runtime config
-        $log->addStep("saving runtime config to disk", function() {
-            $this->st->saveRuntimeConfig();
-        });
+        $this->saveRuntimeConfig($log);
 
         // all done
         $log->endAction();
     }
 
     /**
-     * Removes an item from the runtimeConfig file
+     * Removes an item from a group in the table
      *
-     * @param string $key The key that we want to remove
+     * @param string $key
+     *        The key that we want to remove
      *
      * @return void
      */
@@ -259,91 +237,33 @@ class UsingRuntimeTable extends BaseRuntimeTable
         $tableName = $this->args[0];
 
         // what are we doing?
-        $log = Log::usingLog()->startAction("remove entry '{$group}->{$key}' from {$tableName} table");
+        $log = Log::usingLog()->startAction("remove item '{$key}' from group '{$group}' in {$tableName} table");
 
         // get the table config
-        $tables = $this->getAllTables();
+        $table = RuntimeTable::fromRuntimeTable($tableName)->getTableIfExists();
 
-        // make sure it exists
-        if (!isset($tables->$tableName)) {
-            $msg = "table is empty / does not exist. '{$group}->{$key}' not removed";
-            $log->endAction($msg);
-            return;
-        }
-        if (!isset($tables->$tableName->$group)) {
+        // does the group exist?
+        if (!isset($table->$group)) {
             $msg = "table has no group '{$group}'. '{$group}->{$key}' not removed";
             $log->endAction($msg);
             return;
         }
-        if (!isset($tables->$tableName->$group->$key)) {
-            $msg = "table does not contain an entry for '{$group}->{$key}'";
+
+        // does the group contain the item?
+        if (!isset($table->$group->$key)) {
+            $msg = "table does not contain item '{$item}' in group '{$group}'";
             $log->endAction($msg);
             return;
         }
 
         // remove the entry
-        unset($tables->$tableName->$group->$key);
+        unset($table->$group->$key);
 
-        // remove the table if it's empty
-        if (!count(get_object_vars($tables->$tableName->$group))) {
-            $log->addStep("table group '{$tableName}->{$group}' is empty, removing from runtime config", function() use ($tables, $tableName, $group){
-                unset($tables->$tableName->$group);
-            });
-        }
+        // remove the table if it is now empty
+        RuntimeTable::usingRuntimeTables()->removeTableIfEmpty($tableName);
 
         // save the changes
-        $this->st->saveRuntimeConfig();
-
-        // all done
-        $log->endAction();
-
-    }
-
-    /**
-     * Removes an item from the runtimeConfig file
-     *
-     * @param string $key The key that we want to remove
-     *
-     * @return void
-     */
-    public function removeItemFromAllGroups($key)
-    {
-        // get our table name from the constructor
-        $tableName = $this->args[0];
-
-        // what are we doing?
-        $log = Log::usingLog()->startAction("remove entry '{$key}' from all groups in {$tableName} table");
-
-        // get the table config
-        $tables = $this->getAllTables();
-
-        // make sure it exists
-        if (!isset($tables->$tableName)) {
-            $msg = "table is empty / does not exist. '{$key}' not removed";
-            $log->endAction($msg);
-            return;
-        }
-        $groups = get_object_vars($tables->$tableName);
-        if (!count($groups)) {
-            $msg = "table has no groups. '{$key}' not removed";
-            $log->endAction($msg);
-            return;
-        }
-        foreach ($tables->$tableName as $group => $contents) {
-            if (isset($tables->$tableName->$group->$key)) {
-                // remove the entry
-                unset($tables->$tableName->$group->$key);
-
-                // remove the table if it's empty
-                if (!count(get_object_vars($tables->$tableName->$group))) {
-                    $log->addStep("table group '{$tableName}->{$group}' is empty, removing from runtime config", function() use ($tables, $tableName, $group){
-                        unset($tables->$tableName->$group);
-                    });
-                }
-            }
-        }
-        // save the changes
-        $this->st->saveRuntimeConfig();
+        $this->saveRuntimeConfig($log);
 
         // all done
         $log->endAction();
@@ -364,22 +284,28 @@ class UsingRuntimeTable extends BaseRuntimeTable
         // what are we doing?
         $log = Log::usingLog()->startAction("remove the {$tableName} table from the runtime config");
 
-        // get the table config
-        $tables = $this->getAllTables();
-
-        // make sure it exists
-        if (!isset($tables->$tableName)) {
-            $log->endAction();
-            return;
-        }
-
-        // remove the table
-        unset($tables->$tableName);
+        // there's a module to do this
+        RuntimeTable::usingRuntimeTables()->removeTable($tableName);
 
         // save the changes
-        $this->st->saveRuntimeConfig();
+        $this->saveRuntimeConfig($log);
 
         // all done
         $log->endAction();
+    }
+
+    /**
+     * save the updated runtime config to disk
+     *
+     * @param  object $log
+     *         the currently active logger
+     * @return void
+     */
+    protected function saveRuntimeConfig($log)
+    {
+        // save the updated runtime config
+        $log->addStep("saving runtime config to disk", function() {
+            $this->st->saveRuntimeConfig();
+        });
     }
 }
