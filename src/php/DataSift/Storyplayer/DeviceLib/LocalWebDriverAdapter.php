@@ -74,6 +74,12 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
             $useProxy = fromConfig()->getModuleSetting('device.browsermob.enable');
         }
 
+        // do we have a URL to use?
+        $browserUrl = null;
+        if (fromConfig()->hasModuleSetting('device.localwebdriver.url')) {
+            $browserUrl = fromConfig()->getModuleSetting('device.localwebdriver.url');
+        }
+
         try {
             // by default, we have no proxy session
             $this->proxySession = null;
@@ -96,7 +102,7 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
             }
 
             // create the browser session
-            $webDriver = new WebDriverClient();
+            $webDriver = new WebDriverClient($browserUrl);
             $this->browserSession = $webDriver->newSession(
                 $this->browserDetails->browser,
                 $desiredCapabilities
