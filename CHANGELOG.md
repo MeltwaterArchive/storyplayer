@@ -12,6 +12,16 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
+## 2.3.5 - Wednesday 6th January 2016
+
+### Fixes
+
+* Added initial support for Selenium Grid
+  * Added `device.localwebdriver.url` module setting
+  * Updated the `LocalWebDriverAdapter` to support the new setting
+
+This is a workaround until I have time to get the `RemoteWebDriverAdapter` working (it needs support for working without BrowserMob-Proxy), and support for defining / overriding devices in test environments.
+
 ## 2.3.4 - Sunday 20th December 2015
 
 ### Fixes
