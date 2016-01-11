@@ -75,7 +75,7 @@ class LocalWebDriverAdapter extends BaseAdapter implements DeviceAdapter
         }
 
         // do we have a URL to use?
-        $browserUrl = null;
+        $browserUrl = 'http://localhost:4444/wd/hub';
         if (fromConfig()->hasModuleSetting('device.localwebdriver.url')) {
             $browserUrl = fromConfig()->getModuleSetting('device.localwebdriver.url');
         }
