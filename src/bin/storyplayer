@@ -192,7 +192,7 @@ foreach ($localExtensions as $localExtensionDir) {
 }
 
 // load our list of helper functions
-require __DIR__.'/../php/DataSift/Storyplayer/functions.php';
+require_once __DIR__.'/../php/DataSift/Storyplayer/functions.php';
 
 // are there any local functions to load?
 $localFunctions = "storyplayer/php/functions.php";
