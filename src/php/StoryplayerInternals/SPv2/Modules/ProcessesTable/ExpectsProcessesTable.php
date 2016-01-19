@@ -34,27 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   StoryplayerInternals/Modules/ProcessesTable
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace StoryplayerInternals\SPv2\Modules\ProcessesTable;
+
+use Prose\Prose;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable;
 
 /**
- * retrieve data from the internal processes table
+ *
+ * test the state of the internal processes table
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   StoryplayerInternals/Modules/ProcessesTable
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromProcessesTable extends Prose
+class ExpectsProcessesTable extends Prose
 {
+
     /**
      * tableName
      *
@@ -65,28 +70,26 @@ class FromProcessesTable extends Prose
     protected $tableName = "processes";
 
     /**
-     * getProcessesTable
-     *
-     * Get the entire processes table from the runtime config
-     *
-     * @return object
-     */
-    public function getProcessesTable()
-    {
-        return fromRuntimeTable($this->tableName)->getTable();
-    }
-
-    /**
-     * getDetailsForPid
-     *
-     * Get the get a specific pid's details from the processes table
+     * hasEntryForProcess
      *
      * @param mixed $pid The pid we're working with
      *
-     * @return object
+     * @return void
      */
-    public function getDetailsForPid($pid)
+    public function hasEntryForProcess($pid)
     {
-        return fromRuntimeTable($this->tableName)->getItem($pid);
+        RuntimeTable::expectsRuntimeTable($this->tableName)->hasItem($pid);
+    }
+
+    /**
+     * hasNoEntryForProcess
+     *
+     * @param mixed $pid The pid we're working with
+     *
+     * @return void
+     */
+    public function hasNoEntryForProcess($pid)
+    {
+        RuntimeTable::expectsRuntimeTable($this->tableName)->doesNotHaveItem($pid);
     }
 }

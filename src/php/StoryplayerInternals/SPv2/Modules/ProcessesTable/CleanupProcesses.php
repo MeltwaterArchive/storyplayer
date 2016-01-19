@@ -34,14 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   StoryplayerInternals/Modules/ProcessesTable
  * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2013-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace StoryplayerInternals\SPv2\Modules\ProcessesTable;
+
+use Prose\Prose;
 
 /**
  * CleanupProcesses

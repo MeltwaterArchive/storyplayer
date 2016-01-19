@@ -34,26 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   StoryplayerInternals/Modules/ProcessesTable
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace StoryplayerInternals\SPv2\Modules\ProcessesTable;
+
+use Prose\Prose;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable;
 
 /**
- * manipulate the internal processes table
+ * retrieve data from the internal processes table
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   StoryplayerInternals/Modules/ProcessesTable
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingProcessesTable extends Prose
+class FromProcessesTable extends Prose
 {
     /**
      * tableName
@@ -65,34 +68,28 @@ class UsingProcessesTable extends Prose
     protected $tableName = "processes";
 
     /**
-     * addProcess
+     * getProcessesTable
      *
-     * @param string $hostId
-     *        ID of the host where the process is running
-     * @param object $processDetails
-     *        Details about the process we're working with
+     * Get the entire processes table from the runtime config
      *
-     * @return void
+     * @return object
      */
-    public function addProcess($hostId, $processDetails)
+    public function getProcessesTable()
     {
-        $key = $hostId . ":" . $processDetails->pid;
-        usingRuntimeTable($this->tableName)->addItem($key, $processDetails);
+        return RuntimeTable::fromRuntimeTable($this->tableName)->getTable();
     }
 
     /**
-     * removeProcess
+     * getDetailsForPid
      *
-     * @param string $hostId
-     *        ID of the host where the process was running
-     * @param object $processDetails
-     *        The process ID we're working with
+     * Get the get a specific pid's details from the processes table
      *
-     * @return void
+     * @param mixed $pid The pid we're working with
+     *
+     * @return object
      */
-    public function removeProcess($hostId, $processDetails)
+    public function getDetailsForPid($pid)
     {
-        $key = $hostId . ":" . $processDetails->pid;
-        usingRuntimeTable($this->tableName)->removeItem($key);
+        return RuntimeTable::fromRuntimeTable($this->tableName)->getItem($pid);
     }
 }

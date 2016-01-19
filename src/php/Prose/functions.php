@@ -71,7 +71,9 @@ use Storyplayer\SPv2\Modules\Supervisor;
 use Storyplayer\SPv2\Modules\Users;
 use Storyplayer\SPv2\Modules\ZeroMQ;
 use StoryplayerInternals\SPv2\Modules\Deprecated;
+use StoryplayerInternals\SPv2\Modules\ProcessesTable;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable;
+use StoryplayerInternals\SPv2\Modules\ProcessesTable\UsingProcessesTable;
 use StoryplayerInternals\SPv2\Helpers\ManualUrls;
 
 use Prose\CleanupProcesses;
@@ -79,7 +81,6 @@ use Prose\CleanupRoles;
 use Prose\CleanupTargets;
 use Prose\ExpectsEc2Image;
 use Prose\ExpectsGraphite;
-use Prose\ExpectsProcessesTable;
 use Prose\ExpectsRolesTable;
 use Prose\ExpectsUuid;
 use Prose\FromArray;
@@ -95,7 +96,6 @@ use Prose\FromFile;
 use Prose\FromGraphite;
 use Prose\FromIframe;
 use Prose\FromPDOStatement;
-use Prose\FromProcessesTable;
 use Prose\FromRedisConn;
 use Prose\FromRolesTable;
 use Prose\FromSauceLabs;
@@ -116,7 +116,6 @@ use Prose\UsingIframe;
 use Prose\UsingMysql;
 use Prose\UsingPDO;
 use Prose\UsingPDODB;
-use Prose\UsingProcessesTable;
 use Prose\UsingProvisioning;
 use Prose\UsingProvisioningDefinition;
 use Prose\UsingProvisioningEngine;
@@ -258,12 +257,12 @@ function cleanupProcesses($key)
  *
  * @param  string $key
  *         the name of the roles table in the runtime table
- * @return \Prose\CleanupRoles
+ * @return StoryplayerInternals\SPv2\Modules\ProcessesTable\CleanupRoles
  */
 function cleanupRoles($key)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new CleanupRoles(StoryTeller::instance(), [$key]);
+    return ProcessesTable::cleanupRoles($key);
 }
 
 /**
@@ -474,13 +473,13 @@ function expectsHttpResponse(HttpClientResponse $httpResponse)
  * This module is for internal use by Storyplayer. You shouldn't need to call
  * this from your own stories.
  *
- * @return \Prose\ExpectsProcessesTable
+ * @return StoryplayerInternals\SPv2\Modules\ProcessesTable\ExpectsProcessesTable
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsProcessesTable()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new ExpectsProcessesTable(StoryTeller::instance());
+    return ProcessesTable::expectsProcessesTable();
 }
 
 /**
@@ -973,12 +972,12 @@ function fromPDOStatement(PDOStatement $stmt)
  * This module is intended for internal use by Storyplayer. You shouldn't
  * need to call this module from your stories.
  *
- * @return \Prose\FromProcessesTable
+ * @return StoryplayerInternals\SPv2\Modules\ProcessesTable\FromProcessesTable
  */
 function fromProcessesTable()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromProcessesTable(StoryTeller::instance());
+    return ProcessesTable::fromProcessesTable();
 }
 
 /**
@@ -1526,12 +1525,12 @@ function usingPDODB(PDO $db)
  * This module is for internal use by Storyplayer. You shouldn't need to call
  * this from your own stories.
  *
- * @return \Prose\UsingProcessesTable
+ * @return StoryplayerInternals\SPv2\Modules\ProcessesTable\UsingProcessesTable
  */
 function usingProcessesTable()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingProcessesTable(StoryTeller::instance());
+    return ProcessesTable::usingProcessesTable();
 }
 
 /**

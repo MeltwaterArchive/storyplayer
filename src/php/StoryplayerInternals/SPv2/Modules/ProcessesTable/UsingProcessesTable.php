@@ -34,29 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   StoryplayerInternals/Modules/ProcessesTable
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace StoryplayerInternals\SPv2\Modules\ProcessesTable;
+
+use Prose\Prose;
+use StoryplayerInternals\SPv2\Modules\RuntimeTable;
 
 /**
- *
- * test the state of the internal processes table
+ * manipulate the internal processes table
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   StoryplayerInternals/Modules/ProcessesTable
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsProcessesTable extends Prose
+class UsingProcessesTable extends Prose
 {
-
     /**
      * tableName
      *
@@ -67,26 +68,34 @@ class ExpectsProcessesTable extends Prose
     protected $tableName = "processes";
 
     /**
-     * hasEntryForProcess
+     * addProcess
      *
-     * @param mixed $pid The pid we're working with
+     * @param string $hostId
+     *        ID of the host where the process is running
+     * @param object $processDetails
+     *        Details about the process we're working with
      *
      * @return void
      */
-    public function hasEntryForProcess($pid)
+    public function addProcess($hostId, $processDetails)
     {
-        expectsRuntimeTable($this->tableName)->hasItem($pid);
+        $key = $hostId . ":" . $processDetails->pid;
+        RuntimeTable::usingRuntimeTable($this->tableName)->addItem($key, $processDetails);
     }
 
     /**
-     * hasNoEntryForProcess
+     * removeProcess
      *
-     * @param mixed $pid The pid we're working with
+     * @param string $hostId
+     *        ID of the host where the process was running
+     * @param object $processDetails
+     *        The process ID we're working with
      *
      * @return void
      */
-    public function hasNoEntryForProcess($pid)
+    public function removeProcess($hostId, $processDetails)
     {
-        expectsRuntimeTable($this->tableName)->doesNotHaveItem($pid);
+        $key = $hostId . ":" . $processDetails->pid;
+        RuntimeTable::usingRuntimeTable($this->tableName)->removeItem($key);
     }
 }
