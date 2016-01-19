@@ -34,49 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Uuid
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Uuid;
 
-use DataSift\Stone\TokenLib\TokenGenerator;
+use Prose\Prose;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
- * assertions for the UUID module
+ * generate a uuid on demand, without requiring the uuid extension
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Uuid
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ExpectsUuid extends Prose
+class FromUuid extends Prose
 {
-    public function requirementsAreMet()
+    public function generateUuid()
     {
         // what are we doing?
-        $log = usingLog()->startAction("make sure the UUID module's requirements are installed");
+        $log = Log::usingLog()->startAction("generate a UUID");
 
         // do we have the UUID extension?
-        if (!function_exists('uuid_create')) {
-            // we really want this
-            $log->endAction("PECL uuid extension missing");
-            throw Exceptions::newExpectFailedException(__METHOD__, "PECL uuid extension installed", "extension is not installed");
-        }
+        $uuid = uuid_create();
 
-        // is Stone's TokenLib available?
-        if (!class_exists('DataSift\Stone\TokenLib\TokenGenerator')) {
-            // we really want this
-            $log->endAction("DataSift\Stone\TokenLib missing");
-            throw Exceptions::newExpectFailedException(__METHOD__, "DataSift's Stone library includes TokenLib", "TokenLib not found");
-        }
+        // log it
+        $log->endAction("'{$uuid}'");
 
-        // if we get here, we are good
-        $log->endAction();
+        // all done
+        return $uuid;
     }
 }

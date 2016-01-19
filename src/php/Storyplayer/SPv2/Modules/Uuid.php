@@ -34,39 +34,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Uuid
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules;
 
-/**
- * generate a uuid on demand, without requiring the uuid extension
- *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class FromUuid extends Prose
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Storyplayer\SPv2\Modules\Uuid\FromUuid;
+use Storyplayer\SPv2\Modules\Uuid\ExpectsUuid;
+
+class Uuid
 {
-    public function generateUuid()
+    /**
+     * make sure that the UUID module is in the right state
+     *
+     * @return ExpectsUuid
+     */
+    public static function expectsUuid()
     {
-        // what are we doing?
-        $log = usingLog()->startAction("generate a UUID");
+        return new ExpectsUuid(StoryTeller::instance());
+    }
 
-        // do we have the UUID extension?
-        $uuid = uuid_create();
-
-        // log it
-        $log->endAction("'{$uuid}'");
-
-        // all done
-        return $uuid;
+    /**
+     * inspect
+     *
+     * @return FromUuid
+     */
+    public static function fromUuid()
+    {
+        return new FromUUid(StoryTeller::instance());
     }
 }

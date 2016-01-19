@@ -69,7 +69,9 @@ use Storyplayer\SPv2\Modules\Log;
 use Storyplayer\SPv2\Modules\Shell;
 use Storyplayer\SPv2\Modules\Supervisor;
 use Storyplayer\SPv2\Modules\Users;
+use Storyplayer\SPv2\Modules\Uuid;
 use Storyplayer\SPv2\Modules\ZeroMQ;
+use Storyplayer\SPv2\Modules\Uuid\ExpectsUuid;
 use StoryplayerInternals\SPv2\Modules\Deprecated;
 use StoryplayerInternals\SPv2\Modules\ProcessesTable;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable;
@@ -82,7 +84,6 @@ use Prose\CleanupTargets;
 use Prose\ExpectsEc2Image;
 use Prose\ExpectsGraphite;
 use Prose\ExpectsRolesTable;
-use Prose\ExpectsUuid;
 use Prose\FromArray;
 use Prose\FromAws;
 use Prose\FromCheckpoint;
@@ -104,7 +105,6 @@ use Prose\FromString;
 use Prose\FromSystemUnderTest;
 use Prose\FromTargetsTable;
 use Prose\FromTestEnvironment;
-use Prose\FromUuid;
 use Prose\UsingCheckpoint;
 use Prose\UsingEc2;
 use Prose\UsingEc2Instance;
@@ -559,13 +559,13 @@ function expectsSupervisor($hostId)
  * This module adds support for inspecting a universally-unique-ID. To use it,
  * you need to have PHP's UUID extension installed.
  *
- * @return \Prose\ExpectsUuid
+ * @return Storyplayer\SPv2\Modules\Uuid\ExpectsUuid
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsUuid()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new ExpectsUuid(StoryTeller::instance());
+    return Uuid::expectsUuid();
 }
 
 /**
@@ -1209,12 +1209,12 @@ function fromUsers()
  * This module adds support for inspecting a universally-unique-ID. To use it,
  * you need to have PHP's UUID extension installed.
  *
- * @return \Prose\FromUuid
+ * @return Storyplayer\SPv2\Modules\Uuid\FromUuid
  */
 function fromUuid()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromUuid(StoryTeller::instance());
+    return Storyplayer::fromUuid();
 }
 
 /**
