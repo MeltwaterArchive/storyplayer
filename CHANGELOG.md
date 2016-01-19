@@ -103,6 +103,25 @@ The following are deprecated, and will be removed in SPv3:
 
 * New `legacy-features` section, for testing SPv2 functionality that is no longer the recommended approach.
 
+## 2.3.6 - Tuesday 11th January 2016
+
+### Fixes
+
+* SPv2.3.5 broke support for running tests against the Selenium standalone server.
+  * Fixed `LocalWebDriverAdapter` to always provide a URL for where Selenium is.
+* Found a bug where SPv2.3.x would attempt to include a PHP file more than once.
+  * Fixed `src/bin/storyplayer` to use `require_once()` instead of `require()`
+
+## 2.3.5 - Wednesday 6th January 2016
+
+### Fixes
+
+* Added initial support for Selenium Grid
+  * Added `device.localwebdriver.url` module setting
+  * Updated the `LocalWebDriverAdapter` to support the new setting
+
+This is a workaround until I have time to get the `RemoteWebDriverAdapter` working (it needs support for working without BrowserMob-Proxy), and support for defining / overriding devices in test environments.
+
 ## 2.3.4 - Sunday 20th December 2015
 
 ### Fixes
