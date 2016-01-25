@@ -283,10 +283,10 @@ class PlayStory_Command extends BaseCommand implements CliSignalHandler
         $duration = microtime(true) - $startTime;
 
         // tell the output plugins that we're all done
-        $output->endStoryplayer($duration);
+        $retval = $output->endStoryplayer($duration);
 
         // all done
-        return 0;
+        return $retval;
     }
 
     // ==================================================================

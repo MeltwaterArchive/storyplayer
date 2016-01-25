@@ -107,7 +107,7 @@ abstract class Console extends OutputPlugin
             $this->write("HUH - nothing appears to have happened. Time taken: ", $this->writer->puzzledSummaryStyle);
             $this->writeDuration($duration, $this->writer->puzzledSummaryStyle);
             $this->write(PHP_EOL . PHP_EOL);
-            return;
+            return 1;
         }
 
         // this is our opportunity to tell the user how our story(ies)
@@ -141,14 +141,14 @@ abstract class Console extends OutputPlugin
             $this->write("HUH - nothing appears to have happened. Time taken: ", $this->writer->puzzledSummaryStyle);
             $this->writeDuration($duration, $this->writer->puzzledSummaryStyle);
             $this->write(PHP_EOL . PHP_EOL);
-            return;
+            return 1;
         }
         if (empty($failedGroups)) {
             // nothing failed
             $this->write("SUCCESS - " . count($succeededGroups) . ' PASSED, ' . count($skippedGroups) . ' SKIPPED. Time taken: ', $this->writer->successSummaryStyle);
             $this->writeDuration($duration, $this->writer->successSummaryStyle);
             $this->write(PHP_EOL . PHP_EOL);
-            return;
+            return 0;
         }
 
         // if we get here, then at least one thing failed
@@ -191,7 +191,7 @@ abstract class Console extends OutputPlugin
         if (!$summary) {
             // we're in dev mode, which means the error reports have
             // already been shown where they happened
-            return;
+            return 1;
         }
 
         // are we being run by hand?
@@ -200,6 +200,9 @@ abstract class Console extends OutputPlugin
             $this->write("storyplayer.log", $this->writer->argStyle);
             $this->write(" for details on what went wrong." . PHP_EOL . PHP_EOL);
         }
+
+        // all done
+        return 1;
     }
 
     protected function writeDetailedErrorReport($result)

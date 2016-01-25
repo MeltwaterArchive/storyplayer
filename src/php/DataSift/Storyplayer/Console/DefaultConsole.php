@@ -93,7 +93,7 @@ class DefaultConsole extends Console
 
     public function endStoryplayer($duration)
     {
-        $this->writeFinalReport($duration, true);
+        return $this->writeFinalReport($duration, true);
     }
 
     /**
