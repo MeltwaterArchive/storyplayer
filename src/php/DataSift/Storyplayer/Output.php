@@ -292,14 +292,18 @@ class Output extends OutputPlugin
      *
      * @param  float $duration
      *         how long did storyplayer take to run (in seconds)?
-     * @return void
+     * @return int
      */
     public function endStoryplayer($duration)
     {
+        $retval = 0;
+
         foreach ($this->plugins as $plugin)
         {
-            $plugin->endStoryplayer($duration);
+            $retval = max($retval, $plugin->endStoryplayer($duration));
         }
+
+        return $retval;
     }
 
     /**
