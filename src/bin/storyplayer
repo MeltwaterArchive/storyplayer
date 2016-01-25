@@ -337,7 +337,8 @@ function main($argv)
 
 	// all set - let's go
 	try {
-		return $engine->main($argv, $injectables);
+		$retval = $engine->main($argv, $injectables);
+		return $retval;
 	}
 	catch (Exception $e)
 	{
@@ -346,7 +347,10 @@ function main($argv)
 		if (get_class($e) !== 'Exception') {
 			echo "Stack trace is:\n" . $e->getTraceAsString() . "\n";
 		}
+
+		return 1;
 	}
 }
 
-return main($argv);
+$retval = main($argv);
+exit($retval);
