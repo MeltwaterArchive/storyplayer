@@ -12,6 +12,8 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
+## 2.3.7 - Monday 25th January 2016
+
 ### Fixes
 
 * `storyplayer` now exits with a return code of 1 whenever a detectable error occurs
