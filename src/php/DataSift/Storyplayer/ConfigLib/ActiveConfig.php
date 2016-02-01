@@ -54,6 +54,8 @@ use Datasift\netifaces\NetifacesException;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 
+use Exception;
+
 /**
  * the class for the config we make available to stories
  *
@@ -155,7 +157,13 @@ class ActiveConfig extends WrappedConfig
     {
         // step 1 - how many adapters do we have on this box?
         // @todo Maybe we want to move this somewhere more central later?
-        $os = Os::getOs();
+        try {
+            $os = Os::getOs();
+        }
+        catch (Exception $e) {
+            return "127.0.0.1";
+        }
+
         $parser = IfconfigParser::fromDistributions($os->getPossibleClassNames());
         $netifaces = new netifaces($os, $parser);
 
