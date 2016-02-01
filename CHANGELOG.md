@@ -12,6 +12,12 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
+## 2.3.8 - Monday 1st February 2016
+
+### Fixes
+
+* Use `127.0.0.1` as the IP address of the host machine, if we cannot determine the host machine's IP address.
+
 ## 2.3.7 - Monday 25th January 2016
 
 ### Fixes
