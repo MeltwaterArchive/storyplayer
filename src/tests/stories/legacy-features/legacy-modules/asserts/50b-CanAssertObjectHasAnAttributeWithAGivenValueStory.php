@@ -338,7 +338,7 @@ $story->addAction(function() {
 	catch (Exception $e) {
 		$checkpoint->test46Passed = true;
 	}
-	assertsObject($actualData)->hasAttributeWithValue('attribute5', 0);
+	assertsObject($actualData)->hasAttributeWithValue('attribute5', 0.0);
 	$checkpoint->test47Passed = true;
 	try {
 		assertsObject($actualData)->hasAttributeWithValue('attribute5', 99);
@@ -450,7 +450,7 @@ $story->addAction(function() {
 	catch (Exception $e) {
 		$checkpoint->test65Passed = true;
 	}
-	assertsObject($actualData)->hasAttributeWithValue('attribute7', 0.0);
+	assertsObject($actualData)->hasAttributeWithValue('attribute7', 0);
 	$checkpoint->test66Passed = true;
 	try {
 		assertsObject($actualData)->hasAttributeWithValue('attribute7', 3.1415927);
