@@ -97,7 +97,7 @@ class DevModeConsole extends Console
 
     public function endStoryplayer($duration)
     {
-        $this->writeFinalReport($duration, false);
+        return $this->writeFinalReport($duration, false);
     }
 
     /**

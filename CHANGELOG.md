@@ -103,6 +103,18 @@ The following are deprecated, and will be removed in SPv3:
 
 * New `legacy-features` section, for testing SPv2 functionality that is no longer the recommended approach.
 
+## 2.3.8 - Monday 1st February 2016
+
+### Fixes
+
+* Use `127.0.0.1` as the IP address of the host machine, if we cannot determine the host machine's IP address.
+
+## 2.3.7 - Monday 25th January 2016
+
+### Fixes
+
+* `storyplayer` now exits with a return code of 1 whenever a detectable error occurs
+
 ## 2.3.6 - Tuesday 11th January 2016
 
 ### Fixes
