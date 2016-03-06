@@ -91,7 +91,7 @@ $story->addAction(function() {
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute5', true);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute5', false);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute5', 3.1415927);
-	Asserts::assertsObject($actualData)->hasAttributeWithValue('attribute5', 0);
+	Asserts::assertsObject($actualData)->hasAttributeWithValue('attribute5', 0.0);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute5', 99);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute5', $checkpoint);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute5', "");
@@ -112,7 +112,7 @@ $story->addAction(function() {
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute7', []);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute7', true);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute7', false);
-	Asserts::assertsObject($actualData)->hasAttributeWithValue('attribute7', 0.0);
+	Asserts::assertsObject($actualData)->hasAttributeWithValue('attribute7', 0);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute7', 3.1415927);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute7', 99);
 	Asserts::assertsObject($actualData)->doesNotHaveAttributeWithValue('attribute7', $checkpoint);
