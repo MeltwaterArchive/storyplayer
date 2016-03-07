@@ -63,6 +63,7 @@ use Storyplayer\SPv2\Modules\Browser;
 use Storyplayer\SPv2\Modules\Device;
 use Storyplayer\SPv2\Modules\Exceptions;
 use Storyplayer\SPv2\Modules\Failure;
+use Storyplayer\SPv2\Modules\File;
 use Storyplayer\SPv2\Modules\Host;
 use Storyplayer\SPv2\Modules\HTTP;
 use Storyplayer\SPv2\Modules\Log;
@@ -77,59 +78,6 @@ use StoryplayerInternals\SPv2\Modules\ProcessesTable;
 use StoryplayerInternals\SPv2\Modules\RuntimeTable;
 use StoryplayerInternals\SPv2\Modules\ProcessesTable\UsingProcessesTable;
 use StoryplayerInternals\SPv2\Helpers\ManualUrls;
-
-use Prose\CleanupProcesses;
-use Prose\CleanupRoles;
-use Prose\CleanupTargets;
-use Prose\ExpectsEc2Image;
-use Prose\ExpectsGraphite;
-use Prose\ExpectsRolesTable;
-use Prose\FromArray;
-use Prose\FromAws;
-use Prose\FromCheckpoint;
-use Prose\FromConfig;
-use Prose\FromCurl;
-use Prose\FromEc2;
-use Prose\FromEc2Instance;
-use Prose\FromEnvironment;
-use Prose\FromFacebook;
-use Prose\FromFile;
-use Prose\FromGraphite;
-use Prose\FromIframe;
-use Prose\FromPDOStatement;
-use Prose\FromRedisConn;
-use Prose\FromRolesTable;
-use Prose\FromSauceLabs;
-use Prose\FromStoryplayer;
-use Prose\FromString;
-use Prose\FromSystemUnderTest;
-use Prose\FromTargetsTable;
-use Prose\FromTestEnvironment;
-use Prose\UsingCheckpoint;
-use Prose\UsingEc2;
-use Prose\UsingEc2Instance;
-use Prose\UsingFacebookGraphApi;
-use Prose\UsingFile;
-use Prose\UsingFirstHostWithRole;
-use Prose\UsingHornet;
-use Prose\UsingIframe;
-use Prose\UsingMysql;
-use Prose\UsingPDO;
-use Prose\UsingPDODB;
-use Prose\UsingProvisioning;
-use Prose\UsingProvisioningDefinition;
-use Prose\UsingProvisioningEngine;
-use Prose\UsingRedis;
-use Prose\UsingRedisConn;
-use Prose\UsingReporting;
-use Prose\UsingRolesTable;
-use Prose\UsingSauceLabs;
-use Prose\UsingSavageD;
-use Prose\UsingTargetsTable;
-use Prose\UsingTimer;
-use Prose\UsingVagrant;
-use Prose\UsingYamlFile;
-use Prose\UsingZookeeper;
 
 use Prose\E5xx_ActionFailed;
 
@@ -257,12 +205,12 @@ function cleanupProcesses($key)
  *
  * @param  string $key
  *         the name of the roles table in the runtime table
- * @return StoryplayerInternals\SPv2\Modules\ProcessesTable\CleanupRoles
+ * @return Storyplayer\SPv2\Modules\TestEnvironment\CleanupRoles
  */
 function cleanupRoles($key)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return ProcessesTable::cleanupRoles($key);
+    return TestEnvironment::cleanupRoles($key);
 }
 
 /**
@@ -275,7 +223,7 @@ function cleanupRoles($key)
  *
  * @param  string $key
  *         the name of the targets table in the runtime table
- * @return \Prose\CleanupTargets
+ * @return Storyplayer\SPv2\Modules\TestEnvironment\CleanupTargets
  */
 function cleanupTargets($key)
 {
@@ -315,13 +263,13 @@ function expectsBrowser()
  *
  * @param  string $amiId
  *         the AMI ID that you want to check on
- * @return \Prose\ExpectsEc2Image
+ * @return \Storyplayer\SPv2\Modules\Aws\ExpectsEc2Image
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsEc2Image($amiId)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new ExpectsEc2Image(StoryTeller::instance(), [$amiId]);
+    return Aws::expectsEc2Image($amiId);
 }
 
 /**
@@ -396,13 +344,13 @@ function expectsForm($formId)
  * You can then use this module to make sure that your system under test
  * hasn't used too much CPU or RAM.
  *
- * @return \Prose\ExpectsGraphite
+ * @return \Storyplayer\SPv2\Modules\Graphite\ExpectsGraphite
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsGraphite()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new ExpectsGraphite(StoryTeller::instance());
+    return Graphite::expectsGraphite();
 }
 
 /**
@@ -491,13 +439,13 @@ function expectsProcessesTable()
  * This module is for internal use inside Storyplayer. You shouldn't need to
  * use it from your own stories.
  *
- * @return \Prose\ExpectsRolesTable
+ * @return \Storyplayer\SPv2\Modules\TestEnvironment\ExpectsRolesTable
  * @throws \Prose\E5xx_ExpectFailed
  */
 function expectsRolesTable()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new ExpectsRolesTable(StoryTeller::instance());
+    return TestEnvironment::expectsRolesTable();
 }
 
 /**
@@ -637,12 +585,12 @@ function foreachHostWithRole($roleName)
  *
  * This module contains functions that can be used to manipulate arrays
  *
- * @return \Prose\FromArray
+ * @return \Storyplayer\SPv2\Modules\Types\FromArray
  */
 function fromArray()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromArray(StoryTeller::instance());
+    return Types::fromArray();
 }
 
 /**
@@ -656,12 +604,12 @@ function fromArray()
  *
  * You shouldn't need to call this module from your stories.
  *
- * @return \Prose\FromAws
+ * @return \Storyplayer\SPv2\Modules\Aws\FromAws
  */
 function fromAws()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromAws(StoryTeller::instance());
+    return Aws::fromAws();
 }
 
 /**
@@ -710,12 +658,12 @@ function fromCheckpoint()
  * about Storyplayer (such as the local computer's IP address) that are
  * detected at runtime.
  *
- * @return \Prose\FromConfig
+ * @return \Storyplayer\SPv2\Modules\Storyplayer\FromConfig
  */
 function fromConfig()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromConfig(StoryTeller::instance());
+    return Storyplayer::fromConfig();
 }
 
 /**
@@ -725,12 +673,12 @@ function fromConfig()
  * de facto standard library across all major languages for talking to HTTP
  * servers.
  *
- * @return \Prose\FromCurl
+ * @return \Storyplayer\SPv2\Modules\Curl\FromCurl
  */
 function fromCurl()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromCurl(StoryTeller::instance());
+    return Curl::fromCurl();
 }
 
 /**
@@ -740,12 +688,12 @@ function fromCurl()
  *
  * To start an EC2 virtual machine, call usingEc2().
  *
- * @return \Prose\FromEc2
+ * @return \Storyplayer\SPv2\Modules\Aws\FromEc2
  */
 function fromEc2()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromEc2(StoryTeller::instance());
+    return Aws::fromEc2();
 }
 
 /**
@@ -757,12 +705,12 @@ function fromEc2()
  *
  * @param  string $amiId
  *         the AMI ID that you want to work with
- * @return \Prose\FromEc2Instance
+ * @return \Storyplayer\SPv2\Modules\Aws\FromEc2Instance
  */
 function fromEc2Instance($amiId)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromEc2Instance(StoryTeller::instance(), [$amiId]);
+    return Aws::fromEc2Instance($amiId);
 }
 
 /**
@@ -776,27 +724,12 @@ function fromEc2Instance($amiId)
  *
  * @deprecated 2.0.0 Use fromStoryplayerConfig(), fromSystemUnderTestConfig() or fromTestEnvironmentConfig() instead
  *
- * @return \Prose\FromEnvironment
+ * @return \Storyplayer\SPv2\Module\Storyplayer\FromConfig
  */
 function fromEnvironment()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromEnvironment(StoryTeller::instance());
-}
-
-/**
- * returns the FromFacebook module
- *
- * This module provides support for querying the Facebook API.
- *
- * It is currently unmaintained.
- *
- * @return \Prose\FromFacebook
- */
-function fromFacebook()
-{
-    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromFacebook(StoryTeller::instance());
+    return Storyplayer::fromConfig();
 }
 
 /**
@@ -811,7 +744,7 @@ function fromFacebook()
 function fromFile()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromFile(StoryTeller::instance());
+    return File::fromFile();
 }
 
 /**
@@ -874,12 +807,12 @@ function fromForm($formId)
  * You can then use this module to make sure that your system under test
  * hasn't used too much CPU or RAM.
  *
- * @return \Prose\FromGraphite
+ * @return \Storyplayer\SPv2\Module\Graphite\FromGraphite
  */
 function fromGraphite()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromGraphite(StoryTeller::instance());
+    return Graphite::fromGraphite(StoryTeller::instance());
 }
 
 /**
@@ -954,12 +887,12 @@ function fromHttp()
  *
  * @param  PDOStatement $stmt
  *         the prepared statement used to run an SQL query
- * @return \Prose\FromPDOStatement
+ * @return \Storyplayer\SPv2\Module\PDODB\FromPDOStatement
  */
 function fromPDOStatement(PDOStatement $stmt)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromPDOStatement(StoryTeller::instance(), [$stmt]);
+    return PDODB::fromPDOStatement($stmt);
 }
 
 /**
@@ -991,12 +924,12 @@ function fromProcessesTable()
  *
  * @param  PredisClient $client
  *         the Redis connection opened with UsingRedis
- * @return \Prose\FromRedisConn
+ * @return \Storyplayer\SPv2\Module\Redis\FromRedisConn
  */
 function fromRedisConn(PredisClient $client)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromRedisConn(StoryTeller::instance(), [$client]);
+    return Redis::fromRedisConn($client);
 }
 
 /**
@@ -1008,12 +941,12 @@ function fromRedisConn(PredisClient $client)
  * This module is for internal use inside Storyplayer. You shouldn't need to
  * use it from your own stories.
  *
- * @return \Prose\FromRolesTable
+ * @return \Storyplayer\SPv2\Module\TestEnvironment\FromRolesTable
  */
 function fromRolesTable()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromRolesTable(StoryTeller::instance());
+    return TestEnvironment::fromRolesTable();
 }
 
 /**
@@ -1033,23 +966,6 @@ function fromRuntimeTable($tableName)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
     return RuntimeTable::fromRuntimeTable($tableName);
-}
-
-/**
- * returns the FromSauceLabs module
- *
- * At the moment, this module is a placeholder. We hope to add full support
- * for the SauceLabs API soon.
- *
- * You can use the --device switch to run your tests using SauceLabs'
- * platform today. Supported devices start with the prefix 'sl_'.
- *
- * @return \Prose\FromSauceLabs
- */
-function fromSauceLabs()
-{
-    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromSauceLabs(StoryTeller::instance());
 }
 
 /**
@@ -1080,12 +996,12 @@ function fromShell()
  * about Storyplayer (such as the local computer's IP address) that are
  * detected at runtime.
  *
- * @return \Prose\FromStoryplayer
+ * @return \Storyplayer\SPv2\Module\Storyplayer\FromStoryplayer
  */
 function fromStoryplayer()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromStoryplayer(StoryTeller::instance());
+    return Storyplayer::fromStoryplayer();
 }
 
 
@@ -1094,12 +1010,12 @@ function fromStoryplayer()
  *
  * This module provides useful functions for interacting with strings
  *
- * @return FromString
+ * @return \Storyplayer\SPv2\Module\Types\FromString
  */
 function fromString()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromString(StoryTeller::instance());
+    return Types::fromString();
 }
 
 /**
@@ -1134,12 +1050,12 @@ function fromSupervisor($hostId)
  * you're testing), you can simply add these settings to your
  * system-under-test config files, and load the settings into your stories.
  *
- * @return \Prose\FromSystemUnderTest
+ * @return \Storyplayer\SPv2\Module\Storyplayer\FromSystemUnderTest
  */
 function fromSystemUnderTest()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromSystemUnderTest(StoryTeller::instance());
+    return Storyplayer::fromSystemUnderTest();
 }
 
 /**
@@ -1150,12 +1066,12 @@ function fromSystemUnderTest()
  *
  * You shouldn't need to call this module from your own stories.
  *
- * @return \Prose\FromTargetsTable
+ * @return \StoryplayerInternals\SPv2\Modules\FromTargetsTable
  */
 function fromTargetsTable()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromTargetsTable(StoryTeller::instance());
+    return new FromTargetsTable();
 }
 
 /**
@@ -1176,12 +1092,12 @@ function fromTargetsTable()
  * You can also use this from any custom modules to retrieve any
  * 'moduleSettings' that have been set in the test environment config.
  *
- * @return \Prose\FromTestEnvironment
+ * @return \Storyplayer\SPv2\Modules\TestEnvironment\FromTestEnvironment
  */
 function fromTestEnvironment()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new FromTestEnvironment(StoryTeller::instance());
+    return TestEnvironment::fromTestEnvironment();
 }
 
 /**
@@ -1297,12 +1213,12 @@ function usingBrowser()
  *
  * This module will probably be removed in SPv3.
  *
- * @return \Prose\UsingCheckpoint
+ * @return \Storyplayer\SPv2\Modules\Storyplayer\UsingCheckpoint
  */
 function usingCheckpoint()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingCheckpoint(StoryTeller::instance());
+    return Storyplayer::usingCheckpoint();
 }
 
 /**
@@ -1313,12 +1229,12 @@ function usingCheckpoint()
  * you can interact with it using the FromHost() / UsingHost() module as
  * normal.
  *
- * @return \Prose\UsingEc2
+ * @return \Storyplayer\SPv2\Modules\Aws\UsingEc2
  */
 function usingEc2()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingEc2(StoryTeller::instance());
+    return Aws::usingEc2();
 }
 
 /**
@@ -1334,12 +1250,12 @@ function usingEc2()
  *
  * @param  string $amiId
  *         the AMI ID to work with
- * @return \Prose\UsingEc2Instance
+ * @return \Storyplayer\SPv2\Modules\Aws\UsingEc2Instance
  */
 function usingEc2Instance($amiId)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingEc2Instance(StoryTeller::instance(), [$amiId]);
+    return Aws::usingEc2Instance($amiId);
 }
 
 /**
@@ -1354,7 +1270,7 @@ function usingEc2Instance($amiId)
 function usingFile()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingFile(StoryTeller::instance());
+    return File::usingFile();
 }
 
 /**
@@ -1490,12 +1406,12 @@ function usingLog()
  * Once you have an open connection, use the UsingPDODB module to execute
  * SQL statements.
  *
- * @return \Prose\UsingPDO
+ * @return \Storyplayer\SPv2\Modules\PDODB\UsingPDO
  */
 function usingPDO()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingPDO(StoryTeller::instance());
+    return PDODB::usingPDO();
 }
 
 /**
@@ -1507,12 +1423,12 @@ function usingPDO()
  *
  * @param  \PDO    $db
  *         a PDO connection created by UsingPDO
- * @return \Prose\UsingPDODB
+ * @return \Storyplayer\SPv2\Modules\PDODB\UsingPDODB
  */
 function usingPDODB(PDO $db)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingPDODB(StoryTeller::instance(), [$db]);
+    return PDODB::usingPDODB($db);
 }
 
 /**
@@ -1550,12 +1466,12 @@ function usingProcessesTable()
  * PHP file to the --targets switch. I think this will be easier to use
  * than the current JSON-based approach.
  *
- * @return \Prose\UsingProvisioning
+ * @return \Storyplayer\SPv2\Modules\Provisioning\UsingProvisioning
  */
 function usingProvisioning()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingProvisioning(StoryTeller::instance());
+    return Provisioning::usingProvisioning();
 }
 
 /**
@@ -1572,12 +1488,12 @@ function usingProvisioning()
  *
  * @param  ProvisioningDefinition $def
  *         a provisioning definition created by UsingProvisioning
- * @return \Prose\UsingProvisioningDefinition
+ * @return \Storyplayer\SPv2\Modules\Provisioning\UsingProvisioningDefinition
  */
 function usingProvisioningDefinition(ProvisioningDefinition $def)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingProvisioningDefinition(StoryTeller::instance(), [$def]);
+    return Provisioning::usingProvisioningDefinition($def);
 }
 
 /**
@@ -1595,12 +1511,12 @@ function usingProvisioningDefinition(ProvisioningDefinition $def)
  *
  * @param  string $engine
  *         the name of a supported provisioning engine
- * @return \Prose\UsingProvisioningEngine
+ * @return \Storyplayer\SPv2\Modules\Provisioning\UsingProvisioningEngine
  */
 function usingProvisioningEngine($engine)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingProvisioningEngine(StoryTeller::instance(), [$engine]);
+    return Provisioning::usingProvisioningEngine($engine);
 }
 
 /**
@@ -1613,12 +1529,12 @@ function usingProvisioningEngine($engine)
  * Redis is a very popular key/value store (and a whole lot more) - it's a
  * bit like Memcached on steroids :)
  *
- * @return \Prose\UsingRedis
+ * @return \Storyplayer\SPv2\Modules\Redis\UsingRedis
  */
 function usingRedis()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingRedis(StoryTeller::instance());
+    return Redis::usingRedis();
 }
 
 /**
@@ -1632,12 +1548,12 @@ function usingRedis()
  *
  * @param  PredisClient $client
  *         a Redis client created by the UsingRedis module
- * @return \Prose\UsingRedisConn
+ * @return \Storyplayer\SPv2\Modules\Redis\UsingRedisConn
  */
 function usingRedisConn(PredisClient $client)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingRedisConn(StoryTeller::instance(), [$client]);
+    return Redis::usingRedisConn($client);
 }
 
 /**
@@ -1691,23 +1607,6 @@ function usingRuntimeTable($tableName)
 }
 
 /**
- * returns the UsingSauceLabs module
- *
- * At the moment, this module is a placeholder. We hope to add full support
- * for the SauceLabs API soon.
- *
- * You can use the --device switch to run your tests using SauceLabs'
- * platform today. Supported devices start with the prefix 'sl_'.
- *
- * @return \Prose\UsingSauceLabs
- */
-function usingSauceLabs()
-{
-    Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingSauceLabs(StoryTeller::instance());
-}
-
-/**
  * returns the UsingSavageD module
  *
  * This module provides support for controlling the SavageD data-gathering
@@ -1715,12 +1614,12 @@ function usingSauceLabs()
  * second) monitoring of processes and memory in your test environment. It
  * was originally built to help load test the DataSift platform.
  *
- * @return \Prose\UsingSavageD
+ * @return \Storyplayer\SPv2\Modules\SavageD\UsingSavageD
  */
 function usingSavageD($hostId)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingSavageD(StoryTeller::instance(), [$hostId]);
+    return SavageD::usingSavageD($hostId);
 }
 
 /**
@@ -1784,12 +1683,12 @@ function usingTargetsTable()
  * You don't get these log messages if you call PHP's sleep() directly from
  * your story.
  *
- * @return \Prose\UsingTimer
+ * @return \Storyplayer\SPv2\Module\Timing\UsingTimer
  */
 function usingTimer()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingTimer(StoryTeller::instance());
+    return Timing::usingTimer();
 }
 
 /**
@@ -1821,12 +1720,12 @@ function usingUsers()
  * configuration files. As a result, it's unlikely you'll need to call this
  * module from your own stories.
  *
- * @return \Prose\UsingVagrant
+ * @return \Storyplayer\SPv2\Modules\Vagrant\UsingVagrant
  */
 function usingVagrant()
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingVagrant(StoryTeller::instance());
+    return Vagrant::usingVagrant(StoryTeller::instance());
 }
 
 /**
@@ -1841,7 +1740,7 @@ function usingVagrant()
 function usingYamlFile($filename)
 {
     Deprecated::fireDeprecated(__FUNCTION__, "2.4.0", ManualUrls::DEPRECATED_GLOBAL_FUNCTIONS);
-    return new UsingYamlFile(StoryTeller::instance(), [$filename]);
+    return File::usingYamlFile($filename);
 }
 
 /**
