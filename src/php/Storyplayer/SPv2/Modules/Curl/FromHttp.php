@@ -34,16 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Curl
  * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Curl;
 
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * get information from a HTTP server, without using a web browser to
@@ -52,13 +53,13 @@ use Storyplayer\SPv2\Modules\Exceptions;
  * great for testing APIs
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Curl
  * @author    Michael Heap <michael.heap@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromCurl extends Prose
+class FromHttp extends Prose
 {
     /**
      * get
@@ -82,7 +83,7 @@ class FromCurl extends Prose
         }
 
         // what are we doing?
-        $log = usingLog()->startAction("HTTP GET '${url}'");
+        $log = Log::usingLog()->startAction("HTTP GET '${url}'");
 
         // create a new cURL resource
         $ch = curl_init();
