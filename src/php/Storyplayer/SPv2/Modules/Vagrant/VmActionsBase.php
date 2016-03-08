@@ -34,31 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Vagrant
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Vagrant;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\HostLib;
-use DataSift\Stone\ObjectLib\BaseObject;
-use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Host;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
- * do things with vagrant
+ * base class & API for different types of virtual hosting
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Vagrant
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingVagrant extends VmActionsBase
+class VmActionsBase extends Prose
 {
     public function __construct(StoryTeller $st, $args = array())
     {
@@ -66,67 +66,93 @@ class UsingVagrant extends VmActionsBase
         parent::__construct($st, $args);
     }
 
-    public function createVm($vmName, $osName, $homeFolder)
+    public function destroyVm($vmName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("start vagrant VM '{$vmName}', running guest OS '{$osName}', using Vagrantfile in '{$homeFolder}'");
+        $log = Log::usingLog()->startAction("destroy VM '{$vmName}'");
 
-        // put the details into an array
-        $vmDetails = new BaseObject();
-        $vmDetails->hostId      = $vmName;
-        $vmDetails->osName      = $osName;
-        $vmDetails->homeFolder  = $homeFolder;
-        $vmDetails->type        = 'VagrantVm';
-        $vmDetails->sshUsername = 'vagrant';
-        $vmDetails->sshKeyFile  = $this->determinePrivateKey($vmDetails);
-        $vmDetails->sshOptions  = [
-            "-i '" . $vmDetails->sshKeyFile . "'",
-            "-o StrictHostKeyChecking=no",
-            "-o UserKnownHostsFile=/dev/null",
-            "-o LogLevel=quiet",
-        ];
-        $vmDetails->scpOptions  = [
-            "-i '" . $vmDetails->sshKeyFile . "'",
-            "-o StrictHostKeyChecking=no",
-        ];
+        // get the VM details
+        $vmDetails = Host::fromHost($vmName)->getDetails();
 
         // create our host adapter
         $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-        // create our virtual machine
-        $host->createHost($vmDetails);
+        // stop the VM
+        $host->destroyHost($vmDetails);
 
         // all done
         $log->endAction();
     }
 
-    public function determinePrivateKey($vmDetails)
+    public function stopVm($vmName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("determine private key for Vagrant VM '{$vmDetails->hostId}'");
+        $log = Log::usingLog()->startAction("stop VM '{$vmName}'");
 
-        // the key will be in one of two places, in this order:
-        //
-        // cwd()/.vagrant/machines/:name/virtualbox/private_key
-        // $HOME/.vagrant.d/insecure_private_key
-        //
-        // we use the first that we can find
-        $keyFilenames = [
-            getcwd() . "/.vagrant/machines/{$vmDetails->hostId}/virtualbox/private_key",
-            getenv("HOME") . "/.vagrant.d/insecure_private_key"
-        ];
+        // get the VM details
+        $vmDetails = Host::fromHost($vmName)->getDetails();
 
-        foreach ($keyFilenames as $keyFilename)
-        {
-            usingLog()->writeToLog("checking if {$keyFilename} exists");
-            if (file_exists($keyFilename)) {
-                $log->endAction($keyFilename);
-                return $keyFilename;
-            }
-        }
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
 
-        // if we get here, then we do not know where the private key is
-        $log->endAction("unable to find Vagrant private key for VM");
-        throw Exceptions::newActionFailedException(__METHOD__);
+        // stop the VM
+        $host->stopHost($vmDetails);
+
+        // all done
+        $log->endAction();
+    }
+
+    public function powerOffVm($vmName)
+    {
+        // what are we doing?
+        $log = Log::usingLog()->startAction("power off VM '{$vmName}'");
+
+        // get the VM details
+        $vmDetails = Host::fromHost($vmName)->getDetails();
+
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
+
+        // stop the VM
+        $host->stopHost($vmDetails);
+
+        // all done
+        $log->endAction();
+    }
+
+    public function restartVm($vmName)
+    {
+        // what are we doing?
+        $log = Log::usingLog()->startAction("restart VM '{$vmName}'");
+
+        // get the VM details
+        $vmDetails = Host::fromHost($vmName)->getDetails();
+
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
+
+        // restart our virtual machine
+        $host->restartHost($vmDetails);
+
+        // all done
+        $log->endAction();
+    }
+
+    public function startVm($vmName)
+    {
+        // what are we doing?
+        $log = Log::usingLog()->startAction("start VM '{$vmName}'");
+
+        // get the VM details
+        $vmDetails = Host::fromHost($vmName)->getDetails();
+
+        // create our host adapter
+        $host = HostLib::getHostAdapter($this->st, $vmDetails->type);
+
+        // restart our virtual machine
+        $host->startHost($vmDetails);
+
+        // all done
+        $log->endAction();
     }
 }
