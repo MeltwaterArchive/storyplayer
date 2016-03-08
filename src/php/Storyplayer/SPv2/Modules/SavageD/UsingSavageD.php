@@ -34,15 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/SavageD
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Module\SavageD;
+
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\HTTP;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * do things with SavageD. SavageD is DataSift's real-time server and
@@ -60,16 +63,16 @@ class UsingSavageD extends HostBase
     public function deleteStatsPrefix()
     {
         // what are we doing?
-        $log = usingLog()->startAction("delete SavageD stats prefix on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("delete SavageD stats prefix on host '{$this->args[0]}'");
 
         // where are we doing this?
         $url = $this->getSavagedUrl() . "/stats/prefix";
 
         // make the request
-        $response = usingHttp()->delete($url);
+        $response = HTTP::usingHttp()->delete($url);
 
         // did it work?
-        expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
 
         // all done
         $log->endAction();
@@ -78,19 +81,19 @@ class UsingSavageD extends HostBase
     public function setStatsPrefix($prefix)
     {
         // what are we doing?
-        $log = usingLog()->startAction("set SavageD stats prefix to '{$prefix}' on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("set SavageD stats prefix to '{$prefix}' on host '{$this->args[0]}'");
 
         // where are we doing this?
         $url = $this->getSavagedUrl() . "/stats/prefix";
 
         // make the request
-        usingHttp()->post($url, [], array("prefix" => $prefix));
+        HTTP::usingHttp()->post($url, [], array("prefix" => $prefix));
 
         // did it work?
-        $response = fromHttp()->get($url);
+        $response = HTTP::fromHttp()->get($url);
 
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"prefix":"' . $prefix . '"}');
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"prefix":"' . $prefix . '"}');
 
         // all done
         $log->endAction();
@@ -99,19 +102,19 @@ class UsingSavageD extends HostBase
     public function watchProcess($processName, $pid)
     {
         // what are we doing?
-        $log = usingLog()->startAction("watch the '{$processName}' process w/ ID '{$pid}' on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("watch the '{$processName}' process w/ ID '{$pid}' on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
         $url = $this->getSavagedUrl() . "/process/{$safeProcessName}/pid";
 
         // make the request
-        usingHttp()->post($url, [], array("pid" => $pid));
+        HTTP::usingHttp()->post($url, [], array("pid" => $pid));
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"pid":"' . $pid . '"}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"pid":"' . $pid . '"}');
 
         // all done
         $log->endAction();
@@ -120,19 +123,19 @@ class UsingSavageD extends HostBase
     public function stopWatchingProcess($processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop watching the '{$processName}' process on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("stop watching the '{$processName}' process on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
         $url = $this->getSavagedUrl() . "/process/{$safeProcessName}/pid";
 
         // make the request
-        usingHttp()->delete($url);
+        HTTP::usingHttp()->delete($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(404);
-        expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(404);
+        HTTP::expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
 
         // all done
         $log->endAction();
@@ -141,7 +144,7 @@ class UsingSavageD extends HostBase
     public function watchProcessCpu($processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("watch the CPU used by the '{$processName}' process on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("watch the CPU used by the '{$processName}' process on host '{$this->args[0]}'");
 
         // build the URL
         // where are we doing this?
@@ -149,12 +152,12 @@ class UsingSavageD extends HostBase
         $url = $this->getSavagedUrl() . "/process/{$safeProcessName}/cpu";
 
         // make the request
-        usingHttp()->post($url);
+        HTTP::usingHttp()->post($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"monitoring":true}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":true}');
 
         // all done
         $log->endAction();
@@ -163,19 +166,19 @@ class UsingSavageD extends HostBase
     public function stopWatchingProcessCpu($processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop watch the cpu used by the '{$processName}' process on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("stop watch the cpu used by the '{$processName}' process on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
         $url = $this->getSavagedUrl() . "/process/{$safeProcessName}/url";
 
         // make the request
-        usingHttp()->delete($url);
+        HTTP::usingHttp()->delete($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(404);
-        expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(404);
+        HTTP::expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
 
         // all done
         $log->endAction();
@@ -184,7 +187,7 @@ class UsingSavageD extends HostBase
     public function watchProcessMemory($processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("watch the memory used by the '{$processName}' process on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("watch the memory used by the '{$processName}' process on host '{$this->args[0]}'");
 
         // build the URL
         // where are we doing this?
@@ -192,12 +195,12 @@ class UsingSavageD extends HostBase
         $url = $this->getSavagedUrl() . "/process/{$safeProcessName}/memory";
 
         // make the request
-        usingHttp()->post($url);
+        HTTP::usingHttp()->post($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"monitoring":true}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":true}');
 
         // all done
         $log->endAction();
@@ -206,19 +209,19 @@ class UsingSavageD extends HostBase
     public function stopWatchingProcessMemory($processName)
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop watch the memory used by the '{$processName}' process on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("stop watch the memory used by the '{$processName}' process on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeProcessName = urlencode($this->args[0] . '.processes.' . $processName);
         $url = $this->getSavagedUrl() . "/process/{$safeProcessName}/memory";
 
         // make the request
-        usingHttp()->delete($url);
+        HTTP::usingHttp()->delete($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(404);
-        expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(404);
+        HTTP::expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
 
         // all done
         $log->endAction();
@@ -227,19 +230,19 @@ class UsingSavageD extends HostBase
     public function watchServerCpu()
     {
         // what are we doing?
-        $log = usingLog()->startAction("watch the server's cpu usage on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("watch the server's cpu usage on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeTestName = urlencode($this->args[0] . '.host');
         $url = $this->getSavagedUrl() . "/server/{$safeTestName}/cpu";
 
         // make the request
-        usingHttp()->post($url);
+        HTTP::usingHttp()->post($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"monitoring":true}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":true}');
 
         // all done
         $log->endAction();
@@ -248,19 +251,19 @@ class UsingSavageD extends HostBase
     public function stopWatchingServerCpu()
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop watching the server's cpu on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("stop watching the server's cpu on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeTestName = urlencode($this->args[0] . '.host');
         $url = $this->getSavagedUrl() . "/server/{$safeTestName}/cpu";
 
         // make the request
-        usingHttp()->delete($url);
+        HTTP::usingHttp()->delete($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(404);
-        expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(404);
+        HTTP::expectsHttpResponse($response)->hasBody('{"error": "no such alias"}');
 
         // all done
         $log->endAction();
@@ -269,19 +272,19 @@ class UsingSavageD extends HostBase
     public function watchServerLoadavg()
     {
         // what are we doing?
-        $log = usingLog()->startAction("watch the server's load average on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("watch the server's load average on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeTestName = urlencode($this->args[0] . '.host');
         $url = $this->getSavagedUrl() . "/server/{$safeTestName}/loadavg";
 
         // make the request
-        usingHttp()->post($url);
+        HTTP::usingHttp()->post($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"monitoring":true}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":true}');
 
         // all done
         $log->endAction();
@@ -290,19 +293,19 @@ class UsingSavageD extends HostBase
     public function stopWatchingServerLoadavg()
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop watching the server's load average on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("stop watching the server's load average on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeTestName = urlencode($this->args[0] . '.host');
         $url = $this->getSavagedUrl() . "/server/{$safeTestName}/loadavg";
 
         // make the request
-        usingHttp()->delete($url);
+        HTTP::usingHttp()->delete($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(404);
-        expectsHttpResponse($response)->hasBody('{"monitoring":false}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(404);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":false}');
 
         // all done
         $log->endAction();
@@ -311,19 +314,19 @@ class UsingSavageD extends HostBase
     public function watchServerDiskstats()
     {
         // what are we doing?
-        $log = usingLog()->startAction("watch the server's diskstats on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("watch the server's diskstats on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeTestName = urlencode($this->args[0] . '.host');
         $url = $this->getSavagedUrl() . "/server/{$safeTestName}/diskstats";
 
         // make the request
-        usingHttp()->post($url);
+        HTTP::usingHttp()->post($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"monitoring":true}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":true}');
 
         // all done
         $log->endAction();
@@ -332,19 +335,19 @@ class UsingSavageD extends HostBase
     public function stopWatchingServerDiskstats()
     {
         // what are we doing?
-        $log = usingLog()->startAction("stop watching the server's diskstats on host '{$this->args[0]}'");
+        $log = Log::usingLog()->startAction("stop watching the server's diskstats on host '{$this->args[0]}'");
 
         // where are we doing this?
         $safeTestName = urlencode($this->args[0] . '.host');
         $url = $this->getSavagedUrl() . "/server/{$safeTestName}/diskstats";
 
         // make the request
-        usingHttp()->delete($url);
+        HTTP::usingHttp()->delete($url);
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(404);
-        expectsHttpResponse($response)->hasBody('{"monitoring":false}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(404);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":false}');
 
         // all done
         $log->endAction();
@@ -353,18 +356,18 @@ class UsingSavageD extends HostBase
     public function startMonitoring()
     {
         // what are we doing?
-        $log = usingLog()->startAction("tell SavageD on host '{$this->args[0]}' to start sending stats to statsd");
+        $log = Log::usingLog()->startAction("tell SavageD on host '{$this->args[0]}' to start sending stats to statsd");
 
         // where are we doing this?
         $url = $this->getSavagedUrl() . "/stats/monitoring";
 
         // make the request
-        usingHttp()->post($url, null, array("monitoring" => "true"));
+        HTTP::usingHttp()->post($url, null, array("monitoring" => "true"));
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"monitoring":true}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":true}');
 
         // all done
         $log->endAction();
@@ -373,18 +376,18 @@ class UsingSavageD extends HostBase
     public function stopMonitoring()
     {
         // what are we doing?
-        $log = usingLog()->startAction("tell SavageD on host '{$this->args[0]}' to stop sending stats to statsd");
+        $log = Log::usingLog()->startAction("tell SavageD on host '{$this->args[0]}' to stop sending stats to statsd");
 
         // where are we doing this?
         $url = $this->getSavagedUrl() . "/stats/monitoring";
 
         // make the request
-        usingHttp()->post($url, array("monitoring" => false));
+        HTTP::usingHttp()->post($url, array("monitoring" => false));
 
         // did it work?
-        $response = fromHttp()->get($url);
-        expectsHttpResponse($response)->hasStatusCode(200);
-        expectsHttpResponse($response)->hasBody('{"monitoring":false}');
+        $response = HTTP::fromHttp()->get($url);
+        HTTP::expectsHttpResponse($response)->hasStatusCode(200);
+        HTTP::expectsHttpResponse($response)->hasBody('{"monitoring":false}');
 
         // all done
         $log->endAction();
