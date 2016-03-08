@@ -34,19 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Redis
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Redis;
 
 use Exception;
 use Predis\Client as PredisClient;
-use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * work with a Redis datastore
@@ -58,19 +58,30 @@ use Storyplayer\SPv2\Modules\Exceptions;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class BaseRedisConn extends Prose
+class UsingRedisConn extends BaseRedisConn
 {
-    public function __construct(StoryTeller $st, $args)
+    public function __call($methodName, $params)
     {
-        // call our parent first
-        parent::__construct($st, $args);
+        // what are we doing?
+        $log = Log::usingLog()->startAction(["run redis command", $methodName, "with params:", $params]);
 
-        // make sure we have a Redis connection
-        if (!isset($args[0])) {
-            throw Exceptions::newActionFailedException(__METHOD__, "param #1 needs to be a valid Redis connection");
+        // do we have such a redis call?
+        if (!method_exists($this->args[0], $methodName)) {
+            throw Exceptions::newActionFailedException(__METHOD__, "no such redis command '{$methodName}'");
         }
-        if (!$args[0] instanceof PredisClient) {
-            throw Exceptions::newActionFailedException(__METHOD__, "param #1 needs to be an instance of Predis\\Client");
+
+        // make the call
+        try {
+            $return = call_user_method_array($methodName, $this->args[0], $params);
+
+            // all done
+            $log->endAction($return);
+
+            return $return;
+        }
+        catch (Exception $e)
+        {
+            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
         }
     }
 }

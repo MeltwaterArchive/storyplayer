@@ -34,49 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Redis
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules;
 
-use Exception;
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use Predis\Client as PredisClient;
-use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Redis\FromRedisConn;
+use Storyplayer\SPv2\Modules\Redis\UsingRedis;
+use Storyplayer\SPv2\Modules\Redis\UsingRedisConn;
 
-/**
- * connect to a Redis server using predis
- *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Stuart Herbert <stuart.herbert@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class UsingRedis extends Prose
+class Redis
 {
-    public function connect($dsn)
+    /**
+     * get data from a Redis instance
+     *
+     * @param  PredisClient $client
+     *         the client that is connected to the Redis instance
+     * @return mixed
+     *         the data returned
+     */
+    public static function fromRedisConn(PredisClient $client)
     {
-        // what are we doing?
-        $log = usingLog()->startAction("connect to Redis server '{$dsn}'");
+        return new FromRedisConn($client);
+    }
 
-        // make the connection
-        try {
-            $conn = new PredisClient($dsn);
-        }
-        catch (Exception $e) {
-            $log->endAction("connection failed: " . $e->getMessage());
-            throw Exceptions::newActionFailedException(__METHOD__);
-        }
+    /**
+     * connect to a Redis instance
+     *
+     * @return UsingRedis
+     */
+    public static function usingRedis()
+    {
+        return new UsingRedis();
+    }
 
-        // if we get here, all is good
-
-        // all done
-        $log->endAction("connected");
-        return $conn;
+    /**
+     * perform an action on a Redis instance
+     *
+     * @param  PredisClient $client
+     *         the client that is connected to the Redis instance
+     * @return UsingRedisConn
+     */
+    public static function usingRedisConn(PredisClient $client)
+    {
+        return new UsingRedisConn($client);
     }
 }

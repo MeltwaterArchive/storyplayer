@@ -34,53 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Redis
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Redis;
 
 use Exception;
 use Predis\Client as PredisClient;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
- * work with a Redis datastore
+ * connect to a Redis server using predis
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Redis
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class UsingRedisConn extends BaseRedisConn
+class UsingRedis extends Prose
 {
-    public function __call($methodName, $params)
+    public function connect($dsn)
     {
         // what are we doing?
-        $log = usingLog()->startAction(["run redis command", $methodName, "with params:", $params]);
+        $log = Log::usingLog()->startAction("connect to Redis server '{$dsn}'");
 
-        // do we have such a redis call?
-        if (!method_exists($this->args[0], $methodName)) {
-            throw Exceptions::newActionFailedException(__METHOD__, "no such redis command '{$methodName}'");
-        }
-
-        // make the call
+        // make the connection
         try {
-            $return = call_user_method_array($methodName, $this->args[0], $params);
-
-            // all done
-            $log->endAction($return);
-
-            return $return;
+            $conn = new PredisClient($dsn);
         }
-        catch (Exception $e)
-        {
-            throw Exceptions::newActionFailedException(__METHOD__, $e->getMessage());
+        catch (Exception $e) {
+            $log->endAction("connection failed: " . $e->getMessage());
+            throw Exceptions::newActionFailedException(__METHOD__);
         }
+
+        // if we get here, all is good
+
+        // all done
+        $log->endAction("connected");
+        return $conn;
     }
 }
