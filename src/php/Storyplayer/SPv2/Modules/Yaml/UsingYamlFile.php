@@ -33,20 +33,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  Libraries
- * @package   Storyplayer/Prose
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Yaml;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Stone\DataLib\DataPrinter;
+use Prose\Prose;
 use Symfony\Component\Yaml\Dumper;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * Support for working with YAML files
@@ -79,7 +79,7 @@ class UsingYamlFile extends Prose
         // what are we doing?
         $printer = new DataPrinter();
         $logParams = $printer->convertToString($params);
-        $log = usingLog()->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
+        $log = Log::usingLog()->startAction("create YAML file '{$filename}' with contents '{$logParams}'");
 
         // create an instance of the Symfony YAML writer
         $writer = new Dumper();
