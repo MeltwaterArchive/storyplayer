@@ -34,16 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/PDODB
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\PDODB;
 use PDO;
 use PDOException;
+
+use Storyplayer\SPv2\Modules\Execeptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * connect to a database using PDO
@@ -62,7 +65,7 @@ class UsingPDO extends Prose
     public function connect($dsn, $username = null, $password = null, $options = [])
     {
         // what are we doing?
-        $log = usingLog()->startAction("connect to database '{$dsn}'");
+        $log = Log::usingLog()->startAction("connect to database '{$dsn}'");
 
         // make the connection
         try {

@@ -34,19 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/PDODB
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\PDODB;
 
 use Exception;
 use PDO;
 use PDOException;
 use PDOStatement;
+
+use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * work with a PDO database connection
@@ -79,7 +82,7 @@ class UsingPDODB extends Prose
     public function query($sql, $params = [], $driverParams = [])
     {
         // what are we doing?
-        $log = usingLog()->startAction(["run SQL query:", $sql, "/ with params:", $params, "and driver params:", $driverParams]);
+        $log = Log::usingLog()->startAction(["run SQL query:", $sql, "/ with params:", $params, "and driver params:", $driverParams]);
 
         try
         {
@@ -104,7 +107,7 @@ class UsingPDODB extends Prose
     public function rawQuery($sql, $driverParams = [])
     {
         // what are we doing?
-        $log = usingLog()->startAction(["run raw SQL query:", $sql, "with driver params: ", $driverParams]);
+        $log = Log::usingLog()->startAction(["run raw SQL query:", $sql, "with driver params: ", $driverParams]);
 
         try
         {
@@ -127,7 +130,7 @@ class UsingPDODB extends Prose
     public function beginTransaction()
     {
         // what are we doing?
-        $log = usingLog()->startAction("begin PDO database transaction");
+        $log = Log::usingLog()->startAction("begin PDO database transaction");
 
         try
         {
@@ -145,7 +148,7 @@ class UsingPDODB extends Prose
     public function commitTransaction()
     {
         // what are we doing?
-        $log = usingLog()->startAction("commit PDO database transaction");
+        $log = Log::usingLog()->startAction("commit PDO database transaction");
 
         try
         {
@@ -163,7 +166,7 @@ class UsingPDODB extends Prose
     public function rollbackTransaction()
     {
         // what are we doing?
-        $log = usingLog()->startAction("rollback PDO database transaction");
+        $log = Log::usingLog()->startAction("rollback PDO database transaction");
 
         try
         {
