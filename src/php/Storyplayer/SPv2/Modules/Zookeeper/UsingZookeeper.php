@@ -34,18 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Zookeeper
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Zookeeper;
 
 use Zookeeper;
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * do things with zookeeper
@@ -84,7 +85,7 @@ class UsingZookeeper extends Prose
     protected function connect($host)
     {
         // what are we doing?
-        $log = usingLog()->startAction("connect to Zookeeper at '{$host}'");
+        $log = Log::usingLog()->startAction("connect to Zookeeper at '{$host}'");
 
         // create a Zookeeper object, and connect
         $zk = new Zookeeper();
@@ -145,7 +146,7 @@ class UsingZookeeper extends Prose
     public function write($key, $value)
     {
         // what are we doing?
-        $log = usingLog()->startAction("set '{$key}' to '{$value}' in Zookeeper");
+        $log = Log::usingLog()->startAction("set '{$key}' to '{$value}' in Zookeeper");
 
         // make sure the path exists
         $this->ensurePathToKeyExists($key);
@@ -169,7 +170,7 @@ class UsingZookeeper extends Prose
     public function delete($key)
     {
         // what are we doing?
-        $log = usingLog()->startAction("delete '{$key}' from Zookeeper");
+        $log = Log::usingLog()->startAction("delete '{$key}' from Zookeeper");
 
         // does the key itself exist in zookeeper?
         if (!$this->zk->exists($key)) {
@@ -200,7 +201,7 @@ class UsingZookeeper extends Prose
     public function deleteChildrenOf($key)
     {
         // what are we doing?
-        $log = usingLog()->startAction("delete all children of '{$key}' from Zookeeper");
+        $log = Log::usingLog()->startAction("delete all children of '{$key}' from Zookeeper");
 
         // does the key itself exist in zookeeper?
         if (!$this->zk->exists($key)) {
