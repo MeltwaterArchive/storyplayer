@@ -34,18 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Timing
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Timing;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\LogLib\Log;
 use DataSift\Stone\TimeLib\DateInterval;
+
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * Helper class for running an action for a precise period of time
@@ -54,7 +55,7 @@ use DataSift\Stone\TimeLib\DateInterval;
  * a subprocess of some kind, to make this much more robust than it is
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Timing
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -79,7 +80,7 @@ class TimedAction
     public function forExactly($duration)
     {
         // what are we doing?
-        $log = usingLog()->startAction("run for exactly '{$duration}'");
+        $log = Log::usingLog()->startAction("run for exactly '{$duration}'");
 
         // remember the duration
         //
@@ -108,7 +109,7 @@ class TimedAction
     public function handleSigAlarm()
     {
         // what are we doing?
-        $log = usingLog()->startAction("SIGALRM received");
+        $log = Log::usingLog()->startAction("SIGALRM received");
 
         // try and terminate the running code
         $this->terminate = true;

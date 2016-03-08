@@ -34,18 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Timing
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Timing;
 
 use Exception;
 use DataSift\Stone\TimeLib\DateInterval;
 use Storyplayer\SPv2\Modules\Exceptions;
+use Storyplayer\SPv2\Modules\Log;
 
 /**
  * perform delayed actions
@@ -75,7 +76,7 @@ class UsingTimer extends Prose
         $end = $now + $seconds;
 
         // what are we doing?
-        $log = usingLog()->startAction("polling for up to {$seconds} seconds");
+        $log = Log::usingLog()->startAction("polling for up to {$seconds} seconds");
 
         while ($now < $end) {
             try {
@@ -122,7 +123,7 @@ class UsingTimer extends Prose
         $end = $now + $seconds;
 
         // what are we doing?
-        $log = usingLog()->startAction("polling for up to '{$seconds}' seconds");
+        $log = Log::usingLog()->startAction("polling for up to '{$seconds}' seconds");
 
         while ($now < $end) {
             try {
@@ -170,7 +171,7 @@ class UsingTimer extends Prose
         }
 
         // what are we doing?
-        $log = usingLog()->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
+        $log = Log::usingLog()->startAction("sleeping for {$timeout}; reason is: '{$reason}'");
 
         // zzzzz
         sleep($seconds);
