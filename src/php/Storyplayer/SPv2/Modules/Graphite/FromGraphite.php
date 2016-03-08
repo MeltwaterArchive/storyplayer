@@ -34,20 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Graphite
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Graphite;
+
+use Storyplayer\SPv2\Modules\Asserts;
+use Storyplayer\SPv2\Modules\HTTP;
+use Storyplayer\SPv2\Modules\Log;
+use Storyplayer\SPv2\Modules\Storyplayer;
 
 /**
  * get information from Graphite
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Graphite
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -62,24 +67,24 @@ class FromGraphite extends Prose
         $humanEndTime   = date('Y-m-d H:i:s', $endTime);
 
         // what are we doing?
-        $log = usingLog()->startAction("get raw data from graphite for '{$metric}' between '{$humanStartTime}' and '{$humanEndTime}'");
+        $log = Log::usingLog()->startAction("get raw data from graphite for '{$metric}' between '{$humanStartTime}' and '{$humanEndTime}'");
 
         // find out where graphite is
-        $graphiteUrl = fromConfig()->getModuleSetting('graphite.url');
+        $graphiteUrl = Storyplayer::fromConfig()->getModuleSetting('graphite.url');
         if (substr($graphiteUrl, -1, 1) !== '/') {
             $graphiteUrl .= '/';
         }
 
         // get the requested data
-        $response = fromHttp()->get("{$graphiteUrl}render?format=json&target={$metric}&from={$startTime}&until={$endTime}");
+        $response = HTTP::fromHttp()->get("{$graphiteUrl}render?format=json&target={$metric}&from={$startTime}&until={$endTime}");
 
         // are there any stats in the response?
-        assertsArray($response->chunks)->isExpectedType();
-        assertsArray($response->chunks)->isNotEmpty();
+        Asserts::assertsArray($response->chunks)->isExpectedType();
+        Asserts::assertsArray($response->chunks)->isNotEmpty();
 
         // assemble the raw chunks into one string to decode
         $rawStats = implode("", $response->chunks);
-        assertsString($rawStats)->isValidJson();
+        Asserts::assertsString($rawStats)->isValidJson();
         $stats = json_decode($rawStats);
 
         // all done
