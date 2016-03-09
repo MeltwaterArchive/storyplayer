@@ -34,59 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Types
  * @author    Thomas Shipley <thomas.shipley@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules\Types;
+
+use Storyplayer\SPv2\Modules\Types;
 
 /**
- * A collection of functions for manipulating strings
+ * A collection of functions for manipulating arrays
  *
  * Great for testing APIs
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
+ * @package   Storyplayer/Modules/Types
  * @author    Thomas Shipley <thomas.shipley@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class FromString extends Prose{
-
+class FromArray extends Prose
+{
     /**
-     * Reduces a dot separated path e.g. fb.parent.context by one from
-     * the end of the string.
-     *
-     * The input fb.parent.context -> fb.parent
-     * @param $pathToReduce - The dot separated path to reduce by one
-     * @return null|string - Returns the last element of the dot separated
-     * path when > 1 elements. Otherwise the only element or null.
+     * Sets a value in an array for a . delimited path
+     * if the path does not exist it will be added to the array
+     * @param $array - array to add the value to
+     * @param $path - the . delimited path to the key of the value to add -
+     * if path not found key at that path will be created
+     * @param $val - the value to add
      */
-    public function reduceDotSeparatedPathByOne($pathToReduce)
+    public function setValueInArray(&$array, $path, $val)
     {
-        $parts = $this->splitDotSeparatedPath($pathToReduce);
-        if (count($parts) == 0) {
-            return null;
-        } else if (count($parts) == 1) {
-            return $parts[0];
-        } else {
-            array_pop($parts);
-            return implode('.', $parts);
+        $pathAsArray = Types::fromString()->splitDotSeparatedPath($path);
+        for ($i=&$array; $key=array_shift($pathAsArray); $i=&$i[$key]) {
+            if (!isset($i[$key])) {
+                $i[$key] = [];
+            }
         }
-    }
-
-    /**
-     * A wrapper around the explode function. Given a dot
-     * separated path e.g. fb.parent.context return a array of the elements
-     * @param $pathToSplit - The dot separated path to split
-     * @return array - The elements of the path as a array
-     */
-    public function splitDotSeparatedPath($pathToSplit)
-    {
-        return explode('.', $pathToSplit);
+        $i = $val;
     }
 }

@@ -34,45 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Thomas Shipley <thomas.shipley@datasift.com>
+ * @package   Storyplayer/Modules/Types
+ * @author    Stuart Herbert <stuart.herbert@datasift.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Prose;
+namespace Storyplayer\SPv2\Modules;
 
-/**
- * A collection of functions for manipulating arrays
- *
- * Great for testing APIs
- *
- * @category  Libraries
- * @package   Storyplayer/Prose
- * @author    Thomas Shipley <thomas.shipley@datasift.com>
- * @copyright 2011-present Mediasift Ltd www.datasift.com
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://datasift.github.io/storyplayer
- */
-class FromArray extends Prose{
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use Storyplayer\SPv2\Modules\Types\FromArray;
+use Storyplayer\SPv2\Modules\Types\FromString;
 
-    /**
-     * Sets a value in an array for a . delimited path
-     * if the path does not exist it will be added to the array
-     * @param $array - array to add the value to
-     * @param $path - the . delimited path to the key of the value to add -
-     * if path not found key at that path will be created
-     * @param $val - the value to add
-     */
-    public function setValueInArray(&$array, $path, $val)
+class Types
+{
+    public static function fromArray()
     {
-        $pathAsArray = fromString()->splitDotSeparatedPath($path);
-        for ($i=&$array; $key=array_shift($pathAsArray); $i=&$i[$key]) {
-            if (!isset($i[$key])) {
-                $i[$key] = array();
-            }
-        }
-        $i = $val;
+        return new FromArray();
+    }
+
+    public static function fromString()
+    {
+        return new FromString();
     }
 }
