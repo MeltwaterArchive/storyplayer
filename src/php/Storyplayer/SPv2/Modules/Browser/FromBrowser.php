@@ -413,4 +413,31 @@ class FromBrowser extends Prose
         $log->endAction("width: '{$dimensions['width']}'; height: '{$dimensions['height']}'");
         return array('width' => $dimensions['width'], 'height' => $dimensions['height']);
     }
+
+    // ==================================================================
+    //
+    // Retrievers of browser metadata
+    //
+    // ------------------------------------------------------------------
+
+    public function takeScreenshot($targetFilename = null)
+    {
+        // where are we saving the screenshot to?
+        if ($targetFilename === null) {
+            $targetFilename = date('Y-m-d-h-i-s') . '.png';
+        }
+
+        // what are we doing?
+        $log = Log::usingLog()->startAction("take a screenshot and save it into file '{$targetFilename}'");
+
+        // get the screenshot
+        $screenshot = $this->device->screenshot();
+        $screenshot = base64_decode($screenshot);
+
+        // save it
+        file_put_contents($targetFilename, $screenshot);
+
+        // all done
+        $log->endAction();
+    }
 }
