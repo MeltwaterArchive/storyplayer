@@ -100,6 +100,21 @@ class FromFilesystem extends HostAwareModule
         return $result;
     }
 
+    public function getTmpFileName()
+    {
+        // what are we doing?
+        $log = Log::usingLog()->startAction("generate a temporary filename");
+
+        // create it
+        $filename = tempnam(null, 'storyplayer-data-');
+
+        // log it
+        $log->endAction("'{$filename}'");
+
+        // all done
+        return $filename;
+    }
+
     /**
      * @param  string $filename
      * @return object

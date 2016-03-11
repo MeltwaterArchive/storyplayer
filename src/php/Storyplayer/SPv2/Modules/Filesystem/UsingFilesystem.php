@@ -62,6 +62,24 @@ use Storyplayer\SPv2\Modules\Log;
  */
 class UsingFilesystem extends HostAwareModule
 {
+    public function removeFile($filename)
+    {
+        // what are we doing?
+        $log = Log::usingLog()->startAction("delete the file '{$filename}'");
+
+        // remove the file
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+        else {
+            $log->endAction("file not found");
+        }
+
+        // all done
+        $log->endAction();
+        return $this;
+    }
+
     public function uploadFile($sourceFilename, $destFilename)
     {
         // what are we doing?
