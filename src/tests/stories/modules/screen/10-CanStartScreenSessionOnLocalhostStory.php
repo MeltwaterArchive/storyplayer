@@ -1,8 +1,8 @@
 <?php
 
-use Storyplayer\SPv2\Modules\Checkpoint;
-use Storyplayer\SPv2\Modules\Screen;
-use Storyplayer\SPv2\Stories\BuildStory;
+use Storyplayer\SPv3\Modules\Checkpoint;
+use Storyplayer\SPv3\Modules\Screen;
+use Storyplayer\SPv3\Stories\BuildStory;
 
 // ========================================================================
 //

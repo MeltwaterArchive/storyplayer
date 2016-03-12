@@ -1,9 +1,9 @@
 <?php
 
-use Storyplayer\SPv2\Modules\Asserts;
-use Storyplayer\SPv2\Modules\Browser;
-use Storyplayer\SPv2\Modules\Checkpoint;
-use Storyplayer\SPv2\Stories\BuildStory;
+use Storyplayer\SPv3\Modules\Asserts;
+use Storyplayer\SPv3\Modules\Browser;
+use Storyplayer\SPv3\Modules\Checkpoint;
+use Storyplayer\SPv3\Stories\BuildStory;
 
 // ========================================================================
 //

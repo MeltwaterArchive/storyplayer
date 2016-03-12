@@ -1,9 +1,9 @@
 <?php
 
-use Storyplayer\SPv2\Modules\Checkpoint;
-use Storyplayer\SPv2\Modules\Host;
-use Storyplayer\SPv2\Modules\ZeroMQ;
-use Storyplayer\SPv2\Stories\BuildStory;
+use Storyplayer\SPv3\Modules\Checkpoint;
+use Storyplayer\SPv3\Modules\Host;
+use Storyplayer\SPv3\Modules\ZeroMQ;
+use Storyplayer\SPv3\Stories\BuildStory;
 
 // ========================================================================
 //

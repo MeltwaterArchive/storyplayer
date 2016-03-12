@@ -1,10 +1,10 @@
 <?php
 
-use Storyplayer\SPv2\Modules\Asserts;
-use Storyplayer\SPv2\Modules\Checkpoint;
-use Storyplayer\SPv2\Modules\Log;
-use StoryplayerInternals\SPv2\Modules\RuntimeTable;
-use Storyplayer\SPv2\Stories\BuildStory;
+use Storyplayer\SPv3\Modules\Asserts;
+use Storyplayer\SPv3\Modules\Checkpoint;
+use Storyplayer\SPv3\Modules\Log;
+use StoryplayerInternals\SPv3\Modules\RuntimeTable;
+use Storyplayer\SPv3\Stories\BuildStory;
 
 // ========================================================================
 //

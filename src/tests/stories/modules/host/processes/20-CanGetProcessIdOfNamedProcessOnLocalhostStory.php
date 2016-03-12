@@ -1,11 +1,11 @@
 <?php
 
-use Storyplayer\SPv2\Modules\Asserts;
-use Storyplayer\SPv2\Modules\Checkpoint;
-use Storyplayer\SPv2\Modules\Host;
-use Storyplayer\SPv2\Modules\Log;
-use Storyplayer\SPv2\Modules\Shell;
-use Storyplayer\SPv2\Stories\BuildStory;
+use Storyplayer\SPv3\Modules\Asserts;
+use Storyplayer\SPv3\Modules\Checkpoint;
+use Storyplayer\SPv3\Modules\Host;
+use Storyplayer\SPv3\Modules\Log;
+use Storyplayer\SPv3\Modules\Shell;
+use Storyplayer\SPv3\Stories\BuildStory;
 
 // ========================================================================
 //

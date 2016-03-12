@@ -1,8 +1,8 @@
 <?php
 
-use Storyplayer\SPv2\Modules\Asserts;
-use Storyplayer\SPv2\Modules\Users;
-use Storyplayer\SPv2\Stories\BuildStory;
+use Storyplayer\SPv3\Modules\Asserts;
+use Storyplayer\SPv3\Modules\Users;
+use Storyplayer\SPv3\Stories\BuildStory;
 
 // ========================================================================
 //

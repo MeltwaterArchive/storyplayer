@@ -1,7 +1,7 @@
 <?php
 
-use Storyplayer\SPv2\Modules\Host;
-use Storyplayer\SPv2\Stories\BuildStory;
+use Storyplayer\SPv3\Modules\Host;
+use Storyplayer\SPv3\Stories\BuildStory;
 
 // ========================================================================
 //
