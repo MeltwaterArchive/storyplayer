@@ -52,6 +52,8 @@ The contents of the `develop` branch will become Storyplayer v3.0 (a.k.a. SPv3).
   * New `$story->setScenario()` metadata helper
   * Reduce some of the chatter in the logs
 * New `create-test-env` command
+* Added support for reusable templates for test environments
+  * Added `Storyplayer\SPv3\TestEnvironments\TestEnvironmentTemplate`
 
 ### Fixes
 
