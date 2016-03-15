@@ -1,48 +1,16 @@
 # Changelog
 
-New features and non-urgent bug fixes will go into the `develop` branch. The `develop` branch will become the next minor release of Storyplayer.
-
-the `develop` branch will become:
-
-* v2.1.0
-* v2.2.0
-* v2.3.0
-
-... and so on.
-
-Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
-
 ## develop Branch - In Progress
 
-The focus of this release has been:
+The contents of the `develop` branch will become Storyplayer v3.0 (a.k.a. SPv3).
 
 * Introduce a more self-documenting approach to stories
 * Introduce a long-term approach for using Storyplayer modules that's more natural for PHP developers
 * More tests for Storyplayer modules (both the 'legacy' approach used before now, and the long-term approach)
-* Introduce an internal event-driven approach (we will gradually refactor SPv2 around this)
+* Introduce an internal event-driven approach (we will gradually refactor SPv3 around this)
+* Introduce Env.php scripts for test environments
 * Improve support for multiple test environments
-
-### Upgrade Instructions
-
-In this release, I've made some important improvements to Storyplayer's `runtime.json` config file. Before upgrading, please:
-
-* close down any test environments that Storyplayer has created for you
-* delete your .storyplayer/runtime.json file
-
-After upgrading, all of your original stories will continue to work without modification.
-
-### Backwards-Compatibility Breaks
-
-The following has been changed in SPv2.4:
-
-* [stories with multiple ACTION phases](http://datasift.github.io/storyplayer/v2/using/backwards-breaks/v2.4/stories-with-multiple-action-phases.html)
-* [standardised the RuntimeTable API](http://datasift.github.io/storyplayer/v2/using/backwards-breaks/v2.4/RuntimeTable-API.html)
-
-### Deprecated
-
-The following are deprecated, and will be removed in SPv3:
-
-* [modules as global functions](https://datasift.github.io/storyplayer/v2/using/deprecated/modules-as-global-functions.html)
+* Improve the APIs provided by Storyplayer's modules
 
 ### New
 
@@ -83,6 +51,7 @@ The following are deprecated, and will be removed in SPv3:
   * New `--ublang` CLI switch to activate the new UbLang console
   * New `$story->setScenario()` metadata helper
   * Reduce some of the chatter in the logs
+* New `create-test-env` command
 
 ### Fixes
 
