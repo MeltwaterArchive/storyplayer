@@ -171,7 +171,7 @@ EOS;
 
 // ========================================================================
 //
-// TEST ENVIRONMENT SETUP
+// TEST ENVIRONMENT TEARDOWN
 //
 // Add one function per step. This makes it easier to debug and maintain
 // your test environment cleanup.
