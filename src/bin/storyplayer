@@ -24,6 +24,7 @@ use DataSift\Storyplayer\Injectables;
 
 use DataSift\Storyplayer\Cli\BuildTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\CreateStory_Command;
+use DataSift\Storyplayer\Cli\CreateTestEnvironment_Command;
 use DataSift\Storyplayer\Cli\DeviceListHelper;
 use DataSift\Storyplayer\Cli\ExtraConfigHelper;
 use DataSift\Storyplayer\Cli\Install_Command;
@@ -336,6 +337,7 @@ function main($argv)
 	$engine->addCommand(new BuildTestEnvironment_Command($injectables));
 	$engine->addCommand(new HelpCommand);
 	$engine->addCommand(new CreateStory_Command);
+	$engine->addCommand(new CreateTestEnvironment_Command);
 	$engine->addCommand(new Install_Command);
 	$engine->addCommand(new ListHostsTable_Command);
 	$engine->addCommand(new Script_Command($injectables));
