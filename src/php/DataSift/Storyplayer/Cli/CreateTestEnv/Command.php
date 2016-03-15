@@ -60,13 +60,13 @@ use Phix_Project\ExceptionsLib1\Legacy_ErrorHandler;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class CreateTestEnvironment_Command extends CliCommand
+class CreateTestEnv_Command extends CliCommand
 {
     public function __construct()
     {
         // define the command
-        $this->setName('create-test-environment');
-        $this->setShortDescription('create a new test environment');
+        $this->setName('create-test-env');
+        $this->setShortDescription('create a new test environment file');
         $this->setLongDescription(
             "Use this command to create a new Env.php file, complete with "
             ."the necessary PHP 'use' statement and comments to help guide you "
@@ -74,11 +74,11 @@ class CreateTestEnvironment_Command extends CliCommand
             .PHP_EOL
         );
         $this->setArgsList(array(
-            "namedEnvironment.php" => "the Env.php file to create"
+            "namedEnv.php" => "the Env.php file to create"
         ));
         $this->setSwitches(array(
-            new CreateTestEnvironment_BasedOnSwitch,
-            new CreateTestEnvironment_ForceSwitch
+            new CreateTestEnv_BasedOnSwitch,
+            new CreateTestEnv_ForceSwitch
         ));
     }
 

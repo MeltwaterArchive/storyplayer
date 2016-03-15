@@ -57,7 +57,7 @@ use Phix_Project\CliEngine\CliSwitch;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class CreateTestEnvironment_ForceSwitch extends CliSwitch
+class CreateTestEnv_ForceSwitch extends CliSwitch
 {
     public function __construct()
     {
