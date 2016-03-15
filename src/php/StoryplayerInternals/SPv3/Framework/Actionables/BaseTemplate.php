@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironments
+ * @package   StoryplayerInternals/Framework
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2016-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,75 +43,151 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace Storyplayer\SPv3\TestEnvironments;
+namespace StoryplayerInternals\SPv3\Framework\Actionables\BaseTemplate;
 
 use ReflectionObject;
 
 use GanbaroDigital\Actionables\Values\Actionable;
-use StoryplayerInternals\SPv3\Framework\Actionables\BaseTemplate;
 
 /**
- * Base class for reusable test environment setup/teardown instructions
+ * Base class for all templates
  *
  * @category  Libraries
- * @package   Storyplayer/TestEnvironments
+ * @package   StoryplayerInternals/Framework
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2016-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironmentTemplate extends BaseTemplate
+class BaseTemplate
 {
     /**
-     * does our subclass provide a method called 'testEnvironmentSetup'?
+     * I don't know what I'm doing with parameters in templates yet
+     * @return [type] [description]
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    public function setParams($params = array())
+    {
+        $this->params = $params;
+    }
+
+    /**
+     * does our subclass provide a method called 'perPhaseSetup'?
      *
      * @return boolean
      *         TRUE if it does
      *         FALSE otherwise
      */
-    public function hasTestEnvironmentSetup()
+    public function hasPerPhaseSetup()
     {
-        return method_exists($this, 'testEnvironmentSetup');
+        return method_exists($this, 'perPhaseSetup');
     }
 
     /**
-     * does our subclass provide a method called 'testEnvironmentTeardown'?
+     * does our subclass provide a method called 'perPhaseTeardown'?
      *
      * @return boolean
      *         TRUE if it does
      *         FALSE otherwise
      */
-    public function hasTestEnvironmentTeardown()
+    public function hasPerPhaseTeardown()
     {
-        return method_exists($this, 'testEnvironmentTeardown');
+        return method_exists($this, 'perPhaseTeardown');
     }
 
     /**
-     * return our 'testEnvironmentSetup' method as a callable
+     * does our subclass provide a method called 'deviceSetup'?
+     *
+     * @return boolean
+     *         TRUE if it does
+     *         FALSE otherwise
+     */
+    public function hasDeviceSetup()
+    {
+        return method_exists($this, 'deviceSetup');
+    }
+
+    /**
+     * does our subclass provide a method called 'deviceTeardown'?
+     *
+     * @return boolean
+     *         TRUE if it does
+     *         FALSE otherwise
+     */
+    public function hasDeviceTeardown()
+    {
+        return method_exists($this, 'deviceTeardown');
+    }
+
+    /**
+     * return our 'perPhaseSetup' method as a callable
      *
      * @return callable
      */
-    public function getTestEnvironmentSetup()
+    public function getPerPhaseSetup()
     {
         return new Actionable(
-            [$this, 'testEnvironmentSetup'],
+            [$this, 'perPhaseSetup'],
             $this->getSourceFilename(),
-            [ 'testEnvironmentSetup' ]
+            [ 'perPhaseSetup' ]
         );
     }
 
     /**
-     * return our 'testEnvironmentTeardown' method as a callable
+     * return our 'perPhaseTeardown' method as a callable
      *
      * @return callable
      */
-    public function getTestEnvironmentTeardown()
+    public function getPerPhaseTeardown()
     {
         return new Actionable(
-            [$this, 'testEnvironmentTeardown'],
+            [$this, 'perPhaseTeardown'],
             $this->getSourceFilename(),
-            [ 'testEnvironmentTeardown' ]
+            [ 'perPhaseTeardown' ]
         );
+    }
+
+    /**
+     * return our 'deviceSetup' method as a callable
+     *
+     * @return callable
+     */
+    public function getDeviceSetup()
+    {
+        return new Actionable(
+            [$this, 'deviceSetup'],
+            $this->getSourceFilename(),
+            [ 'deviceSetup' ]
+        );
+    }
+
+    /**
+     * return our 'deviceTeardown' method as a callable
+     *
+     * @return callable
+     */
+    public function getDeviceTeardown()
+    {
+        return new Actionable(
+            [$this, 'deviceTeardown'],
+            $this->getSourceFilename(),
+            [ 'deviceTeardown' ]
+        );
+    }
+
+    /**
+     * which file is this template defined in?
+     *
+     * @return string
+     */
+    public function getSourceFilename()
+    {
+        $refObj = new ReflectionObject($this);
+        return $refObj->getFileName();
     }
 }
