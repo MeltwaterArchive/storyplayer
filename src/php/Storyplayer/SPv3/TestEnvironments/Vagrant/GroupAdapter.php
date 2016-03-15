@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/DefinitionLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,101 +43,111 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\DefinitionLib;
-
-use Storyplayer\SPv3\TestEnvironments\HostManager;
-use Storyplayer\SPv3\TestEnvironments\HostManagerValidator;
-use Storyplayer\SPv3\TestEnvironments\OsAdapter;
-use Storyplayer\SPv3\TestEnvironments\OsAdapterValidator;
+namespace Storyplayer\SPv3\TestEnvironments;
 
 /**
- * Logic for verifying a list of roles for a host
+ * group adapter for hosts managed by vagrant
  *
  * @category  Libraries
- * @package   Storyplayer/DefinitionLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironment_RolesValidator
+
+class Vagrant_GroupAdapter implements GroupAdapter
 {
-    /**
-     * the host we are checking out roles for
-     * @var TestEnvironment_HostDefinition
-     */
-    protected $host;
+	public function __construct()
+	{
+		$this->determineBaseFolder();
+	}
+
+	// ==================================================================
+	//
+	// Base folder support goes here
+	//
+	// ------------------------------------------------------------------
+
+	protected $baseFolder;
+
+	/**
+	 * automagically work out where our test environment's files and
+	 * such like are
+	 *
+	 * @return void
+	 */
+	protected function determineBaseFolder()
+	{
+		// where should we be looking?
+		//
+		// first match wins!
+		$candidates = [
+			dirname(debug_backtrace()[1]['file']),
+			getcwd()
+		];
+
+		foreach ($candidates as $folder) {
+			if (file_exists($folder . '/Vagrantfile')) {
+				$this->baseFolder = str_replace(getcwd(), '.', $folder);
+
+				// all done
+				return;
+			}
+		}
+
+		// if we get here, then we do not know where the Vagrantfile
+		// is, and it is time to bail
+		throw new Vagrant_E4xx_NoVagrantFile($candidates);
+	}
 
     /**
-     * constructor
+     * which folder should SPv3 be in when interacting with this group
+     * of virtual machines?
      *
-     * @param TestEnvironment_HostDefinition $host
-     *        the host that we are validating roles for
+     * @return string
      */
-    public function __construct($host)
+    public function getBaseFolder()
     {
-        $this->host = $host;
+    	return $this->baseFolder;
     }
 
-    /**
-     * validate a set of roles
-     *
-     * throws an exception if there's anything wrong with the roles
-     *
-     * @param  mixed $roles
-     *         the roles to validate
-     * @return void
-     */
-    public function validate($roles)
-    {
-        $this->validateMustBeArray($roles);
+	// ==================================================================
+	//
+	// Host support goes here
+	//
+	// ------------------------------------------------------------------
 
-        // empty arrays are allowed
-        if (count($roles) === 0) {
-            return;
-        }
+	/**
+	 * how do we validate any host adapters used by hosts in this group?
+	 *
+	 * @return HostAdapterValidator
+	 */
+	public function getHostAdapterValidator()
+	{
+		return new Vagrant_HostAdapterValidator($this);
+	}
 
-        $this->validateMustBeKeyValuePairs($roles);
-    }
-
-    /**
-     * make sure that the roles are an array
-     *
-     * @param  mixed $roles
-     *         the roles to check
-     * @return void
-     */
-    protected function validateMustBeArray($roles)
-    {
-        if (!is_array($roles)) {
-            throw new E4xx_IllegalRolesList(
-                $this->host->getTestEnvironmentName(),
-                $this->host->getGroupId(),
-                $this->host->getHostId(),
-                $roles
-            );
-        }
-    }
+	// ==================================================================
+	//
+	// Stuff to support SPv3.0-style internals goes here
+	//
+	// Everything below here is technical debt, and the plan is to
+	// gradually phase it all out over several SPv3 releases
+	//
+	// ------------------------------------------------------------------
 
     /**
-     * make sure that the roles are simple key / value pairs
+     * what type of group are we?
      *
-     * @param  array $roles
-     *         the roles to check
-     * @return void
+     * this is the name of the class (without namespace) that our group
+     * adapter uses
+     *
+     * @return string
      */
-    protected function validateMustBeKeyValuePairs($roles)
-    {
-        foreach ($roles as $key => $value) {
-            if (!is_string($value)) {
-                throw new E4xx_IllegalRole(
-                    $this->host->getTestEnvironmentName(),
-                    $this->host->getGroupId(),
-                    $this->host->getHostId(),
-                    $value
-                );
-            }
-        }
-    }
+	public function getType()
+	{
+		return "LocalVagrantVms";
+	}
 }

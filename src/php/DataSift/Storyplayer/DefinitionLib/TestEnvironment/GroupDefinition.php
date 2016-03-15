@@ -45,9 +45,9 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
-use Storyplayer\TestEnvironments\GroupAdapter;
-use Storyplayer\TestEnvironments\HostAdapter;
-use Storyplayer\TestEnvironments\ProvisioningAdapter;
+use Storyplayer\SPv3\TestEnvironments\GroupAdapter;
+use Storyplayer\SPv3\TestEnvironments\HostAdapter;
+use Storyplayer\SPv3\TestEnvironments\ProvisioningAdapter;
 
 use DataSift\Stone\ObjectLib\BaseObject;
 

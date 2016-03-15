@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/DefinitionLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,101 +43,37 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\DefinitionLib;
+namespace Storyplayer\SPv3\TestEnvironments;
 
-use Storyplayer\SPv3\TestEnvironments\HostManager;
-use Storyplayer\SPv3\TestEnvironments\HostManagerValidator;
-use Storyplayer\SPv3\TestEnvironments\OsAdapter;
-use Storyplayer\SPv3\TestEnvironments\OsAdapterValidator;
+use DataSift\Storyplayer\DefinitionLib\TestEnvironment_GroupDefinition;
 
 /**
- * Logic for verifying a list of roles for a host
+ * adapter for working with a host that runs inside Virtualbox, and is
+ * managed by Vagrant
  *
  * @category  Libraries
- * @package   Storyplayer/DefinitionLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironment_RolesValidator
+
+class Vagrant_VirtualboxHostAdapter extends Vagrant_HostAdapter
 {
-    /**
-     * the host we are checking out roles for
-     * @var TestEnvironment_HostDefinition
-     */
-    protected $host;
-
-    /**
-     * constructor
-     *
-     * @param TestEnvironment_HostDefinition $host
-     *        the host that we are validating roles for
-     */
-    public function __construct($host)
-    {
-        $this->host = $host;
-    }
-
-    /**
-     * validate a set of roles
-     *
-     * throws an exception if there's anything wrong with the roles
-     *
-     * @param  mixed $roles
-     *         the roles to validate
-     * @return void
-     */
-    public function validate($roles)
-    {
-        $this->validateMustBeArray($roles);
-
-        // empty arrays are allowed
-        if (count($roles) === 0) {
-            return;
-        }
-
-        $this->validateMustBeKeyValuePairs($roles);
-    }
-
-    /**
-     * make sure that the roles are an array
-     *
-     * @param  mixed $roles
-     *         the roles to check
-     * @return void
-     */
-    protected function validateMustBeArray($roles)
-    {
-        if (!is_array($roles)) {
-            throw new E4xx_IllegalRolesList(
-                $this->host->getTestEnvironmentName(),
-                $this->host->getGroupId(),
-                $this->host->getHostId(),
-                $roles
-            );
-        }
-    }
-
-    /**
-     * make sure that the roles are simple key / value pairs
-     *
-     * @param  array $roles
-     *         the roles to check
-     * @return void
-     */
-    protected function validateMustBeKeyValuePairs($roles)
-    {
-        foreach ($roles as $key => $value) {
-            if (!is_string($value)) {
-                throw new E4xx_IllegalRole(
-                    $this->host->getTestEnvironmentName(),
-                    $this->host->getGroupId(),
-                    $this->host->getHostId(),
-                    $value
-                );
-            }
-        }
-    }
+	/**
+	 * create an empty host definition for this kind of host
+	 *
+	 * @param  TestEnvironment_GroupDefinition $groupDef
+	 *         the group that we belong to
+	 * @param  string $hostId
+	 *         the alias for this host
+	 * @return object
+	 *         a host definition to populate
+	 */
+	public function newHostDefinition(TestEnvironment_GroupDefinition $groupDef, $hostId)
+	{
+		return new Vagrant_VirtualboxHostDefinition($groupDef, $hostId, $this);
+	}
 }

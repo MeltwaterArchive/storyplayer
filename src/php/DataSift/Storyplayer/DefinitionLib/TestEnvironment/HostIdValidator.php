@@ -45,10 +45,10 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
-use Storyplayer\TestEnvironments\HostManager;
-use Storyplayer\TestEnvironments\HostManagerValidator;
-use Storyplayer\TestEnvironments\OsAdapter;
-use Storyplayer\TestEnvironments\OsAdapterValidator;
+use Storyplayer\SPv3\TestEnvironments\HostManager;
+use Storyplayer\SPv3\TestEnvironments\HostManagerValidator;
+use Storyplayer\SPv3\TestEnvironments\OsAdapter;
+use Storyplayer\SPv3\TestEnvironments\OsAdapterValidator;
 
 /**
  * Logic for verifying a host ID

@@ -1,9 +1,9 @@
 <?php
 
-use Storyplayer\TestEnvironments\Vagrant_GroupAdapter;
-use Storyplayer\TestEnvironments\Vagrant_VirtualboxHostAdapter;
-use Storyplayer\TestEnvironments\CentOS_6_HostAdapter;
-use Storyplayer\TestEnvironments\Dsbuild_Adapter;
+use Storyplayer\SPv3\TestEnvironments\Vagrant_GroupAdapter;
+use Storyplayer\SPv3\TestEnvironments\Vagrant_VirtualboxHostAdapter;
+use Storyplayer\SPv3\TestEnvironments\CentOS_6_HostAdapter;
+use Storyplayer\SPv3\TestEnvironments\Dsbuild_Adapter;
 
 $testEnv = newTestEnvironment();
 

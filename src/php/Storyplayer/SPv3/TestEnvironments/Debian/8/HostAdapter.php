@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Storyplayer/DefinitionLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -43,101 +43,29 @@
  * @link      http://datasift.github.io/storyplayer
  */
 
-namespace DataSift\Storyplayer\DefinitionLib;
-
-use Storyplayer\SPv3\TestEnvironments\HostManager;
-use Storyplayer\SPv3\TestEnvironments\HostManagerValidator;
-use Storyplayer\SPv3\TestEnvironments\OsAdapter;
-use Storyplayer\SPv3\TestEnvironments\OsAdapterValidator;
+namespace Storyplayer\SPv3\TestEnvironments;
 
 /**
- * Logic for verifying a list of roles for a host
+ * support for Storyplayer testing against Debian
  *
  * @category  Libraries
- * @package   Storyplayer/DefinitionLib
+ * @package   Storyplayer/TestEnvironments
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class TestEnvironment_RolesValidator
+
+class Debian_8_HostAdapter implements OsAdapter
 {
     /**
-     * the host we are checking out roles for
-     * @var TestEnvironment_HostDefinition
-     */
-    protected $host;
-
-    /**
-     * constructor
+     * what is our operating system name?
      *
-     * @param TestEnvironment_HostDefinition $host
-     *        the host that we are validating roles for
+     * @return string
      */
-    public function __construct($host)
+    public function getOsName()
     {
-        $this->host = $host;
-    }
-
-    /**
-     * validate a set of roles
-     *
-     * throws an exception if there's anything wrong with the roles
-     *
-     * @param  mixed $roles
-     *         the roles to validate
-     * @return void
-     */
-    public function validate($roles)
-    {
-        $this->validateMustBeArray($roles);
-
-        // empty arrays are allowed
-        if (count($roles) === 0) {
-            return;
-        }
-
-        $this->validateMustBeKeyValuePairs($roles);
-    }
-
-    /**
-     * make sure that the roles are an array
-     *
-     * @param  mixed $roles
-     *         the roles to check
-     * @return void
-     */
-    protected function validateMustBeArray($roles)
-    {
-        if (!is_array($roles)) {
-            throw new E4xx_IllegalRolesList(
-                $this->host->getTestEnvironmentName(),
-                $this->host->getGroupId(),
-                $this->host->getHostId(),
-                $roles
-            );
-        }
-    }
-
-    /**
-     * make sure that the roles are simple key / value pairs
-     *
-     * @param  array $roles
-     *         the roles to check
-     * @return void
-     */
-    protected function validateMustBeKeyValuePairs($roles)
-    {
-        foreach ($roles as $key => $value) {
-            if (!is_string($value)) {
-                throw new E4xx_IllegalRole(
-                    $this->host->getTestEnvironmentName(),
-                    $this->host->getGroupId(),
-                    $this->host->getHostId(),
-                    $value
-                );
-            }
-        }
+        return "debian";
     }
 }

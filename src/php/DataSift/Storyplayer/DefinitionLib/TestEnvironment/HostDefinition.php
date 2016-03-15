@@ -45,10 +45,10 @@
 
 namespace DataSift\Storyplayer\DefinitionLib;
 
-use Storyplayer\TestEnvironments\HostAdapter;
-use Storyplayer\TestEnvironments\HostAdapterValidator;
-use Storyplayer\TestEnvironments\OsAdapter;
-use Storyplayer\TestEnvironments\OsAdapterValidator;
+use Storyplayer\SPv3\TestEnvironments\HostAdapter;
+use Storyplayer\SPv3\TestEnvironments\HostAdapterValidator;
+use Storyplayer\SPv3\TestEnvironments\OsAdapter;
+use Storyplayer\SPv3\TestEnvironments\OsAdapterValidator;
 
 use DataSift\Storyplayer\DefinitionLib\TestEnvironment_RolesValidator;
 
