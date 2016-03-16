@@ -32,7 +32,6 @@ use DataSift\Storyplayer\Cli\KillProcesses_Switch;
 use DataSift\Storyplayer\Cli\ListHostsTable_Command;
 use DataSift\Storyplayer\Cli\ListProcesses_Switch;
 use DataSift\Storyplayer\Cli\ListSystems_Switch;
-use DataSift\Storyplayer\Cli\ListTargets_Switch;
 use DataSift\Storyplayer\Cli\PlayStory_Command;
 use DataSift\Storyplayer\Cli\RuntimeConfigManager;
 use DataSift\Storyplayer\Cli\Script_Command;
@@ -322,7 +321,6 @@ function main($argv)
 	$engine->addEngineSwitch(new KillProcesses_Switch);
 	$engine->addEngineSwitch(new ListProcesses_Switch);
 	$engine->addEngineSwitch(new ListSystems_Switch($injectables->knownSystemsUnderTestList));
-	$engine->addEngineSwitch(new ListTargets_Switch($injectables->knownTestEnvironmentsList));
 	$engine->addEngineSwitch(new LongHelpSwitch);
 	$engine->addEngineSwitch(new ShortHelpSwitch);
 

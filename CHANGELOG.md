@@ -74,6 +74,10 @@ The contents of the `develop` branch will become Storyplayer v3.0 (a.k.a. SPv3).
 
 * New `legacy-features` section, for testing SPv2 functionality that is no longer the recommended approach.
 
+## Removed
+
+* `list-targets` switch removed
+
 ## 2.3.8 - Monday 1st February 2016
 
 ### Fixes
