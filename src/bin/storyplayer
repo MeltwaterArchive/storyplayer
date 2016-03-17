@@ -247,18 +247,12 @@ function main($argv)
 		$sutList->addHardCodedList(new HardCodedSystemsUnderTest);
 		$sutList->findConfigs();
 
-		$envList = new TestEnvironmentsList();
-		$envList->addHardCodedList(new HardCodedTestEnvironments);
-		$envList->findConfigs();
-
 		$deviceList = new DevicesList();
 		$deviceList->addHardCodedList(new HardCodedDevices);
 		$deviceList->findConfigs();
 
 		// put all of that into something we can give to the CliEngine
 		$injectables->initKnownDevicesSupport($deviceList);
-		$injectables->initKnownTestEnvironmentsSupport($envList);
-		$injectables->initDefaultTestEnvironmentName($injectables);
 		$injectables->initKnownSystemsUnderTestSupport($sutList);
 		$injectables->initDefaultSystemUnderTestName($injectables);
 

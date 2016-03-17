@@ -60,29 +60,26 @@ use Phix_Project\CliEngine\CliSwitch;
  */
 class Feature_TestEnvironmentConfigSwitch extends CliSwitch
 {
-    /**
-     * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
-     * @param string $defaultEnvName
-     */
-    public function __construct($envList, $defaultEnvName)
+    public function __construct()
     {
         // define our name, and our description
         $this->setName('target');
-        $this->setShortDescription('set the environment to test against');
+        $this->setShortDescription('load a test environment setup/teardown script');
         $this->setLongDesc(
-            "If you have multiple test environments listed in your configuration files, "
-            . "you can use this switch to choose which test environment to run the test(s) "
-            . "against. If you omit this switch, Storyplayer will default to using your "
-            . "computer's hostname as the value for <environment>."
+            "Use this switch to load the setup/teardown script for your test environment."
             . PHP_EOL
             . PHP_EOL
-            . "If you only have one test environment listed, then this switch has no "
-            . "effect when used, and Storyplayer will always use the test environment "
-            . "from your configuration file."
+            . "You can use test environment scripts to describe any of your development, "
+            . "test, pre-production / staging, and production environments. A test "
+            . "environment script can also create and destroy dynamic test environments."
             . PHP_EOL
             . PHP_EOL
-            . "See http://datasift.github.io/storyplayer/ "
-            . "for how to configure and use multiple test environments."
+            . "Your test environment script's filename must end in 'Env.php'."
+            . PHP_EOL
+            . PHP_EOL
+            . "If you omit this switch, Storyplayer will load a default test environment "
+            . "config. The default config assumes that you are testing against your local "
+            . "computer."
         );
 
         // what are the short switches?
@@ -92,15 +89,13 @@ class Feature_TestEnvironmentConfigSwitch extends CliSwitch
         $this->addLongSwitch('target');
         $this->addLongSwitch('test-environment');
 
+        // where is our default script?
+        $defaultTargetScript = realpath(__DIR__ . "/../../../../StoryplayerInternals/SPv3/Defaults/defaultEnv.php");
+
         // what is the required argument?
-        $requiredArgMsg = "the environment to test against; one of:" . PHP_EOL . PHP_EOL;
-        foreach($envList->getEntryNames() as $envName) {
-            $requiredArgMsg .= "* $envName" . PHP_EOL;
-        }
-        $requiredArgMsg .= PHP_EOL. ' ';
-        $this->setRequiredArg('<environment>', $requiredArgMsg);
-        $this->setArgValidator(new Feature_TestEnvironmentConfigValidator($envList, $defaultEnvName));
-        $this->setArgHasDefaultValueOf($defaultEnvName);
+        $this->setRequiredArg('<testEnv.php>', "path to a test environment setup/teardown script");
+        $this->setArgValidator(new Feature_TestEnvironmentConfigValidator());
+        $this->setArgHasDefaultValueOf($defaultTargetScript);
 
         // all done
     }

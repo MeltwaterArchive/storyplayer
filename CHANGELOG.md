@@ -54,6 +54,7 @@ The contents of the `develop` branch will become Storyplayer v3.0 (a.k.a. SPv3).
 * New `create-test-env` command
 * Added support for reusable templates for test environments
   * Added `Storyplayer\SPv3\TestEnvironments\TestEnvironmentTemplate`
+* `-t / --target` now requires full path to a test environment setup / teardown script
 
 ### Fixes
 

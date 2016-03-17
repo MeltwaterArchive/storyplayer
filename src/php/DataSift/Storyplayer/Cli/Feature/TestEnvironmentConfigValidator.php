@@ -48,27 +48,9 @@ use Phix_Project\ValidationLib4\ValidationResult;
 
 class Feature_TestEnvironmentConfigValidator implements Validator
 {
-    const MSG_NOTVALIDENVIRONMENT = "Unknown test environment '%value%'";
-
-    /**
-     * @var DataSift\Storyplayer\ConfigLib\TestEnvironmentsList
-     */
-    protected $envList;
-
-    /**
-     * @var string
-     */
-    protected $defaultValue;
-
-    /**
-     * @param DataSift\Storyplayer\ConfigLib\TestEnvironmentsList $envList
-     * @param string $defaultValue
-     */
-    public function __construct($envList, $defaultValue)
-    {
-        $this->envList = $envList;
-        $this->defaultValue = $defaultValue;
-    }
+    const MSG_NOTVALIDFILENAME = "invalid filename '%value%'; must end in 'Env.php'";
+    const MSG_FILENOTFOUND = "test environment file '%value%' not found";
+    const MSG_FILENOTREADABLE = "test environment file '%value%' exists, but is not readable; permissions problem?";
 
     /**
      *
@@ -82,18 +64,26 @@ class Feature_TestEnvironmentConfigValidator implements Validator
             $result = new ValidationResult($value);
         }
 
-        // strip off .json if it is there
-        //
-        // this helps if the user has copy and pasted the filename
-        $value = basename($value, '.json');
-
-        // the $value must be a valid environment name, but it's ok if it doesn't
-        // exist if it's the default env as we might not have created it yet
-        if (!$this->envList->hasEntry($value)) {
-            $result->addError(static::MSG_NOTVALIDENVIRONMENT);
+        // to help avoid silly mistakes, test environment config files
+        // must end in 'Env.php'
+        if (substr($value, -7) !== 'Env.php') {
+            $result->addError(static::MSG_NOTVALIDFILENAME);
             return $result;
         }
 
+        // does the file exist?
+        if (!file_exists($value)) {
+            $result->addError(static::MSG_FILENOTFOUND);
+            return $result;
+        }
+
+        // can we read it?
+        if (!is_readable($value)) {
+            $result->addError(static::MSG_FILENOTREADABLE);
+            return $result;
+        }
+
+        // if we get here, all is good
         return $result;
     }
 }
