@@ -301,7 +301,9 @@ class UsingRuntimeTableForTargetEnvironment extends BaseRuntimeTable
             return;
         }
 
-        foreach ($tables->$tableName->$targetEnv as $groupName => $group) {
+        $groupNames = (array_keys($groups));
+        foreach ($groupNames as $groupName) {
+            $group = $tables->$tableName->$targetEnv->$groupName;
             if (isset($group->$key)) {
                 // remove the entry
                 unset($group->$key);
