@@ -12,6 +12,13 @@ the `develop` branch will become:
 
 Urgent bugfixes will go into their own `hotfix` branch, and be immediate released as a patch level release of Storyplayer. As long as you're using Hubflow, the hotfix branches will be automatically merged back into `develop` to also be part of the next minor release of Storyplayer.
 
+## 2.3.9 - Tuesday 5th April 2016
+
+### Fixes
+
+* Workaround for PHP segfault when creating / destroying test environments.
+* Workaround for PHP nesting level too deep error.
+
 ## 2.3.8 - Monday 1st February 2016
 
 ### Fixes

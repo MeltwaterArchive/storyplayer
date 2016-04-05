@@ -354,7 +354,7 @@ class StoryTeller
     public function setStory(Story $story)
     {
         // are we already tracking this story?
-        if ($this->story == $story) {
+        if ($this->story === $story) {
             return $this;
         }
 
