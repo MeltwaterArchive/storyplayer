@@ -79,6 +79,13 @@ The contents of the `develop` branch will become Storyplayer v3.0 (a.k.a. SPv3).
 
 * `list-targets` switch removed
 
+## 2.3.9 - Tuesday 5th April 2016
+
+### Fixes
+
+* Workaround for PHP segfault when creating / destroying test environments.
+* Workaround for PHP nesting level too deep error.
+
 ## 2.3.8 - Monday 1st February 2016
 
 ### Fixes
