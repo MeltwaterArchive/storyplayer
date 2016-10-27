@@ -290,11 +290,46 @@ class Story
     }
 
     /**
+     * Set the group name as the file system path of the directory where the test is located
+     *
+     * @return Story
+     *         $this for fluent interface
+     */
+    public function generateGroup()
+    {
+        // Get the directory path
+        $path = ltrim(
+            str_replace(getcwd(), '', $this->getStoryFilename()),
+            DIRECTORY_SEPARATOR
+        );
+        $directories = explode(DIRECTORY_SEPARATOR, $path);
+
+        // Remove the base directory at the beginning and story file at the end of the path
+        $groupName = array_splice($directories, 1, count($directories) - 2);
+        $this->setGroup($groupName);
+
+        return $this;
+    }
+
+    /**
      * @return Story
      */
     public function called($userStoryText)
     {
         $this->setName($userStoryText);
+
+        return $this;
+    }
+
+    /**
+     * Set the name as the filename of the test
+     *
+     * @return Story
+     *         $this for fluent interface
+     */
+    public function generateName()
+    {
+        $this->setName(basename($this->getStoryFilename()));
 
         return $this;
     }
