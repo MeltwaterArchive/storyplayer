@@ -2,6 +2,10 @@
 
 Bring your user and service stories to life through your tests.
 
+## Note
+
+**This project is no longer maintained by DataSift.**
+
 ## Installation
 
 Storyplayer should be installed via [Composer](http://getcomposer.org/). To install Storyplayer, create a `composer.json` file with the following contents:
