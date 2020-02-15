@@ -56,7 +56,7 @@ use DataSift\Stone\ObjectLib\BaseObject;
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://datasift.github.io/storyplayer
  */
-class ConfigList
+class ConfigList implements \Countable
 {
     /**
      * what kind of config are we wrapping?
@@ -360,5 +360,13 @@ class ConfigList
         {
             $this->addEntry($name, $config);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function count()
+    {
+        return count($this->list);
     }
 }
