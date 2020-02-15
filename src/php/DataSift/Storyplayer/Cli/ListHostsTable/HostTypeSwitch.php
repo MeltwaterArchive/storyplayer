@@ -83,13 +83,16 @@ class ListHostsTable_HostTypeSwitch extends CliSwitch
 
     /**
      *
-     * @param  CliEngine $engine
-     * @param  integer   $invokes
-     * @param  array     $params
-     * @param  boolean   $isDefaultParam
+     * @param CliEngine $engine
+     * @param integer   $invokes
+     * @param array     $params
+     * @param boolean   $isDefaultParam
+     * @param mixed     $additionalContext
+     *
      * @return CliResult
      */
-    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false,
+        $additionalContext = null)
     {
         // remember the setting
         $engine->options->hosttype = explode(',', strtolower($params[0]));

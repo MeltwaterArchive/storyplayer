@@ -86,7 +86,17 @@ class Feature_ReuseTargetSwitch extends CliSwitch
         // all done
     }
 
-    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    /**
+     * @param CliEngine $engine
+     * @param int       $invokes
+     * @param array     $params
+     * @param bool      $isDefaultParam
+     * @param mixed     $additionalContext
+     *
+     * @return CliResult
+     */
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false,
+        $additionalContext = null)
     {
         // remember the setting
         $engine->options->reuseTarget = true;

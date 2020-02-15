@@ -107,13 +107,16 @@ class Feature_TestEnvironmentConfigSwitch extends CliSwitch
 
     /**
      *
-     * @param  CliEngine $engine
-     * @param  integer   $invokes
-     * @param  array     $params
-     * @param  boolean   $isDefaultParam
+     * @param CliEngine $engine
+     * @param integer   $invokes
+     * @param array     $params
+     * @param boolean   $isDefaultParam
+     * @param mixed     $additionalContext
+     *
      * @return CliResult
      */
-    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false,
+        $additionalContext = null)
     {
         // strip off .json if it is there
         $params[0] = basename($params[0], '.json');

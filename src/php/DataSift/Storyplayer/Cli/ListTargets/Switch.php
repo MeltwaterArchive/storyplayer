@@ -86,13 +86,16 @@ class ListTargets_Switch extends CliSwitch
 
     /**
      *
-     * @param  CliEngine $engine
-     * @param  int $invokes
-     * @param  array     $params
-     * @param  bool $isDefaultParam
+     * @param CliEngine $engine
+     * @param int       $invokes
+     * @param array     $params
+     * @param bool      $isDefaultParam
+     * @param mixed     $additionalContext
+     *
      * @return CliResult
      */
-    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false,
+        $additionalContext = null)
     {
         // list the environments (if any) in a machine-friendly way
         foreach ($this->envList as $envName) {
