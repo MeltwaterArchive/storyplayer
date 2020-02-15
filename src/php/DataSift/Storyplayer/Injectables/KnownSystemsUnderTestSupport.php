@@ -43,8 +43,7 @@
 
 namespace DataSift\Storyplayer\Injectables;
 
-use DataSift\Storyplayer\Cli\KnownSystemsUnderTest;
-use DataSift\Stone\ObjectLib\BaseObject;
+use DataSift\Storyplayer\ConfigLib\SystemsUnderTestList;
 
 /**
  * support for working with the list of known systems-under-test
@@ -59,9 +58,14 @@ use DataSift\Stone\ObjectLib\BaseObject;
 trait KnownSystemsUnderTestSupport
 {
     public $knownSystemsUnderTestList;
+    public $knownSystemsUnderTestFilenames;
 
-    public function initKnownSystemsUnderTestSupport($sutList)
+    /**
+     * @param SystemsUnderTestList $sutList
+     */
+    public function initKnownSystemsUnderTestSupport(SystemsUnderTestList $sutList)
     {
-        $this->knownSystemsUnderTestList = $sutList;
+        $this->knownSystemsUnderTestList      = $sutList;
+        $this->knownSystemsUnderTestFilenames = $sutList->getEntryNames();
     }
 }
