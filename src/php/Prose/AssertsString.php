@@ -44,7 +44,7 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ComparisonLib\StringComparitor;
+use DataSift\Stone\ComparisonLib\StringComparator;
 
 /**
  * Assertions about the nature of, and contents of, strings
@@ -81,6 +81,6 @@ class AssertsString extends AssertionsBase
      */
     public function __construct(StoryTeller $st, $params)
     {
-        parent::__construct($st, new StringComparitor($params[0]));
+        parent::__construct($st, new StringComparator($params[0]));
     }
 }

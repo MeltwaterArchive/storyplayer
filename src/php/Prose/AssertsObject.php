@@ -45,7 +45,7 @@ namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\PlayerLib\Story_Checkpoint;
-use DataSift\Stone\ComparisonLib\ObjectComparitor;
+use DataSift\Stone\ComparisonLib\ObjectComparator;
 
 /**
  * Assertions about the nature of, and contents of, objects
@@ -81,6 +81,6 @@ class AssertsObject extends AssertionsBase
      */
     public function __construct(StoryTeller $st, $params)
     {
-        parent::__construct($st, new ObjectComparitor($params[0]));
+        parent::__construct($st, new ObjectComparator($params[0]));
     }
 }

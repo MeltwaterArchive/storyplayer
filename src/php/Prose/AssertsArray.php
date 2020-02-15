@@ -44,7 +44,7 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ComparisonLib\ArrayComparitor;
+use DataSift\Stone\ComparisonLib\ArrayComparator;
 
 /**
  * Assertions about the nature of, and contents of, arrays
@@ -75,6 +75,6 @@ class AssertsArray extends AssertionsBase
 {
     public function __construct(StoryTeller $st, $params)
     {
-        parent::__construct($st, new ArrayComparitor($params[0]));
+        parent::__construct($st, new ArrayComparator($params[0]));
     }
 }

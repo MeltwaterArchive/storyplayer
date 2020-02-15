@@ -44,7 +44,7 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ComparisonLib\BooleanComparitor;
+use DataSift\Stone\ComparisonLib\BooleanComparator;
 
 /**
  * Assertions about the nature of, and contents of, booleans
@@ -69,6 +69,6 @@ class AssertsBoolean extends AssertionsBase
 {
     public function __construct(StoryTeller $st, $params)
     {
-        parent::__construct($st, new BooleanComparitor($params[0]));
+        parent::__construct($st, new BooleanComparator($params[0]));
     }
 }
