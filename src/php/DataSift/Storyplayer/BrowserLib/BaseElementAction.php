@@ -67,7 +67,7 @@ class BaseElementAction
     const SINGLE_TARGET = 1;
     const PLURAL_TARGET = 2;
 
-    protected $countTypes = array(
+    protected $countTypes = [
         "any"       => "any",
         "several"   => "several",
         "no"        => 0,
@@ -94,9 +94,9 @@ class BaseElementAction
         "eighteen"  => 18,
         "nineteen"  => 19,
         "twenty"    => 20,
-    );
+    ];
 
-    protected $indexTypes = array(
+    protected $indexTypes = [
         "first"       => 0,
         "second"      => 1,
         "third"       => 2,
@@ -117,22 +117,22 @@ class BaseElementAction
         "eighteenth"  => 17,
         "nineteenth"  => 18,
         "twentieth"   => 19,
-    );
+    ];
 
-    protected $tagTypes = array(
-        'button'        => array('input', 'button'),
-        'buttons'       => array('input','button'),
+    protected $tagTypes = [
+        'button'        => ['input', 'button'],
+        'buttons'       => ['input', 'button'],
         'cell'          => 'td',
         'cells'         => 'td',
-        'heading'       => array('h1', 'h2', 'h3', 'h4', 'h5','h6'),
-        'headings'      => array('h1', 'h2', 'h3', 'h4', 'h5','h6'),
+        'heading'       => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        'headings'      => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         'link'          => 'a',
         'links'         => 'a',
         'orderedlist'   => 'ol',
-        'unorderedlist' => 'ul'
-    );
+        'unorderedlist' => 'ul',
+    ];
 
-    protected $targetTypes = array(
+    protected $targetTypes = [
         'box'           => self::SINGLE_TARGET,
         'boxes'         => self::PLURAL_TARGET,
         'button'        => self::SINGLE_TARGET,
@@ -151,10 +151,10 @@ class BaseElementAction
         'links'         => self::PLURAL_TARGET,
         'orderedlist'   => self::SINGLE_TARGET,
         'span'          => self::SINGLE_TARGET,
-        'unorderedlist' => self::SINGLE_TARGET
-    );
+        'unorderedlist' => self::SINGLE_TARGET,
+    ];
 
-    protected $searchTypes = array (
+    protected $searchTypes = [
         'id'            => 'ById',
         'label'         => 'ByLabel',
         'labelled'      => 'ByLabel',
@@ -165,7 +165,7 @@ class BaseElementAction
         'placeholder'   => 'ByPlaceholder',
         'title'         => 'ByTitle',
         'labelidortext' => 'ByLabelIdText',
-    );
+    ];
 
     protected $baseElement;
 
@@ -175,8 +175,9 @@ class BaseElementAction
     }
 
     /**
-     * @param  string $methodName
+     * @param string $methodName
      *         camelCase string to parse
+     *
      * @return array<string>
      *         $methodName broken into individual words, all lower-cased
      */
@@ -190,8 +191,9 @@ class BaseElementAction
     }
 
     /**
-     * @param  array<string> $words
+     * @param array<string> $words
      *         a list of words to examine
+     *
      * @return int|null
      */
     protected function determineCountType($words)
@@ -207,8 +209,9 @@ class BaseElementAction
     }
 
     /**
-     * @param  array<string> $words
+     * @param array<string> $words
      *         a list of words to examine
+     *
      * @return int|null
      */
     protected function determineIndexType($words)
@@ -224,8 +227,9 @@ class BaseElementAction
     }
 
     /**
-     * @param  array<string> $words
+     * @param array<string> $words
      *         a list of words to examine
+     *
      * @return string|null
      */
     protected function determineSearchType($words)
@@ -241,8 +245,9 @@ class BaseElementAction
     }
 
     /**
-     * @param  array<string> $words
+     * @param array<string> $words
      *         a list of words to examine
+     *
      * @return string
      */
     protected function determineTargetType($words)
@@ -258,7 +263,8 @@ class BaseElementAction
     }
 
     /**
-     * @param  string $targetType
+     * @param string $targetType
+     *
      * @return string
      */
     protected function determineTagType($targetType)
@@ -273,7 +279,8 @@ class BaseElementAction
     }
 
     /**
-     * @param  string $targetType
+     * @param string $targetType
+     *
      * @return bool
      */
     protected function isPluralTarget($targetType)
@@ -295,8 +302,8 @@ class BaseElementAction
     protected function retrieveElement($methodName, $methodArgs)
     {
         // we need to know which element they want
-        $words = $this->convertMethodNameToWords($methodName);
-        $indexType  = $this->determineIndexType($words);
+        $words     = $this->convertMethodNameToWords($methodName);
+        $indexType = $this->determineIndexType($words);
 
         // get all the elements that match
         $elements = $this->retrieveElements($methodName, $methodArgs);
@@ -309,8 +316,9 @@ class BaseElementAction
     }
 
     /**
-     * @param  string $methodName
-     * @param  array<mixed> $methodArgs
+     * @param string       $methodName
+     * @param array<mixed> $methodArgs
+     *
      * @return array
      */
     protected function retrieveElements($methodName, $methodArgs)
@@ -324,7 +332,8 @@ class BaseElementAction
 
         $searchType = $this->determineSearchType($words);
         if ($searchType === null) {             // we do not understand how to find the target field
-            throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName, "could not work out how to find the target to action upon");
+            throw new E5xx_ActionFailed(__CLASS__ . '::' . $methodName,
+                "could not work out how to find the target to action upon");
         }
 
         // what tag(s) do we want to narrow our search to?
@@ -335,7 +344,7 @@ class BaseElementAction
 
         // let's go find our element
         $searchObject = new DomElementSearch($this->baseElement);
-        $elements = $searchObject->$searchMethod($searchTerm, $tag);
+        $elements     = $searchObject->$searchMethod($searchTerm, $tag);
 
         // all done
         return $elements;
