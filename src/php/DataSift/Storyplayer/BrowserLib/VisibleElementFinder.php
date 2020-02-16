@@ -43,11 +43,12 @@
 
 namespace DataSift\Storyplayer\BrowserLib;
 
+use DataSift\WebDriver\WebDriverElement;
 use Prose\E5xx_ActionFailed;
-use Prose\E5xx_UnknownDomElementType;
 
 /**
  * Trait for assisting with finding a visible element from a larger list
+ *
  * @category  Libraries
  * @package   Storyplayer/BrowserLib
  * @author    Stuart Herbert <stuart.herbert@datasift.com>
@@ -58,58 +59,39 @@ use Prose\E5xx_UnknownDomElementType;
 trait VisibleElementFinder
 {
     /**
-     * @return \DataSift\WebDriver\WebDriverElement
+     * @param int                $nth
+     * @param WebDriverElement[] $elements
+     *
+     * @return WebDriverElement
+     * @throws E5xx_ActionFailed
      */
     public function returnNthVisibleElement($nth, $elements)
     {
-        // what are we doing?
         $count = count($elements);
-        $log = usingLog()->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
+        $log   = usingLog()->startAction("looking for element '{$nth}' out of array of {$count} element(s)");
 
-        // special case - not enough elements, even if they were all
-        // visible
         if ($nth >= count($elements)) {
-            $log->endAction("not enough elements :(");
-            throw new E5xx_ActionFailed(__METHOD__, "no matching element found");
+            $log->endAction('not enough elements :(');
+            throw new E5xx_ActionFailed(__METHOD__, 'no matching element found');
         }
 
-        // let's track which visible element we're looking at
         $checkedIndex = 0;
 
-        // if the page contains multiple matches, return the first one
-        // that the user can see
         foreach ($elements as $element) {
             if (!$element->displayed()) {
-                // DO NOT increment $checkedIndex here
-                //
-                // we only increment it for elements that are visible
                 continue;
             }
 
-            // skip hidden input fields
-            // if ($element->name() == 'input') {
-            //  try {
-            //      $typeAttr = $element->attribute('type');
-            //      if ($typeAttr == 'hidden') {
-            //          // skip this
-            //          continue;
-            //      }
-            //  }
-            //  catch (Exception $e) {
-            //      // no 'type' attribute
-            //      //
-            //      // not fatal
-            //  }
-            // }
-
-            if ($checkedIndex == $nth) {
-                // a match!
+            if ($checkedIndex === $nth) {
                 $log->endAction();
+
                 return $element;
             }
+
+            $checkedIndex++;
         }
 
-        $msg = "no matching element found";
+        $msg = 'no matching element found';
         $log->endAction($msg);
         throw new E5xx_ActionFailed(__METHOD__, $msg);
     }
