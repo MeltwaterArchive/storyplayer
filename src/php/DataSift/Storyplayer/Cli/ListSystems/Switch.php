@@ -86,13 +86,16 @@ class ListSystems_Switch extends CliSwitch
 
     /**
      *
-     * @param  CliEngine $engine
-     * @param  int $invokes
-     * @param  array     $params
-     * @param  boolean $isDefaultParam
+     * @param CliEngine $engine
+     * @param int       $invokes
+     * @param array     $params
+     * @param boolean   $isDefaultParam
+     * @param mixed     $additionalContext
+     *
      * @return CliResult
      */
-    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false)
+    public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false,
+        $additionalContext = null)
     {
         // list the systems-under-test (if any) in a machine-friendly way
         foreach ($this->sutList as $sutName) {

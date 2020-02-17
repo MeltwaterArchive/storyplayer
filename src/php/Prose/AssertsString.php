@@ -44,7 +44,7 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ComparisonLib\StringComparitor;
+use DataSift\Stone\ComparisonLib\StringComparator;
 
 /**
  * Assertions about the nature of, and contents of, strings
@@ -52,12 +52,12 @@ use DataSift\Stone\ComparisonLib\StringComparitor;
  * @method void isString()
  * @method void endsWith(string $expected)
  * @method void doesNotEndWith(string $expected)
- * @method void isHash()
+ * @method void isHash($expectedLength = null)
  * @method void isUuid()
  * @method void isValidJson()
  * @method void isNotValidJson()
- * @method void matchesRegex()
- * @method void doesNotMatchRegex()
+ * @method void matchesRegex($regex)
+ * @method void doesNotMatchRegex($regex)
  * @method void startsWith(string $expected)
  * @method void doesNotStartWith(string $expected)
  * @method void isIn(array $haystack)
@@ -81,6 +81,6 @@ class AssertsString extends AssertionsBase
      */
     public function __construct(StoryTeller $st, $params)
     {
-        parent::__construct($st, new StringComparitor($params[0]));
+        parent::__construct($st, new StringComparator($params[0]));
     }
 }

@@ -1,6 +1,5 @@
 .build
-chromedriver.log
-composer.lock
+*.log
 composer.phar
 dist
 dsbuildparams.*
@@ -10,7 +9,7 @@ nbproject
 review
 sauce_connect.log*
 .storyplayer/runtime*
-storyplayer.log
+log
 vendor
 .idea
 *.iml

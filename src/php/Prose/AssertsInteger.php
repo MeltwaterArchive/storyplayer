@@ -44,7 +44,7 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ComparisonLib\IntegerComparitor;
+use DataSift\Stone\ComparisonLib\IntegerComparator;
 
 /**
  * Assertions about the nature of, and contents of, integers
@@ -74,6 +74,6 @@ class AssertsInteger extends AssertionsBase
      */
     public function __construct(StoryTeller $st, $params)
     {
-        parent::__construct($st, new IntegerComparitor($params[0]));
+        parent::__construct($st, new IntegerComparator($params[0]));
     }
 }

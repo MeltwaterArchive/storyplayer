@@ -77,9 +77,12 @@ class KillProcesses_Switch extends CliSwitch
 
     /**
      *
-     * @param  CliEngine $engine
-     * @param  array     $params
-     * @param  mixed     $additionalContext
+     * @param CliEngine $engine
+     * @param int       $invokes
+     * @param array     $params
+     * @param bool      $isDefaultParam
+     * @param mixed     $additionalContext
+     *
      * @return CliResult
      */
     public function process(CliEngine $engine, $invokes = 1, $params = array(), $isDefaultParam = false, $additionalContext = null)

@@ -44,7 +44,7 @@
 namespace Prose;
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
-use DataSift\Stone\ComparisonLib\DoubleComparitor;
+use DataSift\Stone\ComparisonLib\DoubleComparator;
 
 /**
  * Assertions about the nature of, and contents of, floating point numbers
@@ -74,6 +74,6 @@ class AssertsDouble extends AssertionsBase
      */
     public function __construct(StoryTeller $st, $params)
     {
-        parent::__construct($st, new DoubleComparitor($params[0]));
+        parent::__construct($st, new DoubleComparator($params[0]));
     }
 }

@@ -141,7 +141,7 @@ class AssertionsBase extends Prose
         return $actualLogMsg;
     }
 
-    public function getComparitor()
+    public function getComparator()
     {
         return $this->comparitor;
     }
